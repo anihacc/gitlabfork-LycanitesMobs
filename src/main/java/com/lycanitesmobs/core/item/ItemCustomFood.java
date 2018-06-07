@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.GroupInfo;
-import com.lycanitesmobs.core.info.ItemInfo;
+import com.lycanitesmobs.core.info.ItemConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -84,23 +84,23 @@ public class ItemCustomFood extends ItemFood {
     // ==================================================
     public int getEffectDuration() {
         if(this.foodClass == FOOD_CLASS.RAW)
-            return ItemInfo.durationRaw * 20;
+            return ItemConfig.durationRaw * 20;
         else if(this.foodClass == FOOD_CLASS.COOKED)
-            return ItemInfo.durationCooked * 20;
+            return ItemConfig.durationCooked * 20;
         else if(this.foodClass == FOOD_CLASS.MEAL)
-            return ItemInfo.durationMeal * 20;
+            return ItemConfig.durationMeal * 20;
         else if(this.foodClass == FOOD_CLASS.FEAST)
-            return ItemInfo.durationFeast * 20;
+            return ItemConfig.durationFeast * 20;
         return 1;
     }
 
 	public int getInstantHealing() {
 		if(this.foodClass == FOOD_CLASS.COOKED)
-			return ItemInfo.healingCooked;
+			return ItemConfig.healingCooked;
 		else if(this.foodClass == FOOD_CLASS.MEAL)
-			return ItemInfo.healingMeal;
+			return ItemConfig.healingMeal;
 		else if(this.foodClass == FOOD_CLASS.FEAST)
-			return ItemInfo.healingFeast;
+			return ItemConfig.healingFeast;
 		return 0;
 	}
 

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.info.ItemInfo;
+import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemSwordBase;
 import net.minecraft.block.Block;
@@ -379,7 +379,7 @@ public class EventListener {
 		World world = event.getEntityLiving().getEntityWorld();
 
 		// Seasonal Items:
-        if(ItemInfo.seasonalItemDropChance > 0
+        if(ItemConfig.seasonalItemDropChance > 0
             && (Utilities.isHalloween() || Utilities.isYuletide() || Utilities.isNewYear())) {
             boolean noSeaonalDrop = false;
             boolean alwaysDrop = false;
@@ -399,7 +399,7 @@ public class EventListener {
                     seasonalItem = ObjectManager.getItem("wintergiftlarge");
             }
 
-            if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemInfo.seasonalItemDropChance)) {
+            if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance)) {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
                 EntityItemCustom entityItem = new EntityItemCustom(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
                 entityItem.setPickupDelay(10);

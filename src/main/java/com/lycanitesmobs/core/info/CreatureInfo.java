@@ -84,7 +84,6 @@ public class CreatureInfo {
 
 	/** The names of the Elements of this creature, affects buffs and debuffs amongst other things. **/
 	protected List<String> elementNames = new ArrayList<>();
-
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
 

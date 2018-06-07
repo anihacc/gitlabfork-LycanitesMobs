@@ -1,44 +1,98 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.core.config.ConfigBase;
+import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 
 public class ItemInfo {
-    // ========== Global Settings ==========
-    /** The duration (in seconds) of the effects caused by various foods. Use the get functions to get these in ticks. **/
-    public static int durationRaw = 10;
-    public static int durationCooked = 20;
-    public static int durationMeal = 60;
-    public static int durationFeast = 10 * 60;
 
-    public static int healingCooked = 2;
-    public static int healingMeal = 4;
-    public static int healingFeast = 8;
+	// Core Info:
+	/** The name of this projectile. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
+	protected String name;
 
-    public static double seasonalItemDropChance = 0.1F;
+	/** The entity class used by this item. Defaults to ItemGeneric but can be changed to special classes for unique behaviour, etc. **/
+	public Class<? extends Item> itemClass;
+	/** The model class used by this item. If null, the default vanilla json model loading is used. **/
+	public Class<? extends ModelBase> modelClass;
 
-    public static boolean enableWeaponRecipes = true;
+	/** The group that this item belongs to. **/
+	public GroupInfo group;
 
-    public static boolean removeOnNoFireTick = true;
+	/**
+	 * Constructor
+	 * @param group The group that this item definition will belong to.
+	 */
+	public ItemInfo(GroupInfo group) {
+		this.group = group;
+	}
 
-    // ==================================================
-    //        Load Global Settings From Config
-    // ==================================================
-    public static void loadGlobalSettings() {
-        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
-        config.setCategoryComment("Food Effect Durations", "Here you can set the durations in seconds for each of the food effects.");
-        durationRaw = config.getInt("Food Effect Durations", "Raw Debuffs", durationRaw, "The negative effects from raw foods such as Raw Maka Meat.");
-        durationCooked = config.getInt("Food Effect Durations", "Cooked Buffs", durationCooked, "The positive effects from cooked foods such as Cooked Joust Meat.");
-        durationMeal = config.getInt("Food Effect Durations", "Meal Buffs", durationMeal, "The positive effects from crafted meal class foods such as Moss Pie.");
-        durationFeast = config.getInt("Food Effect Durations", "Feast Buffs", durationFeast, "The positive effects from the harder to craft feast class foods such as Battle Burrito.");
 
-		healingCooked = config.getInt("Food Healing", "Cooked Healing", healingCooked, "The instant healing received from cooked foods such as Cooked Joust Meat.");
-		healingMeal = config.getInt("Food Healing", "Meal Healing", healingMeal, "The instant healing received from crafted meal class foods such as Moss Pie.");
-		healingFeast = config.getInt("Food Healing", "Feast Healing", healingFeast, "The instant healing received from the harder to craft feast class foods such as Battle Burrito.");
+	/** Loads this item from a JSON object. **/
+	public void loadFromJSON(JsonObject json) {
+		this.name = json.get("name").getAsString();
+		try {
+			this.itemClass = (Class<? extends Item>) Class.forName(json.get("itemClass").getAsString());
+		}
+		catch(Exception e) {
+			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
+		}
+		try {
+			this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
+		}
+		catch(Exception e) {
+			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+		}
+	}
 
-        seasonalItemDropChance = config.getDouble("Seasonal Item Drop Chance", "Seasonal", seasonalItemDropChance, "The chance of seasonal items dropping such as Winter Gifts. Can be 0-1, 0.25 would be 25%. Set to 0 to disable these drops all together.");
 
-        config.setCategoryComment("Fire", "Special settings for fire blocks, etc.");
-        removeOnNoFireTick = config.getBool("Fire", "Remove On No Fire Tick", removeOnNoFireTick, "If set to false, when the doFireTick gamerule is set to false, instead of removing all custom fire such as Hellfire, the fire simply stops spreading instead, this is useful for decorative fire on adventure maps and servers.");
-}
+	/**
+	 * Returns the name of this item, this is the unformatted lowercase name. Ex: cleansingcrystal
+	 * @return Item name.
+	 */
+	public String getName() {
+		return this.name;
+	}
+
+	/**
+	 * Returns the registry id of this item. Ex: elementalmobs:cleansingcrystal
+	 * @return Item registry entity id.
+	 */
+	public String getEntityId() {
+		return this.group.filename + ":" + this.getName();
+	}
+
+	/**
+	 * Returns the resource location for this item.
+	 * @return Item resource location.
+	 */
+	public ResourceLocation getResourceLocation() {
+		return new ResourceLocation(this.group.filename, this.getName());
+	}
+
+	/**
+	 * Returns the language key for this item. Ex: elementalmobs.cleansingcrystal
+	 * @return Item language key.
+	 */
+	public String getLocalisationKey() {
+		return this.group.filename + "." + this.getName();
+	}
+
+	/**
+	 * Returns a translated title for this item. Ex: Cleansing Crystal
+	 * @return The display name of this item.
+	 */
+	public String getTitle() {
+		return I18n.translateToLocal("item." + this.getLocalisationKey() + ".name");
+	}
+
+	/**
+	 * Returns a translated description for this item.
+	 * @return The display description of this item.
+	 */
+	public String getDescription() {
+		return I18n.translateToLocal("item." + this.getLocalisationKey() + ".description");
+	}
 }

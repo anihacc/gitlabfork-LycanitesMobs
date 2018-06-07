@@ -198,7 +198,7 @@ public class LycanitesMobs {
 
 
         // ========== Item Info ==========
-        ItemInfo.loadGlobalSettings();
+        ItemConfig.loadGlobalSettings();
 
 
         // ========== Altar Info ==========
