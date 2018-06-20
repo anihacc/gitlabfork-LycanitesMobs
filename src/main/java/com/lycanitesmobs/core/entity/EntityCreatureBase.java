@@ -686,6 +686,12 @@ public abstract class EntityCreatureBase extends EntityLiving {
         	return true;
         }
     	LycanitesMobs.printDebug("MobSpawns", "No Mob Spawner found.");
+
+        // Global Spawn Check:
+		LycanitesMobs.printDebug("MobSpawns", "Global Spawn Check (Master Dimension List, etc)...");
+		if(!CreatureManager.getInstance().spawnConfig.isAllowedGlobal(world)) {
+			return false;
+		}
         
         // Environment Spawning Checks:
     	LycanitesMobs.printDebug("MobSpawns", "Environment spawn check (dimension, group limit, ground type, water, lava, underground)...");
