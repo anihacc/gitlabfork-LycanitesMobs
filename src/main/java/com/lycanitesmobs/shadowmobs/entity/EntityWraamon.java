@@ -27,7 +27,7 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }

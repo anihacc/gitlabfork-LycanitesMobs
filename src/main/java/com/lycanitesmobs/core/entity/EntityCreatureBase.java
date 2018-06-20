@@ -2618,9 +2618,9 @@ public abstract class EntityCreatureBase extends EntityLiving {
 			return null;
 		}
 
-		projectile.posX += offset.x;
-		projectile.posY -= (this.height / 4) + offset.y;
-		projectile.posZ += offset.z;
+		projectile.posX += offset.x * this.sizeScale;
+		projectile.posY -= (this.height / 4) + (offset.y * this.sizeScale);
+		projectile.posZ += offset.z * this.sizeScale;
 		projectile.setProjectileScale(scale);
 
 		Vec3d facing = this.getFacingPositionDouble(this.posX, this.posY, this.posZ, range, angle);

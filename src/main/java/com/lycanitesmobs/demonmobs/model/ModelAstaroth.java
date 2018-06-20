@@ -1,6 +1,7 @@
 package com.lycanitesmobs.demonmobs.model;
 
 import com.lycanitesmobs.core.model.ModelObjOld;
+import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
 import com.lycanitesmobs.demonmobs.DemonMobs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -8,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelAstaroth extends ModelObjOld {
+public class ModelAstaroth extends ModelTemplateQuadruped {
 	
 	// ==================================================
   	//                    Constructors
@@ -21,20 +22,11 @@ public class ModelAstaroth extends ModelObjOld {
     	// Load Model:
     	this.initModel("astaroth", DemonMobs.instance.group, "entity/astaroth");
 
-    	// Set Rotation Centers:
-    	setPartCenter("head", 0F, 1.1F, 0F);
-    	setPartCenter("base", 0F, 0.8F, 0F);
-    	setPartCenter("leftarm", 0.75F, 1.4F, 0.3F);
-    	setPartCenter("rightarm", -0.75F, 1.4F, 0.3F);
-    	setPartCenter("frontleftleg", 0.9F, 0.9F, -0.5F);
-    	setPartCenter("middleleftleg", 0.9F, 0.9F, 0F);
-    	setPartCenter("backleftleg", 0.9F, 0.9F, 0.5F);
-    	setPartCenter("frontrightleg", -0.9F, 0.9F, -0.5F);
-    	setPartCenter("middlerightleg", -0.9F, 0.9F, 0F);
-    	setPartCenter("backrightleg", -0.9F, 0.9F, 0.5F);
-    	
-    	lockHeadX = true;
-    	lockHeadY = true;
+		// Looking:
+		this.lookHeadScaleX = 0F;
+		this.lookHeadScaleY = 0F;
+		this.lookNeckScaleX = 0F;
+		this.lookNeckScaleY = 0F;
 
         // Trophy:
         this.trophyScale = 0.6F;
@@ -48,63 +40,46 @@ public class ModelAstaroth extends ModelObjOld {
     @Override
     public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
-    	float pi = (float)Math.PI;
-    	float posX = 0F;
-    	float posY = 0F;
-    	float posZ = 0F;
-    	float angleX = 0F;
-    	float angleY = 0F;
-    	float angleZ = 0F;
-    	float rotation = 0F;
-    	float rotX = 0F;
-    	float rotY = 0F;
-    	float rotZ = 0F;
-    	
-    	// Leg Angles:
-    	if(partName.equals("frontleftleg") || partName.equals("backleftleg") || partName.equals("middlerightleg")
-    			|| partName.equals("middleleftleg") || partName.equals("frontrightleg") || partName.equals("backrightleg"))
-    		angleZ = 1F;
-    	if(partName.equals("frontleftleg")) angleY = 30F / 360F;
-    	if(partName.equals("middleleftleg")) angleY = 0F;
-    	if(partName.equals("backleftleg")) angleY = -30F / 360F;
-    	if(partName.equals("frontrightleg")) angleY = -30F / 360F;
-    	if(partName.equals("middlerightleg")) angleY = 0F;
-    	if(partName.equals("backrightleg")) angleY = 30F / 360F;
-    	
-    	// Idle - Arms:
-    	float armSwing = 0.3F;
-    	if(partName.equals("leftarm")) {
-    		rotZ += -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
-    		rotX += -Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
-    	}
-    	if(partName.equals("rightarm")) {
-    		rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
-    		rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
-    	}
-    	
-    	// Walking - Arms:
-    	if(partName.equals("leftarm")) {
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * 2.0F * distance * armSwing);
-    	}
-    	if(partName.equals("rightarm")) {
-    		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * 2.0F * distance * armSwing);
-        }
-    	
-    	// Walking - Legs:
-    	float walkSwing = 0.3F;
-    	if(partName.equals("frontleftleg") || partName.equals("backleftleg") || partName.equals("middlerightleg"))
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
-    	if(partName.equals("middleleftleg") || partName.equals("frontrightleg") || partName.equals("backrightleg"))
-    		rotation += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
-    	
+
     	// Walking - Bobbing:
-		float bob = MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
-		if(bob < 0) bob += -bob * 2;
-		posY += bob;
-		
-    	// Apply Animations:
-    	rotate(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+		if(partName.equals("body")) {
+			float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
+			if (bob < 0) {
+				bob += -bob * 2;
+			}
+			this.translate(0, bob, 0);
+		}
+
+		// Tail:
+		if(partName.equals("tail01") || partName.equals("tail03")) {
+			float rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			this.rotate(rotX, rotY, 0);
+		}
+		else if(partName.equals("tail02")) {
+			float rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
+			float rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
+			this.rotate(-rotX, rotY, 0);
+		}
+
+		// Fingers:
+		else if(partName.equals("fingerleft")) {
+			this.rotate(
+					0,
+					(float)Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.2F - 0.2F),
+					0);
+		}
+		else if(partName.equals("fingerright")) {
+			this.rotate(
+					0,
+					(float)Math.toDegrees(MathHelper.cos((loop + 20) * 0.2F) * 0.2F - 0.2F),
+					0);
+		}
+		else if(partName.equals("fingertop")) {
+			this.rotate(
+					(float)Math.toDegrees(MathHelper.sin(loop * 0.2F) * 0.2F - 0.2F),
+					(float)Math.toDegrees(MathHelper.cos((loop + 40) * 0.2F) * 0.2F - 0.2F),
+					0);
+		}
     }
 }

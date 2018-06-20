@@ -28,6 +28,8 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
         this.solidCollision = false;
         this.setupMob();
         this.hitAreaWidthScale = 1.5F;
+
+        this.stepHeight = 1.0F;
     }
 
     // ========== Init AI ==========
@@ -85,7 +87,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDevilstar.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 1f, 1F);
+        this.fireProjectile(EntityDevilstar.class, target, range, 0, new Vec3d(0, -2.8F, 0), 1.2f, 1f, 1F);
         super.attackRanged(target, range);
     }
 	

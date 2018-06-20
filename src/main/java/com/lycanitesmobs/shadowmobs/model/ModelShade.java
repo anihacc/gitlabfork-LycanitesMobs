@@ -54,9 +54,9 @@ public class ModelShade extends ModelTemplateBiped {
     public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	if(entity instanceof EntityCreatureBase && entity.getControllingPassenger() != null) {
 			time = time * 0.25F;
-			distance = distance * 0.4F;
+			distance = distance * 0.8F;
 		}
-    	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
+    	super.animatePart(partName, entity, time, distance * 0.5F, loop, lookY, lookX, scale);
 
 		if(partName.equals("mouth")) {
 			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.1F), 0.0F, 0.0F);
