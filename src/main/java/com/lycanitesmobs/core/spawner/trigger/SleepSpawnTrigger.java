@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -20,7 +21,7 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 
 
 	/** Stores the age tick of each player when they last attempted to sleep. **/
-	protected Map<EntityPlayer, Integer> playerUsedTicks = new HashMap<>();
+	protected Map<EntityPlayer, Long> playerUsedTicks = new HashMap<>();
 
 
 	/** Constructor **/
@@ -41,21 +42,19 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 
 	/** Called every time a player attempts to use a bed. **/
 	public boolean onSleep(World world, EntityPlayer player, BlockPos spawnPos, IBlockState blockState) {
-		// Cooldown:
-		if(this.cooldown > -1) {
-			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-			if(playerExt != null) {
-				int lastUsedTicks = 0;
-				if (!this.playerUsedTicks.containsKey(player)) {
-					this.playerUsedTicks.put(player, lastUsedTicks);
-				} else {
-					lastUsedTicks = this.playerUsedTicks.get(player);
-				}
-				if(playerExt.timePlayed - lastUsedTicks < this.cooldown) {
-					return false;
-				}
-			}
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
+		// Cooldown:
+		if(this.cooldown > -1 && playerExt != null) {
+			long lastUsedTicks = 0;
+			if (!this.playerUsedTicks.containsKey(player)) {
+				this.playerUsedTicks.put(player, lastUsedTicks);
+			} else {
+				lastUsedTicks = this.playerUsedTicks.get(player);
+			}
+			if(playerExt.timePlayed < lastUsedTicks + this.cooldown) {
+				return false;
+			}
 		}
 
 		// Chance:
@@ -68,6 +67,11 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 			return false;
 		}
 
-		return this.trigger(world, player, spawnPos, 0, 0);
+		// Trigger:
+		boolean success = this.trigger(world, player, spawnPos, 0, 0);
+		if(this.cooldown > -1 && playerExt != null) {
+			this.playerUsedTicks.put(player, playerExt.timePlayed);
+		}
+		return success;
 	}
 }

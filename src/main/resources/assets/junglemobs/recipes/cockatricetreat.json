@@ -1,0 +1,20 @@
+{
+	"result": {
+		"item": "junglemobs:cockatricetreat",
+		"count": 4
+	},
+	"pattern": [
+		"TTT",
+		"TDT",
+		"TTT"
+	],
+	"type": "forge:ore_shaped",
+	"key": {
+		"T": {
+			"item": "junglemobs:veswax"
+		},
+		"D": {
+			"item": "minecraft:diamond"
+		}
+	}
+}

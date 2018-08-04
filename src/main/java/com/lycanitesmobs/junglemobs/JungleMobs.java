@@ -105,6 +105,7 @@ public class JungleMobs extends Submod {
 
 		ObjectManager.addItem("uvaraptortreat", new ItemTreat("uvaraptortreat", group));
 		ObjectManager.addItem("dawontreat", new ItemTreat("dawontreat", group));
+		ObjectManager.addItem("cockatricetreat", new ItemTreat("cockatricetreat", group));
 	}
 
 	@Override

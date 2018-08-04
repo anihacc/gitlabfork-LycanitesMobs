@@ -83,7 +83,7 @@ item.serpixtreat.description=Serpix love to devour frosty flesh and bone!
 item.maugtreat.name=Maug Treat
 item.maugtreat.description=Maugs naturally hunt Yetis!
 item.bucketooze.name=Ooze Bucket
-item.bucketooze.description=Ooze is an icy gel substance, causes slowness, hunger and applies low damage over time.
+item.bucketooze.description=Ooze is an icy gel substance, causes slowness and applies low damage over time.
 #
 # Blocks
 tile.frostweb.name=Frostweb

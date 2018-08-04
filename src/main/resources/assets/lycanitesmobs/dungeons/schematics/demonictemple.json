@@ -102,7 +102,7 @@
 			"weight": 1,
 			"subspecies": 0,
 			"mobNameTag": "Arachnotron",
-			"mobSizeScale": 2,
+			"mobSizeScale": 1,
 			"naturalDespawn": "false",
 			"mobLevel": 50,
 			"spawnAsBoss": true,

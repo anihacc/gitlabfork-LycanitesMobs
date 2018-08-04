@@ -1,8 +1,10 @@
 package com.lycanitesmobs.demonmobs.entity;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupFire;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
@@ -36,7 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDemon {
+public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
 
     public List<EntityPlayer> playerTargets = new ArrayList<EntityPlayer>();
     public int hellfireEnergy = 0;

@@ -219,6 +219,46 @@
         "category": "hostile",
         "sounds": [{"name": "junglemobs:entity/dawon/eat", "stream": false}]
     },
+    "entity.cockatrice.say": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/say", "stream": false}]
+    },
+    "entity.cockatrice.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/hurt", "stream": false}]
+    },
+    "entity.cockatrice.death": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/death", "stream": false}]
+    },
+    "entity.cockatrice.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/attack", "stream": false}]
+    },
+    "entity.cockatrice.step": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/step", "stream": false}]
+    },
+    "entity.cockatrice.fly": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/fly", "stream": false}]
+    },
+    "entity.cockatrice.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/beg", "stream": false}]
+    },
+    "entity.cockatrice.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/tame", "stream": false}]
+    },
+    "entity.cockatrice.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/eat", "stream": false}]
+    },
+    "entity.cockatrice.mount": {
+        "category": "hostile",
+        "sounds": [{"name": "junglemobs:entity/cockatrice/mount", "stream": false}]
+    },
     "projectile.poop": {
         "category": "ambient",
         "sounds": [{"name": "junglemobs:projectile/poop", "stream": false}]

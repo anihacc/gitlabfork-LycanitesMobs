@@ -192,7 +192,7 @@ public class CreatureSpawn {
 
 		// Add Vanilla Spawns:
 		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
-			if(this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
+			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
 				for(EnumCreatureType creatureType : this.creatureTypes) {
 					EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
 					for(Biome biome : this.biomesFromTags) {

@@ -20,6 +20,7 @@ public class ClientSubProxy extends CommonSubProxy {
 		AssetManager.addModel("vespid", new ModelVespid());
 		AssetManager.addModel("vespidqueen", new ModelVespidQueen());
 		AssetManager.addModel("dawon", new ModelDawon());
+		AssetManager.addModel("cockatrice", new ModelCockatrice());
 
         // Register Renderers:
         RenderRegister renderRegister = new RenderRegister(groupInfo);

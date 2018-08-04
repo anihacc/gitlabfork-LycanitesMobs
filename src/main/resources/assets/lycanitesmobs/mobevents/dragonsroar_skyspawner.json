@@ -41,6 +41,10 @@
 		{
 			"mobId": "saltwatermobs:quetzodracl",
 			"weight": 8
+		},
+		{
+			"mobId": "junglemobs:cockatrice",
+			"weight": 8
 		}
 	]
 }

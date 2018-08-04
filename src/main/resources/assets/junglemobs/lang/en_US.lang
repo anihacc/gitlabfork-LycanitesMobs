@@ -66,6 +66,14 @@ achievement.dawon.learn=Silicon Based Mammals?
 achievement.dawon.learn.desc=Add a Dawon to your Beastiary.
 achievement.dawon.tame=A Pet For The Fancy
 achievement.dawon.tame.desc=Tame a Dawon.
+entity.junglemobs.cockatrice.name=Cockatrice
+entity.junglemobs.cockatrice.description=Deadly giant chicken-like wyverns, their beat drips with paralysing and aphagia inducing toxins that are said make their victims feel like they're turned into stone.
+achievement.cockatrice.kill=Hardcore Chicken Slayer!
+achievement.cockatrice.kill.desc=Slay a Cockatrice.
+achievement.cockatrice.learn=El Pollo Grande
+achievement.cockatrice.learn.desc=Add a Cockatrice to your Beastiary.
+achievement.cockatrice.tame=Chicken Master!
+achievement.cockatrice.tame.desc=Tame a Cockatrice.
 #
 # Items
 item.junglespawn.name=Spawn
@@ -83,6 +91,8 @@ item.uvaraptortreat.name=Uvaraptor Treat
 item.uvaraptortreat.description=Perhaps you can tame one, it would almost be like a flying mount!
 item.dawontreat.name=Dawon Treat
 item.dawontreat.description=As well as meat, they also eat crystals and seem to love Emeralds!
+item.cockatricetreat.name=Cockatrice Treat
+item.cockatricereat.description=A diamond adorned in Veswax is a great offering to the mighty Cockatrice!
 #
 # Blocks
 tile.quickweb.name=Quickweb

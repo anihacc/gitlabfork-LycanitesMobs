@@ -1,6 +1,8 @@
 package com.lycanitesmobs.demonmobs.entity;
 
+import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.ai.*;
@@ -35,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDemon {
+public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
     protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.<Byte>createKey(EntityCreatureBase.class, DataSerializers.BYTE);

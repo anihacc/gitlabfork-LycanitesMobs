@@ -32,7 +32,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 	/** The minimum amount of blocks that must be found in an area for the location to return any positions. Default -1 (ignore). **/
 	public int blockCost = -1;
 
-	/** If set (above 0), tthe amount of each block in the blocks list must be found. Default: 0 (disabled) **/
+	/** If set (above 0), the amount of each block in the blocks list must be found. Default: 0 (disabled) **/
 	public int requiredBlockTypes = 0;
 
 
