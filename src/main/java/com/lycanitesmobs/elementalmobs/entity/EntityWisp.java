@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class EntityWisp extends EntityCreatureTameable implements IMob {
+public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 	EntityWisp playPartner = null;
 
     // ==================================================
