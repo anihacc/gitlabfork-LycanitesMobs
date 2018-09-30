@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import com.lycanitesmobs.core.spawner.location.SpawnLocation;
+import com.lycanitesmobs.core.spawner.trigger.ChunkSpawnTrigger;
 import com.lycanitesmobs.core.spawner.trigger.SpawnTrigger;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -316,7 +317,7 @@ public class Spawner {
 	 * @param chain How far along a spawner chain this trigger is, this increases whenever the actions of one spawner trigger another spawner and is used to prevent loops, etc.
 	 * @return True on a successful spawn and false on failure.
 	 **/
-	public boolean trigger(World world, EntityPlayer player, BlockPos triggerPos, int level, int countAmount, int chain) {
+	public boolean trigger(World world, EntityPlayer player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int countAmount, int chain) {
 		if(!this.isEnabled(world, player)) {
 			return false;
 		}
@@ -330,7 +331,7 @@ public class Spawner {
 		// Only One Trigger Required:
 		if(this.triggersRequired <= 1 || player == null) {
 			LycanitesMobs.printDebug("JSONSpawner", "Only one trigger required.");
-			return this.doSpawn(world, player, triggerPos, level, chain);
+			return this.doSpawn(world, player, spawnTrigger, triggerPos, level, chain);
 		}
 
 		// Get Current Count:
@@ -358,7 +359,7 @@ public class Spawner {
 		LycanitesMobs.printDebug("JSONSpawner", "Trigger " + currentCount + "/" + this.triggersRequired);
 		if(currentCount >= this.triggersRequired) {
 			this.triggerCounts.put(player, 0);
-			return this.doSpawn(world, player, triggerPos, level, chain);
+			return this.doSpawn(world, player, spawnTrigger, triggerPos, level, chain);
 		}
 
 		this.triggerCounts.put(player, currentCount);
@@ -370,12 +371,13 @@ public class Spawner {
      * Starts a new spawn, usually called from trigger() when the count is sufficient.
      * @param world The World to spawn in.
      * @param player The player that is being spawned around.
+	 * @param spawnTrigger The spawn trigger that has triggered this spawn.
      * @param triggerPos The location that the spawn was triggered, usually used as the center for spawning around or on.
 	 * @param level The level of the spawn trigger, higher levels are from rarer spawn conditions and can result in tougher mobs being spawned.
 	 * @param chain How far along a spawner chain this trigger is, this increases whenever the actions of one spawner trigger another spawner and is used to prevent loops, etc.
      * @return True on a successful spawn and false on failure.
      **/
-    public boolean doSpawn(World world, EntityPlayer player, BlockPos triggerPos, int level, int chain) {
+    public boolean doSpawn(World world, EntityPlayer player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int chain) {
     	int mobCount = this.mobCountMin;
     	if(this.mobCountMax > this.mobCountMin) {
     		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
@@ -389,6 +391,21 @@ public class Spawner {
 
     	// Get Positions:
 		List<BlockPos> spawnPositions = this.getSpawnPos(world, player, triggerPos);
+		// Restrict To Chunk On Chunk Spawn Trigger:
+		if(spawnTrigger instanceof ChunkSpawnTrigger) {
+			for(BlockPos spawnPos : spawnPositions.toArray(new BlockPos[spawnPositions.size()])) {
+				int chunkOffset = 8;
+				if(spawnPos.getX() < triggerPos.getX() + chunkOffset || spawnPos.getX() > triggerPos.getX() + chunkOffset) {
+					LycanitesMobs.printDebug("JSONSpawner", "A spawn position exceeds chunk x boundaries and will not be used for worldgen triggered spawning.");
+					spawnPositions.remove(spawnPos);
+					continue;
+				}
+				if(spawnPos.getZ() < triggerPos.getZ() + chunkOffset || spawnPos.getZ() > triggerPos.getZ() + chunkOffset) {
+					LycanitesMobs.printDebug("JSONSpawner", "A spawn position exceeds chunk z boundaries and will not be used for worldgen triggered spawning.");
+					spawnPositions.remove(spawnPos);
+				}
+			}
+		}
 		if(spawnPositions.isEmpty()) {
 			LycanitesMobs.printDebug("JSONSpawner", "No Spawn Positions Found From Spawn Location");
 			return false;
@@ -396,7 +413,7 @@ public class Spawner {
 		Collections.shuffle(spawnPositions);
 		LycanitesMobs.printDebug("JSONSpawner", "Positions Found: " + spawnPositions.size());
 
-		// Get Biomes
+		// Get Biomes:
 		List<Biome> biomes = null;
 		if(!this.ignoreBiomes) {
 			biomes = new ArrayList<>();

@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
-public class EntityAegis extends EntityCreatureTameable implements IMob, IGroupRock, IFusable {
+public class EntityAegis extends EntityCreatureTameable implements IGroupRock, IFusable {
 
 	protected Village village;
 	public boolean chestProtection = true;
@@ -114,8 +114,8 @@ public class EntityAegis extends EntityCreatureTameable implements IMob, IGroupR
 						if(this.village != null) {
 							reputation = this.village.getPlayerReputation(player.getUniqueID());
 						}
-						if (reputation <= 0 && Math.sqrt(player.getDistanceSq(protectLocation)) <= 80)
-							if (this.chestProtection && player.openContainer != null && (player.openContainer instanceof ContainerChest)) {
+						if (this.chestProtection && reputation <= 0 && Math.sqrt(player.getDistanceSq(protectLocation)) <= 60)
+							if (player.openContainer != null && (player.openContainer instanceof ContainerChest)) {
 								this.setAttackTarget(player);
 								this.setFixateTarget(player);
 							}

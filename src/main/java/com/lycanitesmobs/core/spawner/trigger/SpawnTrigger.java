@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
@@ -11,9 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public abstract class SpawnTrigger {
     /** Spawn Triggers can respond to various events or ticks and will start a spawn. **/
@@ -32,6 +31,12 @@ public abstract class SpawnTrigger {
 
 	/** Determines how many Trigger specific Conditions must be met. If 0 or less all are required. **/
 	public int conditionsRequired = 0;
+
+	/** How long (in ticks) until this trigger can be started again, this is done per player. **/
+	public int cooldown = 0;
+
+	/** Stores the age tick of each player when they last attempted to sleep. **/
+	protected Map<EntityPlayer, Long> playerUsedTicks = new HashMap<>();
 
 
 	/** Creates a Spawn Trigger from the provided JSON data. **/
@@ -112,11 +117,29 @@ public abstract class SpawnTrigger {
 				this.conditions.add(spawnCondition);
 			}
 		}
+
+		if(json.has("cooldown"))
+			this.cooldown = json.get("cooldown").getAsInt();
 	}
 
 
 	/** Triggers an actual spawn. **/
 	public boolean trigger(World world, EntityPlayer player, BlockPos triggerPos, int level, int chain) {
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+
+		// Cooldown:
+		if(this.cooldown > 0 && playerExt != null) {
+			long lastUsedTicks = 0;
+			if (!this.playerUsedTicks.containsKey(player)) {
+				this.playerUsedTicks.put(player, lastUsedTicks);
+			} else {
+				lastUsedTicks = this.playerUsedTicks.get(player);
+			}
+			if(playerExt.timePlayed < lastUsedTicks + this.cooldown) {
+				return false;
+			}
+		}
+
 		// Check Trigger Specific Conditions:
 		if(!this.triggerConditionsMet(world, player, triggerPos)) {
 			return false;
@@ -125,7 +148,7 @@ public abstract class SpawnTrigger {
 		if("".equals(this.spawner.eventName)) {
 			LycanitesMobs.printDebug("JSONSpawner", "Trigger Fired: " + this + " for: " + this.spawner.name);
 		}
-		return this.spawner.trigger(world, player, triggerPos, level, this.count, chain);
+		return this.spawner.trigger(world, player, this, triggerPos, level, this.count, chain);
 	}
 
 	/** Checks all Conditions specific to this Trigger. **/

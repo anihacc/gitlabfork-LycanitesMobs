@@ -17,12 +17,14 @@
 			"entityIds": [
 				"elementalmobs:tremor"
 			],
-			"entityIdsListType": "blacklist"
+			"entityIdsListType": "blacklist",
+			"cooldown": 1200
 		},
 		{
 			"type": "explosion",
 			"chance": 0.2,
-			"playerOnly": true
+			"playerOnly": true,
+			"cooldown": 1200
 		}
 	],
 	"locations": [

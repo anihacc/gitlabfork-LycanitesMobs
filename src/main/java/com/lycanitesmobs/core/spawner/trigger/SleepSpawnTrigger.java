@@ -15,27 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SleepSpawnTrigger extends BlockSpawnTrigger {
-
-	/** How long (in ticks) until this trigger can be started again, this is done per player. **/
-	public int cooldown = 1200;
-
-
-	/** Stores the age tick of each player when they last attempted to sleep. **/
-	protected Map<EntityPlayer, Long> playerUsedTicks = new HashMap<>();
-
-
 	/** Constructor **/
 	public SleepSpawnTrigger(Spawner spawner) {
 		super(spawner);
-	}
-
-
-	@Override
-	public void loadFromJSON(JsonObject json) {
-		if(json.has("cooldown"))
-			this.cooldown = json.get("cooldown").getAsInt();
-
-		super.loadFromJSON(json);
 	}
 
 
@@ -43,19 +25,6 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 	/** Called every time a player attempts to use a bed. **/
 	public boolean onSleep(World world, EntityPlayer player, BlockPos spawnPos, IBlockState blockState) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-
-		// Cooldown:
-		if(this.cooldown > -1 && playerExt != null) {
-			long lastUsedTicks = 0;
-			if (!this.playerUsedTicks.containsKey(player)) {
-				this.playerUsedTicks.put(player, lastUsedTicks);
-			} else {
-				lastUsedTicks = this.playerUsedTicks.get(player);
-			}
-			if(playerExt.timePlayed < lastUsedTicks + this.cooldown) {
-				return false;
-			}
-		}
 
 		// Chance:
 		if(this.chance < 1 && player.getRNG().nextDouble() > this.chance) {

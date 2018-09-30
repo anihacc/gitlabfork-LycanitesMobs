@@ -284,10 +284,15 @@ public class PetEntry {
                 this.entityTick++;
 
                 // Teleport Entity:
-                if(this.teleportEntity) {
-                    if(this.entity.getEntityWorld() != this.host.getEntityWorld())
-                        this.entity.changeDimension(this.host.getEntityWorld().provider.getDimension());
-                    this.entity.setPosition(this.host.posX, this.host.posY, this.host.posZ);
+                try {
+                    if (this.teleportEntity) {
+                        if (this.entity.getEntityWorld() != this.host.getEntityWorld())
+                            this.entity.changeDimension(this.host.getEntityWorld().provider.getDimension());
+                        this.entity.setPosition(this.host.posX, this.host.posY, this.host.posZ);
+                    }
+                }
+                catch(Exception e) {
+                    LycanitesMobs.printDebug("Pet", "Unable to teleport a pet.");
                 }
 
                 if(entity instanceof EntityLivingBase) {

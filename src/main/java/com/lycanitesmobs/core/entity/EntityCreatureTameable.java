@@ -104,6 +104,17 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	else
     		return ownedName;
     }
+
+	/**
+	 * Returns true if this thing is named
+	 */
+	@Override
+	public boolean hasCustomName() {
+		if(!CreatureManager.getInstance().config.ownerTags) {
+			return false;
+		}
+		return super.hasCustomName();
+	}
     
     
     // ==================================================
