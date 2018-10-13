@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.ItemDrop;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -104,7 +105,11 @@ public class MobSpawn {
 				mobSpawn.loadFromJSON(json);
 			}
 			else {
-				Class entityClass = EntityList.getClassFromName(mobId);
+				Class entityClass = null;
+				net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobId));
+				if(entry != null) {
+					entityClass = entry.getEntityClass();
+				}
 				mobSpawn = new MobSpawn(entityClass);
 			}
 			if(mobSpawn != null) {
