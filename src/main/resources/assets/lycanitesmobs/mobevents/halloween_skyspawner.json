@@ -36,6 +36,11 @@
 			"mobNameTag": "Lost Soul"
 		},
 		{
+			"mobId": "elementalmobs:banshee",
+			"weight": 4,
+			"mobNameTag": "Maniacal Ghost"
+		},
+		{
 			"mobId": "demonmobs:cacodemon",
 			"weight": 4
 		},
@@ -50,7 +55,7 @@
 		},
 		{
 			"mobId": "shadowmobs:epion",
-			"weight": 8,
+			"weight": 4,
 			"mobNameTag": "Vampire Bat"
 		}
 	]

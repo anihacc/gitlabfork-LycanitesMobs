@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.gui.GuiButtonCreature;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -271,6 +272,8 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		// Summoning Slots:
 		if(button.id >= this.summoningSlotIdStart && button.id < this.petCommandIdStart) {
 			this.playerExt.setSelectedSummonSet(button.id - this.summoningSlotIdStart);
+			MessageSummonSetSelection message = new MessageSummonSetSelection(this.playerExt);
+			LycanitesMobs.packetHandler.sendToServer(message);
 		}
 
 		SummonSet summonSet = this.playerExt.getSelectedSummonSet();

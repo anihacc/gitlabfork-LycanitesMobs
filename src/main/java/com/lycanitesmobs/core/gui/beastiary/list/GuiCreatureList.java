@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -118,6 +119,10 @@ public class GuiCreatureList extends GuiScrollingList {
 		}
 		else if(this.listType == Type.SUMMONABLE) {
 			this.parentGui.playerExt.getSelectedSummonSet().setSummonType(this.creatureList.get(index).getName());
+			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(this.parentGui.playerExt.getSelectedSummonSet().getSubspecies());
+			this.parentGui.playerExt.sendSummonSetToServer((byte)this.parentGui.playerExt.selectedSummonSet);
+			MessageSummonSetSelection message = new MessageSummonSetSelection(this.parentGui.playerExt);
+			LycanitesMobs.packetHandler.sendToServer(message);
 		}
 		else if(this.listType == Type.PET || this.listType == Type.MOUNT || this.listType == Type.FAMILIAR) {
 			this.parentGui.playerExt.selectedPet = this.petList.get(index);
