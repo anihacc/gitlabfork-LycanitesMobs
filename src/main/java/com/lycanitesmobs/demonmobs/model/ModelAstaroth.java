@@ -1,6 +1,5 @@
 package com.lycanitesmobs.demonmobs.model;
 
-import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
 import com.lycanitesmobs.demonmobs.DemonMobs;
 import net.minecraft.entity.EntityLiving;

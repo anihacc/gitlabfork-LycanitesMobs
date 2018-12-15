@@ -119,9 +119,33 @@
         "category": "hostile",
         "sounds": [{"name": "demonmobs:entity/astaroth/death", "stream": false}]
     },
+    "entity.astaroth.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/tame", "stream": false}]
+    },
     "entity.astaroth.step": {
         "category": "hostile",
         "sounds": [{"name": "demonmobs:entity/astaroth/step", "stream": false}]
+    },
+    "entity.astaroth.void.say": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/void/say", "stream": false}]
+    },
+    "entity.astaroth.void.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/void/hurt", "stream": false}]
+    },
+    "entity.astaroth.void.death": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/void/death", "stream": false}]
+    },
+    "entity.astaroth.void.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/void/tame", "stream": false}]
+    },
+    "entity.astaroth.void.step": {
+        "category": "hostile",
+        "sounds": [{"name": "demonmobs:entity/astaroth/void/step", "stream": false}]
     },
     "entity.cacodemon.say": {
         "category": "hostile",

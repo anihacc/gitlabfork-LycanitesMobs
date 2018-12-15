@@ -220,7 +220,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
     public void applyMinionBehaviour(EntityCreatureTameable minion) {
         if(this.summonSet != null) {
             this.summonSet.applyBehaviour(minion);
-            minion.applySubspecies(this.summonSet.subspecies, true);
+            minion.applySubspecies(this.summonSet.subspecies);
         }
         this.minions.add(minion);
         minion.setHome(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 20);

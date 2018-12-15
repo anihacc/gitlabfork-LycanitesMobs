@@ -7,10 +7,10 @@
 		"enabled": true,
 		"spawners": ["monster", "beast", "portal", "nether"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1],
+		"dimensionIds": [-1, 1],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomes": ["nether"],
+		"biomes": ["nether", "end"],
 		"spawnWeight": 2,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 2,
@@ -42,13 +42,57 @@
 	"subspecies": [
 		{
 			"index": 1,
-			"name": "golden",
+			"color": "golden",
 			"type": "uncommon"
 		},
 		{
 			"index": 2,
-			"name": "scarlet",
+			"color": "scarlet",
 			"type": "uncommon"
+		},
+		{
+			"index": 4,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"type": "common",
+			"priority": 1,
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			]
+		},
+		{
+			"index": 5,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"color": "violet",
+			"type": "uncommon",
+			"priority": 1,
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			]
+		},
+		{
+			"index": 6,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"color": "keppel",
+			"type": "uncommon",
+			"priority": 1,
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			]
 		}
 	],
 	"element": "nether",

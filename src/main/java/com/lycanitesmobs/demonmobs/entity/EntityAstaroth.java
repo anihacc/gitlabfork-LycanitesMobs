@@ -105,7 +105,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
                 EntityTrite trite = new EntityTrite(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
-                trite.applySubspecies(this.getSubspeciesIndex(), true);
+                trite.applySubspecies(this.getSubspeciesIndex());
                 this.getEntityWorld().spawnEntity(trite);
                 if(this.getAttackTarget() != null)
                 	trite.setRevengeTarget(this.getAttackTarget());

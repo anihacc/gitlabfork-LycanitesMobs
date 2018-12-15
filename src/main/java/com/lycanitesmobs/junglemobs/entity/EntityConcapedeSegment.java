@@ -86,7 +86,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     	}
     	
     	if(this.hasParent() && this.getParentTarget() instanceof EntityCreatureBase) {
-    		this.applySubspecies(((EntityCreatureBase)this.getParentTarget()).getSubspeciesIndex(), true);
+    		this.applySubspecies(((EntityCreatureBase)this.getParentTarget()).getSubspeciesIndex());
     	}
     }
     

@@ -1,6 +1,10 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.ModelCustom;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.model.ModelItemBase;
 import net.minecraft.client.model.ModelBase;
@@ -8,7 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,9 +106,28 @@ public class AssetManager {
 	// ========== Model ==========
 	public static ModelBase getModel(String name) {
 		name = name.toLowerCase();
+		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(name);
+		if(creatureInfo != null) {
+
+		}
 		if(!models.containsKey(name))
 			return null;
 		return models.get(name);
+	}
+
+	public static ModelBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		if(entityCreature.getSubspecies() != null && entityCreature.getSubspecies().modelClass != null) {
+			if(models.containsKey(entityCreature.getSubspecies().modelClass.toString())) {
+				return models.get(entityCreature.getSubspecies().modelClass.toString());
+			}
+			ModelBase creatureModel = entityCreature.getSubspecies().modelClass.getConstructor().newInstance();
+			models.put(entityCreature.getSubspecies().modelClass.toString(), creatureModel);
+			return creatureModel;
+		}
+		if (entityCreature.creatureInfo == null) {
+			return null;
+		}
+		return getModel(entityCreature.creatureInfo.getName());
 	}
 	
 	// ========== Obj Model ==========

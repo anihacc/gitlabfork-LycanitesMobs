@@ -4,13 +4,15 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
-import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -56,19 +58,23 @@ public class Subspecies {
     /** The index of this subspecies in MobInfo. Set by MobInfo when added. Should never be 0 as that is used by the default and will result in this subspecies being ignored. **/
     public int index;
 
-	/** The skin of this subspecies. **/
+	/** The skin of this subspecies. Skins refer to different models and major texture changes. Ex: Void Astaroth. **/
 	public String skin;
 
-    /** The color of this subspecies. **/
+    /** The color of this subspecies. Colors refer to just color or minor texture variations. Ex: Verdant Grue. **/
     public String color;
 
     /** The rarity of this subspecies. **/
-    public String rarity;
+    public String rarity = "uncommon";
+
+	/** The model class used by this subspecies. If null a hardcoded default model is searched for. **/
+	@SideOnly(Side.CLIENT)
+	public Class<? extends net.minecraft.client.model.ModelBase> modelClass;
 
     /** The weight of this subspecies, used when randomly determining the subspecies of a mob. A base species uses the static baseSpeciesWeight value. **/
     public int weight;
 
-    /** Higher priority Subspecies will always spawn in place of lower priority ones if they can spawn regardless of weight. Only increase this above 0 if a subspecies has conditions otherwise they will stop standard/base Subspecies from showing up. **/
+    /** Higher priority Subspecies will always spawn in place of lower priority ones if they can spawn (conditions are met) regardless of weight. Only increase this above 0 if a subspecies has conditions otherwise they will stop standard/base Subspecies from showing up. **/
     public int priority = 0;
 
     /** A list of Spawn Conditions required for this subspecies to spawn. **/
@@ -128,7 +134,7 @@ public class Subspecies {
     }
 
 
-    public static Subspecies createFromJSON(JsonObject json) {
+    public static Subspecies createFromJSON(CreatureInfo creatureInfo, JsonObject json) {
 		// Rarity:
 		String rarity = "uncommon";
 		if(json.has("rarity")) {
@@ -156,8 +162,19 @@ public class Subspecies {
 		if(skin == null && color == null) {
 			throw new RuntimeException("Invalid subspecies added with no Skin and/or Color defined! At least one value must be set.");
 		}
+
+		// Create Subspecies:
 		Subspecies subspecies = new Subspecies(skin, color, rarity);
 		subspecies.index = json.get("index").getAsInt();
+
+		// Model Class:
+		if (json.has("modelClass")) {
+			try {
+				LycanitesMobs.proxy.loadSubspeciesModel(subspecies, json.get("modelClass").getAsString());
+			} catch (Exception e) {
+				LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for subspecies: " + subspecies.getTitle() + " entity: " + creatureInfo.getTitle());
+			}
+		}
 
 		// Priority:
 		if(json.has("priority")) {
@@ -181,9 +198,9 @@ public class Subspecies {
 
 	/**
 	 * Constructor for creating a color/skin Subspecies based on a rarity.
-	 * @param skin The skin of the Subspecies. Can be null or default skin.
+	 * @param skin The skin of the Subspecies. Can be null for default skin.
 	 * @param color The color of the Subspecies. Can be null for default color.
-	 * @param rarity The rarity of the Subspecies ('common', 'uncommon' or 'rare'.
+	 * @param rarity The rarity of the Subspecies ('common', 'uncommon' or 'rare').
 	 */
 	public Subspecies(@Nullable String skin, @Nullable String color, String rarity) {
         this.color = color;
@@ -194,18 +211,32 @@ public class Subspecies {
 
 
 	/**
+	 * Registers this subspecies, used for registering new sounds, etc. Can only be done during startup.
+	 */
+	public void register(CreatureInfo creatureInfo) {
+		if(this.skin != null && !creatureInfo.registeredSubspeciesSkins.contains(this.skin)) {
+			creatureInfo.addSounds("." + this.skin);
+			creatureInfo.registeredSubspeciesSkins.add(this.skin);
+		}
+	}
+
+
+	/**
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
 	public String getTitle() {
-		String subspeciesKey = "";
-		if(this.skin != null) {
-			subspeciesKey += "." + this.skin;
-		}
+		String subspeciesName = "";
 		if(this.color != null) {
-			subspeciesKey += "." + this.color;
+			subspeciesName += I18n.translateToLocal("subspecies." + this.color + ".name");
 		}
-        return I18n.translateToLocal("subspecies" + subspeciesKey + ".name");
+		if(this.skin != null) {
+			if(!subspeciesName.equals("")) {
+				subspeciesName += " ";
+			}
+			subspeciesName += I18n.translateToLocal("subspecies." + this.skin + ".name");
+		}
+        return subspeciesName;
     }
 
 

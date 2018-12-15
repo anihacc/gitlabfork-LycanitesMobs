@@ -356,7 +356,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 				this.creaturePreviewEntity = creatureInfo.entityClass.getConstructor(new Class[]{World.class}).newInstance(this.player.getEntityWorld());
 				this.creaturePreviewEntity.onGround = true;
 				if (this.creaturePreviewEntity instanceof EntityCreatureBase) {
-					((EntityCreatureBase) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo), false);
+					((EntityCreatureBase) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
 					((EntityCreatureBase) this.creaturePreviewEntity).updateSize();
 				}
 				if (this.creaturePreviewEntity instanceof EntityCreatureAgeable) {

@@ -12,6 +12,8 @@ public class CreatureConfig {
 	/** If true, all mobs that are a subspecies will always show their nametag. **/
 	public boolean subspeciesTags = true;
 
+	/** The minimum interval in ticks between random idle sounds. **/
+	public int idleSoundTicks = 100;
 
 	// Stats:
 	/** The minimum base starting level of every mob. Cannot be less than 1. **/
@@ -113,9 +115,10 @@ public class CreatureConfig {
 	 * @param config The config to load from.
 	 */
 	public void loadConfig(ConfigBase config) {
-		// Client GUI:
-		config.setCategoryComment("Client", "Mostly client side settings that affect visuals such as mob names or inventory tabs, etc.");
+		// Client:
+		config.setCategoryComment("Client", "Mostly client side settings that affect visuals or sounds such as mob names or inventory tabs, etc.");
 		this.subspeciesTags = config.getBool("Client", "Subspecies Tags", this.subspeciesTags, "If true, all mobs that are a subspecies will always show their nametag.");
+		this.idleSoundTicks = config.getInt("Client", "Idle Sound Ticks", this.idleSoundTicks, "The minimum interval in ticks between random idle sounds.");
 
 		// Stats:
 		config.setCategoryComment("Base Starting Level", "The base starting level is the level every mob will start at. Mob Events, Special Spawners and other things will then add onto this base level.");

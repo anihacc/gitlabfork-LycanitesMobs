@@ -1,6 +1,7 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,11 @@ public class CommonProxy {
     // ========== Renders ==========
     public void addBlockRender(GroupInfo group, Block block) {}
     public void addItemRender(GroupInfo group, Item item) {}
+
+
+    // ========== Creatures ==========
+	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {}
+
 
 	/**
 	 * Returns the Font Renderer used by Lycnaites Mobs.

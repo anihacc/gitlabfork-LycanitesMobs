@@ -361,7 +361,7 @@ public class MobSpawn {
 				clazz = this.creatureInfo.entityClass;
 			if(clazz == null)
 				return null;
-			return (EntityLiving)clazz.getConstructor(new Class[]{World.class}).newInstance(new Object[]{world});
+			return (EntityLiving)clazz.getConstructor(World.class).newInstance(new Object[]{world});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -388,7 +388,7 @@ public class MobSpawn {
 				firstSpawn = false;
 			}
 			if(this.subspecies > -1) {
-				entityCreature.applySubspecies(this.subspecies, true);
+				entityCreature.applySubspecies(this.subspecies);
 				firstSpawn = false;
 			}
 			if(this.fixate && player != null) {

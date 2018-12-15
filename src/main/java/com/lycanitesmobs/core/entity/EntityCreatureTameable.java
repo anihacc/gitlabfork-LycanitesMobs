@@ -1054,16 +1054,16 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	String sound = "_say";
     	if(this.isTamed() && this.getHealth() < this.getMaxHealth())
     		sound = "_beg";
-    	return AssetManager.getSound(this.creatureInfo.getName() + sound);
+    	return AssetManager.getSound(this.getSoundName() + sound);
     }
     
     // ========== Tame ==========
     public void playTameSound() {
-    	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_tame"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(AssetManager.getSound(this.getSoundName() + "_tame"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Eat ==========
     public void playEatSound() {
-    	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_eat"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(AssetManager.getSound(this.getSoundName() + "_eat"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 }

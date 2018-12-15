@@ -31,10 +31,6 @@
 		{
 			"mobId": "forestmobs:ent",
 			"weight": 8
-		},
-		{
-			"mobId": "forestmobs:calpod",
-			"weight": 2
 		}
 	]
 }

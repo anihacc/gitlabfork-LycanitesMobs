@@ -33,10 +33,6 @@
 		{
 			"mobId": "elementalmobs:geonach",
 			"weight": 8
-		},
-		{
-			"mobId": "desertmobs:gorgomite",
-			"weight": 2
 		}
 	]
 }

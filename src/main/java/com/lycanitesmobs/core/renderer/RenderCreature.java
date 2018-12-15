@@ -7,6 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,9 +27,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.lang.reflect.InvocationTargetException;
+
 @SideOnly(Side.CLIENT)
 public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 	public boolean multipass = true;
+	protected ModelBase defaultModel;
 
     private static final DynamicTexture textureBrightness = new DynamicTexture(16, 16);
 	
@@ -40,6 +44,7 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
   	// ==================================================
     public RenderCreature(String entityID, RenderManager renderManager, float shadowSize) {
     	super(renderManager, AssetManager.getModel(entityID), shadowSize);
+		this.defaultModel = this.mainModel;
 
         if(this.mainModel instanceof ModelCustom) {
             ModelCustom modelCustom = (ModelCustom)this.mainModel;
@@ -66,6 +71,17 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 
 	@Override
 	public void doRender(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.mainModel = this.defaultModel;
+
+		// Subspecies Skins:
+		if(entity.getSubspecies() != null && entity.getSubspecies().modelClass != null) {
+			try {
+				this.mainModel = AssetManager.getCreatureModel(entity);
+			} catch (Exception e) {
+				//LycanitesMobs.printWarning("", "Subspecies Model Exception");
+			}
+		}
+
     	super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 

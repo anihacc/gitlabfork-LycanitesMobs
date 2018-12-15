@@ -266,7 +266,7 @@ public class MobEvent {
 			}
 
 			if(level > 1) {
-				entityCreature.applySubspecies(level - 1, true);
+				entityCreature.applySubspecies(level - 1);
 			}
 		}
     }

@@ -82,6 +82,9 @@ public class CreatureInfo {
 	/** The Subspecies that this creature can use. **/
 	public Map<Integer, Subspecies> subspecies = new HashMap<>();
 
+	/** A list of subspecies skins that have been registered, used to prevent duplicates. **/
+	public List<String> registeredSubspeciesSkins = new ArrayList<>();
+
 	/** The names of the Elements of this creature, affects buffs and debuffs amongst other things. **/
 	protected List<String> elementNames = new ArrayList<>();
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
@@ -195,7 +198,7 @@ public class CreatureInfo {
 			Iterator<JsonElement> subspeciesEntries = json.get("subspecies").getAsJsonArray().iterator();
 			while(subspeciesEntries.hasNext()) {
 				JsonObject jsonObject = subspeciesEntries.next().getAsJsonObject();
-				Subspecies subspecies = Subspecies.createFromJSON(jsonObject);
+				Subspecies subspecies = Subspecies.createFromJSON(this, jsonObject);
 				this.subspecies.put(subspecies.index, subspecies);
 			}
 		}
@@ -299,29 +302,42 @@ public class CreatureInfo {
 		}
 
 		// Add Sounds:
-		AssetManager.addSound(name + "_say", group, "entity." + name + ".say");
-		AssetManager.addSound(name + "_hurt", group, "entity." + name + ".hurt");
-		AssetManager.addSound(name + "_death", group, "entity." + name + ".death");
-		AssetManager.addSound(name + "_step", group, "entity." + name + ".step");
-		AssetManager.addSound(name + "_attack", group, "entity." + name + ".attack");
-		AssetManager.addSound(name + "_jump", group, "entity." + name + ".jump");
-		AssetManager.addSound(name + "_fly", group, "entity." + name + ".fly");
-		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
-			AssetManager.addSound(name + "_tame", group, "entity." + name + ".tame");
-			AssetManager.addSound(name + "_beg", group, "entity." + name + ".beg");
+		this.addSounds("");
+
+		// Register Subspecies:
+		for(Subspecies subspecies : this.subspecies.values()) {
+			subspecies.register(this);
 		}
-		if(this.isTameable())
-			AssetManager.addSound(name + "_eat", group, "entity." + name + ".eat");
-		if(this.isMountable())
-			AssetManager.addSound(name + "_mount", group, "entity." + name + ".mount");
-		if(this.isBoss())
-			AssetManager.addSound(name + "_phase", group, "entity." + name + ".phase");
 
 		// Register Spawning:
 		this.creatureSpawn.register(this);
 
 		// Debug Message - Added:
 		LycanitesMobs.printDebug("Creature", "Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.group.name + ")");
+	}
+
+
+	/**
+	 * Adds sounds that this creature uses.
+	 */
+	public void addSounds(String suffix) {
+		AssetManager.addSound(this.name + suffix + "_say", group, "entity." + this.name + suffix + ".say");
+		AssetManager.addSound(this.name + suffix + "_hurt", group, "entity." + this.name + suffix + ".hurt");
+		AssetManager.addSound(this.name + suffix + "_death", group, "entity." + this.name + suffix + ".death");
+		AssetManager.addSound(this.name + suffix + "_step", group, "entity." + this.name + suffix + ".step");
+		AssetManager.addSound(this.name + suffix + "_attack", group, "entity." + this.name + suffix + ".attack");
+		AssetManager.addSound(this.name + suffix + "_jump", group, "entity." + this.name + suffix + ".jump");
+		AssetManager.addSound(this.name + suffix + "_fly", group, "entity." + this.name + suffix + ".fly");
+		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
+			AssetManager.addSound(this.name + suffix + "_tame", group, "entity." + this.name + suffix + ".tame");
+			AssetManager.addSound(this.name + suffix + "_beg", group, "entity." + this.name + suffix + ".beg");
+		}
+		if(this.isTameable())
+			AssetManager.addSound(this.name + suffix + "_eat", group, "entity." + this.name + suffix + ".eat");
+		if(this.isMountable())
+			AssetManager.addSound(this.name + suffix + "_mount", group, "entity." + this.name + suffix + ".mount");
+		if(this.isBoss())
+			AssetManager.addSound(this.name + suffix + "_phase", group, "entity." + this.name + suffix + ".phase");
 	}
 
 

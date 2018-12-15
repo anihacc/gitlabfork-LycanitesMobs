@@ -8,10 +8,12 @@ import com.lycanitesmobs.core.gui.GuiTabMain;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.gui.TabManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
+import com.lycanitesmobs.core.model.ModelCustom;
 import com.lycanitesmobs.core.renderer.EquipmentPartRenderer;
 import com.lycanitesmobs.core.renderer.EquipmentRenderer;
 import com.lycanitesmobs.core.renderer.RenderRegister;
@@ -131,6 +133,14 @@ public class ClientProxy extends CommonProxy {
         RenderRegister renderRegister = new RenderRegister(groupInfo);
         renderRegister.registerRenderFactories();
     }
+
+
+	// ========== Creatures ==========
+	@Override
+	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {
+		subspecies.modelClass = (Class<? extends ModelCustom>) Class.forName(modelClassName);
+	}
+
 	
 	// ========== Get Client Player Entity ==========
 	@Override

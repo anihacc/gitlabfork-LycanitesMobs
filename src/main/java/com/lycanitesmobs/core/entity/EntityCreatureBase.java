@@ -372,9 +372,6 @@ public abstract class EntityCreatureBase extends EntityLiving {
         // Movement:
         this.moveHelper = this.createMoveHelper();
 
-        // Level:
-		this.applyLevel(this.getStartingLevel());
-
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
             this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
@@ -1018,7 +1015,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
         if(minion instanceof EntityCreatureBase) {
             ((EntityCreatureBase)minion).setMinion(true);
-            ((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex(), true);
+            ((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
             ((EntityCreatureBase)minion).setMasterTarget(this);
             ((EntityCreatureBase)minion).spawnEventType = this.spawnEventType;
         }
@@ -1086,6 +1083,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     public void onFirstSpawn() {
         if(this.hasPetEntry() || this.isMinion())
             return;
+        this.applyLevel(this.getStartingLevel());
         if(CreatureManager.getInstance().config.subspeciesSpawn && !this.creatureInfo.creatureSpawn.disableSubspecies)
     	    this.getRandomSubspecies();
 		if(CreatureManager.getInstance().config.randomSizes)
@@ -1098,11 +1096,11 @@ public abstract class EntityCreatureBase extends EntityLiving {
     		Subspecies randomSubspecies = this.creatureInfo.getRandomSubspecies(this, this.spawnedRare);
     		if(randomSubspecies != null) {
 				LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + randomSubspecies.getTitle());
-				this.applySubspecies(randomSubspecies.index, true);
+				this.applySubspecies(randomSubspecies.index);
 			}
     		else {
 				LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
-				this.applySubspecies(0, true);
+				this.applySubspecies(0);
 			}
     	}
     }
@@ -1226,13 +1224,13 @@ public abstract class EntityCreatureBase extends EntityLiving {
 	//                    Subspecies
 	// ==================================================
 	/** Sets the subspecies of this mob by index and refreshes stats. If not a valid ID or 0 it will be set to null which is for base species. **/
-	public void applySubspecies(int subspeciesIndex, boolean resetHealth) {
-		this.setSubspecies(subspeciesIndex, resetHealth);
+	public void applySubspecies(int subspeciesIndex) {
+		this.setSubspecies(subspeciesIndex);
 		this.refreshStats();
 	}
 
 	/** Sets the subspecies of this mob by index without refreshing stats, use applySubspecies() if changing toa  new subspecies. If not a valid ID or 0 it will be set to null which is for base species. **/
-	public void setSubspecies(int subspeciesIndex, boolean resetHealth) {
+	public void setSubspecies(int subspeciesIndex) {
 		this.subspecies = this.creatureInfo.getSubspecies(subspeciesIndex);
 
 		if(this.subspecies != null) {
@@ -1344,7 +1342,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 			if (partner != null && partner instanceof EntityCreatureBase) {
 				EntityCreatureBase partnerCreature = (EntityCreatureBase) partner;
 				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
-				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0, true);
+				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
 				transformedCreature.setSizeScale(this.sizeScale + partnerCreature.sizeScale);
 
 				// Level:
@@ -1405,7 +1403,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 			// Without Partner:
 			else {
-				transformedCreature.applySubspecies(this.getSubspeciesIndex(), true);
+				transformedCreature.applySubspecies(this.getSubspeciesIndex());
 				transformedCreature.setSizeScale(this.sizeScale);
 				transformedCreature.applyLevel(this.getLevel());
 
@@ -1768,7 +1766,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         }
         else {
         	if(this.getSubspeciesIndex() != this.getByteFromDataManager(SUBSPECIES))
-        		this.applySubspecies(this.getByteFromDataManager(SUBSPECIES), false);
+        		this.applySubspecies(this.getByteFromDataManager(SUBSPECIES));
         }
 
         // Size:
@@ -4060,10 +4058,10 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
         if(nbtTagCompound.hasKey("Subspecies")) {
     		if(this.firstSpawn) {
-				this.applySubspecies(nbtTagCompound.getByte("Subspecies"), false);
+				this.applySubspecies(nbtTagCompound.getByte("Subspecies"));
 			}
 			else {
-				this.setSubspecies(nbtTagCompound.getByte("Subspecies"), false);
+				this.setSubspecies(nbtTagCompound.getByte("Subspecies"));
 			}
         }
 
@@ -4221,7 +4219,12 @@ public abstract class EntityCreatureBase extends EntityLiving {
 	public ResourceLocation getTexture(String suffix) {
 		String textureName = this.getTextureName();
 		if(this.getSubspecies() != null) {
-			textureName += "_" + this.getSubspecies().color;
+			if(this.getSubspecies().skin != null) {
+				textureName += "_" + this.getSubspecies().skin;
+			}
+			if(this.getSubspecies().color != null) {
+				textureName += "_" + this.getSubspecies().color;
+			}
 		}
 		if(!"".equals(suffix)) {
 			textureName += "_" + suffix;
@@ -4321,26 +4324,41 @@ public abstract class EntityCreatureBase extends EntityLiving {
         return 1.0F;
     }
 
+    /** Returns the name to use for sound assets. **/
+    public String getSoundName() {
+    	String soundSuffix = "";
+    	if(this.getSubspecies() != null && this.getSubspecies().skin != null) {
+			soundSuffix += "." + this.getSubspecies().skin;
+		}
+    	return this.creatureInfo.getName() + soundSuffix;
+	}
+
     // ========== Idle ==========
     /** Get number of ticks, at least during which the living entity will be silent. **/
     @Override
     public int getTalkInterval() {
-        return 80;
+        return CreatureManager.getInstance().config.idleSoundTicks;
     }
 
     /** Returns the sound to play when this creature is making a random ambient roar, grunt, etc. **/
     @Override
-    protected SoundEvent getAmbientSound() { return AssetManager.getSound(this.creatureInfo.getName() + "_say"); }
+    protected SoundEvent getAmbientSound() {
+    	return AssetManager.getSound(this.getSoundName() + "_say");
+    }
 
     // ========== Hurt ==========
     /** Returns the sound to play when this creature is damaged. **/
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) { return AssetManager.getSound(this.creatureInfo.getName() + "_hurt"); }
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    	return AssetManager.getSound(this.getSoundName() + "_hurt");
+    }
 
     // ========== Death ==========
     /** Returns the sound to play when this creature dies. **/
     @Override
-    protected SoundEvent getDeathSound() { return AssetManager.getSound(this.creatureInfo.getName() + "_death"); }
+    protected SoundEvent getDeathSound() { return AssetManager.getSound(
+			this.getSoundName() + "_death");
+    }
      
     // ========== Step ==========
     /** Plays an additional footstep sound that this creature makes when moving on the ground (all mobs use the block's stepping sounds by default). **/
@@ -4352,7 +4370,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
             super.playStepSound(pos, block);
             return;
         }
-        this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(AssetManager.getSound(this.getSoundName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Fall ==========
@@ -4379,21 +4397,21 @@ public abstract class EntityCreatureBase extends EntityLiving {
     /** Plays the jump sound when this creature jumps. **/
     public void playJumpSound() {
     	if(!this.hasJumpSound) return;
-    	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(AssetManager.getSound(this.getSoundName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
      
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/
     public void playFlySound() {
     	if(!this.isFlying()) return;
-      	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+      	this.playSound(AssetManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Attack ==========
     /** Plays an attack sound, called once this creature has attacked. note that ranged attacks normally rely on the projectiles playing their launched sound instead. **/
     public void playAttackSound() {
      	if(!this.hasAttackSound) return;
-     	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+     	this.playSound(AssetManager.getSound(this.getSoundName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Phase ==========
@@ -4401,7 +4419,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     public void playPhaseSound() {
         if(AssetManager.getSound(this.creatureInfo.getName() + "_phase") == null)
             return;
-        this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(AssetManager.getSound(this.getSoundName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Play Sound ==========

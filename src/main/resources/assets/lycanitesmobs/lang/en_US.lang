@@ -87,6 +87,9 @@ subspecies.mottled.name=Mottled
 subspecies.celestial.name=Celestial
 subspecies.umber.name=Umber
 #
+# Skins:
+subspecies.void.name=Void
+#
 #
 #
 # ========== Blocks ==========

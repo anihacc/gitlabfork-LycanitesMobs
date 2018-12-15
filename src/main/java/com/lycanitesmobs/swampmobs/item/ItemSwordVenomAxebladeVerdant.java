@@ -21,7 +21,7 @@ public class ItemSwordVenomAxebladeVerdant extends ItemSwordVenomAxeblade {
         super.onSpawnEntity(entity);
         if(entity instanceof EntityCreatureBase) {
             EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
-            entityCreature.applySubspecies(2, true);
+            entityCreature.applySubspecies(2);
         }
     }
 

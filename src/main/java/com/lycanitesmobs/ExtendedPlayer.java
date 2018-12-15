@@ -248,7 +248,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			}
 
 			// Mod Version Check:
-			if (this.player.getEntityWorld().isRemote) {
+			if (this.player.getEntityWorld().isRemote && VersionChecker.enabled) {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion();
 				if (latestVersion != null && latestVersion.isNewer) {
 					this.player.sendMessage(new TextComponentString(I18n.translateToLocal("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));

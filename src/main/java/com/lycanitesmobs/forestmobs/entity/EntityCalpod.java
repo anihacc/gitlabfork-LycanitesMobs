@@ -93,7 +93,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).setMinion(true);
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex(), true);
+    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
     	}
     	this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null)

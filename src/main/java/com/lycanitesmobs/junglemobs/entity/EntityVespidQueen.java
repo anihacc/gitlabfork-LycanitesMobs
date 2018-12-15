@@ -163,7 +163,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     	EntityLivingBase minion = new EntityVespid(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex(), true);
+    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
     	}
     	this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null)
