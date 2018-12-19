@@ -27,14 +27,14 @@ public class KeyHandler {
 	
 	public boolean inventoryOpen = false;
 	
-	public KeyBinding mountAbility = new KeyBinding(I18n.translateToLocal("key.mount.ability"), Keyboard.KEY_X, "Lycanites Mobs");
-	public KeyBinding mountInventory = new KeyBinding(I18n.translateToLocal("key.mount.inventory"), Keyboard.KEY_NONE, "Lycanites Mobs");
+	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", Keyboard.KEY_X, "Lycanites Mobs");
+	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", Keyboard.KEY_NONE, "Lycanites Mobs");
 
-	public KeyBinding beastiary = new KeyBinding(I18n.translateToLocal("key.beastiary"), Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding index = new KeyBinding(I18n.translateToLocal("key.index"), Keyboard.KEY_G, "Lycanites Mobs");
-	public KeyBinding pets = new KeyBinding(I18n.translateToLocal("key.pets"), Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding summoning = new KeyBinding(I18n.translateToLocal("key.summoning"), Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding minionSelection = new KeyBinding(I18n.translateToLocal("key.minions"), Keyboard.KEY_R, "Lycanites Mobs");
+	public KeyBinding beastiary = new KeyBinding("key.beastiary", Keyboard.KEY_NONE, "Lycanites Mobs");
+	public KeyBinding index = new KeyBinding("key.index", Keyboard.KEY_G, "Lycanites Mobs");
+	public KeyBinding pets = new KeyBinding("key.pets", Keyboard.KEY_NONE, "Lycanites Mobs");
+	public KeyBinding summoning = new KeyBinding("key.summoning", Keyboard.KEY_NONE, "Lycanites Mobs");
+	public KeyBinding minionSelection = new KeyBinding("key.minions", Keyboard.KEY_R, "Lycanites Mobs");
 	
 	// ==================================================
     //                     Constructor
