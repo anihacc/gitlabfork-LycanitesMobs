@@ -117,7 +117,15 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     // ==================================================
     public void mountAbility(Entity rider) {}
 
-    public void onDismounted(Entity entity) {}
+    public void onDismounted(Entity entity) {
+		if(this.isSitting()) {
+			int homeY = MathHelper.floor(this.posY);
+			if(!this.isCurrentlyFlying()) {
+				homeY = this.getGroundY(this.getPosition());
+			}
+			this.setHomePosition(MathHelper.floor(this.posX), homeY, MathHelper.floor(this.posZ));
+		}
+	}
 	
     
 	// ==================================================

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.google.common.base.Optional;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -123,7 +124,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ========== Despawning ==========
     @Override
     protected boolean canDespawn() {
-    	if(this.isTamed()) return false;
+    	if(this.isTamed())
+    		return false;
         return super.canDespawn();
     }
     
