@@ -45,7 +45,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
 
     // Summoned Minions:
     public List<EntityCreatureBase> minions = new ArrayList<>();
-    protected String[] loadMinionIDs;
+    protected String[] loadMinionIDs; // Temporary array for initially populating from NBT data in update.
 
     // Block:
     protected boolean blockStateSet = false;
@@ -101,53 +101,52 @@ public class TileEntitySummoningPedestal extends TileEntityBase {
             this.loadMinionIDs = null;
         }
 
-        if(this.summonSet == null || this.summonSet.getCreatureInfo() == null) {
-            return;
-        }
+        // Summoning:
+        if(this.summonSet != null && this.summonSet.getCreatureInfo() != null) {
+			if (this.summonSet.getFollowing()) {
+				this.summonSet.following = false;
+			}
 
-        if(this.summonSet.getFollowing()) {
-            this.summonSet.following = false;
-        }
+			// Summoning Portal:
+			if (this.summoningPortal == null || this.summoningPortal.isDead) {
+				this.summoningPortal = new EntityPortal(this.getWorld(), this);
+				this.summoningPortal.setProjectileScale(8);
+				this.getWorld().spawnEntity(this.summoningPortal);
+			}
 
-        // Summoning Portal:
-        if(this.summoningPortal == null || this.summoningPortal.isDead) {
-            this.summoningPortal = new EntityPortal(this.getWorld(), this);
-            this.summoningPortal.setProjectileScale(8);
-            this.getWorld().spawnEntity(this.summoningPortal);
-        }
+			// Update Minions:
+			if (this.updateTick % 100 == 0) {
+				this.capacity = 0;
+				for (EntityCreatureBase minion : this.minions.toArray(new EntityCreatureBase[this.minions.size()])) {
+					if (minion == null || minion.isDead)
+						this.minions.remove(minion);
+					else {
+						this.capacity += (minion.creatureInfo.summonCost * this.capacityCharge);
+					}
+				}
+			}
 
-        // Update Minions:
-        if(this.updateTick % 100 == 0) {
-            this.capacity = 0;
-            for (EntityCreatureBase minion : this.minions.toArray(new EntityCreatureBase[this.minions.size()])) {
-                if(minion == null || minion.isDead)
-                    this.minions.remove(minion);
-                else {
-                    this.capacity += (minion.creatureInfo.summonCost * this.capacityCharge);
-                }
-            }
-        }
+			// Check Capacity:
+			if (this.capacity + this.summonSet.getCreatureInfo().summonCost > this.capacityMax) {
+				this.summonProgress = 0;
+			}
 
-        // Check Capacity:
-        if(this.capacity + this.summonSet.getCreatureInfo().summonCost > this.capacityMax) {
-            this.summonProgress = 0;
-        }
+			// Summon Minions:
+			else if (this.summonProgress++ >= this.summonProgressMax) {
+				this.summoningPortal.summonCreatures();
+				this.summonProgress = 0;
+				this.capacity = Math.min(this.capacity + (this.capacityCharge * this.summonSet.getCreatureInfo().summonCost), this.capacityMax);
+			}
+		}
 
-        // Summon Minions:
-        else if(this.summonProgress++ >= this.summonProgressMax) {
-            this.summoningPortal.summonCreatures();
-            this.summonProgress = 0;
-            this.capacity = Math.min(this.capacity + (this.capacityCharge * this.summonSet.getCreatureInfo().summonCost), this.capacityMax);
-        }
-
-        // Block State:
-        if(!this.blockStateSet) {
-            if(!"".equals(this.getOwnerName()))
-                BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, this.getWorld(), this.getPos());
-            else
-                BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, this.getWorld(), this.getPos());
-            this.blockStateSet = true;
-        }
+		// Block State:
+		if (!this.blockStateSet) {
+			if (!"".equals(this.getOwnerName()))
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.PLAYER, this.getWorld(), this.getPos());
+			else
+				BlockSummoningPedestal.setState(BlockSummoningPedestal.EnumSummoningPedestal.NONE, this.getWorld(), this.getPos());
+			this.blockStateSet = true;
+		}
 
         // Sync To Client:
         if(this.updateTick % 20 == 0) {

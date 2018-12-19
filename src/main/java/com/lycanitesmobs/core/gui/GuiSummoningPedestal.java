@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -179,7 +181,8 @@ public class GuiSummoningPedestal extends GUIBaseManager {
     public void selectMinion(String minionName) {
         if(this.summonSet == null) {
             if(this.summoningPedestal == null || this.summoningPedestal.summonSet == null) {
-                return;
+				this.summoningPedestal.summonSet = new SummonSet(this.playerExt);
+				this.summoningPedestal.sendSummonSetToServer(this.summoningPedestal.summonSet);
             }
             this.summonSet = this.summoningPedestal.summonSet;
         }

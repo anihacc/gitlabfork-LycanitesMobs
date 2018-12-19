@@ -123,14 +123,11 @@ public class GUIBaseManager extends GuiBaseScreen {
 		this.mc.getTextureManager().bindTexture(this.getTexture());
 
 		// No Pets:
-		if(!this.hasPets()) {
-			this.getFontRenderer().drawString(I18n.translateToLocal("gui." + this.type + "manager.empty"), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
-			this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui." + this.type + "manager.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+		if (!this.hasPets()) {
+			this.getFontRenderer().drawString(I18n.translateToLocal("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
 			return;
 		}
-
-		if(!this.hasSelectedPet())
-			return;
 
 		// Title:
 		this.getFontRenderer().drawString(this.getTitle(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
@@ -139,8 +136,10 @@ public class GUIBaseManager extends GuiBaseScreen {
 		this.getFontRenderer().drawString(this.getEnergyTitle(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
 
 		// Removal Confirmation:
-		if((this.type.equalsIgnoreCase("pet") || this.type.equalsIgnoreCase("mount")) && this.selectedPet.releaseEntity)
-			this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui.pet.release.confirm"), this.centerX + 2, this.windowY + 41, (this.windowWidth / 2) - 2, 0xFFFFFF);
+		if (this.hasSelectedPet()) {
+			if ((this.type.equalsIgnoreCase("pet") || this.type.equalsIgnoreCase("mount")) && this.selectedPet.releaseEntity)
+				this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui.pet.release.confirm"), this.centerX + 2, this.windowY + 41, (this.windowWidth / 2) - 2, 0xFFFFFF);
+		}
 	}
 
     public String getTitle() {
@@ -168,8 +167,8 @@ public class GUIBaseManager extends GuiBaseScreen {
 			return;
 		}
 
-        if(this.hasSelectedPet()) {
-            this.drawEnergyBar();
+		this.drawEnergyBar();
+		if(this.hasSelectedPet()) {
             this.drawHealthBar();
         }
 	}

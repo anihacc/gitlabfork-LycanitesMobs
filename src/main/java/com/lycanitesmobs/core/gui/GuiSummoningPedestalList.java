@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class GuiSummoningPedestalList extends GuiScrollingList {
     GUIBaseManager parentGUI;
-	Map<Integer, String> minionList = new HashMap<>();
+	Map<Integer, String> minionList;
 
 	// ==================================================
   	//                    Constructor
