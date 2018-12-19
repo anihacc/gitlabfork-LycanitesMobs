@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0"
+version = project.version
 group = "com.lycanitesmobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "LycanitesMobsComplete 1.X.X.X [1.12.2]"
 
