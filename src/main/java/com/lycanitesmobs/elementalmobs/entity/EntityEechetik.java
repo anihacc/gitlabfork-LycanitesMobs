@@ -100,7 +100,7 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
         super.onLivingUpdate();
 
 		// Plague Aura Attack:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
+		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
 			PotionBase plague = ObjectManager.getPotionEffect("plague");
 			if(plague != null) {
 				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(5), 1);
