@@ -418,6 +418,9 @@ public class MobSpawn {
 		if(this.creatureInfo != null) {
 			return this.creatureInfo.getName();
 		}
-		return this.entityClass.toString();
+		if(this.entityClass != null) {
+			return this.entityClass.toString();
+		}
+		return "Invalid Creature ID or Class";
 	}
 }
