@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.EnumDifficulty;
 
 import java.util.Collections;
 import java.util.List;
@@ -116,6 +117,10 @@ public class EntityAITargetAttack extends EntityAITarget {
     	// Own Class Check:
     	if(this.targetClass != this.host.getClass() && target.getClass() == this.host.getClass())
             return false;
+
+		// Peaceful Difficulty Check:
+		if(this.host.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL && target instanceof EntityPlayer)
+			return false;
 
 		// Tamed Targeting Check:
 		if(!this.tameTargeting && this.host.isTamed())
