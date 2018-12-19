@@ -127,7 +127,7 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
 
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
+        return (double)this.height * 0.8D;
     }
 
     

@@ -148,7 +148,11 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     @Override
     public void updatePassenger(Entity passenger) {
         if(this.isPassenger(passenger)) {
-			Vec3d mountOffset = this.getFacingPositionDouble(0, 0, 0, this.getMountedZOffset(), this.rotationYaw);
+        	double zOffset = this.getMountedZOffset();
+        	if(zOffset == 0) {
+        		zOffset = 0.00001D;
+			}
+			Vec3d mountOffset = this.getFacingPositionDouble(0, 0, 0, zOffset, this.rotationYaw);
             this.getControllingPassenger().setPosition(this.posX + mountOffset.x, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + mountOffset.z);
         }
     }
