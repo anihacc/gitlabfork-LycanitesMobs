@@ -11,6 +11,9 @@ import java.util.Map;
 public class PlayerSpawnTrigger extends SpawnTrigger {
 	/** Has a random chance of triggering after so many player ticks. **/
 
+	/** If true, creative players will also activate this trigger. **/
+	public boolean creative = false;
+
 	/** How many ticks between trigger attempts. **/
 	public double tickRate = 400;
 
@@ -35,6 +38,9 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
+		if(json.has("creative"))
+			this.creative = json.get("creative").getAsBoolean();
+
 		if(json.has("tickRate"))
 			this.tickRate = json.get("tickRate").getAsDouble();
 
@@ -53,6 +59,11 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 
 	/** Called every player tick. **/
 	public void onTick(EntityPlayer player, long ticks) {
+		// Creative:
+		if(!this.creative && player.isCreative()) {
+			return;
+		}
+
 		// World Time:
 		if(this.useWorldTime && player.getEntityWorld().getWorldTime() % 24000 != this.tickRate) {
 			return;
