@@ -27,7 +27,7 @@ public class EquipmentRenderer extends TileEntitySpecialRenderer<TileEntityEquip
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.5F, 0.2F, 0.6F);
 		GlStateManager.rotate(90, 1, 0, 0);
-		GlStateManager.rotate(-90, 0, 0, 1);
+		GlStateManager.rotate(75, 0, 0, 1);
 		GlStateManager.translate(0F, -1.5F, 0F);
 		ModelEquipment modelEquipment = new ModelEquipment();
 		modelEquipment.render(itemStack, hand, this);

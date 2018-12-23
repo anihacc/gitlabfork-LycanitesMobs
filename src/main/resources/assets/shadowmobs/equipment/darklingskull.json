@@ -30,25 +30,25 @@
 			"damageSweep": 45
 		},
 		{
-			"levelMax": 2,
 			"featureType": "effect",
+			"levelMax": 2,
 			"effectType": "leech",
 			"effectTarget": "self",
 			"effectDuration": 10,
 			"effectStrength": 1
 		},
 		{
+			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 3,
-			"featureType": "effect",
 			"effectType": "leech",
 			"effectTarget": "self",
 			"effectDuration": 10,
 			"effectStrength": 2
 		},
 		{
-			"levelMin": 3,
 			"featureType": "effect",
+			"levelMin": 3,
 			"effectType": "leech",
 			"effectTarget": "self",
 			"effectDuration": 10,

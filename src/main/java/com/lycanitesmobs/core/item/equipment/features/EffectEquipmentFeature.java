@@ -20,6 +20,8 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
+		super.loadFromJSON(json);
+
 		this.effectType = json.get("effectType").getAsString();
 
 		this.effectTarget = json.get("effectTarget").getAsString();
@@ -29,8 +31,6 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 		if(json.has("effectStrength"))
 			this.effectStrength = json.get("effectStrength").getAsInt();
-
-		super.loadFromJSON(json);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ public class SlotEquipmentFeature extends EquipmentFeature {
 
 	/** Loads this slot from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
+		super.loadFromJSON(json);
 		this.slotType = json.get("slotType").getAsString();
 	}
 

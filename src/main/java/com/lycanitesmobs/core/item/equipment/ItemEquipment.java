@@ -1,14 +1,21 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
+import com.lycanitesmobs.core.item.equipment.features.HarvestEquipmentFeature;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -21,6 +28,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ItemEquipment extends ItemBase {
 	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
@@ -116,7 +124,7 @@ public class ItemEquipment extends ItemBase {
 
 
 	/**
-	 * Returns the Equipment Part the provided ItemStack or null in empty or a different item.
+	 * Returns the Equipment Part for the provided ItemStack or null in empty or a different item.
 	 * @param itemStack The Equipment Part ItemStack to get the Equipment Part from.
 	 * @return The Equipment Part or null if the stack is empty.
 	 */
@@ -146,6 +154,54 @@ public class ItemEquipment extends ItemBase {
 		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
 		ItemStackHelper.saveAllItems(nbt, itemStacks);
 		equipmentStack.setTagCompound(nbt);
+	}
+
+
+	/**
+	 * Searches for the provided features by type and returns a list of them.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @param featureType The type of feature to search for.
+	 * @return A list of features.
+	 */
+	public List<EquipmentFeature> getFeaturesByType(ItemStack equipmentStack, String featureType) {
+		List<EquipmentFeature> features = new ArrayList<>();
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			for (EquipmentFeature feature : equipmentPart.features) {
+				if(feature.featureType.equalsIgnoreCase(featureType)) {
+					features.add(feature);
+				}
+			}
+		}
+		return features;
+	}
+
+
+	// ==================================================
+	//                       Usage
+	// ==================================================
+	@Override
+	public boolean canHarvestBlock(IBlockState blockState, ItemStack itemStack) {
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestFeature.canHarvestBlock(blockState)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public float getDestroySpeed(ItemStack itemStack, IBlockState blockState) {
+		float speed = 1;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			speed += harvestFeature.getHarvestSpeed(blockState);
+		}
+		return speed;
 	}
 
 

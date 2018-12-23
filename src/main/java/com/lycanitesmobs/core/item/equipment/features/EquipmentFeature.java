@@ -35,6 +35,7 @@ public class EquipmentFeature {
 			equipmentFeature = new SummonEquipmentFeature();
 		}
 
+		equipmentFeature.featureType = type;
 		equipmentFeature.loadFromJSON(json);
 		return equipmentFeature;
 	}
@@ -42,8 +43,6 @@ public class EquipmentFeature {
 
 	/** Loads this feature from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
-		this.featureType = json.get("featureType").getAsString();
-
 		if(json.has("levelMin"))
 			this.levelMin = json.get("levelMin").getAsInt();
 

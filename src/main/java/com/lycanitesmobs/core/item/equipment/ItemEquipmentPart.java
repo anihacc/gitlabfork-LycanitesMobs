@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -11,12 +12,14 @@ import com.lycanitesmobs.core.info.EntityListCustom;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -96,10 +99,12 @@ public class ItemEquipmentPart extends ItemBase {
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
 				JsonObject featureJson = jsonIterator.next().getAsJsonObject();
-				EquipmentFeature feature = EquipmentFeature.createFromJSON(featureJson);
-				this.features.add(feature);
+				if(!this.addFeature(EquipmentFeature.createFromJSON(featureJson))) {
+					LycanitesMobs.printWarning("", "[Equipment] The feature " + featureJson.toString() + " was unable to be added, check the JSON format.");
+				}
 			}
 		}
+		this.sortFeatures();
 
 		this.setRegistryName(this.group.filename, this.itemName);
 		this.setUnlocalizedName(this.itemName);
@@ -186,6 +191,29 @@ public class ItemEquipmentPart extends ItemBase {
 			nbt.setInteger("equipmentLevel", level);
 		}
 		itemStack.setTagCompound(nbt);
+	}
+
+	/**
+	 * Adds a new Feature to this Equipment Part.
+	 * @return True on success and false on failure.
+	 **/
+	public boolean addFeature(EquipmentFeature feature) {
+		if(feature == null) {
+			LycanitesMobs.printWarning("", "[Equipment] Unable to add a null feature to " + this);
+			return false;
+		}
+		if(feature.featureType == null) {
+			LycanitesMobs.printWarning("", "[Equipment] Feature type not set for part " + this);
+			return false;
+		}
+		this.features.add(feature);
+		return true;
+	}
+
+	/** Cycles through all features and organises them. **/
+	public void sortFeatures() {
+		Comparator<EquipmentFeature> comparator = (o1, o2) -> o1.featureType.compareToIgnoreCase(o2.featureType);
+		this.features.sort(comparator);
 	}
 
 	/** Returns an Equipment Part Level for the provided ItemStack. **/

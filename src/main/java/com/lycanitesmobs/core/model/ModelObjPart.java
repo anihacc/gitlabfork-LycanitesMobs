@@ -20,6 +20,12 @@ public class ModelObjPart {
     public float centerY;
     /** The z center location of this part for rotating around. **/
     public float centerZ;
+	/** The x rotation of this part. **/
+	public float rotationX;
+	/** The y rotation of this part. **/
+	public float rotationY;
+	/** The z rotation of this part. **/
+	public float rotationZ;
 
     /** A list of animation frames to apply to this part on the next render frame. **/
     public List<ModelObjAnimationFrame> animationFrames = new ArrayList<>();
@@ -32,13 +38,19 @@ public class ModelObjPart {
      * @param centerX The x center of this part.
      * @param centerY The y center of this part
      * @param centerZ The z center of this part
+	 * @param rotationX The x rotation of this part.
+	 * @param rotationY The y rotation of this part
+	 * @param rotationZ The z rotation of this part
      */
-    public ModelObjPart(String partName, String parentName, float centerX, float centerY, float centerZ) {
+    public ModelObjPart(String partName, String parentName, float centerX, float centerY, float centerZ, float rotationX, float rotationY, float rotationZ) {
         this.name = partName;
         this.parentName = parentName;
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerZ = centerZ;
+		this.rotationX = rotationX;
+		this.rotationY = rotationY;
+		this.rotationZ = rotationZ;
     }
 
 
@@ -98,7 +110,7 @@ public class ModelObjPart {
 	 * @return A new instance of a combined ModelObjPart.
 	 */
 	public ModelObjPart createdCombinedPart(ModelObjPart combinedWithPart) {
-		ModelObjPart combinedPart = new ModelObjPart(this.name + "-" + combinedWithPart.name, "", this.centerX + combinedWithPart.centerX, this.centerY + combinedWithPart.centerY, this.centerZ + combinedWithPart.centerZ);
+		ModelObjPart combinedPart = new ModelObjPart(this.name + "-" + combinedWithPart.name, "", this.centerX + combinedWithPart.centerX, this.centerY + combinedWithPart.centerY, this.centerZ + combinedWithPart.centerZ, this.rotationX + combinedWithPart.rotationX, this.rotationY + combinedWithPart.rotationY, this.rotationZ + combinedWithPart.rotationZ);
 		return combinedPart;
 	}
 }

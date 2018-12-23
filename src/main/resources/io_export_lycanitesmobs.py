@@ -35,7 +35,10 @@ class ExportLycanitesMobs(bpy.types.Operator):
         out.write('    "parent": "' + parentName + '",\n')
         out.write('    "centerX": "' + str(round(obj.matrix_world.to_translation()[0], 3)) + '",\n')
         out.write('    "centerY": "' + str(round(obj.matrix_world.to_translation()[2], 3)) + '",\n')
-        out.write('    "centerZ": "' + str(round(-obj.matrix_world.to_translation()[1], 3)) + '"\n')
+        out.write('    "centerZ": "' + str(round(-obj.matrix_world.to_translation()[1], 3)) + '",\n')
+        out.write('    "rotationX": "' + str(round(eulerToDegree(obj.matrix_world.to_euler('XYZ')[0]), 3)) + '",\n')
+        out.write('    "rotationY": "' + str(round(eulerToDegree(obj.matrix_world.to_euler('XYZ')[2]), 3)) + '",\n')
+        out.write('    "rotationZ": "' + str(round(eulerToDegree(obj.matrix_world.to_euler('XYZ')[1]), 3)) + '"\n')
         out.write('  }')
     out.write('\n]')
     return {'FINISHED'}
@@ -59,6 +62,10 @@ def register():
 def unregister():
   bpy.utils.unregister_class(ExportLycanitesMobs)
   bpy.types.INFO_MT_file_export.remove(menu_func)
+
+def eulerToDegree(euler):
+  pi = 22.0/7.0
+  return ( (euler) / (2 * pi) ) * 360
 
 if __name__ == "__main__":
   register()

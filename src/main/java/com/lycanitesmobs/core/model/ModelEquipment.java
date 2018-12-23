@@ -37,11 +37,12 @@ public class ModelEquipment {
 		ItemEquipment itemEquipment = (ItemEquipment)itemStack.getItem();
 		NonNullList<ItemStack> equipmentPartStacks = itemEquipment.getEquipmentPartStacks(itemStack);
 
-		int slotId = 0;
+		int slotId = -1;
 		ModelItemBase modelPartBase = null;
 		ModelItemBase modelPartHead = null;
 		ModelObjPart headOffset = null;
 		for(ItemStack partStack : equipmentPartStacks) {
+			slotId++;
 
 			// Base:
 			if(slotId == 0) {
@@ -59,7 +60,7 @@ public class ModelEquipment {
 			// Tip A:
 			else if(slotId == 2) {
 				if(modelPartHead == null || headOffset == null || !modelPartHead.animationParts.containsKey("tipa")) {
-					break;
+					continue;
 				}
 				this.renderPart(partStack, hand, renderer, headOffset.createdCombinedPart(modelPartHead.animationParts.get("tipa")));
 			}
@@ -67,7 +68,7 @@ public class ModelEquipment {
 			// Tip B:
 			else if(slotId == 3) {
 				if(modelPartHead == null || headOffset == null || !modelPartHead.animationParts.containsKey("tipb")) {
-					break;
+					continue;
 				}
 				this.renderPart(partStack, hand, renderer, headOffset.createdCombinedPart(modelPartHead.animationParts.get("tipb")));
 			}
@@ -75,7 +76,7 @@ public class ModelEquipment {
 			// Tip C:
 			else if(slotId == 4) {
 				if(modelPartHead == null || headOffset == null || !modelPartHead.animationParts.containsKey("tipc")) {
-					break;
+					continue;
 				}
 				this.renderPart(partStack, hand, renderer, headOffset.createdCombinedPart(modelPartHead.animationParts.get("tipc")));
 			}
@@ -83,12 +84,10 @@ public class ModelEquipment {
 			// Pommel:
 			if(slotId == 5) {
 				if(modelPartBase == null || !modelPartBase.animationParts.containsKey("pommel")) {
-					break;
+					continue;
 				}
 				this.renderPart(partStack, hand, renderer, modelPartBase.animationParts.get("pommel"));
 			}
-
-			slotId++;
 		}
 	}
 

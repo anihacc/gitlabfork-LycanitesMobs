@@ -23,6 +23,8 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
+		super.loadFromJSON(json);
+
 		this.summonMobId = json.get("summonMobId").getAsString();
 
 		if(json.has("summonChance"))
@@ -36,8 +38,6 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 
 		if(json.has("summonCountMax"))
 			this.summonCountMax = json.get("summonCountMax").getAsInt();
-
-		super.loadFromJSON(json);
 	}
 
 	@Override

@@ -23,6 +23,8 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
+		super.loadFromJSON(json);
+
 		if(json.has("damageAmount"))
 			this.damageAmount = json.get("damageAmount").getAsInt();
 
@@ -37,8 +39,6 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 
 		if(json.has("damageSweep"))
 			this.damageSweep = json.get("damageSweep").getAsDouble();
-
-		super.loadFromJSON(json);
 	}
 
 	@Override
