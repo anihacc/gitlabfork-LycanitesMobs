@@ -2,14 +2,18 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 
 import java.util.Set;
 
@@ -170,5 +174,75 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		return 1;
+	}
+
+
+	/**
+	 * Called when a block is destroyed by Equipment with this Feature.
+	 * @param world The world where the block was destroyed.
+	 * @param blockState The block state that was destroyed.
+	 * @param pos The position of the destroyed block.
+	 * @param entityLiving The entity that destroyed the block.
+	 */
+	public void onBlockDestroyed(World world, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	{
+		LycanitesMobs.printWarning("", "Area Harvesting! " + this.harvestRange);
+		// Block and Random Area Harvesting:
+		if(this.harvestShape.equalsIgnoreCase("block") || this.harvestShape.equalsIgnoreCase("random")) {
+			if(this.harvestRange.getX() <= 1 && this.harvestRange.getY() <= 1 && this.harvestRange.getZ() <= 1) {
+				return;
+			}
+
+			boolean random = this.harvestShape.equalsIgnoreCase("random");
+
+			for(int x = pos.getX() - (this.harvestRange.getX() - 1); x < pos.getX() + this.harvestRange.getX(); x++) {
+				for(int y = pos.getY() - (this.harvestRange.getY() - 1); y < pos.getY() + this.harvestRange.getY(); y++) {
+					for(int z = pos.getZ() - (this.harvestRange.getZ() - 1); z < pos.getZ() + this.harvestRange.getZ(); z++) {
+						BlockPos destroyPos = new BlockPos(x, y, z);
+						if(destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
+							continue;
+						}
+						if(random && world.rand.nextBoolean()) {
+							continue;
+						}
+						world.destroyBlock(destroyPos, true);
+					}
+				}
+			}
+			return;
+		}
+
+		// Cross Area Harvesting:
+		if(this.harvestShape.equalsIgnoreCase("cross")) {
+			if(this.harvestRange.getX() > 1) {
+				for (int x = pos.getX() - (this.harvestRange.getX() - 1); x < pos.getX() + this.harvestRange.getX(); x++) {
+					BlockPos destroyPos = new BlockPos(x, pos.getY(), pos.getZ());
+					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
+						continue;
+					}
+					world.destroyBlock(destroyPos, true);
+				}
+			}
+
+			if(this.harvestRange.getY() > 1) {
+				for (int y = pos.getY() - (this.harvestRange.getY() - 1); y < pos.getY() + this.harvestRange.getY(); y++) {
+					BlockPos destroyPos = new BlockPos(pos.getX(), y, pos.getZ());
+					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
+						continue;
+					}
+					world.destroyBlock(destroyPos, true);
+				}
+			}
+
+			if(this.harvestRange.getZ() > 1) {
+				for (int z = pos.getZ() - (this.harvestRange.getZ() - 1); z < pos.getZ() + this.harvestRange.getZ(); z++) {
+					BlockPos destroyPos = new BlockPos(pos.getX(), pos.getY(), z);
+					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
+						continue;
+					}
+					world.destroyBlock(destroyPos, true);
+				}
+			}
+		}
 	}
 }

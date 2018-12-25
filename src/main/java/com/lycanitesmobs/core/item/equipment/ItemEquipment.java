@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
@@ -158,7 +160,7 @@ public class ItemEquipment extends ItemBase {
 
 
 	/**
-	 * Searches for the provided features by type and returns a list of them.
+	 * Searches for the provided active features by type and returns a list of them.
 	 * @param equipmentStack The itemStack of the Equipment.
 	 * @param featureType The type of feature to search for.
 	 * @return A list of features.
@@ -171,7 +173,7 @@ public class ItemEquipment extends ItemBase {
 				continue;
 			}
 			for (EquipmentFeature feature : equipmentPart.features) {
-				if(feature.featureType.equalsIgnoreCase(featureType)) {
+				if(equipmentPart.getLevel(equipmentStack) >= feature.levelMin && equipmentPart.getLevel(equipmentStack) <= feature.levelMax && feature.featureType.equalsIgnoreCase(featureType)) {
 					features.add(feature);
 				}
 			}
@@ -202,6 +204,19 @@ public class ItemEquipment extends ItemBase {
 			speed += harvestFeature.getHarvestSpeed(blockState);
 		}
 		return speed;
+	}
+
+	@Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	{
+		if(worldIn.isRemote) {
+			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
+		}
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			harvestFeature.onBlockDestroyed(worldIn, blockState, pos, entityLiving);
+		}
+		return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
 	}
 
 

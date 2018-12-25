@@ -183,7 +183,7 @@ public abstract class ModelItemBase {
 			// Offset By Equipment Piece Slot:
 			if(offsetObjPart != null) {
 				this.doTranslate(offsetObjPart.centerX, offsetObjPart.centerY, offsetObjPart.centerZ);
-				this.doRotate(offsetObjPart.rotationX, offsetObjPart.rotationY, offsetObjPart.rotationZ);
+				this.doRotate(-offsetObjPart.rotationX, -offsetObjPart.rotationY, -offsetObjPart.rotationZ);
 			}
 
 			// Apply Animation Frames:

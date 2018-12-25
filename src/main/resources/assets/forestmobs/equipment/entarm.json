@@ -12,6 +12,10 @@
 			"slotType": "head"
 		},
 		{
+			"featureType": "slot",
+			"slotType": "pommel"
+		},
+		{
 			"featureType": "damage",
 			"levelMin": 3,
 			"damageAmount": 1,

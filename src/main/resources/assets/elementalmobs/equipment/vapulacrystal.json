@@ -1,8 +1,8 @@
 {
-	"itemName": "geonachfist",
+	"itemName": "vapulacrystal",
 	"loadDefault": true,
 	"slotType": "axe",
-	"dropMobId": "elementalmobs:geonach",
+	"dropMobId": "elementalmobs:vapula",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -12,18 +12,18 @@
 			"levelMax": 1,
 			"harvestType": "pickaxe",
 			"harvestStrength": 6,
-			"harvestShape": "block",
-			"harvestRange": [2, 2, 2],
+			"harvestShape": "cross",
+			"harvestRange": [3, 3, 3],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
 			"featureType": "harvest",
 			"levelMin": 2,
 			"levelMax": 2,
-			"harvestType": "pickaxe",
+			"harvestType": "cross",
 			"harvestStrength": 7,
 			"harvestShape": "block",
-			"harvestRange": [3, 3, 3],
+			"harvestRange": [5, 5, 5],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
@@ -32,32 +32,14 @@
 			"levelMin": 3,
 			"harvestStrength": 8,
 			"harvestShape": "block",
-			"harvestRange": [4, 4, 4],
+			"harvestRange": [7, 7, 7],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
-			"featureType": "damage",
-			"levelMax": 2,
-			"damageAmount": 4,
-			"damageKnockback": 2,
-			"damageCooldown": 2,
-			"damageRange": 1,
-			"damageSweep": 360
-		},
-		{
-			"featureType": "damage",
-			"levelMin": 3,
-			"damageAmount": 5,
-			"damageKnockback": 2,
-			"damageCooldown": 2,
-			"damageRange": 1,
-			"damageSweep": 360
-		},
-		{
 			"featureType": "effect",
-			"effectType": "weight",
+			"effectType": "aphagia",
 			"effectTarget": "target",
-			"effectDuration": 80,
+			"effectDuration": 100,
 			"effectStrength": 1
 		}
 	]
