@@ -3558,15 +3558,15 @@ public abstract class EntityCreatureBase extends EntityLiving {
     /** Gets whether this mob should always display its nametag client side. **/
     @SideOnly(Side.CLIENT)
     public boolean getAlwaysRenderNameTagForRender() {
-        if(this.renderSubspeciesNameTag() && this.getSubspecies() != null)
-    		return CreatureManager.getInstance().config.subspeciesTags;
+        if(this.getSubspecies() != null && !this.hasCustomName())
+    		return this.renderSubspeciesNameTag();
         return super.getAlwaysRenderNameTagForRender();
     }
     
     // ========== Render Subspecies Name Tag ==========
     /** Gets whether this mob should always display its nametag if it's a subspecies. **/
     public boolean renderSubspeciesNameTag() {
-    	return true;
+    	return CreatureManager.getInstance().config.subspeciesTags;
     }
     
     // ========== Consume Player's Item ==========
