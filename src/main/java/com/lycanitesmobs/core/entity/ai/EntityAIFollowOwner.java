@@ -65,8 +65,9 @@ public class EntityAIFollowOwner extends EntityAIFollow {
     @Override
     public void updateTask() {
     	if(!this.host.isSitting()) {
-    		if(this.host.getDistance(this.getTarget()) >= this.lostDistance)
-    			this.teleportToOwner();
+    		if(this.host.getDistance(this.getTarget()) >= this.lostDistance) {
+				this.teleportToOwner();
+			}
     	}
     	super.updateTask();
     }
@@ -74,6 +75,13 @@ public class EntityAIFollowOwner extends EntityAIFollow {
     // ========== Teleport to Owner ==========
     public void teleportToOwner() {
     	if(this.getTarget() != null) {
+			if(!this.host.canBreatheAboveWater() && ((!this.host.isLavaCreature && !this.getTarget().isInWater()) || (this.host.isLavaCreature && !this.getTarget().isInLava()))) {
+				return;
+			}
+			if(!this.host.canBreatheUnderwater() && this.getTarget().isInWater()) {
+				return;
+			}
+
     		World world = this.getTarget().getEntityWorld();
 	    	int i = MathHelper.floor(this.getTarget().posX) - 2;
 	        int j = MathHelper.floor(this.getTarget().getEntityBoundingBox().minY);
