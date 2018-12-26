@@ -28,7 +28,7 @@
 			"levelMin": 3,
 			"damageAmount": 4,
 			"damageKnockback": 0,
-			"damageCooldown": 1,
+			"damageCooldown": 0.75,
 			"damageRange": 1,
 			"damageSweep": 45
 		},

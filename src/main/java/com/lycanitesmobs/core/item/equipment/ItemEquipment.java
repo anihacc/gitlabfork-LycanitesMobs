@@ -1,22 +1,20 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.equipment.features.DamageEquipmentFeature;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
 import com.lycanitesmobs.core.item.equipment.features.HarvestEquipmentFeature;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -24,13 +22,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ItemEquipment extends ItemBase {
 	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
@@ -61,7 +61,7 @@ public class ItemEquipment extends ItemBase {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, descriptionWidth);
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, descriptionWidth);
 			for (Object formattedDescription : formattedDescriptionList) {
 				if (formattedDescription instanceof String)
 					tooltip.add("\u00a73" + formattedDescription);
@@ -80,14 +80,9 @@ public class ItemEquipment extends ItemBase {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
-			descriptions.addAll(equipmentPart.getAdditionalDescriptions(equipmentPartStack, world, tooltipFlag));
+			descriptions.add(I18n.translateToLocal(equipmentPart.getUnlocalizedName() + ".name"));
 		}
 		return descriptions;
-	}
-
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		return super.getAttributeModifiers(slot, stack);
 	}
 
 
@@ -104,6 +99,13 @@ public class ItemEquipment extends ItemBase {
 			return itemStack.getTagCompound();
 		}
 		return new NBTTagCompound();
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	@Override
+	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
+		return LycanitesMobs.proxy.getFontRenderer();
 	}
 
 
@@ -183,7 +185,7 @@ public class ItemEquipment extends ItemBase {
 
 
 	// ==================================================
-	//                       Usage
+	//                     Harvesting
 	// ==================================================
 	@Override
 	public boolean canHarvestBlock(IBlockState blockState, ItemStack itemStack) {
@@ -217,6 +219,99 @@ public class ItemEquipment extends ItemBase {
 			harvestFeature.onBlockDestroyed(worldIn, blockState, pos, entityLiving);
 		}
 		return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
+	}
+
+
+	// ==================================================
+	//                      Damaging
+	// ==================================================
+	/**
+	 * Called when an entity is hit with this item.
+	 * @param itemStack The ItemStack being hit with.
+	 * @param target The target entity being hit.
+	 * @param attacker The entity using this item to hit.
+	 * @return True on successful hit.
+	 */
+	@Override
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+		// Knockback:
+		double knockback = this.getDamageKnockback(itemStack);
+		if(knockback != 0 && attacker != null && target != null) {
+			double xDist = attacker.posX - target.posX;
+			double zDist = attacker.posZ - target.posZ;
+			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+			double motionCap = 10;
+			if(target.motionX < motionCap && target.motionX > -motionCap && target.motionZ < motionCap && target.motionZ > -motionCap) {
+				target.addVelocity(
+						-(xDist / xzDist * knockback + target.motionX * knockback),
+						0,
+						-(zDist / xzDist * knockback + target.motionZ * knockback)
+				);
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Adds attribute modifiers provided by this equipment.
+	 * @param slot The slot that this equipment is in.
+	 * @return The Attribute Modifier multimap with changes applied to it.
+	 */
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack itemStack) {
+		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
+		if (slot == EntityEquipmentSlot.MAINHAND) {
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), 0));
+		}
+
+		return multimap;
+	}
+
+	/**
+	 * Returns how much damage this equipment will do.
+	 * @param itemStack The equipment ItemStack.
+	 * @return The amount of base damage.
+	 */
+	public double getDamageAmount(ItemStack itemStack) {
+		double damage = 1;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
+			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
+			damage += damageFeature.damageAmount;
+		}
+		return damage;
+	}
+
+	/**
+	 * Returns the attack cooldown of this equipment.
+	 * @param itemStack The equipment ItemStack.
+	 * @return The amount of cooldown in ticks.
+	 */
+	public double getDamageCooldown(ItemStack itemStack) {
+		double cooldown = 0;
+		double i = 0;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
+			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
+			cooldown += damageFeature.damageCooldown;
+			i++;
+		}
+		cooldown = 2.4D * (cooldown / i);
+		return cooldown;
+	}
+
+	/**
+	 * Returns the attack knockback of this equipment.
+	 * @param itemStack The equipment ItemStack.
+	 * @return The amount of knockback.
+	 */
+	public double getDamageKnockback(ItemStack itemStack) {
+		double knockback = 0;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
+			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
+			knockback += damageFeature.damageKnockback;
+		}
+		return knockback;
 	}
 
 

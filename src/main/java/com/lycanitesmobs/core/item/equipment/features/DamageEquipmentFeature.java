@@ -8,8 +8,8 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 	/** How much damage this part adds to the weapon attack. **/
 	public int damageAmount = 1;
 
-	/** The time (in ticks) that this feature adds to the weapon attack cooldown on use. **/
-	public int damageCooldown = 0;
+	/** The attack cooldown modifier (based on vanilla sword cooldown). All modifiers are averaged together. **/
+	public double damageCooldown = 1;
 
 	/** How much knockback this part adds to the weapon attack. **/
 	public double damageKnockback = 0;
@@ -29,7 +29,7 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 			this.damageAmount = json.get("damageAmount").getAsInt();
 
 		if(json.has("damageCooldown"))
-			this.damageCooldown = json.get("damageCooldown").getAsInt();
+			this.damageCooldown = json.get("damageCooldown").getAsDouble();
 
 		if(json.has("damageKnockback"))
 			this.damageKnockback = json.get("damageKnockback").getAsDouble();
