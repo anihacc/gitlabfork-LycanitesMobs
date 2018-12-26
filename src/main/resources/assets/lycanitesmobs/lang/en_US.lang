@@ -168,6 +168,16 @@ gui.beastiary.player.focus=Your Summoning Focus
 # Index:
 gui.beastiary.index.title=Index
 gui.beastiary.index.description=Welcome to the Lycanites Mobs Beastiary! Here you can look up all creatures that you have gained knownledge of to better equip yourself against the threats that loom out yonder! You can also manage any pets, mounts and familiars that you may have tamed and then soulbound to yourself. You can also manage what minions you want to summon!
+gui.beastiary.index.version=Mod Version
+gui.beastiary.index.version.newer=Newer Version Available
+gui.beastiary.index.changes=Latest Changes
+gui.beastiary.index.changes.name=Name
+gui.beastiary.index.changes.new=New Features
+gui.beastiary.index.changes.config=Config Changes
+gui.beastiary.index.changes.major=Major Fixes
+gui.beastiary.index.changes.gameplay=Gameplay
+gui.beastiary.index.changes.balancing=Balancing
+gui.beastiary.index.changes.minor=Minor
 #
 # Creatures:
 gui.beastiary.creatures=Creatures

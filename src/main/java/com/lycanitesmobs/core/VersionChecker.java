@@ -15,15 +15,43 @@ import java.nio.charset.Charset;
 public class VersionChecker {
 	public static boolean enabled = true;
 
+	static VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
+	static VersionInfo latestVersion = null;
+
 	public static class VersionInfo {
-		public VersionInfo(String number, String mc) {
-			this.versionNumber = number;
-			this.versionMC = mc;
+		public String versionNumber;
+		public String mcVersion;
+		public String name;
+		public String newFeatures;
+		public String configChanges;
+		public String majorFixes;
+		public String changes;
+		public String balancing;
+		public String minorFixes;
+
+		public boolean isNewer = false;
+
+		/**
+		 * Constructor
+		 * @param versionNumber The version number. Ex: 1.20.5.1
+		 * @param mcVersion The Minecraft version. Ex: 1.12.2
+		 */
+		public VersionInfo(String versionNumber, String mcVersion) {
+			this.versionNumber = versionNumber;
+			this.mcVersion = mcVersion;
 		}
 
-		public String versionNumber;
-		public String versionMC;
-		public boolean isNewer = false;
+		public void loadFromJSON(JsonObject versionJson) {
+			this.versionNumber = versionJson.get("version").getAsString();
+			this.mcVersion = versionJson.get("mcversion").getAsString();
+			this.name = versionJson.get("name").getAsString();
+			this.newFeatures = versionJson.get("new").getAsString();
+			this.configChanges = versionJson.get("config_changes").getAsString();
+			this.majorFixes = versionJson.get("major_fixes").getAsString();
+			this.changes = versionJson.get("changes").getAsString();
+			this.balancing = versionJson.get("balancing").getAsString();
+			this.minorFixes = versionJson.get("minor_fixes").getAsString();
+		}
 
 		/** Sets isNewer to true if this VersionInfo is newer than compareVersion. **/
 		public void checkIfNewer(VersionInfo compareVersion) {
@@ -44,9 +72,10 @@ public class VersionChecker {
 		}
 	}
 
-	public static VersionInfo getLatestVersion() {
-		VersionInfo currentVersion = new VersionInfo(LycanitesMobs.versionNumber, LycanitesMobs.versionMC);
-		VersionInfo latestVersion = null;
+	public static VersionInfo getLatestVersion(boolean refresh) {
+		if(!refresh && latestVersion != null) {
+			return latestVersion;
+		}
 
 		try {
 			URL url = new URL(LycanitesMobs.websiteAPI + "/latest");
@@ -56,6 +85,7 @@ public class VersionChecker {
 			String jsonString = null;
 			try {
 				jsonString = IOUtils.toString(inputStream, (Charset)null);
+				jsonString = jsonString.replace("\\r", "");
 			} catch (Exception e) {
 				throw e;
 			} finally {
@@ -64,10 +94,11 @@ public class VersionChecker {
 
 			JsonParser jsonParser = new JsonParser();
 			JsonElement jsonElement = jsonParser.parse(jsonString);
-			JsonObject jsonObject = jsonElement.getAsJsonObject();
-			String latestVersionNumber = jsonObject.get("version").getAsString();
-			String latestVersionMC = jsonObject.get("mcversion").getAsString();
-			latestVersion = new VersionInfo(latestVersionNumber, latestVersionMC);
+			JsonObject versionJson = jsonElement.getAsJsonObject();
+			String versionNumber = versionJson.get("version").getAsString();
+			String mcVersion = versionJson.get("mcversion").getAsString();
+			latestVersion = new VersionInfo(versionNumber, mcVersion);
+			latestVersion.loadFromJSON(versionJson);
 			latestVersion.checkIfNewer(currentVersion);
 		}
 		catch(Throwable e) {

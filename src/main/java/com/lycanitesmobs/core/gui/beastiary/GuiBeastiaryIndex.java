@@ -2,6 +2,8 @@ package com.lycanitesmobs.core.gui.beastiary;
 
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.VersionChecker;
+import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,8 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class GuiBeastiaryIndex extends GuiBeastiary {
-
-
+	public GuiIndexList indexList;
 
 	/**
 	 * Opens this GUI up to the provided player.
@@ -57,6 +58,9 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		this.buttonList.add(button);
 		button = new GuiButton(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon");
 		this.buttonList.add(button);
+
+		// Lists:
+		this.indexList = new GuiIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2);
 	}
 
 
@@ -76,8 +80,32 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
 		super.drawForeground(mouseX, mouseY, partialTicks);
 
+		int yOffset = this.colRightY + 13;
 		String info = I18n.translateToLocal("gui.beastiary.index.description");
-		this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
+		this.drawSplitString(info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
+
+		// Get Latest Version:
+		VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(false);
+		if(latestVersion == null) {
+			return;
+		}
+
+		// Check Mod Version:
+		String version = "\n§l" + I18n.translateToLocal("gui.beastiary.index.version") + ": §r";
+		if(latestVersion.isNewer) {
+			version += "§4";
+		}
+		version += LycanitesMobs.versionNumber + "§r";
+		if(latestVersion.isNewer) {
+			version += " §l" + I18n.translateToLocal("gui.beastiary.index.version.newer") + ": §r§2" + latestVersion.versionNumber + "§r";
+		}
+		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
+		yOffset += this.getFontRenderer().getWordWrappedHeight(version, this.colRightWidth);
+
+		// Latest Changes:
+		this.indexList.versionInfo = latestVersion;
+		this.indexList.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 
