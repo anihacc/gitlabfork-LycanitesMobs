@@ -48,6 +48,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import scala.actors.threadpool.Arrays;
 
 @Mod(
 		modid = LycanitesMobs.modid,
@@ -122,7 +123,8 @@ public class LycanitesMobs {
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
 		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
-		DonationFamiliars.instance.enabled = config.getBool("Extras", "Donation Familiars", DonationFamiliars.instance.enabled, "Donation Familiars help support the development of this mod but if needed, set this to false to disable them.");
+		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {"Jbams"}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
+		DonationFamiliars.instance.familiarBlacklist = Arrays.asList(familiarBlacklist);
 
 		// ========== Admin Entity Removal Tool ==========
         config.setCategoryComment("Admin", "Special tools for server admins.");

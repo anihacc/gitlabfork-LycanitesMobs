@@ -12,16 +12,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class DonationFamiliars {
     public static DonationFamiliars instance = new DonationFamiliars();
     public Map<String, Map<String, PetEntry>> playerFamiliars = new HashMap<>();
     public long jsonLoadedTime = -1;
-    public boolean enabled = true;
+    public List<String> familiarBlacklist = new ArrayList<>();
 
     // ==================================================
     //                  Read From JSON
@@ -31,23 +28,22 @@ public class DonationFamiliars {
 
         // Load JSON File:
         String jsonString = null;
-        if(this.enabled) {
+		try {
+			URL familiarURL = new URL(LycanitesMobs.websiteAPI + "/familiar");
+			URLConnection urlConnection = familiarURL.openConnection();
+			urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
+			InputStream inputStream = urlConnection.getInputStream();
 			try {
-				URL familiarURL = new URL(LycanitesMobs.websiteAPI + "/familiar");
-				URLConnection urlConnection = familiarURL.openConnection();
-				urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
-				InputStream inputStream = urlConnection.getInputStream();
-				try {
-					jsonString = IOUtils.toString(inputStream, (Charset) null);
-				} catch (Exception e) {
-					throw e;
-				} finally {
-					inputStream.close();
-				}
-				LycanitesMobs.printInfo("", "Online donations file read successfully.");
+				jsonString = IOUtils.toString(inputStream, (Charset) null);
 			} catch (Exception e) {
-				LycanitesMobs.printInfo("", "Unable to access the online donations file, using local copy instead, this might be out of date.");
-				e.printStackTrace();
+				throw e;
+			} finally {
+				inputStream.close();
+			}
+			LycanitesMobs.printInfo("", "Online donations file read successfully.");
+		} catch (Exception e) {
+			LycanitesMobs.printInfo("", "Unable to access the online donations file, using local copy instead, this might be out of date.");
+			e.printStackTrace();
 //            try {
 //                jsonString = FileUtils.readFileToString(FileUtils.getFile(LycanitesMobs.proxy.getMinecraftDir() + "/assets/lycanitesmobs/familiars.json"));
 //            } catch (IOException e1) {
@@ -55,16 +51,13 @@ public class DonationFamiliars {
 //                e1.printStackTrace();
 //                return;
 //            }
-				jsonString = this.getLocalJSON();
-			}
-		}
-		else {
 			jsonString = this.getLocalJSON();
 		}
 
         // Parse JSON File:
-        if(!this.parseFamiliarJSON(jsonString)) // Try and parse web JSON.
-            this.parseFamiliarJSON(this.getLocalJSON()); // If it fails, use local copy.
+        if(!this.parseFamiliarJSON(jsonString)) { // Try and parse web JSON.
+			this.parseFamiliarJSON(this.getLocalJSON()); // If it fails, use local copy.
+		}
     }
 
 
@@ -82,6 +75,9 @@ public class DonationFamiliars {
                 JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
                 String minecraft_uuid = familiarJson.get("minecraft_uuid").getAsString();
                 String minecraft_username = familiarJson.get("minecraft_username").getAsString();
+                if(this.familiarBlacklist.contains(minecraft_username)) {
+                	continue;
+				}
                 String familiar_species = familiarJson.get("familiar_species").getAsString();
                 int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
                 String familiar_name = familiarJson.get("familiar_name").getAsString();
