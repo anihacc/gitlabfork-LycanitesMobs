@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
@@ -304,7 +305,9 @@ public class ModelObj extends ModelCustom {
 
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
-		GlStateManager.enableBlend();
+		if(!CreatureManager.getInstance().config.disableModelAlpha) {
+			GlStateManager.enableBlend();
+		}
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		if(layer != null) {
 			layer.onRenderStart(entity, renderAsTrophy);
@@ -313,7 +316,9 @@ public class ModelObj extends ModelCustom {
 
 	/** Called just after a layer is rendered. **/
 	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
-		GlStateManager.disableBlend();
+		if(!CreatureManager.getInstance().config.disableModelAlpha) {
+			GlStateManager.disableBlend();
+		}
 		if(layer != null) {
 			layer.onRenderFinish(entity, renderAsTrophy);
 		}
