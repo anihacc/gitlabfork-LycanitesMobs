@@ -2681,16 +2681,30 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
         float damage = this.getAttackDamage(damageScale);
         int i = 0;
-        
-        //if(target instanceof EntityLivingBase) { // TODO Enchanted Weapon Damage and Knockback
+
+		// TODO Enchanted Weapon Damage and Knockback
+        //if(target instanceof EntityLivingBase) {
         	//damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE));
             //i += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase)target);
         //}
-        
+
+		// Player Shielding:
+		boolean targetIsShielding = false;
+		if (target instanceof EntityPlayer) {
+			EntityPlayer targetPlayer = (EntityPlayer)target;
+			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
+			targetIsShielding = !playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer);
+		}
+
+		// Attempt The Attack:
         boolean attackSuccess;
         double pierceDamage = this.creatureStats.getPierce();
-        if(damage <= pierceDamage)
-        	attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+        if(targetIsShielding) {
+        	pierceDamage = 0;
+		}
+        if(damage <= pierceDamage) {
+			attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+		}
         else {
         	int hurtResistantTimeBefore = target.hurtResistantTime;
         	target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
@@ -2698,17 +2712,29 @@ public abstract class EntityCreatureBase extends EntityLiving {
     		damage -= pierceDamage;
         	attackSuccess = target.attackEntityFrom(this.getDamageSource(null), damage);
         }
-        
+
+        // After Successful Attack:
         if(attackSuccess) {
             if(i > 0) {
             	target.addVelocity((double)(-MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F) * (float)i * 0.5F));
                 this.motionX *= 0.6D;
                 this.motionZ *= 0.6D;
             }
-            
+
+            // Fire Enchanted Held Weapons:
             int fireEnchantDuration = EnchantmentHelper.getFireAspectModifier(this);
             if(fireEnchantDuration > 0)
             	target.setFire(fireEnchantDuration * 4);
+
+			// Interrupt Shielding Players:
+			if (target instanceof EntityPlayer && this.canInteruptShields(true)) {
+				EntityPlayer targetPlayer = (EntityPlayer)target;
+				if (targetIsShielding && this.canInteruptShields(false)) {
+					ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
+					targetPlayer.getCooldownTracker().setCooldown(playerActiveItemStack.getItem(), 100);
+					this.world.setEntityState(targetPlayer, (byte)30);
+				}
+			}
         }
         
         return attackSuccess;
@@ -2733,6 +2759,15 @@ public abstract class EntityCreatureBase extends EntityLiving {
              return nestedDamageSource;
         return DamageSource.causeMobDamage(this);
     }
+
+	/**
+	 * Returns true if this mob can interrupt players when they are using their shield.
+	 * @param checkAbility If true, this is just to check if this mob is capable of blocking shields. If false, this will return if this mob should actually interrupt a shield (do random rolls here).
+	 * @return True to interrupt shielding.
+	 */
+	public boolean canInteruptShields(boolean checkAbility) {
+     	return false;
+	}
     
     
     // ==================================================
