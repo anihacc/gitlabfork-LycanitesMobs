@@ -117,11 +117,14 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 				else if("pike".equals(slotEquipment.type)) {
 					slotV += slotHeight * 5;
 				}
-				else if("jewel".equals(slotEquipment.type)) {
+				else if("pommel".equals(slotEquipment.type)) {
 					slotV += slotHeight * 6;
 				}
-				else if("aura".equals(slotEquipment.type)) {
+				else if("jewel".equals(slotEquipment.type)) {
 					slotV += slotHeight * 7;
+				}
+				else if("aura".equals(slotEquipment.type)) {
+					slotV += slotHeight * 8;
 				}
 			}
 

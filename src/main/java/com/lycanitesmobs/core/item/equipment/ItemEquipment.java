@@ -129,6 +129,22 @@ public class ItemEquipment extends ItemBase {
 
 
 	/**
+	 * Counts how many Equipment Parts this Piece is made out of.
+	 * @param itemStack The Equipment ItemStack to count the Equipment Part ItemStacks from.
+	 * @return How many Equipment Parts make this Equipment Piece.
+	 */
+	public int getEquipmentPartCount(ItemStack itemStack) {
+		int partCount = 0;
+		for(ItemStack partStack : this.getEquipmentPartStacks(itemStack)) {
+			if(!partStack.isEmpty()) {
+				partCount++;
+			}
+		}
+		return partCount;
+	}
+
+
+	/**
 	 * Returns the Equipment Part for the provided ItemStack or null in empty or a different item.
 	 * @param itemStack The Equipment Part ItemStack to get the Equipment Part from.
 	 * @return The Equipment Part or null if the stack is empty.

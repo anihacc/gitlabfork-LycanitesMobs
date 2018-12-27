@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.inventory;
 
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
@@ -39,10 +41,29 @@ public class SlotEquipment extends SlotBase {
 			return this.type.equals(((ItemEquipmentPart)item).slotType);
 		}
 		else if(item instanceof ItemEquipment) {
-			return this.type.equals("piece");
+			return this.type.equals("piece") && !this.getHasStack();
 		}
         return false;
     }
+
+
+	/**
+	 * Returns true if this slot has an item stack, unless it is an Equipment Piece with no parts.
+	 * @return True if this slot has a valid item stack.
+	 */
+	@Override
+	public boolean getHasStack() {
+		if(!super.getHasStack()) {
+			return false;
+		}
+		if(this.getStack().getItem() instanceof ItemEquipment) {
+			ItemEquipment itemEquipment = (ItemEquipment) this.getStack().getItem();
+			if(itemEquipment.getEquipmentPartCount(this.getStack()) == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	
 	public int getSlotStackLimit() {
@@ -59,7 +80,6 @@ public class SlotEquipment extends SlotBase {
 	 */
 	public void setType(String type) {
 		this.type = type;
-		// TODO Destroy existing parts that don't fit!
 	}
 
 
@@ -83,7 +103,7 @@ public class SlotEquipment extends SlotBase {
 	 * @return True if a slot was updated.
 	 */
 	public boolean updateChildSlot(int index, String type) {
-		if(this.childSlots.size() <= index) {
+		if(index >= this.childSlots.size()) {
 			return false;
 		}
 		this.childSlots.get(index).setType(type);
@@ -97,7 +117,34 @@ public class SlotEquipment extends SlotBase {
 	 */
 	@Override
 	public void putStack(ItemStack itemStack) {
+		this.putStackWithoutUpdate(itemStack);
+
+		// Update Container:
+		if("piece".equals(this.type)) {
+			this.containerForge.onEquipmentPieceSlotChanged(this);
+		}
+		else {
+			this.containerForge.onEquipmentPartSlotChanged(this);
+		}
+	}
+
+
+	/**
+	 * Puts an ItemStack into this slot but does not slot changes in the container. Use this for when the slot types don't need to change.
+	 * @param itemStack The ItemStack being inserted.
+	 */
+	public void putStackWithoutUpdate(ItemStack itemStack) {
 		super.putStack(itemStack);
+
+		// Update Child Slots:
+		if(!this.childSlots.isEmpty()) {
+			this.updateChildSlots();
+		}
+	}
+
+
+	@Override
+	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
 		Item item = itemStack.getItem();
 
 		// Equipment Part:
@@ -105,33 +152,31 @@ public class SlotEquipment extends SlotBase {
 			this.updateChildSlots();
 		}
 
-		// Equipment Piece:
-		else if(item instanceof ItemEquipment) {
-			// TODO Edit existing Equipment Piece.
-		}
-
-		this.containerForge.onEquipmentSlotChanged(this);
-	}
-
-
-	@Override
-	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
 		if("piece".equals(this.type)) {
-			// TODO Clear all parts from the Equipment Container.
+			this.containerForge.onEquipmentPieceSlotChanged(this);
 		}
 		else {
-			this.updateChildSlots();
+			this.containerForge.onEquipmentPartSlotChanged(this);
 		}
+
 		return super.onTake(player, itemStack);
 	}
 
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-		/*if("piece".equals(this.type)) {
-			return super.canTakeStack(player);
+		if(!this.childSlots.isEmpty()) {
+			for(SlotEquipment childSlot : this.childSlots) {
+				if(!childSlot.getStack().isEmpty()) {
+					return false;
+				}
+			}
 		}
-		return false;*/
+		else if("piece".equals(this.type)) {
+			if(this.getHasStack() && !this.containerForge.isEquipmentValid()) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -156,6 +201,9 @@ public class SlotEquipment extends SlotBase {
 						int index = 0;
 						if (slotFeature.slotType.equals("axe")) {
 							index = ++axeSlots;
+						}
+						else if (slotFeature.slotType.equals("pommel")) {
+							index = 1;
 						}
 						if (!updatedChildSlots.contains(index) && this.updateChildSlot(index, slotFeature.slotType)) {
 							updatedChildSlots.add(index);
