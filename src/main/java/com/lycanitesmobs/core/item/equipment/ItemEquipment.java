@@ -5,6 +5,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.DamageEquipmentFeature;
+import com.lycanitesmobs.core.item.equipment.features.EffectEquipmentFeature;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
 import com.lycanitesmobs.core.item.equipment.features.HarvestEquipmentFeature;
 import net.minecraft.block.state.IBlockState;
@@ -248,6 +249,12 @@ public class ItemEquipment extends ItemBase {
 						-(zDist / xzDist * knockback + target.motionZ * knockback)
 				);
 			}
+		}
+
+		// Effects:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "effect")) {
+			EffectEquipmentFeature effectFeature = (EffectEquipmentFeature)equipmentFeature;
+			effectFeature.onHitEntity(itemStack, target, attacker);
 		}
 
 		return true;

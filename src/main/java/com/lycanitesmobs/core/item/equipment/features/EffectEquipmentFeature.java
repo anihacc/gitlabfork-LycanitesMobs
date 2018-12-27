@@ -1,8 +1,13 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class EffectEquipmentFeature extends EquipmentFeature {
 	/** The type of effect to apply. Can be fire or a potion effect name. **/
@@ -46,5 +51,34 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			description += "\n" + I18n.translateToLocal("equipment.feature.effect.strength") + " " + this.effectStrength;
 		}
 		return description;
+	}
+
+	/**
+	 * Called when an entity is hit by equipment with this feature.
+	 * @param itemStack The ItemStack being hit with.
+	 * @param target The target entity being hit.
+	 * @param attacker The entity using this item to hit.
+	 */
+	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+		if(target == null || attacker == null) {
+			return;
+		}
+
+		EntityLivingBase effectTarget = target;
+		if("self".equalsIgnoreCase(this.effectTarget)) {
+			effectTarget = attacker;
+		}
+
+		// Fire:
+		if("fire".equalsIgnoreCase(this.effectType)) {
+			effectTarget.setFire(Math.round(((float)this.effectDuration) / 20));
+			return;
+		}
+
+		// Potion Effects:
+		Potion potion = GameRegistry.findRegistry(Potion.class).getValue(new ResourceLocation(this.effectType));
+		if(potion != null) {
+			effectTarget.addPotionEffect(new PotionEffect(potion, this.effectDuration, this.effectStrength));
+		}
 	}
 }
