@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.model;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,27 +33,25 @@ public class ModelObjPart {
     public List<ModelObjAnimationFrame> animationFrames = new ArrayList<>();
 
 
-    /**
-     * Constructor
-     * @param partName The name of this part.
-     * @param parentName The name of the parent of this part.
-     * @param centerX The x center of this part.
-     * @param centerY The y center of this part
-     * @param centerZ The z center of this part
-	 * @param rotationX The x rotation of this part.
-	 * @param rotationY The y rotation of this part
-	 * @param rotationZ The z rotation of this part
-     */
-    public ModelObjPart(String partName, String parentName, float centerX, float centerY, float centerZ, float rotationX, float rotationY, float rotationZ) {
-        this.name = partName;
-        this.parentName = parentName;
-        this.centerX = centerX;
-        this.centerY = centerY;
-        this.centerZ = centerZ;
-		this.rotationX = rotationX;
-		this.rotationY = rotationY;
-		this.rotationZ = rotationZ;
-    }
+	/**
+	 * Reads JSON dat into this ObjPart.
+	 * @param jsonObject
+	 */
+	public void loadFromJson(JsonObject jsonObject) {
+		this.name = jsonObject.get("name").getAsString().toLowerCase();
+		this.parentName = jsonObject.get("parent").getAsString().toLowerCase();
+		if (this.parentName.isEmpty())
+			this.parentName = null;
+		this.centerX = Float.parseFloat(jsonObject.get("centerX").getAsString());
+		this.centerY = Float.parseFloat(jsonObject.get("centerY").getAsString());
+		this.centerZ = Float.parseFloat(jsonObject.get("centerZ").getAsString());
+		if(jsonObject.has("rotationX"))
+			this.rotationX = Float.parseFloat(jsonObject.get("rotationX").getAsString());
+		if(jsonObject.has("rotationY"))
+			this.rotationY = Float.parseFloat(jsonObject.get("rotationY").getAsString());
+		if(jsonObject.has("rotationZ"))
+			this.rotationZ = Float.parseFloat(jsonObject.get("rotationZ").getAsString());
+	}
 
 
 	/**
@@ -110,7 +110,14 @@ public class ModelObjPart {
 	 * @return A new instance of a combined ModelObjPart.
 	 */
 	public ModelObjPart createdCombinedPart(ModelObjPart combinedWithPart) {
-		ModelObjPart combinedPart = new ModelObjPart(this.name + "-" + combinedWithPart.name, "", this.centerX + combinedWithPart.centerX, this.centerY + combinedWithPart.centerY, this.centerZ + combinedWithPart.centerZ, this.rotationX + combinedWithPart.rotationX, this.rotationY + combinedWithPart.rotationY, this.rotationZ + combinedWithPart.rotationZ);
+		ModelObjPart combinedPart = new ModelObjPart();
+		combinedPart.name = this.name + "-" + combinedWithPart.name;
+		combinedPart.centerX = this.centerX + combinedWithPart.centerX;
+		combinedPart.centerY = this.centerY + combinedWithPart.centerY;
+		combinedPart.centerZ = combinedWithPart.centerZ;
+		combinedPart.rotationX = this.rotationX + combinedWithPart.rotationX;
+		combinedPart.rotationY = this.rotationY + combinedWithPart.rotationY;
+		combinedPart.rotationZ = this.rotationZ + combinedWithPart.rotationZ;
 		return combinedPart;
 	}
 }

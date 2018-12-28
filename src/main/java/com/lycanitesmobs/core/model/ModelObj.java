@@ -121,23 +121,9 @@ public class ModelObj extends ModelCustom {
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
-                    String partName = partJson.get("name").getAsString();
-                    String partParentName = partJson.get("parent").getAsString();
-                    if (partParentName.isEmpty())
-                        partParentName = null;
-                    float partCenterX = Float.parseFloat(partJson.get("centerX").getAsString());
-                    float partCenterY = Float.parseFloat(partJson.get("centerY").getAsString());
-                    float partCenterZ = Float.parseFloat(partJson.get("centerZ").getAsString());
-					float partRotationX = 0;
-					if(partJson.has("rotationX"))
-						partRotationX = Float.parseFloat(partJson.get("rotationX").getAsString());
-					float partRotationY = 0;
-					if(partJson.has("rotationY"))
-						partRotationY = Float.parseFloat(partJson.get("rotationY").getAsString());
-					float partRotationZ = 0;
-					if(partJson.has("rotationZ"))
-						partRotationZ = Float.parseFloat(partJson.get("rotationZ").getAsString());
-					this.addAnimationPart(partName, partParentName, partCenterX, partCenterY, partCenterZ, partRotationX, partRotationY, partRotationZ);
+					ModelObjPart animationPart = new ModelObjPart();
+					animationPart.loadFromJson(partJson);
+					this.addAnimationPart(animationPart);
                 }
             }
             finally {
@@ -162,19 +148,16 @@ public class ModelObj extends ModelCustom {
     //                      Parts
     // ==================================================
     // ========== Add Animation Part ==========
-    public void addAnimationPart(String partName, String parentName, float centerX, float centerY, float centerZ, float rotationX, float rotationY, float rotationZ) {
-        partName = partName.toLowerCase();
-        if(this.animationParts.containsKey(partName)) {
-            LycanitesMobs.printWarning("", "Tried to add an animation part that already exists: " + partName + ".");
+    public void addAnimationPart(ModelObjPart animationPart) {
+        if(this.animationParts.containsKey(animationPart.name)) {
+            LycanitesMobs.printWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
             return;
         }
-        if(parentName != null) {
-            parentName = parentName.toLowerCase();
-            if(parentName.equals(partName))
-                parentName = null;
+        if(animationPart.parentName != null) {
+            if(animationPart.parentName.equals(animationPart.name))
+				animationPart.parentName = null;
         }
-        ModelObjPart animationPart = new ModelObjPart(partName, parentName, centerX, centerY, centerZ, rotationX, rotationY, rotationZ);
-        this.animationParts.put(partName, animationPart);
+        this.animationParts.put(animationPart.name, animationPart);
     }
     
     
