@@ -5,18 +5,24 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.ARBTextureEnvCombine;
 import org.lwjgl.opengl.GL11;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
 public class LayerEffect extends LayerBase {
 
 	public String textureSuffix;
+
+	public boolean subspecies = true;
+
 	public boolean glow = false;
+
 	public enum BLEND {
 		NORMAL(0), ADD(1), SUB(2);
 		public final int id;
@@ -24,7 +30,9 @@ public class LayerEffect extends LayerBase {
 		public int getValue() { return id; }
 	}
 	public int blending = 0;
-	public boolean subspecies = true;
+
+	public Vec2f scrollSpeed;
+
 
     // ==================================================
     //                   Constructor
@@ -84,5 +92,10 @@ public class LayerEffect extends LayerBase {
     	if(this.glow) {
 			GlStateManager.enableLighting();
 		}
+	}
+
+	@Override
+	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 }

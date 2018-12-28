@@ -80,10 +80,13 @@ public class ModelObj extends ModelCustom {
     protected Animator animator;
 	/** The current animation part that is having an animation frame generated for. **/
 	protected ModelObjPart currentAnimationPart;
+	/** The animation data for this model. **/
+	protected ModelAnimation animation;
     /** A list of models states that hold unique render/animation data for a specific entity INSTANCE. **/
     protected Map<Entity, ModelObjState> modelStates = new HashMap<>();
     /** The current model state for the entity that is being animated and rendered. **/
     protected ModelObjState currentModelState;
+
 
 	// ==================================================
   	//                    Constructors
@@ -110,11 +113,11 @@ public class ModelObj extends ModelCustom {
         // Create Animator:
 		this.animator = new Animator();
 
-        // Load Animation Parts:
-        ResourceLocation animPartsLoc = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
+        // Load Model Parts:
+        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-            InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animPartsLoc).getInputStream();
+            InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(modelPartsLocation).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
 				JsonArray jsonArray = JsonUtils.fromJson(gson, reader, JsonArray.class);
@@ -135,10 +138,29 @@ public class ModelObj extends ModelCustom {
             e.printStackTrace();
         }
 
-        // Assign Animation Part Children:
+        // Assign Model Part Children:
         for(ModelObjPart part : this.animationParts.values()) {
             part.addChildren(this.animationParts.values().toArray(new ModelObjPart[this.animationParts.size()]));
         }
+
+		// Load Animations:
+		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
+		try {
+			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animationLocation).getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			try {
+				JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+				this.animation = new ModelAnimation();
+				this.animation.loadFromJson(json);
+			}
+			finally {
+				IOUtils.closeQuietly(reader);
+			}
+		}
+		catch (Exception e) {
+			LycanitesMobs.printWarning("Models", "Unable to load animation json for " + name + ".");
+		}
 
         return this;
     }
