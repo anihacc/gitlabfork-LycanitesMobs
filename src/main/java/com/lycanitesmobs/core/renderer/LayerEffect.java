@@ -5,11 +5,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.ARBTextureEnvCombine;
-import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
@@ -31,7 +28,7 @@ public class LayerEffect extends LayerBase {
 	}
 	public int blending = 0;
 
-	public Vec2f scrollSpeed;
+	public Vector2f scrollSpeed;
 
 
     // ==================================================
@@ -96,6 +93,9 @@ public class LayerEffect extends LayerBase {
 
 	@Override
 	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+    	if(this.scrollSpeed == null) {
+			this.scrollSpeed = new Vector2f(0, 0);
+		}
 		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 }

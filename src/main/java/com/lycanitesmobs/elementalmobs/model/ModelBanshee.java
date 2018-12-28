@@ -9,10 +9,10 @@ import com.lycanitesmobs.elementalmobs.ElementalMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
@@ -42,7 +42,7 @@ public class ModelBanshee extends ModelTemplateElemental {
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerEffect(renderer, "eye", true, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerScrolling(renderer, "hair", false, LayerEffect.BLEND.NORMAL.id, true, new Vec2f(0, -16)));
+		renderer.addLayer(new LayerScrolling(renderer, "hair", false, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, -16)));
 	}
     
     

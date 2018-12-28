@@ -114,7 +114,7 @@ public class ModelObjPart {
 		combinedPart.name = this.name + "-" + combinedWithPart.name;
 		combinedPart.centerX = this.centerX + combinedWithPart.centerX;
 		combinedPart.centerY = this.centerY + combinedWithPart.centerY;
-		combinedPart.centerZ = combinedWithPart.centerZ;
+		combinedPart.centerZ = this.centerZ + combinedWithPart.centerZ;
 		combinedPart.rotationX = this.rotationX + combinedWithPart.rotationX;
 		combinedPart.rotationY = this.rotationY + combinedWithPart.rotationY;
 		combinedPart.rotationZ = this.rotationZ + combinedWithPart.rotationZ;

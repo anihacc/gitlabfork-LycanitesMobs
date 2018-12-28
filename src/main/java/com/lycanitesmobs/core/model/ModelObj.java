@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.LayerBase;
+import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -181,6 +182,18 @@ public class ModelObj extends ModelCustom {
         }
         this.animationParts.put(animationPart.name, animationPart);
     }
+
+
+	// ==================================================
+	//             Add Custom Render Layers
+	// ==================================================
+	@Override
+	public void addCustomLayers(RenderCreature renderer) {
+		super.addCustomLayers(renderer);
+		if(this.animation != null) {
+			this.animation.addCreatureLayers(renderer);
+		}
+	}
     
     
     // ==================================================

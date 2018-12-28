@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.renderer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.util.math.Vec2f;
 
+import javax.vecmath.Vector2f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ModelAnimationLayer {
 	public String blending = "normal";
 
 	/** The scrolling speeds to use, if 0 the texture isn't scrolled in that direction. **/
-	public Vec2f scrollSpeed = new Vec2f(0, 0);
+	public Vector2f scrollSpeed = new Vector2f(0, 0);
 
 
 	/**
@@ -56,7 +57,7 @@ public class ModelAnimationLayer {
 		float scrollSpeedY = 0;
 		if(json.has("scroll_speed_y"))
 			scrollSpeedY = json.get("scroll_speed_y").getAsFloat();
-		this.scrollSpeed = new Vec2f(scrollSpeedX, scrollSpeedY);
+		this.scrollSpeed = new Vector2f(scrollSpeedX, scrollSpeedY);
 	}
 
 

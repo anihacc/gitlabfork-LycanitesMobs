@@ -7,21 +7,15 @@ import com.lycanitesmobs.core.renderer.LayerEffect;
 import com.lycanitesmobs.core.renderer.LayerScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.elementalmobs.ElementalMobs;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
-
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
 
 @SideOnly(Side.CLIENT)
 public class ModelWraith extends ModelTemplateElemental {
@@ -52,7 +46,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerEffect(renderer, "overlay", true, LayerEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerEffect(renderer, "skull", false, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerScrolling(renderer, "", true, LayerEffect.BLEND.ADD.id, true, new Vec2f(-8, 0)));
+		renderer.addLayer(new LayerScrolling(renderer, "", true, LayerEffect.BLEND.ADD.id, true, new Vector2f(-8, 0)));
 	}
 
 

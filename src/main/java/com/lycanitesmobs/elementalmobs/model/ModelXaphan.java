@@ -1,6 +1,5 @@
 package com.lycanitesmobs.elementalmobs.model;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.LayerBase;
 import com.lycanitesmobs.core.renderer.LayerEffect;
@@ -10,10 +9,10 @@ import com.lycanitesmobs.elementalmobs.ElementalMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
@@ -42,7 +41,7 @@ public class ModelXaphan extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerScrolling(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true, new Vec2f(0, 4)));
+		renderer.addLayer(new LayerScrolling(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
 		renderer.addLayer(new LayerEffect(renderer, "ring", true, LayerEffect.BLEND.ADD.id, true));
 	}
     

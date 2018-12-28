@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.model;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.model.animation.ModelAnimationLayer;
+import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,17 @@ public class ModelAnimation {
 				animationLayer.loadFromJson(jsonObject);
 				this.textureLayers.add(animationLayer);
 			}
+		}
+	}
+
+
+	/**
+	 * Adds creature layers from this Animation to the provided renderer.
+	 * @param renderer The renderer to add the layers to.
+	 */
+	public void addCreatureLayers(RenderCreature renderer) {
+		for(ModelAnimationLayer textureLayer : this.textureLayers) {
+			renderer.addLayer(textureLayer.createCreatureLayer(renderer));
 		}
 	}
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
@@ -51,7 +52,7 @@ public class ModelWisp extends ModelTemplateElemental {
 		renderer.addLayer(this.ballLayer);
 		this.ballGlowLayer = new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.ADD.id, true);
 		renderer.addLayer(this.ballGlowLayer);
-		this.hairLayer = new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vec2f(0, 4));
+		this.hairLayer = new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4));
 		renderer.addLayer(this.hairLayer);
 	}
 

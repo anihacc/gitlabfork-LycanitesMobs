@@ -7,14 +7,13 @@ import com.lycanitesmobs.core.renderer.LayerScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.elementalmobs.ElementalMobs;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
@@ -50,7 +49,7 @@ public class ModelSylph extends ModelTemplateElemental {
 		this.hoodLayer = new LayerEffect(renderer, "hood", false, LayerEffect.BLEND.NORMAL.id, true);
 		renderer.addLayer(this.hoodLayer);
 
-		this.wingLayer = new LayerScrolling(renderer, "wing", true, LayerEffect.BLEND.ADD.id, true, new Vec2f(0, 1));
+		this.wingLayer = new LayerScrolling(renderer, "wing", true, LayerEffect.BLEND.ADD.id, true, new Vector2f(0, 1));
 		renderer.addLayer(this.wingLayer);
 	}
 

@@ -28,7 +28,7 @@ public class EquipmentPartRenderer extends TileEntitySpecialRenderer<TileEntityE
 		ModelItemBase modelItemBase = AssetManager.getItemModel(itemEquipmentPart.itemName);
 
 		GlStateManager.rotate(180, 1, 0, 0);
-		GlStateManager.translate(0.8F, -1.5F, -0.5F);
+		GlStateManager.translate(0.8F, -1.5F, -1.5F);
 		GlStateManager.pushMatrix();
 		GlStateManager.rotate(90, 0, 1, 0);
 		GlStateManager.rotate(45, 0, 0, 1);
