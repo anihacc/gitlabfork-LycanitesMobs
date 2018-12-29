@@ -117,6 +117,13 @@ public class ItemEquipmentPart extends ItemBase {
 	//                      Info
 	// ==================================================
 	@Override
+	public String getItemStackDisplayName(ItemStack itemStack) {
+		String displayName = super.getItemStackDisplayName(itemStack);
+		displayName += " " + I18n.translateToLocal("equipment.level") + " " + this.getLevel(itemStack);
+		return displayName;
+	}
+
+	@Override
 	public void addInformation(ItemStack itemStack, @Nullable World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -182,15 +189,11 @@ public class ItemEquipmentPart extends ItemBase {
 	// ==================================================
 	/** Sets up this equipment part, this is called when the provided stack is dropped and needs to have its level randomized, etc. **/
 	public void initializePart(World world, ItemStack itemStack) {
-		NBTTagCompound nbt = this.getTagCompound(itemStack);
-		if(!nbt.hasKey("equipmentLevel")) {
-			int level = this.levelMax;
-			if(this.levelMin < this.levelMax) {
-				level = this.levelMin + world.rand.nextInt(this.levelMax - this.levelMin + 1);
-			}
-			nbt.setInteger("equipmentLevel", level);
+		int level = this.levelMax;
+		if(this.levelMin < this.levelMax) {
+			level = this.levelMin + world.rand.nextInt(this.levelMax - this.levelMin + 1);
 		}
-		itemStack.setTagCompound(nbt);
+		this.setLevel(itemStack, level);
 	}
 
 	/**
@@ -214,6 +217,15 @@ public class ItemEquipmentPart extends ItemBase {
 	public void sortFeatures() {
 		Comparator<EquipmentFeature> comparator = (o1, o2) -> o1.featureType.compareToIgnoreCase(o2.featureType);
 		this.features.sort(comparator);
+	}
+
+	/** Sets the level of the provided Equipment Item Stack. **/
+	public void setLevel(ItemStack itemStack, int level) {
+		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		if(!nbt.hasKey("equipmentLevel")) {
+			nbt.setInteger("equipmentLevel", level);
+		}
+		itemStack.setTagCompound(nbt);
 	}
 
 	/** Returns an Equipment Part Level for the provided ItemStack. **/
@@ -251,7 +263,15 @@ public class ItemEquipmentPart extends ItemBase {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		super.getSubItems(tab, items);
+		if(!this.isInCreativeTab(tab)) {
+			return;
+		}
+
+		for(int level = 1; level <= this.levelMax; level++) {
+			ItemStack itemStack = new ItemStack(this, 1);
+			this.setLevel(itemStack, level);
+			items.add(itemStack);
+		}
 	}
 
 
@@ -264,7 +284,9 @@ public class ItemEquipmentPart extends ItemBase {
 	}
 
 	/** Returns the texture to use for the provided ItemStack. **/
-	public ResourceLocation getTexture(ItemStack itemStack) {
-		return AssetManager.getTexture(this.itemName);
+	public ResourceLocation getTexture(ItemStack itemStack, String suffix) {
+		if(AssetManager.getTexture(this.itemName + suffix) == null)
+			AssetManager.addTexture(this.itemName + suffix, this.group, "textures/equipment/" + this.itemName.toLowerCase() + suffix + ".png");
+		return AssetManager.getTexture(this.itemName + suffix);
 	}
 }

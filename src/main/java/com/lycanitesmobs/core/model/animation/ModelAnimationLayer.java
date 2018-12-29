@@ -1,12 +1,15 @@
 package com.lycanitesmobs.core.model.animation;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.LayerEffect;
+import com.lycanitesmobs.core.renderer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.util.math.Vec2f;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,20 +33,22 @@ public class ModelAnimationLayer {
 	/** The scrolling speeds to use, if 0 the texture isn't scrolled in that direction. **/
 	public Vector2f scrollSpeed = new Vector2f(0, 0);
 
+	/** The color fading speeds to use, if 0 the color isn't faded. **/
+	public Vector4f colorFadeSpeed;
+
 
 	/**
 	 * Reads JSON data into this Animation Layer.
 	 * @param json The JSON data to read from.
 	 */
 	public void loadFromJson(JsonObject json) {
-		if(json.has("name"))
-			this.name = json.get("name").getAsString().toLowerCase();
+		this.name = json.get("name").getAsString().toLowerCase();
 
-		if(json.has("texture_suffix"))
-			this.textureSuffix = json.get("texture_suffix").getAsString();
+		if(json.has("textureSuffix"))
+			this.textureSuffix = json.get("textureSuffix").getAsString();
 
-		if(json.has("subspecies_texture"))
-			this.subspeciesTexture = json.get("subspecies_texture").getAsBoolean();
+		if(json.has("subspeciesTexture"))
+			this.subspeciesTexture = json.get("subspeciesTexture").getAsBoolean();
 
 		if(json.has("glow"))
 			this.glow = json.get("glow").getAsBoolean();
@@ -52,12 +57,27 @@ public class ModelAnimationLayer {
 			this.blending = json.get("blending").getAsString().toLowerCase();
 
 		float scrollSpeedX = 0;
-		if(json.has("scroll_speed_x"))
-			scrollSpeedX = json.get("scroll_speed_x").getAsFloat();
+		if(json.has("scrollSpeedX"))
+			scrollSpeedX = json.get("scrollSpeedX").getAsFloat();
 		float scrollSpeedY = 0;
-		if(json.has("scroll_speed_y"))
-			scrollSpeedY = json.get("scroll_speed_y").getAsFloat();
+		if(json.has("scrollSpeedY"))
+			scrollSpeedY = json.get("scrollSpeedY").getAsFloat();
 		this.scrollSpeed = new Vector2f(scrollSpeedX, scrollSpeedY);
+
+		float colorFadeRed = 0;
+		if(json.has("colorFadeRed"))
+			colorFadeRed = json.get("colorFadeRed").getAsFloat();
+		float colorFadeGreen = 0;
+		if(json.has("colorFadeGreen"))
+			colorFadeGreen = json.get("colorFadeGreen").getAsFloat();
+		float colorFadeBlue = 0;
+		if(json.has("colorFadeBlue"))
+			colorFadeBlue = json.get("colorFadeBlue").getAsFloat();
+		float colorFadeAlpha = 0;
+		if(json.has("colorFadeAlpha"))
+			colorFadeAlpha = json.get("colorFadeAlpha").getAsFloat();
+		if(colorFadeRed != 0 || colorFadeGreen != 0 || colorFadeBlue != 0 || colorFadeAlpha != 0)
+			this.colorFadeSpeed = new Vector4f(colorFadeRed, colorFadeGreen, colorFadeBlue, colorFadeAlpha);
 	}
 
 
@@ -68,14 +88,15 @@ public class ModelAnimationLayer {
 	 */
 	public LayerEffect createCreatureLayer(RenderCreature renderer) {
 		int blendingId = LayerEffect.BLEND.NORMAL.id;
-		if("additive".equals(this.blending)) {
+		if("add".equals(this.blending)) {
 			blendingId = LayerEffect.BLEND.ADD.id;
 		}
-		else if("subtractive".equals(this.blending)) {
+		else if("sub".equals(this.blending)) {
 			blendingId = LayerEffect.BLEND.SUB.id;
 		}
 
 		LayerEffect renderLayer = new LayerEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
+		renderLayer.name = this.name;
 		renderLayer.scrollSpeed = this.scrollSpeed;
 		return renderLayer;
 	}
@@ -86,7 +107,22 @@ public class ModelAnimationLayer {
 	 * @param renderer The item renderer to use for the layer.
 	 * @return A new Layer Renderer.
 	 */
-	public void createItemLayer(IItemModelRenderer renderer) {
-		// TODO Add Item Layers
+	public LayerItem createItemLayer(IItemModelRenderer renderer) {
+		int blendingId = LayerEffect.BLEND.NORMAL.id;
+		if("additive".equals(this.blending)) {
+			blendingId = LayerEffect.BLEND.ADD.id;
+		}
+		else if("subtractive".equals(this.blending)) {
+			blendingId = LayerEffect.BLEND.SUB.id;
+		}
+
+		LayerItem renderLayer = new LayerItem(renderer, this.name);
+		renderLayer.textureSuffix = this.textureSuffix;
+		renderLayer.glow = this.glow;
+		renderLayer.blending = blendingId;
+		renderLayer.scrollSpeed = this.scrollSpeed;
+		renderLayer.colorFadeSpeed = this.colorFadeSpeed;
+
+		return renderLayer;
 	}
 }

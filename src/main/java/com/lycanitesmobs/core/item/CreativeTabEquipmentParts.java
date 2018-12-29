@@ -18,7 +18,9 @@ public class CreativeTabEquipmentParts extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getTabIconItem() {
-		if(ObjectManager.getItem("geonachfist") != null)
+		if(ObjectManager.getItem("xaphanspine") != null)
+			return new ItemStack(ObjectManager.getItem("xaphanspine"));
+		else if(ObjectManager.getItem("geonachfist") != null)
 			return new ItemStack(ObjectManager.getItem("geonachfist"));
 		else if(ObjectManager.getItem("HellfireCharge") != null)
 			return new ItemStack(ObjectManager.getItem("HellfireCharge"));

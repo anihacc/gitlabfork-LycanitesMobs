@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.container;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.inventory.ContainerBase;
 import com.lycanitesmobs.core.inventory.SlotEquipment;
@@ -52,11 +53,11 @@ public class ContainerEquipmentForge extends ContainerBase {
 			this.addSlotToContainer(slotEquipmentTipA);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipA);
 
-			SlotEquipment slotEquipmentTipB = new SlotEquipment(this, slots++, x + (slotSize * 2), y + slotSize, "none");
+			SlotEquipment slotEquipmentTipB = new SlotEquipment(this, slots++, x + (slotSize * 2), y - slotSize, "none");
 			this.addSlotToContainer(slotEquipmentTipB);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipB);
 
-			SlotEquipment slotEquipmentTipC = new SlotEquipment(this, slots++, x + (slotSize * 2), y - slotSize, "none");
+			SlotEquipment slotEquipmentTipC = new SlotEquipment(this, slots++, x + (slotSize * 2), y + slotSize, "none");
 			this.addSlotToContainer(slotEquipmentTipC);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipC);
 
@@ -99,12 +100,12 @@ public class ContainerEquipmentForge extends ContainerBase {
 			SlotEquipment slotPommel = (SlotEquipment)this.getSlot(this.inventoryStart + 6);
 
 			ItemEquipment itemEquipment = (ItemEquipment) slotEquipment.getStack().getItem();
+			int axeIndex = 0;
 			for(ItemStack partStack : itemEquipment.getEquipmentPartStacks(slotEquipment.getStack())) {
 				ItemEquipmentPart itemEquipmentPart = itemEquipment.getEquipmentPart(partStack);
 				if(itemEquipmentPart == null) {
 					continue;
 				}
-				int axeIndex = 0;
 				if("base".equals(itemEquipmentPart.slotType)) {
 					slotBase.putStackWithoutUpdate(partStack);
 				}

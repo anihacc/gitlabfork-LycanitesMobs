@@ -192,7 +192,7 @@ public class ItemEquipment extends ItemBase {
 				continue;
 			}
 			for (EquipmentFeature feature : equipmentPart.features) {
-				if(equipmentPart.getLevel(equipmentStack) >= feature.levelMin && equipmentPart.getLevel(equipmentStack) <= feature.levelMax && feature.featureType.equalsIgnoreCase(featureType)) {
+				if(feature.isActive(equipmentPartStack, equipmentPart.getLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
 					features.add(feature);
 				}
 			}
@@ -298,7 +298,7 @@ public class ItemEquipment extends ItemBase {
 	 * @return The amount of base damage.
 	 */
 	public double getDamageAmount(ItemStack itemStack) {
-		double damage = 1;
+		double damage = 0;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
 			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
 			damage += damageFeature.damageAmount;
@@ -319,6 +319,11 @@ public class ItemEquipment extends ItemBase {
 			cooldown += damageFeature.damageCooldown;
 			i++;
 		}
+
+		if(i == 0) {
+			return 2.4D;
+		}
+
 		cooldown = 2.4D * (cooldown / i);
 		return cooldown;
 	}

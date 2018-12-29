@@ -2,11 +2,13 @@ package com.lycanitesmobs.core.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.LayerBase;
+import com.lycanitesmobs.core.renderer.LayerItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
@@ -47,6 +49,8 @@ public abstract class ModelItemBase {
 	// Animating:
 	/** The animator INSTANCE, this is a helper class that performs actual GL11 functions, etc. **/
 	protected Animator animator;
+	/** The animation data for this model. **/
+	protected ModelAnimation animation;
 	/** The current animation part that is having an animation frame generated for. **/
 	protected ModelObjPart currentAnimationPart;
 	/** A list of models states that hold unique render/animation data for a specific itemstack INSTANCE. **/
@@ -68,7 +72,7 @@ public abstract class ModelItemBase {
 		// Create Animator:
 		this.animator = new Animator();
 
-		// Load Animation Parts:
+		// Load Model Parts:
 		ResourceLocation animPartsLoc = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -93,9 +97,28 @@ public abstract class ModelItemBase {
 			e.printStackTrace();
 		}
 
-		// Assign Animation Part Children:
+		// Assign Model Part Children:
 		for(ModelObjPart part : this.animationParts.values()) {
 			part.addChildren(this.animationParts.values().toArray(new ModelObjPart[this.animationParts.size()]));
+		}
+
+		// Load Animations:
+		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
+		try {
+			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animationLocation).getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			try {
+				JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+				this.animation = new ModelAnimation();
+				this.animation.loadFromJson(json);
+			}
+			finally {
+				IOUtils.closeQuietly(reader);
+			}
+		}
+		catch (Exception e) {
+			LycanitesMobs.printWarning("Model", "Unable to load animation json for " + name + ".");
 		}
 
 		return this;
@@ -120,6 +143,20 @@ public abstract class ModelItemBase {
 
 
 	// ==================================================
+	//             Add Custom Render Layers
+	// ==================================================
+	/**
+	 * Adds extra texture layers to the renderer.
+	 * @param renderer
+	 */
+	public void addCustomLayers(IItemModelRenderer renderer) {
+		if(this.animation != null) {
+			this.animation.addItemLayers(renderer);
+		}
+	}
+
+
+	// ==================================================
 	//                     Render
 	// ==================================================
 	/**
@@ -129,19 +166,22 @@ public abstract class ModelItemBase {
 	 * @param renderer The renderer that is rendering this model, needed for texture binding.
 	 * @param offsetObjPart A ModelObjPart, if not null this model is offset by it, used by assembled equipment pieces to create a full model.
 	 */
-	public void render(ItemStack itemStack, EnumHand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart) {
+	public void render(ItemStack itemStack, EnumHand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop) {
 		if(itemStack == null) {
 			return;
 		}
-		float loop = 0; // TODO Create an animation loop, probably using a ModelObjState.
+
+		if(layer == null && this.animation != null) {
+			layer = this.animation.getBaseLayer(renderer);
+		}
 
 		// Bind Texture:
-		renderer.bindItemTexture(this.getTexture(itemStack));
+		renderer.bindItemTexture(this.getTexture(itemStack, layer));
 
 		// Generate Animation Frames:
 		for(ObjObject part : this.wavefrontParts) {
 			String partName = part.getName().toLowerCase();
-			if(!this.canRenderPart(partName, itemStack))
+			if(!this.canRenderPart(partName, itemStack, layer))
 				continue;
 			this.currentAnimationPart = this.animationParts.get(partName);
 
@@ -152,7 +192,7 @@ public abstract class ModelItemBase {
 		// Render Parts:
 		for(ObjObject part : this.wavefrontParts) {
 			String partName = part.getName().toLowerCase();
-			if(!this.canRenderPart(partName, itemStack))
+			if(!this.canRenderPart(partName, itemStack, layer))
 				continue;
 			this.currentAnimationPart = this.animationParts.get(partName);
 
@@ -173,9 +213,9 @@ public abstract class ModelItemBase {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.onRenderStart(null, itemStack);
-			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack), new Vector2f(0, 0));
-			this.onRenderFinish(null, itemStack);
+			this.onRenderStart(layer, itemStack);
+			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			this.onRenderFinish(layer, itemStack);
 			GlStateManager.popMatrix();
 		}
 
@@ -186,14 +226,24 @@ public abstract class ModelItemBase {
 	}
 
 	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerBase layer, ItemStack itemStack) {
-		GlStateManager.enableBlend();
+	public void onRenderStart(LayerItem layer, ItemStack itemStack) {
+		if(!CreatureManager.getInstance().config.disableModelAlpha) {
+			GlStateManager.enableBlend();
+		}
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		if(layer != null) {
+			layer.onRenderStart(itemStack);
+		}
 	}
 
 	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerBase layer, ItemStack itemStack) {
-		GlStateManager.disableBlend();
+	public void onRenderFinish(LayerItem layer, ItemStack itemStack) {
+		if(!CreatureManager.getInstance().config.disableModelAlpha) {
+			GlStateManager.disableBlend();
+		}
+		if(layer != null) {
+			layer.onRenderFinish(itemStack);
+		}
 	}
 
 
@@ -201,7 +251,7 @@ public abstract class ModelItemBase {
 	//                Can Render Part
 	// ==================================================
 	/** Returns true if the part can be rendered for the given stack. **/
-	public boolean canRenderPart(String partName, ItemStack itemStack) {
+	public boolean canRenderPart(String partName, ItemStack itemStack, LayerItem layer) {
 		if(partName == null)
 			return false;
 		partName = partName.toLowerCase();
@@ -209,6 +259,11 @@ public abstract class ModelItemBase {
 		// Check Animation Part:
 		if(!this.animationParts.containsKey(partName))
 			return false;
+
+		/*/ Check Layer:
+		if(layer != null) {
+			return layer.canRenderPart(partName);
+		}*/
 
 		return true;
 	}
@@ -232,7 +287,7 @@ public abstract class ModelItemBase {
 	//                   Get Texture
 	// ==================================================
 	/** Returns a texture ResourceLocation for the provided itemstack. **/
-	public ResourceLocation getTexture(ItemStack itemStack) {
+	public ResourceLocation getTexture(ItemStack itemStack, LayerItem layer) {
 		return null;
 	}
 
@@ -241,8 +296,24 @@ public abstract class ModelItemBase {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part for the given itemstack. **/
-	public Vector4f getPartColor(String partName, ItemStack itemStack) {
+	public Vector4f getPartColor(String partName, ItemStack itemStack, LayerItem layer, float loop) {
+		if(layer != null) {
+			return layer.getPartColor(partName, itemStack, loop);
+		}
 		return new Vector4f(1, 1, 1, 1);
+	}
+
+
+	// ==================================================
+	//             Get Part Texture Offset
+	// ==================================================
+	//	/** Returns the texture offset to be used for this part and layer. **/
+	public Vector2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
+		if(layer != null) {
+			return layer.getTextureOffset(partName, itemStack, loop);
+		}
+
+		return new Vector2f(0, 0);
 	}
 
 

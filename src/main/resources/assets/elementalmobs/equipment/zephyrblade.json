@@ -1,8 +1,8 @@
 {
-	"itemName": "cinderblade",
+	"itemName": "zephyrblade",
 	"loadDefault": true,
 	"slotType": "blade",
-	"dropMobId": "elementalmobs:cinder",
+	"dropMobId": "elementalmobs:zephyr",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -19,7 +19,7 @@
 			"levelMax": 1,
 			"damageAmount": 3,
 			"damageKnockback": 0,
-			"damageCooldown": 1,
+			"damageCooldown": 0.5,
 			"damageRange": 1,
 			"damageSweep": 45
 		},
@@ -29,7 +29,7 @@
 			"levelMax": 2,
 			"damageAmount": 4,
 			"damageKnockback": 0,
-			"damageCooldown": 1,
+			"damageCooldown": 0.5,
 			"damageRange": 1,
 			"damageSweep": 45
 		},
@@ -38,14 +38,14 @@
 			"levelMin": 3,
 			"damageAmount": 5,
 			"damageKnockback": 0,
-			"damageCooldown": 0.75,
+			"damageCooldown": 0.25,
 			"damageRange": 1,
 			"damageSweep": 45
 		},
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "fire",
+			"effectType": "lycanitesmobs:paralysis",
 			"effectTarget": "target",
 			"effectDuration": 20,
 			"effectStrength": 1
@@ -53,7 +53,7 @@
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "fire",
+			"effectType": "lycanitesmobs:paralysis",
 			"effectTarget": "target",
 			"effectDuration": 40,
 			"effectStrength": 1
@@ -61,7 +61,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.cinder",
+			"summonMobId": "elementalmobs.zephyr",
 			"summonChance": 0.1,
 			"summonDuration": 60,
 			"summonCountMin": 1,

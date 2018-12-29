@@ -32,26 +32,26 @@
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "leech",
+			"effectType": "lycanitesmobs:leech",
 			"effectTarget": "self",
-			"effectDuration": 10,
+			"effectDuration": 20,
 			"effectStrength": 1
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 3,
-			"effectType": "leech",
+			"effectType": "lycanitesmobs:leech",
 			"effectTarget": "self",
-			"effectDuration": 10,
+			"effectDuration": 40,
 			"effectStrength": 2
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "leech",
+			"effectType": "lycanitesmobs:leech",
 			"effectTarget": "self",
-			"effectDuration": 10,
+			"effectDuration": 60,
 			"effectStrength": 3
 		},
 		{

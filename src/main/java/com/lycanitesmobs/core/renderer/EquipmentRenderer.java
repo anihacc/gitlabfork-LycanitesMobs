@@ -10,10 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EquipmentRenderer extends TileEntitySpecialRenderer<TileEntityEquipment> implements IItemModelRenderer {
 
 	@Override
-	public void render(TileEntityEquipment te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityEquipment tileEntityEquipment, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		ItemStack itemStack = ItemEquipment.ITEMSTACK_TO_RENDER; // This is disgusting haxx, I am sorry, but I can't see another way. :(
 		ItemEquipment.ITEMSTACK_TO_RENDER = null;
 
@@ -27,14 +30,20 @@ public class EquipmentRenderer extends TileEntitySpecialRenderer<TileEntityEquip
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.5F, 0.2F, 0.6F);
 		GlStateManager.rotate(90, 1, 0, 0);
-		GlStateManager.rotate(75, 0, 0, 1);
+		GlStateManager.rotate(-100, 0, 0, 1);
 		GlStateManager.translate(0F, -1.5F, 0F);
 		ModelEquipment modelEquipment = new ModelEquipment();
-		modelEquipment.render(itemStack, hand, this);
+
+		float loop = 0;
+		if(Minecraft.getMinecraft().player != null) {
+			loop = Minecraft.getMinecraft().player.ticksExisted;
+		}
+		modelEquipment.render(itemStack, hand, this, loop);
+
 		GlStateManager.popMatrix();
 
-		if(te != null) {
-			super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+		if(tileEntityEquipment != null) {
+			super.render(tileEntityEquipment, x, y, z, partialTicks, destroyStage, alpha);
 		}
 	}
 
@@ -44,5 +53,10 @@ public class EquipmentRenderer extends TileEntitySpecialRenderer<TileEntityEquip
 			return;
 		}
 		this.bindTexture(location);
+	}
+
+	@Override
+	public List<LayerItem> addLayer(LayerItem renderLayer) {
+		return new ArrayList<>();
 	}
 }

@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.renderer.LayerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -23,12 +24,17 @@ public class ModelEquipmentPart extends ModelItemBase {
 	//                   Get Texture
 	// ==================================================
 	@Override
-	public ResourceLocation getTexture(ItemStack itemStack) {
+	public ResourceLocation getTexture(ItemStack itemStack, LayerItem layer) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)itemStack.getItem();
-		return itemEquipmentPart.getTexture(itemStack);
+
+		String suffix = "";
+		if(layer != null && layer.textureSuffix != null && !layer.textureSuffix.isEmpty()) {
+			suffix = "_" + layer.textureSuffix;
+		}
+		return itemEquipmentPart.getTexture(itemStack, suffix);
 	}
 
 
@@ -36,11 +42,16 @@ public class ModelEquipmentPart extends ModelItemBase {
 	//                Get Part Color
 	// ==================================================
 	@Override
-	public Vector4f getPartColor(String partName, ItemStack itemStack) {
+	public Vector4f getPartColor(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
-			return super.getPartColor(partName, itemStack);
+			return super.getPartColor(partName, itemStack, layer, loop);
 		}
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)itemStack.getItem();
+
+		if(layer != null) {
+			return layer.getPartColor(partName, itemStack, loop);
+		}
+
 		return itemEquipmentPart.getColor(itemStack);
 	}
 }

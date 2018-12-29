@@ -263,6 +263,10 @@ public class LycanitesMobs {
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 
 
+		// ========== Equipment ==========
+		EquipmentPartManager.getInstance().loadAllFromJSON(group);
+
+
         // ========== Call Object Lists Setup ==========
         ObjectLists.createCustomItems();
 		ObjectLists.createLists();
@@ -283,10 +287,6 @@ public class LycanitesMobs {
 		// ========== Creatures ==========
 		CreatureManager.getInstance().loadAllFromJSON(group);
 		CreatureManager.getInstance().registerAll(group);
-
-
-		// ========== Equipment ==========
-		EquipmentPartManager.getInstance().loadAllFromJSON(group);
 		
 		
 		// ========== Special Entities ==========

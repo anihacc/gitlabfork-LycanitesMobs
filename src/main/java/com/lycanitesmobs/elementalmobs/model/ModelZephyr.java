@@ -1,5 +1,6 @@
 package com.lycanitesmobs.elementalmobs.model;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.LayerBase;
 import com.lycanitesmobs.core.renderer.LayerEffect;
@@ -78,16 +79,19 @@ public class ModelZephyr extends ModelTemplateElemental {
 			return super.getPartColor(partName, entity, layer, trophy, loop);
 		}
 
-		float alphaSpeed = 15;
+		float alphaTime = 15;
 		if("pulse02".equals(layer.name)) {
-			alphaSpeed = 20;
-			loop += 50;
+			alphaTime = 20;
 		}
 		if("pulse03".equals(layer.name)) {
-			alphaSpeed = 25;
-			loop += 100;
+			alphaTime = 25;
 		}
-		float alpha = loop * alphaSpeed % 360;
-		return new Vector4f(1, 1, 1, ((float)Math.cos(Math.toRadians(alpha)) / 2) + 0.5f);
+
+		float alpha = (loop % alphaTime / alphaTime) * 2;
+		if(alpha > 1) {
+			alpha = -(alpha - 1);
+		}
+
+		return new Vector4f(1, 1, 1, alpha);
 	}
 }
