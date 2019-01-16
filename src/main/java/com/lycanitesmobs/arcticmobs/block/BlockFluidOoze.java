@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -81,7 +82,7 @@ public class BlockFluidOoze extends BlockFluidBase {
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(entity != null) {
             // Damage:
-            if (!(entity instanceof EntityItem)) {
+            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
                 entity.attackEntityFrom(ObjectManager.getDamageSource("ooze"), 1F);
             }
 
