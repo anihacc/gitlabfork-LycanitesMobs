@@ -120,7 +120,25 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		if(this.scaledResolution == null) {
 			this.scaledResolution = new ScaledResolution(this.mc);
 		}
-		return Math.round((float)scaledResolution.getScaledWidth() * x);
+
+		// Aspect Ratio:
+		float targetAspect = 0.5625f; // 16:9
+		float scaledHeight = scaledResolution.getScaledHeight();
+		float scaledWidth = scaledResolution.getScaledWidth();
+		float currentAspect = (scaledHeight * x) / (scaledWidth * x);
+
+		// Wider Than target:
+		if(currentAspect < targetAspect) {
+			scaledWidth = scaledHeight + (scaledHeight * targetAspect);
+		}
+
+		// Taller Than target:
+		else if(currentAspect > targetAspect) {
+			scaledHeight = scaledWidth + (scaledWidth * targetAspect);
+		}
+
+		float guiWidth = scaledWidth * x;
+		return Math.round(Math.max(x, guiWidth));
 	}
 
 
@@ -130,7 +148,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 * @return A scaled y position.
 	 */
 	public int getScaledY(float y) {
-		float baseHeight = Math.round((float)this.getScaledX(y) * (1080F / 1920F));
+		float baseHeight = Math.round((float)this.getScaledX(y) * 0.5625f);
 		return Math.round(baseHeight * y);
 	}
 
