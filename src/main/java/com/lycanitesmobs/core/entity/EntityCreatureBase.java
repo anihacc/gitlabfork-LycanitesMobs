@@ -662,6 +662,12 @@ public abstract class EntityCreatureBase extends EntityLiving {
     	LycanitesMobs.printDebug("MobSpawns", " ~O==================== Vanilla Spawn Check: " + this.creatureInfo.getName() + " ====================O~");
     	LycanitesMobs.printDebug("MobSpawns", "Attempting to Spawn: " + this.creatureInfo.getName());
 		LycanitesMobs.printDebug("MobSpawns", "Target Spawn Location: " + pos);
+
+		// Enabled Check:
+		LycanitesMobs.printDebug("MobSpawns", "Checking if creature is enabled...");
+		if(!this.creatureInfo.enabled || !this.creatureInfo.creatureSpawn.enabled) {
+			return false;
+		}
     	
     	// Peaceful Check:
     	LycanitesMobs.printDebug("MobSpawns", "Checking for peaceful difficulty...");
