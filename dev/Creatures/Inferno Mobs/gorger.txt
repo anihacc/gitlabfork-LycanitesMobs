@@ -1,0 +1,15 @@
+MESH: MouthBottom
+MESH: MouthRight
+MESH: MouthLeft
+MESH: Body08
+MESH: Body07
+MESH: Body06
+MESH: Body05
+MESH: Body04
+MESH: Body03
+MESH: Body02
+MESH: Body
+MESH: MouthTop
+MESH: Body09
+MESH: Head
+MESH: Body01

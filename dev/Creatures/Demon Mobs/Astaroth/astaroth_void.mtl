@@ -1,0 +1,38 @@
+# Blender MTL File: 'astaroth_void.blend'
+# Material Count: 3
+
+newmtl astaroth
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 0
+map_Kd astaroth_void.png
+map_d astaroth_void.png
+
+newmtl astaroth_asmodeus.png
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 0
+map_Kd F:\Dropbox\Projects\Lycanites Mobs\Model Resources\Demon Mobs\Asmodeus\asmodeus.png
+map_d astaroth_void.png
+
+newmtl astaroth_astaroth
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 0
+map_Kd astaroth_void.png
+map_d astaroth_void.png

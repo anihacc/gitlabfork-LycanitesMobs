@@ -23,13 +23,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thaumcraft.api.research.IScanThing;
+//import thaumcraft.api.research.IScanThing;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 @Optional.Interface(iface=Thaumcraft.interfaceScanThing, modid=Thaumcraft.modid, striprefs=true)
-public class ItemBase extends Item implements IScanThing {
+public class ItemBase extends Item {//implements IScanThing {
 	public static int descriptionWidth = 200;
 	
 	public String itemName = "Item";
@@ -195,13 +195,13 @@ public class ItemBase extends Item implements IScanThing {
 	//                   Thaumcraft
 	// ==================================================
 	@Optional.Method(modid=Thaumcraft.modid)
-	@Override
+	//@Override
 	public boolean checkThing(EntityPlayer player, Object obj) {
 		return false;
 	}
 
 	@Optional.Method(modid=Thaumcraft.modid)
-	@Override
+	//@Override
 	public String getResearchKey(EntityPlayer player, Object object) {
 		return null;
 	}
