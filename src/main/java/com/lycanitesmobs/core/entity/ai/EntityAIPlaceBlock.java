@@ -124,14 +124,14 @@ public class EntityAIPlaceBlock extends EntityAIBase {
         this.host.getLookHelper().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
-        if(MathHelper.sqrt(this.host.getDistanceSq(this.pos)) <= this.range) {
+        if(this.host.getDistanceSq(this.pos) <= this.range * this.range) {
         	this.host.getEntityWorld().setBlockState(this.pos, this.block.getStateFromMeta(this.metadata), 3);
             this.block = null;
             this.host.clearMovement();
         }
         
         // Cancel If Too Far:
-        if(MathHelper.sqrt(this.host.getDistanceSq(this.pos)) >= this.maxDistance) {
+        if(this.host.getDistanceSq(this.pos) >= this.maxDistance * this.maxDistance) {
             this.block = null;
             this.host.clearMovement();
         }

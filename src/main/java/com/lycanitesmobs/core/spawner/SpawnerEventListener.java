@@ -181,7 +181,7 @@ public class SpawnerEventListener {
 			}
 			boolean nearOtherPlayers = false;
 			for(BlockPos triggerPosition : triggerPositions) {
-				if(MathHelper.sqrt(player.getDistanceSq(triggerPosition)) <= 100) {
+				if(player.getDistanceSq(triggerPosition) <= 100 * 100) {
 					nearOtherPlayers = true;
 				}
 			}

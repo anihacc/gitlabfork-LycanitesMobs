@@ -2193,8 +2193,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 	public void leap(float range, double leapHeight, BlockPos targetPos) {
 		if(targetPos == null)
 			return;
-		double distance = MathHelper.sqrt(targetPos.distanceSq(this.getPosition()));
-		if(distance > 2.0F && distance <= range) {
+		double distance = targetPos.distanceSq(this.getPosition());
+		if(distance > 2.0F * 2.0F && distance <= range * range) {
 			double xDist = targetPos.getX() - this.getPosition().getX();
 			double zDist = targetPos.getZ() - this.getPosition().getZ();
 			if(xDist == 0) {
