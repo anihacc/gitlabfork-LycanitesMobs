@@ -133,8 +133,15 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     public boolean despawnCheck() {
         if(this.getEntityWorld().isRemote)
         	return false;
-        if(this.getPetEntry() != null && this.getPetEntry().entity != this && this.getPetEntry().entity != null)
-            return true;
+
+        // Bound Pet:
+        if(this.getPetEntry() != null) {
+			if(this.getPetEntry().entity != this && this.getPetEntry().entity != null)
+				return true;
+			if(this.getPetEntry().host == null || this.getPetEntry().host.isDead)
+				return true;
+		}
+
     	if(this.isTamed() && !this.isTemporary)
     		return false;
         return super.despawnCheck();
@@ -152,7 +159,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ========== Can leash ==========
     @Override
     public boolean canBeLeashedTo(EntityPlayer player) {
-	    if(this.isTamed() && player.getName().equalsIgnoreCase(this.getOwnerName()))
+	    if(this.isTamed() && player == this.getPlayerOwner())
 	        return true;
 	    return super.canBeLeashedTo(player);
     }
@@ -196,7 +203,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	commands.putAll(super.getInteractCommands(player, itemStack));
 		
 		// Open GUI:
-		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player.getName().equalsIgnoreCase(this.getOwnerName()))
+		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player == this.getPlayerOwner())
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
     	
     	// Server Item Commands:
@@ -211,7 +218,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Feed");
     		
     		// Equipment:
-    		if(this.isTamed() && !this.isChild() && this.canEquip() && player.getName().equalsIgnoreCase(this.getOwnerName())) {
+    		if(this.isTamed() && !this.isChild() && this.canEquip() && player == this.getPlayerOwner()) {
 	    		String equipSlot = this.inventory.getSlotForEquipment(itemStack);
 	    		if(equipSlot != null && (this.inventory.getEquipmentStack(equipSlot) == null || this.inventory.getEquipmentStack(equipSlot).getItem() != itemStack.getItem()))
 	    			commands.put(COMMAND_PIORITIES.EQUIPPING.id, "Equip Item");
@@ -219,7 +226,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	}
 		
 		// Sit:
-		//if(this.isTamed() && this.canSit() && player.getName().equalsIgnoreCase(this.getOwnerName()) && !this.getEntityWorld().isRemote)
+		//if(this.isTamed() && this.canSit() && player == this.getPlayerOwner() && !this.getEntityWorld().isRemote)
 			//commands.put(CMD_PRIOR.MAIN.id, "Sit");
     	
     	return commands;
@@ -289,7 +296,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     public boolean canNameTag(EntityPlayer player) {
     	if(!this.isTamed())
     		return super.canNameTag(player);
-    	else if(this.isTamed() && player.getName().equalsIgnoreCase(this.getOwnerName()))
+    	else if(this.isTamed() && player == this.getPlayerOwner())
     		return super.canNameTag(player);
     	return false;
     }
@@ -495,6 +502,18 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 
 
 	// ==================================================
+	//                     Immunities
+	// ==================================================
+	// ========== Damage ==========
+	@Override
+	public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+		if("inWall".equals(type) && this.isTamed())
+			return false;
+		return super.isDamageTypeApplicable(type, source, damage);
+	}
+
+
+	// ==================================================
 	//                       Owner
 	// ==================================================
 	/**
@@ -654,7 +673,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 		if(this.isTamed() && this.getOwner() instanceof EntityPlayer && partner instanceof EntityCreatureTameable && baby instanceof EntityCreatureTameable) {
 			EntityCreatureTameable partnerTameable = (EntityCreatureTameable)partner;
 			EntityCreatureTameable babyTameable = (EntityCreatureTameable)baby;
-			if(partnerTameable.getOwnerName() == this.getOwnerName()) {
+			if(partnerTameable.getPlayerOwner() == this.getPlayerOwner()) {
 				babyTameable.setPlayerOwner((EntityPlayer)this.getOwner());
 			}
 		}
@@ -948,7 +967,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     @Override
     public boolean canBeColored(EntityPlayer player) {
     	if(player == null) return true;
-    	return this.isTamed() && player.getName().equalsIgnoreCase(this.getOwnerName());
+    	return this.isTamed() && player == this.getPlayerOwner();
     }
 
 

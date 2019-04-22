@@ -1,6 +1,7 @@
 package com.lycanitesmobs.mountainmobs.entity;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityBeholder extends EntityCreatureRideable {
+	public boolean beholderGreifing = true;
     
     // ==================================================
  	//                    Constructor
@@ -35,7 +37,8 @@ public class EntityBeholder extends EntityCreatureRideable {
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
-        this.solidCollision = true;
+		this.beholderGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Beholder Griefing", this.beholderGreifing, "Set to false to disable Beholder projectile explosions.");
+		this.solidCollision = true;
         this.setupMob();
 
         this.stepHeight = 1.0F;

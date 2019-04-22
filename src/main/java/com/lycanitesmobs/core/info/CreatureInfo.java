@@ -287,7 +287,7 @@ public class CreatureInfo {
 			ObjectManager.entityLists.put(this.group.filename, new EntityListCustom());
 		}
 		ObjectManager.entityLists.get(this.group.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
-		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.getName(), this.group.getNextMobID(), this.group.mod, 128, 3, true);
+		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.group.filename + "." + this.getName(), this.group.getNextMobID(), this.group.mod, 128, 3, true);
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));

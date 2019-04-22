@@ -50,9 +50,11 @@ public class EntityAISit extends EntityAIBase {
     		return false;
         if(!this.host.isTamed())
             return false;
-        if(this.host.isInWater() && !this.host.canBreatheUnderwater())
-            return false;
-        if(!this.host.onGround && !this.host.isCurrentlyFlying())
+        if(this.host.isInWater()) {
+        	if(!this.host.canBreatheUnderwater())
+        		return false;
+		}
+        else if(!this.host.onGround && !this.host.isCurrentlyFlying())
             return false;
 
         if (!(this.host.getOwner() instanceof EntityLivingBase))

@@ -203,7 +203,7 @@ public class PetManager {
             for(PetEntry petEntry : this.removedEntries) {
                 this.removeEntry(petEntry);
             }
-            this.removedEntries = new ArrayList<PetEntry>();
+            this.removedEntries = new ArrayList<>();
         }
 
         // Spirit Reserved:

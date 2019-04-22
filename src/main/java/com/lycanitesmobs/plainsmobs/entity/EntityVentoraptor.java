@@ -138,7 +138,7 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
     public void mountAbility(Entity rider) {
     	if(this.getEntityWorld().isRemote)
     		return;
-    	
+
     	if(this.abilityToggled)
     		return;
     	if(this.getStamina() < this.getStaminaCost())

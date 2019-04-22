@@ -674,6 +674,12 @@ public abstract class EntityCreatureBase extends EntityLiving {
         if(!this.creatureInfo.peaceful && this.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL) {
         	return false;
 		}
+
+		// Gamerule Check:
+		LycanitesMobs.printDebug("MobSpawns", "Checking gamerules...");
+		if(!this.getEntityWorld().getGameRules().getBoolean("doMobSpawning")) {
+			return false;
+		}
         
         // Fixed Spawning Checks:
     	LycanitesMobs.printDebug("MobSpawns", "Fixed spawn check (light level, collisions)...");
@@ -2151,10 +2157,6 @@ public abstract class EntityCreatureBase extends EntityLiving {
     public void leap(double distance, double leapHeight) {
     	float yaw = this.rotationYaw;
     	float pitch = this.rotationPitch;
-    	/*if(this.getRider() != null) {
-    		yaw = this.getRider().rotationYaw;
-			pitch = this.getRider().rotationPitch;
-		}*/
     	double angle = Math.toRadians(yaw);
         double xAmount = -Math.sin(angle);
         double yAmount = leapHeight;
@@ -2167,6 +2169,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
                 yAmount,
                 zAmount * distance + this.motionZ * 0.2D
         );
+		net.minecraftforge.common.ForgeHooks.onLivingJump(this);
     }
     
     // ========== Leap to Target ==========
@@ -2212,6 +2215,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 					leapHeight,
 					zDist / xzDist * 0.5D * 0.8D + this.motionZ * 0.2D
 			);
+			net.minecraftforge.common.ForgeHooks.onLivingJump(this);
 		}
 	}
 

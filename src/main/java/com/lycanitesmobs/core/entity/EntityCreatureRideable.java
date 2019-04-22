@@ -74,31 +74,6 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 					}
 				}
 			}
-
-    		// Player Rider Controls:
-	    	if(this.getControllingPassenger() instanceof EntityPlayer) {
-	    		EntityPlayer player = (EntityPlayer)this.getControllingPassenger();
-	    		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-	    		if(playerExt == null)
-	    			return;
-
-	    		// Mount Ability:
-	    		if(playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY)) {
-	    			this.mountAbility(player);
-	    			this.abilityToggled = true;
-	    		}
-	    		else
-	    			this.abilityToggled = false;
-
-	    		// Player Inventory:
-	    		if(playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_INVENTORY)) {
-	    			if(!this.inventoryToggled)
-	    				this.openGUI(player);
-	    			this.inventoryToggled = true;
-	    		}
-	    		else
-	    			this.inventoryToggled = false;
-	    	}
     	}
     	else {
     		this.abilityToggled = false;
@@ -215,7 +190,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 
         else {
             // Jumping Controls:
-            if (!this.isMountJumping() && this.onGround) {
+            if (!this.isMountJumping()) {
                 if (this.getControllingPassenger() instanceof EntityPlayer) {
                     EntityPlayer player = (EntityPlayer) this.getControllingPassenger();
                     ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
@@ -226,7 +201,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             }
 
             // Jumping Behaviour:
-            if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.onGround && this.canPassengerSteer()) {
+            if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
                 this.motionY = this.getMountJumpHeight() * (double) this.getJumpPower();
                 if (this.isPotionActive(MobEffects.JUMP_BOOST))
                     this.motionY += (double) ((float) (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
@@ -245,6 +220,33 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             }
             this.jumpMovementFactor = (float) (this.getAIMoveSpeed() * this.getGlideScale());
         }
+
+		// Ability Controls:
+		if(this.getControllingPassenger() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)this.getControllingPassenger();
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			if(playerExt != null) {
+
+				// Mount Ability:
+				if (playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY)) {
+					this.mountAbility(player);
+					this.abilityToggled = true;
+				}
+				else {
+					this.abilityToggled = false;
+				}
+
+				// Player Inventory:
+				if (playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_INVENTORY)) {
+					if (!this.inventoryToggled)
+						this.openGUI(player);
+					this.inventoryToggled = true;
+				}
+				else {
+					this.inventoryToggled = false;
+				}
+			}
+		}
 
         // Apply Movement:
         if(this.canPassengerSteer()) {
@@ -277,7 +279,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
         }
 
         // Clear Jumping:
-        if(this.onGround) {
+        if(this.onGround || this.isInWater() || this.isInLava()) {
             this.setJumpPower(0);
             this.setMountJumping(false);
         }

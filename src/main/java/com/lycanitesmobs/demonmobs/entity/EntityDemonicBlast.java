@@ -140,6 +140,10 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 			int explosionRadius = 2;
 			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
 				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
+				if(entityCreatureBase instanceof EntityCacodemon && !((EntityCacodemon)entityCreatureBase).cacodemonGreifing) {
+					super.onImpact();
+					return;
+				}
 				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
 					super.onImpact();
 					return;

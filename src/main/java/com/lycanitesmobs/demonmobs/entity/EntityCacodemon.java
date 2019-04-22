@@ -2,6 +2,7 @@ package com.lycanitesmobs.demonmobs.entity;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
+import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCacodemon extends EntityCreatureRideable implements IGroupDemon {
+    public boolean cacodemonGreifing = true;
     
     // ==================================================
  	//                    Constructor
@@ -31,8 +33,11 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
+
+        this.cacodemonGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Cacodemon Griefing", this.cacodemonGreifing, "Set to false to disable Cacodemon projectile explosions.");
         this.setAttackCooldownMax(20);
         this.setupMob();
+
         this.stepHeight = 1.0F;
         this.hitAreaWidthScale = 1.5F;
     }

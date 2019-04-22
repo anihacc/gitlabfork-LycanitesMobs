@@ -155,6 +155,9 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 			int explosionRadius = 2;
 			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
 				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
+				if(entityCreatureBase instanceof EntityBeholder && !((EntityBeholder)entityCreatureBase).beholderGreifing) {
+					return;
+				}
 				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
 					super.onImpact();
 					return;
