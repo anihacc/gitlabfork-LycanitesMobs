@@ -280,6 +280,7 @@ public class CreatureInfo {
 		// ID and Enabled Check:
 		if(!this.enabled) {
 			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + group.name + ")");
+			return;
 		}
 
 		// Mapping and Registration:

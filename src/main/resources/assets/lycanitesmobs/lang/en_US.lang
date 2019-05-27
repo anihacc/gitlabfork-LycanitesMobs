@@ -95,9 +95,9 @@ subspecies.void.name=Void
 # ========== Blocks ==========
 tile.summoningpedestal.name=Summoning Pedestal
 tile.summoningpedestal.description=This pedestal is able to create a constant summoning portal that will summon the selected minion. Some pedestals can be player owned and some not.
-tile.equipmentforge_wood.name=Wood Equipment Forge (Level 1)
-tile.equipmentforge_stone.name=Stone Equipment Forge (Level 2)
-tile.equipmentforge_iron.name=Iron Equipment Forge (Level 3)
+tile.equipmentforge_lesser.name=Lesser Equipment Forge (Level 1)
+tile.equipmentforge_greater.name=Greater Equipment Forge (Level 2)
+tile.equipmentforge_master.name=Master Equipment Forge (Level 3)
 tile.equipmentforge_wood.description=This forge can be used to create new Equipment from Level 1 creature body parts (higher level parts will be downgraded if possible).
 tile.equipmentforge_stone.description=This forge can be used to create new Equipment from Level 2 or below creature body parts (higher level parts will be downgraded if possible).
 tile.equipmentforge_iron.description=This forge can be used to create new Equipment from Level 3 or below creature body parts.
@@ -334,6 +334,7 @@ lyc.version.newer=You are currently using Lycanites Mobs {current} but a newer v
 common.yes=Yes
 common.no=No
 common.ok=Okay
+common.holdshift=Hold SHIFT for more info.
 #
 #
 #
@@ -436,6 +437,9 @@ equipment.feature.harvest.range=Range:
 equipment.feature.summon=Summons:
 equipment.feature.summon.chance=Chance:
 equipment.feature.summon.count=Amount:
+item.woodenrod.name=Wooden Rod
+item.woodenhilt.name=Wooden Hilt
+item.woodenpaxel.name=Wooden Paxel
 #
 #
 #

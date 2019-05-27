@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
@@ -105,6 +106,12 @@ public class ModelObj extends ModelCustom {
     //                    Init Model
     // ==================================================
     public ModelObj initModel(String name, GroupInfo groupInfo, String path) {
+    	// Check If Enabled:
+		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
+		if(creatureInfo != null && !creatureInfo.enabled) {
+			return this;
+		}
+
         // Load Obj Model:
         this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;

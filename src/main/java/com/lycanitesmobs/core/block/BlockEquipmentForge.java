@@ -38,19 +38,19 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 		this.group = group;
 		this.level = level;
 		if(level <= 1) {
-			this.blockName = "equipmentforge_wood";
+			this.blockName = "equipmentforge_lesser";
 			this.setHarvestLevel("axe", 1);
 			this.setSoundType(SoundType.WOOD);
 			this.setResistance(10F);
 		}
 		else if(level == 2) {
-			this.blockName = "equipmentforge_stone";
+			this.blockName = "equipmentforge_greater";
 			this.setHarvestLevel("pickaxe", 1);
 			this.setSoundType(SoundType.STONE);
 			this.setResistance(20F);
 		}
 		else {
-			this.blockName = "equipmentforge_iron";
+			this.blockName = "equipmentforge_master";
 			this.setHarvestLevel("pickaxe", 2);
 			this.setSoundType(SoundType.METAL);
 			this.setResistance(1000F);

@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -15,15 +16,14 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
 
+import java.util.UUID;
+
 public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
 	/** A list of item stacks in the forge. **/
 	protected NonNullList<ItemStack> itemStacks = NonNullList.withSize(ItemEquipment.PART_LIMIT + 1, ItemStack.EMPTY);
 
 	/** The level of the forge. **/
 	protected int level = 1;
-
-	/** If true, an existing Equipment Piece was placed in the forge first for editing. **/
-	protected boolean editing = false;
 
 
 	@Override
@@ -34,7 +34,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 
 	@Override
 	public void update() {
-
+		super.update();
 	}
 
 
@@ -121,7 +121,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * guis use Slot.isItemValid
 	 */
 	public boolean isItemValidForSlot(int index, ItemStack itemStack) {
-		LycanitesMobs.printDebug("", "Checking if valid");
 		if(!(itemStack.getItem() instanceof ItemEquipment) && !(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return false;
 		}
@@ -164,7 +163,26 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	//             Network Packets
 	// ========================================
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {}
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound syncData = new NBTTagCompound();
+
+		// Server to Client:
+		if(!this.getWorld().isRemote) {
+			syncData.setInteger("ForgeLevel", this.level);
+		}
+
+		return new SPacketUpdateTileEntity(this.getPos(), 1, syncData);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+		if(!this.getWorld().isRemote)
+			return;
+
+		NBTTagCompound syncData = packet.getNbtCompound();
+		if(syncData.hasKey("ForgeLevel"))
+			this.level = syncData.getInteger("ForgeLevel");
+	}
 
 	@Override
 	public void onGuiButton(byte buttonId) {
@@ -177,11 +195,17 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	// ========================================
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		if(nbtTagCompound.hasKey("ForgeLevel")) {
+			this.level = nbtTagCompound.getInteger("ForgeLevel");
+		}
+
 		super.readFromNBT(nbtTagCompound);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+		nbtTagCompound.setInteger("ForgeLevel", this.level);
+
 		return super.writeToNBT(nbtTagCompound);
 	}
 
@@ -190,8 +214,12 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	//                Open GUI
 	// ========================================
 	public Object getGUI(EntityPlayer player) {
-		if(player.world.isRemote)
+		if(player.world.isRemote) {
 			return new GuiEquipmentForge(this, player.inventory);
+		}
+		if(player instanceof EntityPlayerMP) {
+			((EntityPlayerMP)player).connection.sendPacket(this.getUpdatePacket());
+		}
 		return new ContainerEquipmentForge(this, player.inventory);
 	}
 
@@ -199,6 +227,13 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	// ========================================
 	//              Equipment Forge
 	// ========================================
+	/**
+	 * Returns the level of this Equipment Forge.
+	 */
+	public int getLevel() {
+		return this.level;
+	}
+
 	/**
 	 * Sets the level of this Equipment Forge.
 	 * @param level The level to set the forge to. Higher levels allow for working with higher level Equipment Parts.
@@ -211,12 +246,12 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * Gets the name of this Equipment Forge.
 	 */
 	public String getName() {
-		String levelName = "wood";
+		String levelName = "lesser";
 		if(this.level == 2) {
-			levelName = "stone";
+			levelName = "greater";
 		}
 		else if(this.level >= 3) {
-			levelName = "iron";
+			levelName = "master";
 		}
 		return I18n.translateToLocal("tile.equipmentforge_" + levelName + ".name");
 	}

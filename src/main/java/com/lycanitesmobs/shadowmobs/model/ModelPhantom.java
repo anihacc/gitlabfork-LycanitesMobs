@@ -21,10 +21,7 @@ public class ModelPhantom extends ModelObjOld {
     public ModelPhantom(float shadowSize) {
     	// Load Model:
     	this.initModel("phantom", ShadowMobs.instance.group, "entity/phantom");
-    	
 
-
-    	
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 1.8F, 0F);
     	setPartCenter("body", 0F, 1.0F, 0F);

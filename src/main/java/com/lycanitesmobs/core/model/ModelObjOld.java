@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
@@ -88,7 +89,13 @@ public class ModelObjOld extends ModelCustom {
     //                    Init Model
     // ==================================================
     public ModelObjOld initModel(String name, GroupInfo groupInfo, String path) {
-        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
+		// Check If Enabled:
+		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
+		if(creatureInfo != null && !creatureInfo.enabled) {
+			return this;
+		}
+
+		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
             LycanitesMobs.printWarning("", "Unable to load any parts for the " + name + " model!");

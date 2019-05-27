@@ -1,5 +1,5 @@
 {
-	"parent": "lycanitesmobs:block/equipmentforge_stone",
+	"parent": "lycanitesmobs:block/equipmentforge_master",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

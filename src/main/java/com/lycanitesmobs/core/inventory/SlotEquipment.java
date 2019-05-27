@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
@@ -38,9 +37,17 @@ public class SlotEquipment extends SlotBase {
 	public boolean isItemValid(ItemStack itemStack) {
 		Item item = itemStack.getItem();
 		if(item instanceof ItemEquipmentPart) {
-			return this.type.equals(((ItemEquipmentPart)item).slotType);
+			ItemEquipmentPart equipmentPart = (ItemEquipmentPart)item;
+			return this.type.equals(equipmentPart.slotType) && equipmentPart.levelMin <= this.containerForge.equipmentForge.getLevel();
 		}
 		else if(item instanceof ItemEquipment) {
+			if(this.containerForge.equipmentForge.getLevel() < 3) {
+				ItemEquipment equipment = (ItemEquipment)item;
+				int equipmentLevel = equipment.getHighestLevel(itemStack);
+				if(equipmentLevel > this.containerForge.equipmentForge.getLevel()) {
+					return false;
+				}
+			}
 			return this.type.equals("piece") && !this.getHasStack();
 		}
         return false;
@@ -150,6 +157,14 @@ public class SlotEquipment extends SlotBase {
 		// Equipment Part:
 		if(item instanceof ItemEquipmentPart) {
 			this.updateChildSlots();
+		}
+
+		// Equipment Piece:
+		if(item instanceof ItemEquipment) {
+			int forgeLevel = this.containerForge.equipmentForge.getLevel();
+			if(forgeLevel < 3) {
+				((ItemEquipment)item).applyLevelCap(itemStack, this.containerForge.equipmentForge.getLevel());
+			}
 		}
 
 		if("piece".equals(this.type)) {

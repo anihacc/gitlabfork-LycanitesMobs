@@ -52,7 +52,7 @@ public class ClientProxy extends CommonProxy {
 	};
 
 	/**
-	 * Returns the Font Renderer used by Lycnaites Mobs.
+	 * Returns the Font Renderer used by Lycanites Mobs.
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
 	@SideOnly(Side.CLIENT)

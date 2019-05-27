@@ -63,7 +63,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "1.20.5.3";
+	public static final String versionNumber = "1.20.5.4";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -228,9 +228,9 @@ public class LycanitesMobs {
 
         // ========== Create Blocks ==========
         ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(group));
-		ObjectManager.addBlock("equipmentforge_wood", new BlockEquipmentForge(group, 1));
-		ObjectManager.addBlock("equipmentforge_stone", new BlockEquipmentForge(group, 2));
-		ObjectManager.addBlock("equipmentforge_iron", new BlockEquipmentForge(group, 3));
+		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(group, 1));
+		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
+		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
 		
 		
 		// ========== Create Items ==========

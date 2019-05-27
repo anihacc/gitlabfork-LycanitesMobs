@@ -21,7 +21,9 @@ public abstract class TileEntityBase extends TileEntity implements ITickable {
     // ========================================
     /** The main update called every tick. **/
     @Override
-    public void update() {}
+    public void update() {
+
+    }
 
 
     // ========================================

@@ -4,10 +4,7 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.equipment.features.DamageEquipmentFeature;
-import com.lycanitesmobs.core.item.equipment.features.EffectEquipmentFeature;
-import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
-import com.lycanitesmobs.core.item.equipment.features.HarvestEquipmentFeature;
+import com.lycanitesmobs.core.item.equipment.features.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -81,8 +78,10 @@ public class ItemEquipment extends ItemBase {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
-			descriptions.add(I18n.translateToLocal(equipmentPart.getUnlocalizedName() + ".name"));
+			int partLevel = equipmentPart.getLevel(equipmentPartStack);
+			descriptions.add(I18n.translateToLocal(equipmentPart.getUnlocalizedName() + ".name") + " " + I18n.translateToLocal("entity.level") + " " + partLevel);
 		}
+		//descriptions.add(I18n.translateToLocal("common.holdshift"));
 		return descriptions;
 	}
 
@@ -201,6 +200,43 @@ public class ItemEquipment extends ItemBase {
 	}
 
 
+	/**
+	 * Cycles through each Equipment Part and lowers their level to the provided level cap, used by lower level Forges.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @param levelCap The level cap to lower parts to.
+	 */
+	public void applyLevelCap(ItemStack equipmentStack, int levelCap) {
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			equipmentPart.setLevel(equipmentPartStack, Math.min(levelCap, equipmentPart.getLevel(equipmentPartStack)));
+		}
+	}
+
+
+	/**
+	 * Cycles through each Equipment Part returns the highest part level found.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @return The highest part level found.
+	 */
+	public int getHighestLevel(ItemStack equipmentStack) {
+		int highestLevel = 0;
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			int partLevel = equipmentPart.getLevel(equipmentPartStack);
+			if(partLevel > highestLevel) {
+				highestLevel = partLevel;
+			}
+		}
+		return highestLevel;
+	}
+
+
 	// ==================================================
 	//                     Harvesting
 	// ==================================================
@@ -271,6 +307,12 @@ public class ItemEquipment extends ItemBase {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "effect")) {
 			EffectEquipmentFeature effectFeature = (EffectEquipmentFeature)equipmentFeature;
 			effectFeature.onHitEntity(itemStack, target, attacker);
+		}
+
+		// Summons:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
+			SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
+			summonFeature.onHitEntity(itemStack, target, attacker);
 		}
 
 		return true;
