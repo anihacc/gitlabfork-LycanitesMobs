@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Body",
+    "parent": "",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "0.396",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Head",
+    "parent": "Body",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "0.461",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Tail01",
+    "parent": "Body",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "0.241",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Base",
+    "parent": "Tail01",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "0.0",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Tail03",
+    "parent": "Base",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "-0.248",
+    "rotationX": "-3.807",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Tail04",
+    "parent": "Tail03",
+    "centerX": "0.0",
+    "centerY": "-0.016",
+    "centerZ": "-0.496",
+    "rotationX": "3.807",
+    "rotationY": "0.0",
+    "rotationZ": "0.0"
+  },
+  {
+    "name": "Tail05",
+    "parent": "Tail04",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "-0.743",
+    "rotationX": "-7.738",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Tail06",
+    "parent": "Tail05",
+    "centerX": "0.0",
+    "centerY": "-0.033",
+    "centerZ": "-0.988",
+    "rotationX": "-7.738",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  }
+]

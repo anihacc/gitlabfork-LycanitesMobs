@@ -1,7 +1,7 @@
-# Blender MTL File: 'xaphanspine.blend'
+# Blender MTL File: 'spectretendril.blend'
 # Material Count: 1
 
-newmtl xaphanspine
+newmtl spectre
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -10,5 +10,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 0
-map_Kd xaphanspine.png
-map_d xaphanspine.png
+map_Kd spectretendril.png
+map_d spectretendril.png

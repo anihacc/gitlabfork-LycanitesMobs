@@ -1,20 +1,20 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.core.entity.ai.EntityAIWander;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.HashMap;
 
 public class EntityFear extends EntityCreatureBase {
     public Entity fearedEntity;
@@ -119,6 +119,20 @@ public class EntityFear extends EntityCreatureBase {
             this.setDead();
             return;
         }
+
+        // Copy Movement Debuffs:
+		if(this.fearedEntity instanceof EntityLivingBase) {
+			if (fearedEntityLiving.isPotionActive(MobEffects.LEVITATION)) {
+				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(MobEffects.LEVITATION);
+				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			}
+
+			Potion instability = ObjectManager.getPotionEffect("instability");
+			if (instability != null && fearedEntityLiving.isPotionActive(instability)) {
+				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(instability);
+				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			}
+		}
     }
     
     

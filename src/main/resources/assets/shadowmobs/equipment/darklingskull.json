@@ -58,10 +58,11 @@
 			"featureType": "summon",
 			"levelMin": 3,
 			"summonMobId": "shadowmobs.darkling",
-			"summonChance": 0.1,
-			"summonDuration": 60,
+			"summonChance": 0.05,
+			"summonDuration": 10,
 			"summonCountMin": 1,
-			"summonCountMax": 1
+			"summonCountMax": 1,
+			"sizeScale": 1.0
 		}
 	]
 }

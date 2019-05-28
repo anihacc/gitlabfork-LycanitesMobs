@@ -30,6 +30,16 @@
     "rotationZ": "0.0"
   },
   {
+    "name": "Pommel",
+    "parent": "BaseBack01",
+    "centerX": "0.0",
+    "centerY": "-0.004",
+    "centerZ": "-0.167",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "0.0"
+  },
+  {
     "name": "BaseFront03",
     "parent": "",
     "centerX": "0.0",
