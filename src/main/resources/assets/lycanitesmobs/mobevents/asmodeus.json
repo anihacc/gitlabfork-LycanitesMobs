@@ -5,7 +5,13 @@
 	"loadDefault": true,
 	"channel": "boss",
 	"duration": 600,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": [-1],
+			"dimensionListType": "whitelist"
+		}
+	],
 	"levelBoostMax": 0,
 	"triggers": [
 		{
