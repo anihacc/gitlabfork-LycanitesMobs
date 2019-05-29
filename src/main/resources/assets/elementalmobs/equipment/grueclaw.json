@@ -1,17 +1,17 @@
 {
-	"itemName": "cinderblade",
+	"itemName": "grueclaw",
 	"loadDefault": true,
 	"slotType": "blade",
-	"dropMobId": "elementalmobs:cinder",
+	"dropMobId": "elementalmobs:grue",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
 	"features": [
 		{
 			"featureType": "harvest",
-			"harvestType": "sword",
-			"harvestShape": "block",
-			"harvestRange": [1, 1, 1],
+			"harvestType": "shovel",
+			"harvestShape": "cross",
+			"harvestRange": [3, 3, 3],
 			"harvestRangeLevelMultiplier": 0
 		},
 		{
@@ -45,38 +45,36 @@
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "fire",
-			"effectTarget": "target",
-			"effectDuration": 20,
-			"effectStrength": 1
-		},
-		{
-			"featureType": "effect",
-			"levelMin": 3,
-			"effectType": "fire",
+			"effectType": "minecraft:blindness",
 			"effectTarget": "target",
 			"effectDuration": 40,
 			"effectStrength": 1
 		},
 		{
+			"featureType": "effect",
+			"levelMin": 3,
+			"effectType": "minecraft:blindness",
+			"effectTarget": "target",
+			"effectDuration": 80,
+			"effectStrength": 1
+		},
+		{
+			"featureType": "effect",
+			"levelMin": 3,
+			"effectType": "minecraft:invisibility",
+			"effectTarget": "self",
+			"effectDuration": 80,
+			"effectStrength": 1
+		},
+		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.cinder",
+			"summonMobId": "elementalmobs.grue",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,
 			"summonCountMax": 1,
 			"sizeScale": 0.4
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 3,
-			"projectileName": "ember",
-			"projectileTrigger": "hold",
-			"projectilePattern": "spread",
-			"projectileSpreadX": 4,
-			"projectileSpreadY": 4,
-			"projectileChance": 0.25
 		}
 	]
 }

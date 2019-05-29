@@ -1,7 +1,7 @@
 {
-	"itemName": "geonachfist",
+	"itemName": "geonachspear",
 	"loadDefault": true,
-	"slotType": "axe",
+	"slotType": "pike",
 	"dropMobId": "elementalmobs:geonach",
 	"dropChance": 0.1,
 	"levelMin": 1,
@@ -13,7 +13,7 @@
 			"harvestType": "pickaxe",
 			"harvestStrength": 6,
 			"harvestShape": "block",
-			"harvestRange": [2, 2, 2],
+			"harvestRange": [1, 1, 4],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
@@ -23,7 +23,7 @@
 			"harvestType": "pickaxe",
 			"harvestStrength": 7,
 			"harvestShape": "block",
-			"harvestRange": [3, 3, 3],
+			"harvestRange": [1, 1, 8],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
@@ -32,7 +32,7 @@
 			"levelMin": 3,
 			"harvestStrength": 8,
 			"harvestShape": "block",
-			"harvestRange": [4, 4, 4],
+			"harvestRange": [1, 1, 16],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
@@ -40,7 +40,7 @@
 			"levelMax": 2,
 			"damageAmount": 4,
 			"damageKnockback": 2,
-			"damageCooldown": 2,
+			"damageCooldown": 1,
 			"damageRange": 1,
 			"damageSweep": 360
 		},
@@ -49,14 +49,14 @@
 			"levelMin": 3,
 			"damageAmount": 5,
 			"damageKnockback": 2,
-			"damageCooldown": 2,
+			"damageCooldown": 0.5,
 			"damageRange": 1,
 			"damageSweep": 360
 		},
 		{
 			"featureType": "effect",
-			"effectType": "lycanitesmobs:weight",
-			"effectTarget": "target",
+			"effectType": "minecraft:resistance",
+			"effectTarget": "self",
 			"effectDuration": 80,
 			"effectStrength": 1
 		}

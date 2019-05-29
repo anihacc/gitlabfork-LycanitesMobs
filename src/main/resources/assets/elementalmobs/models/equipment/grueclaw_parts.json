@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Base",
+    "parent": "",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "-0.0",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "FingerLeft01",
+    "parent": "Base",
+    "centerX": "0.101",
+    "centerY": "0.09",
+    "centerZ": "0.157",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "FingerLeft04",
+    "parent": "Base",
+    "centerX": "-0.116",
+    "centerY": "0.085",
+    "centerZ": "0.156",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "FingerLeft03",
+    "parent": "Base",
+    "centerX": "-0.046",
+    "centerY": "0.101",
+    "centerZ": "0.164",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "FingerLeft02",
+    "parent": "Base",
+    "centerX": "0.03",
+    "centerY": "0.11",
+    "centerZ": "0.165",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  }
+]

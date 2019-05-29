@@ -4,7 +4,7 @@
     "parent": "",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "0.396",
+    "centerZ": "0.446",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -14,7 +14,7 @@
     "parent": "Body",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "0.461",
+    "centerZ": "0.491",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -24,7 +24,7 @@
     "parent": "Body",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "0.241",
+    "centerZ": "0.337",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -34,7 +34,7 @@
     "parent": "Tail01",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "0.0",
+    "centerZ": "0.169",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -44,8 +44,8 @@
     "parent": "Base",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "-0.248",
-    "rotationX": "-3.807",
+    "centerZ": "-0.005",
+    "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
   },
@@ -53,19 +53,19 @@
     "name": "Tail04",
     "parent": "Tail03",
     "centerX": "0.0",
-    "centerY": "-0.016",
-    "centerZ": "-0.496",
-    "rotationX": "3.807",
+    "centerY": "-0.011",
+    "centerZ": "-0.178",
+    "rotationX": "0.0",
     "rotationY": "0.0",
-    "rotationZ": "0.0"
+    "rotationZ": "-0.0"
   },
   {
     "name": "Tail05",
     "parent": "Tail04",
     "centerX": "0.0",
     "centerY": "0.0",
-    "centerZ": "-0.743",
-    "rotationX": "-7.738",
+    "centerZ": "-0.351",
+    "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
   },
@@ -73,9 +73,9 @@
     "name": "Tail06",
     "parent": "Tail05",
     "centerX": "0.0",
-    "centerY": "-0.033",
-    "centerZ": "-0.988",
-    "rotationX": "-7.738",
+    "centerY": "-0.023",
+    "centerZ": "-0.523",
+    "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
   }

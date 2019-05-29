@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.item.equipment.features;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
+
 public class EquipmentFeature {
 	/** The type of feature that this is. **/
 	public String featureType;
@@ -15,6 +17,7 @@ public class EquipmentFeature {
 
 
 	/** Loads a Tool Feature from the provided JSON data. **/
+	@Nullable
 	public static EquipmentFeature createFromJSON(JsonObject json) {
 		String type = json.get("featureType").getAsString();
 		EquipmentFeature equipmentFeature = null;
@@ -33,6 +36,10 @@ public class EquipmentFeature {
 		}
 		else if("summon".equalsIgnoreCase(type)) {
 			equipmentFeature = new SummonEquipmentFeature();
+		}
+
+		if(equipmentFeature == null) {
+			return null;
 		}
 
 		equipmentFeature.featureType = type;
