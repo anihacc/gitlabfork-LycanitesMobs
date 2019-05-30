@@ -1,40 +1,47 @@
 package com.lycanitesmobs.core.model.animation;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.helpers.JSONHelper;
+import com.lycanitesmobs.core.model.IAnimationModel;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.LayerEffect;
 import com.lycanitesmobs.core.renderer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import net.minecraft.util.math.Vec2f;
+import com.sun.javafx.geom.Vec3f;
+import com.sun.javafx.geom.Vec4f;
+import net.minecraft.entity.EntityLiving;
 
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextureLayerAnimation {
+public class ModelPartAnimation {
 
-	/** The name of this layer. If set to "base" this will apply animations to the base texture layer. **/
-    public String name = "base";
+	/** The model parts that this layer should animation. **/
+    public List<String> targetParts = new ArrayList<>();
 
-    /** The texture suffix for loading sub textures. If empty, the base texture is used. **/
-	public String textureSuffix = "";
+	/** How this animation determines the animation time, can be 'static' (a constant static loop), 'distance' (based on entity movement, entity only), or 'time' (a loop that resets to 0 when the model is offscreen, entity only). **/
+	public String timeSource = "static";
 
-	/** If true, the subspecies name is included when finding the texture. This only applies to subspecies colors as subspecies skins load a different model. **/
-	public boolean subspeciesTexture = true;
+	/** How this animation loops, ignore if duration is 0, can be 'reset', or 'reverse'. **/
+	public String loopType = "reset";
 
-	/** If true, lighting is disabled when rendering this layer for glowing in the dark, etc. **/
-	public boolean glow = false;
+	/** How long in seconds this animation lasts before looping, if 0, infinite. **/
+	public float duration = 0;
 
-	/** The texture blending style to use. Can be "normal", "additive" or "subtractive". **/
-	public String blending = "normal";
+	/** Offsets the amount of animation seconds, used to put different part animations into a pattern. **/
+	public float offset = 0;
 
-	/** The scrolling speeds to use, if 0 the texture isn't scrolled in that direction. **/
-	public Vector2f scrollSpeed = new Vector2f(0, 0);
+	/** The xyz translation to animate by. **/
+	public Vec3f translate = new Vec3f(0, 0, 0);
 
-	/** The color fading speeds to use, if 0 the color isn't faded. **/
-	public Vector4f colorFadeSpeed;
+	/** The angle amount to animate by, (rotation, x, y, z). **/
+	public Vec4f angle = new Vec4f(0, 0, 0, 0);
+
+	/** The xyz rotations to animate by. **/
+	public Vec3f rotate = new Vec3f(0, 0, 0);
+
+	/** The xyz scaling to animate by. **/
+	public Vec3f scale = new Vec3f(0, 0, 0);
 
 
 	/**
@@ -42,87 +49,140 @@ public class TextureLayerAnimation {
 	 * @param json The JSON data to read from.
 	 */
 	public void loadFromJson(JsonObject json) {
-		this.name = json.get("name").getAsString().toLowerCase();
+		if(json.has("targetParts"))
+			this.targetParts = JSONHelper.getJsonStrings(json.getAsJsonArray("targetParts"));
 
-		if(json.has("textureSuffix"))
-			this.textureSuffix = json.get("textureSuffix").getAsString();
+		if(json.has("timeSource"))
+			this.timeSource = json.get("timeSource").getAsString();
 
-		if(json.has("subspeciesTexture"))
-			this.subspeciesTexture = json.get("subspeciesTexture").getAsBoolean();
+		if(json.has("loopType"))
+			this.loopType = json.get("loopType").getAsString();
 
-		if(json.has("glow"))
-			this.glow = json.get("glow").getAsBoolean();
+		if(json.has("duration"))
+			this.duration = json.get("duration").getAsFloat();
 
-		if(json.has("blending"))
-			this.blending = json.get("blending").getAsString().toLowerCase();
+		if(json.has("offset"))
+			this.offset = json.get("offset").getAsFloat();
 
-		float scrollSpeedX = 0;
-		if(json.has("scrollSpeedX"))
-			scrollSpeedX = json.get("scrollSpeedX").getAsFloat();
-		float scrollSpeedY = 0;
-		if(json.has("scrollSpeedY"))
-			scrollSpeedY = json.get("scrollSpeedY").getAsFloat();
-		this.scrollSpeed = new Vector2f(scrollSpeedX, scrollSpeedY);
+		float translateX = 0;
+		if(json.has("translateX"))
+			translateX = json.get("translateX").getAsFloat();
+		float translateY = 0;
+		if(json.has("translateY"))
+			translateY = json.get("translateY").getAsFloat();
+		float translateZ = 0;
+		if(json.has("translateZ"))
+			translateZ = json.get("translateZ").getAsFloat();
+		this.translate = new Vec3f(translateX, translateY, translateZ);
 
-		float colorFadeRed = 0;
-		if(json.has("colorFadeRed"))
-			colorFadeRed = json.get("colorFadeRed").getAsFloat();
-		float colorFadeGreen = 0;
-		if(json.has("colorFadeGreen"))
-			colorFadeGreen = json.get("colorFadeGreen").getAsFloat();
-		float colorFadeBlue = 0;
-		if(json.has("colorFadeBlue"))
-			colorFadeBlue = json.get("colorFadeBlue").getAsFloat();
-		float colorFadeAlpha = 0;
-		if(json.has("colorFadeAlpha"))
-			colorFadeAlpha = json.get("colorFadeAlpha").getAsFloat();
-		if(colorFadeRed != 0 || colorFadeGreen != 0 || colorFadeBlue != 0 || colorFadeAlpha != 0)
-			this.colorFadeSpeed = new Vector4f(colorFadeRed, colorFadeGreen, colorFadeBlue, colorFadeAlpha);
+		float angleAmount = 0;
+		if(json.has("angleAmount"))
+			angleAmount = json.get("angleAmount").getAsFloat();
+		float angleX = 0;
+		if(json.has("angleX"))
+			angleX = json.get("angleX").getAsFloat();
+		float angleY = 0;
+		if(json.has("angleY"))
+			angleY = json.get("angleY").getAsFloat();
+		float angleZ = 0;
+		if(json.has("angleZ"))
+			angleZ = json.get("angleZ").getAsFloat();
+		this.angle = new Vec4f(angleX, angleY, angleZ, angleAmount);
+
+		float rotateX = 0;
+		if(json.has("rotateX"))
+			rotateX = json.get("rotateX").getAsFloat();
+		float rotateY = 0;
+		if(json.has("rotateY"))
+			rotateY = json.get("rotateY").getAsFloat();
+		float rotateZ = 0;
+		if(json.has("rotateZ"))
+			rotateZ = json.get("rotateZ").getAsFloat();
+		this.rotate = new Vec3f(rotateX, rotateY, rotateZ);
+
+		float scaleX = 0;
+		if(json.has("scaleX"))
+			scaleX = json.get("scaleX").getAsFloat();
+		float scaleY = 0;
+		if(json.has("scaleY"))
+			scaleY = json.get("scaleY").getAsFloat();
+		float scaleZ = 0;
+		if(json.has("scaleZ"))
+			scaleZ = json.get("scaleZ").getAsFloat();
+		this.scale = new Vec3f(scaleX, scaleY, scaleZ);
 	}
 
 
 	/**
-	 * Creates a new Creature Layer Renderer instance based on this Animation Layer.
-	 * @param renderer The creature renderer to use for the layer.
-	 * @return A new Layer Renderer.
+	 * Applies this animation onto the provided part for the provided model.
+	 * @param model The model to animate.
+	 * @param partName The name of the part (should be made all lowercase).
+	 * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityCreatureBase is used more animations will be used.
+	 * @param time How long the model has been displayed for? This is currently unused.
+	 * @param distance Used for movement animations, this should just count up from 0 every tick and stop back at 0 when not moving.
+	 * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
+	 * @param lookY A y looking rotation used by the head, etc.
+	 * @param lookX An x looking rotation used by the head, etc.
+	 * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
 	 */
-	public LayerEffect createCreatureLayer(RenderCreature renderer) {
-		int blendingId = LayerEffect.BLEND.NORMAL.id;
-		if("add".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.ADD.id;
+	public void animatePart(IAnimationModel model, String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+		// Check Part Name:
+		boolean matchingPart = false;
+		for (String targetPart : this.targetParts) {
+			if(targetPart.equalsIgnoreCase(partName)) {
+				matchingPart = true;
+				break;
+			}
 		}
-		else if("sub".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.SUB.id;
+		if(!matchingPart) {
+			return;
 		}
 
-		LayerEffect renderLayer = new LayerEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
-		renderLayer.name = this.name;
-		renderLayer.scrollSpeed = this.scrollSpeed;
-		return renderLayer;
+		float progress = loop + (this.offset * 20);
+
+		// Time Source:
+		if("distance".equalsIgnoreCase(this.timeSource))
+			progress = distance + this.offset;
+		else if("time".equalsIgnoreCase(this.timeSource))
+			progress = time + this.offset;
+
+		// Looping Type:
+		float duration = this.duration * 20;
+		if(duration != 0) {
+			if ("reset".equalsIgnoreCase(this.loopType)) {
+				progress = progress % duration;
+			}
+			else if ("reverse".equalsIgnoreCase(this.loopType)) {
+				float cycleProgress = progress % duration;
+				int cycleCount = Math.round((progress - cycleProgress) / duration);
+				if(cycleCount % 2 != 0) {
+					cycleProgress = duration - cycleProgress;
+				}
+				progress = cycleProgress;
+			}
+		}
+
+		// Translate:
+		model.translate(this.translate.x * progress, this.translate.y * progress, this.translate.z * progress);
+
+		// Angle:
+		model.angle(this.angle.w * progress, this.angle.x, this.angle.y, this.angle.z);
+
+		// Rotate:
+		model.rotate(this.rotate.x * progress, this.rotate.y * progress, this.rotate.z * progress);
+
+		// Scale:
+		model.scale(1 + this.scale.x * progress, 1 + this.scale.y * progress, 1 + this.scale.z * progress);
 	}
 
 
 	/**
-	 * Creates a new Item Layer Renderer instance based on this Animation Layer.
-	 * @param renderer The item renderer to use for the layer.
-	 * @return A new Layer Renderer.
+	 * Applies this animation onto the provided part for the provided model, this is a reduced method used by items and blocks.
+	 * @param model The model to animate.
+	 * @param partName The name of the part (should be made all lowercase).
+	 * @param loop How long the model has been displayed for? This is currently unused.
 	 */
-	public LayerItem createItemLayer(IItemModelRenderer renderer) {
-		int blendingId = LayerEffect.BLEND.NORMAL.id;
-		if("additive".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.ADD.id;
-		}
-		else if("subtractive".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.SUB.id;
-		}
-
-		LayerItem renderLayer = new LayerItem(renderer, this.name);
-		renderLayer.textureSuffix = this.textureSuffix;
-		renderLayer.glow = this.glow;
-		renderLayer.blending = blendingId;
-		renderLayer.scrollSpeed = this.scrollSpeed;
-		renderLayer.colorFadeSpeed = this.colorFadeSpeed;
-
-		return renderLayer;
+	public void animatePart(IAnimationModel model, String partName, float loop) {
+		this.animatePart(model, partName, null, loop, 0, loop, 0, 0, 1);
 	}
 }

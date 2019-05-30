@@ -13,7 +13,7 @@ import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelAnimationLayer {
+public class TextureLayerAnimation {
 
 	/** The name of this layer. If set to "base" this will apply animations to the base texture layer. **/
     public String name = "base";
