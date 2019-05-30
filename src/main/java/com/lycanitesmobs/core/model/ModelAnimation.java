@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.model;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.model.animation.ModelAnimationLayer;
+import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
+import com.lycanitesmobs.core.model.animation.TextureLayerAnimation;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
@@ -13,10 +13,10 @@ import java.util.*;
 public class ModelAnimation {
 
 	/** A list of model texture layer definitions. **/
-    public Map<String, ModelAnimationLayer> textureLayers = new HashMap<>();
+    public Map<String, TextureLayerAnimation> textureLayers = new HashMap<>();
 
 	/** A list of part animations. **/
-	//public List<ModelAnimationLayers> partAnimations = new ArrayList<>();
+	public List<ModelPartAnimation> partAnimations = new ArrayList<>();
 
 
 	/**
@@ -24,15 +24,25 @@ public class ModelAnimation {
 	 * @param json The JSON data to read from.
 	 */
 	public void loadFromJson(JsonObject json) {
-
 		// Texture Layers:
 		if(json.has("textureLayers")) {
 			Iterator<JsonElement> textureLayers = json.get("textureLayers").getAsJsonArray().iterator();
 			while(textureLayers.hasNext()) {
 				JsonObject jsonObject = textureLayers.next().getAsJsonObject();
-				ModelAnimationLayer animationLayer = new ModelAnimationLayer();
+				TextureLayerAnimation animationLayer = new TextureLayerAnimation();
 				animationLayer.loadFromJson(jsonObject);
 				this.textureLayers.put(animationLayer.name, animationLayer);
+			}
+		}
+
+		// Part Animations:
+		if(json.has("partAnimations")) {
+			Iterator<JsonElement> partAnimations = json.get("partAnimations").getAsJsonArray().iterator();
+			while(partAnimations.hasNext()) {
+				JsonObject jsonObject = partAnimations.next().getAsJsonObject();
+				ModelPartAnimation partAnimation = new ModelPartAnimation();
+				partAnimation.loadFromJson(jsonObject);
+				this.partAnimations.add(partAnimation);
 			}
 		}
 	}
@@ -43,7 +53,7 @@ public class ModelAnimation {
 	 * @param renderer The renderer to add the layers to.
 	 */
 	public void addCreatureLayers(RenderCreature renderer) {
-		for(ModelAnimationLayer textureLayer : this.textureLayers.values()) {
+		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
 			renderer.addLayer(textureLayer.createCreatureLayer(renderer));
 		}
 	}
@@ -54,7 +64,7 @@ public class ModelAnimation {
 	 * @param renderer The renderer to add the layers to.
 	 */
 	public void addItemLayers(IItemModelRenderer renderer) {
-		for(ModelAnimationLayer textureLayer : this.textureLayers.values()) {
+		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
 			renderer.addLayer(textureLayer.createItemLayer(renderer));
 		}
 	}
@@ -67,7 +77,7 @@ public class ModelAnimation {
 	 */
 	public LayerItem getBaseLayer(IItemModelRenderer renderer) {
 		if(this.textureLayers.containsKey("base")) {
-			ModelAnimationLayer animationLayer = this.textureLayers.get("base");
+			TextureLayerAnimation animationLayer = this.textureLayers.get("base");
 			if(animationLayer != null) {
 				return animationLayer.createItemLayer(renderer);
 			}

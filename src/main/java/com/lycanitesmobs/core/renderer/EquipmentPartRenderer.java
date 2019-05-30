@@ -44,10 +44,12 @@ public class EquipmentPartRenderer extends TileEntitySpecialRenderer<TileEntityE
 		if(Minecraft.getMinecraft().player != null) {
 			loop = Minecraft.getMinecraft().player.ticksExisted;
 		}
-		modelItemBase.render(itemStack, hand, this, null, null, loop);
+		modelItemBase.generateAnimationFrames(itemStack, null, loop, null);
+		modelItemBase.render(itemStack, hand, this, null, null, loop, false);
 		for(LayerItem renderLayer : this.renderLayers) {
-			modelItemBase.render(itemStack, hand, this, null, renderLayer, loop);
+			modelItemBase.render(itemStack, hand, this, null, renderLayer, loop, false);
 		}
+		modelItemBase.clearAnimationFrames();
 
 		GlStateManager.popMatrix();
 

@@ -119,7 +119,7 @@ public class ModelObjOld extends ModelCustom {
      * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
      */
     @Override
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean trophyModel = false;
 		if(scale < 0) {

@@ -37,7 +37,7 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
             ResourceLocation layerTexture = this.getLayerTexture(entity);
             if(layerTexture != null)
                 this.renderer.bindTexture(layerTexture);
-            ((ModelCustom)this.renderer.getMainModel()).render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this);
+            ((ModelCustom)this.renderer.getMainModel()).render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
         }
     }
 

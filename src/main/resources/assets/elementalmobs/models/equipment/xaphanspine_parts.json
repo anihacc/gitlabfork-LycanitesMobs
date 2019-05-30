@@ -20,6 +20,26 @@
     "rotationZ": "0.0"
   },
   {
+    "name": "BaseFront03",
+    "parent": "BaseFront02",
+    "centerX": "0.0",
+    "centerY": "0.01",
+    "centerZ": "0.22",
+    "rotationX": "-9.996",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Head",
+    "parent": "BaseFront03",
+    "centerX": "0.0",
+    "centerY": "0.002",
+    "centerZ": "0.432",
+    "rotationX": "-9.996",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
     "name": "BaseBack01",
     "parent": "Base",
     "centerX": "0.0",
@@ -38,25 +58,5 @@
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "0.0"
-  },
-  {
-    "name": "BaseFront03",
-    "parent": "",
-    "centerX": "0.0",
-    "centerY": "0.01",
-    "centerZ": "0.22",
-    "rotationX": "-9.996",
-    "rotationY": "0.0",
-    "rotationZ": "-0.0"
-  },
-  {
-    "name": "Head",
-    "parent": "BaseFront03",
-    "centerX": "0.0",
-    "centerY": "0.002",
-    "centerZ": "0.432",
-    "rotationX": "-9.996",
-    "rotationY": "0.0",
-    "rotationZ": "-0.0"
   }
 ]

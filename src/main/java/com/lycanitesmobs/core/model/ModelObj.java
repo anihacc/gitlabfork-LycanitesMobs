@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.LayerBase;
+import com.lycanitesmobs.core.renderer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class ModelObj extends ModelCustom {
+public class ModelObj extends ModelCustom implements IAnimationModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -216,9 +217,10 @@ public class ModelObj extends ModelCustom {
      * @param lookX An x looking rotation used by the head, etc.
      * @param layer The layer that is being rendered, if null the default base layer is being rendered.
      * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
+	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
      */
     @Override
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
 		if(scale < 0) {
@@ -251,35 +253,9 @@ public class ModelObj extends ModelCustom {
 		}
 
         // Generate Animation Frames:
-        for(ObjObject part : this.wavefrontParts) {
-            String partName = part.getName().toLowerCase();
-            //if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
-                //continue;
-            this.currentAnimationPart = this.animationParts.get(partName);
-            if(this.currentAnimationPart == null)
-            	continue;
-
-            // Animate:
-			if(entity instanceof EntityLiving) {
-				this.animatePart(partName, (EntityLiving) entity, time, distance, loop, -lookY, lookX, scale);
-			}
-
-            // Trophy Positioning:
-            if(renderAsTrophy) {
-                if(partName.contains("head")) {
-                    if(!partName.contains("left")) {
-                        this.translate(-0.3F, 0, 0);
-                        this.angle(5F, 0, 1, 0);
-                    }
-                    if(!partName.contains("right")) {
-                        this.translate(0.3F, 0, 0);
-                        this.angle(-5F, 0, 1, 0);
-                    }
-                }
-                if(this.trophyOffset.length >= 3)
-                    this.translate(this.trophyOffset[0], this.trophyOffset[1], this.trophyOffset[2]);
-            }
-    	}
+		if(animate) {
+			this.generateAnimationFrames(entity, time, distance, loop, lookY, lookX, scale, layer, renderAsTrophy);
+		}
 
 		// Render Parts:
         for(ObjObject part : this.wavefrontParts) {
@@ -323,9 +299,9 @@ public class ModelObj extends ModelCustom {
 		}
 
 		// Clear Animation Frames:
-        for(ModelObjPart animationPart : this.animationParts.values()) {
-            animationPart.animationFrames.clear();
-        }
+		if(animate) {
+			this.clearAnimationFrames();
+		}
     }
 
 	/** Called just before a layer is rendered. **/
@@ -346,6 +322,46 @@ public class ModelObj extends ModelCustom {
 		}
 		if(layer != null) {
 			layer.onRenderFinish(entity, renderAsTrophy);
+		}
+	}
+
+	/** Generates all animation frames for a render tick. **/
+	public void generateAnimationFrames(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean renderAsTrophy) {
+		for(ObjObject part : this.wavefrontParts) {
+			String partName = part.getName().toLowerCase();
+			//if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
+			//continue;
+			this.currentAnimationPart = this.animationParts.get(partName);
+			if(this.currentAnimationPart == null)
+				continue;
+
+			// Animate:
+			if(entity instanceof EntityLiving) {
+				this.animatePart(partName, (EntityLiving) entity, time, distance, loop, -lookY, lookX, scale);
+			}
+
+			// Trophy Positioning:
+			if(renderAsTrophy) {
+				if(partName.contains("head")) {
+					if(!partName.contains("left")) {
+						this.translate(-0.3F, 0, 0);
+						this.angle(5F, 0, 1, 0);
+					}
+					if(!partName.contains("right")) {
+						this.translate(0.3F, 0, 0);
+						this.angle(-5F, 0, 1, 0);
+					}
+				}
+				if(this.trophyOffset.length >= 3)
+					this.translate(this.trophyOffset[0], this.trophyOffset[1], this.trophyOffset[2]);
+			}
+		}
+	}
+
+	/** Clears all animation frames that were generated for a render tick. **/
+	public void clearAnimationFrames() {
+		for(ModelObjPart animationPart : this.animationParts.values()) {
+			animationPart.animationFrames.clear();
 		}
 	}
 
@@ -396,7 +412,7 @@ public class ModelObj extends ModelCustom {
      * @param partName The name of the part (should be made all lowercase).
      * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityCreatureBase is used more animations will be used.
      * @param time How long the model has been displayed for? This is currently unused.
-     * @param distance Used for movement animations, this should just count up form 0 every tick and stop back at 0 when not moving.
+     * @param distance Used for movement animations, this should just count up from 0 every tick and stop back at 0 when not moving.
      * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
      * @param lookY A y looking rotation used by the head, etc.
      * @param lookX An x looking rotation used by the head, etc.
@@ -484,17 +500,55 @@ public class ModelObj extends ModelCustom {
 	// ==================================================
 	//                  Create Frames
 	// ==================================================
+	@Override
 	public void angle(float rotation, float angleX, float angleY, float angleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("angle", rotation, angleX, angleY, angleZ));
 	}
+
+	@Override
 	public void rotate(float rotX, float rotY, float rotZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("rotate", 1, rotX, rotY, rotZ));
 	}
+
+	@Override
 	public void translate(float posX, float posY, float posZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("translate", 1, posX, posY, posZ));
 	}
+
+	@Override
 	public void scale(float scaleX, float scaleY, float scaleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("scale", 1, scaleX, scaleY, scaleZ));
+	}
+
+
+	// ==================================================
+	//                  Rotate to Point
+	// ==================================================
+	@Override
+	public double rotateToPoint(double aTarget, double bTarget) {
+		return rotateToPoint(0, 0, aTarget, bTarget);
+	}
+
+	@Override
+	public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
+		if(aTarget - aCenter == 0)
+			if(aTarget > aCenter) return 0;
+			else if(aTarget < aCenter) return 180;
+		if(bTarget - bCenter == 0)
+			if(bTarget > bCenter) return 90;
+			else if(bTarget < bCenter) return -90;
+		if(aTarget - aCenter == 0 && bTarget - bCenter == 0)
+			return 0;
+		return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
+	}
+
+	@Override
+	public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
+		double[] rotations = new double[3];
+		rotations[0] = this.rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
+		rotations[1] = this.rotateToPoint(-zCenter, xCenter, -zTarget, xTarget);
+		rotations[2] = this.rotateToPoint(yCenter, xCenter, yTarget, xTarget);
+		return rotations;
 	}
 
 
@@ -528,31 +582,5 @@ public class ModelObj extends ModelCustom {
 		float offsetY = toPart.centerY - fromPart.centerY;
 		float offsetZ = toPart.centerZ - fromPart.centerZ;
 		this.translate(-offsetX, -offsetY, -offsetZ);
-	}
-
-
-	// ==================================================
-	//                  Rotate to Point
-	// ==================================================
-	public double rotateToPoint(double aTarget, double bTarget) {
-		return rotateToPoint(0, 0, aTarget, bTarget);
-	}
-	public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
-		if(aTarget - aCenter == 0)
-			if(aTarget > aCenter) return 0;
-			else if(aTarget < aCenter) return 180;
-		if(bTarget - bCenter == 0)
-			if(bTarget > bCenter) return 90;
-			else if(bTarget < bCenter) return -90;
-		if(aTarget - aCenter == 0 && bTarget - bCenter == 0)
-			return 0;
-		return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
-	}
-	public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
-		double[] rotations = new double[3];
-		rotations[0] = this.rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
-		rotations[1] = this.rotateToPoint(-zCenter, xCenter, -zTarget, xTarget);
-		rotations[2] = this.rotateToPoint(yCenter, xCenter, yTarget, xTarget);
-		return rotations;
 	}
 }

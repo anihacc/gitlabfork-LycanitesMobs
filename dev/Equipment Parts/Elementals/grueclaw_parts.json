@@ -12,9 +12,9 @@
   {
     "name": "FingerLeft01",
     "parent": "Base",
-    "centerX": "0.101",
-    "centerY": "0.09",
-    "centerZ": "0.157",
+    "centerX": "-0.131",
+    "centerY": "-0.099",
+    "centerZ": "0.213",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -22,9 +22,9 @@
   {
     "name": "FingerLeft04",
     "parent": "Base",
-    "centerX": "-0.116",
-    "centerY": "0.085",
-    "centerZ": "0.156",
+    "centerX": "0.15",
+    "centerY": "-0.093",
+    "centerZ": "0.212",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -32,9 +32,9 @@
   {
     "name": "FingerLeft03",
     "parent": "Base",
-    "centerX": "-0.046",
-    "centerY": "0.101",
-    "centerZ": "0.164",
+    "centerX": "0.06",
+    "centerY": "-0.112",
+    "centerZ": "0.224",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"
@@ -42,9 +42,9 @@
   {
     "name": "FingerLeft02",
     "parent": "Base",
-    "centerX": "0.03",
-    "centerY": "0.11",
-    "centerZ": "0.165",
+    "centerX": "-0.039",
+    "centerY": "-0.124",
+    "centerZ": "0.226",
     "rotationX": "0.0",
     "rotationY": "0.0",
     "rotationZ": "-0.0"

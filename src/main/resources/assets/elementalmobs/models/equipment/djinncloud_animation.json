@@ -4,5 +4,13 @@
 			"name": "base",
 			"scrollSpeedX": -2
 		}
+	],
+	"partAnimations": [
+		{
+			"targetParts": [
+				"base"
+			],
+			"rotateZ": 1
+		}
 	]
 }

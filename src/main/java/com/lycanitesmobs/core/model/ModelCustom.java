@@ -65,10 +65,10 @@ public class ModelCustom extends ModelBase {
    	// ==================================================
     @Override
     public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-        this.render(entity, time, distance, loop, lookY, lookX, scale, null);
+        this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
         float sizeScale = 1F;
 		if(entity instanceof EntityCreatureBase) {
             sizeScale *= ((EntityCreatureBase) entity).getRenderScale();

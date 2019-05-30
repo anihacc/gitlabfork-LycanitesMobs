@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ public class ModelObjPart {
     public String name;
     /** The parent part of this model part, null if this part has no parent. This will do all animations that the parent does. **/
     public ModelObjPart parent;
+	/** The offet part of this model part, null if this part has no offset. Offsets are similar to parents but are owned by other models, used by Equipment pieces. **/
+	public ModelObjPart offset;
     /** The parent name of this model part, used for initial setup and null if this part has no parent. **/
     public String parentName;
     /** The child parts connected to this part, these will all do the animations that this does. **/
@@ -73,6 +76,18 @@ public class ModelObjPart {
 
 
 	/**
+	 * Searches for the root parent (the first parent, of parent, etc that has no parent).
+	 * @return The root parent part.
+	 */
+    public ModelObjPart getRootParent() {
+		if(this.parent == null) {
+			return this;
+		}
+		return this.parent.getRootParent();
+	}
+
+
+	/**
 	 * Adds a new animation frame to apply during the next render frame.
 	 * @param frame The animation frame to add.
 	 */
@@ -91,6 +106,13 @@ public class ModelObjPart {
             this.parent.applyAnimationFrames(animator);
         }
 
+        // Apply Offset Frames:
+        if(this.offset != null) {
+        	this.offset.applyAnimationFrames(animator);
+			animator.doTranslate(this.centerX + this.offset.centerX, this.centerY + this.offset.centerY, this.centerZ + this.offset.centerZ);
+			animator.doRotate(-this.offset.rotationX, -this.offset.rotationY, -this.offset.rotationZ);
+		}
+
         // Center Part:
         animator.doTranslate(this.centerX, this.centerY, this.centerZ);
 
@@ -105,12 +127,15 @@ public class ModelObjPart {
 
 
 	/**
-	 * Creates a new ModelObjPart that has the combined offsets of this part and the provided part.
-	 * @param combinedWithPart The part to create the combined part with.
-	 * @return A new instance of a combined ModelObjPart.
+	 * Sets the offset of this part to the provided part.
+	 * @param offsetPart The part to set as the offset.
+	 * @return This part instance for chaining.
 	 */
-	public ModelObjPart createdCombinedPart(ModelObjPart combinedWithPart) {
-		ModelObjPart combinedPart = new ModelObjPart();
+	public ModelObjPart setOffset(ModelObjPart offsetPart) {
+		this.offset = offsetPart;
+		return this;
+
+		/*ModelObjPart combinedPart = new ModelObjPart();
 		combinedPart.name = this.name + "-" + combinedWithPart.name;
 		combinedPart.centerX = this.centerX + combinedWithPart.centerX;
 		combinedPart.centerY = this.centerY + combinedWithPart.centerY;
@@ -118,6 +143,7 @@ public class ModelObjPart {
 		combinedPart.rotationX = this.rotationX + combinedWithPart.rotationX;
 		combinedPart.rotationY = this.rotationY + combinedWithPart.rotationY;
 		combinedPart.rotationZ = this.rotationZ + combinedWithPart.rotationZ;
-		return combinedPart;
+
+		return combinedPart;*/
 	}
 }

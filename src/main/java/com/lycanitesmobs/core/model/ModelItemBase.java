@@ -4,10 +4,10 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerBase;
 import com.lycanitesmobs.core.renderer.LayerItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ModelItemBase {
+public abstract class ModelItemBase implements IAnimationModel {
 
 	// Global:
 	/** An initial x rotation applied to make Blender models match Minecraft. **/
@@ -165,8 +165,9 @@ public abstract class ModelItemBase {
 	 * @param hand The hand that is holding the item or null if in the inventory instead.
 	 * @param renderer The renderer that is rendering this model, needed for texture binding.
 	 * @param offsetObjPart A ModelObjPart, if not null this model is offset by it, used by assembled equipment pieces to create a full model.
+	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually, used by Equipment Pieces so that multiple parts can share their animations with each other..
 	 */
-	public void render(ItemStack itemStack, EnumHand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop) {
+	public void render(ItemStack itemStack, EnumHand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop, boolean animate) {
 		if(itemStack == null) {
 			return;
 		}
@@ -179,14 +180,8 @@ public abstract class ModelItemBase {
 		renderer.bindItemTexture(this.getTexture(itemStack, layer));
 
 		// Generate Animation Frames:
-		for(ObjObject part : this.wavefrontParts) {
-			String partName = part.getName().toLowerCase();
-			if(!this.canRenderPart(partName, itemStack, layer))
-				continue;
-			this.currentAnimationPart = this.animationParts.get(partName);
-
-			// Animate:
-			this.animatePart(partName, itemStack, loop);
+		if(animate) {
+			this.generateAnimationFrames(itemStack, layer, loop, offsetObjPart);
 		}
 
 		// Render Parts:
@@ -203,11 +198,12 @@ public abstract class ModelItemBase {
 			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
 			this.doTranslate(0F, modelYPosOffset, 0F);
 
-			// Offset By Equipment Piece Slot:
+			/*/ Animate and Offset By Equipment Piece Slot:
 			if(offsetObjPart != null) {
+				offsetObjPart.applyAnimationFrames(this.animator);
 				this.doTranslate(offsetObjPart.centerX, offsetObjPart.centerY, offsetObjPart.centerZ);
 				this.doRotate(-offsetObjPart.rotationX, -offsetObjPart.rotationY, -offsetObjPart.rotationZ);
-			}
+			}*/
 
 			// Apply Animation Frames:
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
@@ -220,8 +216,8 @@ public abstract class ModelItemBase {
 		}
 
 		// Clear Animation Frames:
-		for(ModelObjPart animationPart : this.animationParts.values()) {
-			animationPart.animationFrames.clear();
+		if(animate) {
+			this.clearAnimationFrames();
 		}
 	}
 
@@ -243,6 +239,26 @@ public abstract class ModelItemBase {
 		}
 		if(layer != null) {
 			layer.onRenderFinish(itemStack);
+		}
+	}
+
+	/** Generates all animation frames for a render tick. **/
+	public void generateAnimationFrames(ItemStack itemStack, LayerItem layer, float loop, ModelObjPart offsetObjPart) {
+		for(ObjObject part : this.wavefrontParts) {
+			String partName = part.getName().toLowerCase();
+			if(!this.canRenderPart(partName, itemStack, layer))
+				continue;
+			this.currentAnimationPart = this.animationParts.get(partName);
+
+			// Animate:
+			this.animatePart(partName, itemStack, loop);
+		}
+	}
+
+	/** Clears all animation frames that were generated for a render tick. **/
+	public void clearAnimationFrames() {
+		for(ModelObjPart animationPart : this.animationParts.values()) {
+			animationPart.animationFrames.clear();
 		}
 	}
 
@@ -279,7 +295,11 @@ public abstract class ModelItemBase {
 	 * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
 	 */
 	public void animatePart(String partName, ItemStack itemStack, float loop) {
-
+		if(this.animation != null) {
+			for(ModelPartAnimation partAnimation : this.animation.partAnimations) {
+				partAnimation.animatePart(this, partName, loop);
+			}
+		}
 	}
 
 
@@ -339,15 +359,22 @@ public abstract class ModelItemBase {
 	// ==================================================
 	//                  Create Frames
 	// ==================================================
+	@Override
 	public void angle(float rotation, float angleX, float angleY, float angleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("angle", rotation, angleX, angleY, angleZ));
 	}
+
+	@Override
 	public void rotate(float rotX, float rotY, float rotZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("rotate", 1, rotX, rotY, rotZ));
 	}
+
+	@Override
 	public void translate(float posX, float posY, float posZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("translate", 1, posX, posY, posZ));
 	}
+
+	@Override
 	public void scale(float scaleX, float scaleY, float scaleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("scale", 1, scaleX, scaleY, scaleZ));
 	}
@@ -356,9 +383,12 @@ public abstract class ModelItemBase {
 	// ==================================================
 	//                  Rotate to Point
 	// ==================================================
+	@Override
 	public double rotateToPoint(double aTarget, double bTarget) {
 		return rotateToPoint(0, 0, aTarget, bTarget);
 	}
+
+	@Override
 	public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
 		if(aTarget - aCenter == 0)
 			if(aTarget > aCenter) return 0;
@@ -370,6 +400,8 @@ public abstract class ModelItemBase {
 			return 0;
 		return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
 	}
+
+	@Override
 	public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
 		double[] rotations = new double[3];
 		rotations[0] = this.rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
