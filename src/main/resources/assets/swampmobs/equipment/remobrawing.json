@@ -1,15 +1,15 @@
 {
-	"itemName": "cinderblade",
+	"itemName": "remobrawing",
 	"loadDefault": true,
-	"slotType": "blade",
-	"dropMobId": "elementalmobs:cinder",
+	"slotType": "axe",
+	"dropMobId": "swampmobs:remobra",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
 	"features": [
 		{
 			"featureType": "harvest",
-			"harvestType": "sword",
+			"harvestType": "axe",
 			"harvestShape": "block",
 			"harvestRange": [1, 1, 1],
 			"harvestRangeLevelMultiplier": 0
@@ -45,7 +45,7 @@
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "fire",
+			"effectType": "minecraft:poison",
 			"effectTarget": "target",
 			"effectDuration": 20,
 			"effectStrength": 1
@@ -53,7 +53,7 @@
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "fire",
+			"effectType": "minecraft:poison",
 			"effectTarget": "target",
 			"effectDuration": 40,
 			"effectStrength": 1
@@ -61,7 +61,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.cinder",
+			"summonMobId": "swampmobs.remobra",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,
@@ -71,11 +71,8 @@
 		{
 			"featureType": "projectile",
 			"levelMin": 3,
-			"projectileName": "ember",
-			"projectileTrigger": "hold",
-			"projectilePattern": "spread",
-			"projectileSpreadX": 4,
-			"projectileSpreadY": 4
+			"projectileName": "venomshot",
+			"projectileTrigger": "hold"
 		}
 	]
 }

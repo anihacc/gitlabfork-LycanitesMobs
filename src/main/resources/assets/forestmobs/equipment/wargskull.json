@@ -1,19 +1,15 @@
 {
-	"itemName": "ventoraptorskull",
+	"itemName": "wargskull",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "plainsmobs:ventoraptor",
+	"dropMobId": "forestmobs:warg",
 	"dropChance": 0.2,
 	"levelMin": 1,
 	"levelMax": 3,
 	"features": [
 		{
 			"featureType": "slot",
-			"slotType": "axe"
-		},
-		{
-			"featureType": "slot",
-			"slotType": "axe"
+			"slotType": "pike"
 		},
 		{
 			"featureType": "damage",
@@ -36,26 +32,26 @@
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "minecraft:weakness",
+			"effectType": "lycanitesmobs:paralysis",
 			"effectTarget": "target",
-			"effectDuration": 40,
+			"effectDuration": 10,
 			"effectStrength": 1
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 3,
-			"effectType": "minecraft:weakness",
+			"effectType": "lycanitesmobs:paralysis",
 			"effectTarget": "target",
-			"effectDuration": 60,
+			"effectDuration": 20,
 			"effectStrength": 2
 		},
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "minecraft:weakness",
+			"effectType": "lycanitesmobs:paralysis",
 			"effectTarget": "target",
-			"effectDuration": 80,
+			"effectDuration": 40,
 			"effectStrength": 3
 		}
 	]

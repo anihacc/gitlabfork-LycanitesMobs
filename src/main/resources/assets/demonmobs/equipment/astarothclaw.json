@@ -1,26 +1,22 @@
 {
-	"itemName": "ventoraptorskull",
+	"itemName": "astarothclaw",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "plainsmobs:ventoraptor",
+	"dropMobId": "demonmobs:astaroth",
 	"dropChance": 0.2,
-	"levelMin": 1,
+	"levelMin": 2,
 	"levelMax": 3,
 	"features": [
 		{
 			"featureType": "slot",
-			"slotType": "axe"
-		},
-		{
-			"featureType": "slot",
-			"slotType": "axe"
+			"slotType": "pike"
 		},
 		{
 			"featureType": "damage",
 			"levelMax": 2,
 			"damageAmount": 1,
 			"damageKnockback": 0,
-			"damageCooldown": 0,
+			"damageCooldown": 1,
 			"damageRange": 1,
 			"damageSweep": 45
 		},
@@ -29,14 +25,14 @@
 			"levelMin": 3,
 			"damageAmount": 2,
 			"damageKnockback": 0,
-			"damageCooldown": 0,
+			"damageCooldown": 1,
 			"damageRange": 1,
 			"damageSweep": 45
 		},
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "minecraft:weakness",
+			"effectType": "minecraft:wither",
 			"effectTarget": "target",
 			"effectDuration": 40,
 			"effectStrength": 1
@@ -45,7 +41,7 @@
 			"featureType": "effect",
 			"levelMin": 2,
 			"levelMax": 3,
-			"effectType": "minecraft:weakness",
+			"effectType": "minecraft:wither",
 			"effectTarget": "target",
 			"effectDuration": 60,
 			"effectStrength": 2
@@ -53,10 +49,16 @@
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "minecraft:weakness",
+			"effectType": "minecraft:wither",
 			"effectTarget": "target",
 			"effectDuration": 80,
 			"effectStrength": 3
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 1,
+			"projectileName": "devilstar",
+			"projectileTrigger": "hold"
 		}
 	]
 }
