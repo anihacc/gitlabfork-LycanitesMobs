@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.network.MessageBeastiary;
@@ -117,7 +118,7 @@ public class Beastiary {
 	 * @param creatureKnowledge The creature knowledge that was added.
 	 */
 	public void sendAddedMessage(CreatureKnowledge creatureKnowledge) {
-		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
+		if(this.extendedPlayer.player.getEntityWorld().isRemote || !CreatureManager.getInstance().config.beastiaryKnowledgeMessages) {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();

@@ -56,6 +56,9 @@ public class CreatureConfig {
 	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
 	public double beastiaryAddOnDeathChance = 0.15;
 
+	/** If true, a chat message will be displayed when gaining Beastiary Knowledge. **/
+	public boolean beastiaryKnowledgeMessages = true;
+
 
 	// Bosses:
 	/** How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures. **/
@@ -143,6 +146,7 @@ public class CreatureConfig {
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");
 		this.beastiaryAddOnDeathChance = config.getDouble("Beastiary", "Add Creature On Kill Chance", this.beastiaryAddOnDeathChance, "The chance that creatures are added to the player's Beastiary when killed, the Soulgazer can also be used to add creatures. Bosses are always a 100% chance.");
+		this.beastiaryKnowledgeMessages = config.getBool("Beastiary", "Beastiary Knowledge Messages", this.beastiaryKnowledgeMessages, "If true, a chat message will be displayed when gaining Beastiary Knowledge.");
 
 		// Bosses:
 		config.setCategoryComment("Bosses", "Here you can control all settings related to boss creatures, this does not include rare subspecies (mini bosses).");
