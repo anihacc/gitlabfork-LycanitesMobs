@@ -113,6 +113,15 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         return this.getEntityBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
 
+    // ========== First Spawn ==========
+    @Override
+    public void onFirstSpawn() {
+        super.onFirstSpawn();
+        if(this.getArenaCenter() == null) {
+            this.setArenaCenter(this.getPosition());
+        }
+    }
+
 
     // ==================================================
     //                      Positions

@@ -141,6 +141,15 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         return super.isPersistant();
     }
 
+    // ========== First Spawn ==========
+    @Override
+    public void onFirstSpawn() {
+        super.onFirstSpawn();
+        if(this.getArenaCenter() == null) {
+            this.setArenaCenter(this.getPosition());
+        }
+    }
+
 
     // ==================================================
     //                      Positions
