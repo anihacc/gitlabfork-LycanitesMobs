@@ -3,14 +3,10 @@ package com.lycanitesmobs.core.model.animation;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.model.IAnimationModel;
-import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerEffect;
-import com.lycanitesmobs.core.renderer.LayerItem;
-import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.sun.javafx.geom.Vec3f;
-import com.sun.javafx.geom.Vec4f;
 import net.minecraft.entity.EntityLiving;
 
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,16 +28,16 @@ public class ModelPartAnimation {
 	public float offset = 0;
 
 	/** The xyz translation to animate by. **/
-	public Vec3f translate = new Vec3f(0, 0, 0);
+	public Vector3f translate = new Vector3f(0, 0, 0);
 
 	/** The angle amount to animate by, (rotation, x, y, z). **/
-	public Vec4f angle = new Vec4f(0, 0, 0, 0);
+	public Vector4f angle = new Vector4f(0, 0, 0, 0);
 
 	/** The xyz rotations to animate by. **/
-	public Vec3f rotate = new Vec3f(0, 0, 0);
+	public Vector3f rotate = new Vector3f(0, 0, 0);
 
 	/** The xyz scaling to animate by. **/
-	public Vec3f scale = new Vec3f(0, 0, 0);
+	public Vector3f scale = new Vector3f(0, 0, 0);
 
 
 	/**
@@ -73,7 +69,7 @@ public class ModelPartAnimation {
 		float translateZ = 0;
 		if(json.has("translateZ"))
 			translateZ = json.get("translateZ").getAsFloat();
-		this.translate = new Vec3f(translateX, translateY, translateZ);
+		this.translate = new Vector3f(translateX, translateY, translateZ);
 
 		float angleAmount = 0;
 		if(json.has("angleAmount"))
@@ -87,7 +83,7 @@ public class ModelPartAnimation {
 		float angleZ = 0;
 		if(json.has("angleZ"))
 			angleZ = json.get("angleZ").getAsFloat();
-		this.angle = new Vec4f(angleX, angleY, angleZ, angleAmount);
+		this.angle = new Vector4f(angleX, angleY, angleZ, angleAmount);
 
 		float rotateX = 0;
 		if(json.has("rotateX"))
@@ -98,7 +94,7 @@ public class ModelPartAnimation {
 		float rotateZ = 0;
 		if(json.has("rotateZ"))
 			rotateZ = json.get("rotateZ").getAsFloat();
-		this.rotate = new Vec3f(rotateX, rotateY, rotateZ);
+		this.rotate = new Vector3f(rotateX, rotateY, rotateZ);
 
 		float scaleX = 0;
 		if(json.has("scaleX"))
@@ -109,7 +105,7 @@ public class ModelPartAnimation {
 		float scaleZ = 0;
 		if(json.has("scaleZ"))
 			scaleZ = json.get("scaleZ").getAsFloat();
-		this.scale = new Vec3f(scaleX, scaleY, scaleZ);
+		this.scale = new Vector3f(scaleX, scaleY, scaleZ);
 	}
 
 
