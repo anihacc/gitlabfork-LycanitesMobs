@@ -88,3 +88,9 @@ item.mudshotcharge.name=Mudshot Charge
 item.mudshotcharge.description=A ball of vibrating mud. Use to throw or fire from a dispencer. Applies weakness.
 item.mudshotscepter.name=Mudshot Scepter
 item.mudshotscepter.description=Mid Damage, Rapid Fire, Applies Weakness
+#
+#
+#
+# ========== Equipment ==========
+item.clinkscythe.name=Clink Scythe
+item.sutiramustinger.name=Sutiramu Stinger

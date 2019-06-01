@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "minecraft:iron_ore",
+    "item": "minecraft:spider_eye",
     "count": 1
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:geonachfist"
+      "item": "junglemobs:vespidstinger"
     }
   ],
   "type": "forge:ore_shapeless"

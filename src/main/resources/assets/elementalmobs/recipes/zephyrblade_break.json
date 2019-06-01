@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "minecraft:glowstone_dust",
+    "count": 8
+  },
+  "ingredients": [
+	{
+      "item": "elementalmobs:zephyrblade"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

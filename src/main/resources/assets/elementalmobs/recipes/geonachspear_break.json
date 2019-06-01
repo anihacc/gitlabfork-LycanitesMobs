@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "minecraft:iron_ore",
+    "item": "minecraft:quartz",
     "count": 1
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:geonachfist"
+      "item": "elementalmobs:geonachspear"
     }
   ],
   "type": "forge:ore_shapeless"

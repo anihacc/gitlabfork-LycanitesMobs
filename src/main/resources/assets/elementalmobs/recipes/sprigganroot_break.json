@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "elementalmobs:lifedraincharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "elementalmobs:sprigganroot"
     }
   ],
   "type": "forge:ore_shapeless"

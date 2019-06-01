@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "arcticmobs:tundracharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "arcticmobs:wendigoantler"
     }
   ],
   "type": "forge:ore_shapeless"

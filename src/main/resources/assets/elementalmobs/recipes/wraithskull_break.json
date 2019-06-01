@@ -1,0 +1,12 @@
+{
+  "result": {
+    "item": "minecraft:blaze_powder",
+    "count": 2
+  },
+  "ingredients": [
+	{
+      "item": "elementalmobs:wraithskull"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

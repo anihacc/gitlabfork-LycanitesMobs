@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "elementalmobs:whirlwindcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "elementalmobs:djinncloud"
     }
   ],
   "type": "forge:ore_shapeless"

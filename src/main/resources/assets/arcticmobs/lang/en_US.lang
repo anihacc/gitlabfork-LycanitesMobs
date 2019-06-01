@@ -101,3 +101,8 @@ tile.ooze.description=An icy gel substance, causes slowness, hunger and applies 
 #
 # ========== Damage Types ==========
 death.attack.ooze=%1$s was frozen in the icy ooze!
+#
+#
+#
+# ========== Equipment ==========
+item.wendigoantler.name=Wendigo Antler

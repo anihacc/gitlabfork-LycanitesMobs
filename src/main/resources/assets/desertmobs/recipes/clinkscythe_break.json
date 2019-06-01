@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "desertmobs:throwingscythe",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "desertmobs:clinkscythe"
     }
   ],
   "type": "forge:ore_shapeless"

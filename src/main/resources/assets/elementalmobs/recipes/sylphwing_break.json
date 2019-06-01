@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "elementalmobs:aetherwavecharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "elementalmobs:sylphwing"
     }
   ],
   "type": "forge:ore_shapeless"

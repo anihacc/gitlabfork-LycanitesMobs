@@ -98,3 +98,8 @@ item.verdantvenomaxeblade.description=An improved Venom Axeblade that summons Ve
 # Blocks
 tile.poisoncloud.name=Poison Cloud
 tile.poisoncloud.description=A toxic cloud that poisons things that come into contact.
+#
+#
+#
+# ========== Equipment ==========
+item.remobrawing.name=Remobra Wing

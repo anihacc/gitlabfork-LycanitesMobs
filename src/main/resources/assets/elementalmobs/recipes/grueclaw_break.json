@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "minecraft:iron_ore",
+    "item": "minecraft:ender_pearl",
     "count": 1
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:geonachfist"
+      "item": "elementalmobs:grueclaw"
     }
   ],
   "type": "forge:ore_shapeless"

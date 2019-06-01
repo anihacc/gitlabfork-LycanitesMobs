@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "minecraft:iron_ore",
+    "item": "minecraft:slime_ball",
     "count": 1
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:geonachfist"
+      "item": "swampmobs:remobrawing"
     }
   ],
   "type": "forge:ore_shapeless"

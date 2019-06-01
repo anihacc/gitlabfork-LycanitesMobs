@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "demonmobs:devilstarcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "demonmobs:astarothclaw"
     }
   ],
   "type": "forge:ore_shapeless"

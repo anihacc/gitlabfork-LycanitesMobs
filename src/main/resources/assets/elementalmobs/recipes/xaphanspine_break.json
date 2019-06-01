@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "elementalmobs:acidsplashcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "elementalmobs:xaphanspine"
     }
   ],
   "type": "forge:ore_shapeless"

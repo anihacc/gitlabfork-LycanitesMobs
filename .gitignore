@@ -18,6 +18,9 @@ build
 .gradle
 GradleHome
 
+# blender
+*.blend1
+
 # other
 eclipse
 run

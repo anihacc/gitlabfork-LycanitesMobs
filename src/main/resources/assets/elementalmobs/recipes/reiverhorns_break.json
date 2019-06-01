@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:embercharge",
+    "item": "elementalmobs:frostboltcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:cinderblade"
+      "item": "elementalmobs:reiverhorns"
     }
   ],
   "type": "forge:ore_shapeless"

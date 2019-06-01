@@ -62,4 +62,9 @@ item.shamblertreat.name=Shambler Treat
 item.shamblertreat.description=Get your very own leafy friend!
 item.wargtreat.name=Warg Treat
 item.wargtreat.description=Wargs love to hunt Arisaurs the most!
+#
+#
+#
+# ========== Equipment ==========
 item.entarm.name=Ent Arm
+item.wargskull.name=Warg Skull

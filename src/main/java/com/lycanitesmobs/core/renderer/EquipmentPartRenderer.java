@@ -34,16 +34,27 @@ public class EquipmentPartRenderer extends TileEntitySpecialRenderer<TileEntityE
 		this.renderLayers.clear();
 		modelItemBase.addCustomLayers(this);
 
-		GlStateManager.rotate(180, 1, 0, 0);
-		GlStateManager.translate(0.8F, -1.5F, -1.5F);
-		GlStateManager.pushMatrix();
-		GlStateManager.rotate(90, 0, 1, 0);
-		GlStateManager.rotate(45, 0, 0, 1);
-
 		float loop = 0;
 		if(Minecraft.getMinecraft().player != null) {
 			loop = Minecraft.getMinecraft().player.ticksExisted;
 		}
+
+		GlStateManager.translate(0.5F, 0.35F, 0.5F);
+
+		GlStateManager.rotate(190, 1, 0, 0);
+		GlStateManager.rotate(-45, 0, 1, 0);
+		GlStateManager.rotate(10, 0, 0, 1);
+
+		GlStateManager.translate(0F, -1.7F, 0F);
+		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
+			GlStateManager.translate(0F, 0F, 0.5F);
+		}
+		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType)) {
+			GlStateManager.translate(0F, 0F, 1F);
+		}
+
+		GlStateManager.pushMatrix();
+
 		modelItemBase.generateAnimationFrames(itemStack, null, loop, null);
 		modelItemBase.render(itemStack, hand, this, null, null, loop, false);
 		for(LayerItem renderLayer : this.renderLayers) {
