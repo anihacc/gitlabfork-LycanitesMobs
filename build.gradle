@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = project.version
 group = "com.lycanitesmobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "LycanitesMobsComplete 1.X.X.X [1.12.2]"
+archivesBaseName = "lycanitesmobs- " + project.minecraft.version + "-" + project.version
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
