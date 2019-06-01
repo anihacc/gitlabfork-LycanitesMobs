@@ -1,37 +1,7 @@
 [
   {
-    "name": "Body",
-    "parent": "",
-    "centerX": "0.0",
-    "centerY": "0.0",
-    "centerZ": "0.446",
-    "rotationX": "0.0",
-    "rotationY": "0.0",
-    "rotationZ": "-0.0"
-  },
-  {
-    "name": "Head",
-    "parent": "Body",
-    "centerX": "0.0",
-    "centerY": "0.0",
-    "centerZ": "0.491",
-    "rotationX": "0.0",
-    "rotationY": "0.0",
-    "rotationZ": "-0.0"
-  },
-  {
-    "name": "Tail01",
-    "parent": "Body",
-    "centerX": "0.0",
-    "centerY": "0.0",
-    "centerZ": "0.337",
-    "rotationX": "0.0",
-    "rotationY": "0.0",
-    "rotationZ": "-0.0"
-  },
-  {
     "name": "Base",
-    "parent": "Tail01",
+    "parent": "",
     "centerX": "0.0",
     "centerY": "0.0",
     "centerZ": "0.169",
@@ -40,7 +10,37 @@
     "rotationZ": "-0.0"
   },
   {
-    "name": "Tail03",
+    "name": "Front01",
+    "parent": "Base",
+    "centerX": "0.0",
+    "centerY": "0.0",
+    "centerZ": "0.207",
+    "rotationX": "4.998",
+    "rotationY": "0.0",
+    "rotationZ": "0.0"
+  },
+  {
+    "name": "Front02",
+    "parent": "Front01",
+    "centerX": "-0.0",
+    "centerY": "-0.015",
+    "centerZ": "0.375",
+    "rotationX": "-4.998",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Head",
+    "parent": "Front02",
+    "centerX": "-0.0",
+    "centerY": "-0.011",
+    "centerZ": "0.42",
+    "rotationX": "-4.998",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Back01",
     "parent": "Base",
     "centerX": "0.0",
     "centerY": "0.0",
@@ -50,8 +50,8 @@
     "rotationZ": "-0.0"
   },
   {
-    "name": "Tail04",
-    "parent": "Tail03",
+    "name": "Back02",
+    "parent": "Back01",
     "centerX": "0.0",
     "centerY": "-0.011",
     "centerZ": "-0.178",
@@ -60,8 +60,8 @@
     "rotationZ": "-0.0"
   },
   {
-    "name": "Tail05",
-    "parent": "Tail04",
+    "name": "Back03",
+    "parent": "Back02",
     "centerX": "0.0",
     "centerY": "0.0",
     "centerZ": "-0.351",
@@ -70,8 +70,8 @@
     "rotationZ": "-0.0"
   },
   {
-    "name": "Tail06",
-    "parent": "Tail05",
+    "name": "Back04",
+    "parent": "Back03",
     "centerX": "0.0",
     "centerY": "-0.023",
     "centerZ": "-0.523",

@@ -1,14 +1,8 @@
 {
-	"textureLayers": [
-		{
-			"name": "base",
-			"scrollSpeedX": 8
-		}
-	],
 	"partAnimations": [
 		{
 			"targetParts": [
-				"base"
+				"fingertop"
 			],
 			"loopType": "reverse",
 			"duration": 0.5,
@@ -16,11 +10,19 @@
 		},
 		{
 			"targetParts": [
-				"wing03"
+				"fingerleft"
 			],
 			"loopType": "reverse",
 			"duration": 0.5,
-			"rotateX": -1
+			"rotateY": -1
+		},
+		{
+			"targetParts": [
+				"fingerright"
+			],
+			"loopType": "reverse",
+			"duration": 0.5,
+			"rotateY": 1
 		}
-]
+	]
 }
