@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "saltwatermobs:items/saltwaterspawn",
+		"layer1": "saltwatermobs:items/saltwaterspawn_overlay"
+	}
+}
