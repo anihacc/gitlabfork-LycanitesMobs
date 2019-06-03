@@ -2,8 +2,12 @@ package com.lycanitesmobs.elementalmobs;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.creature.*;
+import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
+import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
+import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
+import com.lycanitesmobs.core.model.projectile.ModelLightBall;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.elementalmobs.model.*;
 
 public class ClientSubProxy extends CommonSubProxy {
 	

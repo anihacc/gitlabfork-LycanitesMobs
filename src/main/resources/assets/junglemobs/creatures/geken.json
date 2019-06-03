@@ -1,6 +1,6 @@
 {
 	"name": "geken",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityGeken",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGeken",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

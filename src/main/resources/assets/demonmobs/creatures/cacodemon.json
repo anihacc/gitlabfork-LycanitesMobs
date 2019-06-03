@@ -1,6 +1,6 @@
 {
 	"name": "cacodemon",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityCacodemon",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCacodemon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

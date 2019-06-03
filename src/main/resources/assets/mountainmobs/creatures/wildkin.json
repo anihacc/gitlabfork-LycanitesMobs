@@ -1,6 +1,6 @@
 {
 	"name": "wildkin",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityWildkin",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWildkin",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "wraith",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityWraith",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWraith",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

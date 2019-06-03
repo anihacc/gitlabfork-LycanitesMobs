@@ -1,6 +1,6 @@
 {
 	"name": "arix",
-	"class": "com.lycanitesmobs.arcticmobs.entity.EntityArix",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityArix",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

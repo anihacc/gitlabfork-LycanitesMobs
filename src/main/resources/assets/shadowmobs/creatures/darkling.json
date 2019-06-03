@@ -1,6 +1,6 @@
 {
 	"name": "darkling",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityDarkling",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityDarkling",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

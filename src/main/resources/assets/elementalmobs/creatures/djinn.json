@@ -1,6 +1,6 @@
 {
 	"name": "djinn",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityDjinn",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityDjinn",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

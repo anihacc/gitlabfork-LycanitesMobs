@@ -1,6 +1,6 @@
 {
 	"name": "roc",
-	"class": "com.lycanitesmobs.plainsmobs.entity.EntityRoc",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityRoc",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

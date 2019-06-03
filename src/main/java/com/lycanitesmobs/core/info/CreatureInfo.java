@@ -287,6 +287,9 @@ public class CreatureInfo {
 		if(!ObjectManager.entityLists.containsKey(this.group.filename)) {
 			ObjectManager.entityLists.put(this.group.filename, new EntityListCustom());
 		}
+		if(this.entityClass == null) {
+			LycanitesMobs.printWarning("", "The entity class cannot be found for " + this.name);
+		}
 		ObjectManager.entityLists.get(this.group.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
 		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.group.filename + "." + this.getName(), this.group.getNextMobID(), this.group.mod, 128, 3, true);
 

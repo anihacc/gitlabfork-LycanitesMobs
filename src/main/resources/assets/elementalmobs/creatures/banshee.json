@@ -1,6 +1,6 @@
 {
 	"name": "banshee",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityBanshee",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityBanshee",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

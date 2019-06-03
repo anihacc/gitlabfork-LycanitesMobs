@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerItem;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;

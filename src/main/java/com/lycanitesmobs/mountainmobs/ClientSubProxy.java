@@ -1,10 +1,9 @@
 package com.lycanitesmobs.mountainmobs;
 
-import com.lycanitesmobs.mountainmobs.model.*;
+import com.lycanitesmobs.core.model.creature.*;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.mountainmobs.model.*;
 
 public class ClientSubProxy extends CommonSubProxy {
 	

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.renderer.EquipmentRenderer;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerItem;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;

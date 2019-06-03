@@ -1,6 +1,6 @@
 {
 	"name": "ignibus",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityIgnibus",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityIgnibus",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

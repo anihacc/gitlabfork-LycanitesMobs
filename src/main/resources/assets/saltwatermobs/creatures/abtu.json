@@ -1,6 +1,6 @@
 {
 	"name": "abtu",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityAbtu",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAbtu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

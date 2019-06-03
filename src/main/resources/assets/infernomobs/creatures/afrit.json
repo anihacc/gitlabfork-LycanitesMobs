@@ -1,6 +1,6 @@
 {
 	"name": "afrit",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityAfrit",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAfrit",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

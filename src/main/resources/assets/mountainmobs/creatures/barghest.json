@@ -1,6 +1,6 @@
 {
 	"name": "barghest",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityBarghest",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityBarghest",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "wisp",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityWisp",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWisp",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

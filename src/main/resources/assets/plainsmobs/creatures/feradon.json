@@ -1,6 +1,6 @@
 {
 	"name": "feradon",
-	"class": "com.lycanitesmobs.plainsmobs.entity.EntityFeradon",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityFeradon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

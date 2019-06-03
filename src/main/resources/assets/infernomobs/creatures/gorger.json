@@ -1,6 +1,6 @@
 {
 	"name": "gorger",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityGorger",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGorger",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

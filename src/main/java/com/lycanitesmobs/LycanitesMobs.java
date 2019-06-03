@@ -17,8 +17,13 @@ import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.*;
+import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.item.special.ItemSoulgazer;
+import com.lycanitesmobs.core.item.special.ItemSoulkey;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
+import com.lycanitesmobs.core.item.temp.*;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mods.DLDungeons;
@@ -63,7 +68,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "1.21.0.0";
+	public static final String versionNumber = "2.0.0.0";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";

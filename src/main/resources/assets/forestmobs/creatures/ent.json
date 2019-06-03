@@ -1,6 +1,6 @@
 {
 	"name": "ent",
-	"class": "com.lycanitesmobs.forestmobs.entity.EntityEnt",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityEnt",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

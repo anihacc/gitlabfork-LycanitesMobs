@@ -1,6 +1,6 @@
 {
 	"name": "xaphan",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityXaphan",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityXaphan",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

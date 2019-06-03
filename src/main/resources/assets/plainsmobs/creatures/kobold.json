@@ -1,6 +1,6 @@
 {
 	"name": "kobold",
-	"class": "com.lycanitesmobs.plainsmobs.entity.EntityKobold",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityKobold",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

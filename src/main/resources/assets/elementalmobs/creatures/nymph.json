@@ -1,6 +1,6 @@
 {
 	"name": "nymph",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityNymph",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityNymph",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

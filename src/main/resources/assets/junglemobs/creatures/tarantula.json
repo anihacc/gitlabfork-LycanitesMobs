@@ -1,6 +1,6 @@
 {
 	"name": "tarantula",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityTarantula",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityTarantula",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

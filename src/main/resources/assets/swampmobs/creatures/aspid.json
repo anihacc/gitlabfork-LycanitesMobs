@@ -1,6 +1,6 @@
 {
 	"name": "aspid",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityAspid",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAspid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

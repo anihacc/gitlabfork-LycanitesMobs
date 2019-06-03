@@ -1,6 +1,6 @@
 {
 	"name": "spriggan",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntitySpriggan",
+	"class": "com.lycanitesmobs.core.entity.creature.EntitySpriggan",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

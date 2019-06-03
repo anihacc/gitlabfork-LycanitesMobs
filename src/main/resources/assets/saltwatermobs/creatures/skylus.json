@@ -1,6 +1,6 @@
 {
 	"name": "skylus",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntitySkylus",
+	"class": "com.lycanitesmobs.core.entity.creature.EntitySkylus",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

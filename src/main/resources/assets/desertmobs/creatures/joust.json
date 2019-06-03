@@ -1,6 +1,6 @@
 {
 	"name": "joust",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntityJoust",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityJoust",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

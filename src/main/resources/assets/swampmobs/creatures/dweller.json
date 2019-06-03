@@ -1,6 +1,6 @@
 {
 	"name": "dweller",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityDweller",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityDweller",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

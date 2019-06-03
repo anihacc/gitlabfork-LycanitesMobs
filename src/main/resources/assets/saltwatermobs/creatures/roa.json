@@ -1,6 +1,6 @@
 {
 	"name": "roa",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityRoa",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityRoa",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

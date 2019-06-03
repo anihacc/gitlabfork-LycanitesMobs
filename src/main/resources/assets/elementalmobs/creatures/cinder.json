@@ -1,6 +1,6 @@
 {
 	"name": "cinder",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityCinder",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCinder",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

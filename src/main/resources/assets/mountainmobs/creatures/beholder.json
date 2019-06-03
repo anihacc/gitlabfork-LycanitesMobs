@@ -1,6 +1,6 @@
 {
 	"name": "beholder",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityBeholder",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityBeholder",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "cephignis",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityCephignis",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCephignis",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

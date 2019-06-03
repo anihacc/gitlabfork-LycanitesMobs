@@ -1,6 +1,6 @@
 {
 	"name": "ika",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityIka",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityIka",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

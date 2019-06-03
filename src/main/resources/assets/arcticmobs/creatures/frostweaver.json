@@ -1,6 +1,6 @@
 {
 	"name": "frostweaver",
-	"class": "com.lycanitesmobs.arcticmobs.entity.EntityFrostweaver",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityFrostweaver",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

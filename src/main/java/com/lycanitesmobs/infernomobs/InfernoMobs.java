@@ -8,17 +8,23 @@ import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.ItemCustomFood;
-import com.lycanitesmobs.core.item.ItemTreat;
-import com.lycanitesmobs.infernomobs.block.BlockFluidPureLava;
-import com.lycanitesmobs.infernomobs.block.BlockScorchfire;
-import com.lycanitesmobs.infernomobs.dispenser.DispenserBehaviorMagma;
-import com.lycanitesmobs.infernomobs.dispenser.DispenserBehaviorScorchfire;
-import com.lycanitesmobs.infernomobs.entity.EntityMagma;
-import com.lycanitesmobs.infernomobs.entity.EntityScorchfireball;
-import com.lycanitesmobs.infernomobs.info.AltarInfoUmberLobber;
-import com.lycanitesmobs.infernomobs.item.*;
-import com.lycanitesmobs.infernomobs.worldgen.WorldGeneratorInferno;
+import com.lycanitesmobs.core.item.consumable.ItemCustomFood;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.egg.ItemInfernoEgg;
+import com.lycanitesmobs.core.item.soulstone.ItemSoulstoneInferno;
+import com.lycanitesmobs.core.item.special.ItemBucketPureLava;
+import com.lycanitesmobs.core.item.temp.ItemMagmaCharge;
+import com.lycanitesmobs.core.item.temp.ItemScepterMagma;
+import com.lycanitesmobs.core.item.temp.ItemScepterScorchfire;
+import com.lycanitesmobs.core.item.temp.ItemScorchfireCharge;
+import com.lycanitesmobs.core.block.fluid.BlockFluidPureLava;
+import com.lycanitesmobs.core.block.effect.BlockScorchfire;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorMagma;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorScorchfire;
+import com.lycanitesmobs.core.entity.projectile.EntityMagma;
+import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
+import com.lycanitesmobs.core.info.altar.AltarInfoUmberLobber;
+import com.lycanitesmobs.core.worldgen.fluid.WorldGeneratorPureLava;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -66,7 +72,7 @@ public class InfernoMobs extends Submod {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
-        GameRegistry.registerWorldGenerator(new WorldGeneratorInferno(), 0);
+        GameRegistry.registerWorldGenerator(new WorldGeneratorPureLava(), 0);
 	}
 
 	@SubscribeEvent

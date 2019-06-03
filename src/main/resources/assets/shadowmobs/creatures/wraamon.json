@@ -1,6 +1,6 @@
 {
 	"name": "wraamon",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityWraamon",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWraamon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

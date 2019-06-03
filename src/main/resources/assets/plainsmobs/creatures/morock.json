@@ -1,6 +1,6 @@
 {
 	"name": "morock",
-	"class": "com.lycanitesmobs.plainsmobs.entity.EntityMorock",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityMorock",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

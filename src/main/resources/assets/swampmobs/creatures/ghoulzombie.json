@@ -1,6 +1,6 @@
 {
 	"name": "ghoulzombie",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityGhoulZombie",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGhoulZombie",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

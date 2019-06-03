@@ -1,6 +1,6 @@
 {
 	"name": "cockatrice",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityCockatrice",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCockatrice",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

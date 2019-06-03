@@ -1,6 +1,6 @@
 {
 	"name": "aglebemu",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityAglebemu",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

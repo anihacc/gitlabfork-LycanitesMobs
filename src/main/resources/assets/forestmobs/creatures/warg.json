@@ -1,6 +1,6 @@
 {
 	"name": "warg",
-	"class": "com.lycanitesmobs.forestmobs.entity.EntityWarg",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWarg",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

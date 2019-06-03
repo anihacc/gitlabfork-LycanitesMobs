@@ -1,6 +1,6 @@
 {
 	"name": "reiver",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityReiver",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityReiver",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

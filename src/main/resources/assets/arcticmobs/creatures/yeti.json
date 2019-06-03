@@ -1,6 +1,6 @@
 {
 	"name": "yeti",
-	"class": "com.lycanitesmobs.arcticmobs.entity.EntityYeti",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityYeti",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

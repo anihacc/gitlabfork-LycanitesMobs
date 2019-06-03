@@ -1,6 +1,6 @@
 {
 	"name": "belph",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityBelph",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityBelph",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

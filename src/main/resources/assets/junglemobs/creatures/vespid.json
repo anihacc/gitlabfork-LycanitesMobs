@@ -1,6 +1,6 @@
 {
 	"name": "vespid",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityVespid",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityVespid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

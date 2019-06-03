@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.model.ModelItemBase;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentPart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

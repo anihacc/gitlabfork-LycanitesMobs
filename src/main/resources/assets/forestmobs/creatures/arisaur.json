@@ -1,6 +1,6 @@
 {
 	"name": "arisaur",
-	"class": "com.lycanitesmobs.forestmobs.entity.EntityArisaur",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityArisaur",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

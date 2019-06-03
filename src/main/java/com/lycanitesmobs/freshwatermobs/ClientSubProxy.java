@@ -2,8 +2,8 @@ package com.lycanitesmobs.freshwatermobs;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.creature.*;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.freshwatermobs.model.*;
 
 public class ClientSubProxy extends CommonSubProxy {
 

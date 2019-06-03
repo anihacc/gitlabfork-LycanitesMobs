@@ -1,6 +1,6 @@
 {
 	"name": "vespidqueen",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityVespidQueen",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityVespidQueen",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

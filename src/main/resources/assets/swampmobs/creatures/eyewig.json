@@ -1,6 +1,6 @@
 {
 	"name": "eyewig",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityEyewig",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityEyewig",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

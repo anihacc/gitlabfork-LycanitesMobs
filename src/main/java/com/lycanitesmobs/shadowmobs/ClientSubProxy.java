@@ -2,9 +2,8 @@ package com.lycanitesmobs.shadowmobs;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.creature.*;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.shadowmobs.model.*;
-import com.lycanitesmobs.shadowmobs.model.*;
 
 public class ClientSubProxy extends CommonSubProxy {
 	

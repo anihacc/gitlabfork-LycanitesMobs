@@ -1,6 +1,6 @@
 {
 	"name": "asmodeus",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityAsmodeus",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAsmodeus",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

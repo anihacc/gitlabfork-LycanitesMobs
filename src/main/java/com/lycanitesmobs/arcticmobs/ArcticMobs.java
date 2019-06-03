@@ -3,23 +3,30 @@ package com.lycanitesmobs.arcticmobs;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.block.*;
-import com.lycanitesmobs.arcticmobs.dispenser.DispenserBehaviorBlizzard;
-import com.lycanitesmobs.arcticmobs.dispenser.DispenserBehaviorFrostweb;
-import com.lycanitesmobs.arcticmobs.dispenser.DispenserBehaviorIcefire;
-import com.lycanitesmobs.arcticmobs.dispenser.DispenserBehaviorTundra;
-import com.lycanitesmobs.arcticmobs.entity.EntityBlizzard;
-import com.lycanitesmobs.arcticmobs.entity.EntityFrostweb;
-import com.lycanitesmobs.arcticmobs.entity.EntityIcefireball;
-import com.lycanitesmobs.arcticmobs.entity.EntityTundra;
-import com.lycanitesmobs.arcticmobs.item.*;
-import com.lycanitesmobs.arcticmobs.worldgen.WorldGeneratorArctic;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorBlizzard;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorFrostweb;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorIcefire;
+import com.lycanitesmobs.core.dispenser.projectile.DispenserBehaviorTundra;
+import com.lycanitesmobs.core.block.effect.BlockFrostCloud;
+import com.lycanitesmobs.core.block.effect.BlockFrostfire;
+import com.lycanitesmobs.core.block.effect.BlockFrostweb;
+import com.lycanitesmobs.core.block.effect.BlockIcefire;
+import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
+import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
+import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
+import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
+import com.lycanitesmobs.core.entity.projectile.EntityTundra;
+import com.lycanitesmobs.core.item.egg.ItemArcticEgg;
+import com.lycanitesmobs.core.item.special.ItemBucketOoze;
+import com.lycanitesmobs.core.item.special.ItemFrostyFur;
+import com.lycanitesmobs.core.item.temp.*;
+import com.lycanitesmobs.core.worldgen.fluid.WorldGeneratorOoze;
 import com.lycanitesmobs.core.Submod;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.ItemCustomFood;
-import com.lycanitesmobs.core.item.ItemTreat;
+import com.lycanitesmobs.core.item.consumable.ItemCustomFood;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -72,7 +79,7 @@ public class ArcticMobs extends Submod {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		super.postInit(event);
-		GameRegistry.registerWorldGenerator(new WorldGeneratorArctic(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGeneratorOoze(), 0);
 	}
 
 	@SubscribeEvent

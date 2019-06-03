@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.model.ModelEquipment;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

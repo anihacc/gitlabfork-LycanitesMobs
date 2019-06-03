@@ -1,6 +1,6 @@
 {
 	"name": "pinky",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityPinky",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityPinky",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

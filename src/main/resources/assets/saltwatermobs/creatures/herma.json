@@ -1,6 +1,6 @@
 {
 	"name": "herma",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityHerma",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityHerma",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

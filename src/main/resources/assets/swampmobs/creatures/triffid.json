@@ -1,6 +1,6 @@
 {
 	"name": "triffid",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityTriffid",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityTriffid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

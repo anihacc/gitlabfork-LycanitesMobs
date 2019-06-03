@@ -1,6 +1,6 @@
 {
 	"name": "shade",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityShade",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityShade",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

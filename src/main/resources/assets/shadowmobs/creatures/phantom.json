@@ -1,6 +1,6 @@
 {
 	"name": "phantom",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityPhantom",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityPhantom",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

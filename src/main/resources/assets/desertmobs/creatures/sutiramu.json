@@ -1,6 +1,6 @@
 {
 	"name": "sutiramu",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntitySutiramu",
+	"class": "com.lycanitesmobs.core.entity.creature.EntitySutiramu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

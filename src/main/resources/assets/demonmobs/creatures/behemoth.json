@@ -1,6 +1,6 @@
 {
 	"name": "behemoth",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityBehemoth",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityBehemoth",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

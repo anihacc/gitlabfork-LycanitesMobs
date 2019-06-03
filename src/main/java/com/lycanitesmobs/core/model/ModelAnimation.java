@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.core.model.animation.TextureLayerAnimation;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerItem;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import java.util.*;

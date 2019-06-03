@@ -1,17 +1,13 @@
 package com.lycanitesmobs.core.model.animation;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.LayerEffect;
-import com.lycanitesmobs.core.renderer.LayerItem;
+import com.lycanitesmobs.core.renderer.layer.LayerEffect;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import net.minecraft.util.math.Vec2f;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TextureLayerAnimation {
 

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.core.renderer.LayerItem;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 

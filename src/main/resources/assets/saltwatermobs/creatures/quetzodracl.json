@@ -1,6 +1,6 @@
 {
 	"name": "quetzodracl",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityQuetzodracl",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityQuetzodracl",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

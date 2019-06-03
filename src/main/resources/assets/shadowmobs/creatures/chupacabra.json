@@ -1,6 +1,6 @@
 {
 	"name": "chupacabra",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityChupacabra",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

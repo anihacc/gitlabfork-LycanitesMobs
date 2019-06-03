@@ -1,6 +1,6 @@
 {
 	"name": "geist",
-	"class": "com.lycanitesmobs.shadowmobs.entity.EntityGeist",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGeist",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

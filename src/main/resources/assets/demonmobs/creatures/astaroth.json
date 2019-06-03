@@ -1,6 +1,6 @@
 {
 	"name": "astaroth",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityAstaroth",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAstaroth",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

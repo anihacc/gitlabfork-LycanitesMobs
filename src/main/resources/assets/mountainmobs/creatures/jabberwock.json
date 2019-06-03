@@ -1,6 +1,6 @@
 {
 	"name": "jabberwock",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityJabberwock",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityJabberwock",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

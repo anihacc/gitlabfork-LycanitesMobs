@@ -1,6 +1,6 @@
 {
 	"name": "lurker",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityLurker",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityLurker",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

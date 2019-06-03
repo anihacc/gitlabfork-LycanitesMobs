@@ -1,6 +1,6 @@
 {
 	"name": "manticore",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntityManticore",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityManticore",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "khalk",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityKhalk",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

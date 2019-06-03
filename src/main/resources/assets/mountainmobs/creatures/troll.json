@@ -1,6 +1,6 @@
 {
 	"name": "troll",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityTroll",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityTroll",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

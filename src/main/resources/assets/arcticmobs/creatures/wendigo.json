@@ -1,6 +1,6 @@
 {
 	"name": "wendigo",
-	"class": "com.lycanitesmobs.arcticmobs.entity.EntityWendigo",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

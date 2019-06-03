@@ -1,6 +1,6 @@
 {
 	"name": "clink",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntityClink",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityClink",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

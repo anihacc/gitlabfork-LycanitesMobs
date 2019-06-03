@@ -1,6 +1,6 @@
 {
 	"name": "ioray",
-	"class": "com.lycanitesmobs.freshwatermobs.entity.EntityIoray",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityIoray",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

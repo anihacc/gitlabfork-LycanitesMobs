@@ -1,6 +1,6 @@
 {
 	"name": "lacedon",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityLacedon",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityLacedon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

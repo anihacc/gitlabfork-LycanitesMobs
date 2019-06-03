@@ -1,6 +1,6 @@
 {
 	"name": "abaia",
-	"class": "com.lycanitesmobs.freshwatermobs.entity.EntityAbaia",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityAbaia",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

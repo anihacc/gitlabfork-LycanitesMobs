@@ -1,6 +1,6 @@
 {
 	"name": "rahovart",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityRahovart",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityRahovart",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

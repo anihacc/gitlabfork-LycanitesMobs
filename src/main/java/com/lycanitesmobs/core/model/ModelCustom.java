@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.model;
 
-import com.lycanitesmobs.core.renderer.LayerBase;
+import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.renderer.LayerEquipment;
-import com.lycanitesmobs.core.renderer.LayerSaddle;
+import com.lycanitesmobs.core.renderer.layer.LayerEquipment;
+import com.lycanitesmobs.core.renderer.layer.LayerSaddle;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

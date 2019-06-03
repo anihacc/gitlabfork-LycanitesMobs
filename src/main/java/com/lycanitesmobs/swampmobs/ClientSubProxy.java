@@ -1,10 +1,9 @@
 package com.lycanitesmobs.swampmobs;
 
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.creature.*;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.swampmobs.model.*;
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.swampmobs.model.*;
 
 public class ClientSubProxy extends CommonSubProxy {
 	

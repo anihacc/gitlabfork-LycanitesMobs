@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.ItemSwordBase;
+import com.lycanitesmobs.core.item.temp.ItemSwordBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;

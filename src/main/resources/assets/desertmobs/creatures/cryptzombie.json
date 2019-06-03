@@ -1,6 +1,6 @@
 {
 	"name": "cryptzombie",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntityCryptZombie",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCryptZombie",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "uvaraptor",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityUvaraptor",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityUvaraptor",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

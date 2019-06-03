@@ -1,6 +1,6 @@
 {
 	"name": "concapede",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityConcapedeHead",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityConcapedeHead",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

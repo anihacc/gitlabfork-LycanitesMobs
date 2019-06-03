@@ -1,6 +1,6 @@
 {
 	"name": "vapula",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityVapula",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityVapula",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

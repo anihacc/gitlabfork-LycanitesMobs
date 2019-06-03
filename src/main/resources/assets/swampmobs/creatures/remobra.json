@@ -1,6 +1,6 @@
 {
 	"name": "remobra",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityRemobra",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityRemobra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "conba",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityConba",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityConba",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

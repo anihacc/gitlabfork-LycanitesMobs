@@ -1,6 +1,6 @@
 {
 	"name": "trite",
-	"class": "com.lycanitesmobs.demonmobs.entity.EntityTrite",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityTrite",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

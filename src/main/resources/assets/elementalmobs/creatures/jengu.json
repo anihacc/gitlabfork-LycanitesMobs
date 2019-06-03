@@ -1,6 +1,6 @@
 {
 	"name": "jengu",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityJengu",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityJengu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

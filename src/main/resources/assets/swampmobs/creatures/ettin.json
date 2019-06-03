@@ -1,6 +1,6 @@
 {
 	"name": "ettin",
-	"class": "com.lycanitesmobs.swampmobs.entity.EntityEttin",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityEttin",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

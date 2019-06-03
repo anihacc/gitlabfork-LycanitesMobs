@@ -1,6 +1,6 @@
 {
 	"name": "silex",
-	"class": "com.lycanitesmobs.freshwatermobs.entity.EntitySilex",
+	"class": "com.lycanitesmobs.core.entity.creature.EntitySilex",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "shambler",
-	"class": "com.lycanitesmobs.forestmobs.entity.EntityShambler",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityShambler",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "lobber",
-	"class": "com.lycanitesmobs.infernomobs.entity.EntityLobber",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityLobber",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

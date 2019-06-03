@@ -1,6 +1,6 @@
 {
 	"name": "concapedesegment",
-	"class": "com.lycanitesmobs.junglemobs.entity.EntityConcapedeSegment",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityConcapedeSegment",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 {
 	"name": "yale",
-	"class": "com.lycanitesmobs.mountainmobs.entity.EntityYale",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityYale",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

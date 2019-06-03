@@ -1,6 +1,6 @@
 {
 	"name": "joustalpha",
-	"class": "com.lycanitesmobs.desertmobs.entity.EntityJoustAlpha",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityJoustAlpha",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

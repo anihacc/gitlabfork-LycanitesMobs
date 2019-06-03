@@ -1,6 +1,6 @@
 {
 	"name": "raiko",
-	"class": "com.lycanitesmobs.saltwatermobs.entity.EntityRaiko",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityRaiko",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

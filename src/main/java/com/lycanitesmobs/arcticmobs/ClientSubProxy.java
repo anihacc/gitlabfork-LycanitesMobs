@@ -1,8 +1,8 @@
 package com.lycanitesmobs.arcticmobs;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.arcticmobs.model.*;
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.model.creature.*;
 import com.lycanitesmobs.core.renderer.RenderRegister;
 
 public class ClientSubProxy extends CommonSubProxy {

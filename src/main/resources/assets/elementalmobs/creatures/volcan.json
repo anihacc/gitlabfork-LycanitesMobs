@@ -1,6 +1,6 @@
 {
 	"name": "volcan",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityVolcan",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityVolcan",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

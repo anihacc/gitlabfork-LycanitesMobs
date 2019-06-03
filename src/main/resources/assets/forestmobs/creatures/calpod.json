@@ -1,6 +1,6 @@
 {
 	"name": "calpod",
-	"class": "com.lycanitesmobs.forestmobs.entity.EntityCalpod",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

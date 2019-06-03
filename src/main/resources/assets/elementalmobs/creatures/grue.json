@@ -1,6 +1,6 @@
 {
 	"name": "grue",
-	"class": "com.lycanitesmobs.elementalmobs.entity.EntityGrue",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGrue",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
