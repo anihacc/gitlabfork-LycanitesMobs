@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.item;
+package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.core.info.GroupInfo;
 import net.minecraft.entity.player.EntityPlayer;

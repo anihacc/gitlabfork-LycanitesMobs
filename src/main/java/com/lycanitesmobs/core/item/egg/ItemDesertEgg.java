@@ -1,4 +1,4 @@
-package com.lycanitesmobs.desertmobs.item;
+package com.lycanitesmobs.core.item.egg;
 
 import com.lycanitesmobs.desertmobs.DesertMobs;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;

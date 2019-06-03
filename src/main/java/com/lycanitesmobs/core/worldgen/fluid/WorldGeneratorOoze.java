@@ -1,6 +1,5 @@
-package com.lycanitesmobs.arcticmobs.worldgen;
+package com.lycanitesmobs.core.worldgen.fluid;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.IWorldGenBase;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -9,13 +8,13 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
 
-public class WorldGeneratorArctic implements IWorldGenerator {
+public class WorldGeneratorOoze implements IWorldGenerator {
     protected final IWorldGenBase oozeLakes;
 
     // ==================================================
     //                    Constructors
     // ==================================================
-    public WorldGeneratorArctic() {
+    public WorldGeneratorOoze() {
         this.oozeLakes = new WorldGenOozeLakes();
     }
 

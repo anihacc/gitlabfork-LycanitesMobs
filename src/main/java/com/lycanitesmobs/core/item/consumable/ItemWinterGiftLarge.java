@@ -1,9 +1,10 @@
-package com.lycanitesmobs.core.item;
+package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

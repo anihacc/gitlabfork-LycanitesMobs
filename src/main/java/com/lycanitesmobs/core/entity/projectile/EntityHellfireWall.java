@@ -1,10 +1,11 @@
-package com.lycanitesmobs.demonmobs.entity;
+package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.demonmobs.DemonMobs;
 import net.minecraft.entity.Entity;

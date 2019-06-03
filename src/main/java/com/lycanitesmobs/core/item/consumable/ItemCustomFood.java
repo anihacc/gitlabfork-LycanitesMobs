@@ -1,8 +1,9 @@
-package com.lycanitesmobs.core.item;
+package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.GroupInfo;
 import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;

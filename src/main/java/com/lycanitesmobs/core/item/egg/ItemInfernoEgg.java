@@ -1,4 +1,4 @@
-package com.lycanitesmobs.infernomobs.item;
+package com.lycanitesmobs.core.item.egg;
 
 import com.lycanitesmobs.infernomobs.InfernoMobs;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;

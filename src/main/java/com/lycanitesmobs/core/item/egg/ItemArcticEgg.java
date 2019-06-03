@@ -1,4 +1,4 @@
-package com.lycanitesmobs.arcticmobs.item;
+package com.lycanitesmobs.core.item.egg;
 
 import com.lycanitesmobs.arcticmobs.ArcticMobs;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;

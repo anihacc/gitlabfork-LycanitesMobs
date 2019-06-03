@@ -1,6 +1,5 @@
-package com.lycanitesmobs.demonmobs.entity;
+package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.demonmobs.DemonMobs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 

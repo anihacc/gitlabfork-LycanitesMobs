@@ -1,8 +1,9 @@
-package com.lycanitesmobs.demonmobs.entity;
+package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.demonmobs.DemonMobs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;

@@ -1,4 +1,4 @@
-package com.lycanitesmobs.swampmobs.item;
+package com.lycanitesmobs.core.item.egg;
 
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.swampmobs.SwampMobs;

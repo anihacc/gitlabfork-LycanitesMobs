@@ -1,6 +1,7 @@
-package com.lycanitesmobs.core.item;
+package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.item.ItemBase;
 
 
 public class ItemTreat extends ItemBase {

@@ -1,6 +1,5 @@
-package com.lycanitesmobs.infernomobs.worldgen;
+package com.lycanitesmobs.core.worldgen.fluid;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.IWorldGenBase;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -9,13 +8,13 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
 
-public class WorldGeneratorInferno implements IWorldGenerator {
+public class WorldGeneratorPureLava implements IWorldGenerator {
     protected final IWorldGenBase pureLavaLakes;
 
     // ==================================================
     //                    Constructors
     // ==================================================
-    public WorldGeneratorInferno() {
+    public WorldGeneratorPureLava() {
         this.pureLavaLakes = new WorldGenPureLavaLakes();
     }
 

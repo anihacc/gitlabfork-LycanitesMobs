@@ -1,25 +1,7 @@
-package com.lycanitesmobs.demonmobs.entity;
+package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.api.IGroupBoss;
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.demonmobs.DemonMobs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class EntityHellfireBarrierPart extends EntityHellfireWall {
 

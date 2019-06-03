@@ -1,4 +1,4 @@
-package com.lycanitesmobs.demonmobs.entity;
+package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.AssetManager;

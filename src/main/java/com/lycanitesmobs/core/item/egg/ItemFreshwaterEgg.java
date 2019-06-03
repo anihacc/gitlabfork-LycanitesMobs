@@ -1,4 +1,4 @@
-package com.lycanitesmobs.freshwatermobs.item;
+package com.lycanitesmobs.core.item.egg;
 
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
