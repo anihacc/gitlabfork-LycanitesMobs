@@ -2,13 +2,12 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -22,14 +21,14 @@ import java.util.List;
 
 public class ItemBucketPureLava extends ItemBucket {
 	public String itemName;
-	public GroupInfo group;
+	public ModInfo group;
 	
 	// ==================================================
 	//                   Constructor
 	// ==================================================
     public ItemBucketPureLava(Fluid fluid) {
         super(ObjectManager.getBlock("purelava"));
-        this.group = InfernoMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "bucketpurelava";
         this.setRegistryName(this.group.filename, this.itemName);
         this.setUnlocalizedName(this.itemName);

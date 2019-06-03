@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObj;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -18,7 +18,7 @@ public class ModelTriffid extends ModelObj {
 
     public ModelTriffid(float shadowSize) {
         // Load Model:
-        this.initModel("triffid", SwampMobs.instance.group, "entity/triffid");
+        this.initModel("triffid", LycanitesMobs.modInfo, "entity/triffid");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelGeken extends ModelObjOld {
     
     public ModelGeken(float shadowSize) {
     	// Load Model:
-        this.initModel("Geken", JungleMobs.instance.group, "entity/geken");
+        this.initModel("Geken", LycanitesMobs.modInfo, "entity/geken");
     	
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 1.7F, 0.1F);

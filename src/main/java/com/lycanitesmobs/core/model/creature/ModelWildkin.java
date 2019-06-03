@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateBiped;
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 
 public class ModelWildkin extends ModelTemplateBiped {
 
@@ -14,7 +15,7 @@ public class ModelWildkin extends ModelTemplateBiped {
 
     public ModelWildkin(float shadowSize) {
         // Load Model:
-        this.initModel("wildkin", MountainMobs.instance.group, "entity/wildkin");
+        this.initModel("wildkin", LycanitesMobs.modInfo, "entity/wildkin");
 
         // Trophy:
         this.trophyScale = 0.8F;

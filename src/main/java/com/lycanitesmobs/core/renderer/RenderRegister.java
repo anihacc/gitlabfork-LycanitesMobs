@@ -4,20 +4,20 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class RenderRegister {
-    public GroupInfo groupInfo;
+    public ModInfo groupInfo;
 
-    public RenderRegister(GroupInfo groupInfo) {
+    public RenderRegister(ModInfo groupInfo) {
         this.groupInfo = groupInfo;
     }
 
     public void registerRenderFactories() {
         // Creatures:
         for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
-            if(creatureInfo.group != this.groupInfo)
+            if(creatureInfo.modInfo != this.groupInfo)
                 continue;
             RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryCreature<EntityCreatureBase>(creatureInfo));
         }

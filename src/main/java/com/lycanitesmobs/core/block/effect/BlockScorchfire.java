@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import net.minecraft.block.material.Material;
@@ -26,7 +27,7 @@ public class BlockScorchfire extends BlockFireBase {
 	//                   Constructor
 	// ==================================================
 	public BlockScorchfire() {
-		super(Material.FIRE, InfernoMobs.instance.group, "scorchfire");
+		super(Material.FIRE, LycanitesMobs.modInfo, "scorchfire");
 
         // Stats:
         this.tickRate = 30;

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.item;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -10,7 +10,7 @@ public class ItemMobToken extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemMobToken(GroupInfo group) {
+    public ItemMobToken(ModInfo group) {
         super();
 		this.itemName = "mobtoken";
 		this.group = group;

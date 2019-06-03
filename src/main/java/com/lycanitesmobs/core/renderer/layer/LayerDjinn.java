@@ -38,7 +38,7 @@ public class LayerDjinn extends LayerBase {
 		}
 		textureName += "_ribbon";
 		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, entity.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+			AssetManager.addTexture(textureName, entity.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 		return AssetManager.getTexture(textureName);
     }
 

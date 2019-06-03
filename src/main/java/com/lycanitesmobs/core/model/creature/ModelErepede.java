@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelErepede extends ModelObjOld {
     
     public ModelErepede(float shadowSize) {
     	// Load Model:
-        this.initModel("Erepede", DesertMobs.instance.group, "entity/erepede");
+        this.initModel("Erepede", LycanitesMobs.modInfo, "entity/erepede");
     	
     	// Set Rotation Centers:
         this.setPartCenter("head", 0F, 1.2F, 0.6F);

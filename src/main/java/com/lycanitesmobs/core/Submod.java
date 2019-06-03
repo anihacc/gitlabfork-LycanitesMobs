@@ -3,7 +3,7 @@ package com.lycanitesmobs.core;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 public abstract class Submod {
 
 	/** The primary group info used by this mod. **/
-	public GroupInfo group;
+	public ModInfo group;
 
 
 	public void preInit(FMLPreInitializationEvent event) {

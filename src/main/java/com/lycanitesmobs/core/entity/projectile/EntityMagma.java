@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -38,7 +39,7 @@ public class EntityMagma extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "magma";
-    	this.group = InfernoMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(6);
     	this.setProjectileScale(4F);
     }

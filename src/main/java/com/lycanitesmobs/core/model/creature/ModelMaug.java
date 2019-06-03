@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
 
 public class ModelMaug extends ModelTemplateQuadruped {
@@ -14,7 +15,7 @@ public class ModelMaug extends ModelTemplateQuadruped {
 
     public ModelMaug(float shadowSize) {
         // Load Model:
-        this.initModel("maug", ArcticMobs.instance.group, "entity/maug");
+        this.initModel("maug", LycanitesMobs.modInfo, "entity/maug");
 
         // Trophy:
         this.trophyScale = 0.8F;

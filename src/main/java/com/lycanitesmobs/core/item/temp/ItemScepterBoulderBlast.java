@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,7 +17,7 @@ public class ItemScepterBoulderBlast extends ItemScepter {
 	// ==================================================
     public ItemScepterBoulderBlast() {
         super();
-    	this.group = MountainMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "boulderblastscepter";
         this.setup();
         this.textureName = "scepterboulderblast";

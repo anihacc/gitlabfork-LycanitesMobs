@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.saltwatermobs.SaltwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelRaiko extends ModelObjOld {
 
     public ModelRaiko(float shadowSize) {
     	// Load Model:
-    	this.initModel("raiko", SaltwaterMobs.instance.group, "entity/raiko");
+    	this.initModel("raiko", LycanitesMobs.modInfo, "entity/raiko");
     	
     	// Set Rotation Centers:
         this.setPartCenter("head", 0F, 1.5F, 1.0F);

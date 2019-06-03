@@ -36,7 +36,7 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.vapulaBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Rare Vapula Block Break Radius", this.vapulaBlockBreakRadius, "Controls how large the Royal Vapula's block breaking radius is when it is charging towards its target. Set to -1 to disable.");
+        this.vapulaBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Rare Vapula Block Break Radius", this.vapulaBlockBreakRadius, "Controls how large the Royal Vapula's block breaking radius is when it is charging towards its target. Set to -1 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;

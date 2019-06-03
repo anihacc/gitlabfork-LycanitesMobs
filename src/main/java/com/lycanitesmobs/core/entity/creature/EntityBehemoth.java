@@ -161,7 +161,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
 
         String textureName = this.getTextureName() + "_krampus";
         if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
         return AssetManager.getTexture(textureName);
     }
 }

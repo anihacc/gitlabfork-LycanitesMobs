@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +16,7 @@ public class ItemMudshotCharge extends ItemCharge {
 	// ==================================================
     public ItemMudshotCharge() {
         super();
-        this.group = DesertMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "mudshotcharge";
         this.setup();
     }

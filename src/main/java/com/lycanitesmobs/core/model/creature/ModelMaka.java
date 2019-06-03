@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelMaka extends ModelObjOld {
     
     public ModelMaka(float shadowSize) {
     	// Load Model:
-    	this.initModel("Maka", PlainsMobs.instance.group, "entity/maka");
+    	this.initModel("Maka", LycanitesMobs.modInfo, "entity/maka");
     	
 
 

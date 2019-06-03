@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +16,7 @@ public class ItemMagmaCharge extends ItemCharge {
 	// ==================================================
     public ItemMagmaCharge() {
         super();
-        this.group = InfernoMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "magmacharge";
         this.setup();
     }

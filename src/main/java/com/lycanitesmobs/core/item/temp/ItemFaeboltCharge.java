@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemFaeboltCharge extends ItemCharge {
 	// ==================================================
     public ItemFaeboltCharge() {
         super();
-        this.group = ElementalMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "faeboltcharge";
         this.setup();
     }

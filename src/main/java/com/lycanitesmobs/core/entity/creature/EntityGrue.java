@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
@@ -14,7 +12,6 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -228,7 +225,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
 			textureName += "_" + suffix;
 		}
         if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
         return AssetManager.getTexture(textureName);
     }
 }

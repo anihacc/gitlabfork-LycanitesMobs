@@ -84,7 +84,7 @@ public class EventListener {
 	// ========== Entities ==========
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-		ObjectManager.registerEntities(event, LycanitesMobs.group);
+		ObjectManager.registerEntities(event, LycanitesMobs.modInfo);
 	}
 
 

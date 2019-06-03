@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumParticleTypes;
@@ -34,7 +35,7 @@ public class EntityDemonicSpark extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "demonicspark";
-    	this.group = DemonMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(5);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0D;

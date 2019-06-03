@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityEmber;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemScepterEmber extends ItemScepter {
 	// ==================================================
     public ItemScepterEmber() {
         super();
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "emberscepter";
         this.setup();
     }

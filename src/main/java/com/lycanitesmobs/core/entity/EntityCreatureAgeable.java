@@ -164,7 +164,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     	if(itemStack != null) {
     		
     		// Spawn Egg:
-    		if(itemStack.getItem() == ObjectManager.getItem(this.creatureInfo.group.getEggName()))
+    		if(itemStack.getItem() == ObjectManager.getItem(this.creatureInfo.modInfo.getEggName()))
     			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Spawn Baby");
     		
     		// Breeding Item:
@@ -180,9 +180,9 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Spawn Baby:
-    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && ObjectManager.entityLists.containsKey(this.creatureInfo.group.filename)) {
+    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && ObjectManager.entityLists.containsKey(this.creatureInfo.modInfo.filename)) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-			 Class eggClass = ObjectManager.entityLists.get(this.creatureInfo.group.filename).getClassFromID(itemCustomSpawnEgg.getEntityIdFromItem(itemStack));
+			 Class eggClass = ObjectManager.entityLists.get(this.creatureInfo.modInfo.filename).getClassFromID(itemCustomSpawnEgg.getEntityIdFromItem(itemStack));
 			 if(eggClass != null && eggClass.isAssignableFrom(this.getClass())) {
 				 EntityCreatureAgeable baby = this.createChild(this);
 				 if(baby != null) {

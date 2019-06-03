@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.building;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -26,7 +26,7 @@ public class BlockPropolis extends BlockBase {
         this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
-		this.group = JungleMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "propolis";
 		this.setup();
 		

@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +25,7 @@ public class ModelZephyr extends ModelTemplateElemental {
 
     public ModelZephyr(float shadowSize) {
     	// Load Model:
-    	this.initModel("zephyr", ElementalMobs.instance.group, "entity/zephyr");
+    	this.initModel("zephyr", LycanitesMobs.modInfo, "entity/zephyr");
     	
     	// Trophy:
         this.trophyScale = 1.2F;

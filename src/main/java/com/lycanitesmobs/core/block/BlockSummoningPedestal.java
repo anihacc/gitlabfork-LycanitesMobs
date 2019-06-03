@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.block;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.GuiHandler;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.ITileEntityProvider;
@@ -14,7 +14,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -44,7 +43,7 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSummoningPedestal(GroupInfo group) {
+	public BlockSummoningPedestal(ModInfo group) {
 		super(Material.IRON);
         this.setCreativeTab(LycanitesMobs.blocksTab);
         this.setDefaultState(this.getBlockState().getBaseState().withProperty(PROPERTY_OWNER, EnumSummoningPedestal.NONE));

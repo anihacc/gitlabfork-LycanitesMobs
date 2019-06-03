@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -34,8 +36,12 @@ public class CreatureInfo {
 	/** The entity class used by this creature. **/
 	public Class<? extends EntityLiving> entityClass;
 
-	/** The group that this mob belongs to. **/
-	public GroupInfo group;
+	/** The model class used by this creature. **/
+	@SideOnly(Side.CLIENT)
+	public Class<? extends net.minecraft.client.model.ModelBase> modelClass;
+
+	/** The mod info of the mod this creature belongs to. **/
+	public ModInfo modInfo;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -131,8 +137,8 @@ public class CreatureInfo {
 	 * Constructor
 	 * @param group The group that this creature definition will belong to.
 	 */
-	public CreatureInfo(GroupInfo group) {
-		this.group = group;
+	public CreatureInfo(ModInfo group) {
+		this.modInfo = group;
 		this.creatureSpawn = new CreatureSpawn();
 	}
 
@@ -140,12 +146,22 @@ public class CreatureInfo {
 	/** Loads this creature from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
+
+		// Entity Class:
 		try {
 			this.entityClass = (Class<? extends EntityLiving>) Class.forName(json.get("class").getAsString());
 		}
 		catch(Exception e) {
 			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("class").getAsString() + " for " + this.getName());
 		}
+
+		// Model Class:
+		try {
+			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
+		} catch (Exception e) {
+			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+		}
+
 		if(json.has("enabled"))
 			this.enabled = json.get("enabled").getAsBoolean();
 		if(json.has("dummy"))
@@ -279,19 +295,19 @@ public class CreatureInfo {
 
 		// ID and Enabled Check:
 		if(!this.enabled) {
-			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + group.name + ")");
+			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + modInfo.name + ")");
 			return;
 		}
 
 		// Mapping and Registration:
-		if(!ObjectManager.entityLists.containsKey(this.group.filename)) {
-			ObjectManager.entityLists.put(this.group.filename, new EntityListCustom());
+		if(!ObjectManager.entityLists.containsKey(this.modInfo.filename)) {
+			ObjectManager.entityLists.put(this.modInfo.filename, new EntityListCustom());
 		}
 		if(this.entityClass == null) {
 			LycanitesMobs.printWarning("", "The entity class cannot be found for " + this.name);
 		}
-		ObjectManager.entityLists.get(this.group.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
-		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.group.filename + "." + this.getName(), this.group.getNextMobID(), this.group.mod, 128, 3, true);
+		ObjectManager.entityLists.get(this.modInfo.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
+		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.modInfo.filename + "." + this.getName(), this.modInfo.getNextMobID(), this.modInfo.mod, 128, 3, true);
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
@@ -317,7 +333,7 @@ public class CreatureInfo {
 		this.creatureSpawn.register(this);
 
 		// Debug Message - Added:
-		LycanitesMobs.printDebug("Creature", "Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.group.name + ")");
+		LycanitesMobs.printDebug("Creature", "Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 
@@ -325,23 +341,23 @@ public class CreatureInfo {
 	 * Adds sounds that this creature uses.
 	 */
 	public void addSounds(String suffix) {
-		AssetManager.addSound(this.name + suffix + "_say", group, "entity." + this.name + suffix + ".say");
-		AssetManager.addSound(this.name + suffix + "_hurt", group, "entity." + this.name + suffix + ".hurt");
-		AssetManager.addSound(this.name + suffix + "_death", group, "entity." + this.name + suffix + ".death");
-		AssetManager.addSound(this.name + suffix + "_step", group, "entity." + this.name + suffix + ".step");
-		AssetManager.addSound(this.name + suffix + "_attack", group, "entity." + this.name + suffix + ".attack");
-		AssetManager.addSound(this.name + suffix + "_jump", group, "entity." + this.name + suffix + ".jump");
-		AssetManager.addSound(this.name + suffix + "_fly", group, "entity." + this.name + suffix + ".fly");
+		AssetManager.addSound(this.name + suffix + "_say", modInfo, "entity." + this.name + suffix + ".say");
+		AssetManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + this.name + suffix + ".hurt");
+		AssetManager.addSound(this.name + suffix + "_death", modInfo, "entity." + this.name + suffix + ".death");
+		AssetManager.addSound(this.name + suffix + "_step", modInfo, "entity." + this.name + suffix + ".step");
+		AssetManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
+		AssetManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
+		AssetManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
 		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
-			AssetManager.addSound(this.name + suffix + "_tame", group, "entity." + this.name + suffix + ".tame");
-			AssetManager.addSound(this.name + suffix + "_beg", group, "entity." + this.name + suffix + ".beg");
+			AssetManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
+			AssetManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
 		}
 		if(this.isTameable())
-			AssetManager.addSound(this.name + suffix + "_eat", group, "entity." + this.name + suffix + ".eat");
+			AssetManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + this.name + suffix + ".eat");
 		if(this.isMountable())
-			AssetManager.addSound(this.name + suffix + "_mount", group, "entity." + this.name + suffix + ".mount");
+			AssetManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + this.name + suffix + ".mount");
 		if(this.isBoss())
-			AssetManager.addSound(this.name + suffix + "_phase", group, "entity." + this.name + suffix + ".phase");
+			AssetManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + this.name + suffix + ".phase");
 	}
 
 
@@ -359,7 +375,7 @@ public class CreatureInfo {
 	 * @return Creature registry entity id.
 	 */
 	public String getEntityId() {
-		return this.group.filename + ":" + this.getName();
+		return this.modInfo.filename + ":" + this.getName();
 	}
 
 
@@ -368,7 +384,7 @@ public class CreatureInfo {
 	 * @return Creature resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.group.filename, this.getName());
+		return new ResourceLocation(this.modInfo.filename, this.getName());
 	}
 
 
@@ -377,7 +393,7 @@ public class CreatureInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.group.filename + "." + this.getName();
+		return this.modInfo.filename + "." + this.getName();
 	}
 
 	/**
@@ -405,7 +421,7 @@ public class CreatureInfo {
 	public ResourceLocation getIcon() {
 		ResourceLocation texture = AssetManager.getTexture(this.getName() + "_icon");
 		if(texture == null) {
-			AssetManager.addTexture(this.getName() + "_icon", this.group, "textures/guis/" + this.getName() + "_icon.png");
+			AssetManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/" + this.getName() + "_icon.png");
 			texture = AssetManager.getTexture(this.getName() + "_icon");
 		}
 		return texture;

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +21,7 @@ public class ItemPoopCharge extends ItemCharge {
 	// ==================================================
     public ItemPoopCharge() {
         super();
-        this.group = JungleMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "poopcharge";
         this.setup();
     }

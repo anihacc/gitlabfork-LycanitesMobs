@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -39,7 +40,7 @@ public class EntityLightBall extends EntityProjectileModel {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "lightball";
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(2);
     	this.setProjectileScale(1F);
         this.projectileLife = 100;

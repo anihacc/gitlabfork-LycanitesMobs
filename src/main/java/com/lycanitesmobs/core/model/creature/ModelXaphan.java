@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +28,7 @@ public class ModelXaphan extends ModelTemplateElemental {
 
     public ModelXaphan(float shadowSize) {
     	// Load Model:
-    	this.initModel("xaphan", ElementalMobs.instance.group, "entity/xaphan");
+    	this.initModel("xaphan", LycanitesMobs.modInfo, "entity/xaphan");
     	
     	// Trophy:
         this.trophyScale = 0.8F;

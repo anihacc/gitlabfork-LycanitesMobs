@@ -38,7 +38,7 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
         //this.canGrow = false;
         //this.babySpawnChance = 0.01D;
         
-        this.trollGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Troll Griefing", this.trollGreifing, "Set to false to disable Troll block destruction.");
+        this.trollGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Troll Griefing", this.trollGreifing, "Set to false to disable Troll block destruction.");
         this.solidCollision = true;
         this.setupMob();
     }

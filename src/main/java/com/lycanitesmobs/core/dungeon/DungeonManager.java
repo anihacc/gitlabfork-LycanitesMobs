@@ -11,16 +11,11 @@ import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
 import com.lycanitesmobs.core.dungeon.definition.DungeonStructure;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
-import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
-import com.lycanitesmobs.core.info.GroupInfo;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import com.lycanitesmobs.core.info.ModInfo;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DungeonManager extends JSONLoader {
@@ -139,7 +134,7 @@ public class DungeonManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(GroupInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
 
 	}
 
@@ -151,7 +146,7 @@ public class DungeonManager extends JSONLoader {
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
 		// Load Defaults:
-		Path path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.group.filename, "dungeons/" + type);
+		Path path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.filename, "dungeons/" + type);
 		Map<String, JsonObject> defaultJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJSONs, "name", null);
 

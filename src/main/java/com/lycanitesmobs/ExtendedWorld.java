@@ -122,7 +122,7 @@ public class ExtendedWorld extends WorldSavedData {
     //                     Load Config
     // ==================================================
     public void loadConfig() {
-        ConfigSpawning config = ConfigSpawning.getConfig(LycanitesMobs.group, "mobevents");
+        ConfigSpawning config = ConfigSpawning.getConfig(LycanitesMobs.modInfo, "mobevents");
         //this.mobEventsEnabled = config.getBool("World", this.getConfigEntryName("Mob Events Enabled"), mobEventsEnabled, "If false, all mob events will be completely disabled for this world.");
 
         //this.mobEventsRandom = config.getBool("World", this.getConfigEntryName("Random Mob Events"), mobEventsRandom, "If false, mob events will no longer occur randomly but can still occur via other means such as by schedule. Set this to true if you want both random and scheduled events to take place and also take a look at 'Lock Random Mob Events' if doing so.");

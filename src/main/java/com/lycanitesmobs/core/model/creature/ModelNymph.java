@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -27,7 +28,7 @@ public class ModelNymph extends ModelTemplateElemental {
     public ModelNymph(float shadowSize) {
 
 		// Load Model:
-		this.initModel("nymph", ElementalMobs.instance.group, "entity/nymph");
+		this.initModel("nymph", LycanitesMobs.modInfo, "entity/nymph");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

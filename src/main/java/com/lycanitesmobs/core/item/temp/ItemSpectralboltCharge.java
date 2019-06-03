@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemSpectralboltCharge extends ItemCharge {
 	// ==================================================
     public ItemSpectralboltCharge() {
         super();
-        this.group = ShadowMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "spectralboltcharge";
         this.setup();
     }

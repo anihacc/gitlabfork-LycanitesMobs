@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +35,7 @@ public class BlockPoisonCloud extends BlockBase {
         this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
 
         // Properties:
-		this.group = SwampMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "poisoncloud";
 		this.setup();
 		

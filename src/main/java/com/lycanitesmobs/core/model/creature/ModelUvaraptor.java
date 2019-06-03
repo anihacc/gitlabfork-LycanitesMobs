@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelUvaraptor extends ModelObjOld {
     
     public ModelUvaraptor(float shadowSize) {
     	// Load Model:
-    	this.initModel("Uvaraptor", JungleMobs.instance.group, "entity/uvaraptor");
+    	this.initModel("Uvaraptor", LycanitesMobs.modInfo, "entity/uvaraptor");
     	
 
 

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelTrite extends ModelObjOld {
     
     public ModelTrite(float shadowSize) {
     	// Load Model:
-        this.initModel("trite", DemonMobs.instance.group, "entity/trite");
+        this.initModel("trite", LycanitesMobs.modInfo, "entity/trite");
     	
     	// Set Rotation Centers:
         this.setPartCenter("head", 0F, 0.35F, 0F);

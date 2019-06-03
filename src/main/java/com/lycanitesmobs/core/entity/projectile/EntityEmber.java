@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumParticleTypes;
@@ -32,7 +33,7 @@ public class EntityEmber extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "ember";
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(1);
     	this.setProjectileScale(0.5F);
         this.knockbackChance = 0D;

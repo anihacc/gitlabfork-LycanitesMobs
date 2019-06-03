@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.egg;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 
 public class ItemDemonEgg extends ItemCustomSpawnEgg {
 	
@@ -11,7 +12,7 @@ public class ItemDemonEgg extends ItemCustomSpawnEgg {
     public ItemDemonEgg() {
         super();
         this.setUnlocalizedName("demonspawn");
-        this.group = DemonMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "demonspawn";
         this.texturePath = "demonspawn";
         this.setRegistryName(this.group.filename, this.itemName);

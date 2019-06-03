@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
@@ -44,7 +45,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "demoniclightning";
-    	this.group = DemonMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(10);
     	this.setProjectileScale(2.5F);
 		this.pierce = true;

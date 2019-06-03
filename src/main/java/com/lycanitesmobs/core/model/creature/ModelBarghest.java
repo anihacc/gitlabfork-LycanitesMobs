@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelBarghest extends ModelObjOld {
 
     public ModelBarghest(float shadowSize) {
     	// Load Model:
-    	this.initModel("barghest", MountainMobs.instance.group, "entity/barghest");
+    	this.initModel("barghest", LycanitesMobs.modInfo, "entity/barghest");
     	
 
 

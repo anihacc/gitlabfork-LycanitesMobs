@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -41,7 +42,7 @@ public class EntityVenomShot extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "venomshot";
-    	this.group = SwampMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(3);
     	this.setProjectileScale(2.5F);
         this.knockbackChance = 0.5D;

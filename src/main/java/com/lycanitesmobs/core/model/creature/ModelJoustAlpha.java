@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelJoustAlpha extends ModelObjOld {
     
     public ModelJoustAlpha(float shadowSize) {
     	// Load Model:
-    	this.initModel("JoustAlpha", DesertMobs.instance.group, "entity/joustalpha");
+    	this.initModel("JoustAlpha", LycanitesMobs.modInfo, "entity/joustalpha");
     	
 
 

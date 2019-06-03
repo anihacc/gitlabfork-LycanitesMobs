@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelPhantom extends ModelObjOld {
     
     public ModelPhantom(float shadowSize) {
     	// Load Model:
-    	this.initModel("phantom", ShadowMobs.instance.group, "entity/phantom");
+    	this.initModel("phantom", LycanitesMobs.modInfo, "entity/phantom");
 
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 1.8F, 0F);

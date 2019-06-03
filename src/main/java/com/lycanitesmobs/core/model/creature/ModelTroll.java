@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelTroll extends ModelObjOld {
     
     public ModelTroll(float shadowSize) {
     	// Load Model:
-    	this.initModel("troll", MountainMobs.instance.group, "entity/troll");
+    	this.initModel("troll", LycanitesMobs.modInfo, "entity/troll");
     	
 
 

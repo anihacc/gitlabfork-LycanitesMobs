@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -12,10 +12,10 @@ public class ItemFoodExplorersRisotto extends ItemCustomFood {
     // ==================================================
   	//                    Constructors
   	// ==================================================
-	public ItemFoodExplorersRisotto(String setItemName, GroupInfo group, String setTexturePath, int feed, float saturation) {
+	public ItemFoodExplorersRisotto(String setItemName, ModInfo group, String setTexturePath, int feed, float saturation) {
 		super(setItemName, group, setTexturePath, feed, saturation, FOOD_CLASS.FEAST);
 	}
-	public ItemFoodExplorersRisotto(String setItemName, GroupInfo group, int feed, float saturation) {
+	public ItemFoodExplorersRisotto(String setItemName, ModInfo group, int feed, float saturation) {
 		super(setItemName, group, feed, saturation, FOOD_CLASS.FEAST);
 	}
 	

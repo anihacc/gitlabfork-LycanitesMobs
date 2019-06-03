@@ -1,16 +1,11 @@
 package com.lycanitesmobs.core.config;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ItemDrop;
 import jline.internal.Nullable;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -25,7 +20,7 @@ public class ConfigBase {
     // ========== Version Check ==========
     public static void versionCheck(String minVersion, String currentVersion) {
         // Get Config Version:
-        ConfigBase versionConfig = getConfig(LycanitesMobs.group, "version");
+        ConfigBase versionConfig = getConfig(LycanitesMobs.modInfo, "version");
         String configVersion = versionConfig.getString("Version", "Config Version", "0.0.0.0", "The version that this config was last read from, manually update this if you do not want your config to be cleared, although it is recommended not to unless you are aware of the changes.");
         
         // Test Config Version:
@@ -80,8 +75,11 @@ public class ConfigBase {
 	}
 
     // Get Config:
-    public static ConfigBase getConfig(GroupInfo group, String configName) {
-        String configFileName = group.filename + "-" + configName.toLowerCase();
+    public static ConfigBase getConfig(ModInfo group, String configName) {
+		String configFileName = configName.toLowerCase();
+		if(!"lycanitesmobs".equalsIgnoreCase(group.filename)) {
+			configFileName = group.filename + "-" + configFileName;
+		}
         if(!configs.containsKey(configFileName))
             registerConfig(new ConfigBase(group, configName));
         return configs.get(configFileName);
@@ -92,7 +90,7 @@ public class ConfigBase {
 	// Configuration:
 	public Configuration config;
 
-    public GroupInfo group;
+    public ModInfo group;
     public String configName;
     public String fileName;
     public String configFileName;
@@ -100,7 +98,7 @@ public class ConfigBase {
 	
 	
 	// ========== Constructor ==========
-    public ConfigBase(GroupInfo group, String name) {
+    public ConfigBase(ModInfo group, String name) {
         this.group = group;
         this.configName = name;
         this.fileName = this.configName.toLowerCase();

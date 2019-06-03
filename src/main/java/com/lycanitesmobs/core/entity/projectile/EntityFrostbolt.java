@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -32,7 +33,7 @@ public class EntityFrostbolt extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "frostbolt";
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(5);
     	
     	this.waterProof = true;

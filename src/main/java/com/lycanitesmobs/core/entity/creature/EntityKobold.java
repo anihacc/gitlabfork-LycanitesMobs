@@ -30,7 +30,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
  	// ==================================================
     public EntityKobold(World world) {
         super(world);
-        this.torchGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Kobold Torch Griefing", this.torchGreifing, "Set to false to stop Kobolds from stealing torches.");
+        this.torchGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Kobold Torch Griefing", this.torchGreifing, "Set to false to stop Kobolds from stealing torches.");
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -139,7 +139,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     
     @Override
     public boolean canPickupItems() {
-    	return ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Kobold Thievery", true, "Set to false to prevent Kobold from collecting items.");
+    	return ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Kobold Thievery", true, "Set to false to prevent Kobold from collecting items.");
     }
 	
 	

@@ -36,7 +36,7 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
         this.setupMob();
 
         this.stepHeight = 1.0F;
-        this.healingRate = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Nymph Healing Rate", this.healingRate, "Sets the rate in ticks (20 ticks = 1 second) that a Nymph heals surrounding entities.");
+        this.healingRate = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Nymph Healing Rate", this.healingRate, "Sets the rate in ticks (20 ticks = 1 second) that a Nymph heals surrounding entities.");
     }
 
     // ========== Init AI ==========

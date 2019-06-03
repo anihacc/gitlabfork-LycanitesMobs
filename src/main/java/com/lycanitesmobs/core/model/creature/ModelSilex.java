@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelSilex extends ModelObjOld {
 
     public ModelSilex(float shadowSize) {
     	// Load Model:
-    	this.initModel("silex", FreshwaterMobs.instance.group, "entity/silex");
+    	this.initModel("silex", LycanitesMobs.modInfo, "entity/silex");
     	
 
 

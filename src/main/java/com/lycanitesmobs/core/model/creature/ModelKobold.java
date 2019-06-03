@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelKobold extends ModelObjOld {
     
     public ModelKobold(float shadowSize) {
     	// Load Model:
-    	this.initModel("Kobold", PlainsMobs.instance.group, "entity/kobold");
+    	this.initModel("Kobold", LycanitesMobs.modInfo, "entity/kobold");
     	
 
 

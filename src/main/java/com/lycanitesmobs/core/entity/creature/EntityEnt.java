@@ -165,14 +165,14 @@ public class EntityEnt extends EntityCreatureTameable implements IMob, IGroupPla
         if("Twisted Ent".equals(this.getCustomNameTag())) {
             String textureName = this.getTextureName() + "_twisted";
             if (AssetManager.getTexture(textureName) == null)
-                AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+                AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
             return AssetManager.getTexture(textureName);
         }
 
         if("Salty Tree".equals(this.getCustomNameTag())) {
             String textureName = this.getTextureName() + "_saltytree";
             if (AssetManager.getTexture(textureName) == null)
-                AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+                AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
             return AssetManager.getTexture(textureName);
         }
 

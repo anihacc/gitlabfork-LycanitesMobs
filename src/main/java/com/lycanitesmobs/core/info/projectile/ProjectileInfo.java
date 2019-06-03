@@ -7,7 +7,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -30,7 +30,7 @@ public class ProjectileInfo {
 	public Class<? extends ModelBase> modelClass;
 
 	/** The group that this projectile belongs to. **/
-	public GroupInfo group;
+	public ModInfo group;
 
 	// Stats:
 	public double width = 0.8D;
@@ -69,7 +69,7 @@ public class ProjectileInfo {
 	 * Constructor
 	 * @param group The group that this projectile definition will belong to.
 	 */
-	public ProjectileInfo(GroupInfo group) {
+	public ProjectileInfo(ModInfo group) {
 		this.group = group;
 	}
 

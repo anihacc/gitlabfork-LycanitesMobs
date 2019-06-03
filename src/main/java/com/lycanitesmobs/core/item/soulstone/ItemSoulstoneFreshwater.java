@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.soulstone;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityIoray;
 import com.lycanitesmobs.core.entity.creature.EntityStrider;
@@ -19,7 +19,7 @@ public class ItemSoulstoneFreshwater extends ItemSoulstone {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstoneFreshwater(GroupInfo group) {
+    public ItemSoulstoneFreshwater(ModInfo group) {
         super(group, "freshwater");
     }
     

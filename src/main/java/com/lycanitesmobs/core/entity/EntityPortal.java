@@ -314,11 +314,11 @@ public class EntityPortal extends EntityProjectileBase {
     @Override
     public ResourceLocation getTexture() {
     	if(AssetManager.getTexture(this.entityName) == null)
-     		AssetManager.addTexture(this.entityName, LycanitesMobs.group, "textures/particles/" + this.entityName.toLowerCase() + ".png");
+     		AssetManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
         if(AssetManager.getTexture(this.entityName + "_client") == null)
-            AssetManager.addTexture(this.entityName + "_client", LycanitesMobs.group, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
+            AssetManager.addTexture(this.entityName + "_client", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
         if(AssetManager.getTexture(this.entityName + "_player") == null)
-            AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.group, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
+            AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
 
         if(this.ownerName != null) {
             if(this.ownerName.equalsIgnoreCase(LycanitesMobs.proxy.getClientPlayer().getName()))

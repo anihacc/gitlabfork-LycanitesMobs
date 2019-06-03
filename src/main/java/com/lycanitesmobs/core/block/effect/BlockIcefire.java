@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
@@ -35,7 +36,7 @@ public class BlockIcefire extends BlockFireBase {
 	//                   Constructor
 	// ==================================================
 	public BlockIcefire() {
-		super(Material.FIRE, ArcticMobs.instance.group, "icefire");
+		super(Material.FIRE, LycanitesMobs.modInfo, "icefire");
 
         // Stats:
         this.tickRate = 30;

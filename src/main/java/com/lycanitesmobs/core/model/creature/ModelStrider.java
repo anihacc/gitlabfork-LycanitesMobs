@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelStrider extends ModelObjOld {
 
     public ModelStrider(float shadowSize) {
     	// Load Model:
-    	this.initModel("strider", FreshwaterMobs.instance.group, "entity/strider");
+    	this.initModel("strider", LycanitesMobs.modInfo, "entity/strider");
 
     	// Set Rotation Centers:
     	setPartCenter("body", 0F, 8.0F, 0F);

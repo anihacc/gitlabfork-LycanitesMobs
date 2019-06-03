@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,7 +19,7 @@ public class ModelSpriggan extends ModelTemplateElemental {
 
     public ModelSpriggan(float shadowSize) {
     	// Load Model:
-    	this.initModel("spriggan", ElementalMobs.instance.group, "entity/spriggan");
+    	this.initModel("spriggan", LycanitesMobs.modInfo, "entity/spriggan");
     	
     	// Trophy:
         this.trophyScale = 1.2F;

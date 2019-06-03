@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,12 +15,12 @@ public class EntityParticle extends EntityThrowable {
 	public int particleAgeMax = 20;
 	public double particleGravity = 0D;
 	public String texture;
-	public GroupInfo group;
+	public ModInfo group;
 	
     // ==================================================
     //                      Constructor
     // ==================================================
-	public EntityParticle(World world, double x, double y, double z, String texture, GroupInfo group) {
+	public EntityParticle(World world, double x, double y, double z, String texture, ModInfo group) {
 		super(world);
 		this.posX = x;
 		this.posY = y;

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateAquatic;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,7 +17,7 @@ public class ModelAbaia extends ModelTemplateAquatic {
 
     public ModelAbaia(float shadowSize) {
         // Load Model:
-        this.initModel("abaia", FreshwaterMobs.instance.group, "entity/abaia");
+        this.initModel("abaia", LycanitesMobs.modInfo, "entity/abaia");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

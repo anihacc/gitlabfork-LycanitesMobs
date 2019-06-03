@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateAquatic;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 
 public class ModelIoray extends ModelTemplateAquatic {
 
@@ -14,7 +15,7 @@ public class ModelIoray extends ModelTemplateAquatic {
 
     public ModelIoray(float shadowSize) {
         // Load Model:
-        this.initModel("ioray", FreshwaterMobs.instance.group, "entity/ioray");
+        this.initModel("ioray", LycanitesMobs.modInfo, "entity/ioray");
 
         // Looking:
         this.lookHeadScaleX = 0f;

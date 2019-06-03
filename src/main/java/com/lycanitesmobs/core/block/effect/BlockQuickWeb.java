@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ public class BlockQuickWeb extends BlockBase {
         this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
-		this.group = JungleMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "quickweb";
 		this.setup();
 		

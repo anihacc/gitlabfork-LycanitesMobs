@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPrey;
@@ -41,7 +40,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         this.hasAttackSound = true;
         this.flySoundSpeed = 20;
 
-        this.creeperDropping = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Roc Creeper Dropping", this.creeperDropping, "Set to false to prevent Rocs from picking up Creepers to drop on their victims!");
+        this.creeperDropping = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Roc Creeper Dropping", this.creeperDropping, "Set to false to prevent Rocs from picking up Creepers to drop on their victims!");
         this.setupMob();
 
         this.stepHeight = 1.0F;

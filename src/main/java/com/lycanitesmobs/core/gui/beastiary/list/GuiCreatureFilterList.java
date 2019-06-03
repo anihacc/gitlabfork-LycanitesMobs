@@ -2,17 +2,12 @@ package com.lycanitesmobs.core.gui.beastiary.list;
 
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GuiCreatureFilterList extends GuiScrollingList {
 	protected List<GuiCreatureList> filteredLists = new ArrayList<>();

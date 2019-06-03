@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -9,12 +9,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
@@ -30,7 +28,7 @@ import java.util.Random;
 public class BlockBase extends Block {
 	
 	// Properties:
-	public GroupInfo group;
+	public ModInfo group;
 	public String blockName = "BlockBase";
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
 	
@@ -62,7 +60,7 @@ public class BlockBase extends Block {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public BlockBase(Material material, GroupInfo group, String name) {
+    public BlockBase(Material material, ModInfo group, String name) {
         super(material);
         this.group = group;
         this.blockName = name;

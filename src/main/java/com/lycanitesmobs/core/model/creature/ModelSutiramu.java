@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateArachnid;
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -17,7 +18,7 @@ public class ModelSutiramu extends ModelTemplateArachnid {
 
     public ModelSutiramu(float shadowSize) {
         // Load Model:
-        this.initModel("sutiramu", DesertMobs.instance.group, "entity/sutiramu");
+        this.initModel("sutiramu", LycanitesMobs.modInfo, "entity/sutiramu");
 
         // Looking:
         this.lookHeadScaleX = 0f;

@@ -27,12 +27,12 @@ public class ElementManager extends JSONLoader {
 
 	/** Called during early start up, loads all global configs into this manager. **/
 	public void loadConfig() {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 	}
 
 
 	/** Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded. **/
-	public void loadAllFromJSON(GroupInfo groupInfo) {
+	public void loadAllFromJSON(ModInfo groupInfo) {
 		this.elements.clear();
 		this.loadAllJson(groupInfo, "Element", "elements", "name", false);
 		for(ElementInfo elementInfo : this.elements.values()) {
@@ -43,7 +43,7 @@ public class ElementManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(GroupInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
 		ElementInfo elementInfo = new ElementInfo();
 		elementInfo.loadFromJSON(json);
 		if(elementInfo.name == null) {

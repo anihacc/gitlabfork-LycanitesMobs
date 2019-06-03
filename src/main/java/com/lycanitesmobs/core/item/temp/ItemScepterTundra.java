@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
@@ -16,7 +17,7 @@ public class ItemScepterTundra extends ItemScepter {
 	// ==================================================
     public ItemScepterTundra() {
         super();
-    	this.group = ArcticMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "tundrascepter";
         this.setup();
     }

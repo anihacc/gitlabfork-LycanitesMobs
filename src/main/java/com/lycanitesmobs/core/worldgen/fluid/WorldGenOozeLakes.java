@@ -2,10 +2,9 @@ package com.lycanitesmobs.core.worldgen.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
 import com.lycanitesmobs.core.IWorldGenBase;
 import com.lycanitesmobs.core.config.ConfigSpawning;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -19,7 +18,7 @@ import java.util.Set;
 
 public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
     public String name = "Ooze Lakes";
-    public GroupInfo group = ArcticMobs.instance.group;
+    public ModInfo group = LycanitesMobs.modInfo;
     public double generateUndergroundChance = 0.04D;
     public double generateSurfaceChance = 0.125D;
 

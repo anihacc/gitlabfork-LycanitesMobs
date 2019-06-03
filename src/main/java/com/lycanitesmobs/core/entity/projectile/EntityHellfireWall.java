@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -7,7 +8,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
@@ -46,7 +47,7 @@ public class EntityHellfireWall extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfirewall";
-    	this.group = DemonMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(10);
     	this.setProjectileScale(20F);
         this.setSize(10F, 10F);

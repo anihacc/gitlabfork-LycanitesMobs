@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.util.JsonUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -30,7 +30,7 @@ public abstract class JSONLoader {
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
 	 */
-	public void loadAllJson(GroupInfo groupInfo, String name, String assetPath, String mapKey, boolean loadCustom) {
+	public void loadAllJson(ModInfo groupInfo, String name, String assetPath, String mapKey, boolean loadCustom) {
 		LycanitesMobs.printDebug(name, "Loading JSON " + name + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
@@ -79,7 +79,7 @@ public abstract class JSONLoader {
 	 * @param json The Json group name.
 	 * @param json The Json Object to read.
 	 */
-	public abstract void parseJson(GroupInfo groupInfo, String name, JsonObject json);
+	public abstract void parseJson(ModInfo groupInfo, String name, JsonObject json);
 
 
 	/**

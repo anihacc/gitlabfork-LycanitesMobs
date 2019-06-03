@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 import com.lycanitesmobs.core.renderer.layer.LayerYaleWool;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -23,7 +24,7 @@ public class ModelYale extends ModelObjOld {
     
     public ModelYale(float shadowSize) {
     	// Load Model:
-    	this.initModel("yale", MountainMobs.instance.group, "entity/yale");
+    	this.initModel("yale", LycanitesMobs.modInfo, "entity/yale");
 
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 0.85F, 1.0F);

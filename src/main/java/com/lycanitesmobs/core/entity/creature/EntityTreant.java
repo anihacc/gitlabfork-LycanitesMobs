@@ -159,14 +159,14 @@ public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlan
 		if("Wicked Treant".equals(this.getCustomNameTag())) {
 			String textureName = this.getTextureName() + "_wicked";
 			if (AssetManager.getTexture(textureName) == null)
-				AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 			return AssetManager.getTexture(textureName);
 		}
 
 		if("Salty Tree".equals(this.getCustomNameTag())) {
 			String textureName = this.getTextureName() + "_saltytree";
 			if (AssetManager.getTexture(textureName) == null)
-				AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 			return AssetManager.getTexture(textureName);
 		}
 

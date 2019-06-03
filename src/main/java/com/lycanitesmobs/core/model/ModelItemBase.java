@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
@@ -62,7 +62,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	// ==================================================
 	//                    Init Model
 	// ==================================================
-	public ModelItemBase initModel(String name, GroupInfo groupInfo, String path) {
+	public ModelItemBase initModel(String name, ModInfo groupInfo, String path) {
 		// Load Obj Model:
 		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
 		this.wavefrontParts = this.wavefrontObject.objObjects;

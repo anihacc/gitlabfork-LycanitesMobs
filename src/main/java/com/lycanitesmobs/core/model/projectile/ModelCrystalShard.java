@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObj;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -24,7 +25,7 @@ public class ModelCrystalShard extends ModelObj {
     public ModelCrystalShard(float shadowSize) {
 
 		// Load Model:
-		this.initModel("crystalshard", ElementalMobs.instance.group, "projectile/crystalshard");
+		this.initModel("crystalshard", LycanitesMobs.modInfo, "projectile/crystalshard");
     }
 
 

@@ -28,7 +28,7 @@ public class CreatureManager extends JSONLoader {
 	public Map<Class, CreatureInfo> creatureClassMap = new HashMap<>();
 
 	/** A list of mod groups that have loaded with this Creature Manager. **/
-	public List<GroupInfo> loadedGroups = new ArrayList<>();
+	public List<ModInfo> loadedGroups = new ArrayList<>();
 
 	/** A map containing all the global multipliers for each stat for each difficulty. **/
 	public Map<String, Double> difficultyMultipliers = new HashMap<>();
@@ -43,7 +43,7 @@ public class CreatureManager extends JSONLoader {
 	public boolean dlDungeonsLoaded = false;
 
 
-	/** Returns the main Creature Manager INSTANCE or creates it and returns it. **/
+	/** Returns the main Creature Manager instance or creates it and returns it. **/
 	public static CreatureManager getInstance() {
 		if(INSTANCE == null) {
 			INSTANCE = new CreatureManager();
@@ -63,9 +63,9 @@ public class CreatureManager extends JSONLoader {
 
 	/** Called during early start up, loads all global configs into this manager. **/
 	public void loadConfig() {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 		this.config.loadConfig(config);
-		this.spawnConfig.loadConfig(ConfigBase.getConfig(LycanitesMobs.group, "spawning"));
+		this.spawnConfig.loadConfig(ConfigBase.getConfig(LycanitesMobs.modInfo, "spawning"));
 
 		// Difficulty:
 		String[] difficultyNames = new String[] {"easy", "normal", "hard"};
@@ -119,7 +119,7 @@ public class CreatureManager extends JSONLoader {
 
 
 	/** Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded. **/
-	public void loadAllFromJSON(GroupInfo groupInfo) {
+	public void loadAllFromJSON(ModInfo groupInfo) {
 		try {
 			if(!this.loadedGroups.contains(groupInfo)) {
 				this.loadedGroups.add(groupInfo);
@@ -134,7 +134,7 @@ public class CreatureManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(GroupInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
 		CreatureInfo creatureInfo = new CreatureInfo(groupInfo);
 		creatureInfo.loadFromJSON(json);
 		if(creatureInfo.name == null) {
@@ -168,10 +168,10 @@ public class CreatureManager extends JSONLoader {
 	/**
 	 * Registers all creatures. Can only be called once and during init.
 	 */
-	public void registerAll(GroupInfo group) {
+	public void registerAll(ModInfo group) {
 		LycanitesMobs.printDebug("Creature", "Registering " + this.creatures.size() + " creatures from the group " + group.name + "...");
 		for(CreatureInfo creature : this.creatures.values()) {
-			if(creature.group != group)
+			if(creature.modInfo != group)
 				continue;
 			creature.register();
 		}
@@ -183,7 +183,7 @@ public class CreatureManager extends JSONLoader {
 	 */
 	public void reload() {
 		this.loadConfig();
-		for(GroupInfo group : this.loadedGroups) {
+		for(ModInfo group : this.loadedGroups) {
 			this.loadAllFromJSON(group);
 		}
 		this.initAll();

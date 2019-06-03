@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -25,7 +26,7 @@ public class ModelArgus extends ModelTemplateElemental {
     public ModelArgus(float shadowSize) {
 
 		// Load Model:
-		this.initModel("argus", ElementalMobs.instance.group, "entity/argus");
+		this.initModel("argus", LycanitesMobs.modInfo, "entity/argus");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

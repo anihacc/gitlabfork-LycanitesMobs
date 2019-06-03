@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateDragon;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,7 +17,7 @@ public class ModelMorock extends ModelTemplateDragon {
 
     public ModelMorock(float shadowSize) {
         // Load Model:
-        this.initModel("morock", PlainsMobs.instance.group, "entity/morock");
+        this.initModel("morock", LycanitesMobs.modInfo, "entity/morock");
 
         // Trophy:
         this.trophyScale = 0.8F;

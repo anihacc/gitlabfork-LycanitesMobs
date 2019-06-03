@@ -44,7 +44,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
         this.stepHeight = 1.0F;
         this.setAttackCooldownMax(10);
         
-        this.vespidHiveBuilding = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Vespid Hive Building", this.vespidHiveBuilding, "Set to false to stop Vespids from building hives all together.");
+        this.vespidHiveBuilding = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Vespid Hive Building", this.vespidHiveBuilding, "Set to false to stop Vespids from building hives all together.");
     }
 
     // ========== Init AI ==========

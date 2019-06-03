@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import com.lycanitesmobs.core.item.temp.ItemSwordBase;
 import com.lycanitesmobs.core.entity.creature.EntityRemobra;
 import net.minecraft.block.material.Material;
@@ -30,7 +31,7 @@ public class ItemSwordVenomAxeblade extends ItemSwordBase {
 	// ==================================================
     public ItemSwordVenomAxeblade(String itemName, String textureName) {
         super(Item.ToolMaterial.DIAMOND);
-    	this.group = SwampMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = itemName;
         this.setup();
         this.textureName = textureName;

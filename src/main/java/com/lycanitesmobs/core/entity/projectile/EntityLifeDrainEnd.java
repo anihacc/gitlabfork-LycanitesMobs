@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -29,7 +30,7 @@ public class EntityLifeDrainEnd extends EntityProjectileLaserEnd {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "lifedrain";
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     }
     
     // ========== Stats ==========

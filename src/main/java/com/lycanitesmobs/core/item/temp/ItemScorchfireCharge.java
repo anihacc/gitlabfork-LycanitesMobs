@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
@@ -15,7 +16,7 @@ public class ItemScorchfireCharge extends ItemCharge {
 	// ==================================================
     public ItemScorchfireCharge() {
         super();
-        this.group = InfernoMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "scorchfirecharge";
         this.setup();
     }

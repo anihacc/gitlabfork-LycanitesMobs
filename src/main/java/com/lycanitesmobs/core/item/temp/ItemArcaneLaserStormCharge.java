@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
@@ -15,7 +16,7 @@ public class ItemArcaneLaserStormCharge extends ItemCharge {
 	// ==================================================
     public ItemArcaneLaserStormCharge() {
         super();
-        this.group = MountainMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "arcanelaserstormcharge";
         this.setup();
     }

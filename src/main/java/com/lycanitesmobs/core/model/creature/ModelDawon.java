@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 
 public class ModelDawon extends ModelTemplateQuadruped {
 
@@ -14,7 +15,7 @@ public class ModelDawon extends ModelTemplateQuadruped {
 
     public ModelDawon(float shadowSize) {
         // Load Model:
-        this.initModel("dawon", JungleMobs.instance.group, "entity/dawon");
+        this.initModel("dawon", LycanitesMobs.modInfo, "entity/dawon");
 
         // Trophy:
         this.trophyScale = 0.8F;

@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.forestmobs.ForestMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelWarg extends ModelObjOld {
 
     public ModelWarg(float shadowSize) {
     	// Load Model:
-    	this.initModel("warg", ForestMobs.instance.group, "entity/warg");
+    	this.initModel("warg", LycanitesMobs.modInfo, "entity/warg");
     	
 
 

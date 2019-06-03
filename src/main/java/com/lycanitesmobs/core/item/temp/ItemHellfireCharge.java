@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemHellfireCharge extends ItemCharge {
 	// ==================================================
     public ItemHellfireCharge() {
         super();
-        this.group = DemonMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "hellfirecharge";
         this.setup();
     }

@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -19,7 +20,7 @@ public class ModelKhalk extends ModelObjOld {
     
     public ModelKhalk(float shadowSize) {
     	// Load Model:
-    	this.initModel("Khalk", InfernoMobs.instance.group, "entity/khalk");
+    	this.initModel("Khalk", LycanitesMobs.modInfo, "entity/khalk");
     	
 
 

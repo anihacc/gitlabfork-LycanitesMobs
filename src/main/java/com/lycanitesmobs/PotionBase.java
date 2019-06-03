@@ -18,7 +18,7 @@ public class PotionBase extends Potion {
 		this.name = name;
 		this.setRegistryName(LycanitesMobs.modid, name);
 		this.setPotionName("effect." + name);
-		AssetManager.addTexture("effect." + name, LycanitesMobs.group, "textures/effects/" + name + ".png");
+		AssetManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/effects/" + name + ".png");
 	}
 	
 	

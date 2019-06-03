@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,7 +19,7 @@ public class ModelGeonach extends ModelTemplateElemental {
     public ModelGeonach(float shadowSize) {
 
 		// Load Model:
-		this.initModel("geonach", ElementalMobs.instance.group, "entity/geonach");
+		this.initModel("geonach", LycanitesMobs.modInfo, "entity/geonach");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelAstaroth extends ModelTemplateQuadruped {
     
     public ModelAstaroth(float shadowSize) {
     	// Load Model:
-    	this.initModel("astaroth", DemonMobs.instance.group, "entity/astaroth");
+    	this.initModel("astaroth", LycanitesMobs.modInfo, "entity/astaroth");
 
 		// Looking:
 		this.lookHeadScaleX = 0F;

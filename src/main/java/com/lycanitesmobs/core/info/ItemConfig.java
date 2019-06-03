@@ -25,7 +25,7 @@ public class ItemConfig {
     //        Load Global Settings From Config
     // ==================================================
     public static void loadGlobalSettings() {
-        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
         config.setCategoryComment("Food Effect Durations", "Here you can set the durations in seconds for each of the food effects.");
         durationRaw = config.getInt("Food Effect Durations", "Raw Debuffs", durationRaw, "The negative effects from raw foods such as Raw Maka Meat.");
         durationCooked = config.getInt("Food Effect Durations", "Cooked Buffs", durationCooked, "The positive effects from cooked foods such as Cooked Joust Meat.");

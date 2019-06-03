@@ -33,7 +33,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
-		this.tremorExplosionStrength = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Tremor Explosion Strength", this.tremorExplosionStrength, "Controls the strength of a Tremor's explosion when attacking, set to -1 to disable completely.");
+		this.tremorExplosionStrength = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Tremor Explosion Strength", this.tremorExplosionStrength, "Controls the strength of a Tremor's explosion when attacking, set to -1 to disable completely.");
 		this.setupMob();
 
         this.stepHeight = 1.0F;

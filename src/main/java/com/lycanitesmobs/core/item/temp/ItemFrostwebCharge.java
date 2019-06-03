@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
@@ -15,7 +16,7 @@ public class ItemFrostwebCharge extends ItemCharge {
 	// ==================================================
     public ItemFrostwebCharge() {
         super();
-        this.group = ArcticMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "frostwebcharge";
         this.setup();
     }

@@ -1,12 +1,11 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,17 +31,19 @@ public class CommonProxy {
 	
 	
 	// ========== Client Only ==========
-    public void registerAssets() {}
-    public void registerRenders(GroupInfo groupInfo) {}
+    public void registerRenders(ModInfo groupInfo) {}
+	public void registerTextures() {}
+	public void registerModels(ModInfo groupInfo) {}
     public EntityPlayer getClientPlayer() { return null; }
 
 
     // ========== Renders ==========
-    public void addBlockRender(GroupInfo group, Block block) {}
-    public void addItemRender(GroupInfo group, Item item) {}
+    public void addBlockRender(ModInfo group, Block block) {}
+    public void addItemRender(ModInfo group, Item item) {}
 
 
     // ========== Creatures ==========
+	public void loadCreatureModel(CreatureInfo creature, String modelClassName) throws ClassNotFoundException {}
 	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {}
 
 

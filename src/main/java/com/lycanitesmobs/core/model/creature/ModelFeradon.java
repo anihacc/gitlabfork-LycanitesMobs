@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 
 public class ModelFeradon extends ModelTemplateQuadruped {
 
@@ -14,7 +15,7 @@ public class ModelFeradon extends ModelTemplateQuadruped {
 
     public ModelFeradon(float shadowSize) {
         // Load Model:
-        this.initModel("feradon", PlainsMobs.instance.group, "entity/feradon");
+        this.initModel("feradon", LycanitesMobs.modInfo, "entity/feradon");
 
         // Trophy:
         this.trophyScale = 0.8F;

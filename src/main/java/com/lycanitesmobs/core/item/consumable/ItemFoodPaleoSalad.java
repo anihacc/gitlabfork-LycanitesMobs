@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.lycanitesmobs.core.info.GroupInfo;
-import com.lycanitesmobs.core.item.consumable.ItemCustomFood;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -13,10 +12,10 @@ public class ItemFoodPaleoSalad extends ItemCustomFood {
     // ==================================================
   	//                    Constructors
   	// ==================================================
-	public ItemFoodPaleoSalad(String setItemName, GroupInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
+	public ItemFoodPaleoSalad(String setItemName, ModInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
 		super(setItemName, group, setTexturePath, feed, saturation, foodClass);
 	}
-	public ItemFoodPaleoSalad(String setItemName, GroupInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
+	public ItemFoodPaleoSalad(String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
 		super(setItemName, group, feed, saturation, foodClass);
 	}
 	

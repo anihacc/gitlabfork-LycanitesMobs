@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
@@ -87,7 +87,7 @@ public class ModelObjOld extends ModelCustom {
     // ==================================================
     //                    Init Model
     // ==================================================
-    public ModelObjOld initModel(String name, GroupInfo groupInfo, String path) {
+    public ModelObjOld initModel(String name, ModInfo groupInfo, String path) {
 		// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {

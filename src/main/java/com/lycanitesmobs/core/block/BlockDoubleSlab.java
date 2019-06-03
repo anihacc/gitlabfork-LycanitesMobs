@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,7 +15,7 @@ public class BlockDoubleSlab extends BlockPillar {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockDoubleSlab(Material material, GroupInfo group, String name, String slabName) {
+	public BlockDoubleSlab(Material material, ModInfo group, String name, String slabName) {
 		super(material, group, name);
         this.slabName = slabName;
 	}

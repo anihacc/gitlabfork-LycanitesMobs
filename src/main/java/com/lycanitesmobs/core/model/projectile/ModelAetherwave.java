@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObj;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -24,7 +25,7 @@ public class ModelAetherwave extends ModelObj {
     public ModelAetherwave(float shadowSize) {
 
 		// Load Model:
-		this.initModel("aetherwave", ElementalMobs.instance.group, "projectile/aetherwave");
+		this.initModel("aetherwave", LycanitesMobs.modInfo, "projectile/aetherwave");
     }
 
 

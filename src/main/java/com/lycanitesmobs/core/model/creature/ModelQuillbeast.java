@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 
 public class ModelQuillbeast extends ModelTemplateQuadruped {
 
@@ -14,7 +15,7 @@ public class ModelQuillbeast extends ModelTemplateQuadruped {
 
     public ModelQuillbeast(float shadowSize) {
         // Load Model:
-        this.initModel("quillbeast", PlainsMobs.instance.group, "entity/quillbeast");
+        this.initModel("quillbeast", LycanitesMobs.modInfo, "entity/quillbeast");
 
         // Trophy:
         this.trophyScale = 0.8F;

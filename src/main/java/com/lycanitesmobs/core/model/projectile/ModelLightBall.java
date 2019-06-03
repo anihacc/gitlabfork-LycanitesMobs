@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObj;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
@@ -28,7 +29,7 @@ public class ModelLightBall extends ModelObj {
     public ModelLightBall(float shadowSize) {
 
 		// Load Model:
-		this.initModel("lightball", ElementalMobs.instance.group, "projectile/lightball");
+		this.initModel("lightball", LycanitesMobs.modInfo, "projectile/lightball");
     }
 
 

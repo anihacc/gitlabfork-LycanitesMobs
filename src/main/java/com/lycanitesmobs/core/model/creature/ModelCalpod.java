@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateInsect;
-import com.lycanitesmobs.forestmobs.ForestMobs;
+
 
 public class ModelCalpod extends ModelTemplateInsect {
 
@@ -14,7 +15,7 @@ public class ModelCalpod extends ModelTemplateInsect {
 
     public ModelCalpod(float shadowSize) {
         // Load Model:
-        this.initModel("calpod", ForestMobs.instance.group, "entity/calpod");
+        this.initModel("calpod", LycanitesMobs.modInfo, "entity/calpod");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

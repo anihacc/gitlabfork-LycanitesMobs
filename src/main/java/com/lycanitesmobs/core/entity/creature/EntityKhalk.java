@@ -41,7 +41,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
         this.canGrow = true;
         this.babySpawnChance = 0.01D;
 
-        this.khalkLavaDeath = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Khalk Lava Death", this.khalkLavaDeath, "Set to false to disable Khalks from turning into a pile of lava on death.");
+        this.khalkLavaDeath = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Khalk Lava Death", this.khalkLavaDeath, "Set to false to disable Khalks from turning into a pile of lava on death.");
 		this.solidCollision = true;
         this.setupMob();
 

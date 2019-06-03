@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.special;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
@@ -22,7 +23,7 @@ public class ItemFrostyFur extends ItemBase {
 	// ==================================================
     public ItemFrostyFur() {
         super();
-        this.group = ArcticMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "frostyfur";
         this.setup();
     }

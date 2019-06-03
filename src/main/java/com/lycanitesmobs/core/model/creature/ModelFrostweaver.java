@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelFrostweaver extends ModelObjOld {
     
     public ModelFrostweaver(float shadowSize) {
     	// Load Model:
-    	this.initModel("Frostweaver", ArcticMobs.instance.group, "entity/frostweaver");
+    	this.initModel("Frostweaver", LycanitesMobs.modInfo, "entity/frostweaver");
     	
 
 

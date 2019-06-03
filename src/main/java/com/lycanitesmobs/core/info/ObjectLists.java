@@ -161,13 +161,13 @@ public class ObjectLists {
     //               Create Custom Items
     // ==================================================
     public static void createCustomItems() {
-        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "itemlists");
+        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
         config.setCategoryComment("Custom Objects", "here you can add your own custom items! These items wont do anything and will have no crafting recipes you can however have them drop from mobs by adding them to the custom mob drops. To add items just create a comma seperated list of names (spaces will be removed), you will need to use the item.youritem.name and item.youritem.description lang file entries in your resource pack to name your item and you will also need to save a texture for your item as: assets/lycanitesmobs/items/youritem.png");
         String customItems = config.getString("Custom Objects", "Custom Items", "");
         if("".equals(customItems))
             return;
         for(String itemEntry : customItems.replace(" ", "").split(",")) {
-            ObjectManager.addItem(itemEntry, new ItemCustom(itemEntry, LycanitesMobs.group));
+            ObjectManager.addItem(itemEntry, new ItemCustom(itemEntry, LycanitesMobs.modInfo));
         }
     }
 	
@@ -265,7 +265,7 @@ public class ObjectLists {
 	
 	// ========== Add From Config Value ==========
 	public static void addFromConfig(String listName) {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "itemlists");
+		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
 		config.setCategoryComment("item lists", "Here you can add items from vanilla Minecraft or other mods to various lists used by this mod. These are mostly food items that can be fed to farmable/tameable mobs. Format is: mod:itemname,metadata Multiple entries should be semicolon separated, be sure to use a colon and semicolon in the correct place.");
 		String customDropsString = config.getString("Item Lists", listName).replace(" ", "");
 		LycanitesMobs.printDebug("ItemSetup", "~O========== Custom " + listName + " ==========O~");

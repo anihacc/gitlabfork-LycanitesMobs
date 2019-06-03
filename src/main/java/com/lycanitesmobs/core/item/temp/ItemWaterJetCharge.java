@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemWaterJetCharge extends ItemCharge {
 	// ==================================================
     public ItemWaterJetCharge() {
         super();
-        this.group = FreshwaterMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "waterjetcharge";
         this.setup();
     }

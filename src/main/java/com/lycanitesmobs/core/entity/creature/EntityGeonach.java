@@ -35,7 +35,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.geonachBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Rare Geonach Block Break Radius", this.geonachBlockBreakRadius, "Controls how large the Celestial Geonach's block breaking radius is when it is charging towards its target. Set to -1 to disable. For their block breaking radius on spawn, see the ROCK spawn type features instead. Note that this is only for the extremely rare Geonach.");
+        this.geonachBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Rare Geonach Block Break Radius", this.geonachBlockBreakRadius, "Controls how large the Celestial Geonach's block breaking radius is when it is charging towards its target. Set to -1 to disable. For their block breaking radius on spawn, see the ROCK spawn type features instead. Note that this is only for the extremely rare Geonach.");
         this.setupMob();
 
         this.stepHeight = 1.0F;

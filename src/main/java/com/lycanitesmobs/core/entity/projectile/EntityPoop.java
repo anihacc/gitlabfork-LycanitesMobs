@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
@@ -38,7 +39,7 @@ public class EntityPoop extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "poop";
-    	this.group = JungleMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(2);
     	this.setProjectileScale(1.0F);
     }

@@ -34,7 +34,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
 
-        this.cacodemonGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Cacodemon Griefing", this.cacodemonGreifing, "Set to false to disable Cacodemon projectile explosions.");
+        this.cacodemonGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Cacodemon Griefing", this.cacodemonGreifing, "Set to false to disable Cacodemon projectile explosions.");
         this.setAttackCooldownMax(20);
         this.setupMob();
 

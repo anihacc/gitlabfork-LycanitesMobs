@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObj;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -17,7 +18,7 @@ public class ModelGorger extends ModelObj {
 
     public ModelGorger(float shadowSize) {
         // Load Model:
-        this.initModel("gorger", InfernoMobs.instance.group, "entity/gorger");
+        this.initModel("gorger", LycanitesMobs.modInfo, "entity/gorger");
 
         // Trophy:
         this.trophyScale = 0.8F;

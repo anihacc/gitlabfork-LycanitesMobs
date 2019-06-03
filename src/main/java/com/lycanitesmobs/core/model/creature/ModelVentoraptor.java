@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelVentoraptor extends ModelObjOld {
     
     public ModelVentoraptor(float shadowSize) {
     	// Load Model:
-    	this.initModel("Ventoraptor", PlainsMobs.instance.group, "entity/ventoraptor");
+    	this.initModel("Ventoraptor", LycanitesMobs.modInfo, "entity/ventoraptor");
     	
 
 

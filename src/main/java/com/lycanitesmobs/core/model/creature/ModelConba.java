@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -20,7 +21,7 @@ public class ModelConba extends ModelObjOld {
     
     public ModelConba(float shadowSize) {
     	// Load Model:
-        this.initModel("Conba", JungleMobs.instance.group, "entity/conba");
+        this.initModel("Conba", LycanitesMobs.modInfo, "entity/conba");
     	
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 0.6F, 0.3F);

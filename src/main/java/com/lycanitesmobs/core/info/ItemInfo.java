@@ -19,13 +19,13 @@ public class ItemInfo {
 	public Class<? extends ModelBase> modelClass;
 
 	/** The group that this item belongs to. **/
-	public GroupInfo group;
+	public ModInfo group;
 
 	/**
 	 * Constructor
 	 * @param group The group that this item definition will belong to.
 	 */
-	public ItemInfo(GroupInfo group) {
+	public ItemInfo(ModInfo group) {
 		this.group = group;
 	}
 

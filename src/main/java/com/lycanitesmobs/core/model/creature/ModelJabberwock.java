@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelJabberwock extends ModelObjOld {
     
     public ModelJabberwock(float shadowSize) {
     	// Load Model:
-    	this.initModel("jabberwock", MountainMobs.instance.group, "entity/jabberwock");
+    	this.initModel("jabberwock", LycanitesMobs.modInfo, "entity/jabberwock");
 
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 2.2F, 0.1F);

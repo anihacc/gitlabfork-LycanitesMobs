@@ -38,7 +38,7 @@ public class EntityBeholder extends EntityCreatureRideable {
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
-		this.beholderGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Beholder Griefing", this.beholderGreifing, "Set to false to disable Beholder projectile explosions.");
+		this.beholderGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Beholder Griefing", this.beholderGreifing, "Set to false to disable Beholder projectile explosions.");
 		this.solidCollision = true;
         this.setupMob();
 

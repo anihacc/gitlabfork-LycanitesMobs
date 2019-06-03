@@ -32,7 +32,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
         
-        this.epionGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Epion Griefing", this.epionGreifing, "Set to false to disable Epions falling and exploding in sunlight.");
+        this.epionGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Epion Griefing", this.epionGreifing, "Set to false to disable Epions falling and exploding in sunlight.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -142,7 +142,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
 
 		String textureName = this.getTextureName() + "_vampirebat";
 		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+			AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 		return AssetManager.getTexture(textureName);
 	}
 }

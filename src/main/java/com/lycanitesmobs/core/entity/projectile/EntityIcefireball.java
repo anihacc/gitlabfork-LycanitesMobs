@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -37,7 +38,7 @@ public class EntityIcefireball extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "icefire";
-    	this.group = ArcticMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(2);
     	this.setProjectileScale(2F);
         this.knockbackChance = 0.5D;

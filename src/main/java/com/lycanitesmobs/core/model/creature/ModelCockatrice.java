@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateDragon;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,7 +17,7 @@ public class ModelCockatrice extends ModelTemplateDragon {
 
     public ModelCockatrice(float shadowSize) {
         // Load Model:
-        this.initModel("cockatrice", JungleMobs.instance.group, "entity/cockatrice");
+        this.initModel("cockatrice", LycanitesMobs.modInfo, "entity/cockatrice");
 
 		// Looking:
 		this.lookHeadScaleX = 0.8f;

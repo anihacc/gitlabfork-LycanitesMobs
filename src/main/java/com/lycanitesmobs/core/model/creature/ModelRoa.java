@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateAquatic;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.saltwatermobs.SaltwaterMobs;
+
 import com.lycanitesmobs.core.renderer.layer.LayerRoa;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelRoa extends ModelTemplateAquatic {
 
     public ModelRoa(float shadowSize) {
         // Load Model:
-        this.initModel("roa", SaltwaterMobs.instance.group, "entity/roa");
+        this.initModel("roa", LycanitesMobs.modInfo, "entity/roa");
 
         // Trophy:
         this.trophyScale = 0.8F;

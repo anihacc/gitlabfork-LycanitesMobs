@@ -108,7 +108,7 @@ public class EntityJabberwock extends EntityCreatureTameable implements IMob {
 
         String textureName = this.getTextureName() + "_rudolph";
         if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
         return AssetManager.getTexture(textureName);
     }
 }

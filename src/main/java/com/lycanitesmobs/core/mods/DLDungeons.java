@@ -44,11 +44,41 @@ public class DLDungeons {
 	// ========== Add Mob ==========
 	/**
 	 * Adds a mob entry to the DLDungeon Themes.
-	 * @param creatureInfo The MobInfo class of the mob, this will be used to get the theme amongst other things.
+	 * Themes are: FOREST, PLAINS, MOUNTAIN, SWAMP, WATER, DESERT, WASTELAND, JUNGLE, FROZEN, NETHER, END, MUSHROOM, MAGICAL, DUNGEON, NECRO, URBAN, FIERY, SHADOW, PARADISE
+	 * @param creatureInfo The creature info of the mob, this will be used to get the themes amongst other things.
 	 */
 	public static void addMob(CreatureInfo creatureInfo) {
 		String mobName = creatureInfo.getEntityId();
-		String themes = creatureInfo.group.dungeonThemes;
+
+		// Get Themes:
+		String themes = "";
+		boolean first = true;
+		for(String biomeTag : creatureInfo.creatureSpawn.biomeTags) {
+			if(!first) {
+				themes += ",";
+			}
+			first = false;
+
+			if (biomeTag.charAt(0) == '-' || biomeTag.charAt(0) == '+') {
+				biomeTag = biomeTag.substring(1);
+			}
+
+			if("DRY".equalsIgnoreCase(biomeTag)) {
+				biomeTag = "DESERT";
+			}
+			else if("COLD".equalsIgnoreCase(biomeTag)) {
+				biomeTag = "FROZEN";
+			}
+			else if("VOID".equalsIgnoreCase(biomeTag)) {
+				biomeTag = "SHADOW";
+			}
+			else if("SPOOKY".equalsIgnoreCase(biomeTag)) {
+				biomeTag = "NECRO";
+			}
+
+			themes += biomeTag;
+		}
+
 		if(!"".equalsIgnoreCase(themes) && creatureInfo.dungeonLevel > 0) {
 			try {
 				Class dlDungeonsAPI = Class.forName("jaredbgreat.dldungeons.api.DLDungeonsAPI");

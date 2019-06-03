@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,12 +20,10 @@ public class ModelEpion extends ModelObjOld {
     
     public ModelEpion(float shadowSize) {
     	// Load Model:
-    	this.initModel("epion", ShadowMobs.instance.group, "entity/epion");
-    	
+		this.initModel("epion", LycanitesMobs.modInfo, "entity/epion");
 
 
-    	
-    	// Set Rotation Centers:
+		// Set Rotation Centers:
     	setPartCenter("head", 0F, 0.5F, 0.55F);
     	setPartCenter("body", 0F, 0.5F, 0.0F);
     	

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.block.BlockBase;
@@ -30,7 +30,7 @@ public class BlockFrostweb extends BlockBase {
         this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
-		this.group = ArcticMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "frostweb";
 		this.setup();
 		

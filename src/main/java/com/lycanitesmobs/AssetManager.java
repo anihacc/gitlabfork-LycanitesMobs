@@ -3,8 +3,7 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
-import com.lycanitesmobs.core.model.ModelCustom;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.model.ModelItemBase;
 import net.minecraft.client.model.ModelBase;
@@ -12,8 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -33,13 +30,13 @@ public class AssetManager {
     //                        Add
     // ==================================================
 	// ========== Texture ==========
-	public static void addTexture(String name, GroupInfo group, String path) {
+	public static void addTexture(String name, ModInfo group, String path) {
 		name = name.toLowerCase();
 		textures.put(name, new ResourceLocation(group.filename, path));
 	}
 	
 	// ========== Texture Group ==========
-	public static void addTextureGroup(String name, GroupInfo group, String[] paths) {
+	public static void addTextureGroup(String name, ModInfo group, String[] paths) {
 		name = name.toLowerCase();
         ResourceLocation[] textureGroup = new ResourceLocation[paths.length];
 		for(int i = 0; i < paths.length; i++)
@@ -48,7 +45,7 @@ public class AssetManager {
 	}
 	
 	// ========== Sound ==========
-	public static void addSound(String name, GroupInfo group, String path) {
+	public static void addSound(String name, ModInfo group, String path) {
 		name = name.toLowerCase();
         ResourceLocation resourceLocation = new ResourceLocation(group.filename, path);
         SoundEvent soundEvent = new SoundEvent(resourceLocation);
@@ -64,7 +61,7 @@ public class AssetManager {
 	}
 	
 	// ========== Obj Model ==========
-	public static void addObjModel(String name, GroupInfo group, String path) {
+	public static void addObjModel(String name, ModInfo group, String path) {
 		name = name.toLowerCase();
 		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(group.filename, "models/" + path + ".obj")));
 	}
@@ -137,7 +134,7 @@ public class AssetManager {
 			return null;
 		return objModels.get(name);
 	}
-	public static IModel getObjModel(String name, GroupInfo group, String path) {
+	public static IModel getObjModel(String name, ModInfo group, String path) {
 		name = name.toLowerCase();
 		if(!objModels.containsKey(name))
 			addObjModel(name, group, path);

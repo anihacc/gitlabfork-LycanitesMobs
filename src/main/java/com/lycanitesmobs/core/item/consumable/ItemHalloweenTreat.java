@@ -27,7 +27,7 @@ public class ItemHalloweenTreat extends ItemBase {
 	// ==================================================
     public ItemHalloweenTreat() {
         super();
-        this.group = LycanitesMobs.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "halloweentreat";
         this.setup();
 		AssetManager.addSound(this.itemName + "_good", this.group, "item." + this.itemName + ".good");

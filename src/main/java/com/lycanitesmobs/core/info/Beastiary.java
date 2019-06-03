@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.info;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.network.MessageBeastiary;
@@ -191,7 +190,7 @@ public class Beastiary {
 	 * @param group Group to check with.
 	 * @return True if the player has at least one creature form the specific group.
 	 */
-	public int getCreaturesDescovered(GroupInfo group) {
+	public int getCreaturesDescovered(ModInfo group) {
 		if(this.creatureKnowledgeList.size() == 0) {
 			return 0;
 		}
@@ -199,7 +198,7 @@ public class Beastiary {
 		int creaturesDescovered = 0;
 		for(Entry<String, CreatureKnowledge> creatureKnowledgeEntry : this.creatureKnowledgeList.entrySet()) {
 			if(creatureKnowledgeEntry.getValue() != null) {
-				if (creatureKnowledgeEntry.getValue().getCreatureInfo().group == group) {
+				if (creatureKnowledgeEntry.getValue().getCreatureInfo().modInfo == group) {
 					creaturesDescovered++;
 				}
 			}

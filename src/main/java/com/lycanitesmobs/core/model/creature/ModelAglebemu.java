@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.entity.EntityLiving;
 
 public class ModelAglebemu extends ModelTemplateQuadruped {
@@ -16,7 +17,7 @@ public class ModelAglebemu extends ModelTemplateQuadruped {
 
     public ModelAglebemu(float shadowSize) {
         // Load Model:
-        this.initModel("aglebemu", SwampMobs.instance.group, "entity/aglebemu");
+        this.initModel("aglebemu", LycanitesMobs.modInfo, "entity/aglebemu");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

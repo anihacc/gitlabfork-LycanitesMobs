@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,7 +26,7 @@ public class ModelReiver extends ModelTemplateElemental {
     public ModelReiver(float shadowSize) {
 
     	// Load Model:
-    	this.initModel("reiver", ElementalMobs.instance.group, "entity/reiver");
+    	this.initModel("reiver", LycanitesMobs.modInfo, "entity/reiver");
 
         // Tropy:
         this.trophyScale = 1.0F;

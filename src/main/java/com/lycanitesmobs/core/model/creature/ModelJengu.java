@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,7 +26,7 @@ public class ModelJengu extends ModelTemplateElemental {
 
     public ModelJengu(float shadowSize) {
     	// Load Model:
-    	this.initModel("jengu", ElementalMobs.instance.group, "entity/jengu");
+    	this.initModel("jengu", LycanitesMobs.modInfo, "entity/jengu");
     	
     	// Trophy:
         this.trophyScale = 1.2F;

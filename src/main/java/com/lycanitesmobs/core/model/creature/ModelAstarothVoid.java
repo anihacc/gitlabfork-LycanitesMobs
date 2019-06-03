@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,7 +19,7 @@ public class ModelAstarothVoid extends ModelAstaroth {
 
     public ModelAstarothVoid(float shadowSize) {
     	// Load Model:
-    	this.initModel("astaroth_void", DemonMobs.instance.group, "entity/astaroth_void");
+    	this.initModel("astaroth_void", LycanitesMobs.modInfo, "entity/astaroth_void");
 
 		// Looking:
 		this.lookHeadScaleX = 0F;

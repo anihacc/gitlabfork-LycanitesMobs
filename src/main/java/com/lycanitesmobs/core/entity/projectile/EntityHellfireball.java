@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -40,7 +41,7 @@ public class EntityHellfireball extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfire";
-    	this.group = DemonMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(4);
     	this.setProjectileScale(2.5F);
     }

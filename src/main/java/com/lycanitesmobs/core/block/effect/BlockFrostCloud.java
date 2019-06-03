@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
@@ -33,7 +34,7 @@ public class BlockFrostCloud extends BlockBase {
         this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
 		
 		// Properties:
-		this.group = ArcticMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "frostcloud";
 		this.setup();
 		

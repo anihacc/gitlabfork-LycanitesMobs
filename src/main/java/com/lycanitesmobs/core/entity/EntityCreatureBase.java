@@ -4275,7 +4275,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 			textureName += "_" + suffix;
 		}
 		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+			AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 		return AssetManager.getTexture(textureName);
 	}
 
@@ -4292,7 +4292,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         String textureName = this.getTextureName();
         textureName += "_" + subName;
         if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.group, "textures/entity/" + textureName.toLowerCase() + ".png");
+            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
         return AssetManager.getTexture(textureName);
     }
 

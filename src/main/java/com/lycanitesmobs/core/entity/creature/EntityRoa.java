@@ -52,7 +52,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         this.canGrow = true;
         this.setupMob();
 
-        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Roa Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Roa's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 2 blocks in size itself which the range must cover.");
+        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Roa Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Roa's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 2 blocks in size itself which the range must cover.");
     }
 
     // ========== Init AI ==========

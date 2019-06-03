@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -31,7 +32,7 @@ public class EntityHellfireOrb extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfireorb";
-    	this.group = DemonMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(0);
     	this.setProjectileScale(2F);
         this.movement = false;

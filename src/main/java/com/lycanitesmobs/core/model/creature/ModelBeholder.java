@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelBeholder extends ModelObjOld {
     
     public ModelBeholder(float shadowSize) {
     	// Load Model:
-    	this.initModel("Beholder", MountainMobs.instance.group, "entity/beholder");
+    	this.initModel("Beholder", LycanitesMobs.modInfo, "entity/beholder");
     	
 
 

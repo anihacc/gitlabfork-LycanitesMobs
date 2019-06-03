@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,7 @@ public class ModelLurker extends ModelObjOld {
     
     public ModelLurker(float shadowSize) {
     	// Load Model:
-    	this.initModel("Lurker", SwampMobs.instance.group, "entity/lurker");
+    	this.initModel("Lurker", LycanitesMobs.modInfo, "entity/lurker");
     	
 
 

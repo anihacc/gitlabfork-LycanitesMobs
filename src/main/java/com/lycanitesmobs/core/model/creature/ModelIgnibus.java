@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateDragon;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -16,7 +17,7 @@ public class ModelIgnibus extends ModelTemplateDragon {
 
     public ModelIgnibus(float shadowSize) {
         // Load Model:
-        this.initModel("ignibus", InfernoMobs.instance.group, "entity/ignibus");
+        this.initModel("ignibus", LycanitesMobs.modInfo, "entity/ignibus");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

@@ -37,7 +37,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 		this.isAggressiveByDefault = false;
         this.stepHeight = 1.0F;
 
-		this.chestProtection = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Aegis Chest Protection", this.chestProtection, "Set to false to stop Aegis from protecting village chests.");
+		this.chestProtection = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Aegis Chest Protection", this.chestProtection, "Set to false to stop Aegis from protecting village chests.");
 	}
 
     // ========== Init AI ==========

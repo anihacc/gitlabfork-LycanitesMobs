@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.config;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -17,7 +17,7 @@ public class ConfigSpawning extends ConfigBase {
 	
 	// ========== Config Collections ==========
 	// Get Config:
-     public static ConfigSpawning getConfig(GroupInfo group, String configName) {
+     public static ConfigSpawning getConfig(ModInfo group, String configName) {
          String configFileName = group.filename + "-" + configName.toLowerCase();
          if(!configs.containsKey(configFileName))
              registerConfig(new ConfigSpawning(group, configName));
@@ -59,7 +59,7 @@ public class ConfigSpawning extends ConfigBase {
 	// ========================================
 	//				 Constructor
 	// ========================================
-    public ConfigSpawning(GroupInfo group, String name) {
+    public ConfigSpawning(ModInfo group, String name) {
         super(group, name);
     }
 

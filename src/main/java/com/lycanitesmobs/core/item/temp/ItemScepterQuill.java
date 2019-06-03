@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityQuill;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemScepterQuill extends ItemScepter {
 	// ==================================================
     public ItemScepterQuill() {
         super();
-    	this.group = PlainsMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "quillscepter";
         this.setup();
         this.textureName = "scepterquill";

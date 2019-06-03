@@ -40,7 +40,7 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
         this.canGrow = true;
         this.setupMob();
 
-        this.swarmLimit = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Abtu Swarm Limit", this.swarmLimit, "Limits how many Abtu there can be when swarming.");
+        this.swarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Abtu Swarm Limit", this.swarmLimit, "Limits how many Abtu there can be when swarming.");
     }
 
     // ========== Init AI ==========

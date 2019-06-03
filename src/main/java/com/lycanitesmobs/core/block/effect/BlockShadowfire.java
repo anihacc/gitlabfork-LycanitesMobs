@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +35,7 @@ public class BlockShadowfire extends BlockFireBase {
 	//                   Constructor
 	// ==================================================
 	public BlockShadowfire() {
-		super(Material.FIRE, ShadowMobs.instance.group, "shadowfire");
+		super(Material.FIRE, LycanitesMobs.modInfo, "shadowfire");
 		
 		// Stats:
 		this.tickRate = 30;

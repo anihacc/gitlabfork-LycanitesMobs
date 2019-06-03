@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.block.fluid;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.block.BlockFluidBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +29,7 @@ public class BlockFluidOoze extends BlockFluidBase {
 	//                   Constructor
 	// ==================================================
 	public BlockFluidOoze(Fluid fluid) {
-        super(fluid, Material.WATER, ArcticMobs.instance.group, "ooze");
+        super(fluid, Material.WATER, LycanitesMobs.modInfo, "ooze");
 
         this.setLightOpacity(0);
         this.setLightLevel(0.25F);

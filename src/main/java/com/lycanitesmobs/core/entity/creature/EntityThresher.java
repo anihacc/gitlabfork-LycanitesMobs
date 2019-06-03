@@ -57,7 +57,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         // Stats:
         this.entityCollisionReduction = 0.9F;
 
-        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Thresher Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Thresher's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 10 blocks in size itself which the range must cover.");
+        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Thresher Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Thresher's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 10 blocks in size itself which the range must cover.");
     }
 
     // ========== Init AI ==========

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateDragon;
-import com.lycanitesmobs.saltwatermobs.SaltwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -18,7 +18,7 @@ public class ModelQuetzodracl extends ModelTemplateDragon {
 
     public ModelQuetzodracl(float shadowSize) {
         // Load Model:
-        this.initModel("quetzodracl", SaltwaterMobs.instance.group, "entity/quetzodracl");
+        this.initModel("quetzodracl", LycanitesMobs.modInfo, "entity/quetzodracl");
 
         // Trophy:
         this.trophyScale = 0.8F;

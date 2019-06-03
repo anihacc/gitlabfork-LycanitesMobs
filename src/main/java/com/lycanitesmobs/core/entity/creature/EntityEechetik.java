@@ -2,25 +2,18 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.PotionBase;
-import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -45,7 +38,7 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
         this.attribute = EnumCreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         
-        this.eechetikMyceliumRadius = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Eechetik Mycelium Radius", this.eechetikMyceliumRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
+        this.eechetikMyceliumRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Eechetik Mycelium Radius", this.eechetikMyceliumRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;

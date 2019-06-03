@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelWendigo extends ModelObjOld {
     
     public ModelWendigo(float shadowSize) {
     	// Load Model:
-    	this.initModel("Wendigo", ArcticMobs.instance.group, "entity/wendigo");
+    	this.initModel("Wendigo", LycanitesMobs.modInfo, "entity/wendigo");
 
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 4.392F, -0.216F);

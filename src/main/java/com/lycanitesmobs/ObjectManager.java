@@ -42,7 +42,7 @@ public class ObjectManager {
 	// Maps:
 	public static Map<String, Block> blocks = new HashMap<>();
     public static Map<String, Item> items = new HashMap<>();
-    public static Map<Item, GroupInfo> itemGroups = new HashMap<>();
+    public static Map<Item, ModInfo> itemGroups = new HashMap<>();
 	public static Map<String, Fluid> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
@@ -58,12 +58,12 @@ public class ObjectManager {
 
     public static Map<String, StatBase> stats = new HashMap<>();
 	
-	public static GroupInfo currentGroup;
+	public static ModInfo currentGroup;
 	
     // ==================================================
     //                        Setup
     // ==================================================
-	public static void setCurrentGroup(GroupInfo group) {
+	public static void setCurrentGroup(ModInfo group) {
 		currentGroup = group;
 	}
 	
@@ -92,7 +92,7 @@ public class ObjectManager {
 
 	// ========== Fluid ==========
 	public static Fluid addFluid(String fluidName) {
-        GroupInfo group = currentGroup;
+        ModInfo group = currentGroup;
         Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
 		fluids.put(fluidName, fluid);
 		if(!FluidRegistry.registerFluid(fluid)) {
@@ -162,7 +162,7 @@ public class ObjectManager {
 	// ========== Projectile ==========
     public static void addProjectile(String name, Class entityClass, int updateFrequency, boolean impactSound) {
         name = name.toLowerCase();
-        GroupInfo group = currentGroup;
+        ModInfo group = currentGroup;
         AssetManager.addSound(name, group, "projectile." + name);
         if(impactSound) {
 			AssetManager.addSound(name + "_impact", group, "projectile." + name + ".impact");
@@ -291,10 +291,10 @@ public class ObjectManager {
     }
 
 	// ========== Entities ==========
-	public static void registerEntities(RegistryEvent.Register<EntityEntry> event, GroupInfo group) {
+	public static void registerEntities(RegistryEvent.Register<EntityEntry> event, ModInfo group) {
 		LycanitesMobs.printDebug("Creature", "Forge registering all " + CreatureManager.getInstance().creatures.size() + " creatures from the group: " + group.name + "...");
 		for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
-			if(creatureInfo.group != group) {
+			if(creatureInfo.modInfo != group) {
 				continue;
 			}
 			EntityEntry entityEntry = new EntityEntry(creatureInfo.entityClass, creatureInfo.getEntityId());

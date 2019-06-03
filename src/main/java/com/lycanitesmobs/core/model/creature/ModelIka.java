@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.saltwatermobs.SaltwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelIka extends ModelObjOld {
 
     public ModelIka(float shadowSize) {
     	// Load Model:
-    	this.initModel("ika", SaltwaterMobs.instance.group, "entity/ika");
+    	this.initModel("ika", LycanitesMobs.modInfo, "entity/ika");
     	
 
 

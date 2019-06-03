@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelClink extends ModelObjOld {
     
     public ModelClink(float shadowSize) {
     	// Load Model:
-    	this.initModel("Clink", DesertMobs.instance.group, "entity/clink");
+    	this.initModel("Clink", LycanitesMobs.modInfo, "entity/clink");
     	
 
 

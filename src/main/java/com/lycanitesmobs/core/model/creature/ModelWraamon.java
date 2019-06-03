@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,7 @@ public class ModelWraamon extends ModelTemplateBiped {
 
     public ModelWraamon(float shadowSize) {
     	// Load Model:
-    	this.initModel("wraamon", ShadowMobs.instance.group, "entity/wraamon");
+    	this.initModel("wraamon", LycanitesMobs.modInfo, "entity/wraamon");
 
     	// Looking:
 		this.lookHeadScaleX = 0.8F;

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.block.fluid;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFluidBase;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +27,7 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	//                   Constructor
 	// ==================================================
 	public BlockFluidPureLava(Fluid fluid) {
-		super(fluid, Material.LAVA, InfernoMobs.instance.group, "purelava");
+		super(fluid, Material.LAVA, LycanitesMobs.modInfo, "purelava");
 
         this.setLightOpacity(1);
         this.setLightLevel(1.0F);

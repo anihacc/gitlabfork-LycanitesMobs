@@ -48,7 +48,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
         this.isLavaCreature = true;
         this.hasAttackSound = false;
 
-        this.lobberMelting = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Rare Lobber Melting", this.lobberMelting, "Set to false to disable Umber Lobbers melting certain blocks.");
+        this.lobberMelting = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Rare Lobber Melting", this.lobberMelting, "Set to false to disable Umber Lobbers melting certain blocks.");
         this.setupMob();
 
         this.setPathPriority(PathNodeType.LAVA, 0F);

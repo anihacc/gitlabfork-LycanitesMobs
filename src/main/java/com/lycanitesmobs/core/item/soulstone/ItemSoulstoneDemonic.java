@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.soulstone;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import com.lycanitesmobs.ExtendedPlayer;
@@ -19,7 +19,7 @@ public class ItemSoulstoneDemonic extends ItemSoulstone {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstoneDemonic(GroupInfo group) {
+    public ItemSoulstoneDemonic(ModInfo group) {
         super(group, "demonic");
     }
     

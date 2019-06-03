@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateAquatic;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import com.lycanitesmobs.core.renderer.layer.LayerThresher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelThresher extends ModelTemplateAquatic {
 
     public ModelThresher(float shadowSize) {
         // Load Model:
-        this.initModel("thresher", FreshwaterMobs.instance.group, "entity/thresher");
+        this.initModel("thresher", LycanitesMobs.modInfo, "entity/thresher");
 
         // Looking:
         this.lookHeadScaleX = 0.5f;

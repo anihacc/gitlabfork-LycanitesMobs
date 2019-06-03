@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelTarantula extends ModelObjOld {
     
     public ModelTarantula(float shadowSize) {
     	// Load Model:
-        this.initModel("Tarantula", JungleMobs.instance.group, "entity/tarantula");
+        this.initModel("Tarantula", LycanitesMobs.modInfo, "entity/tarantula");
     	
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 0.3F, 0.2F);

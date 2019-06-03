@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +16,7 @@ public class ItemBoulderBlastCharge extends ItemCharge {
 	// ==================================================
     public ItemBoulderBlastCharge() {
         super();
-        this.group = MountainMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "boulderblastcharge";
         this.setup();
     }

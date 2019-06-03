@@ -1,12 +1,13 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -30,7 +31,7 @@ public class ModelWraith extends ModelTemplateElemental {
     public ModelWraith(float shadowSize) {
 
 		// Load Model:
-		this.initModel("wraith", ElementalMobs.instance.group, "entity/wraith");
+		this.initModel("wraith", LycanitesMobs.modInfo, "entity/wraith");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

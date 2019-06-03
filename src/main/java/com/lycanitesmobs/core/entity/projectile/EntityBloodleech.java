@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,7 +33,7 @@ public class EntityBloodleech extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "bloodleech";
-    	this.group = ShadowMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(2);
         this.knockbackChance = 0.5D;
     	

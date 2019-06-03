@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,7 @@ public class ModelEechetik extends ModelTemplateElemental {
     public ModelEechetik(float shadowSize) {
 
 		// Load Model:
-		this.initModel("eechetik", ElementalMobs.instance.group, "entity/eechetik");
+		this.initModel("eechetik", LycanitesMobs.modInfo, "entity/eechetik");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

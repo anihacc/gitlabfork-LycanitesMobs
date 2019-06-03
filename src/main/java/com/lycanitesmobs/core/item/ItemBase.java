@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item;
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.compatibility.Thaumcraft;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -33,7 +33,7 @@ public class ItemBase extends Item {//implements IScanThing {
 	public static int descriptionWidth = 200;
 	
 	public String itemName = "Item";
-	public GroupInfo group = LycanitesMobs.group;
+	public ModInfo group = LycanitesMobs.modInfo;
 	public String textureName = "item";
 	
 	// ==================================================

@@ -72,7 +72,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 
         // Load Shear Drop From Config:
 		this.woolDrop = new ItemDrop(new ItemStack(Blocks.WOOL), 1).setMinAmount(1).setMaxAmount(3);
-		this.woolDrop = ConfigBase.getConfig(this.creatureInfo.group, "general").getItemDrop("Features", "Yale Shear Drop", this.woolDrop, "The item dropped by Yales when sheared. Format is: itemid,metadata,quantitymin,quantitymax,chance");
+		this.woolDrop = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getItemDrop("Features", "Yale Shear Drop", this.woolDrop, "The item dropped by Yales when sheared. Format is: itemid,metadata,quantitymin,quantitymax,chance");
     }
 
     // ========== Init AI ==========

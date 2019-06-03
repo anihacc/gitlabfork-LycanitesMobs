@@ -2,15 +2,11 @@ package com.lycanitesmobs;
 
 
 import com.lycanitesmobs.core.block.*;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +35,7 @@ public class BlockMaker {
      * @param creationItem The block, item or item stack used to create this stone block from vanilla stone, such as how Nether Warts are used for demonstone (can be null for none).
      * @param creationBlock The block (can be item or item stack also) used in the base crafting recipe, usually cobblestone (null will deault to cobblestone).
      * **/
-    public static void addStoneBlocks(GroupInfo group, String stoneName, Object creationItem, Object creationBlock) {
+    public static void addStoneBlocks(ModInfo group, String stoneName, Object creationItem, Object creationBlock) {
         float hardness = 2F;
         float resistance = 10F;
 
@@ -69,7 +65,7 @@ public class BlockMaker {
 
         STONE_ENTRIES.add(new BlockMakerEntry(stoneName, creationItem, creationBlock));
     }
-    public static void addStoneBlocks(GroupInfo group, String stoneName, Object creationItem) {
+    public static void addStoneBlocks(ModInfo group, String stoneName, Object creationItem) {
         addStoneBlocks(group, stoneName, creationItem, Blocks.COBBLESTONE);
     }
 }

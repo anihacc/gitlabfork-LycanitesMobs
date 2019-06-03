@@ -7,13 +7,18 @@ import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.GuiTabMain;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.gui.TabManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
 import com.lycanitesmobs.core.model.ModelCustom;
+import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
+import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
+import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
+import com.lycanitesmobs.core.model.projectile.ModelLightBall;
 import com.lycanitesmobs.core.renderer.EquipmentPartRenderer;
 import com.lycanitesmobs.core.renderer.EquipmentRenderer;
 import com.lycanitesmobs.core.renderer.RenderRegister;
@@ -77,11 +82,11 @@ public class ClientProxy extends CommonProxy {
 	
 	// ========== Register Assets ==========
 	@Override
-    public void registerAssets() {
+    public void registerTextures() {
         ObjectManager.RegisterModels();
 
 		// ========== Add GUI Textures ==========
-		GroupInfo group = LycanitesMobs.group;
+		ModInfo group = LycanitesMobs.modInfo;
 		AssetManager.addTexture("GUIInventoryCreature", group, "textures/guis/inventory_creature.png");
 
 		// Beastiary:
@@ -118,7 +123,7 @@ public class ClientProxy extends CommonProxy {
 	
 	// ========== Register Renders ==========
 	@Override
-    public void registerRenders(GroupInfo groupInfo) {
+    public void registerRenders(ModInfo groupInfo) {
 
         // Equipment Parts:
 		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader()); // TODO Unused?
@@ -134,8 +139,23 @@ public class ClientProxy extends CommonProxy {
         renderRegister.registerRenderFactories();
     }
 
+	// ========== Register Models ==========
+	@Override
+	public void registerModels(ModInfo groupInfo) {
+		// Projectiles:
+		AssetManager.addModel("lightball", new ModelLightBall());
+		AssetManager.addModel("crystalshard", new ModelCrystalShard());
+		AssetManager.addModel("aetherwave", new ModelAetherwave());
+		AssetManager.addModel("chaosorb", new ModelChaosOrb());
+	}
+
 
 	// ========== Creatures ==========
+	@Override
+	public void loadCreatureModel(CreatureInfo creature, String modelClassName) throws ClassNotFoundException {
+		creature.modelClass = (Class<? extends ModelCustom>) Class.forName(modelClassName);
+	}
+
 	@Override
 	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {
 		subspecies.modelClass = (Class<? extends ModelCustom>) Class.forName(modelClassName);
@@ -150,7 +170,7 @@ public class ClientProxy extends CommonProxy {
 
 
     // ========== Renders ==========
-    public void addBlockRender(GroupInfo group, Block block) {
+    public void addBlockRender(ModInfo group, Block block) {
         // Fluids:
         if(block instanceof BlockFluidBase) {
             BlockFluidBase blockFluid = (BlockFluidBase)block;
@@ -170,9 +190,9 @@ public class ClientProxy extends CommonProxy {
         this.addItemRender(group, Item.getItemFromBlock(block));
     }
 
-    public void addItemRender(GroupInfo group, Item item) {
+    public void addItemRender(ModInfo group, Item item) {
 	    if(group == null) {
-	        group = LycanitesMobs.group;
+	        group = LycanitesMobs.modInfo;
         }
 
         if(item instanceof ItemEquipmentPart) {

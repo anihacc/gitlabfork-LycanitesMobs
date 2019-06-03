@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntitySpectre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -25,7 +26,7 @@ public class ModelSpectre extends ModelTemplateElemental {
     public ModelSpectre(float shadowSize) {
 
 		// Load Model:
-		this.initModel("spectre", ElementalMobs.instance.group, "entity/spectre");
+		this.initModel("spectre", LycanitesMobs.modInfo, "entity/spectre");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

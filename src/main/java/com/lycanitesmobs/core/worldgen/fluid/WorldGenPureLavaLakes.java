@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.worldgen.fluid;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.IWorldGenBase;
 import com.lycanitesmobs.core.config.ConfigSpawning;
-import com.lycanitesmobs.core.info.GroupInfo;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+import com.lycanitesmobs.core.info.ModInfo;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -15,7 +16,7 @@ import java.util.Random;
 
 public class WorldGenPureLavaLakes extends WorldGenLakes implements IWorldGenBase {
     public String name = "Pure Lava Lakes";
-    public GroupInfo group = InfernoMobs.instance.group;
+    public ModInfo group = LycanitesMobs.modInfo;
     public double generateUndergroundChance = 0.04D;
     public double generateSurfaceChance = 0;
 

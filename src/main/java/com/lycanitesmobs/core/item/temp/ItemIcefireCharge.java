@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
@@ -15,7 +16,7 @@ public class ItemIcefireCharge extends ItemCharge {
 	// ==================================================
     public ItemIcefireCharge() {
         super();
-        this.group = ArcticMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "icefirecharge";
         this.setup();
     }

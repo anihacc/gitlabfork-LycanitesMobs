@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.plainsmobs.PlainsMobs;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumParticleTypes;
@@ -30,7 +31,7 @@ public class EntityQuill extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "quill";
-    	this.group = PlainsMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(3);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0.25D;

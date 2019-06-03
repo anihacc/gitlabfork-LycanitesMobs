@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelArix extends ModelObjOld {
 
     public ModelArix(float shadowSize) {
     	// Load Model:
-    	this.initModel("arix", ArcticMobs.instance.group, "entity/arix");
+    	this.initModel("arix", LycanitesMobs.modInfo, "entity/arix");
 
     	// Set Rotation Centers:
     	setPartCenter("head", 0F, 1.07F, 0.1F);

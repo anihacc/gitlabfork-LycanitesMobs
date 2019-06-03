@@ -2,8 +2,6 @@ package com.lycanitesmobs.core.gui.beastiary.list;
 
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.text.translation.I18n;
 

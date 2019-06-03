@@ -1,31 +1,25 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidBlock;
-
-import javax.annotation.Nullable;
 
 public class BlockFluidBase extends BlockFluidClassic {
     public String blockName;
-    public GroupInfo group;
+    public ModInfo group;
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public BlockFluidBase(Fluid fluid, Material material, GroupInfo group, String blockName) {
+    public BlockFluidBase(Fluid fluid, Material material, ModInfo group, String blockName) {
         super(fluid, material);
         this.blockName = blockName;
         this.group = group;

@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -19,7 +20,7 @@ public class ModelConcapedeSegment extends ModelObjOld {
     
     public ModelConcapedeSegment(float shadowSize) {
         // Load Model:
-        this.initModel("concapedesegment", JungleMobs.instance.group, "entity/concapede");
+        this.initModel("concapedesegment", LycanitesMobs.modInfo, "entity/concapede");
     	
     	// Set Rotation Centers:
     	setPartCenter("body", 0F, 0.5F, 0.6F);

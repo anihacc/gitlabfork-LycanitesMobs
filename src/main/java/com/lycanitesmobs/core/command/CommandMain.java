@@ -171,7 +171,7 @@ public class CommandMain implements ICommand {
 			// Enable:
 			if("enable".equalsIgnoreCase(args[1])) {
 				reply = I18n.translateToLocal("lyc.command.dungeon.enable");
-				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 				config.setBool("Dungeons", "Dungeons Enabled", true);
 				LycanitesMobs.dungeonGenerator.enabled = true;
 				commandSender.sendMessage(new TextComponentString(reply));
@@ -181,7 +181,7 @@ public class CommandMain implements ICommand {
 			// Disable:
 			if("disable".equalsIgnoreCase(args[1])) {
 				reply = I18n.translateToLocal("lyc.command.dungeon.disable");
-				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 				config.setBool("Dungeons", "Dungeons Enabled", false);
 				LycanitesMobs.dungeonGenerator.enabled = false;
 				commandSender.sendMessage(new TextComponentString(reply));
@@ -361,7 +361,7 @@ public class CommandMain implements ICommand {
 						reply = I18n.translateToLocal("lyc.command.mobevent.enable");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsEnabled = true;
-						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "mobevents");
+						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Mob Events Enabled", true);
 					}
 					
@@ -442,7 +442,7 @@ public class CommandMain implements ICommand {
 						reply = I18n.translateToLocal("lyc.command.mobevent.enable.random");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsRandom = true;
-						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "mobevents");
+						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Random Mob Events", true);
 						return;
 					}
@@ -450,7 +450,7 @@ public class CommandMain implements ICommand {
 				reply = I18n.translateToLocal("lyc.command.mobevent.enable");
 				commandSender.sendMessage(new TextComponentString(reply));
 				MobEventManager.getInstance().mobEventsEnabled = true;
-				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "mobevents");
+				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 				config.setBool("Global", "Mob Events Enabled", true);
 				return;
 			}
@@ -462,7 +462,7 @@ public class CommandMain implements ICommand {
 						reply = I18n.translateToLocal("lyc.command.mobevent.disable.random");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsRandom = false;
-						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "mobevents");
+						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Random Mob Events", false);
 						return;
 					}
@@ -470,7 +470,7 @@ public class CommandMain implements ICommand {
 				reply = I18n.translateToLocal("lyc.command.mobevent.disable");
 				commandSender.sendMessage(new TextComponentString(reply));
 				MobEventManager.getInstance().mobEventsEnabled = false;
-				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "mobevents");
+				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 				config.setBool("Global", "Mob Events Enabled", false);
 				return;
 			}

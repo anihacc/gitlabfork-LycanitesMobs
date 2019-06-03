@@ -1,22 +1,13 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.google.gson.*;
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.util.JsonUtils;
-import net.minecraft.util.ResourceLocation;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -45,12 +36,12 @@ public class SpawnerManager extends JSONLoader {
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
 		// Load Default Spawners:
-		Path path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.group.filename, "spawners");
+		Path path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.filename, "spawners");
 		Map<String, JsonObject> defaultSpawnerJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultSpawnerJSONs, "name", "spawner");
 
 		// Load Default Mob Event Spawners:
-		path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.group.filename, "mobevents");
+		path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.filename, "mobevents");
 		Map<String, JsonObject> defaultMobEventsJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultMobEventsJSONs, "name", "spawner");
 
@@ -99,7 +90,7 @@ public class SpawnerManager extends JSONLoader {
 
 		// Load Global Spawn Conditions:
 		this.globalSpawnConditions.clear();
-		Path defaultGlobalPath = Utilities.getAssetPath(this.getClass(), LycanitesMobs.group.filename, "globalspawner.json");
+		Path defaultGlobalPath = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.filename, "globalspawner.json");
 		JsonObject defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
 
 		File customGlobalFile = new File(configPath + "globalspawner.json");
@@ -125,7 +116,7 @@ public class SpawnerManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(GroupInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
 
 	}
 

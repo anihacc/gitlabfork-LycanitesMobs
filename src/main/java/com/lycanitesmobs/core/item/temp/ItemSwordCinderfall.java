@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.item.temp.ItemSwordBase;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntityCinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +23,7 @@ public class ItemSwordCinderfall extends ItemSwordBase {
 	// ==================================================
     public ItemSwordCinderfall(String itemName, String textureName) {
         super(ToolMaterial.DIAMOND);
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = itemName;
         this.setup();
         this.textureName = textureName;

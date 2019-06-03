@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -20,7 +20,7 @@ public class BlockPillar extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockPillar(Material material, GroupInfo group, String name) {
+	public BlockPillar(Material material, ModInfo group, String name) {
 		super(material, group, name);
         this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.Y));
 	}

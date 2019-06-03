@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelGhoulZombie extends ModelObjOld {
     
     public ModelGhoulZombie(float shadowSize) {
     	// Load Model:
-    	this.initModel("GhoulZombie", SwampMobs.instance.group, "entity/ghoulzombie");
+    	this.initModel("GhoulZombie", LycanitesMobs.modInfo, "entity/ghoulzombie");
     	
 
 

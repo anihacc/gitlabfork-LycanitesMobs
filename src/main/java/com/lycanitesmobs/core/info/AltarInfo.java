@@ -35,7 +35,7 @@ public class AltarInfo {
     //        Load Global Settings From Config
     // ==================================================
     public static void loadGlobalSettings() {
-        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
         config.setCategoryComment("Altars", "Altars are block arrangements that can be activated using Soulkeys to summon rare subspecies as mini bosses or trigger events including boss events.");
         altarsEnabled = config.getBool("Altars", "Altars Enabled", altarsEnabled, "Set to false to disable altars, Soulkeys can still be crafted but wont work on Altars.");
         checkDimensions = config.getBool("Altars", "Check Dimension", checkDimensions, "If set to true, Altars will only activate in dimensions that the monster spawned or event started is allowed in.");

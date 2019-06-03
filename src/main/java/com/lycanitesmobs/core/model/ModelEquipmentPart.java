@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.model;
 
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class ModelEquipmentPart extends ModelItemBase {
 	// ==================================================
 	//                    Constructor
 	// ==================================================
-	public ModelEquipmentPart(String name, GroupInfo groupInfo) {
+	public ModelEquipmentPart(String name, ModInfo groupInfo) {
 		this.initModel(name, groupInfo, "equipment/" + name);
 	}
 

@@ -23,7 +23,7 @@ public class ItemWinterGiftLarge extends ItemBase {
 	// ==================================================
     public ItemWinterGiftLarge() {
         super();
-        this.group = LycanitesMobs.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "wintergiftlarge";
         this.setup();
         AssetManager.addSound(this.itemName + "_bad", this.group, "item." + this.itemName + ".bad");

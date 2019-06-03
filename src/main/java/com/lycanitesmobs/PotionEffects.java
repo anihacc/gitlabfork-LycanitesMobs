@@ -2,6 +2,7 @@ package com.lycanitesmobs;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.IGroupBoss;
+import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -29,9 +31,50 @@ import java.util.UUID;
 public class PotionEffects {
     private static final UUID swiftswimmingMoveBoostUUID = UUID.fromString("6d4fe17f-06eb-4ebc-a573-364b79faed5e");
     private static final AttributeModifier swiftswimmingMoveBoost = (new AttributeModifier(swiftswimmingMoveBoostUUID, "Swiftswimming Speed Boost", 0.6D, 2)).setSaved(false);
-	
+
+	// Global Settings:
+	public boolean disableNausea = false;
+
 	// ==================================================
-	//                    Entity Update
+	//                    Initialize
+	// ==================================================
+	public void init(ConfigBase config) {
+		config.setCategoryComment("Potion Effects", "Here you can override each potion effect ID from the automatic ID, use 0 if you want it to stay automatic. Overrides should only be needed if you are running a lot of mods that add custom effects.");
+		if(config.getBool("Potion Effects", "Enable Custom Effects", true, "Set to false to disable the custom potion effects.")) {
+			ObjectManager.addPotionEffect("paralysis", config, true, 0xFFFF00, false);
+			ObjectManager.addPotionEffect("penetration", config, true, 0x222222, false);
+			ObjectManager.addPotionEffect("recklessness", config, true, 0xFF0044, false); // TODO Implement
+			ObjectManager.addPotionEffect("rage", config, true, 0xFF4400, false); // TODO Implement
+			ObjectManager.addPotionEffect("weight", config, true, 0x000022, false);
+			ObjectManager.addPotionEffect("fear", config, false, 0x220022, false);
+			ObjectManager.addPotionEffect("decay", config, true, 0x110033, false);
+			ObjectManager.addPotionEffect("insomnia", config, true, 0x002222, false);
+			ObjectManager.addPotionEffect("instability", config, true, 0x004422, false);
+			ObjectManager.addPotionEffect("lifeleak", config, true, 0x0055FF, false);
+			ObjectManager.addPotionEffect("plague", config, true, 0x220066, false);
+			ObjectManager.addPotionEffect("aphagia", config, true, 0xFFDDDD, false);
+			ObjectManager.addPotionEffect("smited", config, true, 0xDDDDFF, false);
+			ObjectManager.addPotionEffect("smouldering", config, true, 0xDD0000, false);
+
+			ObjectManager.addPotionEffect("leech", config, false, 0x00FF99, true);
+			ObjectManager.addPotionEffect("swiftswimming", config, false, 0x0000FF, true);
+			ObjectManager.addPotionEffect("fallresist", config, false, 0xDDFFFF, true);
+			ObjectManager.addPotionEffect("rejuvenation", config, false, 0x99FFBB, true);
+			ObjectManager.addPotionEffect("immunization", config, false, 0x66FFBB, true);
+			ObjectManager.addPotionEffect("cleansed", config, false, 0x66BBFF, true);
+			ObjectManager.addPotionEffect("heataura", config, false, 0x996600, true); // TODO Implement
+			ObjectManager.addPotionEffect("staticaura", config, false, 0xFFBB551, true); // TODO Implement
+			ObjectManager.addPotionEffect("freezeaura", config, false, 0x55BBFF, true); // TODO Implement
+			ObjectManager.addPotionEffect("envenom", config, false, 0x44DD66, true); // TODO Implement
+
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+		this.disableNausea = config.getBool("Potion Effects", "Disable Nausea Debuff", disableNausea, "Set to true to disable the vanilla nausea debuff on players.");
+	}
+
+
+    // ==================================================
+	//                   Entity Update
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
@@ -55,7 +98,7 @@ public class PotionEffects {
 
 
 		// Disable Nausea:
-		if(LycanitesMobs.disableNausea && event.getEntityLiving() instanceof EntityPlayer) {
+		if(this.disableNausea && event.getEntityLiving() instanceof EntityPlayer) {
 			if(entity.isPotionActive(MobEffects.NAUSEA)) {
 				entity.removePotionEffect(MobEffects.NAUSEA);
 			}

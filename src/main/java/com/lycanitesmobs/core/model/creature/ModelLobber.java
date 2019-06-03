@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelLobber extends ModelObjOld {
     
     public ModelLobber(float shadowSize) {
     	// Load Model:
-    	this.initModel("Lobber", InfernoMobs.instance.group, "entity/lobber");
+    	this.initModel("Lobber", LycanitesMobs.modInfo, "entity/lobber");
     	
 
 

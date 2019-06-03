@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -34,13 +34,13 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// Player Info and Containers:
 	public EntityPlayer player;
 	public Beastiary beastiary;
-	public GroupInfo beastiaryGroup;
+	public ModInfo beastiaryGroup;
 	public String beastiaryCategory;
 	public PetManager petManager;
 	public long timePlayed = 0;
 
 	// Beastiary Menu:
-	public GroupInfo selectedGroup;
+	public ModInfo selectedGroup;
 	public CreatureInfo selectedCreature;
 	public int selectedSubspecies = 0;
 	public int selectedPetType = 0;

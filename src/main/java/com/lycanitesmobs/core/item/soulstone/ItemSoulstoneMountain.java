@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityBarghest;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.entity.creature.EntityWildkin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +19,7 @@ public class ItemSoulstoneMountain extends ItemSoulstone {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstoneMountain(GroupInfo group) {
+    public ItemSoulstoneMountain(ModInfo group) {
         super(group, "mountain");
     }
     

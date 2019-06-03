@@ -31,8 +31,8 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
         this.hasAttackSound = true;
         this.setupMob();
         
-        this.calpodSwarmLimit = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Calpod Swarm Limit", this.calpodSwarmLimit, "Limits how many Calpods there can be when swarming.");
-		this.calpodGreifing = ConfigBase.getConfig(this.creatureInfo.group, "general").getBool("Features", "Calpod Griefing", this.calpodGreifing, "Set to false to disable Calpod block destruction.");
+        this.calpodSwarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Calpod Swarm Limit", this.calpodSwarmLimit, "Limits how many Calpods there can be when swarming.");
+		this.calpodGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Calpod Griefing", this.calpodGreifing, "Set to false to disable Calpod block destruction.");
 	}
 
     // ========== Init AI ==========

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,7 +20,7 @@ public class ModelVespid extends ModelObjOld {
     
     public ModelVespid(float shadowSize) {
     	// Load Model:
-    	this.initModel("vespid", JungleMobs.instance.group, "entity/vespid");
+    	this.initModel("vespid", LycanitesMobs.modInfo, "entity/vespid");
     	
 
 

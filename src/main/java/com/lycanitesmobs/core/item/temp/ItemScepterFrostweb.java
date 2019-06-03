@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +16,7 @@ public class ItemScepterFrostweb extends ItemScepter {
 	// ==================================================
     public ItemScepterFrostweb() {
         super();
-    	this.group = ArcticMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "frostwebscepter";
         this.setup();
     }

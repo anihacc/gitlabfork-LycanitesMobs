@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -29,7 +30,7 @@ public class BlockDoomfire extends BlockFireBase {
 	//                   Constructor
 	// ==================================================
 	public BlockDoomfire() {
-		super(Material.FIRE, DemonMobs.instance.group, "doomfire");
+		super(Material.FIRE, LycanitesMobs.modInfo, "doomfire");
 
         // Stats:
         this.tickRate = 30;

@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -25,7 +24,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 public class EntityProjectileBase extends EntityThrowable {
 	public String entityName = "projectile";
-	public GroupInfo group;
+	public ModInfo group;
 	public long updateTick;
 	
 	// Properties:

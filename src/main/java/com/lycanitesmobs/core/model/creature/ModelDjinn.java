@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.renderer.layer.LayerDjinn;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +25,7 @@ public class ModelDjinn extends ModelTemplateElemental {
     public ModelDjinn(float shadowSize) {
 
 		// Load Model:
-		this.initModel("djinn", ElementalMobs.instance.group, "entity/djinn");
+		this.initModel("djinn", LycanitesMobs.modInfo, "entity/djinn");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

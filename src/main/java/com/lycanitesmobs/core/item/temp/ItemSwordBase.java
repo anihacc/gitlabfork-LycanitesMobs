@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,7 @@ public class ItemSwordBase extends ItemSword {
 	public static int descriptionWidth = 128;
 	
 	public String itemName = "Item";
-	public GroupInfo group = LycanitesMobs.group;
+	public ModInfo group = LycanitesMobs.modInfo;
 	public String textureName = "item";
     public final Item.ToolMaterial toolMaterial;
 	

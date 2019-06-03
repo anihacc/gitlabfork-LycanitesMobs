@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,7 +23,7 @@ public class ItemPoisonGland extends ItemBase {
 	// ==================================================
     public ItemPoisonGland() {
         super();
-        this.group = SwampMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "poisongland";
         this.setup();
     }

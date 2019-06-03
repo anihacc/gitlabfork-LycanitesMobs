@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,7 +26,7 @@ public class ModelCinder extends ModelTemplateElemental {
     public ModelCinder(float shadowSize) {
 
 		// Load Model:
-		this.initModel("cinder", ElementalMobs.instance.group, "entity/cinder");
+		this.initModel("cinder", LycanitesMobs.modInfo, "entity/cinder");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

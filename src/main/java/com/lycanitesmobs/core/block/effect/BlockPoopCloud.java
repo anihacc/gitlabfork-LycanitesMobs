@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.junglemobs.JungleMobs;
+
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.material.Material;
@@ -34,7 +35,7 @@ public class BlockPoopCloud extends BlockBase {
         this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
 		
 		// Properties:
-		this.group = JungleMobs.instance.group;
+		this.group = LycanitesMobs.modInfo;
 		this.blockName = "poopcloud";
 		this.setup();
 		

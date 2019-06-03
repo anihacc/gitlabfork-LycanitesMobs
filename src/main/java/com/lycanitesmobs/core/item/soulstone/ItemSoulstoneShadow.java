@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityShade;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.entity.creature.EntityChupacabra;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +19,7 @@ public class ItemSoulstoneShadow extends ItemSoulstone {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstoneShadow(GroupInfo group) {
+    public ItemSoulstoneShadow(ModInfo group) {
         super(group, "shadow");
     }
     

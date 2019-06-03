@@ -1,25 +1,20 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.info.EntityListCustom;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,7 +59,7 @@ public class ItemEquipmentPart extends ItemBase {
 	 * Constructor
 	 * @param groupInfo The group that this part belongs to.
 	 */
-	public ItemEquipmentPart(GroupInfo groupInfo) {
+	public ItemEquipmentPart(ModInfo groupInfo) {
 		super();
 		this.group = groupInfo;
 		this.setMaxStackSize(1);

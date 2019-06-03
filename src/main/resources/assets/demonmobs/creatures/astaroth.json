@@ -53,7 +53,7 @@
 		{
 			"index": 4,
 			"skin": "void",
-			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"modelClass": "com.lycanitesmobs.core.model.creature.ModelAstarothVoid",
 			"type": "common",
 			"priority": 1,
 			"conditions": [
@@ -67,7 +67,7 @@
 		{
 			"index": 5,
 			"skin": "void",
-			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"modelClass": "com.lycanitesmobs.core.model.creature.ModelAstarothVoid",
 			"color": "violet",
 			"type": "uncommon",
 			"priority": 1,
@@ -82,7 +82,7 @@
 		{
 			"index": 6,
 			"skin": "void",
-			"modelClass": "com.lycanitesmobs.demonmobs.model.ModelAstarothVoid",
+			"modelClass": "com.lycanitesmobs.core.model.creature.ModelAstarothVoid",
 			"color": "keppel",
 			"type": "uncommon",
 			"priority": 1,

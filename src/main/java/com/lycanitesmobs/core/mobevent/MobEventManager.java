@@ -7,7 +7,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigSpawning;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -47,7 +47,7 @@ public class MobEventManager extends JSONLoader {
 
     /** Called during early start up, loads all global event configs into the manager. **/
 	public void loadConfig() {
-		ConfigSpawning config = ConfigSpawning.getConfig(LycanitesMobs.group, "mobevents");
+		ConfigSpawning config = ConfigSpawning.getConfig(LycanitesMobs.modInfo, "mobevents");
         config.setCategoryComment("Global", "These are various settings that apply to all events.");
         //config.setCategoryComment("World", "These are various settings that apply to events on a per world basis. If your required world doesn't have its config values generated yet, you can generate them by entering the world in gae at least once.");
 
@@ -63,7 +63,7 @@ public class MobEventManager extends JSONLoader {
 
 
 	/** Loads all JSON Mob Events. **/
-	public void loadAllFromJSON(GroupInfo groupInfo) {
+	public void loadAllFromJSON(ModInfo groupInfo) {
 		LycanitesMobs.printDebug("MobEvents", "Loading JSON Mob Events!");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> mobEventJSONs = new HashMap<>();
@@ -136,7 +136,7 @@ public class MobEventManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(GroupInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
 
 	}
 
@@ -148,7 +148,7 @@ public class MobEventManager extends JSONLoader {
 			mobEvent.destroy();
 		}
 
-		this.loadAllFromJSON(LycanitesMobs.group);
+		this.loadAllFromJSON(LycanitesMobs.modInfo);
 	}
 
 
@@ -161,7 +161,7 @@ public class MobEventManager extends JSONLoader {
             return;
         this.mobEvents.put(mobEvent.name, mobEvent);
         try {
-			AssetManager.addSound("mobevent_" + mobEvent.title.toLowerCase(), LycanitesMobs.group, "mobevent." + mobEvent.title.toLowerCase());
+			AssetManager.addSound("mobevent_" + mobEvent.title.toLowerCase(), LycanitesMobs.modInfo, "mobevent." + mobEvent.title.toLowerCase());
 		}
 		catch(Exception e) {}
     }

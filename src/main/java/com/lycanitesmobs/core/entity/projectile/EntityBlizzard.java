@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntitySerpix;
 import net.minecraft.block.Block;
@@ -37,7 +38,7 @@ public class EntityBlizzard extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "blizzard";
-    	this.group = ArcticMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(1);
     	this.setProjectileScale(0.5F);
         this.knockbackChance = 0D;

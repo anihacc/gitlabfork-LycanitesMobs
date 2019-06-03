@@ -3,16 +3,13 @@ package com.lycanitesmobs.core.gui.beastiary.list;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.GroupInfo;
-import net.minecraft.client.Minecraft;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.*;
 
 public class GuiGroupList extends GuiCreatureFilterList {
-	private Map<Integer, GroupInfo> groupList = new HashMap<>();
+	private Map<Integer, ModInfo> groupList = new HashMap<>();
 
 	/**
 	 * Constructor
@@ -33,10 +30,10 @@ public class GuiGroupList extends GuiCreatureFilterList {
 		this.groupList.clear();
 
 		int groupIndex = 0;
-		List<GroupInfo> groups = new ArrayList<>();
+		List<ModInfo> groups = new ArrayList<>();
 		groups.addAll(CreatureManager.getInstance().loadedGroups);
-		groups.sort(Comparator.comparing(GroupInfo::getTitle));
-		for(GroupInfo group : groups) {
+		groups.sort(Comparator.comparing(ModInfo::getTitle));
+		for(ModInfo group : groups) {
 			if(this.parentGui.playerExt.beastiary.getCreaturesDescovered(group) > 0) {
 				this.groupList.put(groupIndex++, group);
 			}
@@ -75,7 +72,7 @@ public class GuiGroupList extends GuiCreatureFilterList {
 
 	@Override
 	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {
-		GroupInfo group = this.groupList.get(index);
+		ModInfo group = this.groupList.get(index);
 		if(group == null) {
 			return;
 		}
@@ -88,6 +85,6 @@ public class GuiGroupList extends GuiCreatureFilterList {
 		if(this.parentGui.playerExt.selectedGroup == null || creatureInfo == null) {
 			return false;
 		}
-		return creatureInfo.group.equals(this.parentGui.playerExt.selectedGroup);
+		return creatureInfo.modInfo.equals(this.parentGui.playerExt.selectedGroup);
 	}
 }

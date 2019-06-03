@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,7 @@ public class ModelCrusk extends ModelObjOld {
     
     public ModelCrusk(float shadowSize) {
     	// Load Model:
-    	this.initModel("Crusk", DesertMobs.instance.group, "entity/crusk");
+    	this.initModel("Crusk", LycanitesMobs.modInfo, "entity/crusk");
     	
 
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
@@ -10,7 +10,7 @@ public class BlockSoulcube extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSoulcube(GroupInfo group, String name) {
+	public BlockSoulcube(ModInfo group, String name) {
 		super(Material.IRON);
         this.setCreativeTab(LycanitesMobs.blocksTab);
 		

@@ -2,11 +2,13 @@ package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.EntityListCustom;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ItemCustomSpawnEgg extends ItemBase {
-	public GroupInfo group = LycanitesMobs.group;
+	public ModInfo group = LycanitesMobs.modInfo;
 	public String itemName = "customspawnegg";
 	public String texturePath = "customspawn";
     
@@ -52,6 +54,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
         this.setHasSubtypes(true);
         setCreativeTab(LycanitesMobs.creaturesTab);
         setUnlocalizedName("customspawnegg");
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new DispenserBehaviorMobEggCustom());
     }
     
 	// ==================================================

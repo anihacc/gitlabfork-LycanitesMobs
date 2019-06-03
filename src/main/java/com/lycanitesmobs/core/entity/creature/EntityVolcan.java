@@ -40,7 +40,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.volcanMeltRadius = ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Volcan Block Melting Radius", this.volcanMeltRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
+        this.volcanMeltRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Volcan Block Melting Radius", this.volcanMeltRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;

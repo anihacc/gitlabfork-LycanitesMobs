@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.renderer.layer.LayerFire;
 import com.lycanitesmobs.core.renderer.layer.LayerShield;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.demonmobs.DemonMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -25,7 +26,7 @@ public class ModelAsmodeus extends ModelObjOld {
 
     public ModelAsmodeus(float shadowSize) {
     	// Load Model:
-    	this.initModel("asmodeus", DemonMobs.instance.group, "entity/asmodeus");
+    	this.initModel("asmodeus", LycanitesMobs.modInfo, "entity/asmodeus");
 
     	// Set Rotation Centers:
         // Blender: Y = Z

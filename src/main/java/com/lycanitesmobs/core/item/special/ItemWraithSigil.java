@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.special;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntityWraith;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,7 @@ public class ItemWraithSigil extends ItemScepter {
 	// ==================================================
     public ItemWraithSigil() {
         super();
-        this.group = ElementalMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "wraithsigil";
         this.setup();
     }

@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import com.lycanitesmobs.core.entity.creature.EntityDarkling;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -20,7 +21,7 @@ public class ModelDarkling extends ModelObjOld {
 
     public ModelDarkling(float shadowSize) {
     	// Load Model:
-        this.initModel("darkling", ShadowMobs.instance.group, "entity/darkling");
+        this.initModel("darkling", LycanitesMobs.modInfo, "entity/darkling");
     	
     	// Set Rotation Centers:
         this.setPartCenter("head", 0F, 0.24833F, -0.36996F);

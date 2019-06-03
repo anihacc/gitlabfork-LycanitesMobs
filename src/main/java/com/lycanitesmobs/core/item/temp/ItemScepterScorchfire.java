@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemScepterScorchfire extends ItemScepter {
 	// ==================================================
     public ItemScepterScorchfire() {
         super();
-    	this.group = InfernoMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "scorchfirescepter";
         this.setup();
     }

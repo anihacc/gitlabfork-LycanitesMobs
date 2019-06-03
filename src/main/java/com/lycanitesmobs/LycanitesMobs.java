@@ -1,8 +1,6 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.VersionChecker;
-import com.lycanitesmobs.core.block.BlockEquipmentForge;
-import com.lycanitesmobs.core.block.BlockSummoningPedestal;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
@@ -16,16 +14,17 @@ import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
-import com.lycanitesmobs.core.item.*;
-import com.lycanitesmobs.core.item.consumable.*;
+import com.lycanitesmobs.core.info.altar.*;
+import com.lycanitesmobs.core.item.CreativeTabBlocks;
+import com.lycanitesmobs.core.item.CreativeTabCreatures;
+import com.lycanitesmobs.core.item.CreativeTabEquipmentParts;
+import com.lycanitesmobs.core.item.CreativeTabItems;
+import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
+import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
-import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.special.ItemSoulgazer;
-import com.lycanitesmobs.core.item.special.ItemSoulkey;
-import com.lycanitesmobs.core.item.special.ItemSoulstone;
-import com.lycanitesmobs.core.item.temp.*;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
+import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.mods.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -34,6 +33,9 @@ import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
+import com.lycanitesmobs.core.worldgen.WorldGeneratorFluids;
+import com.lycanitesmobs.core.worldgen.mobevents.AsmodeusStructureBuilder;
+import com.lycanitesmobs.core.worldgen.mobevents.RahovartStructureBuilder;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -55,6 +57,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Mod(
 		modid = LycanitesMobs.modid,
@@ -78,7 +81,7 @@ public class LycanitesMobs {
 	
 	public static final PacketHandler packetHandler = new PacketHandler();
 
-    public static GroupInfo group;
+    public static ModInfo modInfo;
     public static ConfigBase config;
 	
 	// Instance:
@@ -104,8 +107,8 @@ public class LycanitesMobs {
 	// Texture Path:
 	public static String texturePath = "mods/lycanitesmobs/";
 
-	// Extra Config Settings:
-	public static boolean disableNausea = false;
+	// Potion Effects:
+	public PotionEffects potionEffects;
 
 	// Dungeon System:
 	public static WorldGeneratorDungeon dungeonGenerator;
@@ -114,28 +117,43 @@ public class LycanitesMobs {
 	static {
 		FluidRegistry.enableUniversalBucket();
 	}
-	
-	
-	// ==================================================
-	//                Pre-Initialization
-	// ==================================================
+
+
+	/**
+	 * The first initialization, loads most configs and jsons and sets up most of the managers, event listeners, etc.
+	 * @param event
+	 */
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		// ========== Config ==========
-		group = new GroupInfo(this, name, 1000);
-        ConfigBase.versionCheck("1.17.3.2", version);
-		group.loadFromConfig();
-		config = ConfigBase.getConfig(group, "general");
+		modInfo = new ModInfo(this, name, 1000); // TODO Remove groups.
+		ObjectManager.setCurrentGroup(modInfo);
+
+		// Config:
+        ConfigBase.versionCheck("2.0.0.0", version);
+		config = ConfigBase.getConfig(modInfo, "general");
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
-		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
-		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {"Jbams"}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
-		DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
-		for(String blacklistEntry : familiarBlacklist) {
-			DonationFamiliars.instance.familiarBlacklist.add(blacklistEntry);
-		}
 
-		// ========== Admin Entity Removal Tool ==========
+		// Familiars:
+		DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
+		String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {"Jbams"}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
+		DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(familiarBlacklist));
+
+		// Version Checker:
+		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
+
+		// Register Assets:
+		proxy.registerRenders(modInfo);
+		proxy.registerModels(modInfo);
+		proxy.registerTextures();
+
+		// Initialize Packet Handler:
+		packetHandler.init();
+
+		// Change Health Limit:
+		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue", "field_111118_b");
+
+		// Admin Entity Removal Tool:
         config.setCategoryComment("Admin", "Special tools for server admins.");
         ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = config.getStringList("Admin", "Force Remove Entity Names", new String[0], "Here you can add a list of entity IDs for entity that you want to be forcefully removed.");
         if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
@@ -145,233 +163,172 @@ public class LycanitesMobs {
         }
         ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
 
-        // ========== Register Rendering Factories ==========
-        proxy.registerRenders(this.group);
+        // Potion Effects:
+		this.potionEffects = new PotionEffects();
+		this.potionEffects.init(config);
 
-        // ========== Change Health Limit ==========
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue", "field_111118_b");
-
-		// ========== Initialize Packet Handler ==========
-		this.packetHandler.init();
-		
-		
-		// ========== Custom Potion Effects ==========
-		config.setCategoryComment("Potion Effects", "Here you can override each potion effect ID from the automatic ID, use 0 if you want it to stay automatic. Overrides should only be needed if you are running a lot of mods that add custom effects.");
-		if(config.getBool("Potion Effects", "Enable Custom Effects", true, "Set to false to disable the custom potion effects.")) {
-			ObjectManager.addPotionEffect("paralysis", config, true, 0xFFFF00, false);
-			ObjectManager.addPotionEffect("penetration", config, true, 0x222222, false);
-			ObjectManager.addPotionEffect("recklessness", config, true, 0xFF0044, false); // TODO Implement
-			ObjectManager.addPotionEffect("rage", config, true, 0xFF4400, false); // TODO Implement
-			ObjectManager.addPotionEffect("weight", config, true, 0x000022, false);
-			ObjectManager.addPotionEffect("fear", config, false, 0x220022, false);
-			ObjectManager.addPotionEffect("decay", config, true, 0x110033, false);
-			ObjectManager.addPotionEffect("insomnia", config, true, 0x002222, false);
-			ObjectManager.addPotionEffect("instability", config, true, 0x004422, false);
-			ObjectManager.addPotionEffect("lifeleak", config, true, 0x0055FF, false);
-			ObjectManager.addPotionEffect("plague", config, true, 0x220066, false);
-			ObjectManager.addPotionEffect("aphagia", config, true, 0xFFDDDD, false);
-			ObjectManager.addPotionEffect("smited", config, true, 0xDDDDFF, false);
-			ObjectManager.addPotionEffect("smouldering", config, true, 0xDD0000, false);
-
-			ObjectManager.addPotionEffect("leech", config, false, 0x00FF99, true);
-			ObjectManager.addPotionEffect("swiftswimming", config, false, 0x0000FF, true);
-			ObjectManager.addPotionEffect("fallresist", config, false, 0xDDFFFF, true);
-			ObjectManager.addPotionEffect("rejuvenation", config, false, 0x99FFBB, true);
-			ObjectManager.addPotionEffect("immunization", config, false, 0x66FFBB, true);
-			ObjectManager.addPotionEffect("cleansed", config, false, 0x66BBFF, true);
-			ObjectManager.addPotionEffect("heataura", config, false, 0x996600, true); // TODO Implement
-			ObjectManager.addPotionEffect("staticaura", config, false, 0xFFBB551, true); // TODO Implement
-			ObjectManager.addPotionEffect("freezeaura", config, false, 0x55BBFF, true); // TODO Implement
-			ObjectManager.addPotionEffect("envenom", config, false, 0x44DD66, true); // TODO Implement
-
-			MinecraftForge.EVENT_BUS.register(new PotionEffects());
-		}
-		disableNausea = config.getBool("Potion Effects", "Disable Nausea Debuff", disableNausea, "Set to true to disable the vanilla nausea debuff on players.");
-
-
-		// ========== Elements ==========
+		// Elements:
 		ElementManager.getInstance().loadConfig();
-		ElementManager.getInstance().loadAllFromJSON(group);
+		ElementManager.getInstance().loadAllFromJSON(modInfo);
 
-
-		// ========== Creatures ==========
+		// Creatures:
 		CreatureManager.getInstance().loadConfig();
 
+		// Projectiles:
+		ProjectileManager.getInstance().loadProjectiles();
 
-		// ========== Spawners ==========
+		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
 
-
-		// ========== Mob Events ==========
+		// Mob Events:
 		MobEventManager.getInstance().loadConfig();
 		FMLCommonHandler.instance().bus().register(MobEventManager.getInstance());
 		FMLCommonHandler.instance().bus().register(MobEventListener.getInstance());
 
-
-        // ========== Item Info ==========
-        ItemConfig.loadGlobalSettings();
-
-
-        // ========== Altar Info ==========
+        // Altars:
         AltarInfo.loadGlobalSettings();
 
-
-
-        // ========== Register Capabilities ==========
+        // Entity Capabilities:
         CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
         CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity.class);
-		
-		
-		// ========== Register Event Listeners ==========
+
+		// Event Listeners:
 		MinecraftForge.EVENT_BUS.register(new EventListener());
         proxy.registerEvents();
-		
-        
-		// ========== Set Current Mod ==========
-		ObjectManager.setCurrentGroup(group);
 
+		// Blocks and Items:
+		ItemManager.getInstance().loadConfig();
+		ItemManager.getInstance().loadItems();
+		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 
-        // ========== Create Blocks ==========
-        ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(group));
-		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(group, 1));
-		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
-		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
-		
-		
-		// ========== Create Items ==========
-		ObjectManager.addItem("soulgazer", new ItemSoulgazer());
-		ObjectManager.addItem("soulstone", new ItemSoulstone(group, ""));
-		ObjectManager.addItem("soulkey", new ItemSoulkey("soulkey", 0));
-		ObjectManager.addItem("soulkeydiamond", new ItemSoulkey("soulkeydiamond", 1));
-		ObjectManager.addItem("soulkeyemerald", new ItemSoulkey("soulkeyemerald", 2));
-		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning("summoningstaff", "summoningstaff"));
-		ObjectManager.addItem("stablesummoningstaff", new ItemStaffStable("stablesummoningstaff", "staffstable"));
-		ObjectManager.addItem("bloodsummoningstaff", new ItemStaffBlood("bloodsummoningstaff", "staffblood"));
-		ObjectManager.addItem("sturdysummoningstaff", new ItemStaffSturdy("sturdysummoningstaff", "staffsturdy"));
-		ObjectManager.addItem("savagesummoningstaff", new ItemStaffSavage("savagesummoningstaff", "staffsavage"));
-		ObjectManager.addItem("equipment", new ItemEquipment());
-		
-		// Super Foods:
-		ObjectManager.addItem("battleburrito", new ItemFoodBattleBurrito("battleburrito", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
-		ObjectManager.addItem("explorersrisotto", new ItemFoodExplorersRisotto("explorersrisotto", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
+		// Object Lists:
+		ObjectLists.createCustomItems();
+		ObjectLists.createLists();
 
-		// Buff Items:
-		ObjectManager.addItem("immunizer", new ItemImmunizer());
-		ObjectManager.addItem("cleansingcrystal", new ItemCleansingCrystal());
-
-		// Seasonal Items:
-		ObjectManager.addItem("halloweentreat", new ItemHalloweenTreat());
-        ObjectManager.addItem("wintergift", new ItemWinterGift());
-        ObjectManager.addItem("wintergiftlarge", new ItemWinterGiftLarge());
-
-        ObjectManager.addItem("mobtoken", new ItemMobToken(group));
-
-
-        // ========== Create Tile Entities ==========
+        // Tile Entities:
         ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 
-
-		// ========== Equipment ==========
-		EquipmentPartManager.getInstance().loadAllFromJSON(group);
-
-
-        // ========== Call Object Lists Setup ==========
-        ObjectLists.createCustomItems();
-		ObjectLists.createLists();
-
-		
-		// ========== Mod Support ==========
+		// Mod Support:
 		DLDungeons.init();
 	}
-	
-	
-	// ==================================================
-	//                  Initialization
-	// ==================================================
+
+
+	/**
+	 * The second initialization phase, loads creatures and initializes special entities.
+	 * @param event The forge init event.
+	 */
 	@Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-		// ========== Creatures ==========
-		CreatureManager.getInstance().loadAllFromJSON(group);
-		CreatureManager.getInstance().registerAll(group);
-		
-		
-		// ========== Special Entities ==========
+		// Load Creatures:
+		CreatureManager.getInstance().loadAllFromJSON(modInfo);
+		CreatureManager.getInstance().registerAll(modInfo);
+
+		// Special Entities:
 		int specialEntityID = 0;
-		EntityRegistry.registerModEntity(new ResourceLocation(this.group.filename, "summoningportal"), EntityPortal.class, "summoningportal", specialEntityID++, instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(this.group.filename, "fear"), EntityFear.class, "fear", specialEntityID++, instance, 64, 1, true);
-		AssetManager.addSound("effect_fear", group, "effect.fear");
-		EntityRegistry.registerModEntity(new ResourceLocation(this.group.filename, "hitarea"), EntityHitArea.class, "hitarea", specialEntityID++, instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "summoningportal"), EntityPortal.class, "summoningportal", specialEntityID++, instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "fear"), EntityFear.class, "fear", specialEntityID++, instance, 64, 1, true);
+		AssetManager.addSound("effect_fear", modInfo, "effect.fear");
+		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "hitarea"), EntityHitArea.class, "hitarea", specialEntityID++, instance, 64, 1, true);
+
+		// Altars:
+		AltarInfo ebonCacodemonAltar = new AltarInfoEbonCacodemon("EbonCacodemonAltar");
+		AltarInfo.addAltar(ebonCacodemonAltar);
+
+		AltarInfo rahovartAltar = new AltarInfoRahovart("RahovartAltar");
+		AltarInfo.addAltar(rahovartAltar);
+		StructureBuilder.addStructureBuilder(new RahovartStructureBuilder());
+
+		AltarInfo asmodeusAltar = new AltarInfoAsmodeus("AsmodeusAltar");
+		AltarInfo.addAltar(asmodeusAltar);
+		StructureBuilder.addStructureBuilder(new AsmodeusStructureBuilder());
+
+		AltarInfo umberLobberAltar = new AltarInfoUmberLobber("UmberLobberAltar");
+		AltarInfo.addAltar(umberLobberAltar);
+
+		AltarInfo celestialGeonachAltar = new AltarInfoCelestialGeonach("CelestialGeonachAltar");
+		AltarInfo.addAltar(celestialGeonachAltar);
+
+		AltarInfo lunarGrueAltar = new AltarInfoLunarGrue("LunarGrueAltar");
+		AltarInfo.addAltar(lunarGrueAltar);
 	}
-	
-	
-	// ==================================================
-	//                Post-Initialization
-	// ==================================================
+
+
+	/**
+	 * Third initialization phase, registers tile entities and initializes creatures and then everything dependant on creatures being ready.
+	 * @param event The forge init event.
+	 */
 	@Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
-        // ========== Assign Mob Spawning ==========
-        GroupInfo.loadAllSpawningFromConfigs();
-
-
-		// ========== Register and Initialize Handlers/Objects ==========
-		proxy.registerAssets();
+		// Register Tile Entities:
         proxy.registerTileEntities();
 
-
-        // ========== Creatures ==========
+        // Init Creatures:
 		CreatureManager.getInstance().initAll();
 
-
-		// ========== Spawners ==========
+		// Load Spawners:
 		SpawnerManager.getInstance().loadAllFromJSON();
-		
-		
-		// ========== Mob Events ==========
-        MobEventManager.getInstance().loadAllFromJSON(group);
 
+		// Load Mob Events:
+        MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
-        // ========== Dungeons ==========
+        // Load Dungeons:
 		DungeonManager.getInstance().loadAllFromJSON();
 		dungeonGenerator = new WorldGeneratorDungeon();
 		GameRegistry.registerWorldGenerator(dungeonGenerator, 1000);
 
+		// World Generators:
+		GameRegistry.registerWorldGenerator(new WorldGeneratorFluids(), 0);
 
-        // ========== Seasonal Item Lists ==========
+        // Seasonal Item Lists:
         ItemHalloweenTreat.createObjectLists();
         ItemWinterGift.createObjectLists();
     }
-	
-	
-    // ==================================================
-    //                    Server Load
-    // ==================================================
+
+
+	/**
+	 * Server startup, adds commands and sets up other server only aspects.
+	 * @param event Server starting event.
+	 */
 	@Mod.EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
-		// ========== Commands ==========
+		// Commands:
 		event.registerServerCommand(new CommandMain());
 	}
-	
-	
-	// ==================================================
-	//                     Debugging
-	// ==================================================
+
+
+	/**
+	 * Prints an info message into the console.
+	 * @param key The debug config key to use, if empty, the message is always printed.
+	 * @param message The message to print.
+	 */
     public static void printInfo(String key, String message) {
         if("".equals(key) || config.getBool("Debug", key, false)) {
             System.out.println("[LycanitesMobs] [Info] [" + key + "] " + message);
         }
     }
 
-    public static void printDebug(String key, String message) {
+
+	/**
+	 * Prints an info debug into the console.
+	 * @param key The debug config key to use, if empty, the message is always printed.
+	 * @param message The message to print.
+	 */
+	public static void printDebug(String key, String message) {
         if("".equals(key) || config.getBool("Debug", key, false)) {
             System.out.println("[LycanitesMobs] [Debug] [" + key + "] " + message);
         }
     }
 
-    public static void printWarning(String key, String message) {
+
+	/**
+	 * Prints an info warning into the console.
+	 * @param key The debug config key to use, if empty, the message is always printed.
+	 * @param message The message to print.
+	 */
+	public static void printWarning(String key, String message) {
 		if("".equals(key) || config.getBool("Debug", key, false)) {
 			System.err.println("[LycanitesMobs] [WARNING] [" + key + "] " + message);
 		}

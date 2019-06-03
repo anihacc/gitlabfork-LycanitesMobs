@@ -18,7 +18,7 @@ public class ItemImmunizer extends ItemBase {
 	// ==================================================
     public ItemImmunizer() {
         super();
-        this.group = LycanitesMobs.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "immunizer";
         this.setup();
     }

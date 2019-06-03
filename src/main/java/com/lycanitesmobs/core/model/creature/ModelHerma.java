@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateArachnid;
-import com.lycanitesmobs.saltwatermobs.SaltwaterMobs;
+
 import net.minecraft.entity.EntityLiving;
 
 public class ModelHerma extends ModelTemplateArachnid {
@@ -15,7 +16,7 @@ public class ModelHerma extends ModelTemplateArachnid {
 
     public ModelHerma(float shadowSize) {
         // Load Model:
-        this.initModel("herma", SaltwaterMobs.instance.group, "entity/herma");
+        this.initModel("herma", LycanitesMobs.modInfo, "entity/herma");
 
         // Looking:
         this.lookHeadScaleX = 0;

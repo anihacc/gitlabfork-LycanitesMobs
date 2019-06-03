@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +21,7 @@ public class ItemScepterLifeDrain extends ItemScepter {
 	// ==================================================
     public ItemScepterLifeDrain() {
         super();
-    	this.group = ElementalMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "lifedrainscepter";
         this.setup();
         this.textureName = "scepterlifedrain";

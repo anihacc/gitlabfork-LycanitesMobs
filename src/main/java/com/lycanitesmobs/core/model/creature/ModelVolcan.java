@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.layer.LayerGlow;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -24,7 +25,7 @@ public class ModelVolcan extends ModelTemplateElemental {
     public ModelVolcan(float shadowSize) {
 
 		// Load Model:
-		this.initModel("volcan", ElementalMobs.instance.group, "entity/volcan");
+		this.initModel("volcan", LycanitesMobs.modInfo, "entity/volcan");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

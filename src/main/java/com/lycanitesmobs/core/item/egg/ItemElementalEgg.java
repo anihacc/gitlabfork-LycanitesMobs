@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.item.egg;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 
 public class ItemElementalEgg extends ItemCustomSpawnEgg {
 
@@ -11,7 +12,7 @@ public class ItemElementalEgg extends ItemCustomSpawnEgg {
     public ItemElementalEgg() {
         super();
         this.setUnlocalizedName("elementalspawn");
-        this.group = ElementalMobs.instance.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "elementalspawn";
         this.texturePath = "elementalspawn";
         this.setRegistryName(this.group.filename, this.itemName);

@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.shadowmobs.ShadowMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class ItemScepterBloodleech extends ItemScepter {
 	// ==================================================
     public ItemScepterBloodleech() {
         super();
-    	this.group = ShadowMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "bloodleechscepter";
         this.setup();
     }

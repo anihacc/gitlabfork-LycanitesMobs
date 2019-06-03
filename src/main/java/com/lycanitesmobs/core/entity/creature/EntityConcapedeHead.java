@@ -32,7 +32,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
     public EntityConcapedeHead(World world) {
         super(world);
         
-        CONCAPEDE_SIZE_MAX = Math.max(1, ConfigBase.getConfig(this.creatureInfo.group, "general").getInt("Features", "Concapede Size Limit", CONCAPEDE_SIZE_MAX, "The maximum amount of segments long a Concapede can be, including the head."));
+        CONCAPEDE_SIZE_MAX = Math.max(1, ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Concapede Size Limit", CONCAPEDE_SIZE_MAX, "The maximum amount of segments long a Concapede can be, including the head."));
         
         // Setup:
         this.attribute = EnumCreatureAttribute.ARTHROPOD;

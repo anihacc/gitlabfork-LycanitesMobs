@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.entity.Entity;
@@ -20,7 +19,7 @@ public class ItemSoulstone extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstone(GroupInfo group, String type) {
+    public ItemSoulstone(ModInfo group, String type) {
         super();
         this.itemName = "soulstone" + type;
 		this.group = group;

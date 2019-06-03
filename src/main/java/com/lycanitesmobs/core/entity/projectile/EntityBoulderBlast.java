@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.mountainmobs.MountainMobs;
+
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,7 +35,7 @@ public class EntityBoulderBlast extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "boulderblast";
-    	this.group = MountainMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(8);
     	this.setProjectileScale(4F);
     	

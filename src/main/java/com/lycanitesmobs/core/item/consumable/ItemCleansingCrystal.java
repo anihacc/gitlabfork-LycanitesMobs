@@ -18,7 +18,7 @@ public class ItemCleansingCrystal extends ItemBase {
 	// ==================================================
     public ItemCleansingCrystal() {
         super();
-        this.group = LycanitesMobs.group;
+        this.group = LycanitesMobs.modInfo;
         this.itemName = "cleansingcrystal";
         this.setup();
     }

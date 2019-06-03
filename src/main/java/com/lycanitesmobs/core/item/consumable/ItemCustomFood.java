@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,7 @@ public class ItemCustomFood extends ItemFood {
     }
 	
 	public String itemName = "customfood";
-	public GroupInfo group = LycanitesMobs.group;
+	public ModInfo group = LycanitesMobs.modInfo;
 	public String texturePath = "customfood";
     public FOOD_CLASS foodClass = FOOD_CLASS.NONE;
 
@@ -41,7 +41,7 @@ public class ItemCustomFood extends ItemFood {
     // ==================================================
   	//                    Constructors
   	// ==================================================
-	public ItemCustomFood(String setItemName, GroupInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
+	public ItemCustomFood(String setItemName, ModInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
 		super(feed, saturation, false);
 		this.itemName = setItemName;
 		this.group = group;
@@ -53,7 +53,7 @@ public class ItemCustomFood extends ItemFood {
 		this.setUnlocalizedName(itemName);
 		this.setPotionEffect(MobEffects.INSTANT_HEALTH, 1, this.getInstantHealing(), 1.0F);
 	}
-	public ItemCustomFood(String setItemName, GroupInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
+	public ItemCustomFood(String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
 		this(setItemName, group, setItemName.toLowerCase(), feed, saturation, foodClass);
 	}
     

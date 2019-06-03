@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.soulstone;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityAfrit;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,7 @@ public class ItemSoulstoneInferno extends ItemSoulstone {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstoneInferno(GroupInfo group) {
+    public ItemSoulstoneInferno(ModInfo group) {
         super(group, "inferno");
     }
     

@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.desertmobs.DesertMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
@@ -16,7 +17,7 @@ public class ItemScepterScythe extends ItemScepter {
 	// ==================================================
     public ItemScepterScythe() {
         super();
-    	this.group = DesertMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "scythescepter";
         this.setup();
         this.textureName = "scepterscythe";

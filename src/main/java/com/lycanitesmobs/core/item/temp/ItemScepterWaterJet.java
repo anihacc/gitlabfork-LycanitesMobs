@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.item.temp;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.freshwatermobs.FreshwaterMobs;
+
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +21,7 @@ public class ItemScepterWaterJet extends ItemScepter {
 	// ==================================================
     public ItemScepterWaterJet() {
         super();
-    	this.group = FreshwaterMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.itemName = "waterjetscepter";
         this.setup();
     }

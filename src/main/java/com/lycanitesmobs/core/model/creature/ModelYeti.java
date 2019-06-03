@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelYeti extends ModelObjOld {
     
     public ModelYeti(float shadowSize) {
     	// Load Model:
-    	this.initModel("Yeti", ArcticMobs.instance.group, "entity/yeti");
+    	this.initModel("Yeti", LycanitesMobs.modInfo, "entity/yeti");
     	
 
 

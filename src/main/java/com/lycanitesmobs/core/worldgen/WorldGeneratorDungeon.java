@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.worldgen;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -12,7 +11,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -25,7 +23,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
     //                    Constructors
     // ==================================================
     public WorldGeneratorDungeon() {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.group, "general");
+		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 		this.enabled = config.getBool("Dungeons", "Dungeons Enabled", this.enabled, "If false, all Lycanites Mobs Dungeons are disabled, set to true to enable the Dungeon System. (The JSON files are still loaded but don't do anything.)");
 		this.dungeonDistance = config.getInt("Dungeons", "Dungeon Distance", this.dungeonDistance, "The average distance in chunks that dungeons are spaced apart from each other.");
 	}

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.GroupInfo;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.block.BlockHorizontal;
@@ -29,7 +29,7 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockEquipmentForge(GroupInfo group, int level) {
+	public BlockEquipmentForge(ModInfo group, int level) {
 		super(level <= 1 ? Material.WOOD : level == 2 ? Material.ROCK : Material.IRON);
         this.setCreativeTab(LycanitesMobs.blocksTab);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));

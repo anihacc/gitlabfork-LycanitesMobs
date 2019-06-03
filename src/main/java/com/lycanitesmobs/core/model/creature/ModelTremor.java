@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.elementalmobs.ElementalMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelTremor extends ModelTemplateElemental {
     public ModelTremor(float shadowSize) {
 
 		// Load Model:
-		this.initModel("tremor", ElementalMobs.instance.group, "entity/tremor");
+		this.initModel("tremor", LycanitesMobs.modInfo, "entity/tremor");
 
 		// Trophy:
 		this.trophyScale = 1.2F;

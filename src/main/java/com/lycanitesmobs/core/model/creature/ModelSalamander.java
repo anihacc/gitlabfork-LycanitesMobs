@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
-import com.lycanitesmobs.infernomobs.InfernoMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
@@ -20,7 +21,7 @@ public class ModelSalamander extends ModelObjOld {
 
     public ModelSalamander(float shadowSize) {
     	// Load Model:
-    	this.initModel("salamander", InfernoMobs.instance.group, "entity/salamander");
+    	this.initModel("salamander", LycanitesMobs.modInfo, "entity/salamander");
     	
 
 

@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.model.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.swampmobs.SwampMobs;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,7 +21,7 @@ public class ModelAspid extends ModelObjOld {
     
     public ModelAspid(float shadowSize) {
     	// Load Model:
-    	this.initModel("Aspid", SwampMobs.instance.group, "entity/aspid");
+    	this.initModel("Aspid", LycanitesMobs.modInfo, "entity/aspid");
     	
 
 

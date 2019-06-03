@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.arcticmobs.ArcticMobs;
+
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
@@ -35,7 +36,7 @@ public class EntityFrostweb extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "frostweb";
-    	this.group = ArcticMobs.instance.group;
+    	this.group = LycanitesMobs.modInfo;
     	this.setBaseDamage(2);
         this.knockbackChance = 0D;
     }
