@@ -56,6 +56,7 @@ public class LanguageManager implements IResourceManagerReloadListener {
 	 */
 	public static String translate(String key) {
 		if(!getInstance().map.containsKey(key)) {
+			//LycanitesMobs.printInfo("", "Translating " + key + " to " + getInstance().map.get(key));
 			return I18n.translateToLocal(key);
 		}
 		return getInstance().map.get(key);

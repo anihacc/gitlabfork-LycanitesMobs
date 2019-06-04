@@ -22,7 +22,6 @@ import com.lycanitesmobs.core.item.CreativeTabItems;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
 import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
@@ -146,11 +145,6 @@ public class LycanitesMobs {
 		// Version Checker:
 		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
 
-		// Register Assets:
-		proxy.registerRenders(modInfo);
-		proxy.registerModels(modInfo);
-		proxy.registerTextures();
-
 		// Initialize Packet Handler:
 		packetHandler.init();
 
@@ -212,6 +206,9 @@ public class LycanitesMobs {
         // Tile Entities:
         ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
+
+		// Renderers:
+		proxy.registerRenders(modInfo);
 
 		// Mod Support:
 		DLDungeons.init();
@@ -292,6 +289,10 @@ public class LycanitesMobs {
         // Seasonal Item Lists:
         ItemHalloweenTreat.createObjectLists();
         ItemWinterGift.createObjectLists();
+
+		// Register Assets:
+		proxy.registerModels(modInfo);
+		proxy.registerTextures();
 
         // Development:
 		//LanguageManager.getInstance().generateLangs();

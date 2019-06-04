@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -97,8 +98,6 @@ public class ClientProxy extends CommonProxy {
 	// ========== Register Assets ==========
 	@Override
     public void registerTextures() {
-        ObjectManager.RegisterModels();
-
 		// ========== Add GUI Textures ==========
 		ModInfo group = LycanitesMobs.modInfo;
 		AssetManager.addTexture("GUIInventoryCreature", group, "textures/guis/inventory_creature.png");
@@ -156,6 +155,8 @@ public class ClientProxy extends CommonProxy {
 	// ========== Register Models ==========
 	@Override
 	public void registerModels(ModInfo groupInfo) {
+		ObjectManager.RegisterModels();
+
 		// Projectiles:
 		AssetManager.addModel("lightball", new ModelLightBall());
 		AssetManager.addModel("crystalshard", new ModelCrystalShard());
