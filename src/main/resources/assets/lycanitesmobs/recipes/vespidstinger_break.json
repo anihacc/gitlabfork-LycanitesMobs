@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "junglemobs:vespidstinger"
+      "item": "lycanitesmobs:vespidstinger"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:lurkertreat",
+    "item": "lycanitesmobs:lurkertreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "swampmobs:aspidmeatcooked"
+      "item": "lycanitesmobs:aspidmeatcooked"
     }
   }
 }

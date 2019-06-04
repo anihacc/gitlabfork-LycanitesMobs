@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:eechetikarm"
+      "item": "lycanitesmobs:eechetikarm"
     }
   ],
   "type": "forge:ore_shapeless"

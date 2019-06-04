@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "forestmobs:shambler",
+			"mobId": "lycanitesmobs:shambler",
 			"weight": 8
 		},
 		{
-			"mobId": "swampmobs:triffid",
+			"mobId": "lycanitesmobs:triffid",
 			"weight": 8
 		}
 	]

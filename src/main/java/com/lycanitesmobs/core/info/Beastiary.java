@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class Beastiary {
 		// Invalid Entity:
 		if(!(entity instanceof EntityCreatureBase)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocal("message.beastiary.unknown")));
+				this.extendedPlayer.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
 			}
 			return false;
 		}
@@ -121,17 +121,17 @@ public class Beastiary {
 			return;
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
-		String message = I18n.translateToLocal("message.beastiary.new");
+		String message = LanguageManager.translate("message.beastiary.new");
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + creatureKnowledge.rank);
 		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
 		if(creatureInfo.isSummonable()) {
-			String summonMessage = I18n.translateToLocal("message.beastiary.summonable");
+			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
 			if(creatureKnowledge.rank >= 3) {
-				summonMessage = I18n.translateToLocal("message.beastiary.summonable.skins");
+				summonMessage = LanguageManager.translate("message.beastiary.summonable.skins");
 			}
 			else if(creatureKnowledge.rank == 2) {
-				summonMessage = I18n.translateToLocal("message.beastiary.summonable.colors");
+				summonMessage = LanguageManager.translate("message.beastiary.summonable.colors");
 			}
 			summonMessage = summonMessage.replace("%creature%", creatureInfo.getTitle());
 			this.extendedPlayer.player.sendMessage(new TextComponentString(summonMessage));
@@ -149,7 +149,7 @@ public class Beastiary {
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		CreatureKnowledge currentKnowledge = this.extendedPlayer.getBeastiary().getCreatureKnowledge(creatureInfo.getName());
-		String message = I18n.translateToLocal("message.beastiary.known");
+		String message = LanguageManager.translate("message.beastiary.known");
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + currentKnowledge.rank);
 		this.extendedPlayer.player.sendMessage(new TextComponentString(message));

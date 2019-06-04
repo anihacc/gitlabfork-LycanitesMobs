@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "elementalmobs:items/azurecinderfallsword"
+		"layer0": "lycanitesmobs:items/azurecinderfallsword"
 	}
 }

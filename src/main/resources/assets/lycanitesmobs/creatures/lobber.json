@@ -85,13 +85,13 @@
 			"chance": 1
 		},
 		{
-			"item": "infernomobs:magmacharge",
+			"item": "lycanitesmobs:magmacharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25
 		},
 		{
-			"item": "infernomobs:soulstoneinferno",
+			"item": "lycanitesmobs:soulstoneinferno",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,

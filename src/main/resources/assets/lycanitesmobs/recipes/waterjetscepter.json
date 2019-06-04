@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "freshwatermobs:waterjetscepter"
+    "item": "lycanitesmobs:waterjetscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "freshwatermobs:waterjetcharge"
+      "item": "lycanitesmobs:waterjetcharge"
     }
   }
 }

@@ -10,7 +10,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,7 +55,7 @@ public class ItemBucketOoze extends ItemBucket {
     }
 
     public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        return I18n.translateToLocal("item." + this.itemName + ".description");
+        return LanguageManager.translate("item." + this.itemName + ".description");
     }
     
 	

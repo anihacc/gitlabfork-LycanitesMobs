@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "freshwatermobs:silexmeatcooked"
+    "item": "lycanitesmobs:silexmeatcooked"
   },
   "ingredients": [
     {
-      "item": "freshwatermobs:lapisfishandchips"
+      "item": "lycanitesmobs:lapisfishandchips"
     }
   ],
   "type": "forge:ore_shapeless"

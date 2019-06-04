@@ -1,6 +1,6 @@
 {
-	"parent": "demonmobs:item/demoniclightningscepter",
+	"parent": "lycanitesmobs:item/demoniclightningscepter",
 	"textures": {
-		"layer0": "demonmobs:items/demoniclightningscepter_fire"
+		"layer0": "lycanitesmobs:items/demoniclightningscepter_fire"
 	}
 }

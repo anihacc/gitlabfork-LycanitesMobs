@@ -84,7 +84,7 @@
 			"chance": 1
 		},
 		{
-			"item": "mountainmobs:boulderblastcharge",
+			"item": "lycanitesmobs:boulderblastcharge",
 			"minAmount": 2,
 			"maxAmount": 3,
 			"chance": 0.25

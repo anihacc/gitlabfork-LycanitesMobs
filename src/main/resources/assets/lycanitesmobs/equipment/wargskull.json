@@ -2,7 +2,7 @@
 	"itemName": "wargskull",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "forestmobs:warg",
+	"dropMobId": "lycanitesmobs:warg",
 	"dropChance": 0.2,
 	"levelMin": 1,
 	"levelMax": 3,

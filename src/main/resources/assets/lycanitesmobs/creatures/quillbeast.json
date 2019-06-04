@@ -66,7 +66,7 @@
 			"chance": 1
 		},
 		{
-			"item": "plainsmobs:quill",
+			"item": "lycanitesmobs:quill",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

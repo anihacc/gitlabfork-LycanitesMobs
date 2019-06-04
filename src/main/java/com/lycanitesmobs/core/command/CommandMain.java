@@ -22,7 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -88,7 +88,7 @@ public class CommandMain implements ICommand {
 	// ==================================================
 	@Override
 	public void execute(MinecraftServer server, ICommandSender commandSender, String[] args) {
-		String reply = I18n.translateToLocal("lyc.command.invalid");
+		String reply = LanguageManager.translate("lyc.command.invalid");
 		if(args.length < 1) {
 			commandSender.sendMessage(new TextComponentString(reply));
 			commandSender.sendMessage(new TextComponentString(this.getUsage(commandSender)));
@@ -97,14 +97,14 @@ public class CommandMain implements ICommand {
 
 		// Debug:
 		if("debug".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.debug.invalid");
+			reply = LanguageManager.translate("lyc.command.debug.invalid");
 			if (args.length < 3) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
 
 			String debugValue = args[1];
-			reply = I18n.translateToLocal("lyc.command.debug.set");
+			reply = LanguageManager.translate("lyc.command.debug.set");
 			reply = reply.replace("%debug%", debugValue);
 			LycanitesMobs.config.setBool("Debug", debugValue, "true".equalsIgnoreCase(args[2]));
 			commandSender.sendMessage(new TextComponentString(reply));
@@ -113,7 +113,7 @@ public class CommandMain implements ICommand {
 
 		// Spawner:
 		if("spawners".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.spawners.invalid");
+			reply = LanguageManager.translate("lyc.command.spawners.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -121,7 +121,7 @@ public class CommandMain implements ICommand {
 
 			// Reload:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.spawners.reload");
+				reply = LanguageManager.translate("lyc.command.spawners.reload");
 				SpawnerManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -129,7 +129,7 @@ public class CommandMain implements ICommand {
 
 			// Creative Test:
 			if("creative".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.spawners.creative");
+				reply = LanguageManager.translate("lyc.command.spawners.creative");
 				SpawnerEventListener.testOnCreative = !SpawnerEventListener.testOnCreative;
 				reply = reply.replace("%value%", "" + SpawnerEventListener.testOnCreative);
 				commandSender.sendMessage(new TextComponentString(reply));
@@ -137,7 +137,7 @@ public class CommandMain implements ICommand {
 			}
 		}
 		if("spawner".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.spawners.invalid");
+			reply = LanguageManager.translate("lyc.command.spawners.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -145,7 +145,7 @@ public class CommandMain implements ICommand {
 
 			// Add:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.spawners.reload");
+				reply = LanguageManager.translate("lyc.command.spawners.reload");
 				SpawnerManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -154,7 +154,7 @@ public class CommandMain implements ICommand {
 
 		// Dungeon:
 		if("dungeon".equalsIgnoreCase(args[0]) || "dungeons".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.dungeon.invalid");
+			reply = LanguageManager.translate("lyc.command.dungeon.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -162,7 +162,7 @@ public class CommandMain implements ICommand {
 
 			// Reload:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.dungeon.reload");
+				reply = LanguageManager.translate("lyc.command.dungeon.reload");
 				DungeonManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -170,7 +170,7 @@ public class CommandMain implements ICommand {
 
 			// Enable:
 			if("enable".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.dungeon.enable");
+				reply = LanguageManager.translate("lyc.command.dungeon.enable");
 				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 				config.setBool("Dungeons", "Dungeons Enabled", true);
 				LycanitesMobs.dungeonGenerator.enabled = true;
@@ -180,7 +180,7 @@ public class CommandMain implements ICommand {
 
 			// Disable:
 			if("disable".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.dungeon.disable");
+				reply = LanguageManager.translate("lyc.command.dungeon.disable");
 				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 				config.setBool("Dungeons", "Dungeons Enabled", false);
 				LycanitesMobs.dungeonGenerator.enabled = false;
@@ -191,7 +191,7 @@ public class CommandMain implements ICommand {
 
 		// Spawner:
 		if("creature".equalsIgnoreCase(args[0]) || "creatures".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.creatures.invalid");
+			reply = LanguageManager.translate("lyc.command.creatures.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -199,7 +199,7 @@ public class CommandMain implements ICommand {
 
 			// Reload:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.creatures.reload");
+				reply = LanguageManager.translate("lyc.command.creatures.reload");
 				CreatureManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -208,7 +208,7 @@ public class CommandMain implements ICommand {
 
 		// Equipment:
 		if("equipment".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.equipment.invalid");
+			reply = LanguageManager.translate("lyc.command.equipment.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -216,7 +216,7 @@ public class CommandMain implements ICommand {
 
 			// Reload:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.equipment.reload");
+				reply = LanguageManager.translate("lyc.command.equipment.reload");
 				EquipmentPartManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -225,7 +225,7 @@ public class CommandMain implements ICommand {
 
 		// Beastiary:
 		if("beastiary".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.beastiary.invalid");
+			reply = LanguageManager.translate("lyc.command.beastiary.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -233,7 +233,7 @@ public class CommandMain implements ICommand {
 
 			// Player Only:
 			if(!(commandSender instanceof EntityPlayer)) {
-				reply = I18n.translateToLocal("lyc.command.playeronly");
+				reply = LanguageManager.translate("lyc.command.playeronly");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
@@ -246,7 +246,7 @@ public class CommandMain implements ICommand {
 
 			// Add:
 			if("add".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.beastiary.add.invalid");
+				reply = LanguageManager.translate("lyc.command.beastiary.add.invalid");
 				if (args.length < 3) {
 					commandSender.sendMessage(new TextComponentString(reply));
 					return;
@@ -260,7 +260,7 @@ public class CommandMain implements ICommand {
 				String creatureName = args[2].toLowerCase();
 				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName);
 				if(creatureInfo == null) {
-					reply = I18n.translateToLocal("lyc.command.beastiary.add.unknown");
+					reply = LanguageManager.translate("lyc.command.beastiary.add.unknown");
 					commandSender.sendMessage(new TextComponentString(reply));
 					return;
 				}
@@ -287,7 +287,7 @@ public class CommandMain implements ICommand {
 					beastiary.addCreatureKnowledge(new CreatureKnowledge(beastiary, creatureInfo.getName(), rank));
 				}
 				beastiary.sendAllToClient();
-				reply = I18n.translateToLocal("lyc.command.beastiary.complete");
+				reply = LanguageManager.translate("lyc.command.beastiary.complete");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
@@ -296,7 +296,7 @@ public class CommandMain implements ICommand {
 			if("clear".equalsIgnoreCase(args[1])) {
 				beastiary.creatureKnowledgeList.clear();
 				beastiary.sendAllToClient();
-				reply = I18n.translateToLocal("lyc.command.beastiary.clear");
+				reply = LanguageManager.translate("lyc.command.beastiary.clear");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
@@ -304,7 +304,7 @@ public class CommandMain implements ICommand {
 		
 		// Mob Event:
 		if("mobevent".equalsIgnoreCase(args[0])) {
-			reply = I18n.translateToLocal("lyc.command.mobevent.invalid");
+			reply = LanguageManager.translate("lyc.command.mobevent.invalid");
 			if(args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -312,7 +312,7 @@ public class CommandMain implements ICommand {
 
 			// Reload:
 			if("reload".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.reload");
+				reply = LanguageManager.translate("lyc.command.mobevent.reload");
 				MobEventManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -320,7 +320,7 @@ public class CommandMain implements ICommand {
 
 			// Creative Test:
 			if("creative".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.creative");
+				reply = LanguageManager.translate("lyc.command.mobevent.creative");
 				MobEventPlayerServer.testOnCreative = !MobEventPlayerServer.testOnCreative;
 				reply = reply.replace("%value%", "" + MobEventPlayerServer.testOnCreative);
 				commandSender.sendMessage(new TextComponentString(reply));
@@ -329,7 +329,7 @@ public class CommandMain implements ICommand {
 			
 			// Start:
 			if("start".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.start.invalid");
+				reply = LanguageManager.translate("lyc.command.mobevent.start.invalid");
 				if(args.length < 3) {
 					commandSender.sendMessage(new TextComponentString(reply));
 					return;
@@ -349,7 +349,7 @@ public class CommandMain implements ICommand {
 					
 					// No World:
 					if(world == null) {
-						reply = I18n.translateToLocal("lyc.command.mobevent.start.noworld");
+						reply = LanguageManager.translate("lyc.command.mobevent.start.noworld");
 						commandSender.sendMessage(new TextComponentString(reply));
 						return;
 					}
@@ -358,14 +358,14 @@ public class CommandMain implements ICommand {
 					
 					// Force Enabled:
 					if(!MobEventManager.getInstance().mobEventsEnabled) {
-						reply = I18n.translateToLocal("lyc.command.mobevent.enable");
+						reply = LanguageManager.translate("lyc.command.mobevent.enable");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsEnabled = true;
 						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Mob Events Enabled", true);
 					}
 					
-					reply = I18n.translateToLocal("lyc.command.mobevent.start");
+					reply = LanguageManager.translate("lyc.command.mobevent.start");
 					commandSender.sendMessage(new TextComponentString(reply));
 					EntityPlayer player = null;
 					BlockPos pos = new BlockPos(0, 0, 0);
@@ -381,7 +381,7 @@ public class CommandMain implements ICommand {
 					return;
 				}
 				
-				reply = I18n.translateToLocal("lyc.command.mobevent.start.unknown");
+				reply = LanguageManager.translate("lyc.command.mobevent.start.unknown");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
@@ -397,7 +397,7 @@ public class CommandMain implements ICommand {
 
             // No World:
             if(world == null) {
-                reply = I18n.translateToLocal("lyc.command.mobevent.start.noworld");
+                reply = LanguageManager.translate("lyc.command.mobevent.start.noworld");
                 commandSender.sendMessage(new TextComponentString(reply));
                 return;
             }
@@ -409,7 +409,7 @@ public class CommandMain implements ICommand {
 			
 			// Random:
 			if("random".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.random");
+				reply = LanguageManager.translate("lyc.command.mobevent.random");
 				commandSender.sendMessage(new TextComponentString(reply));
 				worldExt.stopWorldEvent();
 				MobEventListener.getInstance().triggerRandomMobEvent(world, worldExt);
@@ -418,7 +418,7 @@ public class CommandMain implements ICommand {
 			
 			// Stop:
 			if("stop".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.stop");
+				reply = LanguageManager.translate("lyc.command.mobevent.stop");
 				commandSender.sendMessage(new TextComponentString(reply));
                 worldExt.stopWorldEvent();
 				return;
@@ -426,7 +426,7 @@ public class CommandMain implements ICommand {
 			
 			// List:
 			if("list".equalsIgnoreCase(args[1])) {
-				reply = I18n.translateToLocal("lyc.command.mobevent.list");
+				reply = LanguageManager.translate("lyc.command.mobevent.list");
 				commandSender.sendMessage(new TextComponentString(reply));
 				for(MobEvent mobEvent : MobEventManager.getInstance().mobEvents.values()) {
 					String eventName = mobEvent.name + " (" + mobEvent.getTitle() + ")";
@@ -439,7 +439,7 @@ public class CommandMain implements ICommand {
 			if("enable".equalsIgnoreCase(args[1])) {
 				if(args.length >= 3) {
 					if("random".equalsIgnoreCase(args[2])) {
-						reply = I18n.translateToLocal("lyc.command.mobevent.enable.random");
+						reply = LanguageManager.translate("lyc.command.mobevent.enable.random");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsRandom = true;
 						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
@@ -447,7 +447,7 @@ public class CommandMain implements ICommand {
 						return;
 					}
 				}
-				reply = I18n.translateToLocal("lyc.command.mobevent.enable");
+				reply = LanguageManager.translate("lyc.command.mobevent.enable");
 				commandSender.sendMessage(new TextComponentString(reply));
 				MobEventManager.getInstance().mobEventsEnabled = true;
 				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
@@ -459,7 +459,7 @@ public class CommandMain implements ICommand {
 			if("disable".equalsIgnoreCase(args[1])) {
 				if(args.length >= 3) {
 					if("random".equalsIgnoreCase(args[2])) {
-						reply = I18n.translateToLocal("lyc.command.mobevent.disable.random");
+						reply = LanguageManager.translate("lyc.command.mobevent.disable.random");
 						commandSender.sendMessage(new TextComponentString(reply));
 						MobEventManager.getInstance().mobEventsRandom = false;
 						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
@@ -467,7 +467,7 @@ public class CommandMain implements ICommand {
 						return;
 					}
 				}
-				reply = I18n.translateToLocal("lyc.command.mobevent.disable");
+				reply = LanguageManager.translate("lyc.command.mobevent.disable");
 				commandSender.sendMessage(new TextComponentString(reply));
 				MobEventManager.getInstance().mobEventsEnabled = false;
 				ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");

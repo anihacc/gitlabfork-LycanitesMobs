@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "shadowmobs:shadowstonetile_stairs",
+    "item": "lycanitesmobs:shadowstonetile_stairs",
     "count": 8
   },
   "pattern": [
@@ -11,7 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "B": {
-      "item": "shadowmobs:shadowstonetile"
+      "item": "lycanitesmobs:shadowstonetile"
     }
   }
 }

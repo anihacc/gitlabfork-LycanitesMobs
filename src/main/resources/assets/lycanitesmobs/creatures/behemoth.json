@@ -67,7 +67,7 @@
 			"chance": 0.25
 		},
 		{
-			"item": "demonmobs:hellfirecharge",
+			"item": "lycanitesmobs:hellfirecharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

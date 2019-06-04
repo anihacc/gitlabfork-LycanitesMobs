@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "swampmobs:items/poisonrayscepter"
+		"layer0": "lycanitesmobs:items/poisonrayscepter"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "swampmobs:item/poisonrayscepter_fire"
+            "model": "lycanitesmobs:item/poisonrayscepter_fire"
         }
 	]
 }

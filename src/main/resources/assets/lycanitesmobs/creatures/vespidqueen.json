@@ -69,13 +69,13 @@
 			"chance": 1
 		},
 		{
-			"item": "junglemobs:propolis",
+			"item": "lycanitesmobs:propolis",
 			"minAmount": 4,
 			"maxAmount": 8,
 			"chance": 1
 		},
 		{
-			"item": "junglemobs:veswax",
+			"item": "lycanitesmobs:veswax",
 			"minAmount": 4,
 			"maxAmount": 8,
 			"chance": 1

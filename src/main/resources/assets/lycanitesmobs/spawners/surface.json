@@ -28,7 +28,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:wisp",
+			"mobId": "lycanitesmobs:wisp",
 			"weight": 8
 		}
 	]

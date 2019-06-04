@@ -79,7 +79,7 @@
 			"chance": 0.05
 		},
 		{
-			"item": "elementalmobs:aetherwavecharge",
+			"item": "lycanitesmobs:aetherwavecharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.25

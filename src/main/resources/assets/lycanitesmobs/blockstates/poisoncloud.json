@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "swampmobs:poisoncloud" } }
+		{ "apply": { "model" : "lycanitesmobs:poisoncloud" } }
 	]
 }

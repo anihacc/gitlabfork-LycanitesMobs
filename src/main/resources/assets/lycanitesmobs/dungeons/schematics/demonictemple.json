@@ -46,41 +46,41 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "demonmobs:belph",
+			"mobId": "lycanitesmobs:belph",
 			"weight": 14
 		},
 		{
-			"mobId": "elementalmobs:wraith",
+			"mobId": "lycanitesmobs:wraith",
 			"weight": 8,
 			"dungeonLevelMin": "0"
 		},
 		{
-			"mobId": "demonmobs:behemoth",
+			"mobId": "lycanitesmobs:behemoth",
 			"weight": 4,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "demonmobs:pinky",
+			"mobId": "lycanitesmobs:pinky",
 			"weight": 4,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "demonmobs:trite",
+			"mobId": "lycanitesmobs:trite",
 			"weight": 14,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "demonmobs:astaroth",
+			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
 			"dungeonLevelMin": "2"
 		},
 		{
-			"mobId": "demonmobs:cacodemon",
+			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
 			"dungeonLevelMin": "2"
 		},
 		{
-			"mobId": "demonmobs:behemoth",
+			"mobId": "lycanitesmobs:behemoth",
 			"weight": 1,
 			"subspecies": 0,
 			"mobNameTag": "Baron of Hell",
@@ -93,12 +93,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "demonmobs:hellfirescepter"
+					"item": "lycanitesmobs:hellfirescepter"
 				}
 			]
 		},
 		{
-			"mobId": "demonmobs:astaroth",
+			"mobId": "lycanitesmobs:astaroth",
 			"weight": 1,
 			"subspecies": 0,
 			"mobNameTag": "Arachnotron",
@@ -111,12 +111,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "demonmobs:devilstarscepter"
+					"item": "lycanitesmobs:devilstarscepter"
 				}
 			]
 		},
 		{
-			"mobId": "demonmobs:cacodemon",
+			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
 			"subspecies": 3,
 			"mobSizeScale": 1.25,
@@ -127,7 +127,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "demonmobs:demoniclightningscepter"
+					"item": "lycanitesmobs:demoniclightningscepter"
 				}
 			]
 		}

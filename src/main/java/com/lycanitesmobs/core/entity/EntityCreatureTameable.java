@@ -25,7 +25,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -630,7 +630,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();
 				this.unsetTemporary();
-				String tameMessage = I18n.translateToLocal("message.pet.tamed");
+				String tameMessage = LanguageManager.translate("message.pet.tamed");
 				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
 				player.sendMessage(new TextComponentString(tameMessage));
 				this.playTameEffect(this.isTamed());
@@ -644,7 +644,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 				}
 			}
 			else {
-				String tameFailedMessage = I18n.translateToLocal("message.pet.tamefail");
+				String tameFailedMessage = LanguageManager.translate("message.pet.tamefail");
 				tameFailedMessage = tameFailedMessage.replace("%creature%", this.getSpeciesName());
 				player.sendMessage(new TextComponentString(tameFailedMessage));
 				this.playTameEffect(this.isTamed());

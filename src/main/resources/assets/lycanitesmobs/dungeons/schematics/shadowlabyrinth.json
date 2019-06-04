@@ -46,41 +46,41 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "shadowmobs:geist",
+			"mobId": "lycanitesmobs:geist",
 			"weight": 14
 		},
 		{
-			"mobId": "elementalmobs:grue",
+			"mobId": "lycanitesmobs:grue",
 			"weight": 8,
 			"dungeonLevelMin": "0"
 		},
 		{
-			"mobId": "shadowmobs:shade",
+			"mobId": "lycanitesmobs:shade",
 			"weight": 4,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "shadowmobs:chupacabra",
+			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 4,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "shadowmobs:darkling",
+			"mobId": "lycanitesmobs:darkling",
 			"weight": 14,
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "shadowmobs:epion",
+			"mobId": "lycanitesmobs:epion",
 			"weight": 1,
 			"dungeonLevelMin": "2"
 		},
 		{
-			"mobId": "shadowmobs:phantom",
+			"mobId": "lycanitesmobs:phantom",
 			"weight": 1,
 			"dungeonLevelMin": "2"
 		},
 		{
-			"mobId": "shadowmobs:chupacabra",
+			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 1,
 			"subspecies": 1,
 			"mobNameTag": "Shadow Hound",
@@ -93,12 +93,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "shadowmobs:bloodleechscepter"
+					"item": "lycanitesmobs:bloodleechscepter"
 				}
 			]
 		},
 		{
-			"mobId": "shadowmobs:shade",
+			"mobId": "lycanitesmobs:shade",
 			"weight": 1,
 			"subspecies": 1,
 			"mobNameTag": "Chaos Serpent",
@@ -111,12 +111,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "shadowmobs:spectralboltscepter"
+					"item": "lycanitesmobs:spectralboltscepter"
 				}
 			]
 		},
 		{
-			"mobId": "elementalmobs:grue",
+			"mobId": "lycanitesmobs:grue",
 			"weight": 1,
 			"subspecies": 3,
 			"mobSizeScale": 1.5,
@@ -127,7 +127,7 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "shadowmobs:spectralboltscepter"
+					"item": "lycanitesmobs:spectralboltscepter"
 				}
 			]
 		}

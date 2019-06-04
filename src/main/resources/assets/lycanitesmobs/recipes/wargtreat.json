@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "forestmobs:wargtreat",
+    "item": "lycanitesmobs:wargtreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "forestmobs:arisaurmeatcooked"
+      "item": "lycanitesmobs:arisaurmeatcooked"
     }
   }
 }

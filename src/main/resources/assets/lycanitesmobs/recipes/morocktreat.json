@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "plainsmobs:morocktreat",
+    "item": "lycanitesmobs:morocktreat",
     "count": 4
   },
   "pattern": [
@@ -11,7 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "T": {
-      "item": "plainsmobs:makameatcooked"
+      "item": "lycanitesmobs:makameatcooked"
     },
     "D": {
       "item": "minecraft:diamond"

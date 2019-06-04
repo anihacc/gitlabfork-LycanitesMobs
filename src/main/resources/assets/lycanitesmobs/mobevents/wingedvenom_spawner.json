@@ -31,15 +31,15 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "swampmobs:remobra",
+			"mobId": "lycanitesmobs:remobra",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:eechetik",
+			"mobId": "lycanitesmobs:eechetik",
 			"weight": 2
 		},
 		{
-			"mobId": "elementalmobs:xaphan",
+			"mobId": "lycanitesmobs:xaphan",
 			"weight": 2
 		}
 	]

@@ -2,7 +2,7 @@
 	"itemName": "remobrawing",
 	"loadDefault": true,
 	"slotType": "axe",
-	"dropMobId": "swampmobs:remobra",
+	"dropMobId": "lycanitesmobs:remobra",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -61,7 +61,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "swampmobs.remobra",
+			"summonMobId": "lycanitesmobs.remobra",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

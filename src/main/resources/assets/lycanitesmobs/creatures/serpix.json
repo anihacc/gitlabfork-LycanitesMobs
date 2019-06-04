@@ -78,7 +78,7 @@
 			"chance": 0.25
 		},
 		{
-			"item": "arcticmobs:blizzardcharge",
+			"item": "lycanitesmobs:blizzardcharge",
 			"minAmount": 2,
 			"maxAmount": 6,
 			"chance": 0.5

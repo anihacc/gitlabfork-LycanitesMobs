@@ -84,7 +84,7 @@
 			"chance": 0.25
 		},
 		{
-			"item": "mountainmobs:arcanelaserstormcharge",
+			"item": "lycanitesmobs:arcanelaserstormcharge",
 			"minAmount": 2,
 			"maxAmount": 3,
 			"chance": 0.25

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "junglemobs:poopscepter"
+    "item": "lycanitesmobs:poopscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "junglemobs:poopcharge"
+      "item": "lycanitesmobs:poopcharge"
     }
   }
 }

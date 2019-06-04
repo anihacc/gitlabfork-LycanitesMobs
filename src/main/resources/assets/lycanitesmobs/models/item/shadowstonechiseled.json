@@ -1,5 +1,5 @@
 {
-	"parent": "shadowmobs:block/shadowstonechiseled",
+	"parent": "lycanitesmobs:block/shadowstonechiseled",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

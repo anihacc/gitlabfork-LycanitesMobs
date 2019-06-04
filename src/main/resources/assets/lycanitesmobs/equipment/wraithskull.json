@@ -2,7 +2,7 @@
 	"itemName": "wraithskull",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "elementalmobs:wraith",
+	"dropMobId": "lycanitesmobs:wraith",
 	"dropChance": 0.2,
 	"levelMin": 2,
 	"levelMax": 3,

@@ -32,7 +32,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "shadowmobs:phantom",
+			"mobId": "lycanitesmobs:phantom",
 			"weight": 8,
 			"mobNameTag": "Satan Claws"
 		}

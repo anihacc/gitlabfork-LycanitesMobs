@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:devillasagna"
+    "item": "lycanitesmobs:devillasagna"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:wheat"
     },
     {
-      "item": "demonmobs:pinkymeatcooked"
+      "item": "lycanitesmobs:pinkymeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

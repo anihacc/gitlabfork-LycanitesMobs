@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.*;
@@ -76,20 +76,20 @@ public class GuiIndexList extends GuiScrollingList {
 			return "";
 		}
 
-		String content = "§l§n" + I18n.translateToLocal("gui.beastiary.index.changes") + "§r";
-		content += "\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.name") + ":§r " + this.versionInfo.name;
+		String content = "§l§n" + LanguageManager.translate("gui.beastiary.index.changes") + "§r";
+		content += "\n§l" + LanguageManager.translate("gui.beastiary.index.changes.name") + ":§r " + this.versionInfo.name;
 		if(this.versionInfo.newFeatures.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.new") + ":§r\n" + this.versionInfo.newFeatures;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.new") + ":§r\n" + this.versionInfo.newFeatures;
 		if(this.versionInfo.configChanges.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.config") + ":§r\n" + this.versionInfo.configChanges;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.config") + ":§r\n" + this.versionInfo.configChanges;
 		if(this.versionInfo.majorFixes.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.major") + ":§r\n" + this.versionInfo.majorFixes;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.major") + ":§r\n" + this.versionInfo.majorFixes;
 		if(this.versionInfo.changes.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.gameplay") + ":§r\n" + this.versionInfo.changes;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.gameplay") + ":§r\n" + this.versionInfo.changes;
 		if(this.versionInfo.balancing.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.balancing") + ":§r\n" + this.versionInfo.balancing;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.balancing") + ":§r\n" + this.versionInfo.balancing;
 		if(this.versionInfo.minorFixes.length() > 0)
-			content += "\n\n§l" + I18n.translateToLocal("gui.beastiary.index.changes.minor") + ":§r\n" + this.versionInfo.minorFixes;
+			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.minor") + ":§r\n" + this.versionInfo.minorFixes;
 
 		return content;
 	}

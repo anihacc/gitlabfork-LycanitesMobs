@@ -31,19 +31,19 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "infernomobs:ignibus",
+			"mobId": "lycanitesmobs:ignibus",
 			"weight": 2
 		},
 		{
-			"mobId": "plainsmobs:morock",
+			"mobId": "lycanitesmobs:morock",
 			"weight": 8
 		},
 		{
-			"mobId": "saltwatermobs:quetzodracl",
+			"mobId": "lycanitesmobs:quetzodracl",
 			"weight": 8
 		},
 		{
-			"mobId": "junglemobs:cockatrice",
+			"mobId": "lycanitesmobs:cockatrice",
 			"weight": 8
 		}
 	]

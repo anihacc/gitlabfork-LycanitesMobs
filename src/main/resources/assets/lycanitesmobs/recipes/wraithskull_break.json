@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:wraithskull"
+      "item": "lycanitesmobs:wraithskull"
     }
   ],
   "type": "forge:ore_shapeless"

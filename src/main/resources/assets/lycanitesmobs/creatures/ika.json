@@ -60,8 +60,8 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "saltwatermobs:ikameatraw",
-			"burningItem": "saltwatermobs:ikameatcooked",
+			"item": "lycanitesmobs:ikameatraw",
+			"burningItem": "lycanitesmobs:ikameatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

@@ -59,7 +59,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -552,7 +552,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		if(this.getLevel() < 2) {
 			return "";
 		}
-		return " " + I18n.translateToLocal("entity.level") + " " + this.getLevel();
+		return " " + LanguageManager.translate("entity.level") + " " + this.getLevel();
 	}
 
     /** Gets the name of this entity relative to it's age, more useful for EntityCreatureAgeable. **/

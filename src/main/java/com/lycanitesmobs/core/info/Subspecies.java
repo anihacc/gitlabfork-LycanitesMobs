@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -228,13 +228,13 @@ public class Subspecies {
 	public String getTitle() {
 		String subspeciesName = "";
 		if(this.color != null) {
-			subspeciesName += I18n.translateToLocal("subspecies." + this.color + ".name");
+			subspeciesName += LanguageManager.translate("subspecies." + this.color + ".name");
 		}
 		if(this.skin != null) {
 			if(!subspeciesName.equals("")) {
 				subspeciesName += " ";
 			}
-			subspeciesName += I18n.translateToLocal("subspecies." + this.skin + ".name");
+			subspeciesName += LanguageManager.translate("subspecies." + this.skin + ".name");
 		}
         return subspeciesName;
     }

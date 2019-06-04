@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "plainsmobs:makameatcooked"
+    "item": "lycanitesmobs:makameatcooked"
   },
   "ingredients": [
     {
-      "item": "plainsmobs:bulwarkburger"
+      "item": "lycanitesmobs:bulwarkburger"
     }
   ],
   "type": "forge:ore_shapeless"

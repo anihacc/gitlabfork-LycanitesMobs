@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-        "cross": "junglemobs:blocks/poopcloud"
+        "cross": "lycanitesmobs:blocks/poopcloud"
 	}
 }

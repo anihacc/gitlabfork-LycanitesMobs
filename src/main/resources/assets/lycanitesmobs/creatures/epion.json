@@ -72,7 +72,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "shadowmobs:bloodleechcharge",
+			"item": "lycanitesmobs:bloodleechcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "desertmobs:ambercake"
+    "item": "lycanitesmobs:ambercake"
   },
   "ingredients": [
     {
@@ -11,7 +11,7 @@
       "data": 2
     },
     {
-      "item": "desertmobs:joustmeatcooked"
+      "item": "lycanitesmobs:joustmeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

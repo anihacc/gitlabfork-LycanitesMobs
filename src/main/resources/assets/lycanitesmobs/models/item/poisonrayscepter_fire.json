@@ -1,6 +1,6 @@
 {
-	"parent": "swampmobs:item/poisonrayscepter",
+	"parent": "lycanitesmobs:item/poisonrayscepter",
 	"textures": {
-		"layer0": "swampmobs:items/poisonrayscepter_fire"
+		"layer0": "lycanitesmobs:items/poisonrayscepter_fire"
 	}
 }

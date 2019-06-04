@@ -1,0 +1,78 @@
+item.aquapulsescepter.name=Aqua Pulse Scepter
+item.aquapulsescepter.description=Low Damage, Charge Up, Applies Penetration, Places Water
+#
+item.scorchfirescepter.name=Scorchfire Scepter
+item.scorchfirescepter.description=Low Damage, Rapid Fire, Applies Fire, Places Scorchfire
+#
+item.devilstarscepter.name=Devilstar Scepter
+item.devilstarscepter.description=Low Damage, Fast Rapid Fire
+#
+item.wraithsigil.name=Wraith Sigil
+item.wraithsigil.description=This skull is full to the brim with evil Wraiths! Use to fire a wave of angry Wraiths forwards towards your victim! Results can be explosive!
+#
+item.quillscepter.name=Quill Scepter
+item.quillscepter.description=Mid Damage, Rapid Fire
+#
+item.mudshotscepter.name=Mudshot Scepter
+item.mudshotscepter.description=Mid Damage, Rapid Fire, Applies Weakness
+#
+item.venomshotscepter.name=Venom Shot Scepter
+item.venomshotscepter.description=Low Damage, Rapid Fire, Applies Poison, Places Poison Clouds
+#
+item.blizzardscepter.name=Blizzard Scepter
+item.blizzardscepter.description=Mid Damage, Spray Fire, Places Icefire
+#
+item.bloodleechscepter.name=Bloodleech Scepter
+item.bloodleechscepter.description=Low Damage, Rapid Fire, Drains Health
+#
+item.waterjetscepter.name=Water Jet Scepter
+item.waterjetscepter.description=Mid Damage, Laser, Applies Penetration
+#
+item.doomfirescepter.name=Doomfire Scepter
+item.doomfirescepter.description=Mid Damage, Rapid Fire, Applies Fire, Places Fire
+#
+item.frostboltscepter.name=Frostbolt Scepter
+item.frostboltscepter.description=Mid Damage, Rapid Fire, Applies Move Slowdown
+#
+item.poopscepter.name=Poop Scepter
+item.poopscepter.description=Low Damage, Rapid Fire, Applies Slowness and Nausea, Places Poop Clouds
+#
+item.scythescepter.name=Scythe Scepter
+item.scythescepter.description=Mid Damage, Triple Pulse Fire
+#
+item.tundrascepter.name=Tundra Scepter
+item.tundrascepter.description=High Damage, Charge Up, Places Ooze
+#
+item.magmascepter.name=Magma Scepter
+item.magmascepter.description=High Damage, Charge Up, Applies Fire, Places Lava
+#
+item.hellfirescepter.name=Hellfire Scepter
+item.hellfirescepter.description=High Damage, Charge Up, Applies Fire, Places Hellfire
+#
+item.emberscepter.name=Ember Scepter
+item.emberscepter.description=Mid Damage, Spray Fire, Applies Fire
+#
+item.icefirescepter.name=Icefire Scepter
+item.icefirescepter.description=Low Damage, Rapid Fire, Places Icefire
+#
+item.poisonrayscepter.name=Poison Ray Scepter
+item.poisonrayscepter.description=Mid Damage, Laser, Applies Poison
+#
+item.arcanelaserstormscepter.name=Arcane Laser Storm Scepter
+item.arcanelaserstormscepter.description=High Damage, Charge Up, Lasers Fly Off
+#
+item.demoniclightningscepter.name=Demonic Lightning Scepter
+item.demoniclightningscepter.description=High Damage, Charge Up, Applies Wither, Damaging Sparks Fly Off
+#
+item.spectralboltscepter.name=Spectral Bolt Scepter
+item.spectralboltscepter.description=Medium Damage, Rapid Fire, Causes Fear
+#
+item.lifedrainscepter.name=Life Drain Scepter
+item.lifedrainscepter.description=Mid Damage, Laser, Drains Health
+#
+item.frostwebscepter.name=Frostweb Scepter
+item.frostwebscepter.description=Low Damage, Rapid Fire, Applies Move Slowdown, Places Frostwebs
+#
+item.boulderblastscepter.name=Boulder Blast Scepter
+item.boulderblastscepter.description=High Damage, Charge Up, Applies Dig Speed Slowdown
+#

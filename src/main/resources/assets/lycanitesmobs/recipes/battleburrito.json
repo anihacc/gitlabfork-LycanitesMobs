@@ -4,19 +4,19 @@
   },
   "ingredients": [
     {
-      "item": "demonmobs:pinkymeatcooked"
+      "item": "lycanitesmobs:pinkymeatcooked"
     },
     {
-      "item": "plainsmobs:makameatcooked"
+      "item": "lycanitesmobs:makameatcooked"
     },
     {
-      "item": "forestmobs:arisaurmeatcooked"
+      "item": "lycanitesmobs:arisaurmeatcooked"
     },
     {
-      "item": "arcticmobs:yetimeatcooked"
+      "item": "lycanitesmobs:yetimeatcooked"
     },
     {
-      "item": "swampmobs:aspidmeatcooked"
+      "item": "lycanitesmobs:aspidmeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

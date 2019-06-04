@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "desertmobs:scythescepter"
+    "item": "lycanitesmobs:scythescepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "desertmobs:throwingscythe"
+      "item": "lycanitesmobs:throwingscythe"
     }
   }
 }

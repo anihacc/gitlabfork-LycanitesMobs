@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 public class ItemInfo {
 
@@ -85,7 +85,7 @@ public class ItemInfo {
 	 * @return The display name of this item.
 	 */
 	public String getTitle() {
-		return I18n.translateToLocal("item." + this.getLocalisationKey() + ".name");
+		return LanguageManager.translate("item." + this.getLocalisationKey() + ".name");
 	}
 
 	/**
@@ -93,6 +93,6 @@ public class ItemInfo {
 	 * @return The display description of this item.
 	 */
 	public String getDescription() {
-		return I18n.translateToLocal("item." + this.getLocalisationKey() + ".description");
+		return LanguageManager.translate("item." + this.getLocalisationKey() + ".description");
 	}
 }

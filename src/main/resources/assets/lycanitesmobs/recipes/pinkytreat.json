@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:pinkytreat",
+    "item": "lycanitesmobs:pinkytreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "demonmobs:hellfirecharge"
+      "item": "lycanitesmobs:hellfirecharge"
     }
   }
 }

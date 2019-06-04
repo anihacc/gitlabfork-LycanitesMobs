@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.io.IOException;
 
@@ -42,12 +42,12 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			return this.playerExt.selectedCreature.getTitle();
 		}
 		if(this.groupList != null && this.playerExt.selectedGroup != null) {
-			return I18n.translateToLocal(this.playerExt.selectedGroup.filename + ".name"); //TODO Add getTitle() to GroupInfo
+			return LanguageManager.translate(this.playerExt.selectedGroup.filename + ".name"); //TODO Add getTitle() to GroupInfo
 		}
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			I18n.translateToLocal("gui.beastiary.creatures.empty.title");
+			LanguageManager.translate("gui.beastiary.creatures.empty.title");
 		}
-		return I18n.translateToLocal("gui.beastiary.creatures");
+		return LanguageManager.translate("gui.beastiary.creatures");
 	}
 
 
@@ -99,7 +99,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 		int width = this.colRightWidth - marginX;
 
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			String text = I18n.translateToLocal("gui.beastiary.creatures.empty.info");
+			String text = LanguageManager.translate("gui.beastiary.creatures.empty.info");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 			return;
 		}
@@ -112,13 +112,13 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			this.renderCreature(this.playerExt.selectedCreature, this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + 100, mouseX, mouseY, partialTicks);
 
 			// Element:
-			String text = "\u00A7l" + I18n.translateToLocal("creature.stat.element") + ": " + "\u00A7r";
+			String text = "\u00A7l" + LanguageManager.translate("creature.stat.element") + ": " + "\u00A7r";
 			text += this.playerExt.selectedCreature.elements != null ? this.playerExt.selectedCreature.getElementNames() : "None";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 
 			// Subspecies:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + I18n.translateToLocal("creature.stat.subspecies") + ": " + "\u00A7r";
+			text = "\u00A7l" + LanguageManager.translate("creature.stat.subspecies") + ": " + "\u00A7r";
 			boolean firstSubspecies = true;
 			for(Subspecies subspecies : this.playerExt.selectedCreature.subspecies.values()) {
 				if(!firstSubspecies) {
@@ -131,13 +131,13 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 			// Level:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + I18n.translateToLocal("creature.stat.cost") + ": " + "\u00A7r";
+			text = "\u00A7l" + LanguageManager.translate("creature.stat.cost") + ": " + "\u00A7r";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 			this.drawLevel(this.playerExt.selectedCreature, AssetManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + I18n.translateToLocal("creature.stat.knowledge") + ": " + "\u00A7r";
+			text = "\u00A7l" + LanguageManager.translate("creature.stat.knowledge") + ": " + "\u00A7r";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
@@ -151,12 +151,12 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 		// Group Display:
 		else if(this.playerExt.selectedGroup != null) {
 			// Description:
-			String text = I18n.translateToLocal(this.playerExt.selectedGroup.filename + ".description");
+			String text = LanguageManager.translate(this.playerExt.selectedGroup.filename + ".description");
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 
 			// Descovered:
 			nextY += 12 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = I18n.translateToLocal("gui.beastiary.creatures.descovered") + ": ";
+			text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedGroup);
 			text += "/" + ObjectManager.entityLists.get(this.playerExt.selectedGroup.filename).IDtoClassMapping.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
@@ -164,7 +164,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 		// Base Display:
 		else {
-			String text = I18n.translateToLocal("gui.beastiary.creatures.select");
+			String text = LanguageManager.translate("gui.beastiary.creatures.select");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
 	}

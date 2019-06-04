@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "desertmobs:items/scythescepter"
+		"layer0": "lycanitesmobs:items/scythescepter"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "desertmobs:item/scythescepter_fire"
+            "model": "lycanitesmobs:item/scythescepter_fire"
         }
 	]
 }

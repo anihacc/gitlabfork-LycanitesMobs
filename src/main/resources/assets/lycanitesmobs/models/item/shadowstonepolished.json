@@ -1,5 +1,5 @@
 {
-	"parent": "shadowmobs:block/shadowstonepolished",
+	"parent": "lycanitesmobs:block/shadowstonepolished",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

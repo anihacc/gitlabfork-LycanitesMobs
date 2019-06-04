@@ -72,13 +72,13 @@
 			"chance": 0.25
 		},
 		{
-			"item": "arcticmobs:tundracharge",
+			"item": "lycanitesmobs:tundracharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.75
 		},
 		{
-			"item": "arcticmobs:frostyfur",
+			"item": "lycanitesmobs:frostyfur",
 			"minAmount": 2,
 			"maxAmount": 5,
 			"chance": 1

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:poisonrayscepter"
+    "item": "lycanitesmobs:poisonrayscepter"
   },
   "pattern": [
     "CPC",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "P": {
-      "item": "swampmobs:poisongland"
+      "item": "lycanitesmobs:poisongland"
     },
     "R": {
       "item": "minecraft:blaze_rod"

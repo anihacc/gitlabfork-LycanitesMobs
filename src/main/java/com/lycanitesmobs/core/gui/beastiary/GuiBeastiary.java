@@ -20,7 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.io.IOException;
@@ -214,15 +214,15 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		GuiButton button;
 
 		// Top Menu:
-		button = new GuiButton(GuiHandler.Beastiary.INDEX.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.beastiary.index.title"));
+		button = new GuiButton(GuiHandler.Beastiary.INDEX.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.index.title"));
 		this.buttonList.add(button);
-		button = new GuiButton(GuiHandler.Beastiary.CREATURES.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.beastiary.creatures"));
+		button = new GuiButton(GuiHandler.Beastiary.CREATURES.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.creatures"));
 		this.buttonList.add(button);
-		button = new GuiButton(GuiHandler.Beastiary.PETS.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.beastiary.pets"));
+		button = new GuiButton(GuiHandler.Beastiary.PETS.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.pets"));
 		this.buttonList.add(button);
-		button = new GuiButton(GuiHandler.Beastiary.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.beastiary.summoning"));
+		button = new GuiButton(GuiHandler.Beastiary.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.summoning"));
 		this.buttonList.add(button);
-		button = new GuiButton(GuiHandler.Beastiary.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.beastiary.elements"));
+		button = new GuiButton(GuiHandler.Beastiary.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttonList.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.elements"));
 		this.buttonList.add(button);
 	}
 

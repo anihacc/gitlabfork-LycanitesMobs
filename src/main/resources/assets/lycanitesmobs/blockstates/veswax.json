@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "junglemobs:veswax" } }
+		{ "apply": { "model" : "lycanitesmobs:veswax" } }
 	]
 }

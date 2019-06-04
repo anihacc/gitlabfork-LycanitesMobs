@@ -13,7 +13,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class ItemWinterGiftLarge extends ItemBase {
@@ -52,7 +52,7 @@ public class ItemWinterGiftLarge extends ItemBase {
   	//                       Open
   	// ==================================================
     public void open(ItemStack itemStack, World world, EntityPlayer player) {
-    	String message = I18n.translateToLocal("item." + this.itemName + ".bad");
+    	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		

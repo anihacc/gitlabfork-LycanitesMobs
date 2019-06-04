@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "freshwatermobs:lapisfishandchips"
+    "item": "lycanitesmobs:lapisfishandchips"
   },
   "ingredients": [
     {
       "item": "minecraft:potato"
     },
     {
-      "item": "freshwatermobs:silexmeatcooked"
+      "item": "lycanitesmobs:silexmeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

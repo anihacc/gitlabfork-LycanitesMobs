@@ -12,7 +12,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -161,6 +161,6 @@ public class ProjectileInfo {
 	 * @return The display name of this projectile.
 	 */
 	public String getTitle() {
-		return I18n.translateToLocal("entity." + this.getLocalisationKey() + ".name");
+		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
 	}
 }

@@ -2,7 +2,7 @@
 	"itemName": "darklingskull",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "shadowmobs:darkling",
+	"dropMobId": "lycanitesmobs:darkling",
 	"dropChance": 0.2,
 	"levelMin": 2,
 	"levelMax": 3,
@@ -57,7 +57,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 3,
-			"summonMobId": "shadowmobs.darkling",
+			"summonMobId": "lycanitesmobs.darkling",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
 import com.lycanitesmobs.core.model.ModelCustom;
 import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
@@ -32,6 +33,8 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAir;
@@ -57,6 +60,13 @@ public class ClientProxy extends CommonProxy {
 	};
 
 	/**
+	 * Sets up the Language Manager used for additional lang files.
+	 */
+	public void initLanguageManager() {
+		LanguageManager.getInstance();
+	}
+
+	/**
 	 * Returns the Font Renderer used by Lycanites Mobs.
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
@@ -70,16 +80,20 @@ public class ClientProxy extends CommonProxy {
 		return this.fontRenderer;
 	}
 
-	
+
 	// ========== Register Event Handlers ==========
 	@Override
-    public void registerEvents() {
+	public void registerEvents() {
 		// Event Listeners:
 		FMLCommonHandler.instance().bus().register(new KeyHandler(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
-        MinecraftForge.EVENT_BUS.register(new ClientEventListener());
+		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
+		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		if(resourceManager instanceof IReloadableResourceManager) {
+			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageManager.getInstance());
+		}
 	}
-	
+
 	// ========== Register Assets ==========
 	@Override
     public void registerTextures() {

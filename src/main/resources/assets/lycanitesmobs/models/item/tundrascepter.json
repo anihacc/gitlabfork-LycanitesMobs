@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "arcticmobs:items/tundrascepter"
+		"layer0": "lycanitesmobs:items/tundrascepter"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "arcticmobs:item/tundrascepter_fire"
+            "model": "lycanitesmobs:item/tundrascepter_fire"
         }
 	]
 }

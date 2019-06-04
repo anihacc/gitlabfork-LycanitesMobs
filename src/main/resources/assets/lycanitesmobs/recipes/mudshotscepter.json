@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "desertmobs:mudshotscepter"
+    "item": "lycanitesmobs:mudshotscepter"
   },
   "pattern": [
     " C ",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "desertmobs:mudshotcharge"
+      "item": "lycanitesmobs:mudshotcharge"
     }
   }
 }

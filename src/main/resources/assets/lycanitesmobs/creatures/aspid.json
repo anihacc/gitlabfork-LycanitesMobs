@@ -66,14 +66,14 @@
 			"chance": 0.5
 		},
 		{
-			"item": "swampmobs:aspidmeatraw",
-			"burningItem": "swampmobs:aspidmeatcooked",
+			"item": "lycanitesmobs:aspidmeatraw",
+			"burningItem": "lycanitesmobs:aspidmeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1
 		},
 		{
-			"item": "swampmobs:poisongland",
+			"item": "lycanitesmobs:poisongland",
 			"minAmount": 1,
 			"maxAmount": 2,
 			"chance": 0.25

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "shadowmobs:shadowstonebrick_wall",
+    "item": "lycanitesmobs:shadowstonebrick_wall",
     "count": 6
   },
   "pattern": [
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "B": {
-      "item": "shadowmobs:shadowstonebrick"
+      "item": "lycanitesmobs:shadowstonebrick"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "infernomobs:gorgertreat",
+    "item": "lycanitesmobs:gorgertreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "infernomobs:cephignismeatcooked"
+      "item": "lycanitesmobs:cephignismeatcooked"
     }
   }
 }

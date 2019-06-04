@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:bansheeeye"
+      "item": "lycanitesmobs:bansheeeye"
     }
   ],
   "type": "forge:ore_shapeless"

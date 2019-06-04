@@ -1,5 +1,5 @@
 {
-	"parent": "shadowmobs:block/shadowstonebrick",
+	"parent": "lycanitesmobs:block/shadowstonebrick",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

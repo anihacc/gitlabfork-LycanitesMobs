@@ -31,6 +31,7 @@ public class CommonProxy {
 	
 	
 	// ========== Client Only ==========
+	public void initLanguageManager() {}
     public void registerRenders(ModInfo groupInfo) {}
 	public void registerTextures() {}
 	public void registerModels(ModInfo groupInfo) {}

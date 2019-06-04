@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:cacodemontreat",
+    "item": "lycanitesmobs:cacodemontreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "demonmobs:pinkymeatcooked"
+      "item": "lycanitesmobs:pinkymeatcooked"
     }
   }
 }

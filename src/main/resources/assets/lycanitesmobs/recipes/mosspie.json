@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:mosspie"
+    "item": "lycanitesmobs:mosspie"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:red_mushroom"
     },
     {
-      "item": "swampmobs:aspidmeatcooked"
+      "item": "lycanitesmobs:aspidmeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

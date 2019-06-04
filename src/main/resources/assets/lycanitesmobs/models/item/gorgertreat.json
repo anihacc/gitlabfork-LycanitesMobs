@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "infernomobs:items/gorgertreat"
+		"layer0": "lycanitesmobs:items/gorgertreat"
 	}
 }

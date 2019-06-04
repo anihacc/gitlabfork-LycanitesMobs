@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class ItemSoulstone extends ItemBase {
@@ -47,7 +47,7 @@ public class ItemSoulstone extends ItemBase {
     		return false;
     	if(!(entity instanceof EntityCreatureTameable)) {
     		if(!player.getEntityWorld().isRemote)
-    			player.sendMessage(new TextComponentString(I18n.translateToLocal("message.soulstone.invalid")));
+    			player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.invalid")));
     		return false;
     	}
 
@@ -55,12 +55,12 @@ public class ItemSoulstone extends ItemBase {
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 	 	if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TextComponentString(I18n.translateToLocal("message.soulstone.untamed")));
+				player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.untamed")));
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TextComponentString(I18n.translateToLocal("message.soulstone.exists")));
+				player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.exists")));
 			return false;
 		}
 
@@ -82,7 +82,7 @@ public class ItemSoulstone extends ItemBase {
 				petType = "mount";
 			}
 
-    		String message = I18n.translateToLocal("message.soulstone." + petType + ".added");
+    		String message = LanguageManager.translate("message.soulstone." + petType + ".added");
     		message = message.replace("%creature%", creatureInfo.getTitle());
     		player.sendMessage(new TextComponentString(message));
             //player.addStat(ObjectManager.getStat("soulstone"), 1);

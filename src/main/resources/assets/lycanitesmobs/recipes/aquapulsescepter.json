@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "elementalmobs:aquapulsescepter"
+    "item": "lycanitesmobs:aquapulsescepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "elementalmobs:aquapulsecharge"
+      "item": "lycanitesmobs:aquapulsecharge"
     }
   }
 }

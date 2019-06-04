@@ -1,5 +1,5 @@
 {
-	"parent": "demonmobs:block/soulcubedemonic",
+	"parent": "lycanitesmobs:block/soulcubedemonic",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

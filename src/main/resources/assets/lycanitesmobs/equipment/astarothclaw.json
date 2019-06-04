@@ -2,7 +2,7 @@
 	"itemName": "astarothclaw",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "demonmobs:astaroth",
+	"dropMobId": "lycanitesmobs:astaroth",
 	"dropChance": 0.2,
 	"levelMin": 2,
 	"levelMax": 3,

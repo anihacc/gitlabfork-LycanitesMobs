@@ -28,7 +28,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:djinn",
+			"mobId": "lycanitesmobs:djinn",
 			"weight": 8
 		}
 	]

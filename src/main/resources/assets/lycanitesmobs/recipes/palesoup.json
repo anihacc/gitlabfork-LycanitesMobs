@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "arcticmobs:palesoup"
+    "item": "lycanitesmobs:palesoup"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:bowl"
     },
     {
-      "item": "arcticmobs:yetimeatcooked"
+      "item": "lycanitesmobs:yetimeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

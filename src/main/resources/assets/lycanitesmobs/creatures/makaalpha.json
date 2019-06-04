@@ -66,8 +66,8 @@
 			"chance": 1
 		},
 		{
-			"item": "plainsmobs:makameatraw",
-			"burningItem": "plainsmobs:makameatcooked",
+			"item": "lycanitesmobs:makameatraw",
+			"burningItem": "lycanitesmobs:makameatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

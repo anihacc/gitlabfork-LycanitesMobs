@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class ElementInfo {
 	 * @return The title text.
 	 */
 	public String getTitle() {
-		return I18n.translateToLocal("element." + this.name + ".name");
+		return LanguageManager.translate("element." + this.name + ".name");
 	}
 
 
@@ -112,7 +112,7 @@ public class ElementInfo {
 	 * @return The description text.
 	 */
 	public String getDescription() {
-		return I18n.translateToLocal("element." + this.name + ".description");
+		return LanguageManager.translate("element." + this.name + ".description");
 	}
 
 

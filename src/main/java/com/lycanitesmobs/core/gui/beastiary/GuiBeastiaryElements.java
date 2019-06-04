@@ -4,7 +4,7 @@ import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal("gui.beastiary.elements");
+		return LanguageManager.translate("gui.beastiary.elements");
 	}
 
 
@@ -50,7 +50,7 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 	public void drawForeground(int x, int y, float partialTicks) {
 		super.drawForeground(x, y, partialTicks);
 
-		String info = I18n.translateToLocal("gui.beastiary.elements.comingsoon");
+		String info = LanguageManager.translate("gui.beastiary.elements.comingsoon");
 		this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 	}
 

@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "junglemobs:concapedemeatcooked"
+    "item": "lycanitesmobs:concapedemeatcooked"
   },
   "ingredients": [
     {
-      "item": "junglemobs:tropicalcurry"
+      "item": "lycanitesmobs:tropicalcurry"
     }
   ],
   "type": "forge:ore_shapeless"

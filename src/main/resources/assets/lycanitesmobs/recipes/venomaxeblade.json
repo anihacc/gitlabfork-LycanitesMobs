@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:venomaxeblade"
+    "item": "lycanitesmobs:venomaxeblade"
   },
   "pattern": [
     "CCC",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "C": {
-      "item": "swampmobs:poisongland"
+      "item": "lycanitesmobs:poisongland"
     },
     "S": {
       "item": "minecraft:diamond_sword"

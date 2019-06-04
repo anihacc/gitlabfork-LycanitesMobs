@@ -60,7 +60,7 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "elementalmobs:aquapulsecharge",
+			"item": "lycanitesmobs:aquapulsecharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.25

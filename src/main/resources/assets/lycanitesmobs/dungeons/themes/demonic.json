@@ -6,11 +6,11 @@
 	"ceilingPattern": "random",
 	"floorBlocks": [
 		{
-			"blockId": "demonmobs:demonstonetile",
+			"blockId": "lycanitesmobs:demonstonetile",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:demonstonepolished",
+			"blockId": "lycanitesmobs:demonstonepolished",
 			"weight": 2
 		},
 		{
@@ -20,56 +20,56 @@
 	],
 	"wallBlocks": [
 		{
-			"blockId": "demonmobs:demonstonebrick",
+			"blockId": "lycanitesmobs:demonstonebrick",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:demonstonechiseled",
+			"blockId": "lycanitesmobs:demonstonechiseled",
 			"weight": 2
 		},
 		{
-			"blockId": "demonmobs:demonstonepillar",
+			"blockId": "lycanitesmobs:demonstonepillar",
 			"weight": 0
 		}
 	],
 	"ceilingBlocks": [
 		{
-			"blockId": "demonmobs:demonstonetile",
+			"blockId": "lycanitesmobs:demonstonetile",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:demonstonepolished",
+			"blockId": "lycanitesmobs:demonstonepolished",
 			"weight": 2
 		}
 	],
 	"lightBlocks": [
 		{
-			"blockId": "demonmobs:demoncrystal",
+			"blockId": "lycanitesmobs:demoncrystal",
 			"weight": 8
 		}
 	],
 	"torchBlocks": [],
 	"stairBlocks": [
 		{
-			"blockId": "demonmobs:demonstone_stairs",
+			"blockId": "lycanitesmobs:demonstone_stairs",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:demonstonebrick_stairs",
+			"blockId": "lycanitesmobs:demonstonebrick_stairs",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:demonstonetile_stairs",
+			"blockId": "lycanitesmobs:demonstonetile_stairs",
 			"weight": 8
 		}
 	],
 	"pitBlocks": [
 		{
-			"blockId": "demonmobs:doomfire",
+			"blockId": "lycanitesmobs:doomfire",
 			"weight": 8
 		},
 		{
-			"blockId": "demonmobs:hellfire",
+			"blockId": "lycanitesmobs:hellfire",
 			"weight": 8
 		},
 		{

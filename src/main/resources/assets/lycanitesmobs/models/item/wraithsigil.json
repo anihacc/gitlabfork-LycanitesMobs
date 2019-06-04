@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "elementalmobs:items/wraithsigil"
+		"layer0": "lycanitesmobs:items/wraithsigil"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "elementalmobs:item/wraithsigil_fire"
+            "model": "lycanitesmobs:item/wraithsigil_fire"
         }
 	]
 }

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "mountainmobs:beholdertreat",
+    "item": "lycanitesmobs:beholdertreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "mountainmobs:arcanelaserstormcharge"
+      "item": "lycanitesmobs:arcanelaserstormcharge"
     }
   }
 }

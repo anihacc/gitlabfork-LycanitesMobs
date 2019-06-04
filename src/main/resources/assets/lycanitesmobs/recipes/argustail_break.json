@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:chaosorbcharge",
+    "item": "lycanitesmobs:chaosorbcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:argustail"
+      "item": "lycanitesmobs:argustail"
     }
   ],
   "type": "forge:ore_shapeless"

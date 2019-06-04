@@ -97,7 +97,7 @@
 			"chance": 0.05
 		},
 		{
-			"item": "elementalmobs:lifedraincharge",
+			"item": "lycanitesmobs:lifedraincharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.25

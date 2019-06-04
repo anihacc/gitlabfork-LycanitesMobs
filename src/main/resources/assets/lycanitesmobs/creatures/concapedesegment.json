@@ -66,8 +66,8 @@
 			"chance": 1
 		},
 		{
-			"item": "junglemobs:concapedemeatraw",
-			"burningItem": "junglemobs:concapedemeatcooked",
+			"item": "lycanitesmobs:concapedemeatraw",
+			"burningItem": "lycanitesmobs:concapedemeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

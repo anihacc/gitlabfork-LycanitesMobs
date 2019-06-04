@@ -31,15 +31,15 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "infernomobs:lobber",
+			"mobId": "lycanitesmobs:lobber",
 			"weight": 8
 		},
 		{
-			"mobId": "arcticmobs:wendigo",
+			"mobId": "lycanitesmobs:wendigo",
 			"weight": 8
 		},
 		{
-			"mobId": "arcticmobs:wildkin",
+			"mobId": "lycanitesmobs:wildkin",
 			"weight": 8,
 			"mobNameTag": "Gooderness"
 		}

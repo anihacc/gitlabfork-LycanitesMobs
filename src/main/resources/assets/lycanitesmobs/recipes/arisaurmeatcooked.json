@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "forestmobs:arisaurmeatcooked"
+    "item": "lycanitesmobs:arisaurmeatcooked"
   },
   "ingredients": [
     {
-      "item": "forestmobs:paleosalad"
+      "item": "lycanitesmobs:paleosalad"
     }
   ],
   "type": "forge:ore_shapeless"

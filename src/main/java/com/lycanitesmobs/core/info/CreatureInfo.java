@@ -9,6 +9,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,6 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -156,10 +156,12 @@ public class CreatureInfo {
 		}
 
 		// Model Class:
-		try {
-			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
-		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+		if(json.has("modelClass")) {
+			try {
+				LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
+			} catch (Exception e) {
+				LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+			}
 		}
 
 		if(json.has("enabled"))
@@ -401,7 +403,7 @@ public class CreatureInfo {
 	 * @return The display name of this creature.
 	 */
 	public String getTitle() {
-		return I18n.translateToLocal("entity." + this.getLocalisationKey() + ".name");
+		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
 	}
 
 
@@ -410,7 +412,7 @@ public class CreatureInfo {
 	 * @return The creature description.
 	 */
 	public String getDescription() {
-		return I18n.translateToLocal("entity." + this.getLocalisationKey() + ".description");
+		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".description");
 	}
 
 

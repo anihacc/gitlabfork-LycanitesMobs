@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "junglemobs:vespid",
+			"mobId": "lycanitesmobs:vespid",
 			"weight": 8
 		},
 		{
-			"mobId": "junglemobs:vespidqueen",
+			"mobId": "lycanitesmobs:vespidqueen",
 			"weight": 1
 		}
 	]

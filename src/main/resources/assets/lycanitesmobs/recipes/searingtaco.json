@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "infernomobs:searingtaco"
+    "item": "lycanitesmobs:searingtaco"
   },
   "ingredients": [
     {
       "item": "minecraft:blaze_powder"
     },
     {
-      "item": "infernomobs:cephignismeatcooked"
+      "item": "lycanitesmobs:cephignismeatcooked"
     },
     {
       "item": "minecraft:wheat"

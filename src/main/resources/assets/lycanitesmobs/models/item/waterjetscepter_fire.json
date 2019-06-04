@@ -1,6 +1,6 @@
 {
-	"parent": "freshwatermobs:item/waterjetscepter",
+	"parent": "lycanitesmobs:item/waterjetscepter",
 	"textures": {
-		"layer0": "freshwatermobs:items/waterjetscepter_fire"
+		"layer0": "lycanitesmobs:items/waterjetscepter_fire"
 	}
 }

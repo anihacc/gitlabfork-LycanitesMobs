@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "plainsmobs:ventoraptorskull"
+      "item": "lycanitesmobs:ventoraptorskull"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -31,19 +31,19 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:cinder",
+			"mobId": "lycanitesmobs:cinder",
 			"weight": 8
 		},
 		{
-			"mobId": "infernomobs:afrit",
+			"mobId": "lycanitesmobs:afrit",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:reiver",
+			"mobId": "lycanitesmobs:reiver",
 			"weight": 8
 		},
 		{
-			"mobId": "arcticmobs:arix",
+			"mobId": "lycanitesmobs:arix",
 			"weight": 8
 		}
 	]

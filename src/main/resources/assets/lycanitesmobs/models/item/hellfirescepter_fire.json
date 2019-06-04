@@ -1,6 +1,6 @@
 {
-	"parent": "demonmobs:item/hellfirescepter",
+	"parent": "lycanitesmobs:item/hellfirescepter",
 	"textures": {
-		"layer0": "demonmobs:items/hellfirescepter_fire"
+		"layer0": "lycanitesmobs:items/hellfirescepter_fire"
 	}
 }

@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "shadowmobs:items/bloodleechscepter"
+		"layer0": "lycanitesmobs:items/bloodleechscepter"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "shadowmobs:item/bloodleechscepter_fire"
+            "model": "lycanitesmobs:item/bloodleechscepter_fire"
         }
 	]
 }

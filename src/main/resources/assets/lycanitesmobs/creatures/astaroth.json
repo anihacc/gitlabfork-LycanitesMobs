@@ -116,7 +116,7 @@
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:devilstarcharge",
+			"item": "lycanitesmobs:devilstarcharge",
 			"minAmount": 3,
 			"maxAmount": 6,
 			"chance": 0.5

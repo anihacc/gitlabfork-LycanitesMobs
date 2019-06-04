@@ -2,7 +2,7 @@
 	"itemName": "djinncloud",
 	"loadDefault": true,
 	"slotType": "pommel",
-	"dropMobId": "elementalmobs:djinn",
+	"dropMobId": "lycanitesmobs:djinn",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -26,7 +26,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.djinn",
+			"summonMobId": "lycanitesmobs.djinn",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

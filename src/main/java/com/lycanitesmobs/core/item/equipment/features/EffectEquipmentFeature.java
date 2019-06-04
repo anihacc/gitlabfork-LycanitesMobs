@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class EffectEquipmentFeature extends EquipmentFeature {
@@ -44,12 +44,12 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = I18n.translateToLocal("equipment.feature." + this.featureType) + " " + this.effectType + " (" + this.effectTarget + ")";
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.effectType + " (" + this.effectTarget + ")";
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
+			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
 		}
 		if(this.effectStrength > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.effect.strength") + " " + this.effectStrength;
+			description += "\n" + LanguageManager.translate("equipment.feature.effect.strength") + " " + this.effectStrength;
 		}
 		return description;
 	}

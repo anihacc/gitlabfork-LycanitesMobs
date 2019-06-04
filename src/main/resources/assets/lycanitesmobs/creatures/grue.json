@@ -77,7 +77,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "shadowmobs:soulstoneshadow",
+			"item": "lycanitesmobs:soulstoneshadow",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,

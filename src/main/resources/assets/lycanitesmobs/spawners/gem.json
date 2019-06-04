@@ -31,7 +31,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:vapula",
+			"mobId": "lycanitesmobs:vapula",
 			"weight": 8
 		}
 	]

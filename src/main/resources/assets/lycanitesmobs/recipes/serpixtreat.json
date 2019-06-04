@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "arcticmobs:serpixtreat",
+    "item": "lycanitesmobs:serpixtreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "arcticmobs:frostyfur"
+      "item": "lycanitesmobs:frostyfur"
     }
   }
 }

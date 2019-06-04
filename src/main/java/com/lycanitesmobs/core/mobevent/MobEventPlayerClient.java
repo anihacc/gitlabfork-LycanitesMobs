@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,7 +48,7 @@ public class MobEventPlayerClient {
 		if(!this.extended) {
 			this.ticks = 0;
 		}
-		String eventMessage = I18n.translateToLocal("event." + (extended ? "extended" : "started"));
+		String eventMessage = LanguageManager.translate("event." + (extended ? "extended" : "started"));
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
 		player.sendMessage(new TextComponentString(eventMessage));
 
@@ -73,7 +73,7 @@ public class MobEventPlayerClient {
     //                      Finish
     // ==================================================
 	public void onFinish(EntityPlayer player) {
-		String eventMessage = I18n.translateToLocal("event.finished");
+		String eventMessage = LanguageManager.translate("event.finished");
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
 		player.sendMessage(new TextComponentString(eventMessage));
 	}

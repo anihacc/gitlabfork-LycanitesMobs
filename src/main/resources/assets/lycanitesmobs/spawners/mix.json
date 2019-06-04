@@ -27,7 +27,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:xaphan",
+			"mobId": "lycanitesmobs:xaphan",
 			"weight": 8
 		}
 	]

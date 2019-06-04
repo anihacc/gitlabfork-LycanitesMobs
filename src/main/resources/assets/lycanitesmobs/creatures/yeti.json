@@ -72,14 +72,14 @@
 			"chance": 0.25
 		},
 		{
-			"item": "arcticmobs:yetimeatraw",
-			"burningItem": "arcticmobs:yetimeatcooked",
+			"item": "lycanitesmobs:yetimeatraw",
+			"burningItem": "lycanitesmobs:yetimeatcooked",
 			"minAmount": 2,
 			"maxAmount": 5,
 			"chance": 1
 		},
 		{
-			"item": "arcticmobs:frostyfur",
+			"item": "lycanitesmobs:frostyfur",
 			"minAmount": 1,
 			"maxAmount": 2,
 			"chance": 0.25

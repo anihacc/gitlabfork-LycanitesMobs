@@ -97,7 +97,7 @@
 			"chance": 0.01
 		},
 		{
-			"item": "elementalmobs:crystalshard",
+			"item": "lycanitesmobs:crystalshard",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.25

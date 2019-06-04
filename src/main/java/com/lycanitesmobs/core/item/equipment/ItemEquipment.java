@@ -21,7 +21,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -69,7 +69,7 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		return I18n.translateToLocal("item.equipment.description");
+		return LanguageManager.translate("item.equipment.description");
 	}
 
 	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
@@ -79,9 +79,9 @@ public class ItemEquipment extends ItemBase {
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(I18n.translateToLocal(equipmentPart.getUnlocalizedName() + ".name") + " " + I18n.translateToLocal("entity.level") + " " + partLevel);
+			descriptions.add(LanguageManager.translate(equipmentPart.getUnlocalizedName() + ".name") + " " + LanguageManager.translate("entity.level") + " " + partLevel);
 		}
-		//descriptions.add(I18n.translateToLocal("common.holdshift"));
+		//descriptions.add(LanguageManager.translate("common.holdshift"));
 		return descriptions;
 	}
 

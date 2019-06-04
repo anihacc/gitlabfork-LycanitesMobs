@@ -1,6 +1,6 @@
 {
-	"parent": "plainsmobs:item/quillscepter",
+	"parent": "lycanitesmobs:item/quillscepter",
 	"textures": {
-		"layer0": "plainsmobs:items/quillscepter_fire"
+		"layer0": "lycanitesmobs:items/quillscepter_fire"
 	}
 }

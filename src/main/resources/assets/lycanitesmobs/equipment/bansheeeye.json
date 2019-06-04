@@ -2,7 +2,7 @@
 	"itemName": "bansheeeye",
 	"loadDefault": true,
 	"slotType": "head",
-	"dropMobId": "elementalmobs:banshee",
+	"dropMobId": "lycanitesmobs:banshee",
 	"dropChance": 0.2,
 	"levelMin": 2,
 	"levelMax": 3,
@@ -57,7 +57,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 3,
-			"summonMobId": "elementalmobs.banshee",
+			"summonMobId": "lycanitesmobs.banshee",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

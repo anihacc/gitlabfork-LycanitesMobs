@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:spectretendril"
+      "item": "lycanitesmobs:spectretendril"
     }
   ],
   "type": "forge:ore_shapeless"

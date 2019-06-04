@@ -1,0 +1,90 @@
+item.whirlwindcharge.name=Whirlwind Charge
+item.whirlwindcharge.description=Use to release a ring of whirlwinds or fire from a dispenser.
+#
+item.demoniclightningcharge.name=Demonic Lightning Charge
+item.demoniclightningcharge.description=Use to throw a demonic lightning blast! Can also be fired from a dispenser.
+#
+item.magmacharge.name=Magma Charge
+item.magmacharge.description=Use to throw a ball of lava! Can also be fired from a dispenser.
+#
+item.frostboltcharge.name=Frostbolt Charge
+item.frostboltcharge.description=Use to fire a bolt of ice. Can also be fired from a dispenser.
+#
+item.spectralboltcharge.name=Spectral Bolt Charge
+item.spectralboltcharge.description=Use to throw a Spectral Bolt. Can also be fired from a dispenser.
+#
+item.throwingscythe.name=Throwing Scythe
+item.throwingscythe.description=A curved metal blade, use to throw or triple fire from a dispenser.
+#
+item.boulderblastcharge.name=Boulder Blast Charge
+item.boulderblastcharge.description=Use to throw a giant boulder! Can be fired from a dispenser, causes dig speed slowdown.
+#
+item.acidsplashcharge.name=Acid Splash Charge
+item.acidsplashcharge.description=Use to fire a wave of acid. Can also be fired from a dispenser.
+#
+item.faeboltcharge.name=Faebolt Charge
+item.faeboltcharge.description=Use to fire a bolt of fae energy, this deals no damage but applies the lifeleak debuff converting all damage dealt into healing. Can also be fired from a dispenser.
+#
+item.embercharge.name=Ember Charge
+item.embercharge.description=Use to throw a small flame or spray from a dispenser.
+#
+item.poopcharge.name=Poop
+item.poopcharge.description=Very smelly! Throw it! Can also be used on plants as a fertilizer like bonemeal.
+#
+item.lifedraincharge.name=Life Drain Charge
+item.lifedraincharge.description=Use to fire a quick life draining beam, or fire from a dispenser.
+#
+item.aquapulsecharge.name=Aqua Pulse Charge
+item.aquapulsecharge.description=Use to throw a ball of mystic water or fire from a dispenser.
+#
+item.arcanelaserstormcharge.name=Arcane Laser Storm Charge
+item.arcanelaserstormcharge.description=Use to fire a large blast of arcane magic energy with lasers bursting from it. Can be fired from a dispenser.
+#
+item.lightball.name=Light Ball Charge
+item.lightball.description=Use to throw a ball of light. Can also be fired from a dispenser.
+#
+item.doomfirecharge.name=Doomfire Charge
+item.doomfirecharge.description=Use to place throw a ball of Doomfire. Can also be fired from a dispenser.
+#
+item.aetherwavecharge.name=Aetherwave Charge
+item.aetherwavecharge.description=Use to release a wave of aether energy. Can also be fired from a dispenser.
+#
+item.mudshotcharge.name=Mudshot Charge
+item.mudshotcharge.description=A ball of vibrating mud. Use to throw or fire from a dispencer. Applies weakness.
+#
+item.hellfirecharge.name=Hellfire Charge
+item.hellfirecharge.description=Use to throw a ball of Hellfire. Can also be fired from a dispenser.
+#
+item.tundracharge.name=Tundra Charge
+item.tundracharge.description=Use to launch a ball of ooze. Can also be fired from a dispenser.
+#
+item.quill.name=Quill
+item.quill.description=A razor sharp quill, can be thrown or fired from a dispenser.
+#
+item.crystalshard.name=Crystal Shard
+item.crystalshard.description=Use to throw a crystal shard. Can also be fired from a dispenser.
+#
+item.scorchfirecharge.name=Scorchfire Charge
+item.scorchfirecharge.description=Use to throw a ball of scorchfire. Can also be fired from a dispenser.
+#
+item.bloodleechcharge.name=Bloodleech Charge
+item.bloodleechcharge.description=Use to throw a Bloodleech. Can also be fired from a dispenser.
+#
+item.frostwebcharge.name=Frostweb Charge
+item.frostwebcharge.description=Use to throw a frosty web. Can also be fired from a dispenser.
+#
+item.chaosorbcharge.name=Chaos Orb Charge
+item.chaosorbcharge.description=Use to unleash an orb of chaos. Can also be fired from a dispenser.
+#
+item.icefirecharge.name=Icefire Charge
+item.icefirecharge.description=Use to launch a ball of icefire. Can also be fired from a dispenser.
+#
+item.blizzardcharge.name=Blizzard Charge
+item.blizzardcharge.description=Use to throw a small wave of icefire. Can also be fired from a dispenser.
+#
+item.waterjetcharge.name=Water Jet Charge
+item.waterjetcharge.description=Use to fire a water jet or fire from a dispenser.
+#
+item.devilstarcharge.name=Devilstar Charge
+item.devilstarcharge.description=Use to throw a small devilstar. Can also be rapid fired from a dispenser.
+#

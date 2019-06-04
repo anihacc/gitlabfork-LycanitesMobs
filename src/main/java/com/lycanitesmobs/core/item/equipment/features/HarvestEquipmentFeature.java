@@ -12,7 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.Set;
@@ -74,10 +74,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = I18n.translateToLocal("equipment.feature." + this.featureType) + " " + this.harvestType;
-		description += "\n" + I18n.translateToLocal("equipment.feature.harvest.shape") + " " + this.harvestShape;
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.harvestType;
+		description += "\n" + LanguageManager.translate("equipment.feature.harvest.shape") + " " + this.harvestShape;
 		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.harvest.range") + " " + this.getHarvestRangeString(level);
+			description += "\n" + LanguageManager.translate("equipment.feature.harvest.range") + " " + this.getHarvestRangeString(level);
 		}
 		return description;
 	}

@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "saltwatermobs:items/ikameatraw"
+		"layer0": "lycanitesmobs:items/ikameatraw"
 	}
 }

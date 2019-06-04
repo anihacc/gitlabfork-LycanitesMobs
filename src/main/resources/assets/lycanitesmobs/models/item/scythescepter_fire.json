@@ -1,6 +1,6 @@
 {
-	"parent": "desertmobs:item/scythescepter",
+	"parent": "lycanitesmobs:item/scythescepter",
 	"textures": {
-		"layer0": "desertmobs:items/scythescepter_fire"
+		"layer0": "lycanitesmobs:items/scythescepter_fire"
 	}
 }

@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "arcticmobs:yetimeatcooked"
+    "item": "lycanitesmobs:yetimeatcooked"
   },
   "ingredients": [
     {
-      "item": "arcticmobs:palesoup"
+      "item": "lycanitesmobs:palesoup"
     }
   ],
   "type": "forge:ore_shapeless"

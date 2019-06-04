@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-        "all": "demonmobs:blocks/demonstonetile"
+        "all": "lycanitesmobs:blocks/demonstonetile"
 	}
 }

@@ -1,6 +1,6 @@
 {
-	"parent": "swampmobs:item/venomshotscepter",
+	"parent": "lycanitesmobs:item/venomshotscepter",
 	"textures": {
-		"layer0": "swampmobs:items/venomshotscepter_fire"
+		"layer0": "lycanitesmobs:items/venomshotscepter_fire"
 	}
 }

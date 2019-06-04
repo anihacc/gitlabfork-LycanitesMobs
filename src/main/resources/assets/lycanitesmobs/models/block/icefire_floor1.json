@@ -1,7 +1,7 @@
 {
-    "parent": "arcticmobs:block/icefire_floor",
+    "parent": "lycanitesmobs:block/icefire_floor",
     "textures": {
-        "particle": "arcticmobs:blocks/icefire_layer_1",
-        "fire": "arcticmobs:blocks/icefire_layer_1"
+        "particle": "lycanitesmobs:blocks/icefire_layer_1",
+        "fire": "lycanitesmobs:blocks/icefire_layer_1"
     }
 }

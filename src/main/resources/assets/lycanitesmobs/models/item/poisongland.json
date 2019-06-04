@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "swampmobs:items/poisongland"
+		"layer0": "lycanitesmobs:items/poisongland"
 	}
 }

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 public class DamageEquipmentFeature extends EquipmentFeature {
 	/** How much damage this part adds to the weapon attack. **/
@@ -46,18 +46,18 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = I18n.translateToLocal("equipment.feature." + this.featureType) + " " + this.damageAmount;
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.damageAmount;
 		if(this.damageCooldown > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.damage.cooldown") + " " + this.damageCooldown;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.cooldown") + " " + this.damageCooldown;
 		}
 		if(this.damageKnockback > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.damage.knockback") + " " + this.damageKnockback;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.knockback") + " " + this.damageKnockback;
 		}
 		if(this.damageRange > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.damage.range") + " " + this.damageRange;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + this.damageRange;
 		}
 		if(this.damageSweep > 45) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.damage.sweep") + " " + this.damageSweep;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + this.damageSweep;
 		}
 		return description;
 	}

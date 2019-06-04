@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "mountainmobs:yalemeatcooked"
+    "item": "lycanitesmobs:yalemeatcooked"
   },
   "ingredients": [
     {
-      "item": "mountainmobs:peakskebab"
+      "item": "lycanitesmobs:peakskebab"
     }
   ],
   "type": "forge:ore_shapeless"

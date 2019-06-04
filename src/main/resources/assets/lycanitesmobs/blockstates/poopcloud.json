@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "junglemobs:poopcloud" } }
+		{ "apply": { "model" : "lycanitesmobs:poopcloud" } }
 	]
 }

@@ -1,6 +1,6 @@
 {
-	"parent": "elementalmobs:item/aquapulsescepter",
+	"parent": "lycanitesmobs:item/aquapulsescepter",
 	"textures": {
-		"layer0": "elementalmobs:items/aquapulsescepter_fire"
+		"layer0": "lycanitesmobs:items/aquapulsescepter_fire"
 	}
 }

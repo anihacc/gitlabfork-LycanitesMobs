@@ -29,7 +29,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "forestmobs:ent",
+			"mobId": "lycanitesmobs:ent",
 			"weight": 8
 		}
 	]

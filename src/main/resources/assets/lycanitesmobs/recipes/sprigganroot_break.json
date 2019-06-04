@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:lifedraincharge",
+    "item": "lycanitesmobs:lifedraincharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:sprigganroot"
+      "item": "lycanitesmobs:sprigganroot"
     }
   ],
   "type": "forge:ore_shapeless"

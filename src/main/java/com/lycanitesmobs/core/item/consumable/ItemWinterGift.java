@@ -17,7 +17,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class ItemWinterGift extends ItemBase {
@@ -60,7 +60,7 @@ public class ItemWinterGift extends ItemBase {
   	//                       Good
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, EntityPlayer player) {
-    	String message = I18n.translateToLocal("item." + this.itemName + ".good");
+    	String message = LanguageManager.translate("item." + this.itemName + ".good");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
@@ -83,7 +83,7 @@ public class ItemWinterGift extends ItemBase {
   	//                       Bad
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, EntityPlayer player) {
-    	String message = I18n.translateToLocal("item." + this.itemName + ".bad");
+    	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 

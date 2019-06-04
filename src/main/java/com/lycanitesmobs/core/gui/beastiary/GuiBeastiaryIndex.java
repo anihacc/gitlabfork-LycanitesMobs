@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.io.IOException;
 import java.net.URI;
@@ -29,7 +29,7 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 
 	@Override
 	public String getTitle() {
-		return I18n.translateToLocal("gui.beastiary.index.title");
+		return LanguageManager.translate("gui.beastiary.index.title");
 	}
 
 
@@ -81,7 +81,7 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		super.drawForeground(mouseX, mouseY, partialTicks);
 
 		int yOffset = this.colRightY + 13;
-		String info = I18n.translateToLocal("gui.beastiary.index.description");
+		String info = LanguageManager.translate("gui.beastiary.index.description");
 		this.drawSplitString(info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
 
@@ -92,13 +92,13 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		}
 
 		// Check Mod Version:
-		String version = "\n§l" + I18n.translateToLocal("gui.beastiary.index.version") + ": §r";
+		String version = "\n§l" + LanguageManager.translate("gui.beastiary.index.version") + ": §r";
 		if(latestVersion.isNewer) {
 			version += "§4";
 		}
 		version += LycanitesMobs.versionNumber + "§r";
 		if(latestVersion.isNewer) {
-			version += " §l" + I18n.translateToLocal("gui.beastiary.index.version.newer") + ": §r§2" + latestVersion.versionNumber + "§r";
+			version += " §l" + LanguageManager.translate("gui.beastiary.index.version.newer") + ": §r§2" + latestVersion.versionNumber + "§r";
 		}
 		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(version, this.colRightWidth);

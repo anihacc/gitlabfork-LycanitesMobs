@@ -31,23 +31,23 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "forestmobs:warg",
+			"mobId": "lycanitesmobs:warg",
 			"weight": 8
 		},
 		{
-			"mobId": "mountainmobs:barghest",
+			"mobId": "lycanitesmobs:barghest",
 			"weight": 8
 		},
 		{
-			"mobId": "junglemobs:dawon",
+			"mobId": "lycanitesmobs:dawon",
 			"weight": 8
 		},
 		{
-			"mobId": "plainsmobs:feradon",
+			"mobId": "lycanitesmobs:feradon",
 			"weight": 8
 		},
 		{
-			"mobId": "arcticmobs:maug",
+			"mobId": "lycanitesmobs:maug",
 			"weight": 8
 		}
 	]

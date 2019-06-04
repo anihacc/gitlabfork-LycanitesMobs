@@ -53,15 +53,15 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:grue",
+			"mobId": "lycanitesmobs:grue",
 			"weight": 8
 		},
 		{
-			"mobId": "shadowmobs:darkling",
+			"mobId": "lycanitesmobs:darkling",
 			"weight": 2
 		},
 		{
-			"mobId": "shadowmobs:shade",
+			"mobId": "lycanitesmobs:shade",
 			"weight": 1
 		}
 	],

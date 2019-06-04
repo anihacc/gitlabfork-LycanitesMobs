@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:geonachspear"
+      "item": "lycanitesmobs:geonachspear"
     }
   ],
   "type": "forge:ore_shapeless"

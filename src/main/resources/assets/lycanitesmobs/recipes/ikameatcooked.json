@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "saltwatermobs:ikameatcooked"
+    "item": "lycanitesmobs:ikameatcooked"
   },
   "ingredients": [
     {
-      "item": "saltwatermobs:seashellmaki"
+      "item": "lycanitesmobs:seashellmaki"
     }
   ],
   "type": "forge:ore_shapeless"

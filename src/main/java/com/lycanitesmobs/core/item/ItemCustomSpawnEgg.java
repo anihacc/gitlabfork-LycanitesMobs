@@ -32,7 +32,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,10 +62,10 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	// ==================================================
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
-        String s = ("" + I18n.translateToLocal(this.getUnlocalizedName() + ".name")).trim();
+        String s = ("" + LanguageManager.translate(this.getUnlocalizedName() + ".name")).trim();
         ResourceLocation s1 = this.getEntityIdFromItem(itemStack);
         if (s1 != null) {
-            s = s + " " + I18n.translateToLocal("entity." + this.group.filename + "." + s1.getResourcePath() + ".name");
+            s = s + " " + LanguageManager.translate("entity." + this.group.filename + "." + s1.getResourcePath() + ".name");
         }
 
         return s;

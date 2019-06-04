@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "shadowmobs:shadowstonechiseled",
+    "item": "lycanitesmobs:shadowstonechiseled",
     "count": 2
   },
   "pattern": [
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "B": {
-      "item": "shadowmobs:shadowstonebrick_slab",
+      "item": "lycanitesmobs:shadowstonebrick_slab",
       "data": 0
     }
   }

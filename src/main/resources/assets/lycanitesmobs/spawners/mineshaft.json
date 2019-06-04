@@ -33,7 +33,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:banshee",
+			"mobId": "lycanitesmobs:banshee",
 			"weight": 8
 		}
 	]

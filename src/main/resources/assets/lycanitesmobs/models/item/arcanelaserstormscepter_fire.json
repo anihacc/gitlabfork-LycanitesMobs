@@ -1,6 +1,6 @@
 {
-	"parent": "mountainmobs:item/arcanelaserstormscepter",
+	"parent": "lycanitesmobs:item/arcanelaserstormscepter",
 	"textures": {
-		"layer0": "mountainmobs:items/arcanelaserstormscepter_fire"
+		"layer0": "lycanitesmobs:items/arcanelaserstormscepter_fire"
 	}
 }

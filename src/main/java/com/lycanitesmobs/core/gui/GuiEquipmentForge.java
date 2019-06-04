@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -56,7 +56,7 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.fontRenderer.drawString(this.equipmentForge.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(I18n.translateToLocal(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
     }
 
 
@@ -148,10 +148,10 @@ public class GuiEquipmentForge extends GuiBaseContainer {
         
         String buttonText = "";
         if("construct".equals(this.currentMode)) {
-			buttonText = I18n.translateToLocal("gui.equipmentforge.forge");
+			buttonText = LanguageManager.translate("gui.equipmentforge.forge");
 		}
 		else if("deconstruct".equals(this.currentMode)) {
-			buttonText = I18n.translateToLocal("gui.equipmentforge.deconstruct");
+			buttonText = LanguageManager.translate("gui.equipmentforge.deconstruct");
 		}
         buttonY += buttonSpacing;
         this.buttonList.add(new GuiButton(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText));

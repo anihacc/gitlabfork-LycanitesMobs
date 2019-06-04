@@ -1,14 +1,14 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "junglemobs:items/poopscepter"
+		"layer0": "lycanitesmobs:items/poopscepter"
 	},
 	"overrides": [
         {
             "predicate": {
                 "using": 1
             },
-            "model": "junglemobs:item/poopscepter_fire"
+            "model": "lycanitesmobs:item/poopscepter_fire"
         }
 	]
 }

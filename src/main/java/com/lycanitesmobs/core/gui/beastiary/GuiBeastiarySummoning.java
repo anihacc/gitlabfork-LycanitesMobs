@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.io.IOException;
 
@@ -43,9 +43,9 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 	@Override
 	public String getTitle() {
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
-			return I18n.translateToLocal("gui.beastiary.summoning.empty.title");
+			return LanguageManager.translate("gui.beastiary.summoning.empty.title");
 		}
-		return I18n.translateToLocal("gui.beastiary.summoning");
+		return LanguageManager.translate("gui.beastiary.summoning");
 	}
 
 
@@ -82,46 +82,46 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 			tabSpacing = buttonWidth + buttonSpacing;
 		}
 
-		int buttonMarginX = 10 + Math.max(Math.max(this.getFontRenderer().getStringWidth(I18n.translateToLocal("gui.pet.actions")), this.getFontRenderer().getStringWidth(I18n.translateToLocal("gui.pet.stance"))), this.getFontRenderer().getStringWidth(I18n.translateToLocal("gui.pet.movement")));
+		int buttonMarginX = 10 + Math.max(Math.max(this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.actions")), this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.stance"))), this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.movement")));
 		buttonWidth = 80;
 		buttonHeight = 20;
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 
 		// Actions:
-		GuiButton button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.pvp"));
+		GuiButton button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.pvp"));
 		this.buttonList.add(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.passive"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.passive"));
 		this.buttonList.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.defensive"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.defensive"));
 		this.buttonList.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.assist"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.assist"));
 		this.buttonList.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.aggressive"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.aggressive"));
 		this.buttonList.add(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.follow"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.follow"));
 		this.buttonList.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.wander"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.wander"));
 		this.buttonList.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("gui.pet.sit"));
+		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.sit"));
 		this.buttonList.add(button);
 	}
 
@@ -163,10 +163,10 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 					// Actions:
 					if (button.id == EntityCreatureBase.PET_COMMAND_ID.PVP.id + this.petCommandIdStart) {
 						if (this.playerExt.getSelectedSummonSet().getPVP()) {
-							button.displayString = I18n.translateToLocal("gui.pet.pvp") + ": " + I18n.translateToLocal("common.yes");
+							button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + LanguageManager.translate("common.yes");
 						}
 						else {
-							button.displayString = I18n.translateToLocal("gui.pet.pvp") + ": " + I18n.translateToLocal("common.no");
+							button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + LanguageManager.translate("common.no");
 						}
 					}
 
@@ -214,7 +214,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 
 		// Empty:
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
-			String text = I18n.translateToLocal("gui.beastiary.summoning.empty.info");
+			String text = LanguageManager.translate("gui.beastiary.summoning.empty.info");
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 			return;
 		}
@@ -227,7 +227,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		}
 
 		// Player Summoning Focus:
-		String text = "\u00A7l" + I18n.translateToLocal("gui.beastiary.player.focus") + ": ";
+		String text = "\u00A7l" + LanguageManager.translate("gui.beastiary.player.focus") + ": ";
 		this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 		int barX = nextX + this.getFontRenderer().getStringWidth(text);
 		int focusMax = Math.round((float)this.playerExt.summonFocusMax / this.playerExt.summonFocusCharge);
@@ -243,7 +243,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		if(selectedCreature != null) {
 			// Focus Cost:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + I18n.translateToLocal("creature.stat.focus") + ": ";
+			text = "\u00A7l" + LanguageManager.translate("creature.stat.focus") + ": ";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 			this.drawLevel(selectedCreature, AssetManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 		}
@@ -251,7 +251,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		// Base Display:
 		else {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = I18n.translateToLocal("gui.beastiary.summoning.select");
+			text = LanguageManager.translate("gui.beastiary.summoning.select");
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
@@ -259,11 +259,11 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		int buttonHeight = 20;
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
-		this.getFontRenderer().drawString("\u00A7l" + I18n.translateToLocal("gui.pet.actions"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
+		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.actions"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + I18n.translateToLocal("gui.pet.stance"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
+		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.stance"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + I18n.translateToLocal("gui.pet.movement"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
+		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.movement"), this.colRightX, buttonY + 6, 0xFFFFFF, true);
 	}
 
 

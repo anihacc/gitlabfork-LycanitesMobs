@@ -1,7 +1,7 @@
 {
-    "parent": "demonmobs:block/doomfire_floor",
+    "parent": "lycanitesmobs:block/doomfire_floor",
     "textures": {
-        "particle": "demonmobs:blocks/doomfire_layer_1",
-        "fire": "demonmobs:blocks/doomfire_layer_1"
+        "particle": "lycanitesmobs:blocks/doomfire_layer_1",
+        "fire": "lycanitesmobs:blocks/doomfire_layer_1"
     }
 }

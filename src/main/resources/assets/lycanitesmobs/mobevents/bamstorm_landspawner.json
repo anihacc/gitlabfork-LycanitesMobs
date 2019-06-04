@@ -31,19 +31,19 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "plainsmobs:kobold",
+			"mobId": "lycanitesmobs:kobold",
 			"weight": 8
 		},
 		{
-			"mobId": "junglemobs:conba",
+			"mobId": "lycanitesmobs:conba",
 			"weight": 8
 		},
 		{
-			"mobId": "demonmobs:belph",
+			"mobId": "lycanitesmobs:belph",
 			"weight": 8
 		},
 		{
-			"mobId": "swampmobs:aglebemu",
+			"mobId": "lycanitesmobs:aglebemu",
 			"weight": 8
 		}
 	]

@@ -4,16 +4,16 @@
   },
   "ingredients": [
     {
-      "item": "desertmobs:joustmeatcooked"
+      "item": "lycanitesmobs:joustmeatcooked"
     },
     {
-      "item": "mountainmobs:yalemeatcooked"
+      "item": "lycanitesmobs:yalemeatcooked"
     },
     {
-      "item": "saltwatermobs:ikameatcooked"
+      "item": "lycanitesmobs:ikameatcooked"
     },
     {
-      "item": "junglemobs:concapedemeatcooked"
+      "item": "lycanitesmobs:concapedemeatcooked"
     }
   ],
   "type": "forge:ore_shapeless"

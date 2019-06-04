@@ -29,23 +29,23 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "freshwatermobs:silex",
+			"mobId": "lycanitesmobs:silex",
 			"weight": 16
 		},
 		{
-			"mobId": "freshwatermobs:abaia",
+			"mobId": "lycanitesmobs:abaia",
 			"weight": 8
 		},
 		{
-			"mobId": "saltwatermobs:abtu",
+			"mobId": "lycanitesmobs:abtu",
 			"weight": 8
 		},
 		{
-			"mobId": "saltwatermobs:roa",
+			"mobId": "lycanitesmobs:roa",
 			"weight": 1
 		},
 		{
-			"mobId": "saltwatermobs:skylus",
+			"mobId": "lycanitesmobs:skylus",
 			"weight": 1
 		}
 	]

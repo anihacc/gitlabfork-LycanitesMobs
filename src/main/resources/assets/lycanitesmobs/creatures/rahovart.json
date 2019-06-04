@@ -85,49 +85,49 @@
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:doomfirecharge",
+			"item": "lycanitesmobs:doomfirecharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:hellfirecharge",
+			"item": "lycanitesmobs:hellfirecharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:demonstone",
+			"item": "lycanitesmobs:demonstone",
 			"minAmount": 64,
 			"maxAmount": 128,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:demonstonebrick",
+			"item": "lycanitesmobs:demonstonebrick",
 			"minAmount": 64,
 			"maxAmount": 128,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:demonstonetile",
+			"item": "lycanitesmobs:demonstonetile",
 			"minAmount": 64,
 			"maxAmount": 128,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:demoncrystal",
+			"item": "lycanitesmobs:demoncrystal",
 			"minAmount": 64,
 			"maxAmount": 128,
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:soulstonedemonic",
+			"item": "lycanitesmobs:soulstonedemonic",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1
 		},
 		{
-			"item": "elementalmobs:wraithsigil",
+			"item": "lycanitesmobs:wraithsigil",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1

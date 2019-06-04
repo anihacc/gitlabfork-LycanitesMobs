@@ -66,7 +66,7 @@
 			"chance": 1
 		},
 		{
-			"item": "demonmobs:doomfirecharge",
+			"item": "lycanitesmobs:doomfirecharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:goldenvenomaxeblade"
+    "item": "lycanitesmobs:goldenvenomaxeblade"
   },
   "pattern": [
     "DDD",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "S": {
-      "item": "swampmobs:venomaxeblade"
+      "item": "lycanitesmobs:venomaxeblade"
     },
     "D": {
       "item": "minecraft:diamond"

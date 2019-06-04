@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.UUID;
 
@@ -253,7 +253,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		else if(this.level >= 3) {
 			levelName = "master";
 		}
-		return I18n.translateToLocal("tile.equipmentforge_" + levelName + ".name");
+		return LanguageManager.translate("tile.equipmentforge_" + levelName + ".name");
 	}
 
 	@Override

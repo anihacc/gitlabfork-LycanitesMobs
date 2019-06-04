@@ -2,7 +2,7 @@
 	"itemName": "grueclaw",
 	"loadDefault": true,
 	"slotType": "blade",
-	"dropMobId": "elementalmobs:grue",
+	"dropMobId": "lycanitesmobs:grue",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -69,7 +69,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.grue",
+			"summonMobId": "lycanitesmobs.grue",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

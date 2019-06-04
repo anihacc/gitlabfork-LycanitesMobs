@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "elementalmobs:cinderfallsword"
+    "item": "lycanitesmobs:cinderfallsword"
   },
   "pattern": [
     "CCC",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "C": {
-      "item": "elementalmobs:embercharge"
+      "item": "lycanitesmobs:embercharge"
     },
     "S": {
       "item": "minecraft:diamond_sword"

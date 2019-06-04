@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:soulcubedemonic"
+    "item": "lycanitesmobs:soulcubedemonic"
   },
   "pattern": [
     "DDD",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "S": {
-      "item": "demonmobs:soulstonedemonic"
+      "item": "lycanitesmobs:soulstonedemonic"
     },
     "D": {
       "item": "minecraft:diamond"

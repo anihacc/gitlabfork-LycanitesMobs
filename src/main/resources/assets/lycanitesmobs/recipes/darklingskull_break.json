@@ -5,7 +5,7 @@
   },
   "ingredients": [
     {
-      "item": "shadowmobs:darklingskull"
+      "item": "lycanitesmobs:darklingskull"
     }
   ],
   "type": "forge:ore_shapeless"

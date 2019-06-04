@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "shadowmobs:items/shadowspawn",
-		"layer1": "shadowmobs:items/shadowspawn_overlay"
+		"layer0": "lycanitesmobs:items/shadowspawn",
+		"layer1": "lycanitesmobs:items/shadowspawn_overlay"
 	}
 }

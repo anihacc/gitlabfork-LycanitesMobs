@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model" : "shadowmobs:shadowstone" }
+		"normal": { "model" : "lycanitesmobs:shadowstone" }
 	}
 }

@@ -5,7 +5,7 @@
   },
   "ingredients": [
     {
-      "item": "junglemobs:propolis"
+      "item": "lycanitesmobs:propolis"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.gui.beastiary.list;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 		if(petListType == null) {
 			return;
 		}
-		this.parentGui.getFontRenderer().drawString(I18n.translateToLocal(petListType), this.left + 2 , boxTop + 4, 0xFFFFFF, true);
+		this.parentGui.getFontRenderer().drawString(LanguageManager.translate(petListType), this.left + 2 , boxTop + 4, 0xFFFFFF, true);
 	}
 
 

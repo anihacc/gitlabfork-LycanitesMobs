@@ -11,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class ItemSoulkey extends ItemBase {
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
-            String message = I18n.translateToLocal("message.soulkey.disabled");
+            String message = LanguageManager.translate("message.soulkey.disabled");
             player.sendMessage(new TextComponentString(message));
             return EnumActionResult.FAIL;
         }
@@ -62,7 +62,7 @@ public class ItemSoulkey extends ItemBase {
             }
         }
         if(possibleAltars.isEmpty()) {
-            String message = I18n.translateToLocal("message.soulkey.none");
+            String message = LanguageManager.translate("message.soulkey.none");
             player.sendMessage(new TextComponentString(message));
             return EnumActionResult.FAIL;
         }
@@ -78,17 +78,17 @@ public class ItemSoulkey extends ItemBase {
                     if (itemStack.getCount() <= 0)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
-                        String message = I18n.translateToLocal("message.soulkey.badlocation");
+                        String message = LanguageManager.translate("message.soulkey.badlocation");
                         player.sendMessage(new TextComponentString(message));
                         return EnumActionResult.FAIL;
                     }
-                    String message = I18n.translateToLocal("message.soulkey.active");
+                    String message = LanguageManager.translate("message.soulkey.active");
                     player.sendMessage(new TextComponentString(message));
                 }
                 return EnumActionResult.SUCCESS;
             }
         }
-        String message = I18n.translateToLocal("message.soulkey.invalid");
+        String message = LanguageManager.translate("message.soulkey.invalid");
         player.sendMessage(new TextComponentString(message));
 
         return EnumActionResult.FAIL;

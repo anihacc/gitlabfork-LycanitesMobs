@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "infernomobs:cephignismeatcooked"
+    "item": "lycanitesmobs:cephignismeatcooked"
   },
   "ingredients": [
     {
-      "item": "infernomobs:searingtaco"
+      "item": "lycanitesmobs:searingtaco"
     }
   ],
   "type": "forge:ore_shapeless"

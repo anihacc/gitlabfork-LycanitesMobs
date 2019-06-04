@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "arcticmobs:frostwebscepter"
+    "item": "lycanitesmobs:frostwebscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "arcticmobs:frostwebcharge"
+      "item": "lycanitesmobs:frostwebcharge"
     }
   }
 }

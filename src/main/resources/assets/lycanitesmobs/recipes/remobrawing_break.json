@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "swampmobs:remobrawing"
+      "item": "lycanitesmobs:remobrawing"
     }
   ],
   "type": "forge:ore_shapeless"

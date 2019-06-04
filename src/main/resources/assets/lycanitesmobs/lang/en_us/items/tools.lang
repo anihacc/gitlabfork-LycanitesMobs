@@ -1,0 +1,33 @@
+item.bloodsummoningstaff.name=item.bloodsummoningstaff.name
+item.bloodsummoningstaff.description=item.bloodsummoningstaff.description
+#
+item.summoningstaff.name=item.summoningstaff.name
+item.summoningstaff.description=item.summoningstaff.description
+#
+item.venomaxeblade.name=Venom Axeblade
+item.venomaxeblade.description=Imbued with the souls of Remobra. Effective as both a sword and an axe. On hit: Applies Poison, Chance of summoning Remobra minion. On hold: Poison Immunity.
+#
+item.azurecinderfallsword.name=Azure Cinderfall Sword
+item.azurecinderfallsword.description=An improved Cinderfall Sword that will summon Azure Cinders for an increased amount of time and deals more damage.
+#
+item.stablesummoningstaff.name=item.stablesummoningstaff.name
+item.stablesummoningstaff.description=item.stablesummoningstaff.description
+#
+item.goldenvenomaxeblade.name=Golden Venom Axeblade
+item.goldenvenomaxeblade.description=An improved Venom Axeblade that summons Golden Remobra for an increased amount of time and deals more damage.
+#
+item.cinderfallsword.name=Cinderfall Sword
+item.cinderfallsword.description=Imbued with the souls of Cinders! On hit: Deals additional damage as armor piercing fire damage, ignites, chance of summoning a Cinder minion.
+#
+item.verdantvenomaxeblade.name=Verdant Venom Axeblade
+item.verdantvenomaxeblade.description=An improved Venom Axeblade that summons Verdant Remobra with a higher chance and deals more damage.
+#
+item.savagesummoningstaff.name=item.savagesummoningstaff.name
+item.savagesummoningstaff.description=item.savagesummoningstaff.description
+#
+item.verdantcinderfallsword.name=Verdant Cinderfall Sword
+item.verdantcinderfallsword.description=An improved Cinderfall Sword that will summon Verdant Cinders with a higher chance and deals more damage.
+#
+item.sturdysummoningstaff.name=item.sturdysummoningstaff.name
+item.sturdysummoningstaff.description=item.sturdysummoningstaff.description
+#

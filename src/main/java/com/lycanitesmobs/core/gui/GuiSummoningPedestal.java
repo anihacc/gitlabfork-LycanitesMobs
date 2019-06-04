@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import org.lwjgl.opengl.GL11;
 
 public class GuiSummoningPedestal extends GUIBaseManager {
@@ -50,12 +50,12 @@ public class GuiSummoningPedestal extends GUIBaseManager {
     // ==================================================
     @Override
     public String getTitle() {
-        return I18n.translateToLocal("gui." + "summoningpedestal.name");
+        return LanguageManager.translate("gui." + "summoningpedestal.name");
     }
 
     @Override
     public String getEnergyTitle() {
-        return I18n.translateToLocal("stat.portal.name");
+        return LanguageManager.translate("stat.portal.name");
     }
 
 
@@ -144,16 +144,16 @@ public class GuiSummoningPedestal extends GUIBaseManager {
     public void updateButtons(GuiButton button) {
         // Behaviour Buttons:
         if (button.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
-            button.displayString = I18n.translateToLocal("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
-            button.displayString = I18n.translateToLocal("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
-            button.displayString = (this.summonSet.getAggressive() ? I18n.translateToLocal("gui.pet.aggressive") : I18n.translateToLocal("gui.pet.defensive"));
+            button.displayString = (this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
-            button.displayString = I18n.translateToLocal("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         // Hidden Mount Buttons:
         if("mount".equals(this.type)) {

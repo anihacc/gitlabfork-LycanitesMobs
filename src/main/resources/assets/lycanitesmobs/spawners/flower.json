@@ -33,7 +33,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:nymph",
+			"mobId": "lycanitesmobs:nymph",
 			"weight": 8
 		}
 	]

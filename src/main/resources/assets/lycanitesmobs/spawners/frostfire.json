@@ -22,14 +22,14 @@
 			"rangeMax": [32, 32, 32],
 			"sorting": "random",
 			"blocks": [
-				"arcticmobs:frostfire"
+				"lycanitesmobs:frostfire"
 			],
 			"listType": "whitelist"
 		}
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:reiver",
+			"mobId": "lycanitesmobs:reiver",
 			"weight": 8
 		}
 	]

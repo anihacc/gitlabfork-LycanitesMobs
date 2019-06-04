@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
@@ -79,16 +79,16 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = I18n.translateToLocal("equipment.feature." + this.featureType) + " " + I18n.translateToLocal("entity." + this.summonMobId + ".name");
-		description += "\n" + I18n.translateToLocal("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + "%";
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
+		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + "%";
 		if(this.summonDuration > 0) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
+			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
 		}
 		if(this.summonCountMin != this.summonCountMax) {
-			description += "\n" + I18n.translateToLocal("equipment.feature.summon.count") + " " + this.summonCountMin + " - " + this.summonCountMax;
+			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMin + " - " + this.summonCountMax;
 		}
 		else {
-			description += "\n" + I18n.translateToLocal("equipment.feature.summon.count") + " " + this.summonCountMax;
+			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMax;
 		}
 		return description;
 	}

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -76,7 +76,7 @@ public class ItemCustomFood extends ItemFood {
     }
 
     public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        return I18n.translateToLocal("item." + this.itemName + ".description");
+        return LanguageManager.translate("item." + this.itemName + ".description");
     }
 
 

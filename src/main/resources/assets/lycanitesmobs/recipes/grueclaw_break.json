@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:grueclaw"
+      "item": "lycanitesmobs:grueclaw"
     }
   ],
   "type": "forge:ore_shapeless"

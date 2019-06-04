@@ -72,7 +72,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "arcticmobs:frostwebcharge",
+			"item": "lycanitesmobs:frostwebcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

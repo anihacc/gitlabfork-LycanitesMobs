@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "elementalmobs:verdantcinderfallsword"
+    "item": "lycanitesmobs:verdantcinderfallsword"
   },
   "pattern": [
     "DDD",
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "S": {
-      "item": "elementalmobs:cinderfallsword"
+      "item": "lycanitesmobs:cinderfallsword"
     },
     "D": {
       "item": "minecraft:emerald"

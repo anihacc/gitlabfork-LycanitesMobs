@@ -1,7 +1,7 @@
 {
-    "parent": "shadowmobs:block/shadowfire_up",
+    "parent": "lycanitesmobs:block/shadowfire_up",
     "textures": {
-        "particle": "shadowmobs:blocks/shadowfire_layer_0",
-        "fire": "shadowmobs:blocks/shadowfire_layer_0"
+        "particle": "lycanitesmobs:blocks/shadowfire_layer_0",
+        "fire": "lycanitesmobs:blocks/shadowfire_layer_0"
     }
 }

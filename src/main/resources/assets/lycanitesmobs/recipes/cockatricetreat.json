@@ -1,6 +1,6 @@
 {
 	"result": {
-		"item": "junglemobs:cockatricetreat",
+		"item": "lycanitesmobs:cockatricetreat",
 		"count": 4
 	},
 	"pattern": [
@@ -11,7 +11,7 @@
 	"type": "forge:ore_shaped",
 	"key": {
 		"T": {
-			"item": "junglemobs:veswax"
+			"item": "lycanitesmobs:veswax"
 		},
 		"D": {
 			"item": "minecraft:diamond"

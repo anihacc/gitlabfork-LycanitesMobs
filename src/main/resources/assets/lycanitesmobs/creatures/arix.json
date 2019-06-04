@@ -72,7 +72,7 @@
 			"chance": 0.25
 		},
 		{
-			"item": "arcticmobs:icefirecharge",
+			"item": "lycanitesmobs:icefirecharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

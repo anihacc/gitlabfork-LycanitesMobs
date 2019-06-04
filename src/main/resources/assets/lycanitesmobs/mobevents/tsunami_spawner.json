@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:jengu",
+			"mobId": "lycanitesmobs:jengu",
 			"weight": 2
 		},
 		{
-			"mobId": "elementalmobs:zephyr",
+			"mobId": "lycanitesmobs:zephyr",
 			"weight": 8
 		}
 	]

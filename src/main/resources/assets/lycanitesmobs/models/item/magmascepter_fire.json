@@ -1,6 +1,6 @@
 {
-	"parent": "infernomobs:item/magmascepter",
+	"parent": "lycanitesmobs:item/magmascepter",
 	"textures": {
-		"layer0": "infernomobs:items/magmascepter_fire"
+		"layer0": "lycanitesmobs:items/magmascepter_fire"
 	}
 }

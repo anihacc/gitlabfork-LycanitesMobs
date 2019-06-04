@@ -1,6 +1,6 @@
 {
-	"parent": "junglemobs:item/poopscepter",
+	"parent": "lycanitesmobs:item/poopscepter",
 	"textures": {
-		"layer0": "junglemobs:items/poopscepter_fire"
+		"layer0": "lycanitesmobs:items/poopscepter_fire"
 	}
 }

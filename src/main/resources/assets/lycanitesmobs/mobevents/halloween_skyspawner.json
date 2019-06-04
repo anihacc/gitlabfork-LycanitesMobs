@@ -31,30 +31,30 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:wraith",
+			"mobId": "lycanitesmobs:wraith",
 			"weight": 8,
 			"mobNameTag": "Lost Soul"
 		},
 		{
-			"mobId": "elementalmobs:banshee",
+			"mobId": "lycanitesmobs:banshee",
 			"weight": 4,
 			"mobNameTag": "Maniacal Ghost"
 		},
 		{
-			"mobId": "demonmobs:cacodemon",
+			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 4
 		},
 		{
-			"mobId": "infernomobs:afrit",
+			"mobId": "lycanitesmobs:afrit",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:grue",
+			"mobId": "lycanitesmobs:grue",
 			"weight": 8,
 			"mobNameTag": "Shadow Clown"
 		},
 		{
-			"mobId": "shadowmobs:epion",
+			"mobId": "lycanitesmobs:epion",
 			"weight": 4,
 			"mobNameTag": "Vampire Bat"
 		}

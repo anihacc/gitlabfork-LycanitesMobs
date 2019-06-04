@@ -1,6 +1,6 @@
 {
-	"parent": "arcticmobs:item/icefirescepter",
+	"parent": "lycanitesmobs:item/icefirescepter",
 	"textures": {
-		"layer0": "arcticmobs:items/icefirescepter_fire"
+		"layer0": "lycanitesmobs:items/icefirescepter_fire"
 	}
 }

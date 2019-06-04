@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -250,7 +250,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			if (this.player.getEntityWorld().isRemote) {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
 				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
-					this.player.sendMessage(new TextComponentString(I18n.translateToLocal("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
+					this.player.sendMessage(new TextComponentString(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
 				}
 			}
 

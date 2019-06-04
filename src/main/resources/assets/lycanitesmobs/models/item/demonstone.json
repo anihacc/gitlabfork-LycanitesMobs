@@ -1,5 +1,5 @@
 {
-	"parent": "demonmobs:block/demonstone",
+	"parent": "lycanitesmobs:block/demonstone",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

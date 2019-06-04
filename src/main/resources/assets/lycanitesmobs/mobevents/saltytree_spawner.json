@@ -31,17 +31,17 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "forestmobs:ent",
+			"mobId": "lycanitesmobs:ent",
 			"weight": 8,
 			"mobNameTag": "Salty Tree"
 		},
 		{
-			"mobId": "forestmobs:treant",
+			"mobId": "lycanitesmobs:treant",
 			"weight": 4,
 			"mobNameTag": "Salty Tree"
 		},
 		{
-			"mobId": "arcticmobs:wildkin",
+			"mobId": "lycanitesmobs:wildkin",
 			"weight": 2,
 			"mobNameTag": "Gooderness"
 		}

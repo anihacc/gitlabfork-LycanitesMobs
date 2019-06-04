@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "shadowmobs:bloodleechscepter"
+    "item": "lycanitesmobs:bloodleechscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "shadowmobs:bloodleechcharge"
+      "item": "lycanitesmobs:bloodleechcharge"
     }
   }
 }

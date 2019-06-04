@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "arcticmobs:tundracharge",
+    "item": "lycanitesmobs:tundracharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "arcticmobs:wendigoantler"
+      "item": "lycanitesmobs:wendigoantler"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "freshwatermobs:items/lapisfishandchips"
+		"layer0": "lycanitesmobs:items/lapisfishandchips"
 	}
 }

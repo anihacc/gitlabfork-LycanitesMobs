@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "forestmobs:items/wargtreat"
+		"layer0": "lycanitesmobs:items/wargtreat"
 	}
 }

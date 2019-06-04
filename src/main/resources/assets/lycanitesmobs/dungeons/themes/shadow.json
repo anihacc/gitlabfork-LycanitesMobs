@@ -6,11 +6,11 @@
 	"ceilingPattern": "random",
 	"floorBlocks": [
 		{
-			"blockId": "shadowmobs:shadowstonetile",
+			"blockId": "lycanitesmobs:shadowstonetile",
 			"weight": 8
 		},
 		{
-			"blockId": "shadowmobs:shadowstonepolished",
+			"blockId": "lycanitesmobs:shadowstonepolished",
 			"weight": 2
 		},
 		{
@@ -20,31 +20,31 @@
 	],
 	"wallBlocks": [
 		{
-			"blockId": "shadowmobs:shadowstonebrick",
+			"blockId": "lycanitesmobs:shadowstonebrick",
 			"weight": 8
 		},
 		{
-			"blockId": "shadowmobs:shadowstonechiseled",
+			"blockId": "lycanitesmobs:shadowstonechiseled",
 			"weight": 2
 		},
 		{
-			"blockId": "shadowmobs:shadowstonepillar",
+			"blockId": "lycanitesmobs:shadowstonepillar",
 			"weight": 0
 		}
 	],
 	"ceilingBlocks": [
 		{
-			"blockId": "shadowmobs:shadowstonetile",
+			"blockId": "lycanitesmobs:shadowstonetile",
 			"weight": 8
 		},
 		{
-			"blockId": "shadowmobs:shadowstonepolished",
+			"blockId": "lycanitesmobs:shadowstonepolished",
 			"weight": 2
 		}
 	],
 	"lightBlocks": [
 		{
-			"blockId": "shadowmobs:shadowcrystal",
+			"blockId": "lycanitesmobs:shadowcrystal",
 			"weight": 8
 		},
 		{
@@ -55,25 +55,25 @@
 	"torchBlocks": [],
 	"stairBlocks": [
 		{
-			"blockId": "shadowmobs:shadowstone_stairs",
+			"blockId": "lycanitesmobs:shadowstone_stairs",
 			"weight": 8
 		},
 		{
-			"blockId": "shadowmobs:shadowstonebrick_stairs",
+			"blockId": "lycanitesmobs:shadowstonebrick_stairs",
 			"weight": 8
 		},
 		{
-			"blockId": "shadowmobs:shadowstonetile_stairs",
+			"blockId": "lycanitesmobs:shadowstonetile_stairs",
 			"weight": 8
 		}
 	],
 	"pitBlocks": [
 		{
-			"blockId": "shadowmobs:shadowfire",
+			"blockId": "lycanitesmobs:shadowfire",
 			"weight": 8
 		},
 		{
-			"blockId": "arcticmobs:ooze",
+			"blockId": "lycanitesmobs:ooze",
 			"weight": 8
 		}
 	]

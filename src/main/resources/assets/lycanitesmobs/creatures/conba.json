@@ -67,7 +67,7 @@
 			"chance": 1
 		},
 		{
-			"item": "junglemobs:poopcharge",
+			"item": "lycanitesmobs:poopcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.75

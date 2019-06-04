@@ -1,6 +1,6 @@
 {
-	"parent": "shadowmobs:item/bloodleechscepter",
+	"parent": "lycanitesmobs:item/bloodleechscepter",
 	"textures": {
-		"layer0": "shadowmobs:items/bloodleechscepter_fire"
+		"layer0": "lycanitesmobs:items/bloodleechscepter_fire"
 	}
 }

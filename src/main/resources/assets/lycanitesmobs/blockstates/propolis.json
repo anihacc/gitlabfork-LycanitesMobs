@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "junglemobs:propolis" } }
+		{ "apply": { "model" : "lycanitesmobs:propolis" } }
 	]
 }

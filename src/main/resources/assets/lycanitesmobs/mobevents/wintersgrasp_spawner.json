@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "arcticmobs:wendigo",
+			"mobId": "lycanitesmobs:wendigo",
 			"weight": 8
 		},
 		{
-			"mobId": "arcticmobs:serpix",
+			"mobId": "lycanitesmobs:serpix",
 			"weight": 8
 		}
 	]

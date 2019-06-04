@@ -79,7 +79,7 @@
 			"chance": 0.05
 		},
 		{
-			"item": "shadowmobs:spectralboltcharge",
+			"item": "lycanitesmobs:spectralboltcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

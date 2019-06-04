@@ -78,7 +78,7 @@
 			"chance": 0.25
 		},
 		{
-			"item": "desertmobs:mudshotcharge",
+			"item": "lycanitesmobs:mudshotcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.5

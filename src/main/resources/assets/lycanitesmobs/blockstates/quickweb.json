@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "junglemobs:quickweb" } }
+		{ "apply": { "model" : "lycanitesmobs:quickweb" } }
 	]
 }

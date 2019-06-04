@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "saltwatermobs:items/hermatreat"
+		"layer0": "lycanitesmobs:items/hermatreat"
 	}
 }

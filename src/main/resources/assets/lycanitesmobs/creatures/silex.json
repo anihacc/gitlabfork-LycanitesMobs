@@ -67,8 +67,8 @@
 			"chance": 1
 		},
 		{
-			"item": "freshwatermobs:silexmeatraw",
-			"burningItem": "freshwatermobs:silexmeatcooked",
+			"item": "lycanitesmobs:silexmeatraw",
+			"burningItem": "lycanitesmobs:silexmeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "demonmobs:devilstarcharge",
+    "item": "lycanitesmobs:devilstarcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "demonmobs:astarothclaw"
+      "item": "lycanitesmobs:astarothclaw"
     }
   ],
   "type": "forge:ore_shapeless"

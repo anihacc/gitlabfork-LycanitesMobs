@@ -1,5 +1,5 @@
 {
-	"parent": "junglemobs:block/propolis",
+	"parent": "lycanitesmobs:block/propolis",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

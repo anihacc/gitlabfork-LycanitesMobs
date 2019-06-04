@@ -5,7 +5,7 @@
   },
   "ingredients": [
     {
-      "item": "junglemobs:veswax"
+      "item": "lycanitesmobs:veswax"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -18,15 +18,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-//import thaumcraft.api.research.IScanThing;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+//import thaumcraft.api.research.IScanThing;
 
 @Optional.Interface(iface=Thaumcraft.interfaceScanThing, modid=Thaumcraft.modid, striprefs=true)
 public class ItemBase extends Item {//implements IScanThing {
@@ -74,7 +75,7 @@ public class ItemBase extends Item {//implements IScanThing {
     }
     
     public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	return I18n.translateToLocal("item." + this.itemName + ".description");
+    	return LanguageManager.translate("item." + this.itemName + ".description");
     }
 
     @Override

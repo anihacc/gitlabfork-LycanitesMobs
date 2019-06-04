@@ -15,7 +15,7 @@
 			"chance": 0.05,
 			"entityTypesListType": "blacklist",
 			"entityIds": [
-				"elementalmobs:tremor"
+				"lycanitesmobs:tremor"
 			],
 			"entityIdsListType": "blacklist",
 			"cooldown": 1200
@@ -37,7 +37,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:tremor",
+			"mobId": "lycanitesmobs:tremor",
 			"weight": 8
 		}
 	]

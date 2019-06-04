@@ -2,7 +2,7 @@
 	"itemName": "sprigganroot",
 	"loadDefault": true,
 	"slotType": "base",
-	"dropMobId": "elementalmobs:spriggan",
+	"dropMobId": "lycanitesmobs:spriggan",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -40,7 +40,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.spriggan",
+			"summonMobId": "lycanitesmobs.spriggan",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

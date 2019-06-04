@@ -31,19 +31,19 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "infernomobs:lobber",
+			"mobId": "lycanitesmobs:lobber",
 			"weight": 8
 		},
 		{
-			"mobId": "infernomobs:gorger",
+			"mobId": "lycanitesmobs:gorger",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:volcan",
+			"mobId": "lycanitesmobs:volcan",
 			"weight": 2
 		},
 		{
-			"mobId": "elementalmobs:tremor",
+			"mobId": "lycanitesmobs:tremor",
 			"weight": 2
 		}
 	]

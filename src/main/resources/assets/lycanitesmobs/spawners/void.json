@@ -28,7 +28,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:spectre",
+			"mobId": "lycanitesmobs:spectre",
 			"weight": 8
 		}
 	]

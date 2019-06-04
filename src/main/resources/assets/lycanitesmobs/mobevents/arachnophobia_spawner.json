@@ -31,19 +31,19 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "arcticmobs:frostweaver",
+			"mobId": "lycanitesmobs:frostweaver",
 			"weight": 8
 		},
 		{
-			"mobId": "desertmobs:sutiramu",
+			"mobId": "lycanitesmobs:sutiramu",
 			"weight": 8
 		},
 		{
-			"mobId": "junglemobs:tarantula",
+			"mobId": "lycanitesmobs:tarantula",
 			"weight": 8
 		},
 		{
-			"mobId": "demonmobs:trite",
+			"mobId": "lycanitesmobs:trite",
 			"weight": 8
 		}
 	]

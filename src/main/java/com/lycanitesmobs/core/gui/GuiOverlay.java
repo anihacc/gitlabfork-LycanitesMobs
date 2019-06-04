@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -114,7 +114,7 @@ public class GuiOverlay extends GuiBase {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             	if(this.mountMessageTime < 60)
             		GL11.glColor4f(1.0F, 1.0F, 1.0F, (float)this.mountMessageTime / (float)60);
-            	String mountMessage = I18n.translateToLocal("gui.mount.controls");
+            	String mountMessage = LanguageManager.translate("gui.mount.controls");
             	mountMessage = mountMessage.replace("%control%", GameSettings.getKeyDisplayString(KeyHandler.instance.mountAbility.getKeyCode()));
             	int stringWidth = this.mc.fontRenderer.getStringWidth(mountMessage);
             	this.mc.fontRenderer.drawString(mountMessage, (sWidth / 2) - (stringWidth / 2), sHeight - 64, 0xFFFFFF);

@@ -1,6 +1,6 @@
 {
-	"parent": "infernomobs:item/scorchfirescepter",
+	"parent": "lycanitesmobs:item/scorchfirescepter",
 	"textures": {
-		"layer0": "infernomobs:items/scorchfirescepter_fire"
+		"layer0": "lycanitesmobs:items/scorchfirescepter_fire"
 	}
 }

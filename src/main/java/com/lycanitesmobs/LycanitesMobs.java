@@ -22,6 +22,7 @@ import com.lycanitesmobs.core.item.CreativeTabItems;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
 import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
@@ -128,6 +129,9 @@ public class LycanitesMobs {
 		modInfo = new ModInfo(this, name, 1000); // TODO Remove groups.
 		ObjectManager.setCurrentGroup(modInfo);
 
+		// Localisation:
+		proxy.initLanguageManager();
+
 		// Config:
         ConfigBase.versionCheck("2.0.0.0", version);
 		config = ConfigBase.getConfig(modInfo, "general");
@@ -174,9 +178,6 @@ public class LycanitesMobs {
 		// Creatures:
 		CreatureManager.getInstance().loadConfig();
 
-		// Projectiles:
-		ProjectileManager.getInstance().loadProjectiles();
-
 		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
 
@@ -205,6 +206,9 @@ public class LycanitesMobs {
 		ObjectLists.createCustomItems();
 		ObjectLists.createLists();
 
+		// Projectiles:
+		ProjectileManager.getInstance().loadProjectiles();
+
         // Tile Entities:
         ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
@@ -221,6 +225,9 @@ public class LycanitesMobs {
 	@Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+
+		// Item Ore Dictionary:
+		ItemManager.getInstance().registerOres();
 
 		// Load Creatures:
 		CreatureManager.getInstance().loadAllFromJSON(modInfo);
@@ -285,6 +292,9 @@ public class LycanitesMobs {
         // Seasonal Item Lists:
         ItemHalloweenTreat.createObjectLists();
         ItemWinterGift.createObjectLists();
+
+        // Development:
+		//LanguageManager.getInstance().generateLangs();
     }
 
 

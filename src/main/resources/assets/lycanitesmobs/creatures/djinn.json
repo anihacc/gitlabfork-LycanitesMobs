@@ -84,7 +84,7 @@
 			"chance": 0.05
 		},
 		{
-			"item": "elementalmobs:whirlwindcharge",
+			"item": "lycanitesmobs:whirlwindcharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.05

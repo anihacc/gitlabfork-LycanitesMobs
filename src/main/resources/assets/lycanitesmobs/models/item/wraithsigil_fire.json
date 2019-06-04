@@ -1,6 +1,6 @@
 {
-	"parent": "elementalmobs:item/wraithsigil",
+	"parent": "lycanitesmobs:item/wraithsigil",
 	"textures": {
-		"layer0": "elementalmobs:items/wraithsigil_fire"
+		"layer0": "lycanitesmobs:items/wraithsigil_fire"
 	}
 }

@@ -2,7 +2,7 @@
 	"itemName": "argustail",
 	"loadDefault": true,
 	"slotType": "base",
-	"dropMobId": "elementalmobs:argus",
+	"dropMobId": "lycanitesmobs:argus",
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
@@ -40,7 +40,7 @@
 		{
 			"featureType": "summon",
 			"levelMin": 2,
-			"summonMobId": "elementalmobs.argus",
+			"summonMobId": "lycanitesmobs.argus",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,

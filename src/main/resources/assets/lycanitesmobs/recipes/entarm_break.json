@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "forestmobs:entarm"
+      "item": "lycanitesmobs:entarm"
     }
   ],
   "type": "forge:ore_shapeless"

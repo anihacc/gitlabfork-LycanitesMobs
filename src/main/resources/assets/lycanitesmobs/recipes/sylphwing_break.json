@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:aetherwavecharge",
+    "item": "lycanitesmobs:aetherwavecharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:sylphwing"
+      "item": "lycanitesmobs:sylphwing"
     }
   ],
   "type": "forge:ore_shapeless"

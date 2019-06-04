@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -93,7 +93,7 @@ public class BlockBase extends Block {
     }
 
     public String getDescription(ItemStack itemStack, @Nullable World world) {
-        return I18n.translateToLocal("tile." + this.blockName + ".description");
+        return LanguageManager.translate("tile." + this.blockName + ".description");
     }
 	
 	

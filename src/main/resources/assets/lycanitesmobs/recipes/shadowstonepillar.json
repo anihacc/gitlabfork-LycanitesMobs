@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "shadowmobs:shadowstonepillar",
+    "item": "lycanitesmobs:shadowstonepillar",
     "count": 2
   },
   "pattern": [
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "B": {
-      "item": "shadowmobs:shadowstone"
+      "item": "lycanitesmobs:shadowstone"
     }
   }
 }

@@ -31,7 +31,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "junglemobs:conba",
+			"mobId": "lycanitesmobs:conba",
 			"weight": 8
 		}
 	]

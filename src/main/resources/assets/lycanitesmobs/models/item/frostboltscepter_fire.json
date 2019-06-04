@@ -1,6 +1,6 @@
 {
-	"parent": "elementalmobs:item/frostboltscepter",
+	"parent": "lycanitesmobs:item/frostboltscepter",
 	"textures": {
-		"layer0": "elementalmobs:items/frostboltscepter_fire"
+		"layer0": "lycanitesmobs:items/frostboltscepter_fire"
 	}
 }

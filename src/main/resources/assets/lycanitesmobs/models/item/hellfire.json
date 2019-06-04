@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "demonmobs:blocks/hellfire_layer_0"
+		"layer0": "lycanitesmobs:blocks/hellfire_layer_0"
 	}
 }

@@ -12,7 +12,7 @@ import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -136,7 +136,7 @@ public class MobEvent {
 
     /** Returns the translated name of this event. **/
 	public String getTitle() {
-		return I18n.translateToLocal("mobevent." + this.title + ".name");
+		return LanguageManager.translate("mobevent." + this.title + ".name");
 	}
 
     /** Returns a translated string to overlay the event image, this returns an empty string for english as the image itself has the title in english. **/

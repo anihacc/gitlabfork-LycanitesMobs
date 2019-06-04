@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "mountainmobs:items/mountainspawn",
-		"layer1": "mountainmobs:items/mountainspawn_overlay"
+		"layer0": "lycanitesmobs:items/mountainspawn",
+		"layer1": "lycanitesmobs:items/mountainspawn_overlay"
 	}
 }

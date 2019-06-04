@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "forestmobs:wargskull"
+      "item": "lycanitesmobs:wargskull"
     }
   ],
   "type": "forge:ore_shapeless"

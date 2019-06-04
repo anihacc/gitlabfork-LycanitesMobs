@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "freshwatermobs:items/ioraytreat"
+		"layer0": "lycanitesmobs:items/ioraytreat"
 	}
 }

@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:geonach",
+			"mobId": "lycanitesmobs:geonach",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:vapula",
+			"mobId": "lycanitesmobs:vapula",
 			"weight": 1
 		}
 	]

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:demonstonebrick_wall",
+    "item": "lycanitesmobs:demonstonebrick_wall",
     "count": 6
   },
   "pattern": [
@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "B": {
-      "item": "demonmobs:demonstonebrick"
+      "item": "lycanitesmobs:demonstonebrick"
     }
   }
 }

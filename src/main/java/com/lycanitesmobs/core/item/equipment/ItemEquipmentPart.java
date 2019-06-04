@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -114,7 +114,7 @@ public class ItemEquipmentPart extends ItemBase {
 	@Override
 	public String getItemStackDisplayName(ItemStack itemStack) {
 		String displayName = super.getItemStackDisplayName(itemStack);
-		displayName += " " + I18n.translateToLocal("equipment.level") + " " + this.getLevel(itemStack);
+		displayName += " " + LanguageManager.translate("equipment.level") + " " + this.getLevel(itemStack);
 		return displayName;
 	}
 
@@ -133,14 +133,14 @@ public class ItemEquipmentPart extends ItemBase {
 
 	@Override
 	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		return I18n.translateToLocal("item.equipmentpart.description");
+		return LanguageManager.translate("item.equipmentpart.description");
 	}
 
 	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
 		List<String> descriptions = new ArrayList<>();
 		int level = this.getLevel(itemStack);
-		String baseFeature = I18n.translateToLocal("equipment.slottype") + " " + this.slotType;
-		baseFeature += "\n" + I18n.translateToLocal("equipment.level") + " " + level + "/" + this.levelMax;
+		String baseFeature = LanguageManager.translate("equipment.slottype") + " " + this.slotType;
+		baseFeature += "\n" + LanguageManager.translate("equipment.level") + " " + level + "/" + this.levelMax;
 		descriptions.add(baseFeature);
 		for(EquipmentFeature feature : this.features) {
 			String featureDescription = feature.getDescription(itemStack, level);

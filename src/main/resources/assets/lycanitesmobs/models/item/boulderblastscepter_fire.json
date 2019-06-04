@@ -1,6 +1,6 @@
 {
-	"parent": "mountainmobs:item/boulderblastscepter",
+	"parent": "lycanitesmobs:item/boulderblastscepter",
 	"textures": {
-		"layer0": "mountainmobs:items/boulderblastscepter_fire"
+		"layer0": "lycanitesmobs:items/boulderblastscepter_fire"
 	}
 }

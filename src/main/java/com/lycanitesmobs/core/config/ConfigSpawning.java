@@ -18,9 +18,12 @@ public class ConfigSpawning extends ConfigBase {
 	// ========== Config Collections ==========
 	// Get Config:
      public static ConfigSpawning getConfig(ModInfo group, String configName) {
-         String configFileName = group.filename + "-" + configName.toLowerCase();
+		 String configFileName = configName.toLowerCase();
+		 if(!"lycanitesmobs".equalsIgnoreCase(group.filename)) {
+			 configFileName = group.filename + "-" + configFileName;
+		 }
          if(!configs.containsKey(configFileName))
-             registerConfig(new ConfigSpawning(group, configName));
+             registerConfig(new ConfigSpawning(group, configName, configFileName));
          ConfigBase config = ConfigBase.configs.get(configFileName);
          if(config instanceof ConfigSpawning)
          	return (ConfigSpawning)config;
@@ -59,8 +62,8 @@ public class ConfigSpawning extends ConfigBase {
 	// ========================================
 	//				 Constructor
 	// ========================================
-    public ConfigSpawning(ModInfo group, String name) {
-        super(group, name);
+    public ConfigSpawning(ModInfo group, String name, String filename) {
+        super(group, name, filename);
     }
 
 

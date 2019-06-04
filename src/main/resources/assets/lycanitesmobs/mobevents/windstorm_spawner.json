@@ -31,15 +31,15 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "plainsmobs:roc",
+			"mobId": "lycanitesmobs:roc",
 			"weight": 8
 		},
 		{
-			"mobId": "plainsmobs:morock",
+			"mobId": "lycanitesmobs:morock",
 			"weight": 1
 		},
 		{
-			"mobId": "elementalmobs:djinn",
+			"mobId": "lycanitesmobs:djinn",
 			"weight": 2
 		}
 	]

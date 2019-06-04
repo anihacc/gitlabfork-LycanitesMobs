@@ -17,7 +17,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -350,7 +350,7 @@ public class Spawner {
 		}
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
-				String message = I18n.translateToLocal(this.triggerCountMessages.get(currentCount));
+				String message = LanguageManager.translate(this.triggerCountMessages.get(currentCount));
 				player.sendMessage(new TextComponentString(message));
 			}
 		}

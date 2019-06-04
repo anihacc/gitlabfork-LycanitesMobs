@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "swampmobs:eyewigtreat",
+    "item": "lycanitesmobs:eyewigtreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "swampmobs:poisongland"
+      "item": "lycanitesmobs:poisongland"
     }
   }
 }

@@ -1,5 +1,5 @@
 {
-	"parent": "junglemobs:block/veswax",
+	"parent": "lycanitesmobs:block/veswax",
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170],

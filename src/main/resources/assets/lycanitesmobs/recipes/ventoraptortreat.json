@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "plainsmobs:ventoraptortreat",
+    "item": "lycanitesmobs:ventoraptortreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "plainsmobs:makameatcooked"
+      "item": "lycanitesmobs:makameatcooked"
     }
   }
 }

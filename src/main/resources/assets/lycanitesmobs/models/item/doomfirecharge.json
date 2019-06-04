@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "demonmobs:items/doomfire"
+		"layer0": "lycanitesmobs:items/doomfire"
 	}
 }

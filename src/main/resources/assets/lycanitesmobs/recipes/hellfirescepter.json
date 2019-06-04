@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "demonmobs:hellfirescepter"
+    "item": "lycanitesmobs:hellfirescepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "demonmobs:hellfirecharge"
+      "item": "lycanitesmobs:hellfirecharge"
     }
   }
 }

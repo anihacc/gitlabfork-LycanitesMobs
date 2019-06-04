@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "elementalmobs:crystalshard",
+    "item": "lycanitesmobs:crystalshard",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "elementalmobs:vapulacrystal"
+      "item": "lycanitesmobs:vapulacrystal"
     }
   ],
   "type": "forge:ore_shapeless"

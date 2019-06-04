@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "arcticmobs:items/arixtreat"
+		"layer0": "lycanitesmobs:items/arixtreat"
 	}
 }

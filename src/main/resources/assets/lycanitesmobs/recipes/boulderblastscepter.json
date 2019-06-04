@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "mountainmobs:boulderblastscepter"
+    "item": "lycanitesmobs:boulderblastscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "mountainmobs:boulderblastcharge"
+      "item": "lycanitesmobs:boulderblastcharge"
     }
   }
 }

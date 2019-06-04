@@ -79,7 +79,7 @@
 			"chance": 0.05
 		},
 		{
-			"item": "shadowmobs:geistliver",
+			"item": "lycanitesmobs:geistliver",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

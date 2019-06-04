@@ -1,7 +1,7 @@
 {
-    "parent": "infernomobs:block/scorchfire_up_alt",
+    "parent": "lycanitesmobs:block/scorchfire_up_alt",
     "textures": {
-        "particle": "infernomobs:blocks/scorchfire_layer_1",
-        "fire": "infernomobs:blocks/scorchfire_layer_1"
+        "particle": "lycanitesmobs:blocks/scorchfire_layer_1",
+        "fire": "lycanitesmobs:blocks/scorchfire_layer_1"
     }
 }

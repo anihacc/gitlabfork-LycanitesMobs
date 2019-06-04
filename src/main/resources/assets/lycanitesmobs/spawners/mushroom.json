@@ -39,7 +39,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:eechetik",
+			"mobId": "lycanitesmobs:eechetik",
 			"weight": 8
 		}
 	]

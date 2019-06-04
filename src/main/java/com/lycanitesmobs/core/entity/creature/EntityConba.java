@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class EntityConba extends EntityCreatureTameable implements IMob {
@@ -84,7 +84,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
 		if(this.vespidInfection) {
 			String entityName = EntityList.getEntityString(this);
 	    	if(entityName != null)
-	    		infection = I18n.translateToLocal("entity." + this.creatureInfo.modInfo.filename + "." + entityName + ".infected") + " ";
+	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.filename + "." + entityName + ".infected") + " ";
 		}
     	return infection + super.getSpeciesName();
     }

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "saltwatermobs:quetzodracltreat",
+    "item": "lycanitesmobs:quetzodracltreat",
     "count": 4
   },
   "pattern": [
@@ -11,7 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "T": {
-      "item": "saltwatermobs:ikameatcooked"
+      "item": "lycanitesmobs:ikameatcooked"
     },
     "D": {
       "item": "minecraft:diamond"

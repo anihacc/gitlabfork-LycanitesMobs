@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "mountainmobs:barghesttreat",
+    "item": "lycanitesmobs:barghesttreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "mountainmobs:yalemeatcooked"
+      "item": "lycanitesmobs:yalemeatcooked"
     }
   }
 }

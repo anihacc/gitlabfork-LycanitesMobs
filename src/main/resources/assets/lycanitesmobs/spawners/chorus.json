@@ -31,7 +31,7 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "shadowmobs:wraamon",
+			"mobId": "lycanitesmobs:wraamon",
 			"weight": 8
 		}
 	]

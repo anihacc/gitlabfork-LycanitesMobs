@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "saltwatermobs:roatreat",
+    "item": "lycanitesmobs:roatreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "saltwatermobs:ikameatcooked"
+      "item": "lycanitesmobs:ikameatcooked"
     }
   }
 }

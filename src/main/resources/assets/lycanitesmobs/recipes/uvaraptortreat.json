@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "junglemobs:uvaraptortreat",
+    "item": "lycanitesmobs:uvaraptortreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "T": {
-      "item": "junglemobs:concapedemeatcooked"
+      "item": "lycanitesmobs:concapedemeatcooked"
     }
   }
 }

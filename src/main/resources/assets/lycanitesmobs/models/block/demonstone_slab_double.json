@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_column",
     "textures": {
-        "end": "demonmobs:blocks/demonstonepolished",
-        "side": "demonmobs:blocks/demonstoneslab"
+        "end": "lycanitesmobs:blocks/demonstonepolished",
+        "side": "lycanitesmobs:blocks/demonstoneslab"
     }
 }

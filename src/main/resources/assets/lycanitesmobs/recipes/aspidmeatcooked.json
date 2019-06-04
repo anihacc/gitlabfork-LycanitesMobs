@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "swampmobs:aspidmeatcooked"
+    "item": "lycanitesmobs:aspidmeatcooked"
   },
   "ingredients": [
     {
-      "item": "swampmobs:mosspie"
+      "item": "lycanitesmobs:mosspie"
     }
   ],
   "type": "forge:ore_shapeless"

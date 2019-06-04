@@ -10,7 +10,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.client.GuiScrollingList;
 import org.lwjgl.opengl.GL11;
 
@@ -124,8 +124,8 @@ public class GUIBaseManager extends GuiBaseScreen {
 
 		// No Pets:
 		if (!this.hasPets()) {
-			this.getFontRenderer().drawString(I18n.translateToLocal("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-			this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+			this.getFontRenderer().drawString(LanguageManager.translate("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawSplitString(LanguageManager.translate("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
 			return;
 		}
 
@@ -138,16 +138,16 @@ public class GUIBaseManager extends GuiBaseScreen {
 		// Removal Confirmation:
 		if (this.hasSelectedPet()) {
 			if ((this.type.equalsIgnoreCase("pet") || this.type.equalsIgnoreCase("mount")) && this.selectedPet.releaseEntity)
-				this.getFontRenderer().drawSplitString(I18n.translateToLocal("gui.pet.release.confirm"), this.centerX + 2, this.windowY + 41, (this.windowWidth / 2) - 2, 0xFFFFFF);
+				this.getFontRenderer().drawSplitString(LanguageManager.translate("gui.pet.release.confirm"), this.centerX + 2, this.windowY + 41, (this.windowWidth / 2) - 2, 0xFFFFFF);
 		}
 	}
 
     public String getTitle() {
-        return I18n.translateToLocal("gui." + this.type + "manager.name");
+        return LanguageManager.translate("gui." + this.type + "manager.name");
     }
 
     public String getEnergyTitle() {
-        return I18n.translateToLocal("stat.spirit.name");
+        return LanguageManager.translate("stat.spirit.name");
     }
 	
 	
@@ -264,8 +264,8 @@ public class GUIBaseManager extends GuiBaseScreen {
 		this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.RELEASE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "..."));
 
 		// Removal Confirmation:
-		this.buttonList.add(new GuiButton(101, buttonX, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("common.yes")));
-		this.buttonList.add(new GuiButton(102, buttonXRight, buttonY, buttonWidth, buttonHeight, I18n.translateToLocal("common.no")));
+		this.buttonList.add(new GuiButton(101, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("common.yes")));
+		this.buttonList.add(new GuiButton(102, buttonXRight, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("common.no")));
 	}
 
 	public void updateControls() {
@@ -295,30 +295,30 @@ public class GUIBaseManager extends GuiBaseScreen {
     public void updateButtons(GuiButton button) {
         // Action Buttons:
         if(button.id == EntityCreatureBase.GUI_COMMAND.SPAWNING.id)
-            button.displayString = I18n.translateToLocal("gui.pet.active") + ": " + (this.selectedPet.spawningActive ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.active") + ": " + (this.selectedPet.spawningActive ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         if(button.id == EntityCreatureBase.GUI_COMMAND.TELEPORT.id)
-            button.displayString = I18n.translateToLocal("gui.pet.teleport");
+            button.displayString = LanguageManager.translate("gui.pet.teleport");
 
         // Behaviour Buttons:
         if (button.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
-            button.displayString = I18n.translateToLocal("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.FOLLOWING.id)
-            button.displayString = (this.summonSet.getFollowing() ? I18n.translateToLocal("gui.pet.follow") : I18n.translateToLocal("gui.pet.wander"));
+            button.displayString = (this.summonSet.getFollowing() ? LanguageManager.translate("gui.pet.follow") : LanguageManager.translate("gui.pet.wander"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
-            button.displayString = I18n.translateToLocal("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
-            button.displayString = (this.summonSet.getAggressive() ? I18n.translateToLocal("gui.pet.aggressive") : I18n.translateToLocal("gui.pet.defensive"));
+            button.displayString = (this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive"));
 
         if (button.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
-            button.displayString = I18n.translateToLocal("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? I18n.translateToLocal("common.yes") : I18n.translateToLocal("common.no"));
+            button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
         // Remove:
         if(button.id == EntityCreatureBase.GUI_COMMAND.RELEASE.id)
-            button.displayString = I18n.translateToLocal("gui.pet.release");
+            button.displayString = LanguageManager.translate("gui.pet.release");
 
         // Removal Confirmation:
         if(!this.selectedPet.releaseEntity) {

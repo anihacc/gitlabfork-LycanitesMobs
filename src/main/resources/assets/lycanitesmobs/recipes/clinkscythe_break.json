@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "desertmobs:throwingscythe",
+    "item": "lycanitesmobs:throwingscythe",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "desertmobs:clinkscythe"
+      "item": "lycanitesmobs:clinkscythe"
     }
   ],
   "type": "forge:ore_shapeless"

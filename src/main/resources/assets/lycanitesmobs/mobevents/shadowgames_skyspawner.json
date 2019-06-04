@@ -31,11 +31,11 @@
 	],
 	"mobSpawns": [
 		{
-			"mobId": "elementalmobs:grue",
+			"mobId": "lycanitesmobs:grue",
 			"weight": 8
 		},
 		{
-			"mobId": "elementalmobs:spectre",
+			"mobId": "lycanitesmobs:spectre",
 			"weight": 4
 		}
 	]

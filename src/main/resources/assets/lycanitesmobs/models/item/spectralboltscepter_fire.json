@@ -1,6 +1,6 @@
 {
-	"parent": "shadowmobs:item/spectralboltscepter",
+	"parent": "lycanitesmobs:item/spectralboltscepter",
 	"textures": {
-		"layer0": "shadowmobs:items/spectralboltscepter_fire"
+		"layer0": "lycanitesmobs:items/spectralboltscepter_fire"
 	}
 }

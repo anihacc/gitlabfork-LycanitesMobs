@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "arcticmobs:tundrascepter"
+    "item": "lycanitesmobs:tundrascepter"
   },
   "pattern": [
     "SCS",
@@ -13,10 +13,10 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "arcticmobs:tundracharge"
+      "item": "lycanitesmobs:tundracharge"
     },
     "S": {
-      "item": "arcticmobs:frostyfur"
+      "item": "lycanitesmobs:frostyfur"
     }
   }
 }

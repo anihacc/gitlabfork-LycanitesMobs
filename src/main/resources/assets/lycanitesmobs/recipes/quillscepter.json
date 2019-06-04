@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "plainsmobs:quillscepter"
+    "item": "lycanitesmobs:quillscepter"
   },
   "pattern": [
     "CCC",
@@ -13,7 +13,7 @@
       "item": "minecraft:blaze_rod"
     },
     "C": {
-      "item": "plainsmobs:quill"
+      "item": "lycanitesmobs:quill"
     }
   }
 }

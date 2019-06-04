@@ -78,7 +78,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "elementalmobs:chaosorbcharge",
+			"item": "lycanitesmobs:chaosorbcharge",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 0.1
