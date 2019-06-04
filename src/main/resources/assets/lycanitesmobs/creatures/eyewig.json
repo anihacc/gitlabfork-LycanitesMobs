@@ -1,6 +1,7 @@
 {
 	"name": "eyewig",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEyewig",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEyewig",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

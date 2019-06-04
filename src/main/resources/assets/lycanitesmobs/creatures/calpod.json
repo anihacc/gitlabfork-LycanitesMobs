@@ -1,6 +1,7 @@
 {
 	"name": "calpod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCalpod",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

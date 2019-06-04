@@ -1,6 +1,7 @@
 {
 	"name": "cryptzombie",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityCryptZombie",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCryptZombie",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

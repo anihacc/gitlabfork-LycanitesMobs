@@ -1,6 +1,7 @@
 {
 	"name": "cinder",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityCinder",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCinder",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

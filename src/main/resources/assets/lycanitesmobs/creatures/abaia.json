@@ -1,6 +1,7 @@
 {
 	"name": "abaia",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAbaia",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAbaia",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

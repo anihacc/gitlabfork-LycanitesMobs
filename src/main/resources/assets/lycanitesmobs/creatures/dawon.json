@@ -1,6 +1,7 @@
 {
 	"name": "dawon",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityDawon",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelDawon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

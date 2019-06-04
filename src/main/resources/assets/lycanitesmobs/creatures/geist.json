@@ -1,6 +1,7 @@
 {
 	"name": "geist",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityGeist",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeist",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

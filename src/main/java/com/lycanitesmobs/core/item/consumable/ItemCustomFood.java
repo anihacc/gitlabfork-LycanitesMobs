@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.consumable;
 
+import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ItemConfig;
@@ -7,7 +8,9 @@ import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -38,6 +41,7 @@ public class ItemCustomFood extends ItemFood {
     /** The ID of the chance effect that will occur upon eating this food. Set using setPotionEffect(). */
     protected float effectChance;
 
+
     // ==================================================
   	//                    Constructors
   	// ==================================================
@@ -56,28 +60,38 @@ public class ItemCustomFood extends ItemFood {
 	public ItemCustomFood(String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
 		this(setItemName, group, setItemName.toLowerCase(), feed, saturation, foodClass);
 	}
-    
-    
+
+
 	// ==================================================
 	//                      Info
 	// ==================================================
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String description = this.getDescription(stack, worldIn, tooltip, flagIn);
-        if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
-            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
-            for(Object formattedDescription : formattedDescriptionList) {
-                if(formattedDescription instanceof String)
-                    tooltip.add("\u00a7a" + formattedDescription);
-            }
-        }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return LanguageManager.translate(this.getUnlocalizedName(stack) + ".name").trim();
+	}
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        return LanguageManager.translate("item." + this.itemName + ".description");
-    }
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		String description = this.getDescription(stack, worldIn, tooltip, flagIn);
+		if(!"".equalsIgnoreCase(description)) {
+			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
+			for(Object formattedDescription : formattedDescriptionList) {
+				if(formattedDescription instanceof String)
+					tooltip.add("\u00a7a" + formattedDescription);
+			}
+		}
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+	}
+
+	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		return super.getAttributeModifiers(slot, stack);
+	}
 
 
     // ==================================================

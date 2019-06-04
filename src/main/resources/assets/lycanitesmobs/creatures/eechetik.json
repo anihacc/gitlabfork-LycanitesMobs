@@ -1,6 +1,7 @@
 {
 	"name": "eechetik",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEechetik",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEechetik",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

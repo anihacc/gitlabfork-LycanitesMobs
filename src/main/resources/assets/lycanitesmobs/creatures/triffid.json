@@ -1,6 +1,7 @@
 {
 	"name": "triffid",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityTriffid",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTriffid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

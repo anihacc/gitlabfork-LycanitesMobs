@@ -1,6 +1,7 @@
 {
 	"name": "epion",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEpion",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEpion",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

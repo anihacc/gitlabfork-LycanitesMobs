@@ -1,6 +1,7 @@
 {
 	"name": "beholder",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityBeholder",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBeholder",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

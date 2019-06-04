@@ -1,6 +1,7 @@
 {
 	"name": "khalk",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelKhalk",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

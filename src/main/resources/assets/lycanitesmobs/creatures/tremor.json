@@ -1,6 +1,7 @@
 {
 	"name": "tremor",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityTremor",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTremor",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

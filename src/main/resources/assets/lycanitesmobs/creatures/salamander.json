@@ -1,6 +1,7 @@
 {
 	"name": "salamander",
 	"class": "com.lycanitesmobs.core.entity.creature.EntitySalamander",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSalamander",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

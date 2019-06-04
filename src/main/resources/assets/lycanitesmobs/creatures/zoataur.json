@@ -1,6 +1,7 @@
 {
 	"name": "zoataur",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityZoataur",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelZoataur",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

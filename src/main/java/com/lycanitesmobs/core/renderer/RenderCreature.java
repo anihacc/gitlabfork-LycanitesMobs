@@ -2,6 +2,8 @@ package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.model.ModelCustom;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
@@ -42,8 +44,8 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public RenderCreature(String entityID, RenderManager renderManager, float shadowSize) {
-    	super(renderManager, AssetManager.getModel(entityID), shadowSize);
+    public RenderCreature(String entityID, RenderManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    	super(renderManager, AssetManager.getCreatureModel(CreatureManager.getInstance().getCreature(entityID)), shadowSize);
 		this.defaultModel = this.mainModel;
 
         if(this.mainModel instanceof ModelCustom) {
@@ -71,16 +73,12 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 
 	@Override
 	public void doRender(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		this.mainModel = this.defaultModel;
-
-		// Subspecies Skins:
-		if(entity.getSubspecies() != null && entity.getSubspecies().modelClass != null) {
-			try {
-				this.mainModel = AssetManager.getCreatureModel(entity);
-			} catch (Exception e) {
-				//LycanitesMobs.printWarning("", "Subspecies Model Exception");
-			}
+		try {
+			this.mainModel = AssetManager.getCreatureModel(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		this.mainModel = this.defaultModel;
 
     	super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}

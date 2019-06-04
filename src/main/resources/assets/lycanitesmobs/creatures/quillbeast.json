@@ -1,6 +1,7 @@
 {
 	"name": "quillbeast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityQuillbeast",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelQuillbeast",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

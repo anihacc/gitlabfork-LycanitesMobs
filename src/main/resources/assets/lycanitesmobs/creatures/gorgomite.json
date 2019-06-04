@@ -1,6 +1,7 @@
 {
 	"name": "gorgomite",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityGorgomite",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGorgomite",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

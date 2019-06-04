@@ -56,7 +56,7 @@ item.soulkeyemerald.description=A more powerful Soul Key capable for summoning m
 #
 #
 # ========== Soulstones ==========
-item.soulstone.name=item.Soulstone
+item.soulstone.name=Soulstone
 item.soulstone.description=Use on a tamed creature to bind it to your spirit allowing you to summon and dismiss it anywhere anytime. Bound pets or mounts will also respawn after death.
 #
 item.soulstoneinferno.name=Inferno Soulstone

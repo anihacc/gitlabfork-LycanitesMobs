@@ -1,6 +1,7 @@
 {
 	"name": "trite",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityTrite",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTrite",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

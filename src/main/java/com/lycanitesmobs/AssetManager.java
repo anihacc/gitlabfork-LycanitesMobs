@@ -113,6 +113,11 @@ public class AssetManager {
 	}
 
 	public static ModelBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		if (entityCreature.creatureInfo == null) {
+			return null;
+		}
+
+		// Subpsecies Model:
 		if(entityCreature.getSubspecies() != null && entityCreature.getSubspecies().modelClass != null) {
 			if(models.containsKey(entityCreature.getSubspecies().modelClass.toString())) {
 				return models.get(entityCreature.getSubspecies().modelClass.toString());
@@ -121,10 +126,23 @@ public class AssetManager {
 			models.put(entityCreature.getSubspecies().modelClass.toString(), creatureModel);
 			return creatureModel;
 		}
-		if (entityCreature.creatureInfo == null) {
+
+		// Main Model:
+		return getCreatureModel(entityCreature.creatureInfo);
+	}
+
+	public static ModelBase getCreatureModel(CreatureInfo creatureInfo) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		if (creatureInfo == null) {
 			return null;
 		}
-		return getModel(entityCreature.creatureInfo.getName());
+
+		// Main Model:
+		if (models.containsKey(creatureInfo.modelClass.toString())) {
+			return models.get(creatureInfo.modelClass.toString());
+		}
+		ModelBase creatureModel = creatureInfo.modelClass.getConstructor().newInstance();
+		models.put(creatureInfo.modelClass.toString(), creatureModel);
+		return creatureModel;
 	}
 	
 	// ========== Obj Model ==========

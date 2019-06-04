@@ -1,6 +1,7 @@
 {
 	"name": "ventoraptor",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityVentoraptor",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVentoraptor",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

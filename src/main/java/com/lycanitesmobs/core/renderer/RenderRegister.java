@@ -17,8 +17,6 @@ public class RenderRegister {
     public void registerRenderFactories() {
         // Creatures:
         for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
-            if(creatureInfo.modInfo != this.groupInfo)
-                continue;
             RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryCreature<EntityCreatureBase>(creatureInfo));
         }
 

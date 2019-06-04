@@ -1,4 +1,5 @@
 item.equipment.name=Crafted Equipment
+item.equipment.description=
 item.equipmentpart.description=This item can be used to create powerful equipment using an Equipment Forge or can be crafted into a useful resource.
 #
 item.woodenrod.name=Wooden Rod

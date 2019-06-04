@@ -1,6 +1,7 @@
 {
 	"name": "zephyr",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityZephyr",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelZephyr",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

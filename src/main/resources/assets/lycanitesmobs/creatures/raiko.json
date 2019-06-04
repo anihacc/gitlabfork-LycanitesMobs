@@ -1,6 +1,7 @@
 {
 	"name": "raiko",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityRaiko",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRaiko",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

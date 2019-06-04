@@ -1,6 +1,7 @@
 {
 	"name": "ioray",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityIoray",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelIoray",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

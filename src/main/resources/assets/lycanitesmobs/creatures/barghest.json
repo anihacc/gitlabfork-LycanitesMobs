@@ -1,6 +1,7 @@
 {
 	"name": "barghest",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityBarghest",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBarghest",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

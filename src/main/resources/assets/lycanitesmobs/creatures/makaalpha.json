@@ -1,6 +1,7 @@
 {
 	"name": "makaalpha",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityMakaAlpha",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMakaAlpha",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

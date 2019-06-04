@@ -1,6 +1,7 @@
 {
 	"name": "chupacabra",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelChupacabra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

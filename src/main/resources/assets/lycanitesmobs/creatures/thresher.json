@@ -1,6 +1,7 @@
 {
 	"name": "thresher",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityThresher",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelThresher",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

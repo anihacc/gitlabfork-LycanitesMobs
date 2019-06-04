@@ -1,6 +1,7 @@
 {
 	"name": "jabberwock",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJabberwock",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJabberwock",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

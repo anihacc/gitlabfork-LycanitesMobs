@@ -1,6 +1,7 @@
 {
 	"name": "concapedesegment",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityConcapedeSegment",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConcapedeSegment",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

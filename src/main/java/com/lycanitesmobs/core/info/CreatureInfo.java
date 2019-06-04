@@ -155,21 +155,20 @@ public class CreatureInfo {
 			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("class").getAsString() + " for " + this.getName());
 		}
 
-		// Model Class:
-		if(json.has("modelClass")) {
-			try {
-				LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
-			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
-			}
-		}
-
 		if(json.has("enabled"))
 			this.enabled = json.get("enabled").getAsBoolean();
 		if(json.has("dummy"))
 			this.dummy = json.get("dummy").getAsBoolean();
 		if(this.dummy)
 			return;
+
+		// Model Class:
+		try {
+			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
+		} catch (Exception e) {
+			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+		}
+
 		this.creatureSpawn.loadFromJSON(json.get("spawning").getAsJsonObject());
 
 		if(json.has("width"))

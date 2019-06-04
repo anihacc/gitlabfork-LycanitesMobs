@@ -1,6 +1,7 @@
 {
 	"name": "vespidqueen",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityVespidQueen",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVespidQueen",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

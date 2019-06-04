@@ -58,7 +58,12 @@ public class ItemSwordBase extends ItemSword {
 	// ==================================================
 	//                      Info
 	// ==================================================
-    @Override
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return LanguageManager.translate(this.getUnlocalizedNameInefficiently(stack) + ".name").trim();
+	}
+
+	@Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         String description = this.getDescription(stack, worldIn, tooltip, flagIn);
         if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {

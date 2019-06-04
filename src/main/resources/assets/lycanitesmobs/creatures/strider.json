@@ -1,6 +1,7 @@
 {
 	"name": "strider",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityStrider",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelStrider",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

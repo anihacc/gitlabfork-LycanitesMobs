@@ -1,6 +1,7 @@
 {
 	"name": "rahovart",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityRahovart",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRahovart",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

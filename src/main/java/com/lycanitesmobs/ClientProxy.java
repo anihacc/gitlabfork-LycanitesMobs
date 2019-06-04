@@ -4,14 +4,13 @@ import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.core.gui.GuiTabMain;
 import com.lycanitesmobs.core.gui.GuiOverlay;
+import com.lycanitesmobs.core.gui.GuiTabMain;
 import com.lycanitesmobs.core.gui.TabManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageLoader;
@@ -138,6 +137,11 @@ public class ClientProxy extends CommonProxy {
 	// ========== Register Renders ==========
 	@Override
     public void registerRenders(ModInfo groupInfo) {
+		// Projectile Models:
+		AssetManager.addModel("lightball", new ModelLightBall());
+		AssetManager.addModel("crystalshard", new ModelCrystalShard());
+		AssetManager.addModel("aetherwave", new ModelAetherwave());
+		AssetManager.addModel("chaosorb", new ModelChaosOrb());
 
         // Equipment Parts:
 		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader()); // TODO Unused?
@@ -157,12 +161,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerModels(ModInfo groupInfo) {
 		ObjectManager.RegisterModels();
-
-		// Projectiles:
-		AssetManager.addModel("lightball", new ModelLightBall());
-		AssetManager.addModel("crystalshard", new ModelCrystalShard());
-		AssetManager.addModel("aetherwave", new ModelAetherwave());
-		AssetManager.addModel("chaosorb", new ModelChaosOrb());
 	}
 
 

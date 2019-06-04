@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -15,7 +16,14 @@ public class RenderFactoryCreature<T extends Entity> implements IRenderFactory {
 
     @Override
     public Render createRenderFor(RenderManager manager) {
-        return new RenderCreature(this.creatureInfo.getName(), manager, (float)this.creatureInfo.width / 2);
+        try {
+            return new RenderCreature(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
+        }
+        catch (Exception e) {
+            LycanitesMobs.printWarning("", "An exception occurred rendering a creature model:");
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

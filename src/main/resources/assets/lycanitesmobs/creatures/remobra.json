@@ -1,6 +1,7 @@
 {
 	"name": "remobra",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityRemobra",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRemobra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

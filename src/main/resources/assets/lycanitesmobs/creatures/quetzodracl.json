@@ -1,6 +1,7 @@
 {
 	"name": "quetzodracl",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityQuetzodracl",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelQuetzodracl",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

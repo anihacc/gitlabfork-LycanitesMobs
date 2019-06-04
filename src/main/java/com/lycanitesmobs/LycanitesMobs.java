@@ -171,6 +171,7 @@ public class LycanitesMobs {
 
 		// Creatures:
 		CreatureManager.getInstance().loadConfig();
+		CreatureManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
@@ -207,11 +208,11 @@ public class LycanitesMobs {
         ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 
-		// Renderers:
-		proxy.registerRenders(modInfo);
-
 		// Mod Support:
 		DLDungeons.init();
+
+		// Renderers:
+		proxy.registerRenders(modInfo);
 	}
 
 
@@ -226,8 +227,7 @@ public class LycanitesMobs {
 		// Item Ore Dictionary:
 		ItemManager.getInstance().registerOres();
 
-		// Load Creatures:
-		CreatureManager.getInstance().loadAllFromJSON(modInfo);
+		// Register Creatures:
 		CreatureManager.getInstance().registerAll(modInfo);
 
 		// Special Entities:

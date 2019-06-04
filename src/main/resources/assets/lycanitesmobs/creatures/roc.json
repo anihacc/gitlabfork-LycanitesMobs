@@ -1,6 +1,7 @@
 {
 	"name": "roc",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityRoc",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRoc",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

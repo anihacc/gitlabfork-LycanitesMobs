@@ -1,6 +1,7 @@
 {
 	"name": "herma",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityHerma",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelHerma",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

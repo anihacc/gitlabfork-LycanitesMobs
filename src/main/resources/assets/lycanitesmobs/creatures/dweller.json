@@ -1,6 +1,7 @@
 {
 	"name": "dweller",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityDweller",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelDweller",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

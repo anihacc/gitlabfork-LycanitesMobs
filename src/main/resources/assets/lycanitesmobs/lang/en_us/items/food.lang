@@ -22,8 +22,8 @@ item.yalemeatraw.description=Tastes a bit like mutton. Very chewy when raw, caus
 item.cephignismeatcooked.name=Cooked Cephignis Meat
 item.cephignismeatcooked.description=Very spicy fish!
 #
-item.battleburrito.name=item.battleburrito.name
-item.battleburrito.description=item.battleburrito.description
+item.battleburrito.name=Battle Burrito
+item.battleburrito.description=A powerful fusion of many tasty meats! Applies: Strength, Resistance, Absorption, Health Boost and Heals!
 #
 item.concapedemeatraw.name=Raw Concapede Meat
 item.concapedemeatraw.description=Close your eyes and pretend that it is chicken!
@@ -43,8 +43,8 @@ item.pinkymeatcooked.description=Tastes like very rich, salty beef. Provides str
 item.bulwarkburger.name=Bulwark Burger
 item.bulwarkburger.description=Take on the tough defense of the mighty Maka! Applies absorption.
 #
-item.explorersrisotto.name=item.explorersrisotto.name
-item.explorersrisotto.description=item.explorersrisotto.description
+item.explorersrisotto.name=Explorers Risotto
+item.explorersrisotto.description=A mighty dish bursting with power! Applies: Movement Speed, Dig Speed, Water Breathing and Jump Boost!
 #
 item.paleosalad.name=Paleo Salad
 item.paleosalad.description=The healthiest food you can eat! Increases all healing received.

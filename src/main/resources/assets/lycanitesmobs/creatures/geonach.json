@@ -1,6 +1,7 @@
 {
 	"name": "geonach",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityGeonach",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeonach",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

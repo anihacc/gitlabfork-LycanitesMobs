@@ -1,6 +1,7 @@
 {
 	"name": "maug",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityMaug",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMaug",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

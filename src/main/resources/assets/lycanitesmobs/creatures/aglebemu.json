@@ -1,6 +1,7 @@
 {
 	"name": "aglebemu",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAglebemu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

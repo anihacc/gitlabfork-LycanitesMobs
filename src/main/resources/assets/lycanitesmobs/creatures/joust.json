@@ -1,6 +1,7 @@
 {
 	"name": "joust",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJoust",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoust",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
