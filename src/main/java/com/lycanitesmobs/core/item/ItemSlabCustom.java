@@ -52,6 +52,11 @@ public class ItemSlabCustom extends ItemBlock
         return this.singleSlab.getUnlocalizedName(stack.getMetadata());
     }
 
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return this.block.getLocalizedName();
+    }
+
     /**
      * Called when a Block is right-clicked with this Item
      */

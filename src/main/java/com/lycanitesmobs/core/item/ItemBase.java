@@ -60,10 +60,15 @@ public class ItemBase extends Item {//implements IScanThing {
 	// ==================================================
 	//                      Info
 	// ==================================================
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return LanguageManager.translate(this.getUnlocalizedNameInefficiently(stack) + ".name").trim();
+	}
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
     	String description = this.getDescription(stack, worldIn, tooltip, flagIn);
-    	if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
+    	if(!"".equalsIgnoreCase(description)) {
     		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
     		List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, descriptionWidth);
     		for(Object formattedDescription : formattedDescriptionList) {
@@ -73,9 +78,9 @@ public class ItemBase extends Item {//implements IScanThing {
     	}
     	super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-    
+
     public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	return LanguageManager.translate("item." + this.itemName + ".description");
+    	return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 
     @Override

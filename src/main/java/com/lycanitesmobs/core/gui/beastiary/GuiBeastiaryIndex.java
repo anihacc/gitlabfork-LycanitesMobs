@@ -4,10 +4,9 @@ import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.player.EntityPlayer;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.io.IOException;
 import java.net.URI;

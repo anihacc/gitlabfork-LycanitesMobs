@@ -1,58 +1,32 @@
+item.equipment.name=Crafted Equipment
+item.equipmentpart.description=This item can be used to create powerful equipment using an Equipment Forge or can be crafted into a useful resource.
+#
+item.woodenrod.name=Wooden Rod
+item.woodenhilt.name=Wooden Hilt
+item.woodenpaxel.name=Wooden Paxel
 item.bansheeeye.name=Banshee Eye
-#
 item.sylphwing.name=Sylph Wing
-#
 item.grueclaw.name=Grue Claw
-#
 item.geonachspear.name=Geonach Spear
-#
 item.remobrawing.name=Remobra Wing
-#
 item.astarothclaw.name=Astaroth Claw
-#
 item.zephyrblade.name=Zephyr Blade
-#
 item.sutiramustinger.name=Sutiramu Stinger
-#
 item.wendigoantler.name=Wendigo Antler
-#
 item.clinkscythe.name=Clink Scythe
-#
 item.vespidstinger.name=Vespid Stinger
-#
 item.argustail.name=Argus Tail
-#
 item.wargskull.name=Warg Skull
-#
 item.djinncloud.name=Djinn Cloud
-#
 item.ventoraptorskull.name=Ventoraptor Skull
-#
 item.darklingskull.name=Darkling Skull
-#
 item.entarm.name=Ent Arm
-#
 item.wraithskull.name=Wraith Skull
-#
-item.woodenrod.name=item.woodenrod.name
-#
 item.sprigganroot.name=Spriggan Root
-#
 item.xaphanspine.name=Xaphan Spine
-#
 item.cinderblade.name=Cinder Blade
-#
 item.geonachfist.name=Geonach Fist
-#
-item.woodenpaxel.name=item.woodenpaxel.name
-#
-item.woodenhilt.name=item.woodenhilt.name
-#
 item.spectretendril.name=Spectre Tendril
-#
 item.vapulacrystal.name=Vapula Crystal
-#
 item.reiverhorns.name=Reiver Horns
-#
 item.eechetikarm.name=Eechetik Arm
-#

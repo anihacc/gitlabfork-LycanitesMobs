@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.block;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.block.BlockHorizontal;
@@ -13,6 +14,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,6 +23,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockEquipmentForge extends BlockBase implements ITileEntityProvider {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -68,6 +73,24 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
     public BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {FACING});
     }
+
+
+	// ==================================================
+	//                      Info
+	// ==================================================
+	@Override
+	public String getLocalizedName() {
+		return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(this.getDescription(stack, world));
+	}
+
+	public String getDescription(ItemStack itemStack, @Nullable World world) {
+		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+	}
 
 
     // ==================================================

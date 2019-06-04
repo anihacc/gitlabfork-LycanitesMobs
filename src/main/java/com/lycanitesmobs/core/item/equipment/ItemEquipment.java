@@ -79,7 +79,7 @@ public class ItemEquipment extends ItemBase {
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(LanguageManager.translate(equipmentPart.getUnlocalizedName() + ".name") + " " + LanguageManager.translate("entity.level") + " " + partLevel);
+			descriptions.add(equipmentPart.getItemStackDisplayName(itemStack) + " " + LanguageManager.translate("entity.level") + " " + partLevel);
 		}
 		//descriptions.add(LanguageManager.translate("common.holdshift"));
 		return descriptions;

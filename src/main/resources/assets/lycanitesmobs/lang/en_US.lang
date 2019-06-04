@@ -1,47 +1,4 @@
-# ========== Events ==========
-# %event% will be replaced with the name of the event, don't translate this!
-event.started=%event% has begun!
-event.extended=%event% has been extended!
-event.finished=%event% is no longer spawning mobs!
-event.boss.started=%event% has been called!
-event.boss.extended=%event% is coming!
-event.boss.finished=%event% is unleashed!
-event.boss.phase=Phase
-#
-# Mob Events
-mobevent.arachnophobia.name=Arachnophobia
-mobevent.asmodeus.name=Asmodeus
-mobevent.bamstorm.name=Bamstorm
-mobevent.blackplague.name=Black Plague
-mobevent.bladeflurry.name=Blade Flurry
-mobevent.boulderdash.name=Boulderdash
-mobevent.cinderfall.name=Cinderfall
-mobevent.dragonsroar.name=Dragons Roar
-mobevent.eruption.name=Eruption
-mobevent.halloween.name=Happy Halloween
-mobevent.hellsfury.name=Hells Fury
-mobevent.marchofthegorgomites.name=March of The Gorgomites
-mobevent.poopparty.name=Poop Party
-mobevent.primalfury.name=Primal Fury
-mobevent.rahovart.name=Rahovart
-mobevent.raptorrampage.name=Raptor Rampage
-mobevent.reptileruckus.name=Reptile Ruckus
-mobevent.roasting.name=Your Head Roasting On A Cinder Fire
-mobevent.rootriot.name=Root Riot
-mobevent.rudolph.name=Rudolph The Bloodstained Jabberwock
-mobevent.saltytree.name=Salty Tree
-mobevent.satanclaws.name=Satan Claws
-mobevent.seastorm.name=Seastorm
-mobevent.shadowgames.name=Shadow Games
-mobevent.sharknado.name=Sharknado
-mobevent.subzero.name=Subzero
-mobevent.theswarm.name=The Swarm
-mobevent.tsunami.name=Tsunami
-mobevent.windstorm.name=Windstorm
-mobevent.wingedvenom.name=Winged Venom
-mobevent.wintersgrasp.name=Winters Grasp
-#
-#
+lycanitesmobs.name=Lycanites Mobs
 #
 # ========== Entites ==========
 entity.level=Lvl
@@ -92,64 +49,10 @@ subspecies.void.name=Void
 #
 #
 #
-# ========== Blocks ==========
-tile.summoningpedestal.name=Summoning Pedestal
-tile.summoningpedestal.description=This pedestal is able to create a constant summoning portal that will summon the selected minion. Some pedestals can be player owned and some not.
-tile.equipmentforge_lesser.name=Lesser Equipment Forge (Level 1)
-tile.equipmentforge_greater.name=Greater Equipment Forge (Level 2)
-tile.equipmentforge_master.name=Master Equipment Forge (Level 3)
-tile.equipmentforge_wood.description=This forge can be used to create new Equipment from Level 1 creature body parts (higher level parts will be downgraded if possible).
-tile.equipmentforge_stone.description=This forge can be used to create new Equipment from Level 2 or below creature body parts (higher level parts will be downgraded if possible).
-tile.equipmentforge_iron.description=This forge can be used to create new Equipment from Level 3 or below creature body parts.
-#
-#
-#
 # ========== Items ==========
-item.soulgazer.name=Soulgazer
-item.soulgazer.description=Use on a creature to add it to the Beastiary. To open your Beastiary, either click on the Beastiary tab of your survival inventory or press the Beastiary key (set via the Controls menu).
-item.soulstone.name=Soulstone
-item.soulstone.description=Use on a tamed creature to bind it to your spirit allowing you to summon and dismiss it anywhere anytime. Bound pets or mounts will also respawn after death.
-item.soulkey.name=Soulkey
-item.soulkey.description=Use to activate a summoning altar to call for a rare monster or activate a special event.
-item.soulkeydiamond.name=Diamond Soulkey
-item.soulkeydiamond.description=A more powerful Soul Key capable for summoning more powerful bosses!
-item.soulkeyemerald.name=Emerald Soulkey
-item.soulkeyemerald.description=A more powerful Soul Key capable for summoning more powerful bosses!
-item.summoningstaff.name=Summoning Staff
-item.summoningstaff.description=Summon minions to do your bidding! Start using to create a portal, over time the portal will drain your Summoning Focus (above your hunger bar).
-item.mobtoken.name=Mob Token
-item.mobtoken.description=A cosmetic item used to display creature models as achievement icons, etc.
-item.stablesummoningstaff.name=Stable Summoning Staff
-item.stablesummoningstaff.description=Summoned minions last longer but costs more focus.
-item.bloodsummoningstaff.name=Blood Summoning Staff
-item.bloodsummoningstaff.description=Half the focus cost by sacrificing your health in its place.
-item.savagesummoningstaff.name=Savage Summoning Staff
-item.savagesummoningstaff.description=Summon double minions, but at half health each.
-item.sturdysummoningstaff.name=Sturdy Summoning Staff
-item.sturdysummoningstaff.description=This staff lasts much longer but costs more focus.
-item.battleburrito.name=Battle Burrito
-item.battleburrito.description=A powerful fusion of many tasty meats! Applies: Strength, Resistance, Absorption, Health Boost and Heals!
-item.explorersrisotto.name=Explorers Risotto
-item.explorersrisotto.description=A mighty dish bursting with power! Applies: Movement Speed, Dig Speed, Water Breathing and Jump Boost!
-item.immunizer.name=Immunizer
-item.immunizer.description=A special potion that cures immunizes against poison, hunger, weakness, nausea and paralysis.
-item.cleansingcrystal.name=Cleansing Crystal
-item.cleansingcrystal.description=A magical crystal imbued with spiritual energy, protects against wither, bad luck, fear and insomnia.
-item.halloweentreat.name=Halloween Treat
-item.halloweentreat.description=Trick or treat?!
-item.halloweentreat.good=It's a treat! Lucky you!
-item.halloweentreat.bad=Trick! Bwahahahahah!
-item.wintergift.name=Winter Gift
-item.wintergift.description=Good tidings, Happy Yuletide and Merry Christmas! Open it up and do see what's inside!
-item.wintergift.good=You open your present and it's a pleasant surprise!
-item.wintergift.bad=Oh no! It's a gift of pain, misery and nightmares!
-item.wintergiftlarge.name=Large Winter Gift
-item.wintergiftlarge.description=It's December 25th! Time to open your big presents! Ignore the screeching sound the box makes, it's nothing...
-item.wintergiftlarge.bad=Aaaahhhhh Haaa Haaa Haaa Ha Ha Ha! Bwahahahah! Happy Holidays!
 item.horsearmormetal.name=Iron Pet Armor
 item.horsearmorgold.name=Golden Pet Armor
 item.horsearmordiamond.name=Diamond Pet Armor
-item.equipmentpart.description=This item can be used to create powerful equipment using an Equipment Forge or can be crafted into a useful resource.
 #
 #
 #
@@ -392,7 +295,7 @@ element.order.name=Order
 element.chaos.name=Chaos
 element.acid.name=Acid
 element.lava.name=Lava
-element.electric.name=Electric
+element.lightning.name=Lightning
 element.light.name=Light
 element.shadow.name=Shadow
 element.arbour.name=Arbour
@@ -400,7 +303,7 @@ element.frost.name=Frost
 element.fae.name=Fae
 element.poison.name=Poison
 element.phase.name=Phase
-element.crystal.name=Crystal
+element.gravity.name=Gravity
 element.quake.name=Quake
 element.aether.name=Aether
 element.nether.name=Nether

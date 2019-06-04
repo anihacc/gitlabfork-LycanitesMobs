@@ -15,14 +15,9 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.item.temp.ItemSwordBase;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -32,8 +27,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@SideOnly(Side.CLIENT)
-public class LanguageManager implements IResourceManagerReloadListener {
+public class LanguageManager {
 	public static LanguageManager INSTANCE;
 	protected static final Splitter SPLITTER = Splitter.on('=').limit(2);
 	protected static final Pattern PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
@@ -51,30 +45,54 @@ public class LanguageManager implements IResourceManagerReloadListener {
 
 	/**
 	 * Translates the provided text key, if it cannot be translated, attempts to translate it with the vanilla translator instead.
-	 * @param key
+	 * @param key The key to translate into text.
 	 * @return
 	 */
 	public static String translate(String key) {
 		if(!getInstance().map.containsKey(key)) {
-			//LycanitesMobs.printInfo("", "Translating " + key + " to " + getInstance().map.get(key));
+			//LycanitesMobs.printInfo("", "Translating " + key + " to " + I18n.translateToLocal(key));
 			return I18n.translateToLocal(key);
 		}
 		return getInstance().map.get(key);
 	}
 
 
+
+
+
 	/**
-	 * Called when the Resource Manager is reloaded included the initial load up of the game.
-	 * @param resourceManager The resource manager instance.
+	 * Loads locale data from a specific file stream.
+	 * @param inputStreamIn The input stream to read from.
+	 * @throws IOException
 	 */
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
+	public void loadLocaleData(InputStream inputStreamIn) throws IOException {
+		inputStreamIn = net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.map, inputStreamIn);
+		if (inputStreamIn == null) return;
+		for (String s : IOUtils.readLines(inputStreamIn, StandardCharsets.UTF_8)) {
+			if (!s.isEmpty() && s.charAt(0) != '#') {
+				String[] splitters = Iterables.toArray(SPLITTER.split(s), String.class);
+
+				if (splitters != null && splitters.length == 2) {
+					String s1 = splitters[0];
+					String s2 = PATTERN.matcher(splitters[1]).replaceAll("%$1s");
+					this.map.put(s1, s2);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Loads the provided language.
+	 * @param mainLanguage The language to load, default is en_us.
+	 */
+	public void loadLanguage(String mainLanguage) {
 		LycanitesMobs.printDebug("Localisation", "Loading additional lang files...");
 
 		// Get Languages To Load:
-		List<String> languageList = Lists.newArrayList("en_us");
-		if (!"en_us".equals(Minecraft.getMinecraft().gameSettings.language)) {
-			languageList.add(Minecraft.getMinecraft().gameSettings.language);
+		List<String> languageList = Lists.newArrayList(mainLanguage);
+		if (!"en_us".equals(mainLanguage)) {
+			languageList.add(mainLanguage);
 		}
 
 		// Load Languages Into Map:
@@ -91,38 +109,16 @@ public class LanguageManager implements IResourceManagerReloadListener {
 					// Read Root Lang File:
 					if(!Files.isDirectory(subdirPath)) {
 						LycanitesMobs.printDebug("Localisation", "Reading translations from lang: " + subdirPath.toAbsolutePath());
-						this.loadLocaleData(Files.newInputStream(subdirPath));
+						LanguageManager.getInstance().loadLocaleData(Files.newInputStream(subdirPath));
 						laodedLangFiles++;
 					}
 
 				}
 			}
-			catch (IOException var9) {}
+			catch (Exception var9) {}
 		}
 
-		LycanitesMobs.printDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + translate("lycanitesmobs.test"));
-	}
-
-
-	/**
-	 * Loads locale data from a specific file stream.
-	 * @param inputStreamIn
-	 * @throws IOException
-	 */
-	private void loadLocaleData(InputStream inputStreamIn) throws IOException {
-		inputStreamIn = net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.map, inputStreamIn);
-		if (inputStreamIn == null) return;
-		for (String s : IOUtils.readLines(inputStreamIn, StandardCharsets.UTF_8)) {
-			if (!s.isEmpty() && s.charAt(0) != '#') {
-				String[] splitters = Iterables.toArray(SPLITTER.split(s), String.class);
-
-				if (splitters != null && splitters.length == 2) {
-					String s1 = splitters[0];
-					String s2 = PATTERN.matcher(splitters[1]).replaceAll("%$1s");
-					this.map.put(s1, s2);
-				}
-			}
-		}
+		LycanitesMobs.printDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));
 	}
 
 

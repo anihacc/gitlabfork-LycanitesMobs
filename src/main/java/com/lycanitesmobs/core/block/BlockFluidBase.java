@@ -1,9 +1,12 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +14,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockFluidBase extends BlockFluidClassic {
     public String blockName;
@@ -27,6 +33,24 @@ public class BlockFluidBase extends BlockFluidClassic {
         this.setUnlocalizedName(this.blockName);
 
         this.setRenderLayer(BlockRenderLayer.TRANSLUCENT);
+    }
+
+
+    // ==================================================
+    //                      Info
+    // ==================================================
+    @Override
+    public String getLocalizedName() {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(this.getDescription(stack, world));
+    }
+
+    public String getDescription(ItemStack itemStack, @Nullable World world) {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 
 

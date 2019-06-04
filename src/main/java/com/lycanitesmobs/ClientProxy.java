@@ -14,6 +14,7 @@ import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.localisation.LanguageLoader;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
 import com.lycanitesmobs.core.model.ModelCustom;
@@ -91,7 +92,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageManager.getInstance());
+			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
 		}
 	}
 

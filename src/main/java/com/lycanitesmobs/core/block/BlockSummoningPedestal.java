@@ -40,6 +40,7 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
     }
     public static final PropertyEnum PROPERTY_OWNER = PropertyEnum.create("owner", EnumSummoningPedestal.class);
 
+
 	// ==================================================
 	//                   Constructor
 	// ==================================================

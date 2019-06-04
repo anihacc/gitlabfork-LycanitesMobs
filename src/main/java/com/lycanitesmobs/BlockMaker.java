@@ -65,6 +65,7 @@ public class BlockMaker {
 
         STONE_ENTRIES.add(new BlockMakerEntry(stoneName, creationItem, creationBlock));
     }
+
     public static void addStoneBlocks(ModInfo group, String stoneName, Object creationItem) {
         addStoneBlocks(group, stoneName, creationItem, Blocks.COBBLESTONE);
     }

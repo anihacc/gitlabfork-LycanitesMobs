@@ -113,7 +113,7 @@ public class ItemEquipmentPart extends ItemBase {
 	// ==================================================
 	@Override
 	public String getItemStackDisplayName(ItemStack itemStack) {
-		String displayName = super.getItemStackDisplayName(itemStack);
+		String displayName = LanguageManager.translate(this.getUnlocalizedName(itemStack) + ".name");
 		displayName += " " + LanguageManager.translate("equipment.level") + " " + this.getLevel(itemStack);
 		return displayName;
 	}

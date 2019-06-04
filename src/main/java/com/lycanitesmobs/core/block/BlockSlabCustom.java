@@ -1,11 +1,13 @@
 package com.lycanitesmobs.core.block;
 
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockSlabCustom extends BlockSlab {
@@ -52,6 +55,24 @@ public class BlockSlabCustom extends BlockSlab {
 
     public Block getDoubleBlock() {
         return this.doubleBlock;
+    }
+
+
+    // ==================================================
+    //                      Info
+    // ==================================================
+    @Override
+    public String getLocalizedName() {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(this.getDescription(stack, world));
+    }
+
+    public String getDescription(ItemStack itemStack, @Nullable World world) {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 
 

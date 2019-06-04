@@ -87,6 +87,12 @@ public class BlockBase extends Block {
     // ==================================================
     //                      Info
     // ==================================================
+	@Override
+	public String getLocalizedName() {
+
+    	return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+	}
+
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(this.getDescription(stack, world));

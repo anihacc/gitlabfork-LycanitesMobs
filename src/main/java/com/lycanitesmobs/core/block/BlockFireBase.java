@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.block;
 
 
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.SoundType;
@@ -10,6 +11,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -20,6 +22,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
@@ -35,6 +39,7 @@ public class BlockFireBase extends BlockBase {
     public int agingRate = 3;
     public float spreadChance = 1;
     public boolean removeOnNoFireTick = false;
+
 
     // ==================================================
     //                   Constructor
@@ -57,6 +62,24 @@ public class BlockFireBase extends BlockBase {
         this.setTickRandomly(this.tickRandomly);
         this.setSoundType(SoundType.CLOTH);
         this.disableStats();
+    }
+
+
+    // ==================================================
+    //                      Info
+    // ==================================================
+    @Override
+    public String getLocalizedName() {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(this.getDescription(stack, world));
+    }
+
+    public String getDescription(ItemStack itemStack, @Nullable World world) {
+        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
     }
 
 

@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.model.ModelEquipmentPart;
@@ -82,7 +83,7 @@ public class ObjectManager {
             itemGroups.put(itemSlabCustom, currentGroup);
         }
         else {
-            ItemBlock itemBlock = new ItemBlock(block);
+            ItemBlock itemBlock = new ItemBlockBase(block);
             itemBlock.setRegistryName(block.getRegistryName());
             items.put(name, itemBlock);
             itemGroups.put(itemBlock, currentGroup);

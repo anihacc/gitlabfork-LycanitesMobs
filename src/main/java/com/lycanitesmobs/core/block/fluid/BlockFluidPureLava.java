@@ -3,12 +3,15 @@ package com.lycanitesmobs.core.block.fluid;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFluidBase;
 
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +21,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BlockFluidPureLava extends BlockFluidBase {
@@ -31,6 +36,24 @@ public class BlockFluidPureLava extends BlockFluidBase {
 
         this.setLightOpacity(1);
         this.setLightLevel(1.0F);
+	}
+
+
+	// ==================================================
+	//                      Info
+	// ==================================================
+	@Override
+	public String getLocalizedName() {
+		return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(this.getDescription(stack, world));
+	}
+
+	public String getDescription(ItemStack itemStack, @Nullable World world) {
+		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
 	}
     
     
