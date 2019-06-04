@@ -20,7 +20,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
@@ -56,7 +56,7 @@ public class LanguageManager implements IResourceManagerReloadListener {
 	 */
 	public static String translate(String key) {
 		if(!getInstance().map.containsKey(key)) {
-			return LanguageManager.translate(key);
+			return I18n.translateToLocal(key);
 		}
 		return getInstance().map.get(key);
 	}
