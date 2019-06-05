@@ -9,32 +9,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelGhoulZombie extends ModelObjOld {
+public class ModelCryptkeeper extends ModelObjOld {
 	
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelGhoulZombie() {
+    public ModelCryptkeeper() {
         this(1.0F);
     }
     
-    public ModelGhoulZombie(float shadowSize) {
+    public ModelCryptkeeper(float shadowSize) {
     	// Load Model:
-    	this.initModel("GhoulZombie", LycanitesMobs.modInfo, "entity/ghoulzombie");
+    	this.initModel("CryptZombie", LycanitesMobs.modInfo, "entity/cryptkeeper");
     	
 
 
     	
     	// Set Rotation Centers:
-    	setPartCenter("head", 0F, 1.2F, 0.4F);
-    	setPartCenter("body", 0F, 1.2F, 0.1F);
-    	setPartCenter("leftarm", 0.3F, 1.2F, 0.15F);
-    	setPartCenter("rightarm", -0.3F, 1.2F, 0.15F);
-    	setPartCenter("leftleg", 0.1F, 0.6F, 0.0F);
-    	setPartCenter("rightleg", -0.1F, 0.6F, 0.0F);
+    	setPartCenter("head", 0F, 1.65F, 0.0F);
+    	setPartCenter("body", 0F, 1.65F, 0.0F);
+    	setPartCenter("leftarm", 0.4F, 1.6F, 0.0F);
+    	setPartCenter("rightarm", -0.4F, 1.6F, 0.0F);
+    	setPartCenter("leftleg", 0.1F, 0.85F, 0.0F);
+    	setPartCenter("rightleg", -0.1F, 0.85F, 0.0F);
     	
     	// Trophy:
-        this.trophyScale = 1.2F;
+        this.trophyScale = 1.0F;
+        this.trophyOffset = new float[] {0.0F, -0.3F, -0.1F};
     }
     
     

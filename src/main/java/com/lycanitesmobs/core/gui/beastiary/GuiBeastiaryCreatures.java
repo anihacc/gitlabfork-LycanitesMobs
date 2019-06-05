@@ -143,7 +143,39 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 			// Summary:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.summary") + ": " + "\u00A7r";
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+
+			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = this.playerExt.selectedCreature.getDescription();
+			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+
+			// Habitat:
+			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.habitat") + ": " + "\u00A7r";
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+
+			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			if(creatureKnowledge.rank >= 2) {
+				text = this.playerExt.selectedCreature.getHabitatDescription();
+			}
+			else {
+				text = LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+			}
+			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
+
+			// Combat:
+			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.combat") + ": " + "\u00A7r";
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+
+			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			if(creatureKnowledge.rank >= 2) {
+				text = this.playerExt.selectedCreature.getCombatDescription();
+			}
+			else {
+				text = LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+			}
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 

@@ -75,7 +75,7 @@
 			"dungeonLevelMin": "2"
 		},
 		{
-			"mobId": "lycanitesmobs:phantom",
+			"mobId": "lycanitesmobs:reaper",
 			"weight": 1,
 			"dungeonLevelMin": "2"
 		},

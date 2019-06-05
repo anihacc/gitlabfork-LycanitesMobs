@@ -435,6 +435,24 @@ public class CreatureInfo {
 
 
 	/**
+	 * Returns a translated description of this creature.
+	 * @return The creature description.
+	 */
+	public String getHabitatDescription() {
+		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".habitat");
+	}
+
+
+	/**
+	 * Returns a translated description of this creature.
+	 * @return The creature description.
+	 */
+	public String getCombatDescription() {
+		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".combat");
+	}
+
+
+	/**
 	 * Returns the resource location for the GUI icon of this creature.
 	 * @return Creature icon resource location.
 	 */

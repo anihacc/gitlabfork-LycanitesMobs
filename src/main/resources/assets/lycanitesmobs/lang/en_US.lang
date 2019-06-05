@@ -89,6 +89,10 @@ gui.beastiary.creatures.empty.info=You currently do not have any creatures added
 gui.beastiary.creatures.descovered=Creatures Descovered
 gui.beastiary.creatures.select=Select a group and then select a creature.
 gui.beastiary.website=View On Website
+gui.beastiary.summary=Summary
+gui.beastiary.habitat=Habitat
+gui.beastiary.combat=Combat
+gui.beastiary.unlockedat=Unlocked at
 #
 # Pets:
 gui.beastiary.pets=Pets

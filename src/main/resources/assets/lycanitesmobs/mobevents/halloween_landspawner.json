@@ -53,11 +53,11 @@
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:ghoulzombie",
+			"mobId": "lycanitesmobs:ghoul",
 			"weight": 8
 		},
 		{
-			"mobId": "lycanitesmobs:cryptzombie",
+			"mobId": "lycanitesmobs:cryptkeeper",
 			"weight": 8
 		}
 	]

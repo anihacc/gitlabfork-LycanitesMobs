@@ -508,21 +508,21 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/asmodeus/phase", "stream": false}]
     },
-    "entity.cryptzombie.say": {
+    "entity.cryptkeeper.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/cryptzombie/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/cryptkeeper/say", "stream": false}]
     },
-    "entity.cryptzombie.hurt": {
+    "entity.cryptkeeper.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/cryptzombie/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/cryptkeeper/hurt", "stream": false}]
     },
-    "entity.cryptzombie.death": {
+    "entity.cryptkeeper.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/cryptzombie/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/cryptkeeper/death", "stream": false}]
     },
-    "entity.cryptzombie.step": {
+    "entity.cryptkeeper.step": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/cryptzombie/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/cryptkeeper/step", "stream": false}]
     },
     "entity.sutiramu.say": {
         "category": "hostile",
@@ -2635,29 +2635,29 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/quetzodracl/mount", "stream": false}]
     },
-    "entity.phantom.say": {
+    "entity.reaper.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/say", "stream": false}]
     },
-    "entity.phantom.say.jon": {
+    "entity.reaper.say.jon": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/say_jon", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/say_jon", "stream": false}]
     },
-    "entity.phantom.hurt": {
+    "entity.reaper.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/hurt", "stream": false}]
     },
-    "entity.phantom.death": {
+    "entity.reaper.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/death", "stream": false}]
     },
-    "entity.phantom.beg": {
+    "entity.reaper.beg": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/beg", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/beg", "stream": false}]
     },
-    "entity.phantom.tame": {
+    "entity.reaper.tame": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/phantom/tame", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/reaper/tame", "stream": false}]
     },
     "entity.epion.say": {
         "category": "hostile",
@@ -2824,21 +2824,21 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/wraamon/tame", "stream": false}]
     },
-    "entity.ghoulzombie.say": {
+    "entity.ghoul.say": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/ghoulzombie/say", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/ghoul/say", "stream": false}]
     },
-    "entity.ghoulzombie.hurt": {
+    "entity.ghoul.hurt": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/ghoulzombie/hurt", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/ghoul/hurt", "stream": false}]
     },
-    "entity.ghoulzombie.death": {
+    "entity.ghoul.death": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/ghoulzombie/death", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/ghoul/death", "stream": false}]
     },
-    "entity.ghoulzombie.step": {
+    "entity.ghoul.step": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/ghoulzombie/step", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/ghoul/step", "stream": false}]
     },
     "entity.aglebemu.say": {
         "category": "hostile",

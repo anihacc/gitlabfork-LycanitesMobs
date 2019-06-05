@@ -17,12 +17,12 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityPhantom extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityReaper extends EntityCreatureTameable implements IMob, IGroupShadow {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityPhantom(World world) {
+    public EntityReaper(World world) {
         super(world);
         
         // Setup:

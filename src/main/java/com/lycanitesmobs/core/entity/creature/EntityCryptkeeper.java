@@ -14,12 +14,12 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityCryptZombie extends EntityCreatureAgeable implements IMob {
+public class EntityCryptkeeper extends EntityCreatureAgeable implements IMob {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCryptZombie(World world) {
+    public EntityCryptkeeper(World world) {
         super(world);
         
         // Setup:
@@ -93,6 +93,6 @@ public class EntityCryptZombie extends EntityCreatureAgeable implements IMob {
     // ========== Create Child ==========
     @Override
 	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityCryptZombie(this.getEntityWorld());
+		return new EntityCryptkeeper(this.getEntityWorld());
 	}
 }

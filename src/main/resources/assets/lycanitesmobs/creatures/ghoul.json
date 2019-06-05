@@ -1,8 +1,8 @@
 {
-	"name": "cryptzombie",
+	"name": "ghoul",
 	"creatureType": "undead",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityCryptZombie",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCryptZombie",
+	"class": "com.lycanitesmobs.core.entity.creature.EntityGhoul",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGhoul",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -12,7 +12,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["sandy", "wasteland", "mesa", "-cold"],
+		"biomes": ["swamp", "spooky"],
 		"spawnWeight": 8,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
@@ -24,13 +24,13 @@
 		"despawnNatural": true,
 		"despawnForced": false
 	},
-	"width": 0.6,
-	"height": 1.95,
-	"experience": 5,
-	"health": 25,
+	"width": 0.8,
+	"height": 1.6,
+	"experience": 10,
+	"health": 15,
 	"defense": 0,
 	"armor": 0,
-	"speed": 24,
+	"speed": 28,
 	"damage": 2,
 	"attackSpeed": 1,
 	"rangedSpeed": 1,
@@ -39,8 +39,8 @@
 	"pierce": 1,
 	"sight": 16,
 	"knockbackResistance": 0,
-	"eggBackColor": "#CC9966",
-	"eggForeColor": "#AA8800",
+	"eggBackColor": "#009966",
+	"eggForeColor": "#AAFFDD",
 	"subspecies": [
 		{
 			"index": 1,
@@ -53,13 +53,13 @@
 			"type": "uncommon"
 		}
 	],
-	"element": "gravity",
+	"element": "poison",
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,
 	"mountable": false,
 	"summonCost": 2,
-	"dungeonLevel": 1,
+	"dungeonLevel": 0,
 	"drops": [
 		{
 			"item": "minecraft:rotten_flesh",
@@ -68,7 +68,7 @@
 			"chance": 1
 		},
 		{
-			"item": "minecraft:gold_nugget",
+			"item": "minecraft:coal",
 			"minAmount": 1,
 			"maxAmount": 2,
 			"chance": 0.25

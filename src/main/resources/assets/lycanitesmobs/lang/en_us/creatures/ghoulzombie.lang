@@ -1,4 +1,4 @@
-entity.lycanitesmobs.ghoulzombie.name=Ghoul Zombie
-entity.lycanitesmobs.ghoulzombie.description=Foul poisonous zombies. They behave much like regular zombies, only a bit weaker but poisonous and faster.
-entity.lycanitesmobs.ghoulzombie.habitat=Habitat information coming soon!
-entity.lycanitesmobs.ghoulzombie.combat=Combat information coming soon!
+entity.lycanitesmobs.ghoul.name=Ghoul
+entity.lycanitesmobs.ghoul.description=Foul poisonous zombies. They behave much like regular zombies, only a bit weaker but poisonous and faster.
+entity.lycanitesmobs.ghoul.habitat=Habitat information coming soon!
+entity.lycanitesmobs.ghoul.combat=Combat information coming soon!

@@ -1,6 +1,6 @@
-# Blender v2.67 (sub 0) OBJ File: 'ghoulzombie.blend'
+# Blender v2.67 (sub 0) OBJ File: 'ghoul.blend'
 # www.blender.org
-mtllib ghoulzombie.mtl
+mtllib ghoul.mtl
 o RightLeg
 v -0.228000 0.000000 0.120000
 v -0.228000 0.000000 -0.120000
