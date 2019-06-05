@@ -22,7 +22,7 @@ public class ItemSoulstone extends ItemBase {
     public ItemSoulstone(ModInfo group, String type) {
         super();
         this.itemName = "soulstone" + type;
-		this.group = group;
+		this.modInfo = group;
         this.setup();
     }
 	

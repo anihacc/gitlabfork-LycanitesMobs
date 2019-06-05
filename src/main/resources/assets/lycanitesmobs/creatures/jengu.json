@@ -1,5 +1,6 @@
 {
 	"name": "jengu",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJengu",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJengu",
 	"loadDefault": true,

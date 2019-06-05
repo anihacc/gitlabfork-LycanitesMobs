@@ -21,7 +21,7 @@ public class ItemPoopCharge extends ItemCharge {
 	// ==================================================
     public ItemPoopCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "poopcharge";
         this.setup();
     }

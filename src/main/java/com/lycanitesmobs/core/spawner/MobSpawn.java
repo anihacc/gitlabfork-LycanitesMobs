@@ -356,13 +356,15 @@ public class MobSpawn {
 	 **/
 	public EntityLiving createEntity(World world) {
 		try {
-			Class clazz = this.entityClass;
-			if(this.creatureInfo != null)
-				clazz = this.creatureInfo.entityClass;
-			if(clazz == null)
+			if(this.creatureInfo != null) {
+				return this.creatureInfo.createEntity(world);
+			}
+			if(this.entityClass == null) {
 				return null;
-			return (EntityLiving)clazz.getConstructor(World.class).newInstance(new Object[]{world});
-		} catch (Exception e) {
+			}
+			return (EntityLiving)this.entityClass.getConstructor(World.class).newInstance(new Object[]{world});
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;

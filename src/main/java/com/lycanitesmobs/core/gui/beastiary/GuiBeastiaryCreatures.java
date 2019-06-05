@@ -3,9 +3,8 @@ package com.lycanitesmobs.core.gui.beastiary;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiGroupList;
+import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureTypeList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -16,7 +15,7 @@ import com.lycanitesmobs.core.localisation.LanguageManager;
 import java.io.IOException;
 
 public class GuiBeastiaryCreatures extends GuiBeastiary {
-	public GuiGroupList groupList;
+	public GuiCreatureTypeList creatureTypeList;
 	public GuiCreatureList creatureList;
 	public GuiSubspeciesList subspeciesList;
 
@@ -41,8 +40,8 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 		if(this.creatureList != null && this.playerExt.selectedCreature != null) {
 			return this.playerExt.selectedCreature.getTitle();
 		}
-		if(this.groupList != null && this.playerExt.selectedGroup != null) {
-			return LanguageManager.translate(this.playerExt.selectedGroup.filename + ".name"); //TODO Add getTitle() to GroupInfo
+		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {
+			return this.playerExt.selectedCreatureType.getTitle();
 		}
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
 			LanguageManager.translate("gui.beastiary.creatures.empty.title");
@@ -55,11 +54,11 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 	public void initControls() {
 		super.initControls();
 
-		this.groupList = new GuiGroupList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
+		this.creatureTypeList = new GuiCreatureTypeList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
 
 		int creatureListHeight = Math.round((float)this.colRightHeight * 0.6f);
 		int creatureListY = this.colRightY + 20;
-		this.creatureList = new GuiCreatureList(GuiCreatureList.Type.KNOWLEDGE, this, this.groupList, this.getScaledX(240F / 1920F), creatureListHeight, creatureListY,creatureListY + creatureListHeight, this.colRightX);
+		this.creatureList = new GuiCreatureList(GuiCreatureList.Type.KNOWLEDGE, this, this.creatureTypeList, this.getScaledX(240F / 1920F), creatureListHeight, creatureListY,creatureListY + creatureListHeight, this.colRightX);
 
 		int subspeciesListHeight = Math.round((float)this.colRightHeight * 0.3f);
 		int subspeciesListY = creatureListY + 8 + creatureListHeight;
@@ -81,8 +80,8 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			return;
 		}
 
-		this.groupList.drawScreen(mouseX, mouseY, partialTicks);
-		if(this.playerExt.selectedGroup != null) {
+		this.creatureTypeList.drawScreen(mouseX, mouseY, partialTicks);
+		if(this.playerExt.selectedCreatureType != null) {
 			this.creatureList.drawScreen(mouseX, mouseY, partialTicks);
 			this.subspeciesList.drawScreen(mouseX, mouseY, partialTicks);
 		}
@@ -148,17 +147,17 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
-		// Group Display:
-		else if(this.playerExt.selectedGroup != null) {
+		// Creature Type Display:
+		else if(this.playerExt.selectedCreatureType != null) {
 			// Description:
-			String text = LanguageManager.translate(this.playerExt.selectedGroup.filename + ".description");
+			String text = this.playerExt.selectedCreatureType.getTitle();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 
 			// Descovered:
 			nextY += 12 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
-			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedGroup);
-			text += "/" + ObjectManager.entityLists.get(this.playerExt.selectedGroup.filename).IDtoClassMapping.size();
+			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
+			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 		}
 

@@ -1,5 +1,6 @@
 {
 	"name": "lacedon",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityLacedon",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelLacedon",
 	"loadDefault": true,

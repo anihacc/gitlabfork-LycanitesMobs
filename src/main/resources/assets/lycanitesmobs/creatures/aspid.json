@@ -1,5 +1,6 @@
 {
 	"name": "aspid",
+	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAspid",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVespid",
 	"loadDefault": true,

@@ -1,5 +1,6 @@
 {
 	"name": "phantom",
+	"creatureType": "undead",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityPhantom",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelPhantom",
 	"loadDefault": true,

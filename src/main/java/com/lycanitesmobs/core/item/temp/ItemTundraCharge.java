@@ -16,7 +16,7 @@ public class ItemTundraCharge extends ItemCharge {
 	// ==================================================
     public ItemTundraCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "tundracharge";
         this.setup();
     }

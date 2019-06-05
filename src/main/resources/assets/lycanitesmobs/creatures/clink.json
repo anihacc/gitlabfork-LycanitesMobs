@@ -1,5 +1,6 @@
 {
 	"name": "clink",
+	"creatureType": "imp",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityClink",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelClink",
 	"loadDefault": true,

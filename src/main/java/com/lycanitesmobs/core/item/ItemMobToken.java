@@ -13,21 +13,15 @@ public class ItemMobToken extends ItemBase {
     public ItemMobToken(ModInfo group) {
         super();
 		this.itemName = "mobtoken";
-		this.group = group;
-        this.textureName = this.itemName.toLowerCase();
+		this.modInfo = group;
         this.setUnlocalizedName(this.itemName);
         this.setup();
     }
 
     @Override
     public void setup() {
-        this.setRegistryName(this.group.filename, this.itemName);
+        this.setRegistryName(this.modInfo.filename, this.itemName);
         this.setUnlocalizedName(this.itemName);
-        this.textureName = this.itemName.toLowerCase();
-        int nameLength = this.textureName.length();
-        if(nameLength > 6 && this.textureName.substring(nameLength - 6, nameLength).equalsIgnoreCase("charge")) {
-            this.textureName = this.textureName.substring(0, nameLength - 6);
-        }
     }
 
 

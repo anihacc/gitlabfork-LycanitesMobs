@@ -16,7 +16,7 @@ public class ItemLightBall extends ItemCharge {
 	// ==================================================
     public ItemLightBall() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "lightball";
         this.setup();
     }

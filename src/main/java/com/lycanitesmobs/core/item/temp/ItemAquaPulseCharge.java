@@ -16,7 +16,7 @@ public class ItemAquaPulseCharge extends ItemCharge {
 	// ==================================================
     public ItemAquaPulseCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "aquapulsecharge";
         this.setup();
     }

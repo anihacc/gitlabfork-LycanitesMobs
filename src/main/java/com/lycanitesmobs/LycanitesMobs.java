@@ -171,7 +171,8 @@ public class LycanitesMobs {
 
 		// Creatures:
 		CreatureManager.getInstance().loadConfig();
-		CreatureManager.getInstance().loadAllFromJSON(modInfo);
+		CreatureManager.getInstance().loadCreatureTypesFromJSON(modInfo);
+		CreatureManager.getInstance().loadCreaturesFromJSON(modInfo);
 
 		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
@@ -193,6 +194,7 @@ public class LycanitesMobs {
         proxy.registerEvents();
 
 		// Blocks and Items:
+		CreatureManager.getInstance().createSpawnEggItems();
 		ItemManager.getInstance().loadConfig();
 		ItemManager.getInstance().loadItems();
 		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);

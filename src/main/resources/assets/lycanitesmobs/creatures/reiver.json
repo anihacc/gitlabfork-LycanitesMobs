@@ -1,5 +1,6 @@
 {
 	"name": "reiver",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityReiver",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelReiver",
 	"loadDefault": true,

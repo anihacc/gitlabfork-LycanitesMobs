@@ -1,5 +1,6 @@
 {
 	"name": "serpix",
+	"creatureType": "arthropod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntitySerpix",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSerpix",
 	"loadDefault": true,

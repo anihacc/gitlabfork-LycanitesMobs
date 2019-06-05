@@ -1,5 +1,6 @@
 {
 	"name": "troll",
+	"creatureType": "brute",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityTroll",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTroll",
 	"loadDefault": true,

@@ -1,5 +1,6 @@
 {
 	"name": "ent",
+	"creatureType": "plant",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEnt",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEnt",
 	"loadDefault": true,

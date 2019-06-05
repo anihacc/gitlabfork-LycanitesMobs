@@ -16,7 +16,7 @@ public class ItemSpectralboltCharge extends ItemCharge {
 	// ==================================================
     public ItemSpectralboltCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "spectralboltcharge";
         this.setup();
     }

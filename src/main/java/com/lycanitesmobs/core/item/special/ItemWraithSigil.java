@@ -17,7 +17,7 @@ public class ItemWraithSigil extends ItemScepter {
 	// ==================================================
     public ItemWraithSigil() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "wraithsigil";
         this.setup();
     }

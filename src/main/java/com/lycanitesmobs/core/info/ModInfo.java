@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ModInfo {
 	/** A map containing all groups by their name. **/
-	public static Map<String, ModInfo> groups = new HashMap<>();
+	public static Map<String, ModInfo> modInfos = new HashMap<>();
 
     // ========== Group General ==========
 	/** The mod this info belongs to. **/
@@ -26,9 +26,6 @@ public class ModInfo {
 
     /** The filename of this mod, used for assets, config, etc. This should usually match the mod ID. **/
     public String filename;
-
-    /** The name of the egg item this mod uses. TODO Move eggs to CreatureType. **/
-    public String eggName = "plainsspawn";
     
     // ========== Mobs ==========
     /** The next available ID for registering a mob. **/
@@ -75,7 +72,7 @@ public class ModInfo {
         this.filename = name.toLowerCase().replace(" ", "");
         this.order = order;
 
-        groups.put(this.name, this);
+        modInfos.put(this.name, this);
     }
 
 
@@ -101,9 +98,5 @@ public class ModInfo {
         int id = this.nextProjectileID;
         this.nextProjectileID++;
         return id;
-    }
-
-    public String getEggName() {
-        return this.eggName;
     }
 }

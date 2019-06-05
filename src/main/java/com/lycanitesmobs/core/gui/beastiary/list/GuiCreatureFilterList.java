@@ -21,8 +21,8 @@ public class GuiCreatureFilterList extends GuiScrollingList {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiCreatureFilterList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 24, width, height);
+	public GuiCreatureFilterList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x, int slotHeight) {
+		super(Minecraft.getMinecraft(), width, height, top, bottom, x, slotHeight, width, height);
 		this.parentGui = parentGui;
 	}
 

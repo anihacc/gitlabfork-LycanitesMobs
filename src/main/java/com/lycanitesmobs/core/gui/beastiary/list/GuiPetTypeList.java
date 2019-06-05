@@ -20,7 +20,7 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 	 * @param x The x position of the list.
 	 */
 	public GuiPetTypeList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
-		super(parentGui, width, height, top, bottom, x);
+		super(parentGui, width, height, top, bottom, x, 24);
 		this.refreshList();
 	}
 
@@ -83,12 +83,6 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 
 	@Override
 	protected void drawBackground() {}
-
-
-    @Override
-    protected int getContentHeight() {
-        return this.getSize() * 24;
-    }
 
 
 	@Override

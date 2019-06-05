@@ -23,7 +23,7 @@ public class ItemPoisonGland extends ItemBase {
 	// ==================================================
     public ItemPoisonGland() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "poisongland";
         this.setup();
     }

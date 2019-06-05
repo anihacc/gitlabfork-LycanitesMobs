@@ -1,5 +1,6 @@
 {
 	"name": "strider",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityStrider",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelStrider",
 	"loadDefault": true,

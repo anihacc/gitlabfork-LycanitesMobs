@@ -1,5 +1,6 @@
 {
 	"name": "shambler",
+	"creatureType": "plant",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityShambler",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelShambler",
 	"loadDefault": true,

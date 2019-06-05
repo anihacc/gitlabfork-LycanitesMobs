@@ -14,7 +14,6 @@ import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
 import com.lycanitesmobs.core.block.fluid.BlockFluidPureLava;
 import com.lycanitesmobs.core.item.ItemMobToken;
 import com.lycanitesmobs.core.item.consumable.*;
-import com.lycanitesmobs.core.item.egg.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.soulstone.*;
 import com.lycanitesmobs.core.item.special.*;
@@ -68,22 +67,6 @@ public class ItemManager {
 		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(group, 1));
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
-
-
-		// Eggs:
-		ObjectManager.addItem("arcticspawn", new ItemArcticEgg());
-		ObjectManager.addItem("demonspawn", new ItemDemonEgg());
-		ObjectManager.addItem("desertspawn", new ItemDesertEgg());
-		ObjectManager.addItem("elementalspawn", new ItemElementalEgg());
-		ObjectManager.addItem("forestspawn", new ItemForestEgg());
-		ObjectManager.addItem("freshwaterspawn", new ItemFreshwaterEgg());
-		ObjectManager.addItem("infernospawn", new ItemInfernoEgg());
-		ObjectManager.addItem("junglespawn", new ItemJungleEgg());
-		ObjectManager.addItem("mountainspawn", new ItemMountainEgg());
-		ObjectManager.addItem("plainsspawn", new ItemPlainsEgg());
-		ObjectManager.addItem("saltwaterspawn", new ItemSaltwaterEgg());
-		ObjectManager.addItem("shadowspawn", new ItemShadowEgg());
-		ObjectManager.addItem("swampspawn", new ItemSwampEgg());
 
 
 		// Soulstones:

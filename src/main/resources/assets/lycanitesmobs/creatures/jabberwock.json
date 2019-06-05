@@ -1,5 +1,6 @@
 {
 	"name": "jabberwock",
+	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJabberwock",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJabberwock",
 	"loadDefault": true,

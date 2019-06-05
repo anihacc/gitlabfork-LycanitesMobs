@@ -1,5 +1,6 @@
 {
 	"name": "ghoulzombie",
+	"creatureType": "undead",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityGhoulZombie",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGhoulZombie",
 	"loadDefault": true,

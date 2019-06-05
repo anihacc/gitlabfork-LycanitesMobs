@@ -16,7 +16,7 @@ public class ItemScorchfireCharge extends ItemCharge {
 	// ==================================================
     public ItemScorchfireCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "scorchfirecharge";
         this.setup();
     }

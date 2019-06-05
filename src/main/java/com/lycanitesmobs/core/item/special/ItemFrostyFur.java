@@ -23,7 +23,7 @@ public class ItemFrostyFur extends ItemBase {
 	// ==================================================
     public ItemFrostyFur() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "frostyfur";
         this.setup();
     }

@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
@@ -28,19 +29,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExtendedPlayer implements IExtendedPlayer {
-    public static Map<EntityPlayer, ExtendedPlayer> clientExtendedPlayers = new HashMap<EntityPlayer, ExtendedPlayer>();
-	public static Map<String, NBTTagCompound> backupNBTTags = new HashMap<String, NBTTagCompound>();
+    public static Map<EntityPlayer, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
+	public static Map<String, NBTTagCompound> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
 	public EntityPlayer player;
 	public Beastiary beastiary;
-	public ModInfo beastiaryGroup;
-	public String beastiaryCategory;
 	public PetManager petManager;
 	public long timePlayed = 0;
 
 	// Beastiary Menu:
-	public ModInfo selectedGroup;
+	public CreatureType selectedCreatureType;
 	public CreatureInfo selectedCreature;
 	public int selectedSubspecies = 0;
 	public int selectedPetType = 0;

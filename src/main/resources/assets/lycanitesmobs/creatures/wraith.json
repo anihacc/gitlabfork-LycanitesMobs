@@ -1,5 +1,6 @@
 {
 	"name": "wraith",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityWraith",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWraith",
 	"loadDefault": true,

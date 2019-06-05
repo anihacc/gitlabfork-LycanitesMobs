@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,6 +43,9 @@ public class CreatureInfo {
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;
+
+	/** The creature type this creature belongs to. **/
+	public CreatureType creatureType;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -167,6 +171,20 @@ public class CreatureInfo {
 			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
 			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+		}
+
+		// Creature Type:
+		if(json.has("creatureType")) {
+			this.creatureType = CreatureManager.getInstance().getCreatureType(json.get("creatureType").getAsString());
+			if(this.creatureType == null) {
+				LycanitesMobs.printWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
+			}
+		}
+		if(this.creatureType == null) {
+			this.creatureType = CreatureManager.getInstance().getCreatureType("beast");
+		}
+		if(this.creatureType != null) {
+			this.creatureType.addCreature(this);
 		}
 
 		this.creatureSpawn.loadFromJSON(json.get("spawning").getAsJsonObject());
@@ -372,7 +390,7 @@ public class CreatureInfo {
 
 
 	/**
-	 * Returns the registry id of this creature. Ex: swampmobs:lurker
+	 * Returns the registry id of this creature. Ex: lycanitesmobs:lurker
 	 * @return Creature registry entity id.
 	 */
 	public String getEntityId() {
@@ -396,6 +414,7 @@ public class CreatureInfo {
 	public String getLocalisationKey() {
 		return this.modInfo.filename + "." + this.getName();
 	}
+
 
 	/**
 	 * Returns a translated title for this creature. Ex: Lurker
@@ -604,5 +623,22 @@ public class CreatureInfo {
 		if(roll > hostWeight)
 			return partnerSubspecies;
 		return hostSubspecies;
+	}
+
+	/**
+	 * Creates a new Entity instance from this creature info. Returns null on failure.
+	 * @param world The world to create the entity in.
+	 * @return The created entity.
+	 */
+	public EntityLiving createEntity(World world) {
+		try {
+			if(this.entityClass == null)
+				return null;
+			return this.entityClass.getConstructor(World.class).newInstance(world);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

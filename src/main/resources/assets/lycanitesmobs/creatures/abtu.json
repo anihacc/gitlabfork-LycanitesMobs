@@ -1,5 +1,6 @@
 {
 	"name": "abtu",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAbtu",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAbtu",
 	"loadDefault": true,

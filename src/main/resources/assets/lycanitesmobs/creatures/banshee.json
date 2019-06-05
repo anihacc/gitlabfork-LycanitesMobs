@@ -1,5 +1,6 @@
 {
 	"name": "banshee",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityBanshee",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBanshee",
 	"loadDefault": true,

@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
 import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -16,7 +15,7 @@ public class ItemScepterBlizzard extends ItemScepter {
 	// ==================================================
     public ItemScepterBlizzard() {
         super();
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     	this.itemName = "blizzardscepter";
         this.setup();
     }

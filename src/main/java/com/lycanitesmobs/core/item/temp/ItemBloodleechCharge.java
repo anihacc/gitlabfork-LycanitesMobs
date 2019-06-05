@@ -16,7 +16,7 @@ public class ItemBloodleechCharge extends ItemCharge {
 	// ==================================================
     public ItemBloodleechCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "bloodleechcharge";
         this.setup();
     }

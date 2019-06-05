@@ -34,8 +34,7 @@ public class ItemBase extends Item {//implements IScanThing {
 	public static int descriptionWidth = 200;
 	
 	public String itemName = "Item";
-	public ModInfo group = LycanitesMobs.modInfo;
-	public String textureName = "item";
+	public ModInfo modInfo = LycanitesMobs.modInfo;
 	
 	// ==================================================
 	//                   Constructor
@@ -46,14 +45,9 @@ public class ItemBase extends Item {//implements IScanThing {
     }
     
     public void setup() {
-        this.setRegistryName(this.group.filename, this.itemName);
+        this.setRegistryName(this.modInfo.filename, this.itemName);
     	this.setUnlocalizedName(this.itemName);
-        this.textureName = this.itemName.toLowerCase();
         this.setCreativeTab(LycanitesMobs.itemsTab);
-        int nameLength = this.textureName.length();
-        if(nameLength > 6 && this.textureName.substring(nameLength - 6, nameLength).equalsIgnoreCase("charge")) {
-        	this.textureName = this.textureName.substring(0, nameLength - 6);
-        }
     }
     
     

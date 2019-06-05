@@ -1,12 +1,11 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.EntityListCustom;
-import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.info.CreatureType;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFence;
@@ -19,7 +18,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -32,7 +30,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,19 +39,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class ItemCustomSpawnEgg extends ItemBase {
-	public ModInfo group = LycanitesMobs.modInfo;
-	public String itemName = "customspawnegg";
-	public String texturePath = "customspawn";
+	public CreatureType creatureType;
     
 	// ==================================================
 	//                    Constructor
 	// ==================================================
-    public ItemCustomSpawnEgg() {
+    public ItemCustomSpawnEgg(String name, CreatureType creatureType) {
         super();
-        this.setHasSubtypes(true);
-        setCreativeTab(LycanitesMobs.creaturesTab);
-        setUnlocalizedName("customspawnegg");
+		this.setUnlocalizedName(name);
+		this.setHasSubtypes(true);
+		this.setCreativeTab(LycanitesMobs.creaturesTab);
+
+        this.itemName = name;
+        this.creatureType = creatureType;
+        this.setRegistryName(this.modInfo.filename, this.itemName);
+
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new DispenserBehaviorMobEggCustom());
+
+		LycanitesMobs.printDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
     
 	// ==================================================
@@ -62,13 +64,21 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	// ==================================================
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
-        String s = ("" + LanguageManager.translate(this.getUnlocalizedName() + ".name")).trim();
-        ResourceLocation s1 = this.getEntityIdFromItem(itemStack);
-        if (s1 != null) {
-            s = s + " " + LanguageManager.translate("entity." + this.group.filename + "." + s1.getResourcePath() + ".name");
+		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureType.getTitle() + ": ";
+        String creatureName = this.getCreatureName(itemStack);
+        if (creatureName != null) {
+        	String creatureTitle;
+        	CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName);
+        	if(creatureInfo != null) {
+				creatureTitle = creatureInfo.getTitle();
+			}
+			else {
+				creatureTitle = LanguageManager.translate("entity." + this.modInfo.filename + "." + creatureName + ".name");
+			}
+            displayName += creatureTitle;
         }
 
-        return s;
+        return displayName;
     }
     
     
@@ -88,13 +98,12 @@ public class ItemCustomSpawnEgg extends ItemBase {
         }
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        ResourceLocation entityID = this.getEntityIdFromItem(stack);
-        Class entityClass = ObjectManager.entityLists.get(this.group.filename).getClassFromID(entityID);
-        CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(entityClass);
+    public String getDescription(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
         if(creatureInfo == null) {
-            LycanitesMobs.printWarning("Mob Spawn Egg", "Unable to get a MobInfo entry for id: " + entityID + " class: " + entityClass);
-            return "Unable to get a MobInfo entry for id: " + entityID + " class: " + entityClass;
+        	String creatureName = this.getCreatureName(itemStack);
+            LycanitesMobs.printWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
+            return "Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.";
         }
         return creatureInfo.getDescription();
     }
@@ -120,7 +129,11 @@ public class ItemCustomSpawnEgg extends ItemBase {
         if(block == Blocks.MOB_SPAWNER) {
             TileEntity tileEntity = world.getTileEntity(pos);
             MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner)tileEntity).getSpawnerBaseLogic();
-            mobspawnerbaselogic.setEntityId(this.getEntityIdFromItem(itemStack));
+            CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+            if(creatureInfo == null) {
+				return EnumActionResult.FAIL;
+			}
+            mobspawnerbaselogic.setEntityId(creatureInfo.getResourceLocation());
             tileEntity.markDirty();
             world.notifyBlockUpdate(pos, blockState, blockState, 3);
             if (!player.capabilities.isCreativeMode) {
@@ -131,24 +144,22 @@ public class ItemCustomSpawnEgg extends ItemBase {
         }
         
         // Spawn Mob:
-        else if(!world.isRemote) {
+        else {
             pos = pos.offset(facing);
             double d0 = 0.0D;
-
             if (facing == EnumFacing.UP && blockState.getBlock() instanceof BlockFence) {
                 d0 = 0.5D;
             }
-	        
-	        Entity entity = spawnCreature(world, this.getEntityIdFromItem(itemStack), (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
-	        
-	        if(entity != null) {
-	            if(entity instanceof EntityLivingBase && itemStack.hasDisplayName())
-	                entity.setCustomNameTag(itemStack.getDisplayName());
 
-                applyItemEntityDataToEntity(world, player, itemStack, entity);
-	
-	            if(!player.capabilities.isCreativeMode)
-                    itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+			EntityLivingBase entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
+	        if(entity != null) {
+	            if(itemStack.hasDisplayName()) {
+					entity.setCustomNameTag(itemStack.getDisplayName());
+				}
+                this.applyItemEntityDataToEntity(world, player, itemStack, entity);
+	            if(!player.capabilities.isCreativeMode) {
+					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+				}
 	        }
         }
 
@@ -169,57 +180,32 @@ public class ItemCustomSpawnEgg extends ItemBase {
 
             if(rayTraceResult == null)
                 return new ActionResult(EnumActionResult.PASS, itemStack);
-            else
-                if(rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    BlockPos pos = rayTraceResult.getBlockPos();
+            else {
+				if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
+					BlockPos pos = rayTraceResult.getBlockPos();
 
-                    if(!world.canMineBlockBody(player, pos))
-                        return new ActionResult(EnumActionResult.FAIL, itemStack);
+					if (!world.canMineBlockBody(player, pos)) {
+						return new ActionResult(EnumActionResult.FAIL, itemStack);
+					}
 
-                    if(!player.canPlayerEdit(pos, rayTraceResult.sideHit, itemStack))
-                        return new ActionResult(EnumActionResult.PASS, itemStack);
+					if (!player.canPlayerEdit(pos, rayTraceResult.sideHit, itemStack)) {
+						return new ActionResult(EnumActionResult.PASS, itemStack);
+					}
 
-                    if(world.getBlockState(pos).getMaterial() == Material.WATER) {
-                        Entity entity = spawnCreature(world, this.getEntityIdFromItem(itemStack), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+					if (world.getBlockState(pos).getMaterial() == Material.WATER) {
+						EntityLivingBase entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+						if (entity != null)
+							if (itemStack.hasDisplayName()) {
+								entity.setCustomNameTag(itemStack.getDisplayName());
+							}
+						if (!player.capabilities.isCreativeMode) {
+							itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+						}
+					}
+				}
+			}
 
-                        if(entity != null)
-                            if(entity instanceof EntityLivingBase && itemStack.hasDisplayName())
-                                ((EntityLiving)entity).setCustomNameTag(itemStack.getDisplayName());
-
-                            if(!player.capabilities.isCreativeMode)
-                                itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-                    }
-                }
-
-                return new ActionResult(EnumActionResult.SUCCESS, itemStack);
-        }
-    }
-    
-    
-	// ==================================================
-	//                   Spawn Creature
-	// ==================================================
-    public Entity spawnCreature(World world, ResourceLocation entityID, double x, double y, double z) {
-        if(!ObjectManager.entityLists.get(this.group.filename).entityEggs.containsKey(entityID))
-            return null;
-        else {
-            Entity entity = null;
-
-            for(int j = 0; j < 1; ++j) {
-                entity = ObjectManager.entityLists.get(this.group.filename).createEntityByID(entityID, world);
-
-                if(entity != null && entity instanceof EntityLivingBase) {
-                    EntityLiving entityliving = (EntityLiving)entity;
-                    entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
-                    entityliving.rotationYawHead = entityliving.rotationYaw;
-                    entityliving.renderYawOffset = entityliving.rotationYaw;
-                    entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData)null);
-                    world.spawnEntity(entity);
-                    entityliving.playLivingSound();
-                }
-            }
-
-            return entity;
+			return new ActionResult(EnumActionResult.SUCCESS, itemStack);
         }
     }
     
@@ -236,8 +222,8 @@ public class ItemCustomSpawnEgg extends ItemBase {
     // ========== Get Color from ItemStack ==========
     @Override
     public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
-        EntityListCustom.EntityEggInfo entityEggInfo = ObjectManager.entityLists.get(this.group.filename).entityEggs.get(this.getEntityIdFromItem(itemStack));
-        return entityEggInfo != null ? (tintIndex == 0 ? entityEggInfo.primaryColor : entityEggInfo.secondaryColor) : 16777215;
+		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+		return creatureInfo != null ? (tintIndex == 0 ? creatureInfo.eggBackColor : creatureInfo.eggForeColor) : 16777215;
     }
     
     
@@ -247,69 +233,112 @@ public class ItemCustomSpawnEgg extends ItemBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-    	if(this.group == null || !ObjectManager.entityLists.containsKey(this.group.filename))
-    		return;
-
-    	if(!this.isInCreativeTab(tab)) {
-    		return;
+    	if(this.modInfo == null || this.creatureType == null || !this.isInCreativeTab(tab)) {
+			return;
 		}
 
-        for(EntityListCustom.EntityEggInfo entityEggInfo : ObjectManager.entityLists.get(this.group.filename).entityEggs.values()) {
+        for(CreatureInfo creatureInfo : this.creatureType.creatures.values()) {
             ItemStack itemstack = new ItemStack(this, 1);
-            this.applyEntityIdToItemStack(itemstack, entityEggInfo.spawnedID);
+			this.applyCreatureInfoToItemStack(itemstack, creatureInfo);
             items.add(itemstack);
         }
     }
 
 
-    // ==================================================
-    //              Apply Entity ID To Stack
-    // ==================================================
-    // @SideOnly(Side.CLIENT)
-     public static void applyEntityIdToItemStack(ItemStack stack, ResourceLocation entityId) {
-        NBTTagCompound nbttagcompound = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
-        NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-        nbttagcompound1.setString("id", entityId.toString());
-        nbttagcompound.setTag("EntityTag", nbttagcompound1);
-        stack.setTagCompound(nbttagcompound);
-    }
+	// ==================================================
+	//                    Spawn Egg
+	// ==================================================
+	/**
+	 * Get Creature Info
+	 * @param itemStack The spawn egg item stack to get the creature from.
+	 * @return The Creature Info of the stack spawn egg or null if unknown.
+	 */
+	public CreatureInfo getCreatureInfo(ItemStack itemStack) {
+		String creatureName = this.getCreatureName(itemStack);
+		return CreatureManager.getInstance().getCreature(creatureName);
+	}
 
+	/**
+	 * Get Creature Name
+	 * @param itemStack The spawn egg item stack to get the creature name from.
+	 * @return The name of the creature that the spawn egg item stack should spawn.
+	 */
+	public String getCreatureName(ItemStack itemStack) {
+		NBTTagCompound itemStackNBT = itemStack.getTagCompound();
+		if (itemStackNBT == null || !itemStackNBT.hasKey("CreatureInfoSpawnEgg", 10)) {
+			return null;
+		}
+		NBTTagCompound spawnEggNBT = itemStackNBT.getCompoundTag("CreatureInfoSpawnEgg");
+		return !spawnEggNBT.hasKey("creaturename", 8) ? null : spawnEggNBT.getString("creaturename");
+	}
 
-    // ==================================================
-    //              Get Entity ID From Item
-    // ==================================================
-    public static ResourceLocation getEntityIdFromItem(ItemStack stack) {
-        NBTTagCompound nbttagcompound = stack.getTagCompound();
-        if (nbttagcompound == null || !nbttagcompound.hasKey("EntityTag", 10)) {
-            return null;
-        }
+	/**
+	 * Spawn Creature
+	 * @param world The world to spawn in.
+	 * @param itemStack The spawn egg itemstack to spawn from.
+	 * @param x X spawn coordinate.
+	 * @param y Y spawn coordinate.
+	 * @param z Z spawn coordinate.
+	 * @return The spawned entity instance.
+	 */
+	public EntityLivingBase spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
+		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+		if(creatureInfo == null) {
+			return null;
+		}
 
-        NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("EntityTag");
-        return !nbttagcompound1.hasKey("id", 8) ? null : new ResourceLocation(nbttagcompound1.getString("id"));
-    }
+		EntityLivingBase entity = creatureInfo.createEntity(world);
+		if(entity != null) {
+			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
+			entity.rotationYawHead = entity.rotationYaw;
+			entity.renderYawOffset = entity.rotationYaw;
 
+			if(entity instanceof EntityLiving) {
+				EntityLiving entityliving = (EntityLiving) entity;
+				entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entityliving)), null);
+				entityliving.playLivingSound();
+			}
+			world.spawnEntity(entity);
+		}
+		return entity;
+	}
 
-    // ==================================================
-    //         Apply Item Entity Data To Entity
-    // ==================================================
-    public static void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
+	/**
+	 * Applies creature info to a spawn egg item stack.
+	 * @param itemStack The spawn egg item stack top apply to.
+	 * @param creatureInfo The creature info to apply.
+	 */
+	public void applyCreatureInfoToItemStack(ItemStack itemStack, CreatureInfo creatureInfo) {
+		NBTTagCompound itemStackNBT = itemStack.hasTagCompound() ? itemStack.getTagCompound() : new NBTTagCompound();
+		NBTTagCompound spawnEggNBT = new NBTTagCompound();
+		spawnEggNBT.setString("creaturename", creatureInfo.getName());
+		itemStackNBT.setTag("CreatureInfoSpawnEgg", spawnEggNBT);
+		itemStack.setTagCompound(itemStackNBT);
+	}
+
+	/**
+	 * 
+	 * @param entityWorld
+	 * @param player
+	 * @param stack
+	 * @param targetEntity
+	 */
+    public void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
         MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
         if (minecraftserver != null && targetEntity != null) {
             NBTTagCompound nbttagcompound = stack.getTagCompound();
 
-            if (nbttagcompound != null && nbttagcompound.hasKey("EntityTag", 10))
-            {
-                if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile())))
-                {
+            if (nbttagcompound != null && nbttagcompound.hasKey("CreatureInfoSpawnEgg", 10)) {
+                if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile()))) {
                     return;
                 }
 
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                targetEntity.writeToNBT(nbttagcompound1);
+                NBTTagCompound entityNBT = new NBTTagCompound();
+                targetEntity.writeToNBT(entityNBT);
                 UUID uuid = targetEntity.getUniqueID();
-                nbttagcompound1.merge(nbttagcompound.getCompoundTag("EntityTag"));
+                entityNBT.merge(nbttagcompound.getCompoundTag("CreatureInfoSpawnEgg"));
                 targetEntity.setUniqueId(uuid);
-                targetEntity.readFromNBT(nbttagcompound1);
+                targetEntity.readFromNBT(entityNBT);
             }
         }
     }

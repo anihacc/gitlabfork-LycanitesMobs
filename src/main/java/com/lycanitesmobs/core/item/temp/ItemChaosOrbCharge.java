@@ -16,7 +16,7 @@ public class ItemChaosOrbCharge extends ItemCharge {
 	// ==================================================
     public ItemChaosOrbCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "chaosorbcharge";
         this.setup();
     }

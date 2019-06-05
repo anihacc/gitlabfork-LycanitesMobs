@@ -1,5 +1,6 @@
 {
 	"name": "sutiramu",
+	"creatureType": "arthropod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntitySutiramu",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSutiramu",
 	"loadDefault": true,

@@ -1,5 +1,6 @@
 {
 	"name": "kobold",
+	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityKobold",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelKobold",
 	"loadDefault": true,

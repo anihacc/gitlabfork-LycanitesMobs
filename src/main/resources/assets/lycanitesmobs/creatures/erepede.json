@@ -1,5 +1,6 @@
 {
 	"name": "erepede",
+	"creatureType": "arthropod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityErepede",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelErepede",
 	"loadDefault": true,

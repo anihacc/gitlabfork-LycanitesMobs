@@ -1,5 +1,6 @@
 {
 	"name": "nymph",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityNymph",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelNymph",
 	"loadDefault": true,

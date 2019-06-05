@@ -16,7 +16,7 @@ public class ItemDoomfireCharge extends ItemCharge {
 	// ==================================================
     public ItemDoomfireCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "doomfirecharge";
         this.setup();
     }

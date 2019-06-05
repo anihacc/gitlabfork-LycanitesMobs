@@ -16,7 +16,7 @@ public class ItemMagmaCharge extends ItemCharge {
 	// ==================================================
     public ItemMagmaCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "magmacharge";
         this.setup();
     }

@@ -16,7 +16,7 @@ public class ItemThrowingScythe extends ItemCharge {
 	// ==================================================
     public ItemThrowingScythe() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "throwingscythe";
         this.setup();
     }

@@ -26,7 +26,6 @@ public class ItemStaffSummoning extends ItemScepter {
     public ItemStaffSummoning(String itemName, String textureName) {
         super();
         this.itemName = itemName;
-        this.textureName = textureName;
         this.setup();
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {

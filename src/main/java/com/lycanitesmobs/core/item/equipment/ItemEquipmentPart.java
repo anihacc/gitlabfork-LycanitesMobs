@@ -61,7 +61,7 @@ public class ItemEquipmentPart extends ItemBase {
 	 */
 	public ItemEquipmentPart(ModInfo groupInfo) {
 		super();
-		this.group = groupInfo;
+		this.modInfo = groupInfo;
 		this.setMaxStackSize(1);
 		this.setCreativeTab(LycanitesMobs.equipmentPartsTab);
 	}
@@ -101,10 +101,10 @@ public class ItemEquipmentPart extends ItemBase {
 		}
 		this.sortFeatures();
 
-		this.setRegistryName(this.group.filename, this.itemName);
+		this.setRegistryName(this.modInfo.filename, this.itemName);
 		this.setUnlocalizedName(this.itemName);
 
-		AssetManager.addTexture(this.itemName, this.group, "textures/equipment/" + this.itemName + ".png");
+		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}
 
 
@@ -281,7 +281,7 @@ public class ItemEquipmentPart extends ItemBase {
 	/** Returns the texture to use for the provided ItemStack. **/
 	public ResourceLocation getTexture(ItemStack itemStack, String suffix) {
 		if(AssetManager.getTexture(this.itemName + suffix) == null)
-			AssetManager.addTexture(this.itemName + suffix, this.group, "textures/equipment/" + this.itemName.toLowerCase() + suffix + ".png");
+			AssetManager.addTexture(this.itemName + suffix, this.modInfo, "textures/equipment/" + this.itemName.toLowerCase() + suffix + ".png");
 		return AssetManager.getTexture(this.itemName + suffix);
 	}
 }

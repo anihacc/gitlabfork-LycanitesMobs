@@ -1,5 +1,6 @@
 {
 	"name": "silex",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntitySilex",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSilex",
 	"loadDefault": true,

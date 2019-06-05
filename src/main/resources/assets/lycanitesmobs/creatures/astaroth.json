@@ -1,5 +1,6 @@
 {
 	"name": "astaroth",
+	"creatureType": "demon",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAstaroth",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAstaroth",
 	"loadDefault": true,

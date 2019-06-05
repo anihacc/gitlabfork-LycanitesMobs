@@ -1,5 +1,6 @@
 {
 	"name": "asmodeus",
+	"creatureType": "demon",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAsmodeus",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAsmodeus",
 	"loadDefault": true,

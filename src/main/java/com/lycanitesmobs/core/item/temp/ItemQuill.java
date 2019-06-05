@@ -16,7 +16,7 @@ public class ItemQuill extends ItemCharge {
 	// ==================================================
     public ItemQuill() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "quill";
         this.setup();
     }

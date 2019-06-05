@@ -1,5 +1,6 @@
 {
 	"name": "warg",
+	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityWarg",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWarg",
 	"loadDefault": true,

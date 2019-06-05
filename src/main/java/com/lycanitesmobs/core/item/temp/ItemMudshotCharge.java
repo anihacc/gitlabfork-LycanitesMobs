@@ -16,7 +16,7 @@ public class ItemMudshotCharge extends ItemCharge {
 	// ==================================================
     public ItemMudshotCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "mudshotcharge";
         this.setup();
     }

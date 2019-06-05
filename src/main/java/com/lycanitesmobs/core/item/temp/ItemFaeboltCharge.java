@@ -16,7 +16,7 @@ public class ItemFaeboltCharge extends ItemCharge {
 	// ==================================================
     public ItemFaeboltCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "faeboltcharge";
         this.setup();
     }

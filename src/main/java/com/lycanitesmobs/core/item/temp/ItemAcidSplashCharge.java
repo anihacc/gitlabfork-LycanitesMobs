@@ -16,7 +16,7 @@ public class ItemAcidSplashCharge extends ItemCharge {
 	// ==================================================
     public ItemAcidSplashCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "acidsplashcharge";
         this.setup();
     }

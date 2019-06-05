@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
 
 import com.lycanitesmobs.core.entity.projectile.EntityVenomShot;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +16,7 @@ public class ItemScepterVenomShot extends ItemScepter {
 	// ==================================================
     public ItemScepterVenomShot() {
         super();
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     	this.itemName = "venomshotscepter";
         this.setup();
     }

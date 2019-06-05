@@ -1,5 +1,6 @@
 {
 	"name": "joust",
+	"creatureType": "arthropod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJoust",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoust",
 	"loadDefault": true,

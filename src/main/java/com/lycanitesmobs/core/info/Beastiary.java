@@ -186,11 +186,11 @@ public class Beastiary {
 
 	
 	/**
-	 * Returns how many creatures of the specified group the player has descovered.
-	 * @param group Group to check with.
-	 * @return True if the player has at least one creature form the specific group.
+	 * Returns how many creatures of the specified creature type the player has descovered.
+	 * @param creatureType Creature Type to check with.
+	 * @return True if the player has at least one creature form the specific creature type.
 	 */
-	public int getCreaturesDescovered(ModInfo group) {
+	public int getCreaturesDescovered(CreatureType creatureType) {
 		if(this.creatureKnowledgeList.size() == 0) {
 			return 0;
 		}
@@ -198,7 +198,7 @@ public class Beastiary {
 		int creaturesDescovered = 0;
 		for(Entry<String, CreatureKnowledge> creatureKnowledgeEntry : this.creatureKnowledgeList.entrySet()) {
 			if(creatureKnowledgeEntry.getValue() != null) {
-				if (creatureKnowledgeEntry.getValue().getCreatureInfo().modInfo == group) {
+				if (creatureKnowledgeEntry.getValue().getCreatureInfo().creatureType == creatureType) {
 					creaturesDescovered++;
 				}
 			}

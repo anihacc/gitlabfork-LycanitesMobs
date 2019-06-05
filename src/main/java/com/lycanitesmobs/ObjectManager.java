@@ -319,7 +319,7 @@ public class ObjectManager {
             }
             if(item instanceof ItemEquipmentPart) {
 				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
-            	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.group));
+            	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));
 			}
         }
     }

@@ -4,7 +4,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +15,7 @@ public class ItemScepterFrostweb extends ItemScepter {
 	// ==================================================
     public ItemScepterFrostweb() {
         super();
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     	this.itemName = "frostwebscepter";
         this.setup();
     }

@@ -1,5 +1,6 @@
 {
 	"name": "cephignis",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityCephignis",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCephignis",
 	"loadDefault": true,

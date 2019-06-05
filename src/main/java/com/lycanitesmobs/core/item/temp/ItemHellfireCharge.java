@@ -16,7 +16,7 @@ public class ItemHellfireCharge extends ItemCharge {
 	// ==================================================
     public ItemHellfireCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "hellfirecharge";
         this.setup();
     }

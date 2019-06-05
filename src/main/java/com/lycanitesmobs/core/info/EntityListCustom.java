@@ -11,17 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EntityListCustom {
-    /** provides a mapping between an entityID and an Entity Class */
-    public Map<ResourceLocation, Class> IDtoClassMapping = new HashMap<ResourceLocation, Class>();
+    /** Provides a mapping between an entityID and an Entity Class */
+    public Map<ResourceLocation, Class> IDtoClassMapping = new HashMap<>();
 
-    /** provides a mapping between an Entity Class and an entity ID */
-    private Map<Class, ResourceLocation> classToIDMapping = new HashMap<Class, ResourceLocation>();
+    /** Provides a mapping between an Entity Class and an entity ID */
+    private Map<Class, ResourceLocation> classToIDMapping = new HashMap<>();
 
     /** This is a HashMap of the Creative Entity Eggs/Spawners. */
     public Map<ResourceLocation, EntityEggInfo> entityEggs = Maps.newLinkedHashMap();
 
     /**
-     * adds a mapping between Entity classes and both a string representation and an ID
+     * Adds a mapping between Entity classes and both a string representation and an ID
      */
     public void addMapping(Class entityClass, ResourceLocation entityID) {
         this.IDtoClassMapping.put(entityID, entityClass);
@@ -34,7 +34,7 @@ public class EntityListCustom {
     }
 
     /**
-     * create a new instance of an entity from NBT store
+     * Creates a new instance of an entity from NBT.
      */
     public Entity createEntityFromNBT(NBTTagCompound nbtTagCompound, World world) {
         Entity entity = null;
@@ -60,7 +60,7 @@ public class EntityListCustom {
     }
 
     /**
-     * Create a new instance of an entity in the world by using an entity ID.
+     * Creates a new instance of an entity in the world by using an entity ID.
      */
     public Entity createEntityByID(ResourceLocation entityID, World world) {
         Entity entity = null;
@@ -84,7 +84,7 @@ public class EntityListCustom {
     }
 
     /**
-     * gets the entityID of a specific entity
+     * Gets the entityID of a specific entity
      */
     public ResourceLocation getEntityID(Entity entity) {
         Class entityClass = entity.getClass();

@@ -21,14 +21,17 @@ public class CreatureManager extends JSONLoader {
 	/** Handles all global creature spawning config settings. **/
 	public CreatureSpawnConfig spawnConfig;
 
+	/** A map of all creatures types by name. **/
+	public Map<String, CreatureType> creatureTypes = new HashMap<>();
+
 	/** A map of all creatures by name. **/
 	public Map<String, CreatureInfo> creatures = new HashMap<>();
 
 	/** A map of all creatures by class. **/
 	public Map<Class, CreatureInfo> creatureClassMap = new HashMap<>();
 
-	/** A list of mod groups that have loaded with this Creature Manager. **/
-	public List<ModInfo> loadedGroups = new ArrayList<>();
+	/** A list of mods that have loaded with this Creature Manager. **/
+	public List<ModInfo> loadedMods = new ArrayList<>();
 
 	/** A map containing all the global multipliers for each stat for each difficulty. **/
 	public Map<String, Double> difficultyMultipliers = new HashMap<>();
@@ -118,11 +121,23 @@ public class CreatureManager extends JSONLoader {
 	}
 
 
-	/** Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded. **/
-	public void loadAllFromJSON(ModInfo groupInfo) {
+	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
+	public void loadCreatureTypesFromJSON(ModInfo groupInfo) {
 		try {
-			if(!this.loadedGroups.contains(groupInfo)) {
-				this.loadedGroups.add(groupInfo);
+			this.loadAllJson(groupInfo, "Creature Type", "creaturetypes", "name", true);
+			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
+		}
+		catch(Exception e) {
+			LycanitesMobs.printWarning("", "No Creature Types loaded for: " + groupInfo.name);
+		}
+	}
+
+
+	/** Loads all JSON Creatures. Should only initially be done on pre-init and before Creature Info is loaded and can then be done in game on reload. **/
+	public void loadCreaturesFromJSON(ModInfo groupInfo) {
+		try {
+			if(!this.loadedMods.contains(groupInfo)) {
+				this.loadedMods.add(groupInfo);
 			}
 			this.loadAllJson(groupInfo, "Creature", "creatures", "name", false);
 			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
@@ -135,21 +150,51 @@ public class CreatureManager extends JSONLoader {
 
 	@Override
 	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-		CreatureInfo creatureInfo = new CreatureInfo(groupInfo);
-		creatureInfo.loadFromJSON(json);
-		if(creatureInfo.name == null) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+		// Parse Creature Type JSON:
+		if("Creature Type".equals(name)) {
+			CreatureType creatureType = new CreatureType(groupInfo);
+			creatureType.loadFromJSON(json);
+			if (creatureType.name == null) {
+				LycanitesMobs.printWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				return;
+			}
+
+			// Already Exists:
+			if (this.creatureTypes.containsKey(creatureType.name)) {
+				creatureType = this.creatureTypes.get(creatureType.name);
+				creatureType.loadFromJSON(json);
+			}
+
+			this.creatureTypes.put(creatureType.name, creatureType);
 			return;
 		}
 
-		// Already Exists:
-		if(this.creatures.containsKey(creatureInfo.name)) {
-			creatureInfo = this.creatures.get(creatureInfo.name);
+		// Parse Creature JSON:
+		if("Creature".equals(name)) {
+			CreatureInfo creatureInfo = new CreatureInfo(groupInfo);
 			creatureInfo.loadFromJSON(json);
-		}
+			if (creatureInfo.name == null) {
+				LycanitesMobs.printWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				return;
+			}
 
-		this.creatures.put(creatureInfo.name, creatureInfo);
-		this.creatureClassMap.put(creatureInfo.entityClass, creatureInfo);
+			// Already Exists:
+			if (this.creatures.containsKey(creatureInfo.name)) {
+				creatureInfo = this.creatures.get(creatureInfo.name);
+				creatureInfo.loadFromJSON(json);
+			}
+
+			this.creatures.put(creatureInfo.name, creatureInfo);
+			this.creatureClassMap.put(creatureInfo.entityClass, creatureInfo);
+		}
+	}
+
+
+	/** Creates a Spawn Egg Item for each Creature Type, must be called after both Creature Types and Creatures are loaded. **/
+	public void createSpawnEggItems() {
+		for(CreatureType creatureType : this.creatureTypes.values()) {
+			creatureType.createSpawnEggItem();
+		}
 	}
 
 
@@ -183,10 +228,22 @@ public class CreatureManager extends JSONLoader {
 	 */
 	public void reload() {
 		this.loadConfig();
-		for(ModInfo group : this.loadedGroups) {
-			this.loadAllFromJSON(group);
+		for(ModInfo group : this.loadedMods) {
+			this.loadCreaturesFromJSON(group);
 		}
 		this.initAll();
+	}
+
+
+	/**
+	 * Gets a creature type by name.
+	 * @param creatureTypeName The name of the creature type to get.
+	 * @return The Creature Type.
+	 */
+	public CreatureType getCreatureType(String creatureTypeName) {
+		if(!this.creatureTypes.containsKey(creatureTypeName))
+			return null;
+		return this.creatureTypes.get(creatureTypeName);
 	}
 
 

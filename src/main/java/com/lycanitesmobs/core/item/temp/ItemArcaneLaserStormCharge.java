@@ -16,7 +16,7 @@ public class ItemArcaneLaserStormCharge extends ItemCharge {
 	// ==================================================
     public ItemArcaneLaserStormCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "arcanelaserstormcharge";
         this.setup();
     }

@@ -16,7 +16,7 @@ public class ItemEmberCharge extends ItemCharge {
 	// ==================================================
     public ItemEmberCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "embercharge";
         this.setup();
     }

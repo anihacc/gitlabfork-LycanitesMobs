@@ -16,7 +16,7 @@ public class ItemCrystalShard extends ItemCharge {
 	// ==================================================
     public ItemCrystalShard() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "crystalshard";
         this.setup();
     }

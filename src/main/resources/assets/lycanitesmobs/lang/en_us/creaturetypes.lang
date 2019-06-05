@@ -1,0 +1,14 @@
+creaturetype.spawn=Spawn
+creaturetype.beast.name=Beast
+creaturetype.avian.name=Avian
+creaturetype.arthropod.name=Arthropod
+creaturetype.plant.name=Plant
+creaturetype.aquatic.name=Aquatic
+creaturetype.aberration.name=Aberration
+creaturetype.undead.name=Undead
+creaturetype.brute.name=Brute
+creaturetype.imp.name=Imp
+creaturetype.demon.name=Demon
+creaturetype.angel.name=Angel
+creaturetype.elemental.name=Elemental
+creaturetype.dragon.name=Dragon

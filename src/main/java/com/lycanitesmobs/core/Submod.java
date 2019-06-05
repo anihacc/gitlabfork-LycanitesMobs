@@ -24,7 +24,7 @@ public abstract class Submod {
 		this.createItems();
 		this.createEntities();
 		try {
-			CreatureManager.getInstance().loadAllFromJSON(this.group);
+			CreatureManager.getInstance().loadCreaturesFromJSON(this.group);
 		}
 		catch(Exception e) {
 			LycanitesMobs.printWarning("", "No Creatures loaded for: " + this.group.name);

@@ -1,5 +1,6 @@
 {
 	"name": "ettin",
+	"creatureType": "brute",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEttin",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEttin",
 	"loadDefault": true,

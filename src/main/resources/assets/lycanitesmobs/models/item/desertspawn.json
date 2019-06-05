@@ -1,7 +1,0 @@
-{
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "lycanitesmobs:items/desertspawn",
-		"layer1": "lycanitesmobs:items/desertspawn_overlay"
-	}
-}

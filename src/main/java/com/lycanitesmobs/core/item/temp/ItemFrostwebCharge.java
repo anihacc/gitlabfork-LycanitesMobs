@@ -16,7 +16,7 @@ public class ItemFrostwebCharge extends ItemCharge {
 	// ==================================================
     public ItemFrostwebCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "frostwebcharge";
         this.setup();
     }

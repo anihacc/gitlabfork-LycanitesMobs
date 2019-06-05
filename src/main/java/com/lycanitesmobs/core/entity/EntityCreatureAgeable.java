@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.player.EntityPlayer;
@@ -164,7 +165,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     	if(itemStack != null) {
     		
     		// Spawn Egg:
-    		if(itemStack.getItem() == ObjectManager.getItem(this.creatureInfo.modInfo.getEggName()))
+    		if(itemStack.getItem() == this.creatureInfo.creatureType.getSpawnEgg())
     			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Spawn Baby");
     		
     		// Breeding Item:
@@ -180,21 +181,24 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Spawn Baby:
-    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && ObjectManager.entityLists.containsKey(this.creatureInfo.modInfo.filename)) {
+    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-			 Class eggClass = ObjectManager.entityLists.get(this.creatureInfo.modInfo.filename).getClassFromID(itemCustomSpawnEgg.getEntityIdFromItem(itemStack));
-			 if(eggClass != null && eggClass.isAssignableFrom(this.getClass())) {
-				 EntityCreatureAgeable baby = this.createChild(this);
-				 if(baby != null) {
-					baby.setGrowingAge(baby.growthTime);
-					baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
-					baby.setFarmed();
-					this.getEntityWorld().spawnEntity(baby);
-					if(itemStack.hasDisplayName())
-						baby.setCustomNameTag(itemStack.getDisplayName());
-					this.consumePlayersItem(player, itemStack);
-				 }
-			 }
+			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
+			if(spawnEggCreatureInfo != null) {
+				if (spawnEggCreatureInfo.entityClass != null && spawnEggCreatureInfo.entityClass.isAssignableFrom(this.getClass())) {
+					EntityCreatureAgeable baby = this.createChild(this);
+					if (baby != null) {
+						baby.setGrowingAge(baby.growthTime);
+						baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+						baby.setFarmed();
+						this.getEntityWorld().spawnEntity(baby);
+						if (itemStack.hasDisplayName()) {
+							baby.setCustomNameTag(itemStack.getDisplayName());
+						}
+						this.consumePlayersItem(player, itemStack);
+					}
+				}
+			}
     	}
     	
     	// Breed:

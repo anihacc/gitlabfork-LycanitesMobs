@@ -1,5 +1,6 @@
 {
 	"name": "epion",
+	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityEpion",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEpion",
 	"loadDefault": true,

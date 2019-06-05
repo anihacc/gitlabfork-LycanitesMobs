@@ -11,7 +11,7 @@ public class ItemCustom extends ItemBase {
     public ItemCustom(String itemName, ModInfo group) {
         super();
         this.itemName = itemName;
-        this.group = group;
+        this.modInfo = group;
         this.setCreativeTab(LycanitesMobs.itemsTab);
         this.setup();
     }

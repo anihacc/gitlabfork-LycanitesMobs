@@ -1,5 +1,6 @@
 {
 	"name": "roa",
+	"creatureType": "aquatic",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityRoa",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRoa",
 	"loadDefault": true,

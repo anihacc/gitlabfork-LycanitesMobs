@@ -4,7 +4,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,7 @@ public class ItemScepterTundra extends ItemScepter {
 	// ==================================================
     public ItemScepterTundra() {
         super();
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     	this.itemName = "tundrascepter";
         this.setup();
     }

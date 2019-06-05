@@ -1,5 +1,6 @@
 {
 	"name": "grue",
+	"creatureType": "elemental",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityGrue",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGrue",
 	"loadDefault": true,

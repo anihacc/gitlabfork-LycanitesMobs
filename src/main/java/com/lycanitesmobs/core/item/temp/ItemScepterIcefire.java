@@ -4,7 +4,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -16,7 +15,7 @@ public class ItemScepterIcefire extends ItemScepter {
 	// ==================================================
     public ItemScepterIcefire() {
         super();
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     	this.itemName = "icefirescepter";
         this.setup();
     }

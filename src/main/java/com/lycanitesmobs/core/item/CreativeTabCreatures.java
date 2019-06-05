@@ -18,14 +18,14 @@ public class CreativeTabCreatures extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getTabIconItem() {
-		if(ObjectManager.getItem("demonspawn") != null)
+		if(ObjectManager.getItem("beastspawn") != null)
+			return new ItemStack(ObjectManager.getItem("beastspawn"));
+		else if(ObjectManager.getItem("demonspawn") != null)
 			return new ItemStack(ObjectManager.getItem("demonspawn"));
-		else if(ObjectManager.getItem("desertspawn") != null)
-			return new ItemStack(ObjectManager.getItem("desertspawn"));
-		else if(ObjectManager.getItem("plainsspawn") != null)
-			return new ItemStack(ObjectManager.getItem("plainsspawn"));
-		else if(ObjectManager.getItem("swampspawn") != null)
-			return new ItemStack(ObjectManager.getItem("swampspawn"));
+		else if(ObjectManager.getItem("avianspawn") != null)
+			return new ItemStack(ObjectManager.getItem("avianspawn"));
+		else if(ObjectManager.getItem("arthropodspawn") != null)
+			return new ItemStack(ObjectManager.getItem("arthropodspawn"));
 		else
 			return new ItemStack(Items.SPAWN_EGG);
 	}

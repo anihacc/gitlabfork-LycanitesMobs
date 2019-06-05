@@ -16,7 +16,7 @@ public class ItemWaterJetCharge extends ItemCharge {
 	// ==================================================
     public ItemWaterJetCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "waterjetcharge";
         this.setup();
     }

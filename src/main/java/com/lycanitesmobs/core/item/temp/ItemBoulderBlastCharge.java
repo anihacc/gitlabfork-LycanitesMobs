@@ -16,7 +16,7 @@ public class ItemBoulderBlastCharge extends ItemCharge {
 	// ==================================================
     public ItemBoulderBlastCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "boulderblastcharge";
         this.setup();
     }

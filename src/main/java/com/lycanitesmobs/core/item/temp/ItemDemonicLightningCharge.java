@@ -16,7 +16,7 @@ public class ItemDemonicLightningCharge extends ItemCharge {
 	// ==================================================
     public ItemDemonicLightningCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "demoniclightningcharge";
         this.setup();
     }

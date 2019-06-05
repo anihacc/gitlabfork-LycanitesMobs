@@ -1,5 +1,6 @@
 {
 	"name": "joustalpha",
+	"creatureType": "arthropod",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityJoustAlpha",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoustAlpha",
 	"loadDefault": true,

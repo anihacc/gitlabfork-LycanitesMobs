@@ -62,8 +62,7 @@ public class GuiCreatureList extends GuiScrollingList {
 
 		// Creature Knowledge List:
 		if(this.listType == Type.KNOWLEDGE || this.listType == Type.SUMMONABLE) {
-			List<String> creatures = new ArrayList<>();
-			creatures.addAll(this.parentGui.playerExt.getBeastiary().creatureKnowledgeList.keySet());
+			List<String> creatures = new ArrayList<>(this.parentGui.playerExt.getBeastiary().creatureKnowledgeList.keySet());
 			creatures.sort(Collator.getInstance(new Locale("US")));
 			for(String creatureName : creatures) {
 				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName.toLowerCase());

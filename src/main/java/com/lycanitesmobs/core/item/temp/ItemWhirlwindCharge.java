@@ -16,7 +16,7 @@ public class ItemWhirlwindCharge extends ItemCharge {
 	// ==================================================
     public ItemWhirlwindCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "whirlwindcharge";
         this.setup();
     }

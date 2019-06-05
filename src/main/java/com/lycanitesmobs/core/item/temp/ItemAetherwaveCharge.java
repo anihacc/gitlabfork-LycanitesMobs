@@ -16,7 +16,7 @@ public class ItemAetherwaveCharge extends ItemCharge {
 	// ==================================================
     public ItemAetherwaveCharge() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "aetherwavecharge";
         this.setup();
     }

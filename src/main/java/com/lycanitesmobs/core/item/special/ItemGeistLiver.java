@@ -23,7 +23,7 @@ public class ItemGeistLiver extends ItemBase {
 	// ==================================================
     public ItemGeistLiver() {
         super();
-        this.group = LycanitesMobs.modInfo;
+        this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "geistliver";
         this.setup();
     }
