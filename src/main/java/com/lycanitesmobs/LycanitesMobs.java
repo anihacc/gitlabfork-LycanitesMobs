@@ -9,12 +9,12 @@ import com.lycanitesmobs.core.command.CommandMain;
 import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.altar.*;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.CreativeTabBlocks;
 import com.lycanitesmobs.core.item.CreativeTabCreatures;
 import com.lycanitesmobs.core.item.CreativeTabEquipmentParts;
@@ -174,6 +174,9 @@ public class LycanitesMobs {
 		CreatureManager.getInstance().loadCreatureTypesFromJSON(modInfo);
 		CreatureManager.getInstance().loadCreaturesFromJSON(modInfo);
 
+		// Projectiles:
+		ProjectileManager.getInstance().loadAllFromJSON(modInfo);
+
 		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
 
@@ -195,16 +198,17 @@ public class LycanitesMobs {
 
 		// Blocks and Items:
 		CreatureManager.getInstance().createSpawnEggItems();
+		ProjectileManager.getInstance().createChargeItems();
 		ItemManager.getInstance().loadConfig();
 		ItemManager.getInstance().loadItems();
 		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 
+		// Old Projectiles:
+		ProjectileManager.getInstance().loadOldProjectiles();
+
 		// Object Lists:
 		ObjectLists.createCustomItems();
 		ObjectLists.createLists();
-
-		// Projectiles:
-		ProjectileManager.getInstance().loadProjectiles();
 
         // Tile Entities:
         ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);

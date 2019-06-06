@@ -1,7 +1,7 @@
 {
 	"name": "wendigo",
 	"creatureType": "brute",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWendigo",
 	"loadDefault": true,
 	"enabled": true,

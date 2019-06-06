@@ -1,7 +1,7 @@
 {
 	"name": "khalk",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelKhalk",
 	"loadDefault": true,
 	"enabled": true,

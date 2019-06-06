@@ -95,7 +95,7 @@ public class CreatureInfo {
 	/** A list of subspecies skins that have been registered, used to prevent duplicates. **/
 	public List<String> registeredSubspeciesSkins = new ArrayList<>();
 
-	/** The names of the Elements of this creature, affects buffs and debuffs amongst other things. **/
+	/** The names of the elements of this creature, affects buffs and debuffs amongst other things. **/
 	protected List<String> elementNames = new ArrayList<>();
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
@@ -153,10 +153,10 @@ public class CreatureInfo {
 
 		// Entity Class:
 		try {
-			this.entityClass = (Class<? extends EntityLiving>) Class.forName(json.get("class").getAsString());
+			this.entityClass = (Class<? extends EntityLiving>) Class.forName(json.get("entityClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("class").getAsString() + " for " + this.getName());
+			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 		}
 
 		if(json.has("enabled"))

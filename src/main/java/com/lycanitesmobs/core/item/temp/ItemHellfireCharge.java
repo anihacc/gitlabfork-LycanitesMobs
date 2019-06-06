@@ -26,7 +26,7 @@ public class ItemHellfireCharge extends ItemCharge {
     //                    Item Use
     // ==================================================
     @Override
-    public EntityProjectileBase getProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         return new EntityHellfireball(world, entityPlayer);
     }
 }

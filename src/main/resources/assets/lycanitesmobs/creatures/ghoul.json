@@ -1,7 +1,7 @@
 {
 	"name": "ghoul",
 	"creatureType": "undead",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityGhoul",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGhoul",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGhoul",
 	"loadDefault": true,
 	"enabled": true,

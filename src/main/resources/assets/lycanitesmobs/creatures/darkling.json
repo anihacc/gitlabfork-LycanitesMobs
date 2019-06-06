@@ -1,7 +1,7 @@
 {
 	"name": "darkling",
 	"creatureType": "arthropod",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityDarkling",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityDarkling",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelDarkling",
 	"loadDefault": true,
 	"enabled": true,

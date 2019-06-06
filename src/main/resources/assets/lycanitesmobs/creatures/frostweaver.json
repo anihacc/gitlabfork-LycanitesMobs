@@ -1,7 +1,7 @@
 {
 	"name": "frostweaver",
 	"creatureType": "arthropod",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityFrostweaver",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityFrostweaver",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelFrostweaver",
 	"loadDefault": true,
 	"enabled": true,

@@ -1,7 +1,7 @@
 {
 	"name": "behemoth",
 	"creatureType": "demon",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityBehemoth",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityBehemoth",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBehemoth",
 	"loadDefault": true,
 	"enabled": true,

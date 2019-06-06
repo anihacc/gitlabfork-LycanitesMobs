@@ -1,7 +1,7 @@
 {
 	"name": "lobber",
 	"creatureType": "brute",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityLobber",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityLobber",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelLobber",
 	"loadDefault": true,
 	"enabled": true,

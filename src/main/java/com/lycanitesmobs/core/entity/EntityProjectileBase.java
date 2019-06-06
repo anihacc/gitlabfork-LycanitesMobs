@@ -81,6 +81,15 @@ public class EntityProjectileBase extends EntityThrowable {
     public void setup() {
 
     }
+
+	public String getStringFromDataManager(DataParameter<String> key) {
+		try {
+			return this.getDataManager().get(key);
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 	
     
     // ==================================================

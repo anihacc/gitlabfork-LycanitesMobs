@@ -1,7 +1,7 @@
 {
 	"name": "argus",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityArgus",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityArgus",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelArgus",
 	"loadDefault": true,
 	"enabled": true,

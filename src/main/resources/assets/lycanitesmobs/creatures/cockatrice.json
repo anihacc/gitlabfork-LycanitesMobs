@@ -1,7 +1,7 @@
 {
 	"name": "cockatrice",
 	"creatureType": "dragon",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityCockatrice",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCockatrice",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCockatrice",
 	"loadDefault": true,
 	"enabled": true,

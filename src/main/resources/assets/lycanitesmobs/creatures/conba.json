@@ -1,7 +1,7 @@
 {
 	"name": "conba",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityConba",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConba",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConba",
 	"loadDefault": true,
 	"enabled": true,

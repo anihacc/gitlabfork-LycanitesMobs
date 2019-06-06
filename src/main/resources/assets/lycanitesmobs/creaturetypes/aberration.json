@@ -1,4 +1,5 @@
 {
 	"name": "aberration",
+	"loadDefault": true,
 	"spawnEggName": "aberrationspawn"
 }

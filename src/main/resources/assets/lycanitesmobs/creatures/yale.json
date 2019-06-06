@@ -1,7 +1,7 @@
 {
 	"name": "yale",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityYale",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYale",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYale",
 	"loadDefault": true,
 	"enabled": true,

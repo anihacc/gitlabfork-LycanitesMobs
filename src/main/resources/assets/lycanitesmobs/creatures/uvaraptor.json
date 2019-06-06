@@ -1,7 +1,7 @@
 {
 	"name": "uvaraptor",
 	"creatureType": "avian",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityUvaraptor",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityUvaraptor",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelUvaraptor",
 	"loadDefault": true,
 	"enabled": true,

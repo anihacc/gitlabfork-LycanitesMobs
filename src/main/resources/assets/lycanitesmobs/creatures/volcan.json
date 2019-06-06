@@ -1,7 +1,7 @@
 {
 	"name": "volcan",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityVolcan",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityVolcan",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVolcan",
 	"loadDefault": true,
 	"enabled": true,

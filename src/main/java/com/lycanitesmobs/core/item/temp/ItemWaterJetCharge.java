@@ -26,7 +26,7 @@ public class ItemWaterJetCharge extends ItemCharge {
     //                  Get Projectile
     // ==================================================
     @Override
-    public EntityProjectileBase getProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         return new EntityWaterJet(world, entityPlayer, 20, 10);
     }
 }

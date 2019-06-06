@@ -1,7 +1,7 @@
 {
 	"name": "belph",
 	"creatureType": "demon",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityBelph",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityBelph",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBelph",
 	"loadDefault": true,
 	"enabled": true,

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.info.projectile;
 
 import com.google.gson.JsonObject;
 
-/** Projectile Effects add new behaviour and other effects to projectiles such as debuffs, placing blocks on impact, etc. **/
+/** Projectile Effects add new behaviour and other effects to projectiles such as placing blocks on impact, firing additional projectiles, etc. **/
 public class ProjectileEffect {
 
 

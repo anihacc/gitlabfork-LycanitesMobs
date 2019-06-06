@@ -26,7 +26,7 @@ public class ItemLifeDrainCharge extends ItemCharge {
     //                  Get Projectile
     // ==================================================
     @Override
-    public EntityProjectileBase getProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         return new EntityLifeDrain(world, entityPlayer, 20, 10);
     }
 }

@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.item;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -10,18 +12,30 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class ItemCharge extends ItemBase {
+    /** The projectile info that this projectile charge item belongs to. **/
+    public ProjectileInfo projectileInfo;
 
-    // ==================================================
-    //                   Constructor
-    // ==================================================
+    /**
+     * Constructor
+     * @param projectileInfo The projectile info to base this charge off.
+     */
+    public ItemCharge(ProjectileInfo projectileInfo) {
+        super();
+        this.projectileInfo = projectileInfo;
+        this.modInfo = LycanitesMobs.modInfo;
+        if(this.projectileInfo != null) {
+            this.itemName = projectileInfo.chargeItemName;
+            this.setup();
+        }
+    }
+
+    /**
+     * Older constructor for hard coded projectiles.
+     */
     public ItemCharge() {
         super();
     }
 
-
-    // ==================================================
-    //                    Item Use
-    // ==================================================
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
@@ -30,7 +44,7 @@ public class ItemCharge extends ItemBase {
         }
 
         if(!world.isRemote) {
-            EntityProjectileBase projectile = this.getProjectile(itemStack, world, player);
+            EntityProjectileBase projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null)
                 return new ActionResult<>(EnumActionResult.FAIL, itemStack);
             world.spawnEntity(projectile);
@@ -40,11 +54,17 @@ public class ItemCharge extends ItemBase {
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }
 
-
-    // ==================================================
-    //                  Get Projectile
-    // ==================================================
-    public EntityProjectileBase getProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
-        return null;
+    /**
+     * Creates a projectile instance from this charge item.
+     * @param itemStack The charge itemstack.
+     * @param world The world to create the projectile in.
+     * @param entityPlayer The player using the charge.
+     * @return A projectile instance.
+     */
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+        if(this.projectileInfo == null) {
+            return null;
+        }
+        return this.projectileInfo.createProjectile(world, entityPlayer);
     }
 }

@@ -1,7 +1,7 @@
 {
 	"name": "maka",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityMaka",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityMaka",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMaka",
 	"loadDefault": true,
 	"enabled": true,

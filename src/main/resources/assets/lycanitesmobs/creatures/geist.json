@@ -1,7 +1,7 @@
 {
 	"name": "geist",
 	"creatureType": "undead",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityGeist",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeist",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeist",
 	"loadDefault": true,
 	"enabled": true,

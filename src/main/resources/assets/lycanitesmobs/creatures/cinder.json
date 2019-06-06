@@ -1,7 +1,7 @@
 {
 	"name": "cinder",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityCinder",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCinder",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCinder",
 	"loadDefault": true,
 	"enabled": true,

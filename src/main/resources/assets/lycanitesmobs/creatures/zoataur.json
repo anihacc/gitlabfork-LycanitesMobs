@@ -1,7 +1,7 @@
 {
 	"name": "zoataur",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityZoataur",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityZoataur",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelZoataur",
 	"loadDefault": true,
 	"enabled": true,

@@ -1,7 +1,7 @@
 {
 	"name": "lurker",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityLurker",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityLurker",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelLurker",
 	"loadDefault": true,
 	"enabled": true,

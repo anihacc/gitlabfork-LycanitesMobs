@@ -44,7 +44,7 @@ public class ItemPoopCharge extends ItemCharge {
     }
 
     @Override
-    public EntityProjectileBase getProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         return new EntityPoop(world, entityPlayer);
     }
 }

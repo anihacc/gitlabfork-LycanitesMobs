@@ -1,7 +1,7 @@
 {
 	"name": "xaphan",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityXaphan",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityXaphan",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelXaphan",
 	"loadDefault": true,
 	"enabled": true,

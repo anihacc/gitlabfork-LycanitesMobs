@@ -1,4 +1,5 @@
 {
 	"name": "avian",
+	"loadDefault": true,
 	"spawnEggName": "avianspawn"
 }

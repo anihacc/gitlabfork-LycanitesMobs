@@ -1,7 +1,7 @@
 {
 	"name": "concapede",
 	"creatureType": "arthropod",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityConcapedeHead",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConcapedeHead",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConcapedeHead",
 	"loadDefault": true,
 	"enabled": true,

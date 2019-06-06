@@ -1,7 +1,7 @@
 {
 	"name": "shade",
 	"creatureType": "aberration",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityShade",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityShade",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelShade",
 	"loadDefault": true,
 	"enabled": true,

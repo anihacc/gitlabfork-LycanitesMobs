@@ -1,7 +1,7 @@
 {
 	"name": "ika",
 	"creatureType": "aquatic",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityIka",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityIka",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelIka",
 	"loadDefault": true,
 	"enabled": true,

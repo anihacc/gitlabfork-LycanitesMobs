@@ -1,7 +1,7 @@
 {
 	"name": "maug",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityMaug",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityMaug",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMaug",
 	"loadDefault": true,
 	"enabled": true,

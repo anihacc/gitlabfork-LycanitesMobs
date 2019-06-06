@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.dispenser;
 
+import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IBlockSource;
@@ -15,6 +17,19 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class DispenserBehaviorBase extends BehaviorProjectileDispense {
+	ProjectileInfo projectileInfo;
+
+	// ==================================================
+	//                      Constructor
+	// ==================================================
+	public DispenserBehaviorBase(ProjectileInfo projectileInfo) {
+		super();
+		this.projectileInfo = projectileInfo;
+	}
+
+	public DispenserBehaviorBase() {
+		super();
+	}
 	
 	// ==================================================
 	//                      Dispense
@@ -38,8 +53,23 @@ public class DispenserBehaviorBase extends BehaviorProjectileDispense {
     
 	@Override
     protected IProjectile getProjectileEntity(World world, IPosition pos, ItemStack stack) {
-        return null;
+		if(this.projectileInfo == null) {
+			return null;
+		}
+		return this.projectileInfo.createProjectile(world, pos.getX(), pos.getY(), pos.getZ());
     }
+
+	@Override
+	protected float getProjectileInaccuracy()
+	{
+		return 0F;
+	}
+
+	@Override
+	protected float getProjectileVelocity()
+	{
+		return 1.1F;
+	}
     
     
 	// ==================================================
@@ -54,6 +84,9 @@ public class DispenserBehaviorBase extends BehaviorProjectileDispense {
     }
 
     protected SoundEvent getDispenseSound() {
-        return null;
+		if(this.projectileInfo == null) {
+			return null;
+		}
+		return this.projectileInfo.getLaunchSound();
     }
 }

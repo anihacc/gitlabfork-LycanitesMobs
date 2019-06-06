@@ -1,7 +1,7 @@
 {
 	"name": "yeti",
 	"creatureType": "beast",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityYeti",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYeti",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYeti",
 	"loadDefault": true,
 	"enabled": true,

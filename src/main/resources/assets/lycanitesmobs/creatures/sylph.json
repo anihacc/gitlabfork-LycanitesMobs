@@ -1,7 +1,7 @@
 {
 	"name": "sylph",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntitySylph",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySylph",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSylph",
 	"loadDefault": true,
 	"enabled": true,

@@ -1,7 +1,7 @@
 {
 	"name": "afrit",
 	"creatureType": "imp",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityAfrit",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAfrit",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAfrit",
 	"loadDefault": true,
 	"enabled": true,

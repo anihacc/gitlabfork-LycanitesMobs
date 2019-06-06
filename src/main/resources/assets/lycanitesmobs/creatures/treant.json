@@ -1,7 +1,7 @@
 {
 	"name": "treant",
 	"creatureType": "plant",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityTreant",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTreant",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTreant",
 	"loadDefault": true,
 	"enabled": true,

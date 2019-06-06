@@ -1,7 +1,7 @@
 {
 	"name": "spriggan",
 	"creatureType": "elemental",
-	"class": "com.lycanitesmobs.core.entity.creature.EntitySpriggan",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySpriggan",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSpriggan",
 	"loadDefault": true,
 	"enabled": true,

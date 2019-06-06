@@ -1,7 +1,7 @@
 {
 	"name": "aglebemu",
 	"creatureType": "aquatic",
-	"class": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAglebemu",
 	"loadDefault": true,
 	"enabled": true,

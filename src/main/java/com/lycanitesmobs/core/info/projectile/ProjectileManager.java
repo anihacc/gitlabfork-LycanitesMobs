@@ -1,12 +1,22 @@
-package com.lycanitesmobs.core.info;
+package com.lycanitesmobs.core.info.projectile;
 
+import com.google.gson.JsonObject;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.dispenser.projectile.*;
 import com.lycanitesmobs.core.entity.projectile.*;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.init.Items;
 
-public class ProjectileManager {
+import java.util.HashMap;
+import java.util.Map;
+
+public class ProjectileManager extends JSONLoader {
 	public static ProjectileManager INSTANCE;
+
+	/** A map of all creatures by name. **/
+	public Map<String, ProjectileInfo> projectiles = new HashMap<>();
 
 	/** Returns the main Projectile Manager instance or creates it and returns it. **/
 	public static ProjectileManager getInstance() {
@@ -17,8 +27,60 @@ public class ProjectileManager {
 	}
 
 
+	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
+	public void loadAllFromJSON(ModInfo groupInfo) {
+		try {
+			this.loadAllJson(groupInfo, "Projectile", "projectiles", "name", true);
+			LycanitesMobs.printDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
+		}
+		catch(Exception e) {
+			LycanitesMobs.printWarning("", "No Projectiles loaded for: " + groupInfo.name);
+		}
+	}
+
+
+	@Override
+	public void parseJson(ModInfo modInfo, String name, JsonObject json) {
+		ProjectileInfo projectileInfo = new ProjectileInfo(modInfo);
+		projectileInfo.loadFromJSON(json);
+		if (projectileInfo.name == null) {
+			LycanitesMobs.printWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
+			return;
+		}
+
+		// Already Exists:
+		if (this.projectiles.containsKey(projectileInfo.name)) {
+			projectileInfo = this.projectiles.get(projectileInfo.name);
+			projectileInfo.loadFromJSON(json);
+		}
+
+		this.projectiles.put(projectileInfo.name, projectileInfo);
+		return;
+	}
+
+
+	/**
+	 * Gets a projectile by name.
+	 * @param projectileName The name of the projectile to get.
+	 * @return The Projectile Info.
+	 */
+	public ProjectileInfo getProjectile(String projectileName) {
+		if(!this.projectiles.containsKey(projectileName))
+			return null;
+		return this.projectiles.get(projectileName);
+	}
+
+
+	/** Creates a Charge Item for each Projectile, must be called after Projectiles are loaded. **/
+	public void createChargeItems() {
+		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
+			projectileInfo.createChargeItem();
+		}
+	}
+
+
 	/** Called during early start up, loads all items. **/
-	public void loadProjectiles() {
+	public void loadOldProjectiles() {
 		ObjectManager.addProjectile("frostweb", EntityFrostweb.class, ObjectManager.getItem("frostwebcharge"), new DispenserBehaviorFrostweb());
 		ObjectManager.addProjectile("tundra", EntityTundra.class, ObjectManager.getItem("tundracharge"), new DispenserBehaviorTundra());
 		ObjectManager.addProjectile("icefireball", EntityIcefireball.class, ObjectManager.getItem("icefirecharge"), new DispenserBehaviorIcefire());
