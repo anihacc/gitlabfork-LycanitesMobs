@@ -80,6 +80,10 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 		}
 		this.mainModel = this.defaultModel;
 
+		if(this.mainModel == null) {
+			return;
+		}
+
     	super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 

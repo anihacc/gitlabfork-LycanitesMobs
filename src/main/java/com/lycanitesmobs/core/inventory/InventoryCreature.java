@@ -132,7 +132,7 @@ public class InventoryCreature implements IInventory {
 	}
 
 	public int getActiveItemSlotsSize() {
-		if(this.getEquipmentStack("bag") != null)
+		if(!this.getEquipmentStack("bag").isEmpty())
 			return this.creature.getBagSize();
 		else
 			return this.creature.getNoBagSize();

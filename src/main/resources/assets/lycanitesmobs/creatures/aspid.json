@@ -2,7 +2,7 @@
 	"name": "aspid",
 	"creatureType": "beast",
 	"class": "com.lycanitesmobs.core.entity.creature.EntityAspid",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVespid",
+	"modelClass": "com.lycanitesmobs.core.model.creature.EntityAspid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -39,7 +39,7 @@ public class ModInfo {
     public List<Class> projectileClasses = new ArrayList<>();
 
     // ========== Special Entities ==========
-    /** A list of all Special Entities Classes assigned to this mod (to be rendered invisible). **/
+    /** A list of all Special Entity Classes assigned to this mod (to be rendered invisible). **/
     public List<Class> specialClasses = new ArrayList<>();
 	
 	// ========== Spawn Dimensions ========== TODO Remove

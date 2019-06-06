@@ -24,6 +24,7 @@
 			"blocks": [
 				"lycanitesmobs:ooze"
 			],
+			"blockCost": 8,
 			"listType": "whitelist"
 		}
 	]

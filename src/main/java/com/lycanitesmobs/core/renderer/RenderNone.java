@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.renderer;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -37,13 +36,5 @@ public class RenderNone extends Render {
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
     	return null;
-    }
-    
-    
-    // ==================================================
-    //                  Render Texture
-    // ==================================================
-    private void renderTexture(Tessellator tessellator) {
-    	return;
     }
 }

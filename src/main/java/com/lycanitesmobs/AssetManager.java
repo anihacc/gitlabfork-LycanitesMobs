@@ -132,7 +132,7 @@ public class AssetManager {
 	}
 
 	public static ModelBase getCreatureModel(CreatureInfo creatureInfo) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-		if (creatureInfo == null) {
+		if (creatureInfo == null || creatureInfo.modelClass == null) {
 			return null;
 		}
 

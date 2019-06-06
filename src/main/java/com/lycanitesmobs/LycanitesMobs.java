@@ -235,9 +235,8 @@ public class LycanitesMobs {
 		// Special Entities:
 		int specialEntityID = 0;
 		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "summoningportal"), EntityPortal.class, "summoningportal", specialEntityID++, instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "fear"), EntityFear.class, "fear", specialEntityID++, instance, 64, 1, true);
-		AssetManager.addSound("effect_fear", modInfo, "effect.fear");
 		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "hitarea"), EntityHitArea.class, "hitarea", specialEntityID++, instance, 64, 1, true);
+		AssetManager.addSound("effect_fear", modInfo, "effect.fear");
 
 		// Altars:
 		AltarInfo ebonCacodemonAltar = new AltarInfoEbonCacodemon("EbonCacodemonAltar");

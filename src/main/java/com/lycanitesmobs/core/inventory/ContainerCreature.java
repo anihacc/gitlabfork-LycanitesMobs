@@ -42,6 +42,7 @@ public class ContainerCreature extends ContainerBase {
 			this.addSlot(creature.inventory, creature.inventory.getSlotFromType("bag"), equipX, equipY);
 			equipY += 18;
 		}
+
 		// Weapon and Dye slots will go here.
 		
 		// Creature Armor:

@@ -136,7 +136,7 @@ public class ClientProxy extends CommonProxy {
 	
 	// ========== Register Renders ==========
 	@Override
-    public void registerRenders(ModInfo groupInfo) {
+    public void registerRenders(ModInfo modInfo) {
 		// Projectile Models:
 		AssetManager.addModel("lightball", new ModelLightBall());
 		AssetManager.addModel("crystalshard", new ModelCrystalShard());
@@ -144,16 +144,16 @@ public class ClientProxy extends CommonProxy {
 		AssetManager.addModel("chaosorb", new ModelChaosOrb());
 
         // Equipment Parts:
-		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader()); // TODO Unused?
+		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipmentPart.class, new EquipmentPartRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipment.class, new EquipmentRenderer());
 
 		// Special Entites:
-        groupInfo.specialClasses.add(EntityHitArea.class);
-        groupInfo.specialClasses.add(EntityFear.class);
-        groupInfo.projectileClasses.add(EntityPortal.class);
+        modInfo.specialClasses.add(EntityHitArea.class);
+        modInfo.specialClasses.add(EntityFear.class);
+        modInfo.projectileClasses.add(EntityPortal.class);
 
-        RenderRegister renderRegister = new RenderRegister(groupInfo);
+        RenderRegister renderRegister = new RenderRegister(modInfo);
         renderRegister.registerRenderFactories();
     }
 
@@ -210,11 +210,11 @@ public class ClientProxy extends CommonProxy {
         }
 
         if(item instanceof ItemEquipmentPart) {
-			ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipmentPart.class); // A deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
+			ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipmentPart.class); // Deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
 		}
 
 		if(item instanceof ItemEquipment) {
-			ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipment.class); // A deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
+			ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipment.class); // Deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
 		}
 
         if(item instanceof ItemBase) {

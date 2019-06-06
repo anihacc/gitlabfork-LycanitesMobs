@@ -262,7 +262,7 @@ public class ItemManager {
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 
 		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
-		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
+		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100).setColor(0xCA3F08FF);
 		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
 		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));
 

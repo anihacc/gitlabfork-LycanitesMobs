@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.core.entity.ai.EntityAIWander;
@@ -83,8 +84,9 @@ public class EntityFear extends EntityCreatureBase {
         super.onLivingUpdate();
         
         // Server Side Only:
-        if(this.getEntityWorld().isRemote)
-        	return;
+        if(this.getEntityWorld().isRemote) {
+			return;
+		}
         
         // Clean Up:
         if(this.fearedEntity == null || !this.fearedEntity.isEntityAlive() || !(this.fearedEntity instanceof EntityLivingBase)) {

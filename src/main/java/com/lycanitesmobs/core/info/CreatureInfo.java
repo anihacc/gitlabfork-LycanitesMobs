@@ -50,7 +50,7 @@ public class CreatureInfo {
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
 
-	/** If true, this is not a true mob, for example the fear entity. It will also not be automatically registered, etc. **/
+	/** If true, this is not a true mob, for example the fear entity. It will also not be registered to spawners and will not load assets, etc. **/
 	public boolean dummy = false;
 
 	/** The Spawn Information for this creature. **/
@@ -139,10 +139,10 @@ public class CreatureInfo {
 
 	/**
 	 * Constructor
-	 * @param group The group that this creature definition will belong to.
+	 * @param modInfo The mod that this creature definition will belong to.
 	 */
-	public CreatureInfo(ModInfo group) {
-		this.modInfo = group;
+	public CreatureInfo(ModInfo modInfo) {
+		this.modInfo = modInfo;
 		this.creatureSpawn = new CreatureSpawn();
 	}
 
@@ -309,14 +309,12 @@ public class CreatureInfo {
 	 * Registers this creature to vanilla and custom entity lists. Must be called after init and only during game startup and only by its own submod.
 	 */
 	public void register() {
-		if(this.dummy)
-			return;
-
 		// ID and Enabled Check:
 		if(!this.enabled) {
-			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + modInfo.name + ")");
+			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 			return;
 		}
+		LycanitesMobs.printDebug("Creature", "Registering Creature: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 
 		// Mapping and Registration:
 		if(!ObjectManager.entityLists.containsKey(this.modInfo.filename)) {
@@ -327,6 +325,12 @@ public class CreatureInfo {
 		}
 		ObjectManager.entityLists.get(this.modInfo.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
 		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.modInfo.filename + "." + this.getName(), this.modInfo.getNextMobID(), this.modInfo.mod, 128, 3, true);
+
+		// Stop If Dummy (Fear Entity):
+		if(this.dummy) {
+			LycanitesMobs.printDebug("Creature", "Dummy Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+			return;
+		}
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));

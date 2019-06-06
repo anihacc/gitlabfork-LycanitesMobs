@@ -10,13 +10,16 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 public class RenderRegister {
     public ModInfo groupInfo;
 
-    public RenderRegister(ModInfo groupInfo) {
-        this.groupInfo = groupInfo;
+    public RenderRegister(ModInfo modInfo) {
+        this.groupInfo = modInfo;
     }
 
     public void registerRenderFactories() {
         // Creatures:
         for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
+            if(creatureInfo.dummy) {
+                continue;
+            }
             RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryCreature<EntityCreatureBase>(creatureInfo));
         }
 
