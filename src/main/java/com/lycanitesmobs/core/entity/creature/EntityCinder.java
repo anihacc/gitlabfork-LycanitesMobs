@@ -1,12 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.entity.projectile.EntityEmber;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;

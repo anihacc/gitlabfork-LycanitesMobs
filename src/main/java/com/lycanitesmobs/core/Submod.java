@@ -19,7 +19,7 @@ public abstract class Submod {
 
 	public void preInit(FMLPreInitializationEvent event) {
 		this.initialSetup();
-		ObjectManager.setCurrentGroup(this.group);
+		ObjectManager.setCurrentModInfo(this.group);
 		this.createBlocks();
 		this.createItems();
 		this.createEntities();
@@ -39,14 +39,14 @@ public abstract class Submod {
 	}
 
 	public void init(FMLInitializationEvent event) {
-		ObjectManager.setCurrentGroup(this.group);
+		ObjectManager.setCurrentModInfo(this.group);
 		CreatureManager.getInstance().registerAll(this.group);
 		this.registerOres();
 		this.addRecipes();
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {
-		ObjectManager.setCurrentGroup(this.group);
+		ObjectManager.setCurrentModInfo(this.group);
 		if(CreatureManager.getInstance().spawnConfig.controlVanillaSpawns) {
 			this.editVanillaSpawns();
 		}

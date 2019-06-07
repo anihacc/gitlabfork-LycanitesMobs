@@ -14,6 +14,8 @@ import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import com.lycanitesmobs.core.entity.navigate.ICreatureNodeProcessor;
 import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.inventory.ContainerCreature;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
@@ -2610,6 +2612,26 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 	/**
 	 * Fires a projectile from this mob.
+	 * @param projectileName The name of the projectile to fire from a Projectile Info.
+	 * @param target The target entity to fire at. If null, the projectile is fired from the facing direction instead.
+	 * @param range The range to the target.
+	 * @param angle The angle offset away from the target in degrees.
+	 * @param offset The xyz offset to fire from. Note that the Y offset is relative to 75% of this mob's height.
+	 * @param velocity The velocity of the projectile.
+	 * @param scale The size scale of the projectile.
+	 * @param inaccuracy How inaccurate the projectile aiming is.
+	 * @return The newly created projectile.
+	 */
+	public EntityProjectileBase fireProjectile(String projectileName, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
+		if(projectileInfo == null) {
+			return null;
+		}
+		return this.fireProjectile(projectileInfo.createProjectile(this.getEntityWorld(), this), target, range, angle, offset, velocity, scale, inaccuracy);
+	}
+
+	/**
+	 * Fires a projectile from this mob.
 	 * @param projectileClass The class of the projectile. Must extend EntityProjectileBase.
 	 * @param target The target entity to fire at. If null, the projectile is fired from the facing direction instead.
 	 * @param range The range to the target.
@@ -2628,6 +2650,22 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		catch (Exception e) {
 			LycanitesMobs.printWarning("", "Unable to create a projectile from the class: " + projectileClass);
 		}
+		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
+	}
+
+	/**
+	 * Fires a projectile from this mob.
+	 * @param projectile The projectile instance being fired.
+	 * @param target The target entity to fire at. If null, the projectile is fired from the facing direction instead.
+	 * @param range The range to the target.
+	 * @param angle The angle offset away from the target in degrees.
+	 * @param offset The xyz offset to fire from. Note that the Y offset is relative to 75% of this mob's height.
+	 * @param velocity The velocity of the projectile.
+	 * @param scale The size scale of the projectile.
+	 * @param inaccuracy How inaccurate the projectile aiming is.
+	 * @return The fired created projectile.
+	 */
+	public EntityProjectileBase fireProjectile(EntityProjectileBase projectile, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
 		if(projectile == null) {
 			return null;
 		}

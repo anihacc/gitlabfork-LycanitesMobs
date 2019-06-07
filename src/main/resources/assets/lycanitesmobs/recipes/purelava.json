@@ -1,0 +1,13 @@
+{
+  "result": {
+    "item": "lycanitesmobs:purelava",
+    "count": 1
+  },
+  "ingredients": [
+	{
+      "item": "minecraft:bucket",
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

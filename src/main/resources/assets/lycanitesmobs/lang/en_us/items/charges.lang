@@ -28,6 +28,9 @@ item.faeboltcharge.description=Use to fire a bolt of fae energy, this deals no d
 item.embercharge.name=Ember Charge
 item.embercharge.description=Use to throw a small flame or spray from a dispenser.
 #
+item.venomshotcharge.name=Venomshot Charge
+item.venomshotcharge.description=Use to throw a ball of venom that creates a poisonous cloud and inflicts plague.
+#
 item.poopcharge.name=Poop
 item.poopcharge.description=Very smelly! Throw it! Can also be used on plants as a fertilizer like bonemeal.
 #

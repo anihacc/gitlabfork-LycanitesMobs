@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
@@ -62,6 +63,8 @@ public class ProjectileInfo {
 	public int damage = 1;
 	/** The base amount of damage caused by this projectile that can ignore armor and similar defenses. **/
 	public int pierce = 1;
+	/** The chance of this projectile knocking back an entity hit by it. **/
+	public double knockbackChance = 0;
 	/** How long (in seconds) any element debuffs applied by this projectile last for. **/
 	public int effectDuration = 1;
 	/** How strong any element debuffs applied by this projectile are. **/
@@ -138,10 +141,14 @@ public class ProjectileInfo {
 			this.width = json.get("width").getAsFloat();
 		if(json.has("height"))
 			this.height = json.get("height").getAsFloat();
+		if(json.has("scale"))
+			this.scale = json.get("scale").getAsFloat();
 		if(json.has("damage"))
 			this.damage = json.get("damage").getAsInt();
 		if(json.has("pierce"))
 			this.pierce = json.get("pierce").getAsInt();
+		if(json.has("knockbackChance"))
+			this.knockbackChance = json.get("knockbackChance").getAsDouble();
 		if(json.has("effectDuration"))
 			this.effectDuration = json.get("effectDuration").getAsInt();
 		if(json.has("effectAmplifier"))
@@ -159,13 +166,18 @@ public class ProjectileInfo {
 		}
 
 		// Load Behaviours:
-		if(json.has("behaviour")) {
-			JsonArray jsonArray = json.get("behaviour").getAsJsonArray();
+		if(json.has("behaviours")) {
+			JsonArray jsonArray = json.get("behaviours").getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
-				JsonObject effectJson = jsonIterator.next().getAsJsonObject();
-				ProjectileBehaviour projectileBehaviour = ProjectileBehaviour.createFromJSON(effectJson);
-				this.behaviours.add(projectileBehaviour);
+				JsonObject behaviorJson = jsonIterator.next().getAsJsonObject();
+				ProjectileBehaviour projectileBehaviour = ProjectileBehaviour.createFromJSON(behaviorJson);
+				if(projectileBehaviour != null) {
+					this.behaviours.add(projectileBehaviour);
+				}
+				else {
+					LycanitesMobs.printWarning("", "Unable to load Projectile Behaviour: " + behaviorJson.get("type").getAsString());
+				}
 			}
 		}
 
@@ -251,13 +263,7 @@ public class ProjectileInfo {
 		}
 
 		// Register:
-		ObjectManager.addProjectile(this.name, this.entityClass, this.chargeItem, new DispenserBehaviorBase(), true);
-
-		// Sounds:
-		AssetManager.addSound(this.name + ".launch", this.modInfo, this.name + ".launch");
-		if(this.impactSound) {
-			AssetManager.addSound(this.name + ".impact", this.modInfo, this.name + ".impact");
-		}
+		ObjectManager.addProjectile(this.name, this.entityClass, this.chargeItem, new DispenserBehaviorBase(), this.impactSound);
 	}
 
 	/**
@@ -281,10 +287,10 @@ public class ProjectileInfo {
 	}
 
 	public SoundEvent getLaunchSound() {
-		return AssetManager.getSound(this.name + ".launch");
+		return AssetManager.getSound(this.name);
 	}
 
 	public SoundEvent getImpactSound() {
-		return AssetManager.getSound(this.name + ".impact");
+		return AssetManager.getSound(this.name + "_impact");
 	}
 }

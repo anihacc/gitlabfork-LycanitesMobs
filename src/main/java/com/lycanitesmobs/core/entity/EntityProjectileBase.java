@@ -187,6 +187,7 @@ public class EntityProjectileBase extends EntityThrowable {
      	 boolean collided = false;
          boolean entityCollision = false;
          boolean blockCollision = false;
+         BlockPos impactPos = this.getPosition();
      	
      	// Entity Hit:
      	if(rayTraceResult.entityHit != null) {
@@ -260,10 +261,10 @@ public class EntityProjectileBase extends EntityThrowable {
      		int i = (int)Math.floor(rayTraceResult.entityHit.posX);
      		int j = (int)Math.floor(rayTraceResult.entityHit.posY);
             int k = (int)Math.floor(rayTraceResult.entityHit.posZ);
-            BlockPos pos = new BlockPos(i, j, k);
-            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(pos)) {
+            impactPos = new BlockPos(i, j, k);
+            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
             	try {
-					this.placeBlock(this.getEntityWorld(), pos);
+					this.placeBlock(this.getEntityWorld(), impactPos);
 				}
 				catch(Exception e) {}
 			}
@@ -313,10 +314,10 @@ public class EntityProjectileBase extends EntityThrowable {
  		                ++i;
  	            }
 
-                BlockPos pos = new BlockPos(i, j, k);
- 	            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(pos)) {
+                impactPos = new BlockPos(i, j, k);
+ 	            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
  	            	try {
-						this.placeBlock(this.getEntityWorld(), pos);
+						this.placeBlock(this.getEntityWorld(), impactPos);
 					}
 					catch(Exception e) {}
 				}
@@ -326,7 +327,7 @@ public class EntityProjectileBase extends EntityThrowable {
      	if(collided) {
  	    	// Impact Particles:
  	        if(!this.getEntityWorld().isRemote) {
-				this.onImpact();
+				this.onImpactComplete(impactPos);
 			}
  	        else {
 				this.onImpactVisuals();
@@ -415,7 +416,7 @@ public class EntityProjectileBase extends EntityThrowable {
      }
      
      //========== On Impact Splash/Ricochet Server Side ==========
-     public void onImpact() {}
+     public void onImpactComplete(BlockPos impactPos) {}
      
      //========== On Impact Particles/Sounds Client Side ==========
      public void onImpactVisuals() {
@@ -445,9 +446,9 @@ public class EntityProjectileBase extends EntityThrowable {
      // ==================================================
      //                      Scale
      // ==================================================
-     public void setProjectileScale(float newScale) {
-     	 this.projectileScale = newScale;
-         this.setSize(newScale, newScale);
+     public void setProjectileScale(float scale) {
+     	 this.projectileScale = scale;
+         this.setSize(scale, scale);
          if(this.getEntityWorld().isRemote && !this.clientOnly)
              return;
          if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)

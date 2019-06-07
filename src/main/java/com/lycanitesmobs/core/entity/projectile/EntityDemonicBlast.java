@@ -143,11 +143,11 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
 				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
 				if(entityCreatureBase instanceof EntityCacodemon && !((EntityCacodemon)entityCreatureBase).cacodemonGreifing) {
-					super.onImpact();
+					super.onImpactComplete(this.getPosition());
 					return;
 				}
 				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
-					super.onImpact();
+					super.onImpactComplete(this.getPosition());
 					return;
 				}
 				if (entityCreatureBase.getSubspeciesIndex() > 0) {

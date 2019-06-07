@@ -16,12 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExtendedEntity implements IExtendedEntity {
-    public static Map<Entity, ExtendedEntity> clientExtendedEntities = new HashMap<Entity, ExtendedEntity>();
+    public static Map<Entity, ExtendedEntity> clientExtendedEntities = new HashMap<>();
     public static String[] FORCE_REMOVE_ENTITY_IDS;
     public static int FORCE_REMOVE_ENTITY_TICKS = 40;
 
     // Entity Instance:
 	public EntityLivingBase entity;
+
+	// Equipment:
+	public int equipmentProjectileCooldown = 0;
 
     // Safe Position:
     /** The last coordinates the entity was at where it wasn't inside an opaque block. (Helps prevent suffocation). **/
@@ -105,6 +108,10 @@ public class ExtendedEntity implements IExtendedEntity {
 	public void onUpdate() {
         if(this.entity == null)
             return;
+
+        // Equipment:
+		if(this.equipmentProjectileCooldown > 0)
+			this.equipmentProjectileCooldown--;
 
         // Force Remove Entity:
         if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.length > 0 && !this.forceRemoveChecked) {

@@ -13,12 +13,13 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -238,6 +239,53 @@ public class ItemEquipment extends ItemBase {
 
 
 	// ==================================================
+	//                       Using
+	// ==================================================
+	@Override
+	public EnumAction getItemUseAction(ItemStack itemStack) {
+		return EnumAction.NONE;
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 18000;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
+		boolean active = false;
+
+		// Projectiles:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+			if(projectileFeature.onUseSecondary(world, player, hand)) {
+				active = true;
+			}
+		}
+
+		if(active) {
+			player.setActiveHand(hand);
+			return new ActionResult<>(EnumActionResult.PASS, itemStack);
+		}
+		return new ActionResult<>(EnumActionResult.FAIL, itemStack);
+	}
+
+	@Override
+	public void onUsingTick(ItemStack itemStack, EntityLivingBase user, int count) {
+		if(!user.isHandActive()) {
+			return;
+		}
+
+		// Projectiles:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+			projectileFeature.onHoldSecondary(user, count);
+		}
+	}
+
+
+	// ==================================================
 	//                     Harvesting
 	// ==================================================
 	@Override
@@ -313,6 +361,12 @@ public class ItemEquipment extends ItemBase {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
 			SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
 			summonFeature.onHitEntity(itemStack, target, attacker);
+		}
+
+		// Projectiles:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+			projectileFeature.onHitEntity(itemStack, target, attacker);
 		}
 
 		return true;

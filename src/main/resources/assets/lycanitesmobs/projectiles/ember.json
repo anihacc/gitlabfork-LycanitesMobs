@@ -6,6 +6,7 @@
 	"scale": 0.5,
 	"damage": 1,
 	"pierce": 1,
+	"knockbackChance": 0,
 	"effectDuration": 3,
 	"effectAmplifier": 1,
 	"velocity": 1.1,

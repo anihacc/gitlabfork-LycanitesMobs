@@ -262,7 +262,7 @@ public class ItemManager {
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 
 		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
-		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100).setColor(0xCA3F08FF);
+		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
 		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
 		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));
 
@@ -288,8 +288,6 @@ public class ItemManager {
 		ObjectManager.addItem("mudshotcharge", new ItemMudshotCharge());
 		ObjectManager.addItem("scythescepter", new ItemScepterScythe(), 2, 1, 1);
 		ObjectManager.addItem("mudshotscepter", new ItemScepterMudshot(), 2, 1, 1);
-		//ObjectManager.addItem("embercharge", new ItemEmberCharge());
-		ObjectManager.addItem("emberscepter", new ItemScepterEmber(), 2, 1, 1);
 		ObjectManager.addItem("aquapulsecharge", new ItemAquaPulseCharge());
 		ObjectManager.addItem("aquapulsescepter", new ItemScepterAquaPulse(), 2, 1, 1);
 		ObjectManager.addItem("whirlwindcharge", new ItemWhirlwindCharge());
@@ -322,7 +320,6 @@ public class ItemManager {
 		ObjectManager.addItem("bloodleechcharge", new ItemBloodleechCharge());
 		ObjectManager.addItem("bloodleechscepter", new ItemScepterBloodleech(), 2, 1, 1);
 		ObjectManager.addItem("poisonrayscepter", new ItemScepterPoisonRay(), 2, 1, 1);
-		ObjectManager.addItem("venomshotscepter", new ItemScepterVenomShot(), 2, 1, 1);
 
 
 		// Tools and Weapons:

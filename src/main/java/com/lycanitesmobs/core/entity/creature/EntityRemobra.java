@@ -4,7 +4,6 @@ import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.entity.projectile.EntityVenomShot;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
@@ -66,7 +65,7 @@ public class EntityRemobra extends EntityCreatureTameable implements IMob, IGrou
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityVenomShot.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("venomshot", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

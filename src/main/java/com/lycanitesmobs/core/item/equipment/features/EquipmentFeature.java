@@ -37,6 +37,9 @@ public class EquipmentFeature {
 		else if("summon".equalsIgnoreCase(type)) {
 			equipmentFeature = new SummonEquipmentFeature();
 		}
+		else if("projectile".equalsIgnoreCase(type)) {
+			equipmentFeature = new ProjectileEquipmentFeature();
+		}
 
 		if(equipmentFeature == null) {
 			return null;

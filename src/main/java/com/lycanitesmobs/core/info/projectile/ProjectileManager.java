@@ -102,7 +102,6 @@ public class ProjectileManager extends JSONLoader {
 		ObjectManager.addProjectile("helllaserend", EntityHellLaserEnd.class, false);
 		ObjectManager.addProjectile("throwingscythe", EntityThrowingScythe.class, ObjectManager.getItem("throwingscythe"), new DispenserBehaviorThrowingScythe());
 		ObjectManager.addProjectile("mudshot", EntityMudshot.class, ObjectManager.getItem("mudshotcharge"), new DispenserBehaviorMudshot());
-		//ObjectManager.addProjectile("ember", EntityEmber.class, ObjectManager.getItem("embercharge"), new DispenserBehaviorEmber());
 		ObjectManager.addProjectile("aquapulse", EntityAquaPulse.class, ObjectManager.getItem("aquapulsecharge"), new DispenserBehaviorAquaPulse());
 		ObjectManager.addProjectile("whirlwind", EntityWhirlwind.class, ObjectManager.getItem("whirlwindcharge"), new DispenserBehaviorWhirlwind());
 		ObjectManager.addProjectile("chaosorb", EntityChaosOrb.class, ObjectManager.getItem("chaosorbcharge"), new DispenserBehaviorAetherwave(), true);
@@ -128,6 +127,5 @@ public class ProjectileManager extends JSONLoader {
 		ObjectManager.addProjectile("bloodleech", EntityBloodleech.class, ObjectManager.getItem("bloodleechcharge"), new DispenserBehaviorBloodleech());
 		ObjectManager.addProjectile("poisonray", EntityPoisonRay.class, Items.FERMENTED_SPIDER_EYE, new DispenserBehaviorPoisonRay());
 		ObjectManager.addProjectile("poisonrayend", EntityPoisonRayEnd.class, false);
-		ObjectManager.addProjectile("venomshot", EntityVenomShot.class, ObjectManager.getItem("poisongland"), new DispenserBehaviorVenomShot());
 	}
 }

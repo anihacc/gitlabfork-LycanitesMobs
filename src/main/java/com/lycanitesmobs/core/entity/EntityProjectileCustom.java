@@ -4,12 +4,14 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,10 +90,8 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		this.projectileLife = this.projectileInfo.lifetime;
 		this.setDamage(this.projectileInfo.damage);
 		this.setPierce(this.projectileInfo.pierce);
+		this.knockbackChance = this.projectileInfo.knockbackChance;
 		this.weight = this.projectileInfo.weight;
-
-		// Behaviours:
-		// TODO Add Projectile Behaviours
 
 		// Flags:
 		this.waterProof = this.projectileInfo.waterproof;
@@ -110,19 +110,39 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		if(this.projectileInfo == null && this.getEntityWorld().isRemote) {
 			this.loadProjectileInfo(this.getStringFromDataManager(PROJECTILE_NAME));
 		}
+
 		super.onUpdate();
+
+		if(this.projectileInfo != null && !this.getEntityWorld().isRemote) {
+			for (ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+				behaviour.onProjectileUpdate(this);
+			}
+		}
 	}
 
 
 	// ==================================================
 	//                      Projectile
 	// ==================================================
+	@Override
 	public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
 		super.onDamage(target, damage, attackSuccess);
 		if(!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {
 			for(ElementInfo element : this.projectileInfo.elements) {
 				element.debuffEntity(target, this.projectileInfo.effectDuration * 20, this.projectileInfo.effectAmplifier);
 			}
+		}
+	}
+
+	@Override
+	public void onImpactComplete(BlockPos impactPos) {
+		super.onImpactComplete(impactPos);
+		if(this.projectileInfo == null) {
+			return;
+		}
+
+		for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+			behaviour.onProjectileImpact(this, this.getEntityWorld(), impactPos);
 		}
 	}
 

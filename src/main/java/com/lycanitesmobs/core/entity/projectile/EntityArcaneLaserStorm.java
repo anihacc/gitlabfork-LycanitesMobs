@@ -161,7 +161,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 					return;
 				}
 				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
-					super.onImpact();
+					super.onImpactComplete(this.getPosition());
 					return;
 				}
 				if (entityCreatureBase.getSubspeciesIndex() > 0) {
@@ -173,7 +173,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 			}
 			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
 		}
-    	super.onImpact();
+    	super.onImpactComplete(this.getPosition());
     }
     
     //========== On Impact Particles/Sounds ==========

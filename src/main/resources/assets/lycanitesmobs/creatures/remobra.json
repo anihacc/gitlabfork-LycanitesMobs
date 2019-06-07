@@ -68,6 +68,12 @@
 			"chance": 0.5
 		},
 		{
+			"item": "lycanitesmobs:venomshotcharge",
+			"minAmount": 1,
+			"maxAmount": 2,
+			"chance": 0.5
+		},
+		{
 			"item": "lycanitesmobs:poisongland",
 			"minAmount": 1,
 			"maxAmount": 2,

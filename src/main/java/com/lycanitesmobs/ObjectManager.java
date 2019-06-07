@@ -59,13 +59,13 @@ public class ObjectManager {
 
     public static Map<String, StatBase> stats = new HashMap<>();
 	
-	public static ModInfo currentGroup;
+	public static ModInfo currentModInfo;
 	
     // ==================================================
     //                        Setup
     // ==================================================
-	public static void setCurrentGroup(ModInfo group) {
-		currentGroup = group;
+	public static void setCurrentModInfo(ModInfo group) {
+		currentModInfo = group;
 	}
 	
 	
@@ -80,20 +80,20 @@ public class ObjectManager {
             BlockSlabCustom blockSlab = (BlockSlabCustom)block;
             ItemSlabCustom itemSlabCustom = new ItemSlabCustom(blockSlab, blockSlab, blockSlab.getDoubleBlock());
             items.put(name, itemSlabCustom);
-            itemGroups.put(itemSlabCustom, currentGroup);
+            itemGroups.put(itemSlabCustom, currentModInfo);
         }
         else {
             ItemBlock itemBlock = new ItemBlockBase(block);
             itemBlock.setRegistryName(block.getRegistryName());
             items.put(name, itemBlock);
-            itemGroups.put(itemBlock, currentGroup);
+            itemGroups.put(itemBlock, currentModInfo);
         }
         return block;
 	}
 
 	// ========== Fluid ==========
 	public static Fluid addFluid(String fluidName) {
-        ModInfo group = currentGroup;
+        ModInfo group = currentModInfo;
         Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
 		fluids.put(fluidName, fluid);
 		if(!FluidRegistry.registerFluid(fluid)) {
@@ -112,7 +112,7 @@ public class ObjectManager {
 	public static Item addItem(String name, Item item) {
 		name = name.toLowerCase();
 		items.put(name, item);
-        itemGroups.put(item, currentGroup);
+        itemGroups.put(item, currentModInfo);
 
         // Fluid Dispenser:
         if(item instanceof ItemBucket) {
@@ -163,17 +163,17 @@ public class ObjectManager {
 	// ========== Projectile ==========
     public static void addProjectile(String name, Class entityClass, int updateFrequency, boolean impactSound) {
         name = name.toLowerCase();
-        ModInfo group = currentGroup;
-        AssetManager.addSound(name, group, "projectile." + name);
+        ModInfo modInfo = currentModInfo;
+        AssetManager.addSound(name, modInfo, "projectile." + name);
         if(impactSound) {
-			AssetManager.addSound(name + "_impact", group, "projectile." + name + ".impact");
+			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
 		}
 
-        int projectileID = group.getNextProjectileID();
-        EntityRegistry.registerModEntity(new ResourceLocation(group.filename, name), entityClass, name, projectileID, group.mod, 64, updateFrequency, true);
+        int projectileID = modInfo.getNextProjectileID();
+        EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, name), entityClass, name, projectileID, modInfo.mod, 64, updateFrequency, true);
 
         projectiles.put(name, entityClass);
-        group.projectileClasses.add(entityClass);
+        modInfo.projectileClasses.add(entityClass);
 
 		if(EntityProjectileModel.class.isAssignableFrom(entityClass)) {
 			projectileModels.put(entityClass, name);
@@ -269,7 +269,7 @@ public class ObjectManager {
                 LycanitesMobs.printWarning("", "Block: " + block + " has no Registry Name!");
             }
             //event.getRegistry().register(block); Registered with ItemBlock
-			LycanitesMobs.proxy.addBlockRender(currentGroup, block);
+			LycanitesMobs.proxy.addBlockRender(currentModInfo, block);
         }
     }
 

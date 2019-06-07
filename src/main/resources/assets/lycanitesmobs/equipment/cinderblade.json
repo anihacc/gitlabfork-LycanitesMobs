@@ -59,23 +59,25 @@
 			"effectStrength": 1
 		},
 		{
-			"featureType": "summon",
+			"featureType": "projectile",
 			"levelMin": 2,
+			"projectileName": "ember",
+			"projectileTrigger": "secondary",
+			"projectilePattern": "spread",
+			"cooldown": 2,
+			"count": 10,
+			"spreadX": 45,
+			"spreadY": 10
+		},
+		{
+			"featureType": "summon",
+			"levelMin": 3,
 			"summonMobId": "lycanitesmobs.cinder",
 			"summonChance": 0.05,
 			"summonDuration": 10,
 			"summonCountMin": 1,
 			"summonCountMax": 1,
 			"sizeScale": 0.4
-		},
-		{
-			"featureType": "projectile",
-			"levelMin": 3,
-			"projectileName": "ember",
-			"projectileTrigger": "hold",
-			"projectilePattern": "spread",
-			"projectileSpreadX": 4,
-			"projectileSpreadY": 4
 		}
 	]
 }
