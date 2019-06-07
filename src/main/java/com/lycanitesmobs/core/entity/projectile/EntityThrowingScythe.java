@@ -31,8 +31,8 @@ public class EntityThrowingScythe extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "throwingscythe";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(3);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(3);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0.25D;
     	

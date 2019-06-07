@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.core.entity.EntityParticle;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -53,6 +54,9 @@ public class RenderProjectile extends Render {
     // ==================================================
     public void renderProjectile(Entity entity, double x, double y, double z, float par8, float par9) {
     	double scale = 0.5d;
+    	if(entity instanceof EntityProjectileCustom && ((EntityProjectileCustom)entity).projectileInfo == null) {
+    		return;
+		}
         if(entity instanceof EntityProjectileBase) {
             EntityProjectileBase entityProjectileBase = (EntityProjectileBase)entity;
             scale *= entityProjectileBase.getProjectileScale();

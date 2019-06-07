@@ -40,8 +40,8 @@ public class EntityScorchfireball extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "scorchfire";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(1);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(1);
     	this.setProjectileScale(2F);
         this.knockbackChance = 0.5D;
     }

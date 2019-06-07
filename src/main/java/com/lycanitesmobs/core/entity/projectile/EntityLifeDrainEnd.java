@@ -30,7 +30,7 @@ public class EntityLifeDrainEnd extends EntityProjectileLaserEnd {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "lifedrain";
-    	this.group = LycanitesMobs.modInfo;
+    	this.modInfo = LycanitesMobs.modInfo;
     }
     
     // ========== Stats ==========
@@ -47,7 +47,7 @@ public class EntityLifeDrainEnd extends EntityProjectileLaserEnd {
     @Override
     public ResourceLocation getTexture() {
     	if(AssetManager.getTexture(this.entityName + "End") == null)
-    		AssetManager.addTexture(this.entityName + "End", this.group, "textures/items/" + this.entityName.toLowerCase() + "_end.png");
+    		AssetManager.addTexture(this.entityName + "End", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_end.png");
     	return AssetManager.getTexture(this.entityName + "End");
     }
     

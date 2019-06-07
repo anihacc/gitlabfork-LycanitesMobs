@@ -35,8 +35,8 @@ public class EntityBoulderBlast extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "boulderblast";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(8);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(8);
     	this.setProjectileScale(4F);
     	
     	this.waterProof = true;

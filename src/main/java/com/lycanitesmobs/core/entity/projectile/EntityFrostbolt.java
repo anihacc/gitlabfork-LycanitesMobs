@@ -33,8 +33,8 @@ public class EntityFrostbolt extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "frostbolt";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(5);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(5);
     	
     	this.waterProof = true;
     }

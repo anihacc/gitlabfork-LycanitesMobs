@@ -198,7 +198,7 @@ public class LycanitesMobs {
 
 		// Blocks and Items:
 		CreatureManager.getInstance().createSpawnEggItems();
-		ProjectileManager.getInstance().createChargeItems();
+		ProjectileManager.getInstance().initAll();
 		ItemManager.getInstance().loadConfig();
 		ItemManager.getInstance().loadItems();
 		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);

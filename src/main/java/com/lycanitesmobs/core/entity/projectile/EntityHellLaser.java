@@ -40,8 +40,8 @@ public class EntityHellLaser extends EntityProjectileLaser {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "helllaser";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(1);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(1);
     }
     
     // ========== Stats ==========
@@ -82,7 +82,7 @@ public class EntityHellLaser extends EntityProjectileLaser {
     @Override
     public ResourceLocation getBeamTexture() {
     	if(AssetManager.getTexture(this.entityName + "Beam") == null)
-    		AssetManager.addTexture(this.entityName + "Beam", this.group, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    		AssetManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
     	return AssetManager.getTexture(this.entityName + "Beam");
     }
     

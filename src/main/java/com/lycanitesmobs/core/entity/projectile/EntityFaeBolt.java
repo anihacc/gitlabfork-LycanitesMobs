@@ -5,17 +5,12 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityFaeBolt extends EntityProjectileBase {
@@ -42,12 +37,12 @@ public class EntityFaeBolt extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "faebolt";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(0);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(0);
     	this.setProjectileScale(4F);
     	this.waterProof = true;
 
-		this.debuff = ConfigBase.getConfig(this.group, "general").getBool("Features", "Nymph Fae Bolt Lifeleak Enabled", this.debuff, "Set to false to disable Lifeleak from Faebolts fired by scared Nymphs.");
+		this.debuff = ConfigBase.getConfig(this.modInfo, "general").getBool("Features", "Nymph Fae Bolt Lifeleak Enabled", this.debuff, "Set to false to disable Lifeleak from Faebolts fired by scared Nymphs.");
 	}
 
 

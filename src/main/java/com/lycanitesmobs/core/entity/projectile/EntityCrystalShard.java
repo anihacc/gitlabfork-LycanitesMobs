@@ -38,8 +38,8 @@ public class EntityCrystalShard extends EntityProjectileModel {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "crystalshard";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(2);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(2);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0D;
         this.projectileLife = 100;

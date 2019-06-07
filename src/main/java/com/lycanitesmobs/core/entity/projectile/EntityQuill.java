@@ -31,8 +31,8 @@ public class EntityQuill extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "quill";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(3);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(3);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0.25D;
     	

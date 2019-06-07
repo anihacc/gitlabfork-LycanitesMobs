@@ -47,12 +47,12 @@ public class EntityHellfireWall extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfirewall";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(10);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(10);
     	this.setProjectileScale(20F);
         this.setSize(10F, 10F);
         this.movement = false;
-        this.pierce = true;
+        this.ripper = true;
         this.pierceBlocks = true;
         this.projectileLife = 2 * 20;
         this.animationFrameMax = 59;

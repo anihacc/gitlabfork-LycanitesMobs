@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
@@ -17,7 +19,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 	private float projectileHeight = 0.2f;
 	
 	// Rapid Fire:
-	private Class projectileClass = null;
+	private Class projectileClass;
+	private ProjectileInfo projectileInfo;
 	private int rapidTime = 100;
 	private int rapidDelay = 5;
 	
@@ -32,7 +35,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
     public EntityProjectileRapidFire(Class entityClass, World world, int setTime, int setDelay) {
         super(world);
         this.setSize(projectileWidth, projectileHeight);
-        projectileClass = entityClass;
+		this.projectileClass = entityClass;
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
         this.noClip = true;
@@ -41,7 +44,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
     public EntityProjectileRapidFire(Class entityClass, World world, double par2, double par4, double par6, int setTime, int setDelay) {
         super(world, par2, par4, par6);
         this.setSize(projectileWidth, projectileHeight);
-        projectileClass = entityClass;
+		this.projectileClass = entityClass;
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
         this.noClip = true;
@@ -59,6 +62,28 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
         this.rapidDelay = setDelay;
         this.noClip = true;
     }
+
+	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+		super(world, par2, par4, par6);
+		this.setSize(projectileWidth, projectileHeight);
+		this.projectileInfo = projectileInfo;
+		this.rapidTime = setTime;
+		this.rapidDelay = setDelay;
+		this.noClip = true;
+	}
+
+	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, EntityLivingBase entityLivingBase, int setTime, int setDelay) {
+		super(world, entityLivingBase);
+		this.setSize(projectileWidth, projectileHeight);
+		this.projectileInfo = projectileInfo;
+		this.shootingEntity = entityLivingBase;
+		this.offsetX = this.posX - entityLivingBase.posX;
+		this.offsetY = this.posY - entityLivingBase.posY;
+		this.offsetZ = this.posZ - entityLivingBase.posZ;
+		this.rapidTime = setTime;
+		this.rapidDelay = setDelay;
+		this.noClip = true;
+	}
 	
     
     // ==================================================
@@ -72,7 +97,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
     		this.posZ = shootingEntity.posZ + this.offsetZ;
     	}
     	if(rapidTime > 0) {
-	    	if(projectileClass == null) {
+	    	if(projectileClass == null && this.projectileInfo == null) {
 	    		rapidTime = 0;
 	    		return;
 	    	}
@@ -106,18 +131,30 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
     	
 		try {
 	        IProjectile projectile;
-	        
+
 	        if(this.shootingEntity == null) {
-		    	Constructor constructor = projectileClass.getDeclaredConstructor(new Class[] { World.class, double.class, double.class, double.class });
-		    	constructor.setAccessible(true);
-	        	projectile = (IProjectile)constructor.newInstance(new Object[] { world, this.posX, this.posY, this.posZ });
-				projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+				if(this.projectileInfo != null) {
+					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.posX, this.posY, this.posZ);
+					projectile.shoot(this.motionX, this.motionY, this.motionZ, (float)this.projectileInfo.velocity, 0);
+				}
+				else {
+					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, double.class, double.class, double.class});
+					constructor.setAccessible(true);
+					projectile = (IProjectile) constructor.newInstance(new Object[]{world, this.posX, this.posY, this.posZ});
+					projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+				}
 	        }
 	        else {
-		    	Constructor constructor = projectileClass.getDeclaredConstructor(new Class[] { World.class, EntityLivingBase.class });
-		    	constructor.setAccessible(true);
-	        	projectile = (IProjectile)constructor.newInstance(new Object[] { world, this.shootingEntity });
-				projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+	        	if(this.projectileInfo != null) {
+					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.shootingEntity);
+					projectile.shoot(this.motionX, this.motionY, this.motionZ, (float)this.projectileInfo.velocity, 0);
+				}
+	        	else {
+					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, EntityLivingBase.class});
+					constructor.setAccessible(true);
+					projectile = (IProjectile) constructor.newInstance(new Object[]{world, this.shootingEntity});
+					projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+				}
                 if(projectile instanceof EntityThrowable) {
                     EntityThrowable entityThrowable = (EntityThrowable)projectile;
                     entityThrowable.setPosition(this.shootingEntity.posX + this.offsetX, this.shootingEntity.posY + this.offsetY, this.shootingEntity.posZ + this.offsetZ);

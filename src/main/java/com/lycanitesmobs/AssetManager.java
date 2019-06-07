@@ -30,24 +30,24 @@ public class AssetManager {
     //                        Add
     // ==================================================
 	// ========== Texture ==========
-	public static void addTexture(String name, ModInfo group, String path) {
+	public static void addTexture(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		textures.put(name, new ResourceLocation(group.filename, path));
+		textures.put(name, new ResourceLocation(modInfo.filename, path));
 	}
 	
 	// ========== Texture Group ==========
-	public static void addTextureGroup(String name, ModInfo group, String[] paths) {
+	public static void addTextureGroup(String name, ModInfo modInfo, String[] paths) {
 		name = name.toLowerCase();
         ResourceLocation[] textureGroup = new ResourceLocation[paths.length];
 		for(int i = 0; i < paths.length; i++)
-            textureGroup[i] = new ResourceLocation(group.filename, paths[i]);
+            textureGroup[i] = new ResourceLocation(modInfo.filename, paths[i]);
         textureGroups.put(name, textureGroup);
 	}
 	
 	// ========== Sound ==========
-	public static void addSound(String name, ModInfo group, String path) {
+	public static void addSound(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-        ResourceLocation resourceLocation = new ResourceLocation(group.filename, path);
+        ResourceLocation resourceLocation = new ResourceLocation(modInfo.filename, path);
         SoundEvent soundEvent = new SoundEvent(resourceLocation);
         soundEvent.setRegistryName(resourceLocation);
 		sounds.put(name, soundEvent);
@@ -61,9 +61,9 @@ public class AssetManager {
 	}
 	
 	// ========== Obj Model ==========
-	public static void addObjModel(String name, ModInfo group, String path) {
+	public static void addObjModel(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(group.filename, "models/" + path + ".obj")));
+		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(modInfo.filename, "models/" + path + ".obj")));
 	}
 
 	// ========== Item Model ==========
@@ -152,10 +152,10 @@ public class AssetManager {
 			return null;
 		return objModels.get(name);
 	}
-	public static IModel getObjModel(String name, ModInfo group, String path) {
+	public static IModel getObjModel(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
 		if(!objModels.containsKey(name))
-			addObjModel(name, group, path);
+			addObjModel(name, modInfo, path);
 		return objModels.get(name);
 	}
 

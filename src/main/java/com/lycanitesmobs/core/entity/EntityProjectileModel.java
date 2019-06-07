@@ -33,7 +33,7 @@ public class EntityProjectileModel extends EntityProjectileBase {
 
 	public ResourceLocation getTexture() {
 		if(AssetManager.getTexture(this.getTextureName()) == null)
-			AssetManager.addTexture(this.getTextureName(), this.group, "textures/projectile/" + this.getTextureName() + ".png");
+			AssetManager.addTexture(this.getTextureName(), this.modInfo, "textures/projectile/" + this.getTextureName() + ".png");
 		return AssetManager.getTexture(this.getTextureName());
 	}
 }

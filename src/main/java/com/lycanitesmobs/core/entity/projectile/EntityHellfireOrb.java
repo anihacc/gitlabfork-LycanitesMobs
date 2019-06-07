@@ -32,11 +32,11 @@ public class EntityHellfireOrb extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfireorb";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(0);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(0);
     	this.setProjectileScale(2F);
         this.movement = false;
-        this.pierce = true;
+        this.ripper = true;
         this.pierceBlocks = true;
         this.projectileLife = 5;
         this.animationFrameMax = 4;

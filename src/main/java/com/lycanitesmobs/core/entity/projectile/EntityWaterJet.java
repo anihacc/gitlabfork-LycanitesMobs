@@ -40,8 +40,8 @@ public class EntityWaterJet extends EntityProjectileLaser {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "waterjet";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(3);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(3);
     }
     
     // ========== Stats ==========
@@ -82,7 +82,7 @@ public class EntityWaterJet extends EntityProjectileLaser {
     @Override
     public ResourceLocation getBeamTexture() {
     	if(AssetManager.getTexture(this.entityName + "Beam") == null)
-    		AssetManager.addTexture(this.entityName + "Beam", this.group, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    		AssetManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
     	return AssetManager.getTexture(this.entityName + "Beam");
     }
     

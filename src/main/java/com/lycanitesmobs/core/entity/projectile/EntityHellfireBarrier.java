@@ -44,12 +44,12 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "hellfirebarrier";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(0);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(0);
     	this.setProjectileScale(0F);
         this.setSize(2F, 2F);
         this.movement = false;
-        this.pierce = true;
+        this.ripper = true;
         this.pierceBlocks = true;
         this.projectileLife = 5 * 20;
         this.animationFrameMax = 59;
@@ -178,7 +178,7 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
     // ==================================================
     public ResourceLocation getTexture() {
         if(AssetManager.getTexture("hellfirewall") == null)
-            AssetManager.addTexture("hellfirewall", this.group, "textures/items/hellfirewall" + ".png");
+            AssetManager.addTexture("hellfirewall", this.modInfo, "textures/items/hellfirewall" + ".png");
         return AssetManager.getTexture("hellfirewall");
     }
 }

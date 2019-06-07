@@ -71,10 +71,10 @@ public class ProjectileManager extends JSONLoader {
 	}
 
 
-	/** Creates a Charge Item for each Projectile, must be called after Projectiles are loaded. **/
-	public void createChargeItems() {
+	/** Initialises all projectiles, creates a Charge Item for them, must be called after Elements and Projectiles are loaded. **/
+	public void initAll() {
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
-			projectileInfo.createChargeItem();
+			projectileInfo.init();
 		}
 	}
 
@@ -102,7 +102,7 @@ public class ProjectileManager extends JSONLoader {
 		ObjectManager.addProjectile("helllaserend", EntityHellLaserEnd.class, false);
 		ObjectManager.addProjectile("throwingscythe", EntityThrowingScythe.class, ObjectManager.getItem("throwingscythe"), new DispenserBehaviorThrowingScythe());
 		ObjectManager.addProjectile("mudshot", EntityMudshot.class, ObjectManager.getItem("mudshotcharge"), new DispenserBehaviorMudshot());
-		ObjectManager.addProjectile("ember", EntityEmber.class, ObjectManager.getItem("embercharge"), new DispenserBehaviorEmber());
+		//ObjectManager.addProjectile("ember", EntityEmber.class, ObjectManager.getItem("embercharge"), new DispenserBehaviorEmber());
 		ObjectManager.addProjectile("aquapulse", EntityAquaPulse.class, ObjectManager.getItem("aquapulsecharge"), new DispenserBehaviorAquaPulse());
 		ObjectManager.addProjectile("whirlwind", EntityWhirlwind.class, ObjectManager.getItem("whirlwindcharge"), new DispenserBehaviorWhirlwind());
 		ObjectManager.addProjectile("chaosorb", EntityChaosOrb.class, ObjectManager.getItem("chaosorbcharge"), new DispenserBehaviorAetherwave(), true);

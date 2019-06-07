@@ -7,9 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileModel;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,8 +36,8 @@ public class EntityAetherwave extends EntityProjectileModel {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "aetherwave";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(2);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(2);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0D;
         this.projectileLife = 100;

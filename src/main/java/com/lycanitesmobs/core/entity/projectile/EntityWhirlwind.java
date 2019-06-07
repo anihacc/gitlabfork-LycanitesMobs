@@ -33,8 +33,8 @@ public class EntityWhirlwind extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "whirlwind";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(2);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(2);
     	this.setProjectileScale(2F);
     	this.waterProof = false;
 		this.projectileLife = 100;

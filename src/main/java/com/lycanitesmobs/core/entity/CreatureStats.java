@@ -189,7 +189,7 @@ public class CreatureStats {
 	 */
 	public double getEffect() {
 		String statName = "effect";
-		double statValue = this.entity.creatureInfo.effect;
+		double statValue = this.entity.creatureInfo.effectDuration;
 
 		// Wild:
 		if(this.entity.getOwner() == null) {
@@ -211,7 +211,7 @@ public class CreatureStats {
 	 */
 	public double getAmplifier() {
 		String statName = "amplifier";
-		double statValue = this.entity.creatureInfo.amplifier;
+		double statValue = this.entity.creatureInfo.effectAmplifier;
 
 		// Wild:
 		if(this.entity.getOwner() == null) {

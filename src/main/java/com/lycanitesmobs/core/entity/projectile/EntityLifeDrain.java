@@ -38,8 +38,8 @@ public class EntityLifeDrain extends EntityProjectileLaser {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "lifedrain";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(4);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(4);
     }
     
     // ========== Stats ==========
@@ -88,7 +88,7 @@ public class EntityLifeDrain extends EntityProjectileLaser {
     @Override
     public ResourceLocation getBeamTexture() {
     	if(AssetManager.getTexture(this.entityName + "Beam") == null)
-    		AssetManager.addTexture(this.entityName + "Beam", this.group, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    		AssetManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
     	return AssetManager.getTexture(this.entityName + "Beam");
     }
     

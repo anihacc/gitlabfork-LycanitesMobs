@@ -119,10 +119,13 @@ public class ElementInfo {
 	/**
 	 * Applies buffs to the target entity based on this element.
 	 * @param targetEntity The entity to buffs.
-	 * @param duration The duration of the buffs.
-	 * @param amplifier The amplifier of the buffs.
+	 * @param duration The duration of the buffs. If 0 or below, no debuff is applied.
+	 * @param amplifier The amplifier of the buffs. If 0 or below, no debuff is applied.
 	 */
 	public void buffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
+		if(duration <= 0 || amplifier <= 0) {
+			return;
+		}
 		duration = Math.round((float)duration * (float)this.buffDurationMultiplier);
 		for(String buff : this.buffs) {
 			Potion potion = GameRegistry.findRegistry(Potion.class).getValue(new ResourceLocation(buff));
@@ -136,10 +139,13 @@ public class ElementInfo {
 	/**
 	 * Applies debuffs to the target entity based on this element.
 	 * @param targetEntity The entity to debuffs.
-	 * @param duration The duration (in seconds) of the debuffs.
-	 * @param amplifier The amplifier of the debuffs.
+	 * @param duration The duration (in seconds) of the debuffs. If 0 or below, no debuff is applied.
+	 * @param amplifier The amplifier of the debuffs. If 0 or below, no debuff is applied.
 	 */
 	public void debuffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
+		if(duration <= 0 || amplifier <= 0) {
+			return;
+		}
 		duration = Math.round((float)duration * (float)this.debuffDurationMultiplier);
 		for(String debuff : this.debuffs) {
 			if("burning".equalsIgnoreCase(debuff)) {

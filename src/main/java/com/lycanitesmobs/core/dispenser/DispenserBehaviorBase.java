@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.dispenser;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
@@ -68,6 +67,9 @@ public class DispenserBehaviorBase extends BehaviorProjectileDispense {
 	@Override
 	protected float getProjectileVelocity()
 	{
+		if(this.projectileInfo != null) {
+			return (float)this.projectileInfo.velocity;
+		}
 		return 1.1F;
 	}
     

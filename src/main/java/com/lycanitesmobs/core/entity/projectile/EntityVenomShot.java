@@ -42,8 +42,8 @@ public class EntityVenomShot extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "venomshot";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(3);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(3);
     	this.setProjectileScale(2.5F);
         this.knockbackChance = 0.5D;
     }

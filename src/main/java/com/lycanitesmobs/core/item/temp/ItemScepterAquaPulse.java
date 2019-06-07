@@ -43,7 +43,7 @@ public class ItemScepterAquaPulse extends ItemScepter {
     public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
     	if(!world.isRemote) {
     		EntityProjectileBase projectile = new EntityAquaPulse(world, entity);
-    		projectile.setBaseDamage((int)(projectile.getDamage(null) * power * 2));
+    		projectile.setDamage((int)(projectile.getDamage(null) * power * 2));
         	world.spawnEntity(projectile);
             this.playSound(itemStack, world, entity, power, projectile);
         }

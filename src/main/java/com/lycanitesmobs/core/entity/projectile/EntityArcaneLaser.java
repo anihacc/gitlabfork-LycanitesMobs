@@ -38,8 +38,8 @@ public class EntityArcaneLaser extends EntityProjectileLaser {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "arcanelaser";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(4);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(4);
     }
     
     // ========== Stats ==========
@@ -66,7 +66,7 @@ public class EntityArcaneLaser extends EntityProjectileLaser {
     @Override
     public ResourceLocation getBeamTexture() {
     	if(AssetManager.getTexture(this.entityName + "beam") == null)
-    		AssetManager.addTexture(this.entityName + "beam", this.group, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    		AssetManager.addTexture(this.entityName + "beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
     	return AssetManager.getTexture(this.entityName + "beam");
     }
     

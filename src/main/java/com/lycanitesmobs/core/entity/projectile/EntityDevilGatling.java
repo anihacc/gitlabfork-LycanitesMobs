@@ -43,9 +43,9 @@ public class EntityDevilGatling extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "devilgatling";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(4);
-		this.pierce = true;
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(4);
+		this.ripper = true;
     }
 	
     

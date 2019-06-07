@@ -69,8 +69,8 @@ public class CreatureInfo {
 	public double damage = 2.0D;
 	public double attackSpeed = 1.0D; // Seconds per melee.
 	public double rangedSpeed = 0.5D; // Seconds per ranged.
-	public double effect = 1.0D; // Seconds of effect.
-	public double amplifier = -1.0D; // No effect when less than 0.
+	public double effectDuration = 1.0D; // Seconds of effect.
+	public double effectAmplifier = -1.0D; // No effect when less than 0.
 	public double pierce = 1.0D;
 
 	public double sight = 16.0D;
@@ -210,10 +210,10 @@ public class CreatureInfo {
 			this.attackSpeed = json.get("attackSpeed").getAsDouble();
 		if(json.has("rangedSpeed"))
 			this.rangedSpeed = json.get("rangedSpeed").getAsDouble();
-		if(json.has("effect"))
-			this.effect = json.get("effect").getAsDouble();
-		if(json.has("amplifier"))
-			this.amplifier = json.get("amplifier").getAsDouble();
+		if(json.has("effectDuration"))
+			this.effectDuration = json.get("effectDuration").getAsDouble();
+		if(json.has("effectAmplifier"))
+			this.effectAmplifier = json.get("effectAmplifier").getAsDouble();
 		if(json.has("pierce"))
 			this.pierce = json.get("pierce").getAsDouble();
 
@@ -276,12 +276,12 @@ public class CreatureInfo {
 		if(this.dummy)
 			return;
 
-		// Element:
+		// Elements:
 		this.elements.clear();
 		for(String elementName : this.elementNames) {
 			ElementInfo element = ElementManager.getInstance().getElement(elementName);
 			if (element == null) {
-				throw new RuntimeException("[Creature] Unable to initialise Creature Info for " + this.getName() + " as the element " + this.elementNames + " cannot be found.");
+				throw new RuntimeException("[Creature] Unable to initialise Creature Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
 			}
 			this.elements.add(element);
 		}

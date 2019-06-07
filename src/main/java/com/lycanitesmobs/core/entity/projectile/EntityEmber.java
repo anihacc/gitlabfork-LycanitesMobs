@@ -33,8 +33,8 @@ public class EntityEmber extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "ember";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(1);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(1);
     	this.setProjectileScale(0.5F);
         this.knockbackChance = 0D;
     }

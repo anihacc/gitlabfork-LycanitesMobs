@@ -33,7 +33,7 @@ import java.util.List;
 public class ItemBase extends Item {//implements IScanThing {
 	public static int descriptionWidth = 200;
 	
-	public String itemName = "Item";
+	public String itemName = "unamed_item";
 	public ModInfo modInfo = LycanitesMobs.modInfo;
 	
 	// ==================================================

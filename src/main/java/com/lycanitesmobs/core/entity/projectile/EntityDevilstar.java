@@ -37,8 +37,8 @@ public class EntityDevilstar extends EntityProjectileBase {
     // ========== Setup Projectile ==========
     public void setup() {
     	this.entityName = "devilstar";
-    	this.group = LycanitesMobs.modInfo;
-    	this.setBaseDamage(2);
+    	this.modInfo = LycanitesMobs.modInfo;
+    	this.setDamage(2);
     	this.setProjectileScale(1F);
         this.knockbackChance = 0.125D;
         this.projectileLife = 100;

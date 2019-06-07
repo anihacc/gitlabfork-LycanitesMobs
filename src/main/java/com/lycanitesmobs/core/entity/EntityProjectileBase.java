@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
@@ -12,6 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -24,23 +26,28 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 public class EntityProjectileBase extends EntityThrowable {
 	public String entityName = "projectile";
-	public ModInfo group;
+	public ModInfo modInfo;
 	public long updateTick;
 	
 	// Properties:
     public boolean movement = true;
-	public byte baseDamage = 1;
+
+    // Stats:
 	public float projectileScale = 1F;
 	public int projectileLife = 200;
-    public double knockbackChance = 1;
-    public boolean pierce = false;
-    public boolean pierceBlocks = false;
-	
+	public int damage = 1;
+	public int pierce = 1;
+	public double weight = 1.0D;
+	public double knockbackChance = 1;
+
+    // Flags:
 	public boolean waterProof = false;
 	public boolean lavaProof = false;
 	public boolean cutsGrass = false;
+	public boolean ripper = false;
+	public boolean pierceBlocks = false;
 
-    // Texture and Animation:
+	// Texture and Animation:
     public int animationFrame = 0;
     public int animationFrameMax = 0;
     public int textureTiling = 1;
@@ -64,7 +71,7 @@ public class EntityProjectileBase extends EntityThrowable {
 
     public EntityProjectileBase(World world, EntityLivingBase entityLiving) {
         super(world, entityLiving);
-        this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.5F, 1.0F);
+        this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
         this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
         this.setup();
@@ -128,10 +135,12 @@ public class EntityProjectileBase extends EntityThrowable {
     		else if(!this.lavaProof && this.isInLava())
     			this.setDead();
     	}
+
+    	// Life Timeout:
         if(!this.getEntityWorld().isRemote || this.clientOnly) {
             if(this.projectileLife-- <= 0)
                 this.setDead();
-        }
+		}
 
         // Sync Scale:
         if(this.getEntityWorld().isRemote) {
@@ -163,7 +172,7 @@ public class EntityProjectileBase extends EntityThrowable {
     // ========== Gravity ==========
     @Override
     protected float getGravityVelocity() {
-    	return 0.03F;
+    	return (float)this.weight * 0.03F;
     }
 
     @Override
@@ -223,7 +232,7 @@ public class EntityProjectileBase extends EntityThrowable {
 								attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 							}
 							else {
-								double pierceDamage = 1;
+								double pierceDamage = this.pierce;
 								if (damage <= pierceDamage)
 									attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 								else {
@@ -324,7 +333,7 @@ public class EntityProjectileBase extends EntityThrowable {
 			}
  	        
  	        // Remove Projectile:
-            boolean entityPierced = this.pierce && entityCollision;
+            boolean entityPierced = this.ripper && entityCollision;
             boolean blockPierced = this.pierceBlocks && blockCollision;
  	        if(!this.getEntityWorld().isRemote && !entityPierced && !blockPierced) {
  	            this.setDead();
@@ -378,7 +387,13 @@ public class EntityProjectileBase extends EntityThrowable {
 	    return true;
      }
      
-     //========== On Damage ==========
+
+	/**
+	 * Called when this projectile damages an entity (successfully or on failure).
+	 * @param target The entity damaged.
+	 * @param damage The full amount of damage that was meant to be dealt.
+	 * @param attackSuccess True if the entity was damaged, false if it wasn't.
+	 */
      public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {}
      
      //========== Entity Collision ==========
@@ -452,19 +467,28 @@ public class EntityProjectileBase extends EntityThrowable {
      // ==================================================
      //                      Damage
      // ==================================================
-     public void setBaseDamage(int newDamage) {
-     	this.baseDamage = (byte)newDamage;
-     }
-     
-     public float getDamage(Entity entity) {
-    	 float damage = (float)this.baseDamage;
-    	 if(this.getThrower() != null) {
-             if(this.getThrower() instanceof EntityPlayer && !(entity instanceof EntityPlayer) || this.getThrower().getControllingPassenger() instanceof EntityPlayer)
-                 damage *= 1.2f;
-         }
-         return damage;
-     }
-     
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+
+	public float getDamage(Entity entity) {
+		float damage = (float)this.damage;
+		if(this.getThrower() != null) {
+			// 20% Extra Damage From Players vs Entities
+			if((this.getThrower() instanceof EntityPlayer  || this.getThrower().getControllingPassenger() instanceof EntityPlayer) && !(entity instanceof EntityPlayer))
+				damage *= 1.2f;
+		}
+		return damage;
+	}
+
+	public void setPierce(int pierce) {
+		this.pierce = pierce;
+	}
+
+	public int getPierce() {
+		return this.pierce;
+	}
+
      /** When given a base time (in seconds) this will return the scaled time with difficulty and other modifiers taken into account
       * seconds - The base duration in seconds that this effect should last for.
      **/
@@ -504,6 +528,30 @@ public class EntityProjectileBase extends EntityThrowable {
         coords[2] = entity.posZ + (distance * zAmount);
         return coords;
     }
+
+
+	// ==================================================
+	//                       NBT
+	// ==================================================
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+
+		compound.setFloat("ProjectileScale", this.projectileScale);
+		compound.setInteger("ProjectileLife", this.projectileLife);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+
+		if(compound.hasKey("ProjectileScale")) {
+			this.setProjectileScale(compound.getFloat("ProjectileScale"));
+		}
+		if(compound.hasKey("ProjectileLife")) {
+			this.projectileLife = compound.getInteger("ProjectileLife");
+		}
+	}
      
      
      // ==================================================
@@ -515,7 +563,7 @@ public class EntityProjectileBase extends EntityThrowable {
 
      public ResourceLocation getTexture() {
      	if(AssetManager.getTexture(this.getTextureName()) == null)
-     		AssetManager.addTexture(this.getTextureName(), this.group, "textures/items/" + this.getTextureName() + ".png");
+     		AssetManager.addTexture(this.getTextureName(), this.modInfo, "textures/items/" + this.getTextureName() + ".png");
      	return AssetManager.getTexture(this.getTextureName());
      }
      
