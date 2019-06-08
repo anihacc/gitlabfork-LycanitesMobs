@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ghoul.name=Ghoul
+entity.lycanitesmobs.ghoul.description=Foul poisonous undead, Ghouls are smaller than the average zombie allowing them to crawl into smaller places.
+entity.lycanitesmobs.ghoul.habitat=Ghouls can be found lurking around swamps, dark forests and jungles at night.
+entity.lycanitesmobs.ghoul.combat=Ghouls attack at melee and inflict poison.

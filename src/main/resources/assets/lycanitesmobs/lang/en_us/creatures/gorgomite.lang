@@ -1,4 +1,4 @@
 entity.lycanitesmobs.gorgomite.name=Gorgomite
-entity.lycanitesmobs.gorgomite.description=Small rock beetles, fairly weak but if given enough time, they will call nearby friends from the ground, before you know it, you will be swarmed, so kill them quickly. They are scared of Manticores.
-entity.lycanitesmobs.gorgomite.habitat=Habitat information coming soon!
-entity.lycanitesmobs.gorgomite.combat=Combat information coming soon!
+entity.lycanitesmobs.gorgomite.description=Small rock beetles, they are known to be quite aggressive but are scared of Manticores.
+entity.lycanitesmobs.gorgomite.habitat=Gorgomites are often found in the desert where they come out at night.
+entity.lycanitesmobs.gorgomite.combat=These beetles are just a nuisance at first with a simple weak bite, but they will rapidly call for other Gorgomites and will begin to swarm so it is vital that they are eliminated quickly.

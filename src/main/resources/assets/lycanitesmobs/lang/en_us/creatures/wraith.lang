@@ -1,4 +1,4 @@
 entity.lycanitesmobs.wraith.name=Wraith
-entity.lycanitesmobs.wraith.description=Demonic skulls suspended by demonic flames, they will charge into their target and will explode on death.
-entity.lycanitesmobs.wraith.habitat=Habitat information coming soon!
-entity.lycanitesmobs.wraith.combat=Combat information coming soon!
+entity.lycanitesmobs.wraith.description=Wicked Nether Elementals that are a symbol of pain and suffering. Djinn and Argus Elementals can fuse to create a powerful Wraith.
+entity.lycanitesmobs.wraith.habitat=Being Nether Elementals, Wraiths manifest in areas of concentrated evil such as the skies of the Nether.
+entity.lycanitesmobs.wraith.combat=Wraiths are fast and will fly recklessly to their victim and attack on impact, they are fairly weak but explode upon their destruction.

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.concapedesegment.name=Concapede Segment
 entity.lycanitesmobs.concapedesegment.description=Strange beetles that connect to each other. Segments are usually attached to and are grown by heads. If detached from a head or another segment in front, it will grow into a head. Segments alone are defenseless.
-entity.lycanitesmobs.concapedesegment.habitat=Habitat information coming soon!
-entity.lycanitesmobs.concapedesegment.combat=Combat information coming soon!
+entity.lycanitesmobs.concapedesegment.habitat=Segments grow from heads which can be found in tropical areas like jungles.
+entity.lycanitesmobs.concapedesegment.combat=Segments are defenseless but will be protected by Heads unless those Heads are busy eating.

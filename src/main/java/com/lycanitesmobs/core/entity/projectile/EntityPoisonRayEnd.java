@@ -31,6 +31,7 @@ public class EntityPoisonRayEnd extends EntityProjectileLaserEnd {
     public void setup() {
     	this.entityName = "poisonray";
     	this.modInfo = LycanitesMobs.modInfo;
+		this.waterProof = true;
     }
     
     // ========== Stats ==========

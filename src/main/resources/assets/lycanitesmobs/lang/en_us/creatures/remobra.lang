@@ -1,4 +1,4 @@
 entity.lycanitesmobs.remobra.name=Remobra
-entity.lycanitesmobs.remobra.description=Small, flying Amphithere Dragons that spit poison, if their spit hits the ground, it will burst into a poisonous cloud.
-entity.lycanitesmobs.remobra.habitat=Habitat information coming soon!
-entity.lycanitesmobs.remobra.combat=Combat information coming soon!
+entity.lycanitesmobs.remobra.description=Small, flying Amphithere Dragons that spit venom.
+entity.lycanitesmobs.remobra.habitat=These dragons can be found in swamps and dark forests.
+entity.lycanitesmobs.remobra.combat=Remobra attack by spitting venom, if their spit hits their victim it inflicts plague, if it hits the ground, it will burst into a poisonous cloud.

@@ -2,7 +2,7 @@
 	"name": "aspid",
 	"creatureType": "beast",
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAspid",
-	"modelClass": "com.lycanitesmobs.core.model.creature.EntityAspid",
+	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAspid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -12,7 +12,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["swamp", "spooky"],
+		"biomes": ["swamp", "spooky", "mushroom"],
 		"spawnWeight": 16,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 5,

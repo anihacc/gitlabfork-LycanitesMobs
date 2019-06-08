@@ -241,6 +241,7 @@ lyc.version.newer=You are currently using Lycanites Mobs {current} but a newer v
 common.yes=Yes
 common.no=No
 common.ok=Okay
+common.none=None
 common.holdshift=Hold SHIFT for more info.
 #
 #
@@ -365,6 +366,12 @@ creature.stat.subspecies=Subspecies
 creature.stat.cost=Summoning Cost
 creature.stat.spirit=Summoning Spirit Cost
 creature.stat.focus=Summoning Focus Cost
-creature.stat.health=Health
 creature.stat.respawning=Respawning
 creature.stat.knowledge=Knowledge Rank
+creature.stat.base=Base Stats
+creature.stat.health=Health
+creature.stat.defense=Defense
+creature.stat.speed=Speed
+creature.stat.damage=Melee Damage
+creature.stat.pierce=Melee Pierce
+creature.stat.effect=Melee Effect

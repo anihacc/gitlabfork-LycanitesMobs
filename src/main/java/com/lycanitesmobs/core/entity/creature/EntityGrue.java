@@ -152,7 +152,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     	// Leech:
     	if(this.getSubspeciesIndex() > 2 && target instanceof EntityLivingBase) {
     		EntityLivingBase targetLiving = (EntityLivingBase)target;
-    		List<Potion> goodEffects = new ArrayList<Potion>();
+    		List<Potion> goodEffects = new ArrayList<>();
     		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
     			if(potionEffectObj instanceof PotionEffect) {
     				Potion potion = ((PotionEffect)potionEffectObj).getPotion();

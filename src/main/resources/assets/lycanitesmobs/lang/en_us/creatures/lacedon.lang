@@ -1,4 +1,4 @@
 entity.lycanitesmobs.lacedon.name=Lacedon
-entity.lycanitesmobs.lacedon.description=Deadly aquatic creatures that induce the weight effect which usually drags their victim down to the bottom of the ocean. They are able to come onto land for a small amount of time and indefinitely if it is raining.
-entity.lycanitesmobs.lacedon.habitat=Habitat information coming soon!
-entity.lycanitesmobs.lacedon.combat=Combat information coming soon!
+entity.lycanitesmobs.lacedon.description=Strange humanoid aquatic creatures, they are able to come onto land for a small amount of time and indefinitely if it is raining.
+entity.lycanitesmobs.lacedon.habitat=Lacedon can be found in saltwater oceans.
+entity.lycanitesmobs.lacedon.combat=Lacedon inflict a weight debuff when attacking which will usually end with their victim being dragged into the bottom of the ocean.

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.volcan.name=Volcan
-entity.lycanitesmobs.volcan.description=Searing Lava Elementals, Volcans will melt everything in their path!
-entity.lycanitesmobs.volcan.habitat=Habitat information coming soon!
-entity.lycanitesmobs.volcan.combat=Combat information coming soon!
+entity.lycanitesmobs.volcan.description=Searing Lava Elementals, Volcans will melt everything in their path! Cinders and Geonach Elementals can fuse to create powerful Volcans.
+entity.lycanitesmobs.volcan.habitat=Being Lava Elementals, Volcans manifest around large volumes of lava underground, they are quite rare.
+entity.lycanitesmobs.volcan.combat=Volcans will melt any stone around them into lava so must be eliminated fast. Volcans attack at melee and apply the smouldering effect, however they also have a heat aura burning anything close to them.

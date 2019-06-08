@@ -1,4 +1,4 @@
 entity.lycanitesmobs.abtu.name=Abtu
-entity.lycanitesmobs.abtu.description=Vicious fish with big teeth! It is rare to find adults, but if you do, you best swim away as they will swarm you with their children!
-entity.lycanitesmobs.abtu.habitat=Habitat information coming soon!
-entity.lycanitesmobs.abtu.combat=Combat information coming soon!
+entity.lycanitesmobs.abtu.description=Vicious fish with big teeth! It is rare to find adults as their reckless nature means they don't live too long!
+entity.lycanitesmobs.abtu.habitat=These fish are found commonly in saltwater oceans and beaches.
+entity.lycanitesmobs.abtu.combat=Once an Abtu has sense of it's prey, it will stop at nothing to devour it, they are known to even jump onto land and chase their prey! Adult Abtu are more reserved but also rare, they will call nearby infants to swarm their prey.

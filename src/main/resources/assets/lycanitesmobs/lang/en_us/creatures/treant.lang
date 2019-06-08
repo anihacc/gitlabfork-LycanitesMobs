@@ -1,4 +1,4 @@
 entity.lycanitesmobs.treant.name=Treant
-entity.lycanitesmobs.treant.description=Large guardians of the forest, very much like Ents only much bigger and stronger. They will sometimes cause paralysis, drain health when attacking and regenerate from water.
-entity.lycanitesmobs.treant.habitat=Habitat information coming soon!
-entity.lycanitesmobs.treant.combat=Combat information coming soon!
+entity.lycanitesmobs.treant.description=Large guardians of the forest, very much like Ents only much bigger and stronger.
+entity.lycanitesmobs.treant.habitat=Although rare, Trents can be found in dense forests.
+entity.lycanitesmobs.treant.combat=Treants cause paralysis, drain health when attacking and regenerate from water. Axes and similar tools are very effective.

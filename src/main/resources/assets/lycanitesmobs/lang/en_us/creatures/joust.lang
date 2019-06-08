@@ -1,4 +1,4 @@
 entity.lycanitesmobs.joust.name=Joust
-entity.lycanitesmobs.joust.description=Fierce desert animals, they can be farmed and love cactus green! They are usually peaceful but will bite back if hit, watch out for alphas!
-entity.lycanitesmobs.joust.habitat=Habitat information coming soon!
-entity.lycanitesmobs.joust.combat=Combat information coming soon!
+entity.lycanitesmobs.joust.description=Fierce arthropod creatures, they can be farmed and love cactus green!
+entity.lycanitesmobs.joust.habitat=These creatures can be found in deserts and mesas.
+entity.lycanitesmobs.joust.combat=Jousts are usually peaceful but will bite back if hit and will follow the command of aggressive Alpha Jousts.

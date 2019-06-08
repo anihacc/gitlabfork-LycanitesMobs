@@ -1,4 +1,4 @@
 entity.lycanitesmobs.cinder.name=Cinder
-entity.lycanitesmobs.cinder.description=Violent fire spirits, Cinders like to incinerate everything.
-entity.lycanitesmobs.cinder.habitat=Habitat information coming soon!
-entity.lycanitesmobs.cinder.combat=Combat information coming soon!
+entity.lycanitesmobs.cinder.description=Violent Fire Elementals that seeks only to burn other creatures around them.
+entity.lycanitesmobs.cinder.habitat=Being Fire Elementals, Cinders are manifested from pure Fire and so they will spawns frequently in locations with a lot of fire. They don't manifest around impure flames such as Scorchfire or Doomfire however.
+entity.lycanitesmobs.cinder.combat=Cinders release a powerful gout for fire that will burn their enemies, these flames are too weak to spread more fire however.

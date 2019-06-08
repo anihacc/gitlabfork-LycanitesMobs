@@ -1,4 +1,4 @@
 entity.lycanitesmobs.triffid.name=Triffid
-entity.lycanitesmobs.triffid.description=Large carnivorous plants, slow but poisonous and deadly! Axes are very effective, but take heed for they will heal in water!
-entity.lycanitesmobs.triffid.habitat=Habitat information coming soon!
-entity.lycanitesmobs.triffid.combat=Combat information coming soon!
+entity.lycanitesmobs.triffid.description=Large carnivorous plants, slow but incredibly poisonous and deadly!
+entity.lycanitesmobs.triffid.habitat=These plant creatures often lurk in swamps due to it being moist, not too cold and full of prey for them to devour.
+entity.lycanitesmobs.triffid.combat=These creatures are very slow but should be handled with care as their attacks are incredibly strong and spread plague. Axes are very effective, but take heed for they will heal in water!

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.raiko.name=Raiko
-entity.lycanitesmobs.raiko.description=Large sea birds known to dive into the ocean and snatch their prey to fly up high and drop their their prey back into the ocean with the weight effect, eventually drowning their prey.
-entity.lycanitesmobs.raiko.habitat=Habitat information coming soon!
-entity.lycanitesmobs.raiko.combat=Combat information coming soon!
+entity.lycanitesmobs.raiko.description=Large sea birds known to dive into the ocean and snatch their prey.
+entity.lycanitesmobs.raiko.habitat=These birds can be found flying over oceans.
+entity.lycanitesmobs.raiko.combat=Raiko will pickup their prey, it is important to kill them before they carry you too far up. Eventually Raiko will release their prey with the weight effect, this can cause great falling damage but usually drops their victim into the deep ocean.

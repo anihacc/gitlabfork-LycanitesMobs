@@ -1,4 +1,4 @@
 entity.lycanitesmobs.belph.name=Belph
-entity.lycanitesmobs.belph.description=As the wicked natives of the Nether, Belphs take pleasure in hurling fiery projectiles that spread doomfire.
-entity.lycanitesmobs.belph.habitat=Habitat information coming soon!
-entity.lycanitesmobs.belph.combat=Combat information coming soon!
+entity.lycanitesmobs.belph.description=Small but dangerous demons with a one track mind bent on killing and eating.
+entity.lycanitesmobs.belph.habitat=These demons can be found in the Nether and will invade through portals.
+entity.lycanitesmobs.belph.combat=Belphs throw balls of Doomfire, a flame made from Nether Magic, that burn an unnatural red.

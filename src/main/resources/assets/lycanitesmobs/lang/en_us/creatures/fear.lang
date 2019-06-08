@@ -1,4 +1,4 @@
-entity.lycanitesmobs.fear.name=entity.lycanitesmobs.fear.name
-entity.lycanitesmobs.fear.description=entity.lycanitesmobs.fear.description
-entity.lycanitesmobs.fear.habitat=Habitat information coming soon!
-entity.lycanitesmobs.fear.combat=Combat information coming soon!
+entity.lycanitesmobs.fear.name=Fear
+entity.lycanitesmobs.fear.description=This is a dummy entity used for the fear effect, if this is in the beastiary or has a spawn egg this is a bug, please report it!
+entity.lycanitesmobs.fear.habitat=Dummy entity.
+entity.lycanitesmobs.fear.combat=Dummy entity.

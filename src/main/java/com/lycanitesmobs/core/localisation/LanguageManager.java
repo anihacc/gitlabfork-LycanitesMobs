@@ -53,7 +53,7 @@ public class LanguageManager {
 			//LycanitesMobs.printInfo("", "Translating " + key + " to " + I18n.translateToLocal(key));
 			return I18n.translateToLocal(key);
 		}
-		return getInstance().map.get(key);
+		return getInstance().map.get(key).replace("\\n", "\n");
 	}
 
 

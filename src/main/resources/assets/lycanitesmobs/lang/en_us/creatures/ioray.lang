@@ -1,4 +1,4 @@
 entity.lycanitesmobs.ioray.name=Ioray
-entity.lycanitesmobs.ioray.description=Beautiful creates that gracefully swim at a very fast rate, they have a large collection of precious gems on their back but also a deadly Water Jet attack and they are hostile and will actively hunt.
-entity.lycanitesmobs.ioray.habitat=Habitat information coming soon!
-entity.lycanitesmobs.ioray.combat=Combat information coming soon!
+entity.lycanitesmobs.ioray.description=Beautiful creatures that gracefully swim at a very fast rate, they have a large collection of precious gems on their back, they are quite aggressive however.
+entity.lycanitesmobs.ioray.habitat=These creatures can be found in saltwater oceans.
+entity.lycanitesmobs.ioray.combat=Iorays have a deadly Water Jet attack that will strip away the defenses of anything hit.

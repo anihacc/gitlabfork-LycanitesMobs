@@ -1,4 +1,4 @@
 entity.lycanitesmobs.kobold.name=Kobold
-entity.lycanitesmobs.kobold.description=Small rodents that cant resist stealing items! Killing them will cause them to drop their items. They usually flee from other creatures but are known to attack people who are low on health.
-entity.lycanitesmobs.kobold.habitat=Habitat information coming soon!
-entity.lycanitesmobs.kobold.combat=Combat information coming soon!
+entity.lycanitesmobs.kobold.description=Small rodents that can't resist stealing items including torches! Killing them will cause them to drop their stolen goods.
+entity.lycanitesmobs.kobold.habitat=These rodents can usually be found in the plains at night.
+entity.lycanitesmobs.kobold.combat=Kobolds usually flee from other creatures but are known to attack people who are low on health.

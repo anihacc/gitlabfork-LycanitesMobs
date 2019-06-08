@@ -2,19 +2,14 @@ package com.lycanitesmobs.core.gui.beastiary.list;
 
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
-import java.util.*;
-
 public class GuiIndexList extends GuiScrollingList {
-	protected List<GuiCreatureList> filteredLists = new ArrayList<>();
 	protected GuiBeastiary parentGui;
 	public VersionChecker.VersionInfo versionInfo;
-	public int yOffset = 0;
 
 	/**
 	 * Constructor
@@ -39,11 +34,6 @@ public class GuiIndexList extends GuiScrollingList {
 	@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
-		for(GuiCreatureList creatureList : this.filteredLists) {
-			if(creatureList != null) {
-				creatureList.refreshList();
-			}
-		}
 	}
 
 
@@ -66,7 +56,7 @@ public class GuiIndexList extends GuiScrollingList {
 	@Override
 	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {
 		if(index == 0 && this.versionInfo != null) {
-			this.parentGui.drawSplitString(this.getContent(), this.parentGui.colRightX + 8, boxTop, this.listWidth - 20, 0xFFFFFF, true);
+			this.parentGui.drawSplitString(this.getContent(), this.left + 6, boxTop, this.listWidth - 20, 0xFFFFFF, true);
 		}
 	}
 
@@ -92,27 +82,5 @@ public class GuiIndexList extends GuiScrollingList {
 			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.minor") + ":§r\n" + this.versionInfo.minorFixes;
 
 		return content;
-	}
-
-
-	/**
-	 * Adds a Creature List as a list that should be filtered by this filter list.
-	 * @param creatureList The Creature List to add and refresh as this filter list changes.
-	 */
-	public void addFilteredList(GuiCreatureList creatureList) {
-		if(!this.filteredLists.contains(creatureList)) {
-			this.filteredLists.add(creatureList);
-		}
-	}
-
-
-	/**
-	 * Returns if this filter list allows the provided Creature Info to be added to the display list.
-	 * @param creatureInfo The Creature info to display.
-	 * @param listType The type of Creature List.
-	 * @return True if the Creature Info should be included.
-	 */
-	public boolean canListCreature(CreatureInfo creatureInfo, GuiCreatureList.Type listType) {
-		return true;
 	}
 }

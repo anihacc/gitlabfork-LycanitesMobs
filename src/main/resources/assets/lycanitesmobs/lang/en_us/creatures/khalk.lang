@@ -1,4 +1,4 @@
 entity.lycanitesmobs.khalk.name=Khalk
-entity.lycanitesmobs.khalk.description=Large magma beasts known for their incredible defense and deadly offsense. On death, their bodies break down into lava!
-entity.lycanitesmobs.khalk.habitat=Habitat information coming soon!
-entity.lycanitesmobs.khalk.combat=Combat information coming soon!
+entity.lycanitesmobs.khalk.description=Large magma beasts known for their incredible defense and deadly offense. On death, their bodies break down into lava!
+entity.lycanitesmobs.khalk.habitat=These beasts can be found deep in lakes of lava that are underground.
+entity.lycanitesmobs.khalk.combat=Khalk have an incredibly powerful melee attack that inflicts smouldering, however they are incredibly slow. Be sure to keep back when they die as they turn into a small pool of temporary lava.

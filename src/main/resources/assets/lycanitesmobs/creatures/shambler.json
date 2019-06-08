@@ -12,7 +12,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["forest", "-mountain"],
+		"biomes": ["forest", "jungle", "-mountain"],
 		"spawnWeight": 4,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,

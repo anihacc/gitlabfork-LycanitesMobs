@@ -1,4 +1,4 @@
 entity.lycanitesmobs.aegis.name=Aegis
-entity.lycanitesmobs.aegis.description=Law enforcing Order Elementals that usually manifest in built up locations such as Villages, it seems the developing society of a village resonates with these Order Elementals, so you best not disrupt it while they're around!
-entity.lycanitesmobs.aegis.habitat=Habitat information coming soon!
-entity.lycanitesmobs.aegis.combat=Combat information coming soon!
+entity.lycanitesmobs.aegis.description=Law enforcing Order Elementals, Aegis have been known to enforce the law around villages, even petty thieves will be mercilessly pursued.
+entity.lycanitesmobs.aegis.habitat=Being Order Elementals, Aegis manifest in areas rich in the Order element, thus villages very commonly create these creatures.
+entity.lycanitesmobs.aegis.combat=Aegis have two modes that they shift between, a defensive Shield Mode where they will block most damage with two large rotating shields and an offensive Sword Mode where they will shred through their target with four spinning blades.

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.shambler.name=Shambler
-entity.lycanitesmobs.shambler.description=Overgrown shrub creatures. Shamblers regenerate from water and can inflict paralysis. Can be tamed and are an excellent way to liven up the your garden!
-entity.lycanitesmobs.shambler.habitat=Habitat information coming soon!
-entity.lycanitesmobs.shambler.combat=Combat information coming soon!
+entity.lycanitesmobs.shambler.description=Overgrown shrub creatures. Can be tamed and are an excellent way to liven up the your garden!
+entity.lycanitesmobs.shambler.habitat=Shamblers spawn in dense forests and jungles.
+entity.lycanitesmobs.shambler.combat=Shamblers regenerate from water and can inflict paralysis, they are dangerous but very slow.

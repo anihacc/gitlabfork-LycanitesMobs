@@ -1,4 +1,4 @@
 entity.lycanitesmobs.darkling.name=Darkling
-entity.lycanitesmobs.darkling.description=Foul little shadow insects that like to latch onto their victim and slowly drain their blood, feasting to regain any lost health! You best swat these pests off fast!
-entity.lycanitesmobs.darkling.habitat=Habitat information coming soon!
-entity.lycanitesmobs.darkling.combat=Combat information coming soon!
+entity.lycanitesmobs.darkling.description=Foul little shadow insects that like to latch onto their victim and slowly drain their blood! You best swat these pests off fast!
+entity.lycanitesmobs.darkling.habitat=These insects can be found in dark underground areas.
+entity.lycanitesmobs.darkling.combat=Darklings will leap at their victims and latch on where they will begin to rapidly drain blood, this will heal them, it is vital that they are killed fast.

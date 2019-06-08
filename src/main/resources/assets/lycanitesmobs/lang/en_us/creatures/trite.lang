@@ -1,4 +1,4 @@
 entity.lycanitesmobs.trite.name=Trite
-entity.lycanitesmobs.trite.description=Small, fast spider like creatures with an unsidedown humanoid head that bares a vicious bite that will cause wither.
-entity.lycanitesmobs.trite.habitat=Habitat information coming soon!
-entity.lycanitesmobs.trite.combat=Combat information coming soon!
+entity.lycanitesmobs.trite.description=Small and fast demonic creatures that appear to be a brain with spider-like legs.
+entity.lycanitesmobs.trite.habitat=Trites roam all over the nether, it is said they come from Purgatory a Hell Plane of endless flesh.
+entity.lycanitesmobs.trite.combat=Trites are very weak but can be hard to hit due to their speed and small size, their bites also apply wither.

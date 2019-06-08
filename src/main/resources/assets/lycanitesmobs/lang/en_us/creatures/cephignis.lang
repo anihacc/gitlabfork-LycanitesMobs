@@ -1,4 +1,4 @@
 entity.lycanitesmobs.cephignis.name=Cephignis
-entity.lycanitesmobs.cephignis.description=Large fish that live in lava! Cephignis can be farmed using coal or charcoal!
-entity.lycanitesmobs.cephignis.habitat=Habitat information coming soon!
-entity.lycanitesmobs.cephignis.combat=Combat information coming soon!
+entity.lycanitesmobs.cephignis.description=Large peaceful fish that have adapted to live in extreme temperatures, their bodies are as hot as lava. Cephignis can be farmed using coal or charcoal!
+entity.lycanitesmobs.cephignis.habitat=These fish can be found swimming in lava and cannot survive outside it for long.
+entity.lycanitesmobs.cephignis.combat=Cephignis are usually passive relying on their environment to protect them from most predators.

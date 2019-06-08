@@ -1,4 +1,4 @@
 entity.lycanitesmobs.tarantula.name=Tarantula
 entity.lycanitesmobs.tarantula.description=Poisonous jumping spiders that leave behind a trail of temporary sticky green webbing.
-entity.lycanitesmobs.tarantula.habitat=Habitat information coming soon!
-entity.lycanitesmobs.tarantula.combat=Combat information coming soon!
+entity.lycanitesmobs.tarantula.habitat=Tarantulas can be found in jungles and swamps.
+entity.lycanitesmobs.tarantula.combat=These spiders have a poisonous bite and jump frequently, it is important to be wary of their stick green webs.

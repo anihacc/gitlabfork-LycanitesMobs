@@ -1,4 +1,4 @@
 entity.lycanitesmobs.geonach.name=Geonach
-entity.lycanitesmobs.geonach.description=Geonachs are brutal earth elementals commonly found by unsuspecting miners when disturbing the earth. They rapidly strike twice with a dig slowdown spear and then slam with their weight debuff fist.
-entity.lycanitesmobs.geonach.habitat=Habitat information coming soon!
-entity.lycanitesmobs.geonach.combat=Combat information coming soon!
+entity.lycanitesmobs.geonach.description=Geonachs are brutal Earth Elementals commonly found by unsuspecting miners when disturbing the earth.
+entity.lycanitesmobs.geonach.habitat=Being Earth Elementals, Geonach manifest where the Earth is strong, usually within ores, breaking these ores will aggravate them.
+entity.lycanitesmobs.geonach.combat=Geonach will attack rapidly with their spear arm as well as occasionally with their heavier fist for more damage. Their attacks will inflict the weight debuff which commonly traps their victims. Pickaxes and similar tools are very effective.

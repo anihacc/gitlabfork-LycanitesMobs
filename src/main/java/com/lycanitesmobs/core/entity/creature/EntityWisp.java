@@ -98,12 +98,12 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 						this.applyBuffs(target, 1, 1);
 						this.applyDebuffs(target, 1, 1);
 						if(target instanceof EntityZombie || target instanceof EntitySkeleton) {
-							//target.setFire(10);
+							target.setFire(1);
 						}
 						if(target instanceof EntityCreatureBase) {
 							EntityCreatureBase targetCreature = (EntityCreatureBase)target;
 							if(targetCreature.daylightBurns()) {
-								//targetCreature.setFire(10);
+								targetCreature.setFire(1);
 							}
 						}
 					}

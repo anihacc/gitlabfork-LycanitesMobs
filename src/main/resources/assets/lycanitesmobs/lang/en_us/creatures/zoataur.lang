@@ -1,4 +1,4 @@
 entity.lycanitesmobs.zoataur.name=Zoataur
-entity.lycanitesmobs.zoataur.description=Fierce beasts with hardened bone shields, they are known to take a defensive stance during combat and block a lot of damage, it is best to back off until they stop blocking before striking again.
-entity.lycanitesmobs.zoataur.habitat=Habitat information coming soon!
-entity.lycanitesmobs.zoataur.combat=Combat information coming soon!
+entity.lycanitesmobs.zoataur.description=Large reptilian beasts with thick scales.
+entity.lycanitesmobs.zoataur.habitat=These beasts can be found roaming the plains.
+entity.lycanitesmobs.zoataur.combat=Zoataur are slow but hit hard, they will also sometime curl into a defensive pose where they can block most damage, they can't move or attack when doing this however.

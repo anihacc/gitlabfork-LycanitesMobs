@@ -1,4 +1,4 @@
 entity.lycanitesmobs.yale.name=Yale
-entity.lycanitesmobs.yale.description=Strange fluffy ram-like creatures. Yales provide wool which can be obtained using shears, they can also be farmed with vegetables. They use their horns as front legs and eat with tiny arms.
-entity.lycanitesmobs.yale.habitat=Habitat information coming soon!
-entity.lycanitesmobs.yale.combat=Combat information coming soon!
+entity.lycanitesmobs.yale.description=Strange fluffy ram-like beasts, however under the coat of wool, they are not what they seem. Yales provide wool which can be obtained using shears, they can also be farmed with vegetables. Their horns are actually strange limbs and they have tiny hooked arms that they use to sift through grass with.
+entity.lycanitesmobs.yale.habitat=These beasts can be found roaming the mountains.
+entity.lycanitesmobs.yale.combat=Yales are usually passive.

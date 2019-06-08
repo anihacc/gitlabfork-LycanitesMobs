@@ -1,4 +1,4 @@
 entity.lycanitesmobs.grue.name=Grue
-entity.lycanitesmobs.grue.description=When it is pitch black, you are likely to be eaten by a Grue so be careful when putting out that torch or drowning that lava! Grue will teleport behind their target and drain its health!
-entity.lycanitesmobs.grue.habitat=Habitat information coming soon!
-entity.lycanitesmobs.grue.combat=Combat information coming soon!
+entity.lycanitesmobs.grue.description=When it is pitch black, you are likely to be eaten by a Grue! It is impossible to see these Shadow Elementals in complete darkness. Cinder and Argus elementals can fuse to create powerful Grues.
+entity.lycanitesmobs.grue.habitat=Being Shadow Elementals, Grues spawn where it is dark and usually deep underground.
+entity.lycanitesmobs.grue.combat=Grues have a nasty melee attack that inflicts blindness on top of this they will occasionally teleport behind their victim. Also, if their victim has any good effects active, Grues will devour these effects and heal!

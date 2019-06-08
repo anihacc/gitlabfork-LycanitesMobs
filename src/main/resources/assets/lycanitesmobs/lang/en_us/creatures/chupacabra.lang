@@ -1,4 +1,4 @@
 entity.lycanitesmobs.chupacabra.name=Chupacabra
-entity.lycanitesmobs.chupacabra.description=Dreadful creatures that lurk within the darkest caverns beneath the earth, their insatiable hunger for flesh can be used to manipulate and farm them. Their bite is not only fatal but heals them.
-entity.lycanitesmobs.chupacabra.habitat=Habitat information coming soon!
-entity.lycanitesmobs.chupacabra.combat=Combat information coming soon!
+entity.lycanitesmobs.chupacabra.description=Dreadful creatures, their insatiable hunger for flesh can be used to manipulate and farm them.
+entity.lycanitesmobs.chupacabra.habitat=Chupacabras usually live underground in dark caves.
+entity.lycanitesmobs.chupacabra.combat=These beasts are incredibly aggressive with a deadly bite and sharp claws, however their greed can be used against them as they will prioritize large prey. Their attacks will also heal them.

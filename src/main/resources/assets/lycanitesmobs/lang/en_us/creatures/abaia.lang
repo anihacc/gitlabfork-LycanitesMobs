@@ -1,4 +1,4 @@
 entity.lycanitesmobs.abaia.name=Abaia
-entity.lycanitesmobs.abaia.description=Long eel-like fish that emit electric sparks zapping any near by threat.
-entity.lycanitesmobs.abaia.habitat=Habitat information coming soon!
-entity.lycanitesmobs.abaia.combat=Combat information coming soon!
+entity.lycanitesmobs.abaia.description=Aggressive eels that generate an electric current through their body.
+entity.lycanitesmobs.abaia.habitat=These fish are catadromous meaning they are born in saltwater oceans and then migrate and mature in freshwater rivers before returning to saltwater again, some end up trapped in lakes and create a colony there also, so they can be found in most locations.
+entity.lycanitesmobs.abaia.combat=While Abaia use their electrical current to shock anything near them, they also have a nasty bite.

@@ -39,6 +39,7 @@ public class EntityLifeDrain extends EntityProjectileLaser {
     public void setup() {
     	this.entityName = "lifedrain";
     	this.modInfo = LycanitesMobs.modInfo;
+    	this.waterProof = true;
     	this.setDamage(4);
     }
     

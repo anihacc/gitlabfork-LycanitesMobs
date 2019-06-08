@@ -1,4 +1,4 @@
 entity.lycanitesmobs.wendigo.name=Wendigo
-entity.lycanitesmobs.wendigo.description=Large icy beasts known for leaving a trail of Frostfire in their wake! They will also hurl Tundra Blasts which create pools of icy Ooze on impact.
-entity.lycanitesmobs.wendigo.habitat=Habitat information coming soon!
-entity.lycanitesmobs.wendigo.combat=Combat information coming soon!
+entity.lycanitesmobs.wendigo.description=Large icy brutes known for leaving a trail of Frostfire in their wake!
+entity.lycanitesmobs.wendigo.habitat=These brutes can be found in cold areas like ice plains a well as large pools of icy ooze.
+entity.lycanitesmobs.wendigo.combat=Wendigo are slow but hurl Tundra Blasts which create pools of icy ooze on impact. They also leave Frostfire where they walk which is known to manifest Reivers if left unchecked.

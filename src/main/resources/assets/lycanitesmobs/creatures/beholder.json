@@ -53,7 +53,10 @@
 			"type": "uncommon"
 		}
 	],
-	"element": "void",
+	"elements": [
+		"gravity",
+		"void"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.concapede.name=Concapede
-entity.lycanitesmobs.concapede.description=Strange beetles that connect to each other. Heads lead the way and are hostile at night with a poisonous bite. Heads grow extra segments from behind and if fed vegetables, will become passive and wont defend their segments.
-entity.lycanitesmobs.concapede.habitat=Habitat information coming soon!
-entity.lycanitesmobs.concapede.combat=Combat information coming soon!
+entity.lycanitesmobs.concapede.description=Strange beetles that connect to each other. Heads lead the way and grow extra segments from behind and if fed vegetables, will become preoccupied allowing their segments to be attacked, this technique is used by farmers.
+entity.lycanitesmobs.concapede.habitat=These insects can be found in tropical areas like jungles.
+entity.lycanitesmobs.concapede.combat=Concapedes have a poisonous bite but are only hostile at night.

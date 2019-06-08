@@ -12,7 +12,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["all", "-ocean", "-beach"],
+		"biomes": ["all"],
 		"spawnWeight": 1,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 1,

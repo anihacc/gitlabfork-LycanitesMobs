@@ -1,4 +1,4 @@
 entity.lycanitesmobs.tremor.name=Tremor
-entity.lycanitesmobs.tremor.description=Tremors are explosive Quake Elementals formed from large explosions and destruction.
-entity.lycanitesmobs.tremor.habitat=Habitat information coming soon!
-entity.lycanitesmobs.tremor.combat=Combat information coming soon!
+entity.lycanitesmobs.tremor.description=Explosive Quake Elementals, Tremors are incredibly destructive. Geonach and Argus Elementals can fuse to create powerful Tremors.
+entity.lycanitesmobs.tremor.habitat=Being Quake Elementals, Tremors manifest from combustion and loud sounds and so occasionally manifest from large explosions.
+entity.lycanitesmobs.tremor.combat=Tremors attack by creating small explosions around them, they are fairly weak but can be quite destructive and should be eliminated quickly.

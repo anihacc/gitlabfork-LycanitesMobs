@@ -1,4 +1,4 @@
 entity.lycanitesmobs.afrit.name=Afrit
-entity.lycanitesmobs.afrit.description=Wicked fire imps normally found bathing in lava. They throw balls of scorchfire which ignites and applies penetration. Can be tamed making great pets!
-entity.lycanitesmobs.afrit.habitat=Habitat information coming soon!
-entity.lycanitesmobs.afrit.combat=Combat information coming soon!
+entity.lycanitesmobs.afrit.description=Wicked flame imps that are bent on destruction, they will aggressively burn the world around them.
+entity.lycanitesmobs.afrit.habitat=These imps are usually found bathing in pools of lava.
+entity.lycanitesmobs.afrit.combat=Afrits usually attack from a distance by throwing balls of Scorchfire, a deadly combination of hot fire and a strong acid that weakens the defenses of anything that is hit.

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.cryptkeeper.name=Cryptkeeper
+entity.lycanitesmobs.cryptkeeper.description=Mummified corpses, unlike the usual undead, these do not burn in sunlight.
+entity.lycanitesmobs.cryptkeeper.habitat=These undead often wonder the desert at night.
+entity.lycanitesmobs.cryptkeeper.combat=Cryptkeepers attack at melee and spread a nasty bacteria that inflicts aphagia.

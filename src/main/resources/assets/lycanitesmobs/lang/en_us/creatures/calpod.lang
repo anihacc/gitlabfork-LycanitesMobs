@@ -1,4 +1,4 @@
 entity.lycanitesmobs.calpod.name=Calpod
-entity.lycanitesmobs.calpod.description=Nasty insects that can sometimes be found lurking in forest undergrowth as well as inside trees, once angered they will call upon additional Calpods so kill them off fast!
-entity.lycanitesmobs.calpod.habitat=Habitat information coming soon!
-entity.lycanitesmobs.calpod.combat=Combat information coming soon!
+entity.lycanitesmobs.calpod.description=Nasty termite-like insects that swarm their prey!
+entity.lycanitesmobs.calpod.habitat=These insects can be found in the forest undergrowth and come out at night.
+entity.lycanitesmobs.calpod.combat=Calpods have a nasty bite but must be killed quickly as they will rapidly call more Calpods to join them.

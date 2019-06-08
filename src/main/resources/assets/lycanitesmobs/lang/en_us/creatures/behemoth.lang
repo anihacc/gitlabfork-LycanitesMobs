@@ -1,4 +1,4 @@
 entity.lycanitesmobs.behemoth.name=Behemoth
-entity.lycanitesmobs.behemoth.description=Tall demonic monstrosities, Behemoth throw balls of Hellfire. Shelter is recommended.
-entity.lycanitesmobs.behemoth.habitat=Habitat information coming soon!
-entity.lycanitesmobs.behemoth.combat=Combat information coming soon!
+entity.lycanitesmobs.behemoth.description=Tall demonic monstrosities, Behemoth are powerful demons bent on destruction.
+entity.lycanitesmobs.behemoth.habitat=Behemoth can be found in the Nether and will also invade through unprotected portals if they are large enough.
+entity.lycanitesmobs.behemoth.combat=These demons lob balls of Hellfire, a green flame created by tearing apart souls, not only do these flames burn, but they wither as well.

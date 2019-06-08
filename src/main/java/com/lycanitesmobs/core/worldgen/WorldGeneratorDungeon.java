@@ -16,8 +16,8 @@ import java.util.Random;
 import java.util.UUID;
 
 public class WorldGeneratorDungeon implements IWorldGenerator {
-	public boolean enabled;
-	public int dungeonDistance = 35;
+	public boolean enabled = true;
+	public int dungeonDistance = 170;
 
     // ==================================================
     //                    Constructors

@@ -1,4 +1,4 @@
 entity.lycanitesmobs.yeti.name=Yeti
 entity.lycanitesmobs.yeti.description=Large frosty mammals that like to eat the frozen vegetation of the arctic. They can be farmed using vegetables, but watch out for their frost clouds. Yeti milk is a delicacy!
-entity.lycanitesmobs.yeti.habitat=Habitat information coming soon!
-entity.lycanitesmobs.yeti.combat=Combat information coming soon!
+entity.lycanitesmobs.yeti.habitat=These beasts often roam cold and snowy areas such as taiga.
+entity.lycanitesmobs.yeti.combat=Yetis are usually passive.

@@ -7,7 +7,7 @@
 	"enabled": true,
 	"spawning": {
 		"enabled": true,
-		"spawners": ["lava"],
+		"spawners": ["lavaunderground"],
 		"disableSubspecies": false,
 		"dimensionIds": [],
 		"dimensionListType": "blacklist",

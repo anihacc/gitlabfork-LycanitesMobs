@@ -1,4 +1,4 @@
 entity.lycanitesmobs.skylus.name=Skylus
-entity.lycanitesmobs.skylus.description=Squid like creatures that form and live in tough shells. If damaged enough, their shells will break, this reduces their defense but increases their attack and movement speeds. Their attacks blind with ink.
-entity.lycanitesmobs.skylus.habitat=Habitat information coming soon!
-entity.lycanitesmobs.skylus.combat=Combat information coming soon!
+entity.lycanitesmobs.skylus.description=Squid like creatures that form and live in tough shells. If damaged enough, their shells will break.
+entity.lycanitesmobs.skylus.habitat=These creatures can be found in saltwater oceans.
+entity.lycanitesmobs.skylus.combat=Skylus with grasp their prey and drag them deep underwater, their attacks also blind with ink. When their shell is destroyed they become a lot faster but also more vulnerable to damage.
