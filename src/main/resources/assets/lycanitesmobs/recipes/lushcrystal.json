@@ -4,7 +4,8 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:tallgrass"
+      "item": "minecraft:tallgrass",
+      "data": 1
     },
     {
       "item": "minecraft:glowstone"

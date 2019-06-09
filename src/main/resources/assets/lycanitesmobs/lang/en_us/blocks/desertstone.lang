@@ -1,0 +1,50 @@
+tile.desertstonebrick_stairs.name=Desertstone Brick Stairs
+tile.desertstonebrick_stairs.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertcrystal.name=Desert Crystal
+tile.desertcrystal.description=Strange glass enchanted with light magic.
+#
+tile.desertstonechiseled.name=Chiseled Desertstone
+tile.desertstonechiseled.description=Finely carved desertstone.
+#
+tile.desertstonebrick_wall.name=Desertstone Brick Wall
+tile.desertstonebrick_wall.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstone.name=Desertstone
+tile.desertstone.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonebrick_slab.name=Desertstone Brick Slab
+tile.desertstonebrick_slab.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstone_stairs.name=Desertstone Stairs
+tile.desertstone_stairs.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstone_slab.name=Desertstone Slab
+tile.desertstone_slab.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonebrick_fence.name=Desertstone Brick Fence
+tile.desertstonebrick_fence.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonepillar.name=Desertstone Pillar
+tile.desertstonepillar.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonetile_slab.name=Desertstone Tile Slab
+tile.desertstonetile_slab.description=Decorated desertstone used to pave the floors of great monuments.
+#
+tile.desertstonetile.name=Desertstone Tile
+tile.desertstonetile.description=Decorated desertstone used to pave the floors of great monuments.
+#
+tile.desertstone_slab_double.name=Double Desertstone Slab
+tile.desertstone_slab_double.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonebrick.name=Desertstone Brick
+tile.desertstonebrick.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonepolished.name=Polished Desertstone
+tile.desertstonepolished.description=A refined sandstone used to build great desert monuments.
+#
+tile.desertstonetile_stairs.name=Desertstone Tile Stairs
+tile.desertstonetile_stairs.description=Decorated desertstone used to pave the floors of great monuments.
+#
+tile.soulcubedesertic.name=Desertic Soulcube
+tile.soulcubedesertic.description=A strange device full of complex light, gravity and earth magic.
