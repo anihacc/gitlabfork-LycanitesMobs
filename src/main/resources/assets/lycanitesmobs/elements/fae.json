@@ -5,7 +5,7 @@
 		"minecraft:regeneration"
 	],
 	"debuffs": [
-		"lycanitesmobs:lifeleak"
+		"lycanitesmobs:bleed"
 	],
 	"immunities": [
 		"minecraft:glowing"

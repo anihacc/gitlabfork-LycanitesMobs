@@ -18,9 +18,10 @@ public class SlotBase extends Slot {
   	//                    Validation
   	// ==================================================
 	public boolean isItemValid(ItemStack itemStack) {
-		if(this.inventory instanceof InventoryCreature)
-			return this.inventory.isItemValidForSlot(this.getSlotIndex(), itemStack);
-        return true;
+		if(this.inventory == null) {
+			return true;
+		}
+		return this.inventory.isItemValidForSlot(this.getSlotIndex(), itemStack);
     }
 	
 	public int getSlotStackLimit() {

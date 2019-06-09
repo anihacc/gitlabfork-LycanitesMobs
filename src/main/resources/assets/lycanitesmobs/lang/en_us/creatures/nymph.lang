@@ -1,4 +1,4 @@
 entity.lycanitesmobs.nymph.name=Nymph
 entity.lycanitesmobs.nymph.description=Whimsical Fae Elementals bursting with healing energy that heals all around them. They have a fondness for flowers! While harmless directly, they can cause mischief when scared. Jengu and Aegis Elementals can fuse to create powerful Nymphs.
 entity.lycanitesmobs.nymph.habitat=Being Fae Elementals, Nymphs manifest around sources of life and as such manifest around flowers in sunlight.
-entity.lycanitesmobs.nymph.combat=Nymphs are peaceful and will healing anything around them, this can be harmful to undead. If hit, Nymphs will flee firing flowers that apply lifeleak, this causes the afflicted's attack to heal instead of damage.
+entity.lycanitesmobs.nymph.combat=Nymphs are peaceful and will healing anything around them, this can be harmful to undead. If hit, Nymphs will flee firing flowers with sharp thorns that inflict bleed.

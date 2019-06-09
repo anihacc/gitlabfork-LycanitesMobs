@@ -110,7 +110,9 @@ gui.beastiary.summoning.empty.info=You haven't added any creatures that can be s
 #
 # Elements:
 gui.beastiary.elements=Elements
-gui.beastiary.elements.comingsoon=This page will feature information about the Elements used by Creatures along with what each Buff and Debuff does. Coming Soon!
+gui.beastiary.elements.about=A magical force called mana surges throughout this universe, this force can be divided into several magical elements. Each element has it's own impact on reality and reactions to other elements. Creatures have naturally evolved to make use of one or more of these elements and elementals are living manifestations of these elements.
+gui.beastiary.elements.buffs=Beneficial Effects
+gui.beastiary.elements.debuffs=Detrimental Effects
 #
 # Summoning Pedestal:
 gui.summoningpedestal.name=Summoning Pedestal
@@ -262,6 +264,7 @@ stat.portal.description=Summoning portals are only able to maintain the presence
 #
 # ========== Potion Effects ==========
 # Debuff:
+effect.burning=Burning
 effect.paralysis=Paralysis
 effect.penetration=Penetration
 effect.recklessness=Recklessness
@@ -271,6 +274,7 @@ effect.fear=Fear
 effect.decay=Decay
 effect.insomnia=Insomnia
 effect.instability=Instability
+effect.bleed=Bleed
 effect.lifeleak=Lifeleak
 effect.plague=Plague
 effect.aphagia=Aphagia
@@ -288,31 +292,6 @@ effect.heataura=Heat Aura
 effect.staticaura=Static Aura
 effect.freezeaura=Freeze Aura
 effect.envenom=Envenom
-#
-#
-#
-# ========== Elements ==========
-element.fire.name=Fire
-element.water.name=Water
-element.earth.name=Earth
-element.air.name=Air
-element.order.name=Order
-element.chaos.name=Chaos
-element.acid.name=Acid
-element.lava.name=Lava
-element.lightning.name=Lightning
-element.light.name=Light
-element.shadow.name=Shadow
-element.arbour.name=Arbour
-element.frost.name=Frost
-element.fae.name=Fae
-element.poison.name=Poison
-element.phase.name=Phase
-element.gravity.name=Gravity
-element.quake.name=Quake
-element.aether.name=Aether
-element.nether.name=Nether
-element.void.name=Void
 #
 #
 #

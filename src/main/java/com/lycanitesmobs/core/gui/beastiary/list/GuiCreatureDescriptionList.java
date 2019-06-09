@@ -90,7 +90,7 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 
 			text += "\n" + LanguageManager.translate("creature.stat.pierce") + ": " + creatureInfo.pierce;
 			String effectText = creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X";
-			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier <= 0)
+			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier < 0)
 				effectText = LanguageManager.translate("common.none");
 			text += "\n" + LanguageManager.translate("creature.stat.effect") + ": " + effectText;
 		}

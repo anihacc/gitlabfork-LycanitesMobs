@@ -38,15 +38,10 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 
-	@Override
-	public int getSizeInventory() {
-		return 0;
-	}
-
-
 	// ========================================
 	//                Inventory
 	// ========================================
+	@Override
 	public boolean isEmpty() {
 		for (ItemStack itemstack : this.itemStacks) {
 			if (!itemstack.isEmpty()) {
@@ -59,6 +54,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Returns the stack in the given slot.
 	 */
+	@Override
 	public ItemStack getStackInSlot(int index) {
 		return this.itemStacks.get(index);
 	}
@@ -66,6 +62,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
 	 */
+	@Override
 	public ItemStack decrStackSize(int index, int count) {
 		return ItemStackHelper.getAndSplit(this.itemStacks, index, count);
 	}
@@ -73,6 +70,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Removes a stack from the given slot and returns it.
 	 */
+	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return ItemStackHelper.getAndRemove(this.itemStacks, index);
 	}
@@ -80,6 +78,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
+	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		this.itemStacks.set(index, stack);
 		if (stack.getCount() > this.getInventoryStackLimit()) {
@@ -87,16 +86,16 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		}
 	}
 
-	/**
-	 * Returns the size of the Forge inventory.
-	 */
-	public int getInventorySize() {
+
+	@Override
+	public int getSizeInventory() {
 		return this.itemStacks.size();
 	}
 
 	/**
 	 * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended.
 	 */
+	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
@@ -120,6 +119,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into the given slot. For
 	 * guis use Slot.isItemValid
 	 */
+	@Override
 	public boolean isItemValidForSlot(int index, ItemStack itemStack) {
 		if(!(itemStack.getItem() instanceof ItemEquipment) && !(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return false;

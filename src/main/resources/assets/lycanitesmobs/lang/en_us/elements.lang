@@ -1,0 +1,62 @@
+element.fire.name=Fire
+element.fire.description=A base element that represents plasma and raw energy. It can be extracted from the para elements: Acid, Lava, Lightning, Light and Shadow.
+#
+element.water.name=Water
+element.water.description=A base element that represents fluids, predominantly water itself. Water can be extracted from the para elements: Acid, Arbour, Frost, Fae and Poison.
+#
+element.earth.name=Earth
+element.earth.description=A base element that represents solid form, from the dirt to rocks, crystals and even metal or bone. It can be extracted from the para elements: Lava, Arbour, Phase, Gravity and Quake.
+#
+element.air.name=Air
+element.air.description=A base element that represents gas but is often known only for its ability to control the flow of wind. It can be extracted from the para elements: Lightning, Ice, Phase, Aether and Nether.
+#
+element.order.name=Order
+element.order.description=A base element that represents sequence and balance, while these are very hypothetical concepts, Order has a very physical presence in magical universes with a basic form being raw force. Order can be extracted from the para elements: Light, Fae, Gravity, Aether and Void.
+#
+element.chaos.name=Chaos
+element.chaos.description=A base element that represents entropy, growth and destruction. It can be extracted from the para elements: Shadow, Poison, Quake, Nether and Void.
+#
+element.acid.name=Acid
+element.acid.description=A para element that represents corrosion and physical consumption but can be expanded into a wide range of chemistry and also despite the name Acid it also covers base substances as well. Acid can be fused from the base elements Fire and Water as it embodies both the energy based properties of Fire and the fluid substance based properties of Water.
+#
+element.lava.name=Lava
+element.lava.description=A para element that represents embodied heat, while Fire is more about plasma and energy, Lava is about energy storage and the effects of heat. Lava can be fused from the base elements Fire and Earth as it embodies the energy aspect of Fire and the dense mass aspect of Earth.
+#
+element.lightning.name=Lightning
+element.lightning.description=A para element that represents electrical current and energy. Lightning can be fused from the base elements Fire and Air as it embodies the energy and plasma aspects of Fire with the flowing and non-grounded aspects of Air.
+#
+element.light.name=Light
+element.light.description=A para element that represents radiation making it a very dangerous force as it can range from the visible light spectrum that the element is named after to the more deadlier ranges of radiation that can cause serious damage. Light can be fused from the base elements Fire and Order as it embodies the energy aspect of Fire and the refinement of Order.
+#
+element.shadow.name=Shadow
+element.shadow.description=A para element that represents darkness as a force that stops radiation or energy generation. Shadow can be fused from Fire and Chaos as it embodies the energy aspect of Fire which is then inverted by Chaos into a force that goes against energy creation cancelling it out.
+#
+element.arbour.name=Arbour
+element.arbour.description=A para element that represents growth and nature, it is closely based around plants with make heavy use of this element. Arbour can be fused from Water and Earth as it embodies the fluid form of water with the solid presence of Earth.
+#
+element.frost.name=Frost
+element.frost.description=A para element that represents cold where it actively repels any form of heat. Frost can be fused from Water and Air as it embodies the fluid cooling nature of Water and the cooling flow of Air.
+#
+element.fae.name=Fae
+element.fae.description=A para element that represents life and adaption. Fae can be fused from Water and Order as it embodies the fluid nature of Water and the structure of Order.
+#
+element.poison.name=Poison
+element.poison.description=A para element that represents chemical substances, usually poisons or venom as well as narcotics and also medicines but can also take on many other forms as well such as oil. Poison can be fused from Water and Chaos where Water embodies a fluid form that can be altered which is manipulated by Chaos into all kinds of strange chemicals.
+#
+element.phase.name=Phase
+element.phase.description=A para element that represents phase shifting or spiritual reality, a space layered on top of the physical world, it is what spirits are made of and use. Phase can be fused from the base elements Earth and Air as it embodies the solid form of Earth and the flowing non-solid of Air.
+#
+element.gravity.name=Gravity
+element.gravity.description=A para element that represents gravitation, magnetism, bonding, compression and artificial structure. Gravity can be fused from Earth and Order where it embodies the solid physical presence of Earth and the structure and laws of Order.
+#
+element.quake.name=Quake
+element.quake.description=A para element that represents vibration, sound, combustion and destruction. Quake can be fused from Earth and Chaos where Earth embodies solid form which is then broke apart by Chaos.
+#
+element.aether.name=Aether
+element.aether.description=A para element that represents purity, divinity, faith and worship. Aether can be fused from Air and Order as it embodies the flowing aspect of Air with the structure and laws of Order.
+#
+element.nether.name=Nether
+element.nether.description=A para element that represents corruption, demonism, desire and rebellion. Nether can be fused from Air and Chaos where Air embodies flowing and Chaos twists it into corruption.
+#
+element.void.name=Void
+element.void.description=A para element that represents nothingness and removal. Void can be fused from Order and Chaos where Order embodies structure and consistency which is cancelled out by Chaos which embodies entropy and randomness.

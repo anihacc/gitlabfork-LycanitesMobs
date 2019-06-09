@@ -7,7 +7,7 @@ item.mobtoken.description=A cosmetic item used to display creature models as ach
 #
 # ========== Consumables ==========
 item.immunizer.name=Immunizer
-item.immunizer.description=A special potion that cures immunizes against poison, hunger, weakness, nausea and paralysis.
+item.immunizer.description=A special potion that immunizes against poison, hunger, weakness, nausea and paralysis.
 #
 item.cleansingcrystal.name=Cleansing Crystal
 item.cleansingcrystal.description=A magical crystal imbued with spiritual energy, protects against wither, bad luck, fear and insomnia.

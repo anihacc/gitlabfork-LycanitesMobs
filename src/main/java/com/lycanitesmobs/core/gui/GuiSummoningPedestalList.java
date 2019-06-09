@@ -12,14 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GuiSummoningPedestalList extends GuiScrollingList {
-    GUIBaseManager parentGUI;
+	GuiSummoningPedestal parentGUI;
 	Map<Integer, String> minionList;
 
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public GuiSummoningPedestalList(GUIBaseManager parentGUI, ExtendedPlayer playerExt, int width, int height, int top, int bottom, int left) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, left, 28);
+	public GuiSummoningPedestalList(GuiSummoningPedestal parentGUI, ExtendedPlayer playerExt, int width, int height, int top, int bottom, int left) {
+		super(Minecraft.getMinecraft(), width, height, top, bottom, left, 28, width, height);
 		this.parentGUI = parentGUI;
 		this.minionList = playerExt.getBeastiary().getSummonableList();
 	}

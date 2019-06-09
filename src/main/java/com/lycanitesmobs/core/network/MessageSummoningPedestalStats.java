@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<MessageSummoningPedestalStats, IMessage> {
 	public int capacity;
 	public int progress;
+	public int fuel;
+	public int fuelMax;
     public int x;
     public int y;
     public int z;
@@ -24,9 +26,11 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
 	//                    Constructors
 	// ==================================================
 	public MessageSummoningPedestalStats() {}
-	public MessageSummoningPedestalStats(int capacity, int progress, int x, int y, int z) {
+	public MessageSummoningPedestalStats(int capacity, int progress, int fuel, int fuelMax, int x, int y, int z) {
 		this.capacity = capacity;
         this.progress = progress;
+        this.fuel = fuel;
+        this.fuelMax = fuelMax;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -41,11 +45,10 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
 	 */
 	@Override
 	public IMessage onMessage(MessageSummoningPedestalStats message, MessageContext ctx) {
-		EntityPlayer player = null;
 		if(ctx.side == Side.SERVER)
 			return null;
 
-        player = LycanitesMobs.proxy.getClientPlayer();
+		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
         TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
         TileEntitySummoningPedestal summoningPedestal = null;
         if(tileEntity instanceof TileEntitySummoningPedestal)
@@ -54,6 +57,8 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
             return null;
         summoningPedestal.capacity = message.capacity;
         summoningPedestal.summonProgress = message.progress;
+        summoningPedestal.summoningFuel = message.fuel;
+        summoningPedestal.summoningFuelMax = message.fuelMax;
 		return null;
 	}
 	
@@ -72,6 +77,8 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
         this.z = packet.readInt();
         this.capacity = packet.readInt();
         this.progress = packet.readInt();
+        this.fuel = packet.readInt();
+        this.fuelMax = packet.readInt();
 	}
 	
 	
@@ -89,6 +96,8 @@ public class MessageSummoningPedestalStats implements IMessage, IMessageHandler<
         packet.writeInt(this.z);
         packet.writeInt(this.capacity);
         packet.writeInt(this.progress);
+        packet.writeInt(this.fuel);
+        packet.writeInt(this.fuelMax);
 	}
 	
 }

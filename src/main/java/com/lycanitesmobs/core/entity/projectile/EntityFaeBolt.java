@@ -17,7 +17,6 @@ public class EntityFaeBolt extends EntityProjectileBase {
 
 	// Properties:
 	public Entity shootingEntity;
-	public boolean debuff = true;
 
     // ==================================================
  	//                   Constructors
@@ -41,8 +40,6 @@ public class EntityFaeBolt extends EntityProjectileBase {
     	this.setDamage(0);
     	this.setProjectileScale(4F);
     	this.waterProof = true;
-
-		this.debuff = ConfigBase.getConfig(this.modInfo, "general").getBool("Features", "Nymph Fae Bolt Lifeleak Enabled", this.debuff, "Set to false to disable Lifeleak from Faebolts fired by scared Nymphs.");
 	}
 
 
@@ -62,11 +59,9 @@ public class EntityFaeBolt extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
-    	if(this.debuff) {
-			Potion lifeleak = ObjectManager.getPotionEffect("lifeleak");
-			if (lifeleak != null)
-				entityLiving.addPotionEffect(new PotionEffect(lifeleak, this.getEffectDuration(3), 0));
-		}
+		Potion bleed = ObjectManager.getPotionEffect("bleed");
+		if (bleed != null)
+			entityLiving.addPotionEffect(new PotionEffect(bleed, this.getEffectDuration(5), 0));
         return true;
     }
     

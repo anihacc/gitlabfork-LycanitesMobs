@@ -237,9 +237,8 @@ public class LycanitesMobs {
 		CreatureManager.getInstance().registerAll(modInfo);
 
 		// Special Entities:
-		int specialEntityID = 0;
-		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "summoningportal"), EntityPortal.class, "summoningportal", specialEntityID++, instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "hitarea"), EntityHitArea.class, "hitarea", specialEntityID++, instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "summoningportal"), EntityPortal.class, "summoningportal", modInfo.getNextSpecialID(), instance, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "hitarea"), EntityHitArea.class, "hitarea", modInfo.getNextSpecialID(), instance, 64, 1, true);
 		AssetManager.addSound("effect_fear", modInfo, "effect.fear");
 
 		// Altars:

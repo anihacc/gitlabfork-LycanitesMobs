@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -51,6 +52,7 @@ public class PotionEffects {
 			ObjectManager.addPotionEffect("insomnia", config, true, 0x002222, false);
 			ObjectManager.addPotionEffect("instability", config, true, 0x004422, false);
 			ObjectManager.addPotionEffect("lifeleak", config, true, 0x0055FF, false);
+			ObjectManager.addPotionEffect("bleed", config, true, 0xFF2222, false);
 			ObjectManager.addPotionEffect("plague", config, true, 0x220066, false);
 			ObjectManager.addPotionEffect("aphagia", config, true, 0xFFDDDD, false);
 			ObjectManager.addPotionEffect("smited", config, true, 0xDDDDFF, false);
@@ -220,6 +222,16 @@ public class PotionEffects {
 				float brightness = entity.getBrightness();
 				if(brightness > 0.5F && entity.getEntityWorld().canBlockSeeSky(entity.getPosition())) {
 					entity.setFire(4);
+				}
+			}
+		}
+
+		// Bleed
+		PotionBase bleed = ObjectManager.getPotionEffect("bleed");
+		if(bleed != null && !entity.getEntityWorld().isRemote) {
+			if(!invulnerable && entity.isPotionActive(bleed) && entity.getEntityWorld().getTotalWorldTime() % 20 == 0 && !entity.isRiding()) {
+				if(entity.prevDistanceWalkedModified != entity.distanceWalkedModified) {
+					entity.attackEntityFrom(DamageSource.MAGIC, entity.getActivePotionEffect(bleed).getAmplifier() + 1);
 				}
 			}
 		}

@@ -29,7 +29,7 @@ public class ContainerEquipmentForge extends ContainerBase {
 		// Forge Inventory
 		this.inventoryStart = this.inventorySlots.size();
 		int slots = 0;
-		if(equipmentForge.getInventorySize() > 0) {
+		if(equipmentForge.getSizeInventory() > 0) {
 			int slotSize = 18;
 			int x = 8 + slotSize;
 			int y = 38;

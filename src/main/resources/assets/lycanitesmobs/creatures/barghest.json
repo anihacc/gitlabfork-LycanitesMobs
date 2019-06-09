@@ -35,7 +35,7 @@
 	"attackSpeed": 1,
 	"rangedSpeed": 1,
 	"effectDuration": 5,
-	"effectAmplifier": 1,
+	"effectAmplifier": 0,
 	"pierce": 1,
 	"sight": 16,
 	"knockbackResistance": 0.25,
@@ -53,7 +53,7 @@
 			"type": "uncommon"
 		}
 	],
-	"element": "earth",
+	"element": "fae",
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

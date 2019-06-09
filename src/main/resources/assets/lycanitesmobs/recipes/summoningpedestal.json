@@ -13,13 +13,13 @@
       "item": "lycanitesmobs:soulstone"
     },
     "D": {
-      "item": "minecraft:diamond_block"
+      "item": "minecraft:diamond"
     },
     "G": {
-      "item": "minecraft:gold_block"
+      "item": "minecraft:gold_ingot"
     },
     "N": {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:soulgazer"
     }
   }
 }

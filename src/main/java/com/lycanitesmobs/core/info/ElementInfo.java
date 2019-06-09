@@ -123,7 +123,7 @@ public class ElementInfo {
 	 * @param amplifier The amplifier of the buffs. If 0 or below, no debuff is applied.
 	 */
 	public void buffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
-		if(duration <= 0 || amplifier <= 0) {
+		if(duration <= 0 || amplifier < 0) {
 			return;
 		}
 		duration = Math.round((float)duration * (float)this.buffDurationMultiplier);
@@ -143,7 +143,7 @@ public class ElementInfo {
 	 * @param amplifier The amplifier of the debuffs. If 0 or below, no debuff is applied.
 	 */
 	public void debuffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
-		if(duration <= 0 || amplifier <= 0) {
+		if(duration <= 0 || amplifier < 0) {
 			return;
 		}
 		duration = Math.round((float)duration * (float)this.debuffDurationMultiplier);

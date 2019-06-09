@@ -28,8 +28,11 @@ public class ModInfo {
     public String filename;
     
     // ========== Mobs ==========
+	/** The next available ID for registering a special entity. **/
+	protected int nextSpecialID = 0;
+
     /** The next available ID for registering a mob. **/
-    protected int nextMobID = 0;
+    protected int nextMobID = 100;
 
     /** The next available ID for registering a projectile. **/
 	protected int nextProjectileID = 1000;
@@ -88,6 +91,12 @@ public class ModInfo {
     // ==================================================
     //                    Entity IDs
     // ==================================================
+	public int getNextSpecialID() {
+		int id = this.nextSpecialID;
+		this.nextSpecialID++;
+		return id;
+	}
+
     public int getNextMobID() {
         int id = this.nextMobID;
         this.nextMobID++;
