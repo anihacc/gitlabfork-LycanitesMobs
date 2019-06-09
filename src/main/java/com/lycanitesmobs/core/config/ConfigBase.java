@@ -45,11 +45,11 @@ public class ConfigBase {
             String configDirPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid;
             File configDir = new File(configDirPath);
             configDir.mkdir();
-            LycanitesMobs.printWarning("", "[Config] The current config is too old, resetting config now...");
+            LycanitesMobs.printWarning("", "[Config] The current configs are too old, clearing all configs now...");
             try {
                 FileUtils.cleanDirectory(configDir);
             } catch (IOException e) {
-                LycanitesMobs.printWarning("", "[Config] Unable to clear the config directory! This could be a permissions/read-only issue!");
+                LycanitesMobs.printWarning("", "[Config] Unable to clear the config directory! This could be a file permissions issue!");
                 e.printStackTrace();
             }
         }
