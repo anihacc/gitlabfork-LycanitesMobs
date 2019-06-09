@@ -379,6 +379,8 @@ public class ItemManager {
 
 
 		// Building Blocks:
+		BlockMaker.addStoneBlocks(group, "lush", Blocks.TALLGRASS);
+		BlockMaker.addStoneBlocks(group, "desert", Blocks.SANDSTONE);
 		BlockMaker.addStoneBlocks(group, "shadow", Blocks.OBSIDIAN);
 		BlockMaker.addStoneBlocks(group, "demon", Items.NETHER_WART);
 		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(group, "soulcubedemonic"));

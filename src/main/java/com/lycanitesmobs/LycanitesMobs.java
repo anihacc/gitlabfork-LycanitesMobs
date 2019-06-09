@@ -125,7 +125,7 @@ public class LycanitesMobs {
 	 */
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		modInfo = new ModInfo(this, name, 1000); // TODO Remove groups.
+		modInfo = new ModInfo(this, name, 1000);
 		ObjectManager.setCurrentModInfo(modInfo);
 
 		// Localisation:

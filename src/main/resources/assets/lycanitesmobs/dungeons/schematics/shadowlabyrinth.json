@@ -9,7 +9,9 @@
 		{
 			"type": "world",
 			"dimensionIds": [0, 1],
-			"dimensionListType": "whitelist"
+			"dimensionListType": "whitelist",
+			"biomeTags": ["spooky", "mountain", "swamp", "end"],
+			"biomeTagListType": "whitelist"
 		}
 	],
 	"themes": ["shadow"],

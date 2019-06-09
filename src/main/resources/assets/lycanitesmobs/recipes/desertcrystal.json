@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "lycanitesmobs:desertcrystal"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:sandstone"
+    },
+    {
+      "item": "minecraft:glowstone"
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}
