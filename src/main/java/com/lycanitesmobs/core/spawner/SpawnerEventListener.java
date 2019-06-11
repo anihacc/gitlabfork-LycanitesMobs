@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -319,7 +319,7 @@ public class SpawnerEventListener {
 		// Spawn On Block Harvest:
 		World world = event.getWorld();
         BlockPos blockPos = event.getPos();
-		IBlockState blockState = event.getState();
+		BlockState blockState = event.getState();
 
         for(BlockSpawnTrigger spawnTrigger : this.blockSpawnTriggers) {
             spawnTrigger.onBlockHarvest(world, player, blockPos, blockState, 0, event.getFortuneLevel(), event.isSilkTouching());
@@ -339,7 +339,7 @@ public class SpawnerEventListener {
 		this.onBlockBreak(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
     }
 
-	public void onBlockBreak(World world, BlockPos blockPos, IBlockState blockState, PlayerEntity player, int chain) {
+	public void onBlockBreak(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
 			return;
 		}
@@ -363,7 +363,7 @@ public class SpawnerEventListener {
 		this.onBlockPlace(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
 	}
 
-	public void onBlockPlace(World world, BlockPos blockPos, IBlockState blockState, PlayerEntity player, int chain) {
+	public void onBlockPlace(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
 			return;
 		}
@@ -468,7 +468,7 @@ public class SpawnerEventListener {
 
 		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
 			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
+				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
 				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
 					trigger = true;
 				}
@@ -477,7 +477,7 @@ public class SpawnerEventListener {
 
 		else if(event.getState().getBlock() == Blocks.STONE) {
 			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
+				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
 				if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.FLOWING_LAVA) {
 					trigger = true;
 				}
@@ -488,7 +488,7 @@ public class SpawnerEventListener {
 			boolean water = false;
 			boolean lava = false;
 			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
+				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
 				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
 					water = true;
 				}

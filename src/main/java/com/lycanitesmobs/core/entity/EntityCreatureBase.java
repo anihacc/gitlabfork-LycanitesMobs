@@ -23,7 +23,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -928,7 +928,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     	for(int i = x - checkRange; i <= x + checkRange; i++)
         	for(int j = y - checkRange; j <= y + checkRange; j++)
             	for(int k = z - checkRange; k <= z + checkRange; k++) {
-            		IBlockState spawnerBlock = world.getBlockState(new BlockPos(i, j, k));
+            		BlockState spawnerBlock = world.getBlockState(new BlockPos(i, j, k));
             		if(spawnerBlock != null) {
 	            		TileEntity tileEntity = world.getTileEntity(new BlockPos(i, j, k));
 
@@ -1898,7 +1898,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
             else if(this.getMasterTarget() != null)
                 targetInWater = this.getMasterTarget().isInWater();
             if(!targetInWater) {
-                IBlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().up());
+                BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().up());
                 if (blockState.getBlock().isAir(blockState, this.getEntityWorld(), this.getPosition().up())) {
                     return false;
                 }
@@ -2335,10 +2335,10 @@ public abstract class EntityCreatureBase extends EntityLiving {
         int y = pos.getY();
         if(y <= 0)
             return 0;
-        IBlockState startBlock = this.getEntityWorld().getBlockState(pos);
+        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
         if(startBlock.getBlock().isAir(startBlock, this.getEntityWorld(), pos)) {
             for(int possibleGroundY = Math.max(0, y - 1); possibleGroundY >= 0; possibleGroundY--) {
-                IBlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleGroundY, pos.getZ()));
+                BlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleGroundY, pos.getZ()));
                 if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleGroundY, pos.getZ())))
                     y = possibleGroundY;
                 else
@@ -2358,10 +2358,10 @@ public abstract class EntityCreatureBase extends EntityLiving {
         if(this.getEntityWorld().canBlockSeeSky(pos))
             return yMax;
 
-        IBlockState startBlock = this.getEntityWorld().getBlockState(pos);
+        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
         if(startBlock.getBlock().isAir(startBlock, this.getEntityWorld(), pos)) {
             for(int possibleAirY = Math.min(yMax, y + 1); possibleAirY <= yMax; possibleAirY++) {
-                IBlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleAirY, pos.getZ()));
+                BlockState possibleGroundBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleAirY, pos.getZ()));
                 if(possibleGroundBlock.getBlock().isAir(possibleGroundBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleAirY, pos.getZ())))
                     y = possibleAirY;
                 else
@@ -2384,11 +2384,11 @@ public abstract class EntityCreatureBase extends EntityLiving {
             return yMax;
         int yLimit = 24;
         yMax = Math.min(yMax, y + yLimit);
-        IBlockState startBlock = this.getEntityWorld().getBlockState(pos);
+        BlockState startBlock = this.getEntityWorld().getBlockState(pos);
         if(startBlock.getMaterial() == Material.WATER) {
             int possibleSurfaceY = y;
             for(possibleSurfaceY += 1; possibleSurfaceY <= yMax; possibleSurfaceY++) {
-                IBlockState possibleSurfaceBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ()));
+                BlockState possibleSurfaceBlock = this.getEntityWorld().getBlockState(new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ()));
                 if(possibleSurfaceBlock.getBlock().isAir(possibleSurfaceBlock, this.getEntityWorld(), new BlockPos(pos.getX(), possibleSurfaceY, pos.getZ())))
                     return possibleSurfaceY;
                 else if(possibleSurfaceBlock.getMaterial() != Material.WATER)
@@ -3277,7 +3277,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/
     @Override
-    protected void updateFallState(double y, boolean onGround, IBlockState state, BlockPos pos) {
+    protected void updateFallState(double y, boolean onGround, BlockState state, BlockPos pos) {
         if(!this.isFlying())
             super.updateFallState(y, onGround, state, pos);
     }
@@ -3365,7 +3365,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 			for (int d = -((int) Math.ceil(this.width) - range); d <= (Math.ceil(this.width) + range); d++) {
 				for (int h = 0; h <= Math.ceil(this.height); h++) {
 					BlockPos breakPos = new BlockPos(x + w, y + h, z + d);
-					IBlockState blockState = this.getEntityWorld().getBlockState(breakPos);
+					BlockState blockState = this.getEntityWorld().getBlockState(breakPos);
 					float hardness = blockState.getBlockHardness(this.getEntityWorld(), breakPos);
 					Material material = blockState.getMaterial();
 					if (hardness >= 0 && strength >= hardness && strength >= blockState.getBlock().getExplosionResistance(this) && material != Material.WATER && material != Material.LAVA) {
@@ -3383,7 +3383,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		for(int w = -((int)Math.ceil(this.width) + range); w <= (Math.ceil(this.width) + range); w++)
 			for(int d = -((int)Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++)
 				for(int h = 0; h <= Math.ceil(this.height); h++) {
-					IBlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
+					BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x + w, y + h, z + d));
 					if(blockClass.isInstance(blockState.getBlock())) {
 						this.getEntityWorld().destroyBlock(new BlockPos(x + w, y + h, z + d), drop);
 					}
@@ -3924,7 +3924,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     /** Returns true if the target location has a block that this mob can breathe in (air, water, lava, depending on the creature). **/
     public boolean canBreatheAtLocation(BlockPos pos) {
-    	IBlockState blockState = this.getEntityWorld().getBlockState(pos);
+    	BlockState blockState = this.getEntityWorld().getBlockState(pos);
     	if(blockState == null)
     		return true;
     	if(this.canBreatheAboveWater() && blockState.getMaterial() == Material.AIR)
@@ -3945,7 +3945,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 	 * @return True if swimmable.
 	 */
 	public boolean isSwimmable(int x, int y, int z) {
-        IBlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y, z));
+        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y, z));
 		if(blockState == null)
 			return false;
 		if(this.isLavaCreature && Material.LAVA.equals(blockState.getMaterial()))
@@ -3978,7 +3978,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel(BlockPos pos) {
-        IBlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
+        BlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
         if(pos.getY() < 0)
             return 0;
         if(spawnBlockState != null && spawnBlockState.getMaterial() == Material.WATER && CreatureManager.getInstance().spawnConfig.useSurfaceLightLevel)

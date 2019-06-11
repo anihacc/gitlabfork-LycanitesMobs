@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -64,7 +64,7 @@ public class BlockFluidOoze extends BlockFluidBase {
     // ==================================================
     @Override
     public boolean canDisplace(IBlockAccess world, BlockPos pos) {
-        IBlockState blockState = world.getBlockState(pos);
+        BlockState blockState = world.getBlockState(pos);
         if(blockState == null || blockState.getBlock() == this) {
             return false;
         }
@@ -103,7 +103,7 @@ public class BlockFluidOoze extends BlockFluidBase {
 	//                      Collision
 	// ==================================================
 	@Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         if(entity != null) {
             // Damage:
             if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
@@ -128,7 +128,7 @@ public class BlockFluidOoze extends BlockFluidBase {
 	// ==================================================
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState blockState, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState blockState, World world, BlockPos pos, Random random) {
         float f; 
         float f1;
         float f2;

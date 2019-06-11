@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -95,7 +95,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block breaks. **/
-	public void onBlockBreak(World world, PlayerEntity player, BlockPos breakPos, IBlockState blockState, int chain) {
+	public void onBlockBreak(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain) {
 		if(!this.onBreak) {
 			return;
 		}
@@ -104,7 +104,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block is harvested. **/
-	public void onBlockHarvest(World world, PlayerEntity player, BlockPos breakPos, IBlockState blockState, int chain, int fortune, boolean silkTouch) {
+	public void onBlockHarvest(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain, int fortune, boolean silkTouch) {
 		if(!this.onHarvest) {
 			return;
 		}
@@ -128,7 +128,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a block is placed. **/
-	public void onBlockPlace(World world, PlayerEntity player, BlockPos breakPos, IBlockState blockState, int chain) {
+	public void onBlockPlace(World world, PlayerEntity player, BlockPos breakPos, BlockState blockState, int chain) {
 		if(!this.onPlace) {
 			return;
 		}
@@ -137,7 +137,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every time a player breaks a block. **/
-	public void onBlockTriggered(World world, PlayerEntity player, BlockPos blockPos, IBlockState blockState, int chain, int fortune) {
+	public void onBlockTriggered(World world, PlayerEntity player, BlockPos blockPos, BlockState blockState, int chain, int fortune) {
 		// Check Player:
 		if(this.playerOnly && (player == null || player instanceof FakePlayer)) {
 			return;
@@ -157,7 +157,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	}
 
 	/** Returns true if the provided block is a match for this trigger. **/
-	public boolean isTriggerBlock(IBlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
 		if(this.blocks.size() > 0) {
 			Block block = blockState.getBlock();
 			if (this.blocks.contains(block)) {
@@ -180,7 +180,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	}
 
 	/** Returns a value to represent the block's rarity for higher level spawns with increased chances of tougher mobs, etc. **/
-	public int getBlockLevel(IBlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
 		return 0;
 	}
 }

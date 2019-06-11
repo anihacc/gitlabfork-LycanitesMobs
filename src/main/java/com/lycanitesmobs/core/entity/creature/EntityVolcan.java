@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -118,7 +118,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {
 						Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
 						if (block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
-							IBlockState blockState = Blocks.FLOWING_LAVA.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
+							BlockState blockState = Blocks.FLOWING_LAVA.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
 							if (block == Blocks.OBSIDIAN)
 								blockState = Blocks.LAVA.getDefaultState();
 							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);

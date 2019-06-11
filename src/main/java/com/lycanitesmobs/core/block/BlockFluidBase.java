@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.block;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -58,12 +58,12 @@ public class BlockFluidBase extends BlockFluidClassic {
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
     }
 
     @Override
-    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, BlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
         if(world instanceof World)
             this.onEntityCollidedWithBlock((World)world, blockpos, state, entity);
         return super.isEntityInsideMaterial(world, blockpos, state, entity, yToTest, materialIn, testingHead);
@@ -74,7 +74,7 @@ public class BlockFluidBase extends BlockFluidClassic {
     //                      Visuals
     // ==================================================
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState blockState) {
+    public EnumBlockRenderType getRenderType(BlockState blockState) {
         return EnumBlockRenderType.MODEL;
     }
 }

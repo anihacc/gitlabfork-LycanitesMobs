@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.location;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,7 +25,7 @@ public class MaterialSpawnLocation extends BlockSpawnLocation {
 	/** Returns if the provided block position is valid. **/
 	@Override
 	public boolean isValidBlock(World world, BlockPos blockPos) {
-		IBlockState blockState = world.getBlockState(blockPos);
+		BlockState blockState = world.getBlockState(blockPos);
 		if(blockState == null) {
 			return false;
 		}

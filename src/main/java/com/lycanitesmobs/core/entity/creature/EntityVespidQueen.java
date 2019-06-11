@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -229,7 +229,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     }
 
     public boolean isHiveWall(BlockPos searchPos) {
-        IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)
@@ -238,7 +238,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     }
 
     public boolean isHiveFloor(BlockPos searchPos) {
-        IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("propolis") && searchBlock.getMetaFromState(searchState) < 8)
@@ -312,7 +312,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 					for(int z = hivePos.getZ() - hiveMax; z <= hivePos.getZ() + hiveMax; z++) {
                         BlockPos checkPos = new BlockPos(x, y, z);
 						if(this.isHiveBlock(checkPos)) {
-                            IBlockState state = this.getEntityWorld().getBlockState(checkPos);
+                            BlockState state = this.getEntityWorld().getBlockState(checkPos);
 							Block block = state.getBlock();
 							int orientationMeta = block.getMetaFromState(state);
 							EnumFacing facing = EnumFacing.getFront(orientationMeta);
@@ -346,7 +346,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 	}
 	
 	public boolean canPlaceBlockAt(BlockPos pos) {
-        IBlockState targetState = this.getEntityWorld().getBlockState(pos);
+        BlockState targetState = this.getEntityWorld().getBlockState(pos);
 		Block targetBlock = targetState.getBlock();
         if(targetBlock == null)
 			return false;

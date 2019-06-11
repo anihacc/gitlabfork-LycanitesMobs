@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.dungeon.instance.SectorInstance;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -133,7 +133,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getFloor(SectorInstance sectorInstance, char patternChar, Random random) {
+	public BlockState getFloor(SectorInstance sectorInstance, char patternChar, Random random) {
 		return this.getBlockState(sectorInstance, patternChar, random, this.floorBlocks);
 	}
 
@@ -144,7 +144,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getWall(SectorInstance sectorInstance, char patternChar, Random random) {
+	public BlockState getWall(SectorInstance sectorInstance, char patternChar, Random random) {
 		return this.getBlockState(sectorInstance, patternChar, random, this.wallBlocks);
 	}
 
@@ -155,7 +155,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getCeiling(SectorInstance sectorInstance, char patternChar, Random random) {
+	public BlockState getCeiling(SectorInstance sectorInstance, char patternChar, Random random) {
 		return this.getBlockState(sectorInstance, patternChar, random, this.ceilingBlocks);
 	}
 
@@ -166,7 +166,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getLight(char patternChar, Random random) {
+	public BlockState getLight(char patternChar, Random random) {
 		return this.getBlockState(null, patternChar, random, this.lightBlocks);
 	}
 
@@ -177,7 +177,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getTorch(char patternChar, Random random) {
+	public BlockState getTorch(char patternChar, Random random) {
 		return this.getBlockState(null, patternChar, random, this.torchBlocks);
 	}
 
@@ -188,7 +188,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getStairs(char patternChar, Random random) {
+	public BlockState getStairs(char patternChar, Random random) {
 		return this.getBlockState(null, patternChar, random, this.stairBlocks);
 	}
 
@@ -199,7 +199,7 @@ public class DungeonTheme {
 	 * @param random The instance of random, used for characters that are random.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getPit(char patternChar, Random random) {
+	public BlockState getPit(char patternChar, Random random) {
 		return this.getBlockState(null, patternChar, random, this.pitBlocks);
 	}
 
@@ -212,7 +212,7 @@ public class DungeonTheme {
 	 * @param blockList The list of Theme Blocks to select from.
 	 * @return A block state for placing.
 	 */
-	public IBlockState getBlockState(SectorInstance sectorInstance, char patternChar, Random random, List<ThemeBlock> blockList) {
+	public BlockState getBlockState(SectorInstance sectorInstance, char patternChar, Random random, List<ThemeBlock> blockList) {
 		// Nothing:
 		if(patternChar == '0') {
 			return Blocks.AIR.getDefaultState();

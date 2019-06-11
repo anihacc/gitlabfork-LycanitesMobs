@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.block.BlockBase;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -60,7 +60,7 @@ public class BlockPoisonCloud extends BlockBase {
     // ========== Can Remove ==========
     /** Returns true if the block should be removed naturally (remove on tick). **/
     @Override
-    public boolean canRemove(World world, BlockPos pos, IBlockState state, Random rand) {
+    public boolean canRemove(World world, BlockPos pos, BlockState state, Random rand) {
         if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM)
             return false;
         return super.canRemove(world, pos, state, rand);
@@ -71,12 +71,12 @@ public class BlockPoisonCloud extends BlockBase {
     //                   Block States
     // ==================================================
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(AGE, meta);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(AGE);
     }
 
@@ -90,12 +90,12 @@ public class BlockPoisonCloud extends BlockBase {
 	//                     Break
 	// ==================================================
 	@Override
-	public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
+	public Item getItemDropped(BlockState blockState, Random random, int fortune) {
 		return ObjectManager.getItem("poisongland");
 	}
 	
 	@Override
-	public int damageDropped(IBlockState blockState) {
+	public int damageDropped(BlockState blockState) {
 		return 0;
 	}
     
@@ -109,7 +109,7 @@ public class BlockPoisonCloud extends BlockBase {
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
 		if(entity instanceof EntityLivingBase) {
 			((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
@@ -122,7 +122,7 @@ public class BlockPoisonCloud extends BlockBase {
 	// ==================================================
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
 
         int x = pos.getX();

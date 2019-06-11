@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -65,7 +65,7 @@ public class ItemSlabCustom extends ItemBlock
         if (itemStack.getCount() != 0 && player.canPlayerEdit(pos.offset(facing), facing, itemStack))
         {
             Comparable<?> comparable = this.singleSlab.getTypeForItem(itemStack);
-            IBlockState iblockstate = worldIn.getBlockState(pos);
+            BlockState iblockstate = worldIn.getBlockState(pos);
 
             if (iblockstate.getBlock() == this.singleSlab)
             {
@@ -75,7 +75,7 @@ public class ItemSlabCustom extends ItemBlock
 
                 if ((facing == EnumFacing.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP) && comparable1 == comparable)
                 {
-                    IBlockState iblockstate1 = this.makeState(iproperty, comparable1);
+                    BlockState iblockstate1 = this.makeState(iproperty, comparable1);
                     AxisAlignedBB axisalignedbb = iblockstate1.getCollisionBoundingBox(worldIn, pos);
 
                     if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, iblockstate1, 11))
@@ -103,7 +103,7 @@ public class ItemSlabCustom extends ItemBlock
         BlockPos blockpos = pos;
         IProperty<?> iproperty = this.singleSlab.getVariantProperty();
         Comparable<?> comparable = this.singleSlab.getTypeForItem(stack);
-        IBlockState iblockstate = worldIn.getBlockState(pos);
+        BlockState iblockstate = worldIn.getBlockState(pos);
 
         if (iblockstate.getBlock() == this.singleSlab)
         {
@@ -116,13 +116,13 @@ public class ItemSlabCustom extends ItemBlock
         }
 
         pos = pos.offset(side);
-        IBlockState iblockstate1 = worldIn.getBlockState(pos);
+        BlockState iblockstate1 = worldIn.getBlockState(pos);
         return iblockstate1.getBlock() == this.singleSlab && comparable == iblockstate1.getValue(iproperty) ? true : super.canPlaceBlockOnSide(worldIn, blockpos, side, player, stack);
     }
 
     private boolean tryPlace(PlayerEntity player, ItemStack itemStack, World worldIn, BlockPos pos, Object itemSlabType)
     {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
+        BlockState iblockstate = worldIn.getBlockState(pos);
 
         if (iblockstate.getBlock() == this.singleSlab)
         {
@@ -130,7 +130,7 @@ public class ItemSlabCustom extends ItemBlock
 
             if (comparable == itemSlabType)
             {
-                IBlockState iblockstate1 = this.makeState(this.singleSlab.getVariantProperty(), comparable);
+                BlockState iblockstate1 = this.makeState(this.singleSlab.getVariantProperty(), comparable);
                 AxisAlignedBB axisalignedbb = iblockstate1.getCollisionBoundingBox(worldIn, pos);
 
                 if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, iblockstate1, 11))
@@ -147,7 +147,7 @@ public class ItemSlabCustom extends ItemBlock
         return false;
     }
 
-    protected <T extends Comparable<T>> IBlockState makeState(IProperty<T> p_185055_1_, Comparable<?> p_185055_2_)
+    protected <T extends Comparable<T>> BlockState makeState(IProperty<T> p_185055_1_, Comparable<?> p_185055_2_)
     {
         return this.doubleSlab.getDefaultState();//.withProperty(p_185055_1_, (T)p_185055_2_);
     }

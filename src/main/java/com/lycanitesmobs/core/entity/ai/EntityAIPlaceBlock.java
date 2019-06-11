@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -142,7 +142,7 @@ public class EntityAIPlaceBlock extends EntityAIBase {
    	//                  Can Place Block
    	// ==================================================
     public boolean canPlaceBlock(BlockPos pos) {
-    	IBlockState targetState = this.host.getEntityWorld().getBlockState(pos);
+    	BlockState targetState = this.host.getEntityWorld().getBlockState(pos);
         Block targetBlock = targetState.getBlock();
     	if(targetBlock == null)
     		return false;

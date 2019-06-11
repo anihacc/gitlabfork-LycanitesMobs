@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.BlockDirt;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -114,8 +114,8 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 				for (int d = -((int) Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++) {
 					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {
 						BlockPos blockPos = this.getPosition().add(w, h, d);
-						IBlockState blockState = this.getEntityWorld().getBlockState(blockPos);
-						IBlockState upperBlockState = this.getEntityWorld().getBlockState(blockPos.up());
+						BlockState blockState = this.getEntityWorld().getBlockState(blockPos);
+						BlockState upperBlockState = this.getEntityWorld().getBlockState(blockPos.up());
 						if (upperBlockState.getBlock() == Blocks.AIR && blockState.getBlock() == Blocks.DIRT && blockState.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.DIRT) {
 							this.getEntityWorld().setBlockState(blockPos, Blocks.MYCELIUM.getDefaultState());
 						}

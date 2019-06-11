@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.IMob;
@@ -141,7 +141,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
 					for(int z = (int)this.posZ - lavaWidth; z <= (int)this.posZ + lavaWidth; z++) {
 						Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 						if(block == Blocks.AIR) {
-							IBlockState blockState = Blocks.FLOWING_LAVA.getStateFromMeta(11);
+							BlockState blockState = Blocks.FLOWING_LAVA.getStateFromMeta(11);
 							if(x == (int)this.posX && y == (int)this.posY && z == (int)this.posZ)
 								blockState = Blocks.FLOWING_LAVA.getStateFromMeta(12);
 							this.getEntityWorld().setBlockState(new BlockPos(x, y, z), blockState, 3);

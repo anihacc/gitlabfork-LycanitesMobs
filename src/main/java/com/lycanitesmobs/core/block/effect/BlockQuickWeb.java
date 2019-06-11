@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 
 import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
@@ -51,12 +51,12 @@ public class BlockQuickWeb extends BlockBase {
 	//                     Break
 	// ==================================================
     @Override
-    public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
+    public Item getItemDropped(BlockState blockState, Random random, int fortune) {
         return ObjectManager.getItem("quickwebcharge");
     }
 
     @Override
-    public int damageDropped(IBlockState blockState) {
+    public int damageDropped(BlockState blockState) {
         return 0;
     }
 
@@ -70,7 +70,7 @@ public class BlockQuickWeb extends BlockBase {
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
         entity.setInWeb();
     }

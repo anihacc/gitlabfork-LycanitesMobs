@@ -8,7 +8,7 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
@@ -247,7 +247,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     }
 
     public boolean isHiveWall(BlockPos searchPos) {
-        IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)
@@ -256,7 +256,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     }
 
     public boolean isHiveFloor(BlockPos searchPos) {
-        IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
+        BlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
             if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)

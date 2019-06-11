@@ -6,7 +6,7 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
@@ -60,7 +60,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
 	// Pathing Weight:
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
-        IBlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+        BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         if(blockState.getBlock() != Blocks.AIR) {
             if(blockState.getMaterial() == Material.SAND)
                 return 10F;

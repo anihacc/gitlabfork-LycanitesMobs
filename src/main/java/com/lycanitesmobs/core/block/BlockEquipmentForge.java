@@ -13,7 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.PlayerEntity;
@@ -97,17 +97,17 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
     //                     Block Events
     // ==================================================
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
 		this.setDefaultFacing(world, pos, state);
         super.onBlockAdded(world, pos, state);
     }
 
-	protected void setDefaultFacing(World world, BlockPos pos, IBlockState state) {
+	protected void setDefaultFacing(World world, BlockPos pos, BlockState state) {
 		if (!world.isRemote) {
-			IBlockState iblockstate = world.getBlockState(pos.north());
-			IBlockState iblockstate1 = world.getBlockState(pos.south());
-			IBlockState iblockstate2 = world.getBlockState(pos.west());
-			IBlockState iblockstate3 = world.getBlockState(pos.east());
+			BlockState iblockstate = world.getBlockState(pos.north());
+			BlockState iblockstate1 = world.getBlockState(pos.south());
+			BlockState iblockstate2 = world.getBlockState(pos.west());
+			BlockState iblockstate3 = world.getBlockState(pos.east());
 			EnumFacing enumfacing = state.getValue(FACING);
 
 			if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock()) {
@@ -128,13 +128,13 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 	}
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         if(tileEntity != null && tileEntity instanceof TileEntityBase)
             ((TileEntityBase)tileEntity).onRemove();
@@ -143,13 +143,13 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
     }
 
     @Override
-    public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
+    public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         return tileEntity != null && tileEntity.receiveClientEvent(eventID, eventParam);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!world.isRemote) {
             if(playerIn != null && playerIn.getEntityWorld() != null) {
                 playerIn.openGui(LycanitesMobs.instance, GuiHandler.GuiType.TILEENTITY.id, playerIn.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
@@ -174,7 +174,7 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
     //                    Block State
     // ==================================================
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public BlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
@@ -185,12 +185,12 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 	}
 
     @Override
-	public int getMetaFromState(IBlockState state) {
+	public int getMetaFromState(BlockState state) {
 		return (state.getValue(FACING)).getIndex();
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 }

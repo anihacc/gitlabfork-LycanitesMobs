@@ -8,7 +8,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -57,12 +57,12 @@ public class BlockFrostCloud extends BlockBase {
     //                   Block States
     // ==================================================
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(AGE, meta);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(AGE);
     }
 
@@ -76,12 +76,12 @@ public class BlockFrostCloud extends BlockBase {
 	//                     Break
 	// ==================================================
     @Override
-    public Item getItemDropped(IBlockState blockState, Random random, int fortune) {
+    public Item getItemDropped(BlockState blockState, Random random, int fortune) {
         return ObjectManager.getItem("frostyfur");
     }
 
     @Override
-    public int damageDropped(IBlockState blockState) {
+    public int damageDropped(BlockState blockState) {
         return 0;
     }
 
@@ -95,7 +95,7 @@ public class BlockFrostCloud extends BlockBase {
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
         if(entity instanceof EntityLivingBase) {
             ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5 * 20, 0));
@@ -109,7 +109,7 @@ public class BlockFrostCloud extends BlockBase {
 	// ==================================================
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
 
         int x = pos.getX();

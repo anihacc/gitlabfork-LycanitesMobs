@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -45,7 +45,7 @@ public class ThemeBlock {
 	 * Returns a block state for this theme block entry.
 	 * @return A new block state.
 	 */
-	public IBlockState getBlockState() {
+	public BlockState getBlockState() {
 		if(this.metadata <= 0) {
 			return this.block.getDefaultState();
 		}

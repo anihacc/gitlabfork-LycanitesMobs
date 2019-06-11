@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -276,7 +276,7 @@ public class EntityProjectileBase extends EntityThrowable {
 			int j = rayTraceResult.getBlockPos().getY();
 			int k = rayTraceResult.getBlockPos().getZ();
 			BlockPos blockPos = new BlockPos(i, j, k);
-			IBlockState blockState = this.getEntityWorld().getBlockState(blockPos);
+			BlockState blockState = this.getEntityWorld().getBlockState(blockPos);
 			if (blockState.getBlock() instanceof BlockTallGrass || blockState.getBlock() == Blocks.DOUBLE_PLANT) {
 				if (this.cutsGrass) {
 					world.destroyBlock(blockPos, false);

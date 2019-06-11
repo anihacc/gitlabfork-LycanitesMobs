@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.block.BlockFireBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -77,7 +77,7 @@ public class BlockShadowfire extends BlockFireBase {
 	//                       Break
 	// ==================================================
 	@Override
-	public Item getItemDropped(IBlockState state, Random random, int zero) {
+	public Item getItemDropped(BlockState state, Random random, int zero) {
 		return ObjectManager.getItem("spectralboltcharge");
 	}
     
@@ -86,7 +86,7 @@ public class BlockShadowfire extends BlockFireBase {
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
         if(entity instanceof EntityItem)
             return;
@@ -113,7 +113,7 @@ public class BlockShadowfire extends BlockFireBase {
 	// ==================================================
     @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         super.randomDisplayTick(state, world, pos, random);
 
         int x = pos.getX();

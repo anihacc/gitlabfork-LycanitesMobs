@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
@@ -104,7 +104,7 @@ public abstract class EntityAIDoorInteract extends EntityAIBase {
  	//                    Find Door
  	// ==================================================
     private BlockDoor findUsableDoor(BlockPos pos) {
-        IBlockState iblockstate = this.host.getEntityWorld().getBlockState(pos);
+        BlockState iblockstate = this.host.getEntityWorld().getBlockState(pos);
         Block block = iblockstate.getBlock();
         return block instanceof BlockDoor && iblockstate.getMaterial() == Material.WOOD ? (BlockDoor)block : null;
     }

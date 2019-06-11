@@ -5,7 +5,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -289,7 +289,7 @@ public class ItemEquipment extends ItemBase {
 	//                     Harvesting
 	// ==================================================
 	@Override
-	public boolean canHarvestBlock(IBlockState blockState, ItemStack itemStack) {
+	public boolean canHarvestBlock(BlockState blockState, ItemStack itemStack) {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.canHarvestBlock(blockState)) {
@@ -300,7 +300,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public float getDestroySpeed(ItemStack itemStack, IBlockState blockState) {
+	public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
 		float speed = 1;
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
@@ -310,7 +310,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, BlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
 	{
 		if(worldIn.isRemote) {
 			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);

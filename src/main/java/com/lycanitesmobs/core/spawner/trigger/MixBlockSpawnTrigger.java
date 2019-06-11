@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -24,13 +24,13 @@ public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 	}
 
 	@Override
-	public int getBlockLevel(IBlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
 		return 0;
 	}
 
 
 	/** Called every time liquids mix to form a block. **/
-	public void onMix(World world, IBlockState blockState, BlockPos mixPos) {
+	public void onMix(World world, BlockState blockState, BlockPos mixPos) {
 		// Check Block:
 		if(!this.isTriggerBlock(blockState, world, mixPos, 0)) {
 			return;

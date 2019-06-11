@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class BlockDoubleSlab extends BlockPillar {
     // ==================================================
     //========== Drops ==========
     @Override
-    public Item getItemDropped(IBlockState state, Random random, int zero) {
+    public Item getItemDropped(BlockState state, Random random, int zero) {
         Block slabBlock = ObjectManager.getBlock(this.slabName);
         if(slabBlock != null)
             return Item.getItemFromBlock(slabBlock);
@@ -58,7 +58,7 @@ public class BlockDoubleSlab extends BlockPillar {
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
+    public int damageDropped(BlockState state) {
         return 0;
     }
 

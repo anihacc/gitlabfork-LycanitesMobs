@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -97,8 +97,8 @@ public class EntityTundra extends EntityProjectileBase {
     @Override
     public void placeBlock(World world, BlockPos pos) {
         if(ObjectManager.getBlock("ooze") != null) {
-            IBlockState placedBlockBig = ObjectManager.getBlock("ooze").getDefaultState().withProperty(BlockLiquid.LEVEL, 4);
-            IBlockState placedBlock = ObjectManager.getBlock("ooze").getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
+            BlockState placedBlockBig = ObjectManager.getBlock("ooze").getDefaultState().withProperty(BlockLiquid.LEVEL, 4);
+            BlockState placedBlock = ObjectManager.getBlock("ooze").getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
             if(this.canDestroyBlockSub(pos))
                 world.setBlockState(pos, placedBlockBig, 3);
             if(this.canDestroyBlockSub(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))

@@ -6,7 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -107,7 +107,7 @@ public class BlockBase extends Block {
 	//                      Place
 	// ==================================================
 	@Override
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+	public void onBlockAdded(World world, BlockPos pos, BlockState state) {
 		// Initial Block Ticking:
 		if(this.tickRate > 0)
 			world.scheduleUpdate(pos, this, this.tickRate(world));
@@ -119,12 +119,12 @@ public class BlockBase extends Block {
 	// ==================================================
 	//========== Drops ==========
 	@Override
-	public Item getItemDropped(IBlockState state, Random random, int zero) {
+	public Item getItemDropped(BlockState state, Random random, int zero) {
         return super.getItemDropped(state, random, zero);
 	}
 	
 	@Override
-	public int damageDropped(IBlockState state) {
+	public int damageDropped(BlockState state) {
 		return 0;
 	}
     
@@ -143,12 +143,12 @@ public class BlockBase extends Block {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState();
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return 0;
     }
 	
@@ -157,7 +157,7 @@ public class BlockBase extends Block {
 	//                   Block Updates
 	// ==================================================
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) { //triggerPos?
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) { //triggerPos?
         // Crushable:
 		if(this.canBeCrushed)
 			if(block == Blocks.SAND || block == Blocks.GRAVEL)
@@ -177,7 +177,7 @@ public class BlockBase extends Block {
 
     // ========== Tick Update ==========
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
         if (world.isRemote)
             return;
 
@@ -198,7 +198,7 @@ public class BlockBase extends Block {
 
     // ========== Can Remove ==========
     /** Returns true if the block should be removed naturally (remove on tick). **/
-    public boolean canRemove(World world, BlockPos pos, IBlockState state, Random rand) {
+    public boolean canRemove(World world, BlockPos pos, BlockState state, Random rand) {
         return true;
     }
     
@@ -226,7 +226,7 @@ public class BlockBase extends Block {
 
     // ========== Is Block Solid ==========
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(BlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         if(this.noEntityCollision)
             return false;
         return super.isSideSolid(base_state, world, pos, side);
@@ -234,13 +234,13 @@ public class BlockBase extends Block {
 
     // ========== Physical Collision Box ==========
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess world, BlockPos pos) {
         return super.getBoundingBox(state, world, pos);
     }
 
     // ========== Collision Bounding Box ==========
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(BlockState state, IBlockAccess world, BlockPos pos) {
         if(this.noEntityCollision)
             return Block.NULL_AABB;
         return super.getCollisionBoundingBox(state, world, pos);
@@ -249,13 +249,13 @@ public class BlockBase extends Block {
     // ========== Selection Box ==========
     @SideOnly(Side.CLIENT)
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+    public AxisAlignedBB getSelectedBoundingBox(BlockState state, World world, BlockPos pos) {
         return super.getSelectedBoundingBox(state, world, pos);
     }
     
     // ========== Is Opaque ==========
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(BlockState state) {
         return this.isOpaque;
     }
     
@@ -264,12 +264,12 @@ public class BlockBase extends Block {
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState blockState, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState blockState, Entity entity) {
 		super.onEntityCollidedWithBlock(world, pos, blockState, entity);
 	}
 
     @Override
-    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState blockState, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, BlockState blockState, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
         if(this.noEntityCollision && world instanceof World)
             this.onEntityCollidedWithBlock((World)world, blockpos, blockState, entity);
         return super.isEntityInsideMaterial(world, blockpos, blockState, entity, yToTest, materialIn, testingHead);

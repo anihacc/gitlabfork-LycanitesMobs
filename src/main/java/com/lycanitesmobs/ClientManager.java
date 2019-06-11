@@ -27,7 +27,7 @@ import com.lycanitesmobs.core.renderer.RenderRegister;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipment;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentPart;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
@@ -183,7 +183,7 @@ public class ClientManager extends CommonProxy {
             ModelLoader.setCustomMeshDefinition(item, itemStack -> fluidLocation);
             ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
                 @Override
-                protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                protected ModelResourceLocation getModelResourceLocation(BlockState state) {
                     return fluidLocation;
                 }
             });

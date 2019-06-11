@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
@@ -86,7 +86,7 @@ public class EntityAspid extends EntityCreatureAgeable implements IAnimals, IGro
 	@Override
 	public float getBlockPathWeight(int par1, int par2, int par3) {
         if(this.getEntityWorld().getBlockState(new BlockPos(par1, par2 - 1, par3)).getBlock() != Blocks.AIR) {
-            IBlockState blocStatek = this.getEntityWorld().getBlockState(new BlockPos(par1, par2 - 1, par3));
+            BlockState blocStatek = this.getEntityWorld().getBlockState(new BlockPos(par1, par2 - 1, par3));
             if(blocStatek.getMaterial() == Material.GRASS)
                 return 10F;
             if(blocStatek.getMaterial() == Material.GROUND)

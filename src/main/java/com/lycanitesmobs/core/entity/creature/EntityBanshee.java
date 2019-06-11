@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -102,7 +102,7 @@ public class EntityBanshee extends EntityCreatureTameable implements IMob, IGrou
 	 */
 	public boolean canTeleportTo(BlockPos pos) {
 		for (int y = 0; y <= 1; y++) {
-			IBlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
+			BlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
 			if (blockState.isNormalCube())
 				return false;
 		}

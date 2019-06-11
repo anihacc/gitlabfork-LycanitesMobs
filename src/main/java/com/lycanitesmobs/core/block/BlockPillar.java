@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -58,12 +58,12 @@ public class BlockPillar extends BlockBase {
     }
 
     @Override
-    protected ItemStack getSilkTouchDrop(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(BlockState state) {
         return new ItemStack(Item.getItemFromBlock(this));
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         EnumFacing.Axis enumfacing$axis = EnumFacing.Axis.Y;
         int i = meta & 12;
 
@@ -76,7 +76,7 @@ public class BlockPillar extends BlockBase {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         int i = 0;
         EnumFacing.Axis enumfacing$axis = (EnumFacing.Axis)state.getValue(AXIS);
 
@@ -93,7 +93,7 @@ public class BlockPillar extends BlockBase {
     //                    Placement
     // ==================================================
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, facing.getAxis());
     }
 
@@ -103,7 +103,7 @@ public class BlockPillar extends BlockBase {
     // ==================================================
     @Override
     public boolean rotateBlock(net.minecraft.world.World world, BlockPos pos, EnumFacing axis) {
-        net.minecraft.block.state.IBlockState state = world.getBlockState(pos);
+        net.minecraft.block.state.BlockState state = world.getBlockState(pos);
         for (net.minecraft.block.properties.IProperty<?> prop : state.getProperties().keySet()) {
             if (prop.getName().equals("axis")) {
                 world.setBlockState(pos, state.cycleProperty(prop));
@@ -115,7 +115,7 @@ public class BlockPillar extends BlockBase {
 
     /** Returns a blockstate for the provided rotation. **/
     @Override
-    public IBlockState withRotation(IBlockState state, Rotation rot) {
+    public BlockState withRotation(BlockState state, Rotation rot) {
         switch (rot) {
             case COUNTERCLOCKWISE_90:
             case CLOCKWISE_90:

@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -101,7 +101,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     @Override
     public float getAISpeedModifier() {
     	if(this.hasRiderTarget()) {
-            IBlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
+            BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
             if (blockState.getMaterial() == Material.SAND
                     || (blockState == Material.AIR && this.getEntityWorld().getBlockState(this.getPosition().add(0, -2, 0)).getMaterial() == Material.SAND))
                 return 1.8F;

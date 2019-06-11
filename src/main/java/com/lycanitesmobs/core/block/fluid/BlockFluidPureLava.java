@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -62,7 +62,7 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	// ==================================================
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
-		IBlockState blockState = world.getBlockState(pos);
+		BlockState blockState = world.getBlockState(pos);
 		
 		// Renewable Fluid:
 		if(blockState.getBlock() == this) {
@@ -75,7 +75,7 @@ public class BlockFluidPureLava extends BlockFluidBase {
 				adjBlockPositions.add(pos.add(0, 0, -1));
 				adjBlockPositions.add(pos.add(0, 0, 1));
 				for(BlockPos adjBlockPos : adjBlockPositions) {
-                    IBlockState adjBlockState = world.getBlockState(adjBlockPos);
+                    BlockState adjBlockState = world.getBlockState(adjBlockPos);
                     Block adjBlock = adjBlockState.getBlock();
 					int adjMetadata = adjBlock.getMetaFromState(adjBlockState);
 					if(adjBlock == this && adjMetadata == 0)
@@ -116,7 +116,7 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	//                      Collision
 	// ==================================================
 	@Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
 		if(entity instanceof EntityItem)
 			entity.attackEntityFrom(DamageSource.LAVA, 10F);
         super.onEntityCollidedWithBlock(world, pos, state, entity);
@@ -128,7 +128,7 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	// ==================================================
     @Override
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState blockState, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState blockState, World world, BlockPos pos, Random random) {
         float f; 
         float f1;
         float f2;

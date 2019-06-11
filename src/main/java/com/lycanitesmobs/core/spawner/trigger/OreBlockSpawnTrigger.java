@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -38,7 +38,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 
 
 	@Override
-	public boolean isTriggerBlock(IBlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
 		Block block = blockState.getBlock();
 
 		if(block == Blocks.MONSTER_EGG) {
@@ -81,7 +81,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 	}
 
 	@Override
-	public int getBlockLevel(IBlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
 		Block block = blockState.getBlock();
 		if(block == Blocks.DIAMOND_ORE)
 			return 3;

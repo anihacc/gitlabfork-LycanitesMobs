@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
@@ -50,7 +50,7 @@ public class EntityAIStayByWater extends EntityAIBase {
     public boolean shouldExecute() {
     	// Set home when in water or lava (for lava creatures).
     	if(this.host.isInWater()) {
-    		IBlockState waterBlock = this.host.getEntityWorld().getBlockState(this.host.getPosition());
+    		BlockState waterBlock = this.host.getEntityWorld().getBlockState(this.host.getPosition());
     		if((!this.host.isLavaCreature && waterBlock.getMaterial() == Material.WATER) ||
     			(this.host.isLavaCreature && waterBlock.getMaterial() == Material.LAVA)) {
 	    		this.waterPos = this.host.getPosition();

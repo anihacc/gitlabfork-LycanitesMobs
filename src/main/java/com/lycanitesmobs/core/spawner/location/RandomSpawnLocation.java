@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.location;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EnumFacing;
@@ -236,7 +236,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	public boolean posHasGround(World world, BlockPos pos) {
 		if(pos == null || pos.getY() == 0)
 			return false;
-		IBlockState possibleGroundBlock = world.getBlockState(pos.down());
+		BlockState possibleGroundBlock = world.getBlockState(pos.down());
 		try {
 			if(possibleGroundBlock.isNormalCube())
 				return true;

@@ -6,7 +6,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -98,7 +98,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param blockState
 	 * @return
 	 */
-	public boolean canHarvestBlock(IBlockState blockState) {
+	public boolean canHarvestBlock(BlockState blockState) {
 		Block block = blockState.getBlock();
 		Material material = blockState.getMaterial();
 
@@ -146,7 +146,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param blockState The block to harvest.
 	 * @return The harvest speed to add (all harvest features have their speed added together).
 	 */
-	public float getHarvestSpeed(IBlockState blockState) {
+	public float getHarvestSpeed(BlockState blockState) {
 		if(!this.canHarvestBlock(blockState)) {
 			return 0;
 		}
@@ -160,7 +160,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param blockState The block to check.
 	 * @return A harvest speed multiplier.
 	 */
-	public float getHarvestMultiplier(IBlockState blockState) {
+	public float getHarvestMultiplier(BlockState blockState) {
 		Material material = blockState.getMaterial();
 
 		// Web:
@@ -184,7 +184,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param pos The position of the destroyed block.
 	 * @param entityLiving The entity that destroyed the block.
 	 */
-	public void onBlockDestroyed(World world, IBlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	public void onBlockDestroyed(World world, BlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
 	{
 		LycanitesMobs.printWarning("", "Area Harvesting! " + this.harvestRange);
 		// Block and Random Area Harvesting:

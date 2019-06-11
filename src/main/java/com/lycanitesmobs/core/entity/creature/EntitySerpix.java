@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityBlaze;
@@ -167,7 +167,7 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     public boolean canStealth() {
         if(this.isTamed() && this.isSitting())
             return false;
-        IBlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
+        BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
             if(blockState.getMaterial() == Material.GROUND) return true;
             if(blockState.getMaterial() == Material.GRASS) return true;

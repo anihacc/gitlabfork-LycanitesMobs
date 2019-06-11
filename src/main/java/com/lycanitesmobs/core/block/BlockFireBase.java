@@ -10,7 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -87,7 +87,7 @@ public class BlockFireBase extends BlockBase {
     //                   Block States
     // ==================================================
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public BlockState getActualState(BlockState state, IBlockAccess worldIn, BlockPos pos) {
         if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) && !Blocks.FIRE.canCatchFire(worldIn, pos.down(), EnumFacing.UP)) {
             return state.withProperty(NORTH, this.canCatchFire(worldIn, pos.north(), EnumFacing.SOUTH))
                     .withProperty(EAST,  this.canCatchFire(worldIn, pos.east(), EnumFacing.WEST))
@@ -99,12 +99,12 @@ public class BlockFireBase extends BlockBase {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(AGE, meta);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(AGE);
     }
 
@@ -126,7 +126,7 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
         if (!world.getGameRules().getBoolean("doFireTick")) {
             if(this.removeOnNoFireTick)
                 world.setBlockToAir(pos);
@@ -246,7 +246,7 @@ public class BlockFireBase extends BlockBase {
 
     /** Called when an adjacent block changes. **/
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) {
         if (!world.getBlockState(pos.down()).isSideSolid(world, pos, EnumFacing.UP) && !this.canNeighborCatchFire(world, pos)) {
             world.setBlockToAir(pos);
         }
@@ -254,7 +254,7 @@ public class BlockFireBase extends BlockBase {
 
     /** Called when this block is added to the world. **/
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
         super.onBlockAdded(world, pos, state);
     }
 
@@ -290,7 +290,7 @@ public class BlockFireBase extends BlockBase {
     private void tryCatchFire(World world, BlockPos pos, int chance, Random random, int age, EnumFacing face) {
         int flammability = this.getBlockFlammability(world, pos, face);
         if (Math.round(random.nextInt(chance) / this.spreadChance) < flammability) {
-            IBlockState blockState = world.getBlockState(pos);
+            BlockState blockState = world.getBlockState(pos);
 
             if (random.nextInt(age + 10) < 5 && !world.isRainingAt(pos)) {
                 int newFireAge = age + random.nextInt(5) / 4;
@@ -346,7 +346,7 @@ public class BlockFireBase extends BlockBase {
         return 0;
     }
 
-    protected ItemStack getSilkTouchDrop(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(BlockState state) {
         return new ItemStack(this.getItemDropped(state, null, 0), 1, 0);
     }
 

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -64,7 +64,7 @@ public class EntityAIEatBlock extends EntityAIBase {
          int j = MathHelper.floor(this.host.posY);
          int k = MathHelper.floor(this.host.posZ);
 
-         IBlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
+         BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
          return this.isValidBlock(blockState);
      }
   	
@@ -72,7 +72,7 @@ public class EntityAIEatBlock extends EntityAIBase {
   	// ==================================================
    	//                 Valid Block Check
    	// ==================================================
-     public boolean isValidBlock(IBlockState blockState) {
+     public boolean isValidBlock(BlockState blockState) {
          for(Block edibleBlock : this.blocks) {
         	 if(edibleBlock == blockState.getBlock())
         		 return true;
@@ -122,7 +122,7 @@ public class EntityAIEatBlock extends EntityAIBase {
          int i = MathHelper.floor(this.host.posX);
          int j = MathHelper.floor(this.host.posY);
          int k = MathHelper.floor(this.host.posZ);
-         IBlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
+         BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
          
          if(this.isValidBlock(blockState)) {
              //if(this.host.getEntityWorld().getGameRules().getGameRuleBooleanValue("mobGriefing"))

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,13 +25,13 @@ public class CropBlockSpawnTrigger extends BlockSpawnTrigger {
 
 
 	@Override
-	public boolean isTriggerBlock(IBlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
 		Block block = blockState.getBlock();
 		return block instanceof IPlantable || block instanceof BlockVine;
 	}
 
 	@Override
-	public int getBlockLevel(IBlockState blockState, World world, BlockPos blockPos) {
+	public int getBlockLevel(BlockState blockState, World world, BlockPos blockPos) {
 		return 0;
 	}
 }

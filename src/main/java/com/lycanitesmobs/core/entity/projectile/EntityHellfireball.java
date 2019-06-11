@@ -6,7 +6,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -107,7 +107,7 @@ public class EntityHellfireball extends EntityProjectileBase {
         int x = pos.getX();
         int y = pos.getY();
         int z = pos.getZ();
-        IBlockState placedBlockState = ObjectManager.getBlock("hellfire").getDefaultState();
+        BlockState placedBlockState = ObjectManager.getBlock("hellfire").getDefaultState();
         if(this.canDestroyBlockSub(new BlockPos(x, y, z)))
             world.setBlockState(new BlockPos(x, y, z), placedBlockState);
         if (this.canDestroyBlockSub(new BlockPos(x + 1, y, z)))

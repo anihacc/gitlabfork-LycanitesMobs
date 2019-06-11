@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -43,12 +43,12 @@ public class BlockPropolis extends BlockBase {
     //                   Block States
     // ==================================================
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public BlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(BlockVeswax.HIVE, meta);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
+    public int getMetaFromState(BlockState state) {
         return state.getValue(BlockVeswax.HIVE);
     }
 
@@ -62,7 +62,7 @@ public class BlockPropolis extends BlockBase {
 	//                   Placement
 	// ==================================================
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack itemStack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack itemStack) {
         int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
         orientationMeta += 8;
         world.setBlockState(pos, state.withProperty(BlockVeswax.HIVE, orientationMeta), 2);
@@ -81,7 +81,7 @@ public class BlockPropolis extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+    public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
 		if(world.isRemote)
 			return;
 		if(this.getMetaFromState(state) >= 8)

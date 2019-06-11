@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;
@@ -461,7 +461,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     protected PathNodeType getPathNodeTypeRaw(IBlockAccess blockAccess, int x, int y, int z) {
         BlockPos blockpos = new BlockPos(x, y, z);
-        IBlockState iblockstate = blockAccess.getBlockState(blockpos);
+        BlockState iblockstate = blockAccess.getBlockState(blockpos);
         Block block = iblockstate.getBlock();
         Material material = iblockstate.getMaterial();
         PathNodeType type = block.getAiPathNodeType(iblockstate, blockAccess,blockpos);
@@ -484,7 +484,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         for (int i = x; i < x + this.entitySizeX; ++i) {
             for (int j = y; j < y + this.entitySizeY; ++j) {
                 for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    IBlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
 
                     // Non-Solid:
 					if (!iblockstate.getMaterial().isSolid() && !iblockstate.getMaterial().isLiquid()) {
@@ -525,7 +525,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         for (int i = x; i < x + this.entitySizeX; ++i) {
             for (int j = y; j < y + Math.min(this.entitySizeY, 3); ++j) {
                 for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    IBlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
 
                     if(this.entityCreature == null) {
                         return PathNodeType.BLOCKED;

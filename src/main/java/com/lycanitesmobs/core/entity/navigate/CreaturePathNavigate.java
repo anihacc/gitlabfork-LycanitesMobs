@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.*;
@@ -84,7 +84,7 @@ public class CreaturePathNavigate extends PathNavigate {
     // ==================== Pathing Destination ====================
     /** Returns a suitable position close to the provided position if the position itself isn't suitable. **/
     protected BlockPos getSuitableDestination(BlockPos pos) {
-        IBlockState targetBlockState = this.world.getBlockState(pos);
+        BlockState targetBlockState = this.world.getBlockState(pos);
 
         // Air:
         if(targetBlockState.getMaterial() == Material.AIR) {
@@ -205,7 +205,7 @@ public class CreaturePathNavigate extends PathNavigate {
     public boolean canEntityStandOnPos(BlockPos pos) {
         // Flight/Swimming:
         if(this.entityCreature.isFlying() || (this.entityCreature.isInWater() && this.entityCreature.isStrongSwimmer())) {
-            IBlockState blockState = this.world.getBlockState(pos);
+            BlockState blockState = this.world.getBlockState(pos);
             if(blockState.getMaterial().isLiquid()) {
             	return this.entityCreature.isStrongSwimmer();
 			}
@@ -395,7 +395,7 @@ public class CreaturePathNavigate extends PathNavigate {
         for(int i = 0; i < this.currentPath.getCurrentPathLength(); ++i) {
             PathPoint pathpoint = this.currentPath.getPathPointFromIndex(i);
             PathPoint pathpoint1 = i + 1 < this.currentPath.getCurrentPathLength() ? this.currentPath.getPathPointFromIndex(i + 1) : null;
-            IBlockState iblockstate = this.world.getBlockState(new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z));
+            BlockState iblockstate = this.world.getBlockState(new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z));
             Block block = iblockstate.getBlock();
 
             if (block == Blocks.CAULDRON) {
