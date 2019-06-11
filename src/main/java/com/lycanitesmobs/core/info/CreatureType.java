@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.item.Item;
 
@@ -25,8 +26,11 @@ public class CreatureType {
 	/** The name of the spawn egg item this type uses. **/
 	protected String spawnEggName = "beastspawn";
 
-	/** The name of the spawn egg item this type uses. **/
+	/** The spawn egg item this type uses. **/
 	protected Item spawnEgg;
+
+	/** The treat item this type uses. **/
+	protected Item treat;
 
 
 	/**
@@ -45,8 +49,24 @@ public class CreatureType {
 		if(json.has("spawnEggName")) {
 			this.spawnEggName = json.get("spawnEggName").getAsString();
 		}
+	}
 
-		LycanitesMobs.printDebug("Creature Type", "Added Creature Type: " + this.getTitle());
+	/**
+	 * Loads this creature type (should only be called during startup), generates spawn egg, etc.
+	 */
+	public void load() {
+		this.createItems();
+
+		LycanitesMobs.printDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
+	}
+
+
+	/**
+	 * Returns the name of this creature type. Ex: beast
+	 * @return The name of this creature type.
+	 */
+	public String getName() {
+		return this.name;
 	}
 
 
@@ -55,7 +75,25 @@ public class CreatureType {
 	 * @return The display name of this creature type.
 	 */
 	public String getTitle() {
-		return LanguageManager.translate("creaturetype." + this.name + ".name");
+		return LanguageManager.translate("creaturetype." + this.getName() + ".name");
+	}
+
+
+	/**
+	 * Generates a treat item name from this type. Ex: beasttreat
+	 * @return The treat item name for this creature type.
+	 */
+	public String getTreatName() {
+		return this.getName() + "treat";
+	}
+
+
+	/**
+	 * Gets this creature type's treat item.
+	 * @return The treat item for this creature type.
+	 */
+	public Item getTreatItem() {
+		return this.treat;
 	}
 
 
@@ -82,14 +120,23 @@ public class CreatureType {
 
 
 	/**
-	 * Creates the spawn egg item, must be called after creatures are loaded so that an egg for each creature can be added.
+	 * Creates items for this creature type such as the spawn egg item or treat item, must be called after creatures are loaded so that an egg for each creature can be added.
 	 */
-	public void createSpawnEggItem() {
+	public void createItems() {
+		// Spawn Egg:
 		this.spawnEgg = ObjectManager.getItem(this.spawnEggName);
 		if(this.spawnEgg != null) {
 			return;
 		}
 		this.spawnEgg = new ItemCustomSpawnEgg(this.spawnEggName, this);
 		ObjectManager.addItem(this.spawnEggName, this.spawnEgg);
+
+		// Treat:
+		this.treat = ObjectManager.getItem(this.getTreatName());
+		if(this.treat != null) {
+			return;
+		}
+		this.treat = new ItemTreat(this);
+		ObjectManager.addItem(this.getTreatName(), this.treat);
 	}
 }

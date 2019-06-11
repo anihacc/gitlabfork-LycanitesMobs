@@ -43,7 +43,7 @@ public class EntityCrusk extends EntityCreatureTameable implements IGroupPredato
         this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(60));
         this.tasks.addTask(2, this.aiSit);
         this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("crusktreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
         this.tasks.addTask(6, new EntityAIAttackMelee(this));
         this.tasks.addTask(7, new EntityAIWander(this));
@@ -132,17 +132,6 @@ public class EntityCrusk extends EntityCreatureTameable implements IGroupPredato
 	@Override
 	public boolean isBreedingItem(ItemStack par1ItemStack) {
 		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-    	if(!this.isChild())
-    		return false;
-        return itemstack.getItem() == ObjectManager.getItem("crusktreat");
     }
     
     

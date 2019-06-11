@@ -14,7 +14,7 @@ spawner.darkness.level3=A shadowy creature has spawned from the darkness!
 spawner.darkness.level1.back=The sounds seem to have stopped... For now at least...
 spawner.chaos.level1=You are disrupting the balance of nature, be careful!
 spawner.chaos.level2=Your destructive actions on the elements is drawing in Chaotic energy!
-spawner.chaos.level3=Chaotic energy has manifested! Beware!
+spawner.chaos.level3=Chaotic energy has manifested into something! Beware!
 spawner.chaos.level1.back=Balance seems to be restored... For now at least...
 #
 #
@@ -93,6 +93,8 @@ gui.beastiary.summary=Summary
 gui.beastiary.habitat=Habitat
 gui.beastiary.combat=Combat
 gui.beastiary.unlockedat=Unlocked at
+gui.beastiary.tameable=This creature can be tamed with
+gui.beastiary.summonable=This creature can be summoned as a minion.
 #
 # Pets:
 gui.beastiary.pets=Pets

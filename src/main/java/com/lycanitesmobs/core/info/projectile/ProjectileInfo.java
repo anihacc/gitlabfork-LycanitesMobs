@@ -15,12 +15,13 @@ import com.lycanitesmobs.core.info.ElementManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -75,8 +76,6 @@ public class ProjectileInfo {
 	public double weight = 1.0D;
 
 	// Elements:
-	/** The names of the elements of this projectile, affects buffs and debuffs amongst other things. **/
-	protected List<String> elementNames = new ArrayList<>();
 	/** The Elements of this projectile, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
 
@@ -137,12 +136,15 @@ public class ProjectileInfo {
 			}
 		}
 
+		// Size:
 		if(json.has("width"))
 			this.width = json.get("width").getAsFloat();
 		if(json.has("height"))
 			this.height = json.get("height").getAsFloat();
 		if(json.has("scale"))
 			this.scale = json.get("scale").getAsFloat();
+
+		// Stats:
 		if(json.has("damage"))
 			this.damage = json.get("damage").getAsInt();
 		if(json.has("pierce"))
@@ -160,12 +162,21 @@ public class ProjectileInfo {
 		if(json.has("lifetime"))
 			this.lifetime = json.get("lifetime").getAsInt();
 
-		// Load Elements:
+		// Elements:
+		List<String> elementNames = new ArrayList<>();
 		if(json.has("elements")) {
-			this.elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+			elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+		}
+		this.elements.clear();
+		for(String elementName : elementNames) {
+			ElementInfo element = ElementManager.getInstance().getElement(elementName);
+			if (element == null) {
+				throw new RuntimeException("[Creature] Unable to initialise Projectile Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
+			}
+			this.elements.add(element);
 		}
 
-		// Load Behaviours:
+		// Behaviours:
 		if(json.has("behaviours")) {
 			JsonArray jsonArray = json.get("behaviours").getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
@@ -181,7 +192,7 @@ public class ProjectileInfo {
 			}
 		}
 
-		// Load Flags:
+		// Flags:
 		if(json.has("waterproof"))
 			this.waterproof = json.get("waterproof").getAsBoolean();
 		if(json.has("lavaproof"))
@@ -196,6 +207,28 @@ public class ProjectileInfo {
 			this.impactSound = json.get("impactSound").getAsBoolean();
 		if(json.has("glow"))
 			this.glow = json.get("glow").getAsBoolean();
+	}
+
+	/**
+	 * Loads this projectile (should only be called during startup), generates charge items, etc.
+	 */
+	public void load() {
+		// Charge Item:
+		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
+		if(this.chargeItem == null) {
+			this.chargeItem = new ItemCharge(this);
+			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
+		}
+
+		// Dispenser:
+		this.dispenserBehaviour = new DispenserBehaviorBase();
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this.chargeItem, this.dispenserBehaviour);
+
+		// Sounds:
+		AssetManager.addSound(name, modInfo, "projectile." + name);
+		if(this.impactSound) {
+			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
+		}
 	}
 
 
@@ -237,33 +270,6 @@ public class ProjectileInfo {
 	 */
 	public String getTitle() {
 		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
-	}
-
-	/**
-	 * Initialises this projectile, creating the charge item, adding sounds, registering, etc.
-	 */
-	public void init() {
-		LycanitesMobs.printDebug("Projectile", "Registering Projectile: " + this.getName());
-
-		// Elements:
-		this.elements.clear();
-		for(String elementName : this.elementNames) {
-			ElementInfo element = ElementManager.getInstance().getElement(elementName);
-			if (element == null) {
-				throw new RuntimeException("[Creature] Unable to initialise Projectile Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
-			}
-			this.elements.add(element);
-		}
-
-		// Charge Item:
-		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
-		if(this.chargeItem == null) {
-			this.chargeItem = new ItemCharge(this);
-			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
-		}
-
-		// Register:
-		ObjectManager.addProjectile(this.name, this.entityClass, this.chargeItem, new DispenserBehaviorBase(), this.impactSound);
 	}
 
 	/**

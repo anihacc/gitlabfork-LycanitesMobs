@@ -49,7 +49,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIMate(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("pinkytreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
         this.tasks.addTask(6, new EntityAIAttackMelee(this).setSpeed(1.5D));
         this.tasks.addTask(7, this.aiSit);
@@ -243,15 +243,6 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         if(!CreatureManager.getInstance().config.predatorsAttackAnimals)
             return ObjectLists.inItemList("rawmeat", itemStack) || ObjectLists.inItemList("cookedmeat", itemStack);
         return false; // Breeding is triggered by attacking specific mobs instead!
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("pinkytreat") && this.isChild();
     }
     
     

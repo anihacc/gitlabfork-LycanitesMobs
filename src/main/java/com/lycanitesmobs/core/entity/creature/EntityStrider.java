@@ -58,7 +58,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
         this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
         this.tasks.addTask(3, this.attackAI);
         this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(5, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("stridertreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(6, new EntityAIStayByWater(this).setSpeed(1.25D));
         this.wanderAI = new EntityAIWander(this);
         this.tasks.addTask(7, this.wanderAI);
@@ -333,15 +333,6 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("stridertreat");
-    }
 
 
     // ==================================================

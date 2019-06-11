@@ -66,7 +66,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("salamandertreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(1, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(2, new EntityAIAttackMelee(this));
         this.tasks.addTask(3, this.aiSit);
         this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -314,17 +314,6 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
 	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
 		return new EntitySalamander(this.getEntityWorld());
 	}
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("salamandertreat");
-    }
 
 
     // ==================================================

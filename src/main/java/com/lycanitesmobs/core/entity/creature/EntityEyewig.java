@@ -40,7 +40,7 @@ public class EntityEyewig extends EntityCreatureRideable {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         //this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("eyewigtreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(4.0F));
         this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
         this.tasks.addTask(6, rangedAttackAI);
@@ -209,15 +209,6 @@ public class EntityEyewig extends EntityCreatureRideable {
 	//                     Pet Control
 	// ==================================================
 	public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("eyewigtreat");
-    }
     
     
     // ==================================================

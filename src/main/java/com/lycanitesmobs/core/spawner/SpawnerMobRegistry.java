@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpawnerMobRegistry {
-	/** This class globally maps Mobs to Spawners. MobSpawns created from SpawnInfo configs are handled here, MobSpawns defined in Spawner JSONs are handled by the Spawner class instead. **/
+	/** This class globally maps Mobs to Spawners. MobSpawns created from CreatureSpawns configs are handled here, MobSpawns defined in Spawner JSONs are handled by the Spawner class instead. **/
 
 	/** A static map of each SpawnerMobRegistry by Spawner name. Note that even if a Spawner name is not found via JSON, a SpawnerMobRegistry is still created for it. **/
 	public static Map<String, SpawnerMobRegistry> SPAWNER_MOB_REGISTRIES = new HashMap<>();

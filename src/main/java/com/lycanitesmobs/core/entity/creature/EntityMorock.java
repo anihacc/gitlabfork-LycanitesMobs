@@ -47,7 +47,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("morocktreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
         this.tasks.addTask(5, this.attackAI);
         this.tasks.addTask(6, this.aiSit);
@@ -187,17 +187,6 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return 5; }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("morocktreat");
-    }
 
 
     // ==================================================

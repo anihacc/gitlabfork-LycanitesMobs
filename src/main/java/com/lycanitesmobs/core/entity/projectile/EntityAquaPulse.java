@@ -43,6 +43,7 @@ public class EntityAquaPulse extends EntityProjectileBase {
     	this.setDamage(2);
     	this.setProjectileScale(4F);
     	this.waterProof = true;
+    	this.cutsGrass = true;
     }
     
     

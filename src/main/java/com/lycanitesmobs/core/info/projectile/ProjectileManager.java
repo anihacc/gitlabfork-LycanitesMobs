@@ -1,22 +1,45 @@
 package com.lycanitesmobs.core.info.projectile;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.dispenser.projectile.*;
+import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ModInfo;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProjectileManager extends JSONLoader {
 	public static ProjectileManager INSTANCE;
 
-	/** A map of all creatures by name. **/
+	/** A map of all projectiles by name. **/
 	public Map<String, ProjectileInfo> projectiles = new HashMap<>();
+
+	/** A map of old projectile classes that are hardcoded instead of using json definitions that use the default item sprite renderer. **/
+	public Map<String, Class<? extends Entity>> oldSpriteProjectiles = new HashMap<>();
+
+	/** A map of old projectiles that use the obj model renderer. Newer json based projectiles provide their model class in their ProjectileInfo definition instead. **/
+	public Map<String, Class<? extends Entity>> oldModelProjectiles = new HashMap<>();
+
+	/** The next available network id for projectiles to register by. **/
+	protected int nextProjectileNetworkId = 1000;
 
 	/** Returns the main Projectile Manager instance or creates it and returns it. **/
 	public static ProjectileManager getInstance() {
@@ -26,6 +49,17 @@ public class ProjectileManager extends JSONLoader {
 		return INSTANCE;
 	}
 
+	/**
+	 * Called during startup and initially loads everything in this manager.
+	 * @param modInfo The mod loading this manager.
+	 */
+	public void startup(ModInfo modInfo) {
+		this.loadAllFromJSON(modInfo);
+		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
+			projectileInfo.load();
+		}
+		this.loadOldProjectiles();
+	}
 
 	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
 	public void loadAllFromJSON(ModInfo groupInfo) {
@@ -60,6 +94,62 @@ public class ProjectileManager extends JSONLoader {
 
 
 	/**
+	 * Generates the next available projectile network id to register with.
+	 * @return The next projectile network id.
+	 */
+	public int getNextProjectileNetworkId() {
+		return this.nextProjectileNetworkId++;
+	}
+
+
+	/**
+	 * Registers all creatures added to this creature manager, called from the registry event.
+	 * @param event The enity register event.
+	 * @param modInfo The mod to register entities from.
+	 */
+	@SubscribeEvent
+	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+		ModInfo modInfo = LycanitesMobs.modInfo;
+		LycanitesMobs.printDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
+
+		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
+			if(projectileInfo.modInfo != modInfo) {
+				continue;
+			}
+			EntityEntry entityEntry = EntityEntryBuilder.create()
+					.entity(projectileInfo.entityClass)
+					.id(projectileInfo.getEntityId(), this.getNextProjectileNetworkId())
+					.name(projectileInfo.getName())
+					.tracker(40, 3, true)
+					.build();
+			event.getRegistry().register(entityEntry);
+		}
+
+		for(String entityName : this.oldSpriteProjectiles.keySet()) {
+			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			EntityEntry entityEntry = EntityEntryBuilder.create()
+					.entity(this.oldSpriteProjectiles.get(entityName))
+					.id(registryName, this.getNextProjectileNetworkId())
+					.name(entityName)
+					.tracker(40, 3, true)
+					.build();
+			event.getRegistry().register(entityEntry);
+		}
+
+		for(String entityName : this.oldModelProjectiles.keySet()) {
+			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			EntityEntry entityEntry = EntityEntryBuilder.create()
+					.entity(this.oldModelProjectiles.get(entityName))
+					.id(registryName, this.getNextProjectileNetworkId())
+					.name(entityName)
+					.tracker(40, 3, true)
+					.build();
+			event.getRegistry().register(entityEntry);
+		}
+	}
+
+
+	/**
 	 * Gets a projectile by name.
 	 * @param projectileName The name of the projectile to get.
 	 * @return The Projectile Info.
@@ -71,61 +161,82 @@ public class ProjectileManager extends JSONLoader {
 	}
 
 
-	/** Initialises all projectiles, creates a Charge Item for them, must be called after Elements and Projectiles are loaded. **/
-	public void initAll() {
-		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
-			projectileInfo.init();
-		}
-	}
-
-
 	/** Called during early start up, loads all items. **/
 	public void loadOldProjectiles() {
-		ObjectManager.addProjectile("frostweb", EntityFrostweb.class, ObjectManager.getItem("frostwebcharge"), new DispenserBehaviorFrostweb());
-		ObjectManager.addProjectile("tundra", EntityTundra.class, ObjectManager.getItem("tundracharge"), new DispenserBehaviorTundra());
-		ObjectManager.addProjectile("icefireball", EntityIcefireball.class, ObjectManager.getItem("icefirecharge"), new DispenserBehaviorIcefire());
-		ObjectManager.addProjectile("blizzard", EntityBlizzard.class, ObjectManager.getItem("blizzardcharge"), new DispenserBehaviorBlizzard());
-		ObjectManager.addProjectile("hellfireball", EntityHellfireball.class, ObjectManager.getItem("hellfirecharge"), new DispenserBehaviorHellfireball());
-		ObjectManager.addProjectile("doomfireball", EntityDoomfireball.class, ObjectManager.getItem("doomfirecharge"), new DispenserBehaviorDoomfireball());
-		ObjectManager.addProjectile("devilstar", EntityDevilstar.class, ObjectManager.getItem("devilstarcharge"), new DispenserBehaviorDevilstar());
-		ObjectManager.addProjectile("demonicspark", EntityDemonicSpark.class, false);
-		ObjectManager.addProjectile("demonicblast", EntityDemonicBlast.class, ObjectManager.getItem("demoniclightningcharge"), new DispenserBehaviorDemonicLightning());
-		ObjectManager.addProjectile("hellfirewall", EntityHellfireWall.class, false);
-		ObjectManager.addProjectile("hellfireorb", EntityHellfireOrb.class, false);
-		ObjectManager.addProjectile("hellfirewave", EntityHellfireWave.class, false);
-		ObjectManager.addProjectile("hellfirewavepart", EntityHellfireWavePart.class, false);
-		ObjectManager.addProjectile("hellfirebarrier", EntityHellfireBarrier.class, false);
-		ObjectManager.addProjectile("hellfirebarrierpart", EntityHellfireBarrierPart.class, false);
-		ObjectManager.addProjectile("devilgatling", EntityDevilGatling.class, false);
-		ObjectManager.addProjectile("hellshield", EntityHellShield.class, false);
-		ObjectManager.addProjectile("helllaser", EntityHellLaser.class, false);
-		ObjectManager.addProjectile("helllaserend", EntityHellLaserEnd.class, false);
-		ObjectManager.addProjectile("throwingscythe", EntityThrowingScythe.class, ObjectManager.getItem("throwingscythe"), new DispenserBehaviorThrowingScythe());
-		ObjectManager.addProjectile("mudshot", EntityMudshot.class, ObjectManager.getItem("mudshotcharge"), new DispenserBehaviorMudshot());
-		ObjectManager.addProjectile("aquapulse", EntityAquaPulse.class, ObjectManager.getItem("aquapulsecharge"), new DispenserBehaviorAquaPulse());
-		ObjectManager.addProjectile("whirlwind", EntityWhirlwind.class, ObjectManager.getItem("whirlwindcharge"), new DispenserBehaviorWhirlwind());
-		ObjectManager.addProjectile("chaosorb", EntityChaosOrb.class, ObjectManager.getItem("chaosorbcharge"), new DispenserBehaviorAetherwave(), true);
-		ObjectManager.addProjectile("acidsplash", EntityAcidSplash.class, ObjectManager.getItem("acidsplashcharge"), new DispenserBehaviorAcidSplash(), true);
-		ObjectManager.addProjectile("lightball", EntityLightBall.class, ObjectManager.getItem("lightball"), new DispenserBehaviorLightBall());
-		ObjectManager.addProjectile("lifedrain", EntityLifeDrain.class, ObjectManager.getItem("lifedraincharge"), new DispenserBehaviorLifeDrain());
-		ObjectManager.addProjectile("lifedrainend", EntityLifeDrainEnd.class, false);
-		ObjectManager.addProjectile("crystalshard", EntityCrystalShard.class, ObjectManager.getItem("crystalshard"), new DispenserBehaviorCrystalShard());
-		ObjectManager.addProjectile("frostbolt", EntityFrostbolt.class, ObjectManager.getItem("frostboltcharge"), new DispenserBehaviorFrostbolt());
-		ObjectManager.addProjectile("faebolt", EntityFaeBolt.class, ObjectManager.getItem("faeboltcharge"), new DispenserBehaviorFaebolt());
-		ObjectManager.addProjectile("aetherwave", EntityAetherwave.class, ObjectManager.getItem("aetherwavecharge"), new DispenserBehaviorAetherwave());
-		ObjectManager.addProjectile("waterjet", EntityWaterJet.class, ObjectManager.getItem("waterjetcharge"), new DispenserBehaviorWaterJet());
-		ObjectManager.addProjectile("waterjetend", EntityWaterJetEnd.class, false);
-		ObjectManager.addProjectile("magma", EntityMagma.class, ObjectManager.getItem("magmacharge"), new DispenserBehaviorMagma());
-		ObjectManager.addProjectile("scorchfireball", EntityScorchfireball.class, ObjectManager.getItem("scorchfirecharge"), new DispenserBehaviorScorchfire());
-		ObjectManager.addProjectile("poop", EntityPoop.class, ObjectManager.getItem("poopcharge"), new DispenserBehaviorPoop());
-		ObjectManager.addProjectile("boulderblast", EntityBoulderBlast.class, ObjectManager.getItem("boulderblastcharge"), new DispenserBehaviorBoulderBlast());
-		ObjectManager.addProjectile("arcanelaserstorm", EntityArcaneLaserStorm.class, ObjectManager.getItem("arcanelaserstormcharge"), new DispenserBehaviorArcaneLaserStorm());
-		ObjectManager.addProjectile("arcanelaser", EntityArcaneLaser.class, false);
-		ObjectManager.addProjectile("arcanelaserend", EntityArcaneLaserEnd.class, false);
-		ObjectManager.addProjectile("quill", EntityQuill.class, ObjectManager.getItem("quill"), new DispenserBehaviorQuill());
-		ObjectManager.addProjectile("spectralbolt", EntitySpectralbolt.class, ObjectManager.getItem("spectralboltcharge"), new DispenserBehaviorSpectralbolt());
-		ObjectManager.addProjectile("bloodleech", EntityBloodleech.class, ObjectManager.getItem("bloodleechcharge"), new DispenserBehaviorBloodleech());
-		ObjectManager.addProjectile("poisonray", EntityPoisonRay.class, Items.FERMENTED_SPIDER_EYE, new DispenserBehaviorPoisonRay());
-		ObjectManager.addProjectile("poisonrayend", EntityPoisonRayEnd.class, false);
+		this.addOldProjectile("summoningportal", EntityPortal.class);
+		this.addOldProjectile("frostweb", EntityFrostweb.class, ObjectManager.getItem("frostwebcharge"), new DispenserBehaviorFrostweb());
+		this.addOldProjectile("tundra", EntityTundra.class, ObjectManager.getItem("tundracharge"), new DispenserBehaviorTundra());
+		this.addOldProjectile("icefireball", EntityIcefireball.class, ObjectManager.getItem("icefirecharge"), new DispenserBehaviorIcefire());
+		this.addOldProjectile("blizzard", EntityBlizzard.class, ObjectManager.getItem("blizzardcharge"), new DispenserBehaviorBlizzard());
+		this.addOldProjectile("hellfireball", EntityHellfireball.class, ObjectManager.getItem("hellfirecharge"), new DispenserBehaviorHellfireball());
+		this.addOldProjectile("doomfireball", EntityDoomfireball.class, ObjectManager.getItem("doomfirecharge"), new DispenserBehaviorDoomfireball());
+		this.addOldProjectile("devilstar", EntityDevilstar.class, ObjectManager.getItem("devilstarcharge"), new DispenserBehaviorDevilstar());
+		this.addOldProjectile("demonicspark", EntityDemonicSpark.class, false);
+		this.addOldProjectile("demonicblast", EntityDemonicBlast.class, ObjectManager.getItem("demoniclightningcharge"), new DispenserBehaviorDemonicLightning());
+		this.addOldProjectile("hellfirewall", EntityHellfireWall.class, false);
+		this.addOldProjectile("hellfireorb", EntityHellfireOrb.class, false);
+		this.addOldProjectile("hellfirewave", EntityHellfireWave.class, false);
+		this.addOldProjectile("hellfirewavepart", EntityHellfireWavePart.class, false);
+		this.addOldProjectile("hellfirebarrier", EntityHellfireBarrier.class, false);
+		this.addOldProjectile("hellfirebarrierpart", EntityHellfireBarrierPart.class, false);
+		this.addOldProjectile("devilgatling", EntityDevilGatling.class, false);
+		this.addOldProjectile("hellshield", EntityHellShield.class, false);
+		this.addOldProjectile("helllaser", EntityHellLaser.class, false);
+		this.addOldProjectile("helllaserend", EntityHellLaserEnd.class, false);
+		this.addOldProjectile("throwingscythe", EntityThrowingScythe.class, ObjectManager.getItem("throwingscythe"), new DispenserBehaviorThrowingScythe());
+		this.addOldProjectile("mudshot", EntityMudshot.class, ObjectManager.getItem("mudshotcharge"), new DispenserBehaviorMudshot());
+		this.addOldProjectile("aquapulse", EntityAquaPulse.class, ObjectManager.getItem("aquapulsecharge"), new DispenserBehaviorAquaPulse());
+		this.addOldProjectile("whirlwind", EntityWhirlwind.class, ObjectManager.getItem("whirlwindcharge"), new DispenserBehaviorWhirlwind());
+		this.addOldProjectile("chaosorb", EntityChaosOrb.class, ObjectManager.getItem("chaosorbcharge"), new DispenserBehaviorChaosOrb(), true);
+		this.addOldProjectile("acidsplash", EntityAcidSplash.class, ObjectManager.getItem("acidsplashcharge"), new DispenserBehaviorAcidSplash(), true);
+		this.addOldProjectile("lightball", EntityLightBall.class, ObjectManager.getItem("lightball"), new DispenserBehaviorLightBall());
+		this.addOldProjectile("lifedrain", EntityLifeDrain.class, ObjectManager.getItem("lifedraincharge"), new DispenserBehaviorLifeDrain());
+		this.addOldProjectile("lifedrainend", EntityLifeDrainEnd.class, false);
+		this.addOldProjectile("crystalshard", EntityCrystalShard.class, ObjectManager.getItem("crystalshard"), new DispenserBehaviorCrystalShard());
+		this.addOldProjectile("frostbolt", EntityFrostbolt.class, ObjectManager.getItem("frostboltcharge"), new DispenserBehaviorFrostbolt());
+		this.addOldProjectile("faebolt", EntityFaeBolt.class, ObjectManager.getItem("faeboltcharge"), new DispenserBehaviorFaebolt());
+		this.addOldProjectile("aetherwave", EntityAetherwave.class, ObjectManager.getItem("aetherwavecharge"), new DispenserBehaviorAetherwave());
+		this.addOldProjectile("waterjet", EntityWaterJet.class, ObjectManager.getItem("waterjetcharge"), new DispenserBehaviorWaterJet());
+		this.addOldProjectile("waterjetend", EntityWaterJetEnd.class, false);
+		this.addOldProjectile("magma", EntityMagma.class, ObjectManager.getItem("magmacharge"), new DispenserBehaviorMagma());
+		this.addOldProjectile("scorchfireball", EntityScorchfireball.class, ObjectManager.getItem("scorchfirecharge"), new DispenserBehaviorScorchfire());
+		this.addOldProjectile("poop", EntityPoop.class, ObjectManager.getItem("poopcharge"), new DispenserBehaviorPoop());
+		this.addOldProjectile("boulderblast", EntityBoulderBlast.class, ObjectManager.getItem("boulderblastcharge"), new DispenserBehaviorBoulderBlast());
+		this.addOldProjectile("arcanelaserstorm", EntityArcaneLaserStorm.class, ObjectManager.getItem("arcanelaserstormcharge"), new DispenserBehaviorArcaneLaserStorm());
+		this.addOldProjectile("arcanelaser", EntityArcaneLaser.class, false);
+		this.addOldProjectile("arcanelaserend", EntityArcaneLaserEnd.class, false);
+		this.addOldProjectile("quill", EntityQuill.class, ObjectManager.getItem("quill"), new DispenserBehaviorQuill());
+		this.addOldProjectile("spectralbolt", EntitySpectralbolt.class, ObjectManager.getItem("spectralboltcharge"), new DispenserBehaviorSpectralbolt());
+		this.addOldProjectile("bloodleech", EntityBloodleech.class, ObjectManager.getItem("bloodleechcharge"), new DispenserBehaviorBloodleech());
+		this.addOldProjectile("poisonray", EntityPoisonRay.class, Items.FERMENTED_SPIDER_EYE, new DispenserBehaviorPoisonRay());
+		this.addOldProjectile("poisonrayend", EntityPoisonRayEnd.class, false);
+	}
+
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass) {
+		if(EntityProjectileModel.class.isAssignableFrom(entityClass)) {
+			this.oldModelProjectiles.put(name, entityClass);
+			return;
+		}
+		this.oldSpriteProjectiles.put(name, entityClass);
+	}
+	
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass, boolean impactSound) {
+		name = name.toLowerCase();
+		ModInfo modInfo = LycanitesMobs.modInfo;
+		AssetManager.addSound(name, modInfo, "projectile." + name);
+		if(impactSound) {
+			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
+		}
+		this.addOldProjectile(name, entityClass);
+	}
+
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour) {
+		this.addOldProjectile(name, entityClass, item, dispenseBehaviour, false);
+	}
+
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour, boolean impactSound) {
+		name = name.toLowerCase();
+		this.addOldProjectile(name, entityClass, impactSound);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, dispenseBehaviour);
 	}
 }

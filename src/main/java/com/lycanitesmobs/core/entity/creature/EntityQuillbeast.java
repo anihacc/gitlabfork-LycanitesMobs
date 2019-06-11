@@ -39,7 +39,7 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("quillbeasttreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(1, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.aiAttackMelee = new EntityAIAttackMelee(this).setLongMemory(true).setEnabled(false);
         this.tasks.addTask(2, this.aiAttackMelee);
         this.aiAttackRanged = new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
@@ -127,15 +127,6 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
     // ==================================================
     public int getNoBagSize() { return 0; }
     public int getBagSize() { return 5; }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("quillbeasttreat");
-    }
 
 
     // ==================================================

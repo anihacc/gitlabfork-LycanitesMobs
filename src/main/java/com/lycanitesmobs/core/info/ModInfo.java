@@ -26,24 +26,6 @@ public class ModInfo {
 
     /** The filename of this mod, used for assets, config, etc. This should usually match the mod ID. **/
     public String filename;
-    
-    // ========== Mobs ==========
-	/** The next available ID for registering a special entity. **/
-	protected int nextSpecialID = 0;
-
-    /** The next available ID for registering a mob. **/
-    protected int nextMobID = 100;
-
-    /** The next available ID for registering a projectile. **/
-	protected int nextProjectileID = 1000;
-
-    // ========== Projectiles ==========
-    /** A list of all Projectile Classes assigned to this mod. **/
-    public List<Class> projectileClasses = new ArrayList<>();
-
-    // ========== Special Entities ==========
-    /** A list of all Special Entity Classes assigned to this mod (to be rendered invisible). **/
-    public List<Class> specialClasses = new ArrayList<>();
 	
 	// ========== Spawn Dimensions ========== TODO Remove
     /** A comma separated list of dimensions that mobs in this mod spawn in. As read from the config **/
@@ -86,26 +68,4 @@ public class ModInfo {
 	public String getTitle() {
     	return LanguageManager.translate(this.filename + ".name");
 	}
-
-
-    // ==================================================
-    //                    Entity IDs
-    // ==================================================
-	public int getNextSpecialID() {
-		int id = this.nextSpecialID;
-		this.nextSpecialID++;
-		return id;
-	}
-
-    public int getNextMobID() {
-        int id = this.nextMobID;
-        this.nextMobID++;
-        return id;
-    }
-
-    public int getNextProjectileID() {
-        int id = this.nextProjectileID;
-        this.nextProjectileID++;
-        return id;
-    }
 }

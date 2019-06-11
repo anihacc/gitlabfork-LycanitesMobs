@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
+import com.sun.istack.internal.NotNull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -18,9 +19,14 @@ import java.util.Random;
 
 public class ItemDrop {
 	// ========== Item ==========
-	public ItemStack itemStack = null;
-	public ItemStack burningItemStack = null;
-	public Map<Integer, ItemStack> effectsItem = new HashMap<>();
+	protected String itemId;
+	protected int metadata;
+
+	protected String burningItemId;
+	protected int burningMetadata;
+
+	protected Map<Integer, String> effectItemIds = new HashMap<>();
+	protected Map<Integer, Integer> effectItemMetadata = new HashMap<>();
 	
 	public int minAmount = 1;
 	public int maxAmount = 1;
@@ -43,19 +49,11 @@ public class ItemDrop {
 				itemMetadata = json.get("metadata").getAsInt();
 			}
 			String itemId = json.get("item").getAsString();
-
-			Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(itemId));
-			if(item != null) {
-				itemDrop = new ItemDrop(new ItemStack(item, 1, itemMetadata), 1);
-				itemDrop.loadFromJSON(json);
-			}
-			else {
-				LycanitesMobs.printWarning("", "[JSON] Unable to load item drop from the item id: " + itemId);
-				return null;
-			}
+			itemDrop = new ItemDrop(itemId, itemMetadata, 1);
+			itemDrop.loadFromJSON(json);
 		}
 		else {
-			LycanitesMobs.printWarning("", "[JSON] Unable to load item drop from json as it has no name!");
+			LycanitesMobs.printWarning("", "[JSON] Unable to load item drop from json as it has no item id!");
 		}
 
 		return itemDrop;
@@ -87,13 +85,10 @@ public class ItemDrop {
 				chance = Float.parseFloat(customDropValues[4]);
 			}
 
-			ItemDrop itemDrop = null;
-			Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(itemId));
-			if(item != null) {
-				itemDrop = new ItemDrop(new ItemStack(item, amountMin, itemMetadata), chance);
-				itemDrop.setMinAmount(amountMin);
-				itemDrop.setMaxAmount(amountMax);
-			}
+			ItemDrop itemDrop = new ItemDrop(itemId, itemMetadata, chance);
+			itemDrop.setMinAmount(amountMin);
+			itemDrop.setMaxAmount(amountMax);
+
 			return itemDrop;
 		}
 		return null;
@@ -103,10 +98,9 @@ public class ItemDrop {
     // ==================================================
    	//                     Constructor
    	// ==================================================
-	public ItemDrop(ItemStack itemStack, float chance) {
-		this.itemStack = itemStack;
-		this.minAmount = 1;
-		this.maxAmount = 1;
+	public ItemDrop(String itemId, int metadata, float chance) {
+		this.itemId = itemId;
+		this.metadata = metadata;
 		this.chance = chance;
 	}
 
@@ -115,31 +109,20 @@ public class ItemDrop {
 	}
 
 	public void loadFromJSON(JsonObject json) {
-		if (json.has("minAmount"))
+		if(json.has("minAmount"))
 			this.minAmount = json.get("minAmount").getAsInt();
-		if (json.has("maxAmount"))
+		if(json.has("maxAmount"))
 			this.maxAmount = json.get("maxAmount").getAsInt();
-		if (json.has("chance"))
+		if(json.has("chance"))
 			this.chance = json.get("chance").getAsFloat();
-		if (json.has("subspecies"))
+		if(json.has("subspecies"))
 			this.subspeciesID = json.get("subspecies").getAsInt();
 
-		if (json.has("burningItem")) {
-			int dropMeta = 0;
+		if(json.has("burningItem")) {
+			this.burningItemId = json.get("burningItem").getAsString();
 			if(json.has("burningMetadata")) {
-				dropMeta = json.get("burningMetadata").getAsInt();
+				this.burningMetadata = json.get("burningMetadata").getAsInt();
 			}
-			String dropName = json.get("burningItem").getAsString();
-
-			ItemStack itemStack = null;
-			if (Item.getByNameOrId(dropName) != null) {
-				itemStack = new ItemStack(Item.getByNameOrId(dropName), 1, dropMeta);
-			}
-			else if (Block.getBlockFromName(dropName) != null) {
-				itemStack = new ItemStack(Block.getBlockFromName(dropName), 1, dropMeta);
-			}
-
-			this.burningItemStack = itemStack;
 		}
 	}
 
@@ -147,18 +130,21 @@ public class ItemDrop {
     // ==================================================
    	//                     Properties
    	// ==================================================
-	public ItemDrop setDrop(ItemStack item) {
-		this.itemStack = item;
+	public ItemDrop setDrop(ItemStack itemStack) {
+		this.itemId = itemStack.getItem().getRegistryName().toString();
+		this.metadata = itemStack.getMetadata();
 		return this;
 	}
 
-	public ItemDrop setBurningDrop(ItemStack item) {
-		this.burningItemStack = item;
+	public ItemDrop setBurningDrop(ItemStack itemStack) {
+		this.burningItemId = itemStack.getItem().getRegistryName().toString();
+		this.burningMetadata = itemStack.getMetadata();
 		return this;
 	}
 
-	public ItemDrop setEffectDrop(int effectID, ItemStack item) {
-		effectsItem.put(effectID, item);
+	public ItemDrop setEffectDrop(int effectID, ItemStack itemStack) {
+		this.effectItemIds.put(effectID, itemStack.getItem().getRegistryName().toString());
+		this.effectItemMetadata.put(effectID, itemStack.getMetadata());
 		return this;
 	}
 
@@ -206,25 +192,83 @@ public class ItemDrop {
 		int dropAmount = min + Math.round(dropRange);
 		return dropAmount;
 	}
-	
-	public ItemStack getItemStack(EntityLivingBase entity, int quantity) {
-		ItemStack drop = this.itemStack;
-		if(entity.isBurning()) {
-			if(this.burningItemStack != null)
-				drop = this.burningItemStack;
+
+	/**
+	 * Gets the base itemstack for this item drop.
+	 * @return The base itemstack to drop.
+	 */
+	@NotNull
+	public ItemStack getItemStack() {
+		if(this.itemId == null) {
+			return ItemStack.EMPTY;
 		}
-		
-		for(Object potionEffect : entity.getActivePotionEffects()) {
-			if(potionEffect instanceof PotionEffect) {
-				int effectID = Potion.getIdFromPotion(((PotionEffect) potionEffect).getPotion());
-				if(effectsItem.containsKey(effectID))
-					drop = effectsItem.get(effectID);
+
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.itemId));
+		if(item != null) {
+			return new ItemStack(item, 1, this.metadata);
+		}
+
+		return ItemStack.EMPTY;
+	}
+
+	/**
+	 * Gets the itemstack that burning entities should drop.
+	 * @return The burning itemstack or the base itemstack if not set.
+	 */
+	@NotNull
+	public ItemStack getBurningItemStack() {
+		if(this.burningItemId == null) {
+			return this.getItemStack();
+		}
+
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.burningItemId));
+		if(item != null) {
+			return new ItemStack(item, 1, this.burningMetadata);
+		}
+
+		return this.getItemStack();
+	}
+
+	/**
+	 * Gets the itemstack that entities with the provided effect should drop.
+	 * @return The effect itemstack or the base itemstack if not set.
+	 */
+	@NotNull
+	public ItemStack getEffectItemStack(int effectId) {
+		if(!this.effectItemIds.containsKey(effectId) || !this.effectItemMetadata.containsKey(effectId)) {
+			return ItemStack.EMPTY;
+		}
+		Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(this.effectItemIds.get(effectId)));
+		if(item != null) {
+			return new ItemStack(item, 1, this.effectItemMetadata.get(effectId));
+		}
+
+		return ItemStack.EMPTY;
+	}
+	
+	public ItemStack getEntityDropItemStack(EntityLivingBase entity, int quantity) {
+		ItemStack itemStack = this.getItemStack();
+
+		if(entity != null) {
+			if(entity.isBurning()) {
+				itemStack = this.getBurningItemStack();
+			}
+
+			for(Object potionEffect : entity.getActivePotionEffects()) {
+				if(potionEffect instanceof PotionEffect) {
+					int effectId = Potion.getIdFromPotion(((PotionEffect) potionEffect).getPotion());
+					ItemStack effectStack = this.getEffectItemStack(effectId);
+					if(!effectStack.isEmpty())
+						itemStack = effectStack;
+				}
 			}
 		}
 		
-		if(drop != null)
-			drop.setCount(quantity);
-		return drop;
+		if(itemStack != null) {
+			itemStack.setCount(quantity);
+		}
+
+		return itemStack;
 	}
 
 
@@ -233,8 +277,10 @@ public class ItemDrop {
 	 * @param nbtTagCompound The NBT to load values from.
 	 */
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
-		this.itemStack = new ItemStack(nbtTagCompound);
-
+		if(nbtTagCompound.hasKey("ItemId"))
+			this.itemId = nbtTagCompound.getString("ItemId");
+		if(nbtTagCompound.hasKey("Metadata"))
+			this.metadata = nbtTagCompound.getInteger("Metadata");
 		this.minAmount = nbtTagCompound.getInteger("MinAmount");
 		this.maxAmount = nbtTagCompound.getInteger("MaxAmount");
 		this.chance = nbtTagCompound.getFloat("Chance");
@@ -244,18 +290,20 @@ public class ItemDrop {
 	/**
 	 * Writes this Item Drop to NBT.
 	 * @param nbtTagCompound The NBT to write to.
-	 * @return The NBT written to.
+	 * @return True on success or false on fail (this happens if this drop is missing an item id, etc).
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-		NBTTagCompound itemNBT = new NBTTagCompound();
-		this.itemStack.writeToNBT(itemNBT);
-		nbtTagCompound.setTag("ItemStack", itemNBT);
+	public boolean writeToNBT(NBTTagCompound nbtTagCompound) {
+		if(this.itemId == null) {
+			return false;
+		}
 
+		nbtTagCompound.setString("ItemId", this.itemId);
+		nbtTagCompound.setInteger("Metadata", this.metadata);
 		nbtTagCompound.setInteger("MinAmount", this.minAmount);
 		nbtTagCompound.setInteger("MaxAmount", this.maxAmount);
 		nbtTagCompound.setFloat("Chance", this.chance);
 
-		return nbtTagCompound;
+		return true;
 	}
 
 
@@ -264,6 +312,6 @@ public class ItemDrop {
 	 * @return The Item Drop config string.
 	 */
 	public String toConfigString() {
-		return this.itemStack.getItem().getRegistryName().toString() + "," + this.itemStack.getMetadata() + "," + this.minAmount + "," + this.maxAmount + "," + this.chance;
+		return this.itemId + "," + this.metadata + "," + this.minAmount + "," + this.maxAmount + "," + this.chance;
 	}
 }

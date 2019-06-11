@@ -69,7 +69,11 @@ public class PotionEffects {
 			ObjectManager.addPotionEffect("freezeaura", config, false, 0x55BBFF, true); // TODO Implement
 			ObjectManager.addPotionEffect("envenom", config, false, 0x44DD66, true); // TODO Implement
 
+			// Event Listener:
 			MinecraftForge.EVENT_BUS.register(this);
+
+			// Effect Sounds:
+			AssetManager.addSound("effect_fear", LycanitesMobs.modInfo, "effect.fear");
 		}
 		this.disableNausea = config.getBool("Potion Effects", "Disable Nausea Debuff", disableNausea, "Set to true to disable the vanilla nausea debuff on players.");
 	}

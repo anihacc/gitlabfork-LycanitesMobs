@@ -62,7 +62,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIMate(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("ignibustreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(4, new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(20.0F).setMinChaseDistance(10.0F));
         this.tasks.addTask(5, this.aiSit);
         this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -298,15 +298,6 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         if(damageSrc.isFireDamage())
             return 0F;
         else return super.getDamageModifier(damageSrc);
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("ignibustreat");
     }
     
     

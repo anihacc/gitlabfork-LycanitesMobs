@@ -48,7 +48,7 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         //this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("shadetreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(6, new EntityAIAttackMelee(this).setSpeed(1.5D));
         this.tasks.addTask(7, this.aiSit);
         this.tasks.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -228,15 +228,6 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {
         return false;
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("shadetreat");
     }
     
     

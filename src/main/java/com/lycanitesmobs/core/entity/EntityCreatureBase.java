@@ -463,7 +463,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         this.loadItemDrops();
 		ItemEquipmentPart itemEquipmentPart = ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId());
 		if(itemEquipmentPart != null) {
-			this.drops.add(new ItemDrop(new ItemStack(itemEquipmentPart), itemEquipmentPart.dropChance).setMaxAmount(1));
+			this.drops.add(new ItemDrop(itemEquipmentPart.getRegistryName().toString(), 0, itemEquipmentPart.dropChance).setMaxAmount(1));
 		}
         
         // Fire Immunity:
@@ -476,14 +476,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
     // ========== Item Drops ==========
     /** Loads all default item drops, will be ignored if the Enable Default Drops config setting for this mob is set to false, should be overridden to add drops. **/
     public void loadItemDrops() {
-		for(ItemDrop drop : this.creatureInfo.drops) {
-			ItemDrop newDrop = new ItemDrop(drop.itemStack.copy(), drop.chance).setMinAmount(drop.minAmount).setMaxAmount(drop.maxAmount).setChance(drop.chance).setSubspecies(drop.subspeciesID).setBurningDrop(drop.burningItemStack);
-			this.drops.add (newDrop);
-		}
-		for(ItemDrop drop : CreatureManager.getInstance().config.getGlobalDrops()) {
-			ItemDrop newDrop = new ItemDrop(drop.itemStack.copy(), drop.chance).setMinAmount(drop.minAmount).setMaxAmount(drop.maxAmount).setChance(drop.chance).setSubspecies(drop.subspeciesID).setBurningDrop(drop.burningItemStack);
-			this.drops.add (newDrop);
-		}
+		this.drops.addAll(this.creatureInfo.drops);
+		this.drops.addAll(CreatureManager.getInstance().config.getGlobalDrops());
 	}
 
     /** Adds a saved item drop to this creature instance where it will be read/written from/to NBT Data. **/
@@ -3124,7 +3118,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     	if(forSpawnCount) {
     		if(this.isMinion()) // Minions shouldn't take up the spawn count.
     			return false;
-    		for(EnumCreatureType creatureType : this.creatureInfo.creatureSpawn.creatureTypes) {
+    		for(EnumCreatureType creatureType : this.creatureInfo.creatureSpawn.vanillaSpawnerTypes) {
     			if(creatureType == type)
     				return true;
     		}
@@ -3433,11 +3427,11 @@ public abstract class EntityCreatureBase extends EntityLiving {
    	//                      Drops
    	// ==================================================
     // ========== Item ID ==========
-    /** Gets the item ID of what this mob mostly drops. This is provided for compatibility but is not used by the DropRate code. **/
+    /** Gets the item ID of what this mob commonly drops. This is provided for compatibility but is not used by the DropRate code. **/
     @Override
     protected Item getDropItem() {
         if(this.drops != null && this.drops.get(0) != null && !this.isMinion() && !this.isBoundPet())
-        	return this.drops.get(0).itemStack.getItem();
+        	return this.drops.get(0).getItemStack().getItem();
         else
         	return null;
     }
@@ -3463,7 +3457,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     			quantity = Math.round((float)quantity * (float)this.extraMobBehaviour.itemDropMultiplierOverride);
     		ItemStack dropStack = null;
     		if(quantity > 0)
-    			dropStack = itemDrop.getItemStack(this, quantity);
+    			dropStack = itemDrop.getEntityDropItemStack(this, quantity);
     		if(dropStack != null)
     			this.dropItem(dropStack);
     	}
@@ -4235,8 +4229,9 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		NBTTagList nbtDropList = new NBTTagList();
         for(ItemDrop drop : this.savedDrops) {
 			NBTTagCompound dropNBT = new NBTTagCompound();
-			dropNBT = drop.writeToNBT(dropNBT);
-			nbtDropList.appendTag(dropNBT);
+			if(drop.writeToNBT(dropNBT)) {
+				nbtDropList.appendTag(dropNBT);
+			}
 		}
 		nbtTagCompound.setTag("Drops", nbtDropList);
         

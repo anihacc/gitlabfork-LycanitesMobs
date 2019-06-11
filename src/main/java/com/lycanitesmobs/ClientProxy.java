@@ -125,13 +125,6 @@ public class ClientProxy extends CommonProxy {
 		// ========== Add GUI Tabs ==========
 		TabManager.registerTab(new GuiTabMain(0));
     }
-
-
-	// ========== Register Tile Entities ==========
-	@Override
-	public void registerTileEntities() {
-		// None
-	}
 	
 	
 	// ========== Register Renders ==========
@@ -148,18 +141,13 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipmentPart.class, new EquipmentPartRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipment.class, new EquipmentRenderer());
 
-		// Special Entites:
-        modInfo.specialClasses.add(EntityHitArea.class);
-        modInfo.specialClasses.add(EntityFear.class);
-        modInfo.projectileClasses.add(EntityPortal.class);
-
         RenderRegister renderRegister = new RenderRegister(modInfo);
         renderRegister.registerRenderFactories();
     }
 
 	// ========== Register Models ==========
 	@Override
-	public void registerModels(ModInfo groupInfo) {
+	public void registerItemModels(ModInfo groupInfo) {
 		ObjectManager.RegisterModels();
 	}
 

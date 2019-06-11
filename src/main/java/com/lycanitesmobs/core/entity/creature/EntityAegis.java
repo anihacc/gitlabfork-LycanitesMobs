@@ -59,6 +59,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 		this.targetTasks.addTask(3, new EntityAIDefendVillage(this));
 		this.targetTasks.addTask(4, new EntityAITargetDefend(this, EntityVillager.class));
         //this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+		this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityArgus.class));
         this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
 		this.targetTasks.addTask(7, new EntityAITargetFuse(this));
     }

@@ -18,7 +18,6 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -92,11 +91,9 @@ public class CreatureInfo {
 	/** The Subspecies that this creature can use. **/
 	public Map<Integer, Subspecies> subspecies = new HashMap<>();
 
-	/** A list of subspecies skins that have been registered, used to prevent duplicates. **/
-	public List<String> registeredSubspeciesSkins = new ArrayList<>();
+	/** A list of subspecies skins that have been loaded, used to prevent them loading assets multiple times per color variation. **/
+	public List<String> loadedSubspeciesSkins = new ArrayList<>();
 
-	/** The names of the elements of this creature, affects buffs and debuffs amongst other things. **/
-	protected List<String> elementNames = new ArrayList<>();
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
 
@@ -187,13 +184,20 @@ public class CreatureInfo {
 			this.creatureType.addCreature(this);
 		}
 
-		this.creatureSpawn.loadFromJSON(json.get("spawning").getAsJsonObject());
+		// Spawning:
+		this.creatureSpawn.loadFromJSON(this, json.get("spawning").getAsJsonObject());
 
+		// Size:
 		if(json.has("width"))
 			this.width = json.get("width").getAsDouble();
 		if(json.has("height"))
 			this.height = json.get("height").getAsDouble();
+		if(json.has("sizeScale"))
+			this.sizeScale = json.get("sizeScale").getAsDouble();
+		if(json.has("hitboxScale"))
+			this.hitboxScale = json.get("hitboxScale").getAsDouble();
 
+		// Stats:
 		if(json.has("experience"))
 			this.experience = json.get("experience").getAsInt();
 		if(json.has("health"))
@@ -216,17 +220,14 @@ public class CreatureInfo {
 			this.effectAmplifier = json.get("effectAmplifier").getAsDouble();
 		if(json.has("pierce"))
 			this.pierce = json.get("pierce").getAsDouble();
-
 		if(json.has("knockbackResistance"))
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
 
+		// Spawn Egg:
 		this.eggBackColor = Color.decode(json.get("eggBackColor").getAsString()).getRGB();
 		this.eggForeColor = Color.decode(json.get("eggForeColor").getAsString()).getRGB();
-
-		if(json.has("boss"))
-			this.boss = json.get("boss").getAsBoolean();
 
 		// Subspecies:
 		if(json.has("subspecies")) {
@@ -239,16 +240,29 @@ public class CreatureInfo {
 		}
 
 		// Elements:
-		this.elementNames.clear();
+		List<String> elementNames = new ArrayList<>();
 		if(json.has("element")) {
-			this.elementNames.add(json.get("element").getAsString());
+			elementNames.add(json.get("element").getAsString());
 		}
 		if(json.has("elements")) {
-			this.elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+			elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+		}
+		this.elements.clear();
+		for(String elementName : elementNames) {
+			ElementInfo element = ElementManager.getInstance().getElement(elementName);
+			if (element == null) {
+				throw new RuntimeException("[Creature] The element " + elementName + " cannot be found for: " + this.getName());
+			}
+			this.elements.add(element);
 		}
 
+		// Flags:
+		if(json.has("boss"))
+			this.boss = json.get("boss").getAsBoolean();
 		if(json.has("peaceful"))
 			this.peaceful = json.get("peaceful").getAsBoolean();
+
+		// Pet or Minion:
 		if(json.has("summonable"))
 			this.summonable = json.get("summonable").getAsBoolean();
 		if(json.has("tameable"))
@@ -260,36 +274,9 @@ public class CreatureInfo {
 		if(json.has("dungeonLevel"))
 			this.dungeonLevel = json.get("dungeonLevel").getAsInt();
 
-		if(json.has("drops")) {
-			this.dropsJson = json.getAsJsonArray("drops");
-		}
-
-		if(json.has("sizeScale"))
-			this.sizeScale = json.get("sizeScale").getAsDouble();
-		if(json.has("hitboxScale"))
-			this.hitboxScale = json.get("hitboxScale").getAsDouble();
-	}
-
-
-	/** Initialises this Creature Info, should be called after pre-init and when reloading. **/
-	public void init() {
-		if(this.dummy)
-			return;
-
-		// Elements:
-		this.elements.clear();
-		for(String elementName : this.elementNames) {
-			ElementInfo element = ElementManager.getInstance().getElement(elementName);
-			if (element == null) {
-				throw new RuntimeException("[Creature] Unable to initialise Creature Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
-			}
-			this.elements.add(element);
-		}
-
 		// Item Drops:
-		this.drops.clear();
-		if(this.dropsJson != null) {
-			for(JsonElement mobDropJson : this.dropsJson) {
+		if(json.has("drops")) {
+			for(JsonElement mobDropJson : json.getAsJsonArray("drops")) {
 				ItemDrop itemDrop = ItemDrop.createFromJSON(mobDropJson.getAsJsonObject());
 				if(itemDrop != null) {
 					this.drops.add(itemDrop);
@@ -299,38 +286,17 @@ public class CreatureInfo {
 				}
 			}
 		}
-
-		// Spawning:
-		this.creatureSpawn.init(this);
 	}
 
-
 	/**
-	 * Registers this creature to vanilla and custom entity lists. Must be called after init and only during game startup and only by its own submod.
+	 * Loads this creature (should only be called during startup), generates sounds, achievement stats, etc.
 	 */
-	public void register() {
-		// ID and Enabled Check:
-		if(!this.enabled) {
-			LycanitesMobs.printDebug("Creature", "Creature Disabled: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
-			return;
-		}
-		LycanitesMobs.printDebug("Creature", "Registering Creature: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
-
-		// Mapping and Registration:
-		if(!ObjectManager.entityLists.containsKey(this.modInfo.filename)) {
-			ObjectManager.entityLists.put(this.modInfo.filename, new EntityListCustom());
-		}
-		if(this.entityClass == null) {
-			LycanitesMobs.printWarning("", "The entity class cannot be found for " + this.name);
-		}
-		ObjectManager.entityLists.get(this.modInfo.filename).addMapping(this.entityClass, this.getResourceLocation(), this.eggBackColor, this.eggForeColor);
-		EntityRegistry.registerModEntity(this.getResourceLocation(), this.entityClass, this.modInfo.filename + "." + this.getName(), this.modInfo.getNextMobID(), this.modInfo.mod, 128, 3, true);
-
-		// Stop If Dummy (Fear Entity):
+	public void load() {
+		// Skip Dummies:
 		if(this.dummy) {
-			LycanitesMobs.printDebug("Creature", "Dummy Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 			return;
 		}
+		LycanitesMobs.printDebug("", "Loading: " + this.getName());
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
@@ -347,16 +313,15 @@ public class CreatureInfo {
 		// Add Sounds:
 		this.addSounds("");
 
-		// Register Subspecies:
+		// Init Subspecies:
 		for(Subspecies subspecies : this.subspecies.values()) {
-			subspecies.register(this);
+			subspecies.load(this);
 		}
 
-		// Register Spawning:
-		this.creatureSpawn.register(this);
+		// Vanilla Spawning:
+		this.creatureSpawn.registerVanillaSpawns(this);
 
-		// Debug Message - Added:
-		LycanitesMobs.printDebug("Creature", "Creature Added: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+		LycanitesMobs.printDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 

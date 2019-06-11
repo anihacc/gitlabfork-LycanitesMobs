@@ -52,7 +52,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("roctreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
         this.tasks.addTask(5, this.attackAI);
         this.tasks.addTask(6, this.aiSit);
@@ -278,17 +278,6 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         if(this.hasPickupEntity() && this.getPickupEntity() instanceof EntityPlayer)
             return new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return super.getWanderPosition(wanderPosition);
-    }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("roctreat");
     }
 
 

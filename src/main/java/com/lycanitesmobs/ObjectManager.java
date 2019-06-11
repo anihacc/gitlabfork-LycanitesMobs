@@ -2,8 +2,12 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityProjectileModel;
-import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
@@ -13,9 +17,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -30,7 +34,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,24 +52,34 @@ public class ObjectManager {
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
 	public static Map<String, PotionBase> potionEffects = new HashMap<>();
-	
-	public static Map<String, EntityListCustom> entityLists = new HashMap<>();
-	
-	public static Map<String, Class> projectiles = new HashMap<>();
-	/** A map of optional model projectile ids to use for each projectile class. **/
-	public static Map<Class, String> projectileModels = new HashMap<>();
+
+	// Entity Maps:
+	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
     public static Map<String, StatBase> stats = new HashMap<>();
 	
 	public static ModInfo currentModInfo;
+
+	/** The next available network id for special entities to register by. **/
+	protected static int nextSpecialEntityNetworkId = 0;
+
 	
     // ==================================================
     //                        Setup
     // ==================================================
 	public static void setCurrentModInfo(ModInfo group) {
 		currentModInfo = group;
+	}
+
+
+	/**
+	 * Generates the next available special entity network id to register with.
+	 * @return The next special entity network id.
+	 */
+	public static int getNextSpecialEntityNetworkId() {
+		return nextSpecialEntityNetworkId++;
 	}
 	
 	
@@ -158,40 +172,11 @@ public class ObjectManager {
 
 		return potion;
 	}
-	
 
-	// ========== Projectile ==========
-    public static void addProjectile(String name, Class entityClass, int updateFrequency, boolean impactSound) {
-        name = name.toLowerCase();
-        ModInfo modInfo = currentModInfo;
-        AssetManager.addSound(name, modInfo, "projectile." + name);
-        if(impactSound) {
-			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
-		}
+	// ========== Special Entity ==========
+	public static void addSpecialEntity(String name, Class<? extends Entity> entityClass) {
+		specialEntities.put(name, entityClass);
 
-        int projectileID = modInfo.getNextProjectileID();
-        EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, name), entityClass, name, projectileID, modInfo.mod, 64, updateFrequency, true);
-
-        projectiles.put(name, entityClass);
-        modInfo.projectileClasses.add(entityClass);
-
-		if(EntityProjectileModel.class.isAssignableFrom(entityClass)) {
-			projectileModels.put(entityClass, name);
-		}
-    }
-
-	public static void addProjectile(String name, Class entityClass, boolean impactSound) {
-		addProjectile(name, entityClass, 1, impactSound);
-	}
-
-	public static void addProjectile(String name, Class entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour, boolean impactSound) {
-		name = name.toLowerCase();
-		addProjectile(name, entityClass, impactSound);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, dispenseBehaviour);
-	}
-	
-	public static void addProjectile(String name, Class entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour) {
-		addProjectile(name, entityClass, item, dispenseBehaviour, false);
 	}
 
 
@@ -292,14 +277,16 @@ public class ObjectManager {
     }
 
 	// ========== Entities ==========
-	public static void registerEntities(RegistryEvent.Register<EntityEntry> event, ModInfo group) {
-		LycanitesMobs.printDebug("Creature", "Forge registering all " + CreatureManager.getInstance().creatures.size() + " creatures from the group: " + group.name + "...");
-		for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
-			if(creatureInfo.modInfo != group) {
-				continue;
-			}
-			EntityEntry entityEntry = new EntityEntry(creatureInfo.entityClass, creatureInfo.getEntityId());
-			entityEntry.setRegistryName(creatureInfo.getEntityId());
+	public static void registerSpecialEntities(RegistryEvent.Register<EntityEntry> event) {
+		// Special Entities:
+		for(String entityName : specialEntities.keySet()) {
+			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			EntityEntry entityEntry = EntityEntryBuilder.create()
+					.entity(specialEntities.get(entityName))
+					.id(registryName, getNextSpecialEntityNetworkId())
+					.name(entityName)
+					.tracker(80, 3, false)
+					.build();
 			event.getRegistry().register(entityEntry);
 		}
 	}
@@ -310,13 +297,13 @@ public class ObjectManager {
     // ==================================================
     @SideOnly(Side.CLIENT)
     public static void RegisterModels() {
-        for(Item item : items.values()) {
-            if(item instanceof ItemBase) {
-                ItemBase itemBase = (ItemBase) item;
-                if (itemBase.useItemColors()) {
-                    Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientProxy.itemColor, item);
-                }
-            }
+		for(Item item : items.values()) {
+			if(item instanceof ItemBase) {
+				ItemBase itemBase = (ItemBase) item;
+				if (itemBase.useItemColors()) {
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientProxy.itemColor, item);
+				}
+			}
             if(item instanceof ItemEquipmentPart) {
 				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
             	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));

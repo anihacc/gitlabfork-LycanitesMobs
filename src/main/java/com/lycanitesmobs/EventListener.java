@@ -7,8 +7,8 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.temp.ItemSwordBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
@@ -51,6 +51,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import thaumcraft.api.OreDictionaryEntries;
 
 public class EventListener {
 
@@ -67,12 +69,14 @@ public class EventListener {
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         ObjectManager.registerBlocks(event);
+		ItemManager.getInstance().registerBlockOres();
     }
 
     // ========== Items ==========
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         ObjectManager.registerItems(event);
+        ItemManager.getInstance().registerItemOres();
     }
 
     // ========== Potions ==========
@@ -84,7 +88,7 @@ public class EventListener {
 	// ========== Entities ==========
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-		ObjectManager.registerEntities(event, LycanitesMobs.modInfo);
+		ObjectManager.registerSpecialEntities(event);
 	}
 
 
@@ -237,23 +241,6 @@ public class EventListener {
 			if(playerExt != null)
 				playerExt.onUpdate();
 		}
-
-        // ========== Item Early Update ==========
-        if(event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer entityPlayer = (EntityPlayer)event.getEntityLiving();
-            if(entityPlayer.getHeldItem(EnumHand.MAIN_HAND) != null) {
-                ItemStack equippedItemStack = entityPlayer.getHeldItem(EnumHand.MAIN_HAND);
-                if(equippedItemStack.getItem() instanceof ItemSwordBase) {
-                    ((ItemSwordBase)equippedItemStack.getItem()).onEarlyUpdate(equippedItemStack, event.getEntityLiving(), EnumHand.MAIN_HAND);
-                }
-            }
-            if(entityPlayer.getHeldItem(EnumHand.OFF_HAND) != null) {
-                ItemStack equippedItemStack = entityPlayer.getHeldItem(EnumHand.OFF_HAND);
-                if(equippedItemStack.getItem() instanceof ItemSwordBase) {
-                    ((ItemSwordBase)equippedItemStack.getItem()).onEarlyUpdate(equippedItemStack, event.getEntityLiving(), EnumHand.OFF_HAND);
-                }
-            }
-        }
 	}
 
 
@@ -270,16 +257,12 @@ public class EventListener {
         if (player.getHeldItem(event.getHand()) != null) {
             ItemStack itemStack = player.getHeldItem(event.getHand());
             Item item = itemStack.getItem();
-            if (item instanceof ItemBase)
-                if (((ItemBase) item).onItemRightClickOnEntity(player, entity, itemStack)) {
-                    if (event.isCancelable())
-                        event.setCanceled(true);
-                }
-            if (item instanceof ItemSwordBase)
-                if (((ItemSwordBase) item).onItemRightClickOnEntity(player, entity, itemStack)) {
-                    if (event.isCancelable())
-                        event.setCanceled(true);
-                }
+            if (item instanceof ItemBase) {
+				if (((ItemBase) item).onItemRightClickOnEntity(player, entity, itemStack)) {
+					if (event.isCancelable())
+						event.setCanceled(true);
+				}
+			}
         }
 	}
 

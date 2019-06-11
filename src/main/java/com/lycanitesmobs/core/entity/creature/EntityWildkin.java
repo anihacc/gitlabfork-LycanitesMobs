@@ -41,7 +41,7 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
         }
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, this.aiSit);
-        this.tasks.addTask(2, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("wildkintreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(2, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.tasks.addTask(4, new EntityAIBreakDoor(this));
         this.tasks.addTask(5, new EntityAIAttackMelee(this));
@@ -90,17 +90,6 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("wildkintreat");
-    }
 
 
     // ==================================================

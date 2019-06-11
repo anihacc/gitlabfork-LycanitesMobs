@@ -2,7 +2,11 @@ package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.info.altar.*;
+import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.mobevent.trigger.AltarMobEventTrigger;
+import com.lycanitesmobs.core.worldgen.mobevents.AsmodeusStructureBuilder;
+import com.lycanitesmobs.core.worldgen.mobevents.RahovartStructureBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -76,6 +80,32 @@ public class AltarInfo {
             return altars.get(name.toLowerCase());
         }
         return null;
+    }
+
+
+    // ==================================================
+    //                   Create Altars
+    // ==================================================
+    public static void createAltars() {
+        AltarInfo ebonCacodemonAltar = new AltarInfoEbonCacodemon("EbonCacodemonAltar");
+        addAltar(ebonCacodemonAltar);
+
+        AltarInfo rahovartAltar = new AltarInfoRahovart("RahovartAltar");
+        addAltar(rahovartAltar);
+        StructureBuilder.addStructureBuilder(new RahovartStructureBuilder());
+
+        AltarInfo asmodeusAltar = new AltarInfoAsmodeus("AsmodeusAltar");
+        addAltar(asmodeusAltar);
+        StructureBuilder.addStructureBuilder(new AsmodeusStructureBuilder());
+
+        AltarInfo umberLobberAltar = new AltarInfoUmberLobber("UmberLobberAltar");
+        addAltar(umberLobberAltar);
+
+        AltarInfo celestialGeonachAltar = new AltarInfoCelestialGeonach("CelestialGeonachAltar");
+        addAltar(celestialGeonachAltar);
+
+        AltarInfo lunarGrueAltar = new AltarInfoLunarGrue("LunarGrueAltar");
+        addAltar(lunarGrueAltar);
     }
 
 

@@ -46,7 +46,7 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
         this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
         this.tasks.addTask(4, this.aiSit);
         this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(6, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("lurkertreat"))).setTemptDistanceMin(2.0D));
+        this.tasks.addTask(6, new EntityAITempt(this).setTemptDistanceMin(2.0D));
         this.tasks.addTask(7, new EntityAIMate(this));
         this.tasks.addTask(8, new EntityAIFollowParent(this));
         this.tasks.addTask(9, new EntityAIWander(this));
@@ -109,7 +109,7 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
 	    		if(this.getAttackTarget() instanceof EntityPlayer) {
 	    			EntityPlayer playerTarget = (EntityPlayer)this.getAttackTarget();
 	    			ItemStack itemstack = playerTarget.inventory.getCurrentItem();
-	    			if(itemstack != null && isTamingItem(itemstack))
+	    			if(this.isTamingItem(itemstack))
 	    				return false;
 	    		}
 				PotionBase stalkingEffect = ObjectManager.getPotionEffect("plague");
@@ -160,15 +160,6 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
     // ==================================================
     public int getNoBagSize() { return 0; }
     public int getBagSize() { return 5; }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("lurkertreat");
-    }
     
     
     // ==================================================

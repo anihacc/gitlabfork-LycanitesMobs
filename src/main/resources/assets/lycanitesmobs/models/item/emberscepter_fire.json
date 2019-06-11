@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/emberscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/emberscepter_fire"
-	}
-}

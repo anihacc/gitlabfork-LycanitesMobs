@@ -1,15 +1,8 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 public class EntityAIFollowFuse extends EntityAIFollow {
 	// Targets:
@@ -37,6 +30,9 @@ public class EntityAIFollowFuse extends EntityAIFollow {
     	/*if(this.host instanceof EntityCreatureTameable && ((EntityCreatureTameable)this.host).isTamed()) {
     		return false;
 		}*/
+    	if(this.host.isBoss()) {
+    		return false;
+		}
 		return super.shouldExecute();
 	}
     

@@ -15,12 +15,7 @@ public class CommonProxy {
 	
 	// ========== Register Event Handlers ==========
     public void registerEvents() {
-	}
-	
-	
-	// ========== Register Tile Entities ==========
-	public void registerTileEntities() {
-		// None
+
 	}
     
 	
@@ -34,7 +29,7 @@ public class CommonProxy {
 	public void initLanguageManager() {}
     public void registerRenders(ModInfo groupInfo) {}
 	public void registerTextures() {}
-	public void registerModels(ModInfo groupInfo) {}
+	public void registerItemModels(ModInfo groupInfo) {}
     public EntityPlayer getClientPlayer() { return null; }
 
 

@@ -211,12 +211,12 @@ public class Subspecies {
 
 
 	/**
-	 * Registers this subspecies, used for registering new sounds, etc. Can only be done during startup.
+	 * Loads this subspecies, used for adding new sounds, etc. Can only be done during startup.
 	 */
-	public void register(CreatureInfo creatureInfo) {
-		if(this.skin != null && !creatureInfo.registeredSubspeciesSkins.contains(this.skin)) {
+	public void load(CreatureInfo creatureInfo) {
+		if(this.skin != null && !creatureInfo.loadedSubspeciesSkins.contains(this.skin)) {
 			creatureInfo.addSounds("." + this.skin);
-			creatureInfo.registeredSubspeciesSkins.add(this.skin);
+			creatureInfo.loadedSubspeciesSkins.add(this.skin);
 		}
 	}
 

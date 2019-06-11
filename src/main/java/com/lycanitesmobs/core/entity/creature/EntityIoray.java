@@ -54,7 +54,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
         super.initEntityAI();
         this.tasks.addTask(1, new EntityAIStayByWater(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("ioraytreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(4.0F));
         this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
         this.tasks.addTask(5, rangedAttackAI);
@@ -261,17 +261,6 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     @Override
     public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
         return new EntityIoray(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("ioraytreat");
     }
 
 

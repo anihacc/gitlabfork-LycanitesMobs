@@ -23,7 +23,8 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 	/** Loads this Mob Event Trigger from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
 		this.altar = AltarInfo.getAltar(json.get("altarName").getAsString());
-		this.altar.mobEventTrigger = this;
+		if(this.altar != null)
+			this.altar.mobEventTrigger = this;
 
 		super.loadFromJSON(json);
 	}
@@ -46,5 +47,14 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 			return false;
 		}
 		return this.trigger(world, player, pos, level);
+	}
+
+
+	/**
+	 * Called when this AltarMobEventTrigger is removed.
+	 */
+	public void onRemove() {
+		if(this.altar != null)
+			this.altar.mobEventTrigger = null;
 	}
 }

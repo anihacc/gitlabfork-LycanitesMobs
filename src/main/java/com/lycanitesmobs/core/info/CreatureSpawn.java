@@ -33,7 +33,7 @@ public class CreatureSpawn {
 	public List<String> spawners = new ArrayList<>();
 
 	/** A list of Vanilla Creature Types to use. **/
-	public List<EnumCreatureType> creatureTypes = new ArrayList<>();
+	public List<EnumCreatureType> vanillaSpawnerTypes = new ArrayList<>();
 
 
 	// Dimensions:
@@ -99,7 +99,7 @@ public class CreatureSpawn {
 	/**
 	 * Loads this element from a JSON object.
 	 */
-	public void loadFromJSON(JsonObject json) {
+	public void loadFromJSON(CreatureInfo creatureInfo, JsonObject json) {
 		if(json.has("enabled"))
 			this.enabled = json.get("enabled").getAsBoolean();
 		if(json.has("disableSubspecies"))
@@ -107,18 +107,21 @@ public class CreatureSpawn {
 
 		// Spawners:
 		this.spawners.clear();
-		this.creatureTypes.clear();
+		this.vanillaSpawnerTypes.clear();
 		if(json.has("spawners")) {
 			this.spawners = JSONHelper.getJsonStrings(json.get("spawners").getAsJsonArray());
 			for(String spawner : this.spawners) {
+				LycanitesMobs.printDebug("Creature", "Adding " + creatureInfo.getName() + " to " + spawner + " global spawn list.");
+				SpawnerMobRegistry.createSpawn(creatureInfo, spawner);
+
 				if ("monster".equalsIgnoreCase(spawner))
-					this.creatureTypes.add(EnumCreatureType.MONSTER);
+					this.vanillaSpawnerTypes.add(EnumCreatureType.MONSTER);
 				else if ("creature".equalsIgnoreCase(spawner))
-					this.creatureTypes.add(EnumCreatureType.CREATURE);
+					this.vanillaSpawnerTypes.add(EnumCreatureType.CREATURE);
 				else if ("watercreature".equalsIgnoreCase(spawner))
-					this.creatureTypes.add(EnumCreatureType.WATER_CREATURE);
+					this.vanillaSpawnerTypes.add(EnumCreatureType.WATER_CREATURE);
 				else if ("ambient".equalsIgnoreCase(spawner))
-					this.creatureTypes.add(EnumCreatureType.AMBIENT);
+					this.vanillaSpawnerTypes.add(EnumCreatureType.AMBIENT);
 			}
 		}
 
@@ -172,19 +175,10 @@ public class CreatureSpawn {
 	}
 
 
-	/** Initialises this Creature Spawn Info, should be called after pre-init and when reloading. **/
-	public void init(CreatureInfo creatureInfo) {
-		for(String spawner : this.spawners) {
-			LycanitesMobs.printDebug("Creature", "Adding " + creatureInfo.getName() + " to " + spawner + " global spawn list.");
-			SpawnerMobRegistry.createSpawn(creatureInfo, spawner);
-		}
-	}
-
-
 	/**
 	 * Registers this mob to vanilla spawners and dungeons. Can only be done during startup.
 	 */
-	public void register(CreatureInfo creatureInfo) {
+	public void registerVanillaSpawns(CreatureInfo creatureInfo) {
 		// Load Biomes:
 		if(this.biomesFromTags == null) {
 			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
@@ -193,7 +187,7 @@ public class CreatureSpawn {
 		// Add Vanilla Spawns:
 		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
 			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
-				for(EnumCreatureType creatureType : this.creatureTypes) {
+				for(EnumCreatureType creatureType : this.vanillaSpawnerTypes) {
 					EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
 					for(Biome biome : this.biomesFromTags) {
 						if(biome == Biomes.HELL) {

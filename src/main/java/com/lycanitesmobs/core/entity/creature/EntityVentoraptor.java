@@ -49,7 +49,7 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         //this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("ventoraptortreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
         this.tasks.addTask(6, new EntityAIAttackMelee(this));
 		this.tasks.addTask(7, this.aiSit);
@@ -197,17 +197,6 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
 	@Override
 	public boolean isBreedingItem(ItemStack par1ItemStack) {
 		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-    	if(itemStack == null)
-    		return false;
-    	return itemStack.getItem() == ObjectManager.getItem("ventoraptortreat");
     }
     
     

@@ -49,7 +49,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIPlayerControl(this));
-        this.tasks.addTask(2, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("erepedetreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(2, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(3, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
 		this.tasks.addTask(4, this.aiSit);
 		this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -202,21 +202,6 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
 	@Override
 	public boolean isBreedingItem(ItemStack par1ItemStack) {
 		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        return itemStack.getItem() == ObjectManager.getItem("erepedetreat");
-    }
-    
-    @Override
-    public void setTamed(boolean setTamed) {
-    	this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-    	super.setTamed(setTamed);
     }
     
     

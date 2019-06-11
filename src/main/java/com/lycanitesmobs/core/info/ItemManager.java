@@ -322,53 +322,6 @@ public class ItemManager {
 		ObjectManager.addItem("poisonrayscepter", new ItemScepterPoisonRay(), 2, 1, 1);
 
 
-		// Tools and Weapons:
-		ObjectManager.addItem("cinderfallsword", new ItemSwordCinderfall("cinderfallsword", "swordcinderfall"), 2, 1, 1);
-		ObjectManager.addItem("azurecinderfallsword", new ItemSwordCinderfallAzure("azurecinderfallsword", "swordcinderfallazure"));
-		ObjectManager.addItem("verdantcinderfallsword", new ItemSwordCinderfallVerdant("verdantcinderfallsword", "swordcinderfallverdant"));
-		ObjectManager.addItem("venomaxeblade", new ItemSwordVenomAxeblade("venomaxeblade", "swordvenomaxeblade"), 2, 1, 1);
-		ObjectManager.addItem("goldenvenomaxeblade", new ItemSwordVenomAxebladeGolden("goldenvenomaxeblade", "swordvenomaxebladegolden"));
-		ObjectManager.addItem("verdantvenomaxeblade", new ItemSwordVenomAxebladeVerdant("verdantvenomaxeblade", "swordvenomaxebladeverdant"));
-
-
-		// Treats:
-		ObjectManager.addItem("arixtreat", new ItemTreat("arixtreat", group));
-		ObjectManager.addItem("serpixtreat", new ItemTreat("serpixtreat", group));
-		ObjectManager.addItem("maugtreat", new ItemTreat("maugtreat", group));
-		ObjectManager.addItem("pinkytreat", new ItemTreat("pinkytreat", group));
-		ObjectManager.addItem("cacodemontreat", new ItemTreat("cacodemontreat", group));
-		ObjectManager.addItem("crusktreat", new ItemTreat("crusktreat", group));
-		ObjectManager.addItem("erepedetreat", new ItemTreat("erepedetreat", group));
-		ObjectManager.addItem("shamblertreat", new ItemTreat("shamblertreat", group));
-		ObjectManager.addItem("wargtreat", new ItemTreat("wargtreat", group));
-		ObjectManager.addItem("stridertreat", new ItemTreat("stridertreat", group));
-		ObjectManager.addItem("threshertreat", new ItemTreat("threshertreat", group));
-		ObjectManager.addItem("ioraytreat", new ItemTreat("ioraytreat", group));
-		ObjectManager.addItem("afrittreat", new ItemTreat("afrittreat", group));
-		ObjectManager.addItem("salamandertreat", new ItemTreat("salamandertreat", group));
-		ObjectManager.addItem("gorgertreat", new ItemTreat("gorgertreat", group));
-		ObjectManager.addItem("ignibustreat", new ItemTreat("ignibustreat", group));
-		ObjectManager.addItem("uvaraptortreat", new ItemTreat("uvaraptortreat", group));
-		ObjectManager.addItem("dawontreat", new ItemTreat("dawontreat", group));
-		ObjectManager.addItem("cockatricetreat", new ItemTreat("cockatricetreat", group));
-		ObjectManager.addItem("barghesttreat", new ItemTreat("barghesttreat", group));
-		ObjectManager.addItem("beholdertreat", new ItemTreat("beholdertreat", group));
-		ObjectManager.addItem("wildkintreat", new ItemTreat("wildkintreat", group));
-		ObjectManager.addItem("ventoraptortreat", new ItemTreat("ventoraptortreat", group));
-		ObjectManager.addItem("roctreat", new ItemTreat("roctreat", group));
-		ObjectManager.addItem("feradontreat", new ItemTreat("feradontreat", group));
-		ObjectManager.addItem("quillbeasttreat", new ItemTreat("quillbeasttreat", group));
-		ObjectManager.addItem("morocktreat", new ItemTreat("morocktreat", group));
-		ObjectManager.addItem("raikotreat", new ItemTreat("raikotreat", group));
-		ObjectManager.addItem("roatreat", new ItemTreat("roatreat", group));
-		ObjectManager.addItem("hermatreat", new ItemTreat("hermatreat", group));
-		ObjectManager.addItem("quetzodracltreat", new ItemTreat("quetzodracltreat", group));
-		ObjectManager.addItem("chupacabratreat", new ItemTreat("chupacabratreat", group));
-		ObjectManager.addItem("shadetreat", new ItemTreat("shadetreat", group));
-		ObjectManager.addItem("lurkertreat", new ItemTreat("lurkertreat", group));
-		ObjectManager.addItem("eyewigtreat", new ItemTreat("eyewigtreat", group));
-
-
 		// Summoning Staves:
 		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning("summoningstaff", "summoningstaff"));
 		ObjectManager.addItem("stablesummoningstaff", new ItemStaffStable("stablesummoningstaff", "staffstable"));
@@ -416,7 +369,34 @@ public class ItemManager {
 	/**
 	 * Adds items to the ore dictionary.
 	 */
-	public void registerOres() {
+	public void registerItemOres() {
+		OreDictionary.registerOre("listAllporkraw", Items.PORKCHOP);
+		OreDictionary.registerOre("listAllporkcooked", Items.COOKED_PORKCHOP);
+		OreDictionary.registerOre("listAllbeefraw", Items.BEEF);
+		OreDictionary.registerOre("listAllbeefcooked", Items.COOKED_BEEF);
+		OreDictionary.registerOre("listAllchickenraw", Items.CHICKEN);
+		OreDictionary.registerOre("listAllchickencooked", Items.COOKED_CHICKEN);
+		OreDictionary.registerOre("listAllmuttonraw", Items.MUTTON);
+		OreDictionary.registerOre("listAllmuttoncooked", Items.COOKED_MUTTON);
+		OreDictionary.registerOre("listAllfishraw", Items.FISH);
+		OreDictionary.registerOre("listAllfishcooked", Items.COOKED_FISH);
+		OreDictionary.registerOre("listAllVegetables", Items.WHEAT);
+		OreDictionary.registerOre("listAllVegetables", Items.BREAD);
+		OreDictionary.registerOre("listAllVegetables", Items.CARROT);
+		OreDictionary.registerOre("listAllVegetables", Items.POTATO);
+		OreDictionary.registerOre("listAllVegetables", Items.BAKED_POTATO);
+		OreDictionary.registerOre("listAllVegetables", Items.BEETROOT);
+		OreDictionary.registerOre("listAllVegetables", Items.MUSHROOM_STEW);
+		OreDictionary.registerOre("listAllFruit", Items.APPLE);
+		OreDictionary.registerOre("listAllFruit", Items.MELON);
+		OreDictionary.registerOre("listAllSweet", Items.CAKE);
+		OreDictionary.registerOre("listAllSweet", Items.PUMPKIN_PIE);
+		OreDictionary.registerOre("listAllSweet", Items.COOKIE);
+		OreDictionary.registerOre("listAllSweet", Items.SUGAR);
+		OreDictionary.registerOre("listAllEntomo", Items.SPIDER_EYE);
+		OreDictionary.registerOre("listAllEntomo", Items.FERMENTED_SPIDER_EYE);
+		OreDictionary.registerOre("listAllRotten", Items.ROTTEN_FLESH);
+
 		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("yetimeatraw"));
 		OreDictionary.registerOre("listAllporkcooked", ObjectManager.getItem("yetimeatcooked"));
 		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("pinkymeatraw"));
@@ -428,6 +408,8 @@ public class ItemManager {
 		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cephignismeatcooked"));
 		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("concapedemeatraw"));
 		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("concapedemeatcooked"));
+		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("concapedemeatraw"));
+		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("concapedemeatcooked"));
 		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("yalemeatraw"));
 		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("yalemeatcooked"));
 		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("makameatraw"));
@@ -438,5 +420,15 @@ public class ItemManager {
 		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("chupacabrameatcooked"));
 		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("aspidmeatraw"));
 		OreDictionary.registerOre("listAllbeefcooked", ObjectManager.getItem("aspidmeatcooked"));
+	}
+
+
+	/**
+	 * Adds items to the ore dictionary.
+	 */
+	public void registerBlockOres() {
+		OreDictionary.registerOre("listAllVegetables", Blocks.RED_MUSHROOM);
+		OreDictionary.registerOre("listAllVegetables", Blocks.BROWN_MUSHROOM);
+		OreDictionary.registerOre("listAllVegetables", Blocks.PUMPKIN);
 	}
 }

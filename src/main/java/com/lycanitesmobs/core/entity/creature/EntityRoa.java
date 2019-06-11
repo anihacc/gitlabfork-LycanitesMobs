@@ -61,7 +61,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         super.initEntityAI();
         this.tasks.addTask(1, new EntityAIStayByWater(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("roatreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false));
         this.tasks.addTask(5, this.aiSit);
         this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -317,17 +317,6 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
     @Override
     public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
         return new EntityRoa(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("roatreat");
     }
 
 

@@ -40,7 +40,7 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
         super.initEntityAI();
         this.tasks.addTask(1, new EntityAIStayByWater(this));
         this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(Items.DYE, 1, 4)));
+        this.tasks.addTask(3, new EntityAITempt(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
         this.tasks.addTask(4, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
         this.tasks.addTask(5, new EntityAIMate(this));
         this.tasks.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));

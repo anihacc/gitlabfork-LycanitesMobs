@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/venomshotscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/venomshotscepter_fire"
-	}
-}

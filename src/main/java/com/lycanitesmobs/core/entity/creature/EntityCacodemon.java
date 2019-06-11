@@ -48,7 +48,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
         super.initEntityAI();
         this.tasks.addTask(1, new EntityAIMate(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("cacodemontreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(4, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
         this.tasks.addTask(5, this.aiSit);
         this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -185,15 +185,6 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     
     @Override
     public boolean canBurn() { return false; }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("cacodemontreat");
-    }
     
     
     // ==================================================

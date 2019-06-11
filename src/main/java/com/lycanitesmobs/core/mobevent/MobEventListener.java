@@ -60,7 +60,7 @@ public class MobEventListener {
 		}
 		if(mobEventTrigger instanceof AltarMobEventTrigger) {
 			AltarMobEventTrigger altarMobEventTrigger = (AltarMobEventTrigger)mobEventTrigger;
-			altarMobEventTrigger.altar.mobEventTrigger = null;
+			altarMobEventTrigger.onRemove();
 		}
 	}
 

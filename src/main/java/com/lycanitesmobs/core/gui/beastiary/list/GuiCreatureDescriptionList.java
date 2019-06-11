@@ -71,9 +71,20 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 		if(creatureInfo == null) {
 			return "";
 		}
+		String text = "";
+
+		// Taming:
+		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
+		}
+
+		// Summoning:
+		if(creatureInfo.creatureType != null && creatureInfo.isSummonable() && creatureInfo.creatureType.getTreatItem() != null) {
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
+		}
 
 		// Summary:
-		String text = "\u00A7l" + LanguageManager.translate("gui.beastiary.summary") + ": " + "\u00A7r";
+		text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summary") + ": " + "\u00A7r";
 		text += "\n" + creatureInfo.getDescription();
 
 		// Stats:

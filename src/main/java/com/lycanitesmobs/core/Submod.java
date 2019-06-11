@@ -40,7 +40,6 @@ public abstract class Submod {
 
 	public void init(FMLInitializationEvent event) {
 		ObjectManager.setCurrentModInfo(this.group);
-		CreatureManager.getInstance().registerAll(this.group);
 		this.registerOres();
 		this.addRecipes();
 	}
@@ -66,9 +65,7 @@ public abstract class Submod {
 	public abstract void createEntities();
 
 	/** Registers entities, must be called by submods themselves. **/
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-		ObjectManager.registerEntities(event, this.group);
-	}
+	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {}
 
 	/** Registers all models. **/
 	public abstract void registerModels();

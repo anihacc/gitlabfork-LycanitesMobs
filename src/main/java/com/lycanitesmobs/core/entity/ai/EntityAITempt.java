@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ public class EntityAITempt extends EntityAIBase {
     
     // Properties:
     private double speed = 1.0D;
-    private ItemStack temptItem = null;
+    private ItemStack temptItemStack = null;
     private boolean ignoreTemptMeta = false;
     private String temptList = null;
     private int retemptTime;
@@ -26,6 +27,7 @@ public class EntityAITempt extends EntityAIBase {
     private double temptDistanceMax = 10.0D;
     private boolean scaredByPlayerMovement = false;
     private boolean stopAttack = false;
+    private boolean includeTreats = true;
     
     private double targetX;
     private double targetY;
@@ -51,8 +53,8 @@ public class EntityAITempt extends EntityAIBase {
     	this.speed = setSpeed;
     	return this;
     }
-    public EntityAITempt setItem(ItemStack item) {
-    	this.temptItem = item;
+    public EntityAITempt setItemStack(ItemStack item) {
+    	this.temptItemStack = item;
     	return this;
     }
     public EntityAITempt setIgnoreMeta(boolean ignore) {
@@ -83,6 +85,10 @@ public class EntityAITempt extends EntityAIBase {
     	this.stopAttack = setStopAttack;
     	return this;
     }
+    public EntityAITempt setIncludeTreats(boolean includeTreats) {
+        this.includeTreats = includeTreats;
+        return this;
+    }
     
     
     // ==================================================
@@ -97,7 +103,7 @@ public class EntityAITempt extends EntityAIBase {
         if(!this.host.canBeTempted())
         	return false;
         
-        if(this.host instanceof EntityCreatureTameable && ((EntityCreatureTameable)this.host).isTamed())
+        if(this.host instanceof EntityCreatureTameable && this.host.isTamed())
         	return false;
 		
         this.player = this.host.getEntityWorld().getClosestPlayerToEntity(this.host, this.temptDistanceMax);
@@ -112,19 +118,34 @@ public class EntityAITempt extends EntityAIBase {
     }
 
     public boolean isTemptStack(ItemStack itemStack) {
-        if(itemStack == null)
+        if(itemStack.isEmpty()) {
             return false;
+        }
+
+        // Creature Type Treats:
+        if(this.includeTreats && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof ItemTreat) {
+            ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
+            if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
+                return true;
+            }
+        }
+
+        // Tempt List:
         if(this.temptList != null) {
             if(!ObjectLists.inItemList(this.temptList, itemStack))
                 return false;
         }
-        else {
-            if(itemStack.getItem() != this.temptItem.getItem())
+
+        // Single Tempt Item:
+        else if(this.temptItemStack != null) {
+            if(itemStack.getItem() != this.temptItemStack.getItem())
                 return false;
-            if(!this.ignoreTemptMeta && itemStack.getItem() == this.temptItem.getItem() && itemStack.getItemDamage() != this.temptItem.getItemDamage())
+            if(!this.ignoreTemptMeta && itemStack.getItem() == this.temptItemStack.getItem() && itemStack.getItemDamage() != this.temptItemStack.getItemDamage())
                 return false;
+            return true;
         }
-        return true;
+
+        return false;
     }
     
     

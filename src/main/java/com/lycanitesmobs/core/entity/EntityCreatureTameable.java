@@ -7,6 +7,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
@@ -615,7 +616,18 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     }
     
     public boolean isTamingItem(ItemStack itemstack) {
-        return false;
+		if(itemstack.isEmpty() || this.creatureInfo.creatureType == null) {
+			return false;
+		}
+
+		if(itemstack.getItem() instanceof ItemTreat) {
+			ItemTreat itemTreat = (ItemTreat)itemstack.getItem();
+			if(itemTreat.getCreatureType() == this.creatureInfo.creatureType) {
+				return this.creatureInfo.isTameable();
+			}
+		}
+
+		return false;
     }
     
     // ========== Tame Entity ==========

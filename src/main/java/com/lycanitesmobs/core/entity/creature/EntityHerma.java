@@ -44,7 +44,7 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
         this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("hermatreat"))).setTemptDistanceMin(2.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(2.0D));
         this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(true));
         this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new EntityAIWander(this);
@@ -147,15 +147,6 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("hermatreat");
-    }
 
 
     // ==================================================

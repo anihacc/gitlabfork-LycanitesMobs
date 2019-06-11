@@ -66,7 +66,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         super.initEntityAI();
         this.tasks.addTask(1, new EntityAIStayByWater(this));
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("threshertreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false).setRange(2));
         this.tasks.addTask(5, this.aiSit);
         this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -303,17 +303,6 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     @Override
     public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
         return new EntityThresher(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("threshertreat");
     }
 
 

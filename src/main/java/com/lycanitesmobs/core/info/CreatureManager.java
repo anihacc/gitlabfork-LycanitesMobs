@@ -6,6 +6,10 @@ import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +33,9 @@ public class CreatureManager extends JSONLoader {
 
 	/** A map of all creatures by class. **/
 	public Map<Class, CreatureInfo> creatureClassMap = new HashMap<>();
+
+	/** The next available network id for creatures to register by. **/
+	protected int nextCreatureNetworkId = 100;
 
 	/** A list of mods that have loaded with this Creature Manager. **/
 	public List<ModInfo> loadedMods = new ArrayList<>();
@@ -61,6 +68,22 @@ public class CreatureManager extends JSONLoader {
 	public CreatureManager() {
 		this.config = new CreatureConfig();
 		this.spawnConfig = new CreatureSpawnConfig();
+	}
+
+	/**
+	 * Called during startup and initially loads everything in this manager.
+	 * @param modInfo The mod loading this manager.
+	 */
+	public void startup(ModInfo modInfo) {
+		this.loadConfig();
+		this.loadCreatureTypesFromJSON(modInfo);
+		this.loadCreaturesFromJSON(modInfo);
+		for(CreatureType creatureType : this.creatureTypes.values()) {
+			creatureType.load();
+		}
+		for(CreatureInfo creatureInfo : this.creatures.values()) {
+			creatureInfo.load();
+		}
 	}
 
 
@@ -190,35 +213,35 @@ public class CreatureManager extends JSONLoader {
 	}
 
 
-	/** Creates a Spawn Egg Item for each Creature Type, must be called after both Creature Types and Creatures are loaded. **/
-	public void createSpawnEggItems() {
-		for(CreatureType creatureType : this.creatureTypes.values()) {
-			creatureType.createSpawnEggItem();
-		}
+	/**
+	 * Generates the next available creature network id to register with.
+	 * @return The next creature network id.
+	 */
+	public int getNextCreatureNetworkId() {
+		return this.nextCreatureNetworkId++;
 	}
 
 
 	/**
-	 * Initialises all creatures. Called after all creatures are loaded.
+	 * Registers all creatures added to this creature manager, called from the registry event.
+	 * @param event The enity register event.
+	 * @param modInfo The mod to register entities from.
 	 */
-	public void initAll() {
-		LycanitesMobs.printDebug("Creature", "Initialising all " + this.creatures.size() + " creatures...");
-		SpawnerMobRegistry.SPAWNER_MOB_REGISTRIES.clear();
-		for(CreatureInfo creature : this.creatures.values()) {
-			creature.init();
-		}
-	}
-
-
-	/**
-	 * Registers all creatures. Can only be called once and during init.
-	 */
-	public void registerAll(ModInfo modInfo) {
-		LycanitesMobs.printDebug("Creature", "Registering " + this.creatures.size() + " creatures from the mod " + modInfo.name + "...");
-		for(CreatureInfo creature : this.creatures.values()) {
-			if(creature.modInfo != modInfo)
+	@SubscribeEvent
+	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+		ModInfo modInfo = LycanitesMobs.modInfo;
+		LycanitesMobs.printDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures from the mod: " + modInfo.name + "...");
+		for(CreatureInfo creatureInfo : this.creatures.values()) {
+			if(creatureInfo.modInfo != modInfo) {
 				continue;
-			creature.register();
+			}
+			EntityEntry entityEntry = EntityEntryBuilder.create()
+					.entity(creatureInfo.entityClass)
+					.id(creatureInfo.getEntityId(), this.getNextCreatureNetworkId())
+					.name(creatureInfo.getName())
+					.tracker(creatureInfo.isBoss() ? 160 : 80, 3, false)
+					.build();
+			event.getRegistry().register(entityEntry);
 		}
 	}
 
@@ -228,10 +251,10 @@ public class CreatureManager extends JSONLoader {
 	 */
 	public void reload() {
 		this.loadConfig();
+		SpawnerMobRegistry.SPAWNER_MOB_REGISTRIES.clear();
 		for(ModInfo group : this.loadedMods) {
 			this.loadCreaturesFromJSON(group);
 		}
-		this.initAll();
 	}
 
 

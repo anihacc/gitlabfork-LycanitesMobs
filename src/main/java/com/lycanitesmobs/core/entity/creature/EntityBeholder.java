@@ -50,7 +50,7 @@ public class EntityBeholder extends EntityCreatureRideable {
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("beholdertreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
 		this.tasks.addTask(6, this.aiSit);
 		this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
@@ -176,17 +176,6 @@ public class EntityBeholder extends EntityCreatureRideable {
 	public double getMountedZOffset() {
 		return (double)this.width * -0.2D;
 	}
-
-
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-        if(itemStack == null)
-            return false;
-        return itemStack.getItem() == ObjectManager.getItem("beholdertreat");
-    }
 
 
     // ==================================================

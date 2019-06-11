@@ -13,7 +13,6 @@ import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
-import com.lycanitesmobs.core.info.altar.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.CreativeTabBlocks;
 import com.lycanitesmobs.core.item.CreativeTabCreatures;
@@ -24,7 +23,6 @@ import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.mods.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -34,12 +32,9 @@ import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorFluids;
-import com.lycanitesmobs.core.worldgen.mobevents.AsmodeusStructureBuilder;
-import com.lycanitesmobs.core.worldgen.mobevents.RahovartStructureBuilder;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -53,7 +48,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -120,7 +114,7 @@ public class LycanitesMobs {
 
 
 	/**
-	 * The first initialization, loads most configs and jsons and sets up most of the managers, event listeners, etc.
+	 * The first initialization, load everything for this mod, the order that things are loaded within this method is important.
 	 * @param event
 	 */
 	@Mod.EventHandler
@@ -132,10 +126,15 @@ public class LycanitesMobs {
 		proxy.initLanguageManager();
 
 		// Config:
-        ConfigBase.versionCheck("2.0.0.0", version);
+        ConfigBase.versionCheck("2.0.0.1", version);
 		config = ConfigBase.getConfig(modInfo, "general");
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+
+		// Event Listeners:
+		MinecraftForge.EVENT_BUS.register(new EventListener());
+		MinecraftForge.EVENT_BUS.register(CreatureManager.getInstance());
+		MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
 
 		// Familiars:
 		DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
@@ -145,8 +144,9 @@ public class LycanitesMobs {
 		// Version Checker:
 		VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
 
-		// Initialize Packet Handler:
+		// Network:
 		packetHandler.init();
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
 		// Change Health Limit:
 		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue", "field_111118_b");
@@ -161,6 +161,19 @@ public class LycanitesMobs {
         }
         ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
 
+		// Blocks and Items:
+		ItemManager.getInstance().loadConfig();
+		ItemManager.getInstance().loadItems();
+		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
+		ObjectLists.createCustomItems();
+		ObjectLists.createLists();
+		ItemHalloweenTreat.createObjectLists();
+		ItemWinterGift.createObjectLists();
+
+		// Tile Entities:
+		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
+		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
+
         // Potion Effects:
 		this.potionEffects = new PotionEffects();
 		this.potionEffects.init(config);
@@ -169,137 +182,67 @@ public class LycanitesMobs {
 		ElementManager.getInstance().loadConfig();
 		ElementManager.getInstance().loadAllFromJSON(modInfo);
 
+		// Special Entities:
+		ObjectManager.addSpecialEntity("hitarea", EntityHitArea.class);
+
 		// Creatures:
-		CreatureManager.getInstance().loadConfig();
-		CreatureManager.getInstance().loadCreatureTypesFromJSON(modInfo);
-		CreatureManager.getInstance().loadCreaturesFromJSON(modInfo);
+		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
+		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity.class);
+		CreatureManager.getInstance().startup(modInfo);
 
 		// Projectiles:
-		ProjectileManager.getInstance().loadAllFromJSON(modInfo);
+		ProjectileManager.getInstance().startup(modInfo);
 
 		// Spawners:
 		FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
-
-		// Mob Events:
-		MobEventManager.getInstance().loadConfig();
-		FMLCommonHandler.instance().bus().register(MobEventManager.getInstance());
-		FMLCommonHandler.instance().bus().register(MobEventListener.getInstance());
-
-        // Altars:
-        AltarInfo.loadGlobalSettings();
-
-        // Entity Capabilities:
-        CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
-        CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity.class);
-
-		// Event Listeners:
-		MinecraftForge.EVENT_BUS.register(new EventListener());
-        proxy.registerEvents();
-
-		// Blocks and Items:
-		CreatureManager.getInstance().createSpawnEggItems();
-		ProjectileManager.getInstance().initAll();
-		ItemManager.getInstance().loadConfig();
-		ItemManager.getInstance().loadItems();
-		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
-
-		// Old Projectiles:
-		ProjectileManager.getInstance().loadOldProjectiles();
-
-		// Object Lists:
-		ObjectLists.createCustomItems();
-		ObjectLists.createLists();
-
-        // Tile Entities:
-        ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
-		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
-
-		// Mod Support:
-		DLDungeons.init();
-
-		// Renderers:
-		proxy.registerRenders(modInfo);
-	}
-
-
-	/**
-	 * The second initialization phase, loads creatures and initializes special entities.
-	 * @param event The forge init event.
-	 */
-	@Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
-		// Item Ore Dictionary:
-		ItemManager.getInstance().registerOres();
-
-		// Register Creatures:
-		CreatureManager.getInstance().registerAll(modInfo);
-
-		// Special Entities:
-		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "summoningportal"), EntityPortal.class, "summoningportal", modInfo.getNextSpecialID(), instance, 64, 1, true);
-		EntityRegistry.registerModEntity(new ResourceLocation(modInfo.filename, "hitarea"), EntityHitArea.class, "hitarea", modInfo.getNextSpecialID(), instance, 64, 1, true);
-		AssetManager.addSound("effect_fear", modInfo, "effect.fear");
-
-		// Altars:
-		AltarInfo ebonCacodemonAltar = new AltarInfoEbonCacodemon("EbonCacodemonAltar");
-		AltarInfo.addAltar(ebonCacodemonAltar);
-
-		AltarInfo rahovartAltar = new AltarInfoRahovart("RahovartAltar");
-		AltarInfo.addAltar(rahovartAltar);
-		StructureBuilder.addStructureBuilder(new RahovartStructureBuilder());
-
-		AltarInfo asmodeusAltar = new AltarInfoAsmodeus("AsmodeusAltar");
-		AltarInfo.addAltar(asmodeusAltar);
-		StructureBuilder.addStructureBuilder(new AsmodeusStructureBuilder());
-
-		AltarInfo umberLobberAltar = new AltarInfoUmberLobber("UmberLobberAltar");
-		AltarInfo.addAltar(umberLobberAltar);
-
-		AltarInfo celestialGeonachAltar = new AltarInfoCelestialGeonach("CelestialGeonachAltar");
-		AltarInfo.addAltar(celestialGeonachAltar);
-
-		AltarInfo lunarGrueAltar = new AltarInfoLunarGrue("LunarGrueAltar");
-		AltarInfo.addAltar(lunarGrueAltar);
-	}
-
-
-	/**
-	 * Third initialization phase, registers tile entities and initializes creatures and then everything dependant on creatures being ready.
-	 * @param event The forge init event.
-	 */
-	@Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-		// Register Tile Entities:
-        proxy.registerTileEntities();
-
-        // Init Creatures:
-		CreatureManager.getInstance().initAll();
-
-		// Load Spawners:
 		SpawnerManager.getInstance().loadAllFromJSON();
 
-		// Load Mob Events:
-        MobEventManager.getInstance().loadAllFromJSON(modInfo);
+		// Altars:
+		AltarInfo.loadGlobalSettings();
+		AltarInfo.createAltars();
 
-        // Load Dungeons:
-		DungeonManager.getInstance().loadAllFromJSON();
-		dungeonGenerator = new WorldGeneratorDungeon();
-		GameRegistry.registerWorldGenerator(dungeonGenerator, 1000);
+		// Mob Events:
+		FMLCommonHandler.instance().bus().register(MobEventManager.getInstance());
+		FMLCommonHandler.instance().bus().register(MobEventListener.getInstance());
+		MobEventManager.getInstance().loadConfig();
+		MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
 		// World Generators:
 		GameRegistry.registerWorldGenerator(new WorldGeneratorFluids(), 0);
 
-        // Seasonal Item Lists:
-        ItemHalloweenTreat.createObjectLists();
-        ItemWinterGift.createObjectLists();
+		// Dungeons:
+		DungeonManager.getInstance().loadAllFromJSON();
+		dungeonGenerator = new WorldGeneratorDungeon();
+		GameRegistry.registerWorldGenerator(dungeonGenerator, 1000);
 
-		// Register Assets:
-		proxy.registerModels(modInfo);
-		proxy.registerTextures();
+		// Client:
+		proxy.registerEvents();
+		proxy.registerRenders(modInfo);
+		proxy.registerTextures(); // Includes Beastairy Tab
 
-        // Development:
-		//LanguageManager.getInstance().generateLangs();
+		// Mod Support:
+		DLDungeons.init();
+	}
+
+
+	/**
+	 * The second initialization phase, only used to register some things.
+	 * @param event The forge init event.
+	 */
+	@Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+		// Client:
+		proxy.registerItemModels(modInfo); // Here for Item Color
+	}
+
+
+	/**
+	 * Third initialization phase, no longer needed.
+	 * @param event The forge init event.
+	 */
+	@Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+
     }
 
 

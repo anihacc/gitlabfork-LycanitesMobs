@@ -71,7 +71,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         this.colorMixer.setInventorySlotContents(1, new ItemStack(Items.DYE, 1, 0));
 
         // Load Shear Drop From Config:
-		this.woolDrop = new ItemDrop(new ItemStack(Blocks.WOOL), 1).setMinAmount(1).setMaxAmount(3);
+		this.woolDrop = new ItemDrop(Blocks.WOOL.getRegistryName().toString(), 0, 1).setMinAmount(1).setMaxAmount(3);
 		this.woolDrop = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getItemDrop("Features", "Yale Shear Drop", this.woolDrop, "The item dropped by Yales when sheared. Format is: itemid,metadata,quantitymin,quantitymax,chance");
     }
 
@@ -135,7 +135,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 		this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
 
 		int quantity = this.woolDrop.getQuantity(this.getRNG(), fortune);
-		ItemStack dropStack = this.woolDrop.getItemStack(this, quantity);
+		ItemStack dropStack = this.woolDrop.getEntityDropItemStack(this, quantity);
 		this.dropItem(dropStack);
 		dropStacks.add(dropStack);
 		
@@ -167,9 +167,9 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	@Override
 	public void setColor(int color) {
         if(this.woolDrop == null) {
-			this.woolDrop = new ItemDrop(new ItemStack(Blocks.WOOL), 1).setMinAmount(1).setMaxAmount(3);
+			this.woolDrop = new ItemDrop(Blocks.WOOL.getRegistryName().toString(), 0, 1).setMinAmount(1).setMaxAmount(3);
 		}
-		else if(this.woolDrop.itemStack.getItem() == Item.getItemFromBlock(Blocks.WOOL)) {
+		else if(this.woolDrop.getItemStack().getItem() == Item.getItemFromBlock(Blocks.WOOL)) {
 			this.woolDrop.setDrop(new ItemStack(Blocks.WOOL, 1, color));
 		}
 		super.setColor(color);

@@ -49,7 +49,7 @@ public class EntityShambler extends EntityCreatureTameable implements IMob, IGro
         this.tasks.addTask(4, new EntityAIAttackMelee(this));
         this.tasks.addTask(5, this.aiSit);
         this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(7, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("shamblertreat"))).setTemptDistanceMin(2.0D));
+        this.tasks.addTask(7, new EntityAITempt(this).setTemptDistanceMin(2.0D));
         this.tasks.addTask(8, new EntityAIWander(this));
         this.tasks.addTask(10, new EntityAIBeg(this));
         this.tasks.addTask(11, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
@@ -142,15 +142,6 @@ public class EntityShambler extends EntityCreatureTameable implements IMob, IGro
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemstack) {
-        return itemstack.getItem() == ObjectManager.getItem("shamblertreat");
-    }
     
     
     // ==================================================

@@ -4,27 +4,19 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.Utilities;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.core.item.consumable.ItemCustomFood;
-import com.lycanitesmobs.core.item.consumable.ItemTreat;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.core.item.temp.ItemScepter;
-import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
-import com.lycanitesmobs.core.item.temp.ItemSwordBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.text.translation.I18n;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class LanguageManager {
@@ -119,94 +111,5 @@ public class LanguageManager {
 		}
 
 		LycanitesMobs.printDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));
-	}
-
-
-	/**
-	 * Creatures a collection of lang files using old lang files if possible. Used for development only.
-	 */
-	public void generateLangs() {
-		// Creatures:
-		for(CreatureInfo creature : CreatureManager.getInstance().creatures.values()) {
-			String creatureLangPath = LycanitesMobs.proxy.getMinecraftDir() + "/lang/en_us/creatures/" + creature.getName() + ".lang";
-			LycanitesMobs.printInfo("", "Creating lang file for creature: " + creature.getName() + " path: " + creatureLangPath);
-			try {
-				File langFile = new File(creatureLangPath);
-				langFile.createNewFile();
-				FileOutputStream outputStream = new FileOutputStream(langFile);
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-				outputStreamWriter.append("entity.lycanitesmobs." + creature.getName() + ".name=" + creature.getTitle());
-				outputStreamWriter.append("\nentity.lycanitesmobs." + creature.getName() + ".description=" + creature.getDescription());
-				outputStreamWriter.append("\nentity.lycanitesmobs." + creature.getName() + ".habitat=" + "Habitat information coming soon!");
-				outputStreamWriter.append("\nentity.lycanitesmobs." + creature.getName() + ".combat=" + "Combat information coming soon!");
-				outputStreamWriter.close();
-				outputStream.close();
-			} catch (IOException e) {
-				//e.printStackTrace();
-			}
-		}
-
-		// Items:
-		List<String> addedItems = new ArrayList<>();
-		for(String itemType : new String[] { "food", "equipment", "charges", "treats", "tools", "scepters", "blocks", "misc" }) {
-			try {
-				String itemsLangPath = LycanitesMobs.proxy.getMinecraftDir() + "/lang/en_us/items/" + itemType + ".lang";
-				File langFile = new File(itemsLangPath);
-				langFile.createNewFile();
-				FileOutputStream outputStream = new FileOutputStream(langFile);
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-				boolean first = true;
-				for (Item item : ObjectManager.items.values()) {
-					if("food".equals(itemType)) {
-						if (!(item instanceof ItemCustomFood))
-							continue;
-					}
-					else if("equipment".equals(itemType)) {
-						if (!(item instanceof ItemEquipmentPart))
-							continue;
-					}
-					else if("charges".equals(itemType)) {
-						if(!(item instanceof ItemCharge))
-							continue;
-					}
-					else if("treats".equals(itemType)) {
-						if(!(item instanceof ItemTreat))
-							continue;
-					}
-					else if("tools".equals(itemType)) {
-						if(!(item instanceof ItemSwordBase) && !(item instanceof ItemStaffSummoning))
-							continue;
-					}
-					else if("scepters".equals(itemType)) {
-						if(!(item instanceof ItemScepter))
-							continue;
-					}
-					else if("blocks".equals(itemType)) {
-						if(!(item instanceof ItemBlock))
-							continue;
-					}
-
-					if(addedItems.contains(item.getUnlocalizedName())) {
-						continue;
-					}
-					addedItems.add(item.getUnlocalizedName());
-
-					LycanitesMobs.printInfo("", "Creating lang file for item: " + item.getUnlocalizedName() + " path: " + itemsLangPath);
-					if(!first) {
-						outputStreamWriter.append("\n");
-					}
-					first = false;
-					outputStreamWriter.append(item.getUnlocalizedName() + ".name=" + translate(item.getUnlocalizedName() + ".name"));
-					if(!(item instanceof ItemEquipmentPart)) {
-						outputStreamWriter.append("\n" + item.getUnlocalizedName() + ".description=" + translate(item.getUnlocalizedName() + ".description"));
-					}
-					outputStreamWriter.append("\n#");
-				}
-				outputStreamWriter.close();
-				outputStream.close();
-			} catch (IOException e) {
-				//e.printStackTrace();
-			}
-		}
 	}
 }

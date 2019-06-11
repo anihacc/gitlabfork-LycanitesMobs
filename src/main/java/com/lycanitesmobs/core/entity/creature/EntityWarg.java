@@ -54,7 +54,7 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
         //this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItem(new ItemStack(ObjectManager.getItem("wargtreat"))).setTemptDistanceMin(4.0D));
+        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
         this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
         this.tasks.addTask(6, new EntityAIAttackMelee(this));
         this.tasks.addTask(7, this.aiSit);
@@ -245,17 +245,6 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {
 		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Taming
-    // ==================================================
-    @Override
-    public boolean isTamingItem(ItemStack itemStack) {
-    	if(itemStack == null)
-    		return false;
-    	return itemStack.getItem() == ObjectManager.getItem("wargtreat");
     }
     
     
