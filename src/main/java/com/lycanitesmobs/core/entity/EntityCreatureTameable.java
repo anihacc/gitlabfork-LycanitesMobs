@@ -12,7 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -159,7 +159,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
   	// ==================================================
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) {
+    public boolean canBeLeashedTo(PlayerEntity player) {
 	    if(this.isTamed() && player == this.getPlayerOwner())
 	        return true;
 	    return super.canBeLeashedTo(player);
@@ -199,7 +199,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
 		
@@ -235,7 +235,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Open GUI:
     	if(command.equals("GUI")) {
@@ -294,7 +294,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Can Name Tag ==========
     @Override
-    public boolean canNameTag(EntityPlayer player) {
+    public boolean canNameTag(PlayerEntity player) {
     	if(!this.isTamed())
     		return super.canNameTag(player);
     	else if(this.isTamed() && player == this.getPlayerOwner())
@@ -304,7 +304,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Perform GUI Command ==========
     @Override
-    public void performGUICommand(EntityPlayer player, byte guiCommandID) {
+    public void performGUICommand(PlayerEntity player, byte guiCommandID) {
     	if(!this.petControlsEnabled())
     		return;
     	if(player != this.getOwner())
@@ -387,7 +387,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 return true;
 
             // Check Player PvP:
-			if(target instanceof EntityPlayer && (!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP())) {
+			if(target instanceof PlayerEntity && (!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP())) {
 				return true;
 			}
 
@@ -449,7 +449,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 return false;
             if(!this.getEntityWorld().isRemote) {
                 boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();
-                if(targetEntity instanceof EntityPlayer && !canPVP)
+                if(targetEntity instanceof PlayerEntity && !canPVP)
                     return false;
                 if(targetEntity instanceof EntityCreatureTameable) {
                     EntityCreatureTameable targetTameable = (EntityCreatureTameable)targetEntity;
@@ -540,7 +540,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	 * Sets the owner of this entity to the provided player entity. Also updates the tamed status of this entity.
 	 * @param player The player to become the owner.
 	 */
-	public void setPlayerOwner(EntityPlayer player) {
+	public void setPlayerOwner(PlayerEntity player) {
 		this.setOwnerId(player.getUniqueID());
 	}
 
@@ -561,7 +561,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	public Entity getPlayerOwner() {
 		if(this.getEntityWorld().isRemote) {
 			Entity owner = this.getOwner();
-			if(owner instanceof EntityPlayer) {
+			if(owner instanceof PlayerEntity) {
 				return owner;
 			}
 			return null;
@@ -579,8 +579,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	public String getOwnerName() {
 		Entity owner = this.getOwner();
 		if(owner != null) {
-			if(owner instanceof EntityPlayer) {
-				return ((EntityPlayer)owner).getDisplayNameString();
+			if(owner instanceof PlayerEntity) {
+				return ((PlayerEntity)owner).getDisplayNameString();
 			}
 			else {
 				return owner.getName();
@@ -636,7 +636,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	 * @param player The player taming this entity.
 	 * @return True if the entity is tamed, false on failure.
 	 */
-    public boolean tame(EntityPlayer player) {
+    public boolean tame(PlayerEntity player) {
     	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies()) {
 			if (this.rand.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
@@ -682,11 +682,11 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 
 	@Override
 	public void onCreateBaby(EntityCreatureAgeable partner, EntityCreatureAgeable baby) {
-		if(this.isTamed() && this.getOwner() instanceof EntityPlayer && partner instanceof EntityCreatureTameable && baby instanceof EntityCreatureTameable) {
+		if(this.isTamed() && this.getOwner() instanceof PlayerEntity && partner instanceof EntityCreatureTameable && baby instanceof EntityCreatureTameable) {
 			EntityCreatureTameable partnerTameable = (EntityCreatureTameable)partner;
 			EntityCreatureTameable babyTameable = (EntityCreatureTameable)baby;
 			if(partnerTameable.getPlayerOwner() == this.getPlayerOwner()) {
-				babyTameable.setPlayerOwner((EntityPlayer)this.getOwner());
+				babyTameable.setPlayerOwner((PlayerEntity)this.getOwner());
 			}
 		}
 		super.onCreateBaby(partner, baby);
@@ -977,7 +977,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
      * @param player The player to check for when coloring, this is to stop players from dying other players pets. If provided with null it should return if this creature can be dyed in general.
      */
     @Override
-    public boolean canBeColored(EntityPlayer player) {
+    public boolean canBeColored(PlayerEntity player) {
     	if(player == null) return true;
     	return this.isTamed() && player == this.getPlayerOwner();
     }

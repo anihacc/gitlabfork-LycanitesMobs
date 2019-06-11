@@ -10,7 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -360,16 +360,16 @@ public class EntityProjectileBase extends EntityThrowable {
             }
 	    	
 	    	// Player Damage Event:
-		    if(owner instanceof EntityPlayer) {
-		    	if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((EntityPlayer)owner, targetEntity))) {
+		    if(owner instanceof PlayerEntity) {
+		    	if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)owner, targetEntity))) {
 		    		return false;
 		    	}
 		    }
 		    
 		    // Player PVP:
 		    if(!this.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
-		    	if(owner instanceof EntityPlayer) {
-			    	if(targetEntity instanceof EntityPlayer)
+		    	if(owner instanceof PlayerEntity) {
+			    	if(targetEntity instanceof PlayerEntity)
 			    		return false;
 			    	if(targetEntity instanceof EntityCreatureTameable) {
 			    		EntityCreatureTameable tamedTarget = (EntityCreatureTameable)targetEntity;
@@ -476,7 +476,7 @@ public class EntityProjectileBase extends EntityThrowable {
 		float damage = (float)this.damage;
 		if(this.getThrower() != null) {
 			// 20% Extra Damage From Players vs Entities
-			if((this.getThrower() instanceof EntityPlayer  || this.getThrower().getControllingPassenger() instanceof EntityPlayer) && !(entity instanceof EntityPlayer))
+			if((this.getThrower() instanceof PlayerEntity  || this.getThrower().getControllingPassenger() instanceof PlayerEntity) && !(entity instanceof PlayerEntity))
 				damage *= 1.2f;
 		}
 		return damage;

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.item.temp.ItemScepter;
 
 import com.lycanitesmobs.core.entity.creature.EntityWraith;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -47,8 +47,8 @@ public class ItemWraithSigil extends ItemScepter {
                 EntityWraith minion = new EntityWraith(world);
                 minion.setPositionAndRotation(entity.posX, entity.posY + 1, entity.posZ, entity.rotationYaw + (5 * i), -entity.rotationPitch);
                 minion.setMinion(true);
-				if(entity instanceof EntityPlayer) {
-					minion.setPlayerOwner((EntityPlayer)entity);
+				if(entity instanceof PlayerEntity) {
+					minion.setPlayerOwner((PlayerEntity)entity);
 					minion.ownerUUID = entity.getUniqueID();
 				}
 				world.spawnEntity(minion);

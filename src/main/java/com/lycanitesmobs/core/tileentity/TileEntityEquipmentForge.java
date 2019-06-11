@@ -5,8 +5,8 @@ import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -101,17 +101,17 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		return false;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 
 	}
 
@@ -213,12 +213,12 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	// ========================================
 	//                Open GUI
 	// ========================================
-	public Object getGUI(EntityPlayer player) {
+	public Object getGUI(PlayerEntity player) {
 		if(player.world.isRemote) {
 			return new GuiEquipmentForge(this, player.inventory);
 		}
-		if(player instanceof EntityPlayerMP) {
-			((EntityPlayerMP)player).connection.sendPacket(this.getUpdatePacket());
+		if(player instanceof PlayerEntityMP) {
+			((PlayerEntityMP)player).connection.sendPacket(this.getUpdatePacket());
 		}
 		return new ContainerEquipmentForge(this, player.inventory);
 	}

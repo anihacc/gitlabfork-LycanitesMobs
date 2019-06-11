@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -119,7 +119,7 @@ public class ContainerBase extends Container {
   	//                   Auto Placing
   	// ==================================================
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotID) {
+	public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
 		ItemStack itemStack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(slotID);
 		if(slot == null || !slot.getHasStack())
@@ -182,7 +182,7 @@ public class ContainerBase extends Container {
   	//                     Interact
   	// ==================================================
 	@Override
-	public boolean canInteractWith(EntityPlayer entityplayer) {
+	public boolean canInteractWith(PlayerEntity entityplayer) {
 		return true;
 	}
 }

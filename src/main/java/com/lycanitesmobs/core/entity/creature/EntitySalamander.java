@@ -18,7 +18,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -74,7 +74,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
         this.tasks.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
         this.tasks.addTask(7, new EntityAIWander(this).setPauseRate(30));
         this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -83,7 +83,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
         this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
         this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
         this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
         this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
@@ -173,8 +173,8 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
         if(!possibleTargets.isEmpty()) {
             for(EntityLivingBase possibleTarget : possibleTargets) {
                 boolean doDamage = true;
-                if(this.getRider() instanceof EntityPlayer) {
-                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((EntityPlayer)this.getRider(), possibleTarget))) {
+                if(this.getRider() instanceof PlayerEntity) {
+                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
                         doDamage = false;
                     }
                 }

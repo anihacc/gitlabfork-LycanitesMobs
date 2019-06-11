@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.network.MessageMobEvent;
 import com.lycanitesmobs.core.network.MessageWorldEvent;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -283,7 +283,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by INSTANCE) on the provided world.
      *  **/
-    public void startMobEvent(MobEvent mobEvent, EntityPlayer player, BlockPos pos, int level) {
+    public void startMobEvent(MobEvent mobEvent, PlayerEntity player, BlockPos pos, int level) {
         if(mobEvent == null) {
             LycanitesMobs.printWarning("", "Tried to start a null mob event.");
             return;
@@ -319,7 +319,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by name) on the provided world.
      **/
-    public MobEvent startMobEvent(String mobEventName, EntityPlayer player, BlockPos pos, int level) {
+    public MobEvent startMobEvent(String mobEventName, PlayerEntity player, BlockPos pos, int level) {
         MobEvent mobEvent;
         if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
             mobEvent = MobEventManager.getInstance().mobEvents.get(mobEventName);

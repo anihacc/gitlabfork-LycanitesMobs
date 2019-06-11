@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.EnumDifficulty;
 
 import java.util.Collections;
@@ -119,7 +119,7 @@ public class EntityAITargetAttack extends EntityAITarget {
             return false;
 
 		// Peaceful Difficulty Check:
-		if(this.host.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL && target instanceof EntityPlayer)
+		if(this.host.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL && target instanceof PlayerEntity)
 			return false;
 
 		// Tamed Targeting Check:
@@ -184,7 +184,7 @@ public class EntityAITargetAttack extends EntityAITarget {
 			return false;
 		}
 
-    	if(this.targetClass == EntityPlayer.class) {
+    	if(this.targetClass == PlayerEntity.class) {
 			if (this.host.updateTick % 10 != 0) {
 				return false;
 			}
@@ -219,10 +219,10 @@ public class EntityAITargetAttack extends EntityAITarget {
 	@Override
 	public EntityLivingBase getNewTarget(double rangeX, double rangeY, double rangeZ) {
 		// Faster Player Targeting:
-		if(this.targetClass == EntityPlayer.class) {
+		if(this.targetClass == PlayerEntity.class) {
 			EntityLivingBase newTarget = null;
 			try {
-				List<EntityPlayer> possibleTargets = this.host.getEntityWorld().getPlayers(EntityPlayer.class, this.targetSelector);
+				List<PlayerEntity> possibleTargets = this.host.getEntityWorld().getPlayers(PlayerEntity.class, this.targetSelector);
 				if (possibleTargets.isEmpty())
 					return null;
 				Collections.sort(possibleTargets, this.nearestSorter);

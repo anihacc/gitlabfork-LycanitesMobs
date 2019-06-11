@@ -11,7 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +50,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
         this.tasks.addTask(3, this.aiSit);
         this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
@@ -58,7 +58,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
         this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
 		this.targetTasks.addTask(3, new EntityAIDefendVillage(this));
 		this.targetTasks.addTask(4, new EntityAITargetDefend(this, EntityVillager.class));
-        //this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        //this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
 		this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityArgus.class));
         this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
 		this.targetTasks.addTask(7, new EntityAITargetFuse(this));
@@ -107,7 +107,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 
 				// Monitor Nearest Player:
 				if(protectLocation != null) {
-					EntityPlayer player = this.getEntityWorld().getNearestAttackablePlayer(this, 64, 32);
+					PlayerEntity player = this.getEntityWorld().getNearestAttackablePlayer(this, 64, 32);
 					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 					if (player != null) {
 						if(this.village != null) {

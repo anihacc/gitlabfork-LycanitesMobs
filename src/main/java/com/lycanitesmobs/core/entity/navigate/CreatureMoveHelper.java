@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class CreatureMoveHelper extends EntityMoveHelper {
@@ -48,7 +48,7 @@ public class CreatureMoveHelper extends EntityMoveHelper {
     /** Returns true if the entity is controlled by its rider. **/
     public boolean isControlledByRider() {
         // Mounted By Player:
-        if(this.entityCreature != null && this.entityCreature.getControllingPassenger() instanceof EntityPlayer && this.entityCreature.canBeSteered()) {
+        if(this.entityCreature != null && this.entityCreature.getControllingPassenger() instanceof PlayerEntity && this.entityCreature.canBeSteered()) {
             return true;
         }
 

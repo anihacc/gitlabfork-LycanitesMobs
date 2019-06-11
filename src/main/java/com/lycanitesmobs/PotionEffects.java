@@ -10,8 +10,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
@@ -104,7 +104,7 @@ public class PotionEffects {
 
 
 		// Disable Nausea:
-		if(this.disableNausea && event.getEntityLiving() instanceof EntityPlayer) {
+		if(this.disableNausea && event.getEntityLiving() instanceof PlayerEntity) {
 			if(entity.isPotionActive(MobEffects.NAUSEA)) {
 				entity.removePotionEffect(MobEffects.NAUSEA);
 			}
@@ -112,8 +112,8 @@ public class PotionEffects {
 
 		// Immunity:
 		boolean invulnerable = false;
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
+		if(entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
 			invulnerable = player.isCreative() || player.isSpectator();
 		}
 
@@ -165,8 +165,8 @@ public class PotionEffects {
 					entity.motionY += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					entity.motionZ += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					try {
-						if (entity instanceof EntityPlayerMP) {
-							EntityPlayerMP player = (EntityPlayerMP) entity;
+						if (entity instanceof PlayerEntityMP) {
+							PlayerEntityMP player = (PlayerEntityMP) entity;
 							player.connection.sendPacket(new SPacketEntityVelocity(entity));
 							MessageEntityVelocity messageEntityVelocity = new MessageEntityVelocity(
 									player,
@@ -252,8 +252,8 @@ public class PotionEffects {
 		// ========== Buffs ==========
 		// Swiftswimming
 		PotionBase swiftswimming = ObjectManager.getPotionEffect("swiftswimming");
-		if(swiftswimming != null && entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
+		if(swiftswimming != null && entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
 			if(entity.isPotionActive(swiftswimming) && entity.isInWater()) {
 				int amplifier = entity.getActivePotionEffect(swiftswimming).getAmplifier();
 				IAttributeInstance movement = entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
@@ -328,8 +328,8 @@ public class PotionEffects {
 			return;
 
 		boolean invulnerable = false;
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
+		if(entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
 			invulnerable = player.capabilities.isCreativeMode;
 		}
 		if(invulnerable) {
@@ -482,14 +482,14 @@ public class PotionEffects {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 
 		// Insomnia:
 		PotionBase insomnia = ObjectManager.getPotionEffect("insomnia");
 		if(insomnia != null && player.isPotionActive(insomnia)) {
-			event.setResult(EntityPlayer.SleepResult.NOT_SAFE);
+			event.setResult(PlayerEntity.SleepResult.NOT_SAFE);
 		}
 	}
 

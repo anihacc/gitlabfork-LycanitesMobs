@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.io.IOException;
 
@@ -25,14 +25,14 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 	 * Opens this GUI up to the provided player.
 	 * @param player The player to open the GUI to.
 	 */
-	public static void openToPlayer(EntityPlayer player) {
+	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
 			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.CREATURES.id, 0, 0);
 		}
 	}
 
 
-	public GuiBeastiaryCreatures(EntityPlayer player) {
+	public GuiBeastiaryCreatures(PlayerEntity player) {
 		super(player);
 	}
 

@@ -6,7 +6,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -33,7 +33,7 @@ public class ItemGeistLiver extends ItemBase {
     //                    Item Use
     // ==================================================
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         if (world.isRemote) {
             return EnumActionResult.SUCCESS;

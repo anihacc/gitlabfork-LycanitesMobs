@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.pets;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
@@ -159,9 +159,9 @@ public class PetManager {
 
         // New Entries:
         if(this.newEntries.size() > 0) {
-            if (!world.isRemote && this.host instanceof EntityPlayer) {
+            if (!world.isRemote && this.host instanceof PlayerEntity) {
                 for (PetEntry petEntry : this.newEntries) {
-                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((EntityPlayer) this.host);
+                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity) this.host);
                     if (playerExt != null)
                         playerExt.sendPetEntryToPlayer(petEntry);
                 }
@@ -178,8 +178,8 @@ public class PetManager {
                 petEntry.setOwner(this.host);
 
             // Pet and Mount Spirit Check:
-            if(this.host instanceof EntityPlayer) {
-                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)this.host);
+            if(this.host instanceof PlayerEntity) {
+                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)this.host);
                 if(playerExt != null && petEntry.usesSpirit()) {
                     int spiritCost = petEntry.getSpiritCost();
                     if(petEntry.spawningActive && petEntry.active) {
@@ -207,8 +207,8 @@ public class PetManager {
         }
 
         // Spirit Reserved:
-        if(this.host instanceof EntityPlayer) {
-            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)this.host);
+        if(this.host instanceof PlayerEntity) {
+            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)this.host);
             if(playerExt != null)
                 playerExt.spiritReserved = newSpiritReserved;
         }

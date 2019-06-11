@@ -11,7 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -54,7 +54,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
         this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new EntityAIWander(this).setPauseRate(0);
         this.tasks.addTask(8, this.wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -63,7 +63,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
         this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
         this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
         this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
     }
@@ -142,7 +142,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
                 return groundPos.up();
             }
         }
-        if(this.hasPickupEntity() && this.getPickupEntity() instanceof EntityPlayer)
+        if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
             wanderPosition = new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return wanderPosition;
     }

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item.special;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -35,7 +35,7 @@ public class ItemSoulgazer extends ItemBase {
 	// ==================================================
 	// ========== Entity Interaction ==========
 	@Override
-    public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
+    public boolean onItemRightClickOnEntity(PlayerEntity player, Entity entity, ItemStack itemStack) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
     		return false;

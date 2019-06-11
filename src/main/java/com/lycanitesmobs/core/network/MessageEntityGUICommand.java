@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
@@ -39,7 +39,7 @@ public class MessageEntityGUICommand implements IMessage, IMessageHandler<Messag
 		if(ctx.side != Side.SERVER) return null;
         IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
         mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
+			PlayerEntity player = ctx.getServerHandler().player;
 			World world = player.getEntityWorld();
 			Entity entity = world.getEntityByID(message.entityID);
 			if (entity instanceof EntityCreatureTameable) {

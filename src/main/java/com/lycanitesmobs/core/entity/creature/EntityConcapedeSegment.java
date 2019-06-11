@@ -16,7 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -211,7 +211,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     
 	// ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) {
+    public boolean canBeLeashedTo(PlayerEntity player) {
 	    return !this.hasParent();
     }
     

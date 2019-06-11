@@ -17,8 +17,8 @@ import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ExtendedPlayer implements IExtendedPlayer {
-    public static Map<EntityPlayer, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
+    public static Map<PlayerEntity, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
 	public static Map<String, NBTTagCompound> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
-	public EntityPlayer player;
+	public PlayerEntity player;
 	public Beastiary beastiary;
 	public PetManager petManager;
 	public long timePlayed = 0;
@@ -82,9 +82,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// ==================================================
     //                   Get for Player
     // ==================================================
-	public static ExtendedPlayer getForPlayer(EntityPlayer player) {
+	public static ExtendedPlayer getForPlayer(PlayerEntity player) {
 		if(player == null) {
-			//LycanitesMobs.printWarning("", "Tried to access an ExtendedPlayer from a null EntityPlayer.");
+			//LycanitesMobs.printWarning("", "Tried to access an ExtendedPlayer from a null PlayerEntity.");
 			return null;
 		}
 
@@ -133,7 +133,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     }
 
     /** Initially sets the player entity and loads any backup data, if the entity is being cloned from another call backupPlayer() instead so that the clone's ExtendedPlayer can load it. **/
-	public void setPlayer(EntityPlayer player) {
+	public void setPlayer(PlayerEntity player) {
         this.player = player;
         this.petManager.host = player;
         if(this.player.getEntityWorld() == null || this.player.getEntityWorld().isRemote)
@@ -144,7 +144,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         }
 	}
 
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
         return this.player;
     }
 
@@ -222,7 +222,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(!this.player.getEntityWorld().isRemote) {
 			if(sync) {
 				MessagePlayerStats message = new MessagePlayerStats(this);
-				LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP) this.player);
+				LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP) this.player);
 			}
 		}
 
@@ -261,7 +261,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.beastiary.sendAllToClient();
 			this.sendAllSummonSetsToPlayer();
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this);
-			LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+			LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
 		}
 
         // Pet Manager:
@@ -345,7 +345,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		for(PetEntry petEntry : this.petManager.allEntries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
-                LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+                LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
             }
 		}
 	}
@@ -353,7 +353,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public void sendPetEntryToPlayer(PetEntry petEntry) {
         if(this.player.getEntityWorld().isRemote) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);
-        LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+        LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
     }
 
 	public void sendPetEntryToServer(PetEntry petEntry) {
@@ -373,7 +373,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         if(this.player.getEntityWorld().isRemote) return;
         for(byte setID = 1; setID <= this.summonSetMax; setID++) {
             MessageSummonSet message = new MessageSummonSet(this, setID);
-            LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+            LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
         }
     }
 

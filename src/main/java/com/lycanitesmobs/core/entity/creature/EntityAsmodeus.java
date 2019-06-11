@@ -19,7 +19,7 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
@@ -52,7 +52,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // AI:
     public EntityAIAttackRanged aiRangedAttack;
 
-    public List<EntityPlayer> playerTargets = new ArrayList<EntityPlayer>();
+    public List<PlayerEntity> playerTargets = new ArrayList<PlayerEntity>();
     public boolean firstPlayerTargetCheck = false;
     public List<EntityTrite> triteMinions = new ArrayList<EntityTrite>();
     public List<EntityAstaroth> astarothMinions = new ArrayList<EntityAstaroth>();
@@ -111,11 +111,11 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         this.tasks.addTask(2, this.aiRangedAttack);
         //this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
         //this.tasks.addTask(7, new EntityAIStayByHome(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityTrite.class, EntityAstaroth.class, EntityCacodemon.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
     }
 
@@ -176,7 +176,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         if(!this.getEntityWorld().isRemote) {
             if (this.updateTick % 200 == 0 || !this.firstPlayerTargetCheck) {
                 this.firstPlayerTargetCheck = true;
-                this.playerTargets = this.getNearbyEntities(EntityPlayer.class, null, 64);
+                this.playerTargets = this.getNearbyEntities(PlayerEntity.class, null, 64);
             }
             if (this.updateTick % 20 == 0) {
                 if (this.playerTargets.isEmpty()) {
@@ -195,7 +195,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         // Passive Attacks:
         if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
             // Flying Player Wraith Attack:
-            for(EntityPlayer target : this.playerTargets) {
+            for(PlayerEntity target : this.playerTargets) {
                 if(target.capabilities.isCreativeMode || target.isSpectator())
                     continue;
                 if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
@@ -544,8 +544,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             entity.setDead();
             return false;
         }
-        if(entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)entity;
+        if(entity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity)entity;
             if (!player.capabilities.isCreativeMode && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
@@ -561,9 +561,9 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
     public boolean attackEntityFrom(DamageSource damageSrc, float damage) {
-        if(this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof EntityPlayer) {
+        if(this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof PlayerEntity) {
             if (!this.playerTargets.contains(damageSrc.getTrueSource()))
-                this.playerTargets.add((EntityPlayer)damageSrc.getTrueSource());
+                this.playerTargets.add((PlayerEntity)damageSrc.getTrueSource());
         }
         return super.attackEntityFrom(damageSrc, damage);
     }

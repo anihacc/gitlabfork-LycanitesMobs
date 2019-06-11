@@ -13,7 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -43,7 +43,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	 */
 	private final InventoryCrafting colorMixer = new InventoryCrafting(new Container() {
         private static final String __OBFID = "CL_00001649";
-        public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
+        public boolean canInteractWith(PlayerEntity par1PlayerEntity) {
             return false;
         }
     }, 2, 1);
@@ -87,7 +87,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
         this.tasks.addTask(6, new EntityAIEatBlock(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
         this.tasks.addTask(7, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
@@ -160,7 +160,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	}
 	
 	@Override
-	public boolean canBeColored(EntityPlayer player) {
+	public boolean canBeColored(PlayerEntity player) {
 		return true;
 	}
 	
@@ -216,7 +216,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) {
+    public boolean canBeLeashedTo(PlayerEntity player) {
         return true;
     }
     

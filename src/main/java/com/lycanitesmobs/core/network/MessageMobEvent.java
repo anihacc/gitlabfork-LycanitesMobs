@@ -4,7 +4,7 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
@@ -44,7 +44,7 @@ public class MessageMobEvent implements IMessage, IMessageHandler<MessageMobEven
         mainThread.addScheduledTask(new Runnable() {
             @Override
             public void run() {
-                EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+                PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
                 World world = player.getEntityWorld();
                 ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 

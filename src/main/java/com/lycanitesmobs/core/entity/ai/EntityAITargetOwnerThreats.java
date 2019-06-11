@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class EntityAITargetOwnerThreats extends EntityAITarget {
 	// Properties:
@@ -80,7 +80,7 @@ public class EntityAITargetOwnerThreats extends EntityAITarget {
         // EntityLiving Check:
 		if(target instanceof EntityLiving) {
 			EntityLiving targetLiving = (EntityLiving)target;
-			if(!targetLiving.canAttackClass(EntityPlayer.class)) {
+			if(!targetLiving.canAttackClass(PlayerEntity.class)) {
 				return false;
 			}
 		}

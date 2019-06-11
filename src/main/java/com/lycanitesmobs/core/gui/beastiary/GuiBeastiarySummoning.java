@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 
@@ -28,14 +28,14 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 	 * Opens this GUI up to the provided player.
 	 * @param player The player to open the GUI to.
 	 */
-	public static void openToPlayer(EntityPlayer player) {
+	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
 			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.SUMMONING.id, 0, 0);
 		}
 	}
 
 
-	public GuiBeastiarySummoning(EntityPlayer player) {
+	public GuiBeastiarySummoning(PlayerEntity player) {
 		super(player);
 	}
 

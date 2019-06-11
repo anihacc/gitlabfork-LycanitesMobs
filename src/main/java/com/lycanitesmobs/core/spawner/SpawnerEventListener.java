@@ -7,7 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -174,7 +174,7 @@ public class SpawnerEventListener {
 
 		// World Tick:
 		List<BlockPos> triggerPositions = new ArrayList<>();
-		for(EntityPlayer player : world.playerEntities) {
+		for(PlayerEntity player : world.playerEntities) {
 			if(triggerPositions.isEmpty()) {
 				triggerPositions.add(player.getPosition());
 				continue;
@@ -207,17 +207,17 @@ public class SpawnerEventListener {
 	// ==================================================
 	//               Entity Update Event
 	// ==================================================
-	public Map<EntityPlayer, Long> playerUpdateTicks = new HashMap<>();
+	public Map<PlayerEntity, Long> playerUpdateTicks = new HashMap<>();
 	
 	/** This uses the player update events to update Tick Spawn Triggers. **/
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if(entity == null || !(entity instanceof EntityPlayer) || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote || event.isCanceled())
+		if(entity == null || !(entity instanceof PlayerEntity) || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		
 		// ========== Spawn Near Players ==========
-		EntityPlayer player = (EntityPlayer)entity;
+		PlayerEntity player = (PlayerEntity)entity;
 		
 		if(!playerUpdateTicks.containsKey(player))
 			playerUpdateTicks.put(player, (long)0);
@@ -248,13 +248,13 @@ public class SpawnerEventListener {
 		
 		// Get Killer:
 		Entity killerEntity = event.getSource().getTrueSource();
-		if(!(killerEntity instanceof EntityPlayer)) {
+		if(!(killerEntity instanceof PlayerEntity)) {
 			return;
 		}
 
 		// Call Triggers:
 		for(KillSpawnTrigger spawnTrigger : this.killSpawnTriggers) {
-			spawnTrigger.onKill((EntityPlayer)killerEntity, (EntityLiving)killedEntity);
+			spawnTrigger.onKill((PlayerEntity)killerEntity, (EntityLiving)killedEntity);
 		}
 	}
 
@@ -308,7 +308,7 @@ public class SpawnerEventListener {
 	/** This uses the block harvest drops events to update Block Spawn Triggers. **/
 	@SubscribeEvent
 	public void onHarvestDrops(HarvestDropsEvent event) {
-		EntityPlayer player = event.getHarvester();
+		PlayerEntity player = event.getHarvester();
 		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
 			return;
 		}
@@ -339,7 +339,7 @@ public class SpawnerEventListener {
 		this.onBlockBreak(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
     }
 
-	public void onBlockBreak(World world, BlockPos blockPos, IBlockState blockState, EntityPlayer player, int chain) {
+	public void onBlockBreak(World world, BlockPos blockPos, IBlockState blockState, PlayerEntity player, int chain) {
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
 			return;
 		}
@@ -363,7 +363,7 @@ public class SpawnerEventListener {
 		this.onBlockPlace(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
 	}
 
-	public void onBlockPlace(World world, BlockPos blockPos, IBlockState blockState, EntityPlayer player, int chain) {
+	public void onBlockPlace(World world, BlockPos blockPos, IBlockState blockState, PlayerEntity player, int chain) {
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
 			return;
 		}
@@ -381,7 +381,7 @@ public class SpawnerEventListener {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 		if(player == null || player.getEntityWorld() == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		
@@ -402,7 +402,7 @@ public class SpawnerEventListener {
 		
 		// Interrupt:
 		if(interrupted) {
-			event.setResult(EntityPlayer.SleepResult.NOT_SAFE);
+			event.setResult(PlayerEntity.SleepResult.NOT_SAFE);
 		}
 	}
 
@@ -413,7 +413,7 @@ public class SpawnerEventListener {
 	/** This uses the item fished event to spawn mobs. **/
 	@SubscribeEvent
 	public void onFished(ItemFishedEvent event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 		if(player == null || player.getEntityWorld() == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) { // No Spawning for Creative Players
@@ -440,9 +440,9 @@ public class SpawnerEventListener {
 		}
 
 		World world = event.getWorld();
-		EntityPlayer player = null;
-		if(explosion.getExplosivePlacedBy() instanceof EntityPlayer) {
-			player = (EntityPlayer)explosion.getExplosivePlacedBy();
+		PlayerEntity player = null;
+		if(explosion.getExplosivePlacedBy() instanceof PlayerEntity) {
+			player = (PlayerEntity)explosion.getExplosivePlacedBy();
 		}
 
 		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) { // No Spawning for Creative Players

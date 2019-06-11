@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public class EntityAIBeg extends EntityAIBase {
 	// Targets:
     private EntityCreatureTameable host;
-    private EntityPlayer player;
+    private PlayerEntity player;
     
     // Properties:
     private float range = 8.0F * 8.0F;
@@ -79,7 +79,7 @@ public class EntityAIBeg extends EntityAIBase {
 	// ==================================================
  	//                    Got Beg Item
  	// ==================================================
-    private boolean gotBegItem(EntityPlayer player) {
+    private boolean gotBegItem(PlayerEntity player) {
         ItemStack itemstack = player.inventory.getCurrentItem();
         if(itemstack == null)
         	return false;

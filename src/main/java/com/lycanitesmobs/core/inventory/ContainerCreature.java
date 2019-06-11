@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerCreature extends ContainerBase {
@@ -67,7 +67,7 @@ public class ContainerCreature extends ContainerBase {
   	//                  Container Closed
   	// ==================================================
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
+	public void onContainerClosed(PlayerEntity player) {
 		super.onContainerClosed(player);
 	}
 }

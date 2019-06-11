@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,7 +27,7 @@ public class EntityPortal extends EntityProjectileBase {
     public int summonDuration = 60 * 20;
 	
 	// Properties:
-	public EntityPlayer shootingEntity;
+	public PlayerEntity shootingEntity;
 	public Class summonClass;
 	public ItemStaffSummoning portalItem;
     public String ownerName;
@@ -45,7 +45,7 @@ public class EntityPortal extends EntityProjectileBase {
         this.isImmuneToFire = true;
     }
 
-    public EntityPortal(World world, EntityPlayer shooter, Class summonClass, ItemStaffSummoning portalItem) {
+    public EntityPortal(World world, PlayerEntity shooter, Class summonClass, ItemStaffSummoning portalItem) {
         super(world, shooter);
         this.shootingEntity = shooter;
         this.summonClass = summonClass;

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.item.ItemCharge;
 
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -32,7 +32,7 @@ public class ItemPoopCharge extends ItemCharge {
     // ==================================================
     // ========== Use ==========
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         if(ItemDye.applyBonemeal(itemStack, world, pos, player, hand)) {
             if(!world.isRemote) {
@@ -44,7 +44,7 @@ public class ItemPoopCharge extends ItemCharge {
     }
 
     @Override
-    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, PlayerEntity entityPlayer) {
         return new EntityPoop(world, entityPlayer);
     }
 }

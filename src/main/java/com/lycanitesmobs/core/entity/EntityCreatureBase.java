@@ -36,8 +36,8 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -232,7 +232,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
-	public List<EntityPlayer> guiViewers = new ArrayList<>();
+	public List<PlayerEntity> guiViewers = new ArrayList<>();
 	/** Counts from the guiRefreshTime down to 0 when a GUI refresh has been scheduled. **/
 	public int guiRefreshTick = 0;
 	/** The amount of ticks to wait before a GUI refresh. **/
@@ -354,7 +354,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 
     // Override AI:
-    public EntityAITargetAttack aiTargetPlayer = new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class);
+    public EntityAITargetAttack aiTargetPlayer = new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class);
     public EntityAITargetRevenge aiDefendAnimals = new EntityAITargetRevenge(this).setHelpClasses(IAnimals.class);
 
 
@@ -1379,7 +1379,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 					}
 					if (owner != null) {
 						transformedCreature.applyLevel(transformedLevel);
-						fusionTameable.setPlayerOwner((EntityPlayer)owner);
+						fusionTameable.setPlayerOwner((PlayerEntity)owner);
 					}
 
 					// Tamed Partner:
@@ -1390,7 +1390,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 						}
 						if (partnerOwner != null) {
 							transformedCreature.applyLevel(transformedLevel);
-							fusionTameable.setPlayerOwner((EntityPlayer) partnerOwner);
+							fusionTameable.setPlayerOwner((PlayerEntity) partnerOwner);
 
 							// Temporary:
 							if (partnerCreature.isTemporary) {
@@ -1418,8 +1418,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 				// Tamed:
 				if (transformedCreature instanceof EntityCreatureTameable) {
 					EntityCreatureTameable fusionTameable = (EntityCreatureTameable) transformedCreature;
-					if (this.getOwner() != null && this.getOwner() instanceof EntityPlayer) {
-						fusionTameable.setPlayerOwner((EntityPlayer) this.getOwner());
+					if (this.getOwner() != null && this.getOwner() instanceof PlayerEntity) {
+						fusionTameable.setPlayerOwner((PlayerEntity) this.getOwner());
 					}
 				}
 			}
@@ -1486,7 +1486,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 		// Beastiary Discovery:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
-        	for(EntityPlayer player : this.getEntityWorld().getPlayers(EntityPlayer.class, player -> player != null && this.getDistance(player) <= 5)) {
+        	for(PlayerEntity player : this.getEntityWorld().getPlayers(PlayerEntity.class, player -> player != null && this.getDistance(player) <= 5)) {
 				ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 				if(extendedPlayer != null) {
 					extendedPlayer.getBeastiary().discoverCreature(this, 1, false);
@@ -1577,8 +1577,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
         // Prevent Creative Attack Target:
         if(this.hasAttackTarget()) {
-            if(this.getAttackTarget() instanceof EntityPlayer) {
-                EntityPlayer targetPlayer = (EntityPlayer)this.getAttackTarget();
+            if(this.getAttackTarget() instanceof PlayerEntity) {
+                PlayerEntity targetPlayer = (PlayerEntity)this.getAttackTarget();
                 if(targetPlayer.capabilities.isCreativeMode)
                     this.setAttackTarget(null);
             }
@@ -2109,7 +2109,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     // ========== Can Be Leashed To ==========
     /** Returns whether or not this entity can be leashed to the specified player. Useful for tamed entites. **/
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) { return false; }
+    public boolean canBeLeashedTo(PlayerEntity player) { return false; }
     
     // ========== Test Leash ==========
     /** Called on the update to see if the leash should snap at the given distance. **/
@@ -2451,8 +2451,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		}
 
 		// Players:
-        if(targetEntity instanceof EntityPlayer) {
-            EntityPlayer targetPlayer = (EntityPlayer)targetEntity;
+        if(targetEntity instanceof PlayerEntity) {
+            PlayerEntity targetPlayer = (PlayerEntity)targetEntity;
             if(targetPlayer.capabilities.isCreativeMode) {
 				return false;
 			}
@@ -2732,8 +2732,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
 		// Player Shielding:
 		boolean targetIsShielding = false;
-		if (target instanceof EntityPlayer) {
-			EntityPlayer targetPlayer = (EntityPlayer)target;
+		if (target instanceof PlayerEntity) {
+			PlayerEntity targetPlayer = (PlayerEntity)target;
 			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
 			targetIsShielding = !playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer);
 		}
@@ -2769,8 +2769,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
             	target.setFire(fireEnchantDuration * 4);
 
 			// Interrupt Shielding Players:
-			if (target instanceof EntityPlayer && this.canInteruptShields(true)) {
-				EntityPlayer targetPlayer = (EntityPlayer)target;
+			if (target instanceof PlayerEntity && this.canInteruptShields(true)) {
+				PlayerEntity targetPlayer = (PlayerEntity)target;
 				if (targetIsShielding && this.canInteruptShields(false)) {
 					ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
 					targetPlayer.getCooldownTracker().setCooldown(playerActiveItemStack.getItem(), 100);
@@ -2830,7 +2830,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         damage *= this.getDamageModifier(damageSrc);
         damage = this.getDamageAfterDefense(damage);
         if(this.isBoss() || this.isRareSubspecies()) {
-            if (!(damageSrc.getTrueSource() instanceof EntityPlayer))
+            if (!(damageSrc.getTrueSource() instanceof PlayerEntity))
                 damage *= 0.25F;
         }
         
@@ -2899,9 +2899,9 @@ public abstract class EntityCreatureBase extends EntityLiving {
             if(!this.isBoundPet())
                 this.inventory.dropInventory();
             if(damageSource.getTrueSource() != null) {
-                if(damageSource.getTrueSource() instanceof EntityPlayer) {
+                if(damageSource.getTrueSource() instanceof PlayerEntity) {
                     try {
-                        EntityPlayer player = (EntityPlayer) damageSource.getTrueSource();
+                        PlayerEntity player = (PlayerEntity) damageSource.getTrueSource();
                         player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1);
                         if (this.isBoss() || this.getRNG().nextDouble() <= CreatureManager.getInstance().config.beastiaryAddOnDeathChance) {
                             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
@@ -3359,7 +3359,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     public void destroyArea(int x, int y, int z, float strength, boolean drop, int range) {
     	this.destroyArea(x, y, z, strength, drop, range, null, 0);
     }
-	public void destroyArea(int x, int y, int z, float strength, boolean drop, int range, EntityPlayer player, int chain) {
+	public void destroyArea(int x, int y, int z, float strength, boolean drop, int range, PlayerEntity player, int chain) {
 		range = Math.max(range -1, 0);
 		for(int w = -((int)Math.ceil(this.width) - range); w <= (Math.ceil(this.width) + range); w++) {
 			for (int d = -((int) Math.ceil(this.width) - range); d <= (Math.ceil(this.width) + range); d++) {
@@ -3504,7 +3504,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     // ==================================================
     // ========== GUI ==========
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
-    public void openGUI(EntityPlayer player) {
+    public void openGUI(PlayerEntity player) {
     	if(this.getEntityWorld().isRemote)
     		return;
     	this.addGUIViewer(player);
@@ -3513,13 +3513,13 @@ public abstract class EntityCreatureBase extends EntityLiving {
     }
     
     /** This adds the provided PlayerEntity to the guiViewers array list, where on the next GUI refresh it will open the GUI. **/
-    public void addGUIViewer(EntityPlayer player) {
+    public void addGUIViewer(PlayerEntity player) {
     	if(!this.getEntityWorld().isRemote)
     		this.guiViewers.add(player);
     }
     
     /** This removes the provided PlayerEntity from the guiViewers array list. **/
-    public void removeGUIViewer(EntityPlayer player) {
+    public void removeGUIViewer(PlayerEntity player) {
     	if(!this.getEntityWorld().isRemote)
     		this.guiViewers.remove(player);
     }
@@ -3529,7 +3529,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     	if(this.getEntityWorld().isRemote)
     		return;
     	if(this.guiViewers.size() > 0) {
-        	for(EntityPlayer player : this.guiViewers.toArray(new EntityPlayer[this.guiViewers.size()])) {
+        	for(PlayerEntity player : this.guiViewers.toArray(new PlayerEntity[this.guiViewers.size()])) {
         		if(player.openContainer != null && player.openContainer instanceof ContainerCreature) {
         			if(((ContainerCreature)player.openContainer).creature == this)
         				this.openGUIToPlayer(player);
@@ -3541,7 +3541,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     }
     
     /** Actually opens the GUI to the player, should be used by openGUI() for an initial opening and then by refreshGUIViewers() for constant updates. **/
-    public void openGUIToPlayer(EntityPlayer player) {
+    public void openGUIToPlayer(PlayerEntity player) {
     	if(player != null)
     		player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.ENTITY.id, this.getEntityWorld(), this.getEntityId(), 0, 0);
     }
@@ -3553,7 +3553,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
-    public boolean processInteract(EntityPlayer player, EnumHand hand) {
+    public boolean processInteract(PlayerEntity player, EnumHand hand) {
 	    if(assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand)))
 	    	return true;
 	    return super.processInteract(player, hand);
@@ -3561,7 +3561,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
     // ========== Assess Interact Command ==========
     /** Performs the best possible command and returns true or false if there isn't one. **/
-    public boolean assessInteractCommand(HashMap<Integer, String> commands, EntityPlayer player, ItemStack itemStack) {
+    public boolean assessInteractCommand(HashMap<Integer, String> commands, PlayerEntity player, ItemStack itemStack) {
     	if(commands.isEmpty())
     		return false;
     	int priority = 100;
@@ -3576,7 +3576,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     // ========== Get Interact Commands ==========
     /** Gets a map of all possible interact events with the key being the priority, lower is better. **/
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
     	
     	// Item Commands:
@@ -3604,7 +3604,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     // ========== Perform Command ==========
     /** Performs the given interact command. Could be used outside of the interact method if needed. **/
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Leash:
     	if("Leash".equals(command)) {
@@ -3627,7 +3627,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     // ========== Can Name Tag ==========
     /** Returns true if this mob can be given a new name with a name tag by the provided player entity. **/
-    public boolean canNameTag(EntityPlayer player) {
+    public boolean canNameTag(PlayerEntity player) {
     	return true;
     }
     
@@ -3648,11 +3648,11 @@ public abstract class EntityCreatureBase extends EntityLiving {
     
     // ========== Consume Player's Item ==========
     /** Consumes 1 item from the the item stack currently held by the specified player. **/
-    public void consumePlayersItem(EntityPlayer player, ItemStack itemStack) {
+    public void consumePlayersItem(PlayerEntity player, ItemStack itemStack) {
     	consumePlayersItem(player, itemStack, 1);
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
-    public void consumePlayersItem(EntityPlayer player, ItemStack itemStack, int amount) {
+    public void consumePlayersItem(PlayerEntity player, ItemStack itemStack, int amount) {
     	if(!player.capabilities.isCreativeMode)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
         if(itemStack.getCount() <= 0)
@@ -3661,11 +3661,11 @@ public abstract class EntityCreatureBase extends EntityLiving {
 
     // ========== Replace Player's Item ==========
     /** Replaces 1 of the specified itemstack with a new itemstack. **/
-    public void replacePlayersItem(EntityPlayer player, ItemStack itemStack, ItemStack newStack) {
+    public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, ItemStack newStack) {
     	replacePlayersItem(player, itemStack, 1, newStack);
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
-    public void replacePlayersItem(EntityPlayer player, ItemStack itemStack, int amount, ItemStack newStack) {
+    public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, int amount, ItemStack newStack) {
     	if(!player.capabilities.isCreativeMode)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
     	
@@ -3678,7 +3678,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     }
     
     // ========== Perform GUI Command ==========
-    public void performGUICommand(EntityPlayer player, byte guiCommandID) {
+    public void performGUICommand(PlayerEntity player, byte guiCommandID) {
     	scheduleGUIRefresh();
     }
     
@@ -4341,7 +4341,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
      * @param player The player to check for when coloring, this is to stop players from dying other players pets. If provided with null it should return if this creature can be dyed in general.
      * @return True if tis entity can be dyed by the player or if the player is null, if it can be dyed at all (null is passed by the renderer).
      */
-    public boolean canBeColored(EntityPlayer player) {
+    public boolean canBeColored(PlayerEntity player) {
     	return false;
     }
     
@@ -4375,14 +4375,14 @@ public abstract class EntityCreatureBase extends EntityLiving {
     }
 
     @Override
-    public void addTrackingPlayer(EntityPlayerMP player) {
+    public void addTrackingPlayer(PlayerEntityMP player) {
         super.addTrackingPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.addPlayer(player);
     }
 
     @Override
-    public void removeTrackingPlayer(EntityPlayerMP player) {
+    public void removeTrackingPlayer(PlayerEntityMP player) {
         super.removeTrackingPlayer(player);
         if(this.getBossInfo() != null)
             this.bossInfo.removePlayer(player);

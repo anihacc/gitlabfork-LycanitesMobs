@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EnumHand;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -39,7 +39,7 @@ public class GuiOverlay extends GuiBase {
 	public void onRenderExperienceBar(RenderGameOverlayEvent event) {
         if(LycanitesMobs.proxy.getClientPlayer() == null)
             return;
-        EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+        PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
 	      return;

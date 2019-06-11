@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.gui.GuiOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
@@ -44,7 +44,7 @@ public class MobEventPlayerClient {
     // ==================================================
     //                       Start
     // ==================================================
-	public void onStart(EntityPlayer player) {
+	public void onStart(PlayerEntity player) {
 		if(!this.extended) {
 			this.ticks = 0;
 		}
@@ -72,7 +72,7 @@ public class MobEventPlayerClient {
     // ==================================================
     //                      Finish
     // ==================================================
-	public void onFinish(EntityPlayer player) {
+	public void onFinish(PlayerEntity player) {
 		String eventMessage = LanguageManager.translate("event.finished");
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
 		player.sendMessage(new TextComponentString(eventMessage));
@@ -92,7 +92,7 @@ public class MobEventPlayerClient {
     // ==================================================
     @SideOnly(Side.CLIENT)
     public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
-    	EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+    	PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
         if(player.capabilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}

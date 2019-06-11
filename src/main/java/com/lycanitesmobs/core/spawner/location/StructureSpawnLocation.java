@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -32,7 +32,7 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 
 
 	@Override
-	public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
+	public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
 		LycanitesMobs.printDebug("JSONSpawner", "Getting Nearest Structures Within Range");
 		if(!(world instanceof WorldServer)) {
 			LycanitesMobs.printWarning("", "[JSONSpawner] Structure spawn location was called with a non ServerWorld World instance.");

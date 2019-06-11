@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -173,8 +173,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
         // Swimming / Flying Controls:
         double verticalMotion = 0;
         if(this.isInWater() || this.isInLava() || this.isFlying()) {
-            if (this.getControllingPassenger() instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) this.getControllingPassenger();
+            if (this.getControllingPassenger() instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                 if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                     verticalMotion = this.creatureStats.getSpeed() * 20;
@@ -191,8 +191,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
         else {
             // Jumping Controls:
             if (!this.isMountJumping()) {
-                if (this.getControllingPassenger() instanceof EntityPlayer) {
-                    EntityPlayer player = (EntityPlayer) this.getControllingPassenger();
+                if (this.getControllingPassenger() instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
                     ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                     if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                         this.startJumping();
@@ -222,8 +222,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
         }
 
 		// Ability Controls:
-		if(this.getControllingPassenger() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)this.getControllingPassenger();
+		if(this.getControllingPassenger() instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)this.getControllingPassenger();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(playerExt != null) {
 
@@ -349,7 +349,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
     	
@@ -365,7 +365,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Mount:
     	if(command.equals("Mount")) {
@@ -414,14 +414,14 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     		return false;
     	
     	// Can Be Mounted By A Player:
-    	if(this.isTamed() && entity instanceof EntityPlayer) {
-    		EntityPlayer player = (EntityPlayer)entity;
+    	if(this.isTamed() && entity instanceof PlayerEntity) {
+    		PlayerEntity player = (PlayerEntity)entity;
     		if(player == this.getOwner())
     			return this.hasSaddle() && !this.isChild();
     	}
     	
     	// Can Be Mounted By Mobs:
-    	else if(!this.isTamed() && !(entity instanceof EntityPlayer)) {
+    	else if(!this.isTamed() && !(entity instanceof PlayerEntity)) {
     		return !this.isChild();
     	}
     	

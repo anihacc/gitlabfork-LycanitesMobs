@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.network;
 
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -35,7 +35,7 @@ public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRe
 		if(ctx.side != Side.SERVER) return null;
         IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
         mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
+			PlayerEntity player = ctx.getServerHandler().player;
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			playerExt.requestGUI(message.guiID);
 		});

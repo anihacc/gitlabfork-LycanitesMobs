@@ -18,7 +18,7 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -57,7 +57,7 @@ public class CommandMain implements ICommand {
 
 	@Override
 	public String getUsage(ICommandSender commandSender) {
-		if(commandSender instanceof EntityPlayer)
+		if(commandSender instanceof PlayerEntity)
 			return "/lycanitesmobs <sub-commands: mobevent [start <event name>, stop, list, enable, disable]>";
 		return "/lycanitesmobs <sub-commands: mobevent [start <event name> dimensionID, stop, list, enable, disable]>";
 	}
@@ -232,12 +232,12 @@ public class CommandMain implements ICommand {
 			}
 
 			// Player Only:
-			if(!(commandSender instanceof EntityPlayer)) {
+			if(!(commandSender instanceof PlayerEntity)) {
 				reply = LanguageManager.translate("lyc.command.playeronly");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
-			EntityPlayer player = (EntityPlayer)commandSender;
+			PlayerEntity player = (PlayerEntity)commandSender;
 			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 			Beastiary beastiary = extendedPlayer.getBeastiary();
 			if(extendedPlayer == null || beastiary == null) {
@@ -367,10 +367,10 @@ public class CommandMain implements ICommand {
 					
 					reply = LanguageManager.translate("lyc.command.mobevent.start");
 					commandSender.sendMessage(new TextComponentString(reply));
-					EntityPlayer player = null;
+					PlayerEntity player = null;
 					BlockPos pos = new BlockPos(0, 0, 0);
-					if(commandSender instanceof EntityPlayer) {
-						player = (EntityPlayer)commandSender;
+					if(commandSender instanceof PlayerEntity) {
+						player = (PlayerEntity)commandSender;
 						pos = player.getPosition();
 					}
 					int level = 1;
@@ -491,7 +491,7 @@ public class CommandMain implements ICommand {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender commandSender) {
-		if(commandSender instanceof EntityPlayer) {
+		if(commandSender instanceof PlayerEntity) {
 			if(!commandSender.canUseCommand(this.getRequiredPermissionLevel(), this.getName()))
 				return false;
 		}

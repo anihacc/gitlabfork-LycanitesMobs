@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,7 +19,7 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 	 * Opens this GUI up to the provided player.
 	 * @param player The player to open the GUI to.
 	 */
-	public static void openToPlayer(EntityPlayer player) {
+	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
 			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.INDEX.id, 0, 0);
 		}
@@ -32,7 +32,7 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 	}
 
 
-	public GuiBeastiaryIndex(EntityPlayer player) {
+	public GuiBeastiaryIndex(PlayerEntity player) {
 		super(player);
 	}
 

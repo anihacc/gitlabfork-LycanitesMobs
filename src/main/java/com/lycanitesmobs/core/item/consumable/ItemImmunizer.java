@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item.consumable;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
@@ -28,7 +28,7 @@ public class ItemImmunizer extends ItemBase {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
 			if(!player.capabilities.isCreativeMode) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));

@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -39,7 +39,7 @@ public class ItemWinterGift extends ItemBase {
  	//                    Item Use
  	// ==================================================
     @Override
-     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
         if(!player.capabilities.isCreativeMode) {
             itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
@@ -59,7 +59,7 @@ public class ItemWinterGift extends ItemBase {
     // ==================================================
   	//                       Good
   	// ==================================================
-    public void openGood(ItemStack itemStack, World world, EntityPlayer player) {
+    public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".good");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
@@ -82,7 +82,7 @@ public class ItemWinterGift extends ItemBase {
     // ==================================================
   	//                       Bad
   	// ==================================================
-    public void openBad(ItemStack itemStack, World world, EntityPlayer player) {
+    public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);

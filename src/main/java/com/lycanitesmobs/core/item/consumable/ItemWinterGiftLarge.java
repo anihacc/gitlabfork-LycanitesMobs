@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -34,7 +34,7 @@ public class ItemWinterGiftLarge extends ItemBase {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
          if(!player.capabilities.isCreativeMode) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
@@ -51,7 +51,7 @@ public class ItemWinterGiftLarge extends ItemBase {
     // ==================================================
   	//                       Open
   	// ==================================================
-    public void open(ItemStack itemStack, World world, EntityPlayer player) {
+    public void open(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TextComponentString(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);

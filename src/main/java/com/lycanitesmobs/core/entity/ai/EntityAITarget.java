@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -204,10 +204,10 @@ public abstract class EntityAITarget extends EntityAIBase {
             return false;
 
         // Player Checks:
-		if(checkTarget instanceof EntityPlayer) {
-			if(!targetCreative && ((EntityPlayer)checkTarget).isCreative())
+		if(checkTarget instanceof PlayerEntity) {
+			if(!targetCreative && ((PlayerEntity)checkTarget).isCreative())
 				return false;
-			if(((EntityPlayer)checkTarget).isSpectator())
+			if(((PlayerEntity)checkTarget).isSpectator())
 				return false;
 		}
         
@@ -259,7 +259,7 @@ public abstract class EntityAITarget extends EntityAIBase {
             return false;
 
 		// Player Check:
-		if(checkTarget instanceof EntityPlayer)
+		if(checkTarget instanceof PlayerEntity)
 			return false;
 
         // Same Species:

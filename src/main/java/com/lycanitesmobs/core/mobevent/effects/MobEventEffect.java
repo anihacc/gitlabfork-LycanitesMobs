@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -51,7 +51,7 @@ public abstract class MobEventEffect {
 	}
 
 	/** Returns if this effect can activate on the given event update tick. **/
-	public boolean canActivate(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public boolean canActivate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 		// Check Ticks:
 		if(this.eventTicksMin >= 0 && ticks < this.eventTicksMin) {
 			return false;
@@ -75,7 +75,7 @@ public abstract class MobEventEffect {
 	 * @param ticks The ticks that the event has been active for.
 	 * @return Returns true if effects should be played. This is used by classes that extend this class.
 	 */
-	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 
 	}
 
@@ -89,7 +89,7 @@ public abstract class MobEventEffect {
 	 * @param ticks The ticks that the event has been active for.
 	 * @return Returns true if effects should be played. This is used by classes that extend this class.
 	 */
-	public void onSpawn(EntityLiving entity, World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void onSpawn(EntityLiving entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 
 	}
 }

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.condition;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -113,7 +113,7 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 
     @Override
-    public boolean isMet(World world, EntityPlayer player, BlockPos position) {
+    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
 		if(player == null) {
 			return false;
 		}

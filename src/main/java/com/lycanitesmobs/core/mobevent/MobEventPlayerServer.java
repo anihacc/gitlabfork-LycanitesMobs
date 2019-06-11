@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.mobevent;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +23,7 @@ public class MobEventPlayerServer {
     public long startedWorldTime = 0;
 
     /** The player that triggered this event. Can be null as not all events are player specific. **/
-    public EntityPlayer player;
+    public PlayerEntity player;
 
     /** The origin position of this event. This is not always relevant. **/
     public BlockPos origin = new BlockPos(0, 0, 0);

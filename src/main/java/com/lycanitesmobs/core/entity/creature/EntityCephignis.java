@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
@@ -58,7 +58,7 @@ public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, 
         this.tasks.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
         this.wanderAI = new EntityAIWander(this);
         this.tasks.addTask(7, this.wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
         this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
@@ -121,7 +121,7 @@ public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, 
 
     // ========== Can leash ==========
     @Override
-    public boolean canBeLeashedTo(EntityPlayer player) { return true; }
+    public boolean canBeLeashedTo(PlayerEntity player) { return true; }
 
     // ========== Can Be Tempted ==========
     @Override

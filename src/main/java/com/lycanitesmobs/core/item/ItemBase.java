@@ -11,7 +11,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -97,17 +97,17 @@ public class ItemBase extends Item {//implements IScanThing {
 	// ==================================================
     // ========== Use ==========
     @Override
-    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
     	return super.onItemUse(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
     
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
-    public void onItemLeftClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public void onItemLeftClick(ItemStack itemStackIn, World worldIn, PlayerEntity playerIn, EnumHand hand) {
         return;
     }
 
@@ -130,7 +130,7 @@ public class ItemBase extends Item {//implements IScanThing {
     }
     
     // ========== Entity Interaction ==========
-    public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
+    public boolean onItemRightClickOnEntity(PlayerEntity player, Entity entity, ItemStack itemStack) {
     	return false;
     }
 
@@ -196,13 +196,13 @@ public class ItemBase extends Item {//implements IScanThing {
 	// ==================================================
 	@Optional.Method(modid=Thaumcraft.modid)
 	//@Override
-	public boolean checkThing(EntityPlayer player, Object obj) {
+	public boolean checkThing(PlayerEntity player, Object obj) {
 		return false;
 	}
 
 	@Optional.Method(modid=Thaumcraft.modid)
 	//@Override
-	public String getResearchKey(EntityPlayer player, Object object) {
+	public String getResearchKey(PlayerEntity player, Object object) {
 		return null;
 	}
 }

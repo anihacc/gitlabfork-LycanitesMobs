@@ -5,7 +5,7 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -60,7 +60,7 @@ public class ItemSlabCustom extends ItemBlock
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         if (itemStack.getCount() != 0 && player.canPlayerEdit(pos.offset(facing), facing, itemStack))
         {
@@ -98,7 +98,7 @@ public class ItemSlabCustom extends ItemBlock
     }
 
     @SideOnly(Side.CLIENT)
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack)
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack)
     {
         BlockPos blockpos = pos;
         IProperty<?> iproperty = this.singleSlab.getVariantProperty();
@@ -120,7 +120,7 @@ public class ItemSlabCustom extends ItemBlock
         return iblockstate1.getBlock() == this.singleSlab && comparable == iblockstate1.getValue(iproperty) ? true : super.canPlaceBlockOnSide(worldIn, blockpos, side, player, stack);
     }
 
-    private boolean tryPlace(EntityPlayer player, ItemStack itemStack, World worldIn, BlockPos pos, Object itemSlabType)
+    private boolean tryPlace(PlayerEntity player, ItemStack itemStack, World worldIn, BlockPos pos, Object itemSlabType)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 

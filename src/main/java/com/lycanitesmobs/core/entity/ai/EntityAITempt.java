@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 public class EntityAITempt extends EntityAIBase {
     // Targets:
     private EntityCreatureBase host;
-    private EntityPlayer player;
+    private PlayerEntity player;
     
     // Properties:
     private double speed = 1.0D;

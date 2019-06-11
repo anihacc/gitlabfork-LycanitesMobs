@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -123,7 +123,7 @@ public class EntityAIAttackRanged extends EntityAIBase {
     		return false;
         if(!this.mountedAttacking && this.host instanceof EntityCreatureRideable) {
             EntityCreatureRideable rideableHost = (EntityCreatureRideable)this.host;
-            if(rideableHost.getControllingPassenger() instanceof EntityPlayer)
+            if(rideableHost.getControllingPassenger() instanceof PlayerEntity)
                 return false;
         }
         EntityLivingBase possibleAttackTarget = this.host.getAttackTarget();

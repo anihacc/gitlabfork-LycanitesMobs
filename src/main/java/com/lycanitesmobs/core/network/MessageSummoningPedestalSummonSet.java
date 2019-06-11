@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.network;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IThreadListener;
@@ -50,7 +50,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
             return null;
         IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
         mainThread.addScheduledTask(() -> {
-			EntityPlayer player = ctx.getServerHandler().player;
+			PlayerEntity player = ctx.getServerHandler().player;
 			TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
 			TileEntitySummoningPedestal summoningPedestal = null;
 			if(tileEntity instanceof TileEntitySummoningPedestal)

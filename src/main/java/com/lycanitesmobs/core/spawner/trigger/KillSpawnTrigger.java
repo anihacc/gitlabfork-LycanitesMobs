@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -36,7 +36,7 @@ public class KillSpawnTrigger extends EntitySpawnTrigger {
 
 
 	/** Called every time a player kills an entity. **/
-	public void onKill(EntityPlayer player, EntityLiving killedEntity) {
+	public void onKill(PlayerEntity player, EntityLiving killedEntity) {
 
 		// Check Entity:
 		if(!this.isMatchingEntity(killedEntity)) {

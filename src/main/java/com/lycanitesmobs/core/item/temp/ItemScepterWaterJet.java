@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
@@ -31,7 +31,7 @@ public class ItemScepterWaterJet extends ItemScepter {
 	// ==================================================
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
         this.projectileTarget = null;
         return super.onItemRightClick(world, player, hand);

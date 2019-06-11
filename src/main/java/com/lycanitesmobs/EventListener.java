@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -136,7 +136,7 @@ public class EventListener {
             });
         }
 
-        if(event.getObject() instanceof EntityPlayer) {
+        if(event.getObject() instanceof PlayerEntity) {
             event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedPlayer"), new ICapabilitySerializable<NBTTagCompound>() {
                 IExtendedPlayer instance = LycanitesMobs.EXTENDED_PLAYER.getDefaultInstance();
 
@@ -212,8 +212,8 @@ public class EventListener {
             extendedEntity.onDeath();
 
 		// ========== Extended Player ==========
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
+		if(entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
             ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
             if(extendedPlayer != null)
 			    extendedPlayer.onDeath();
@@ -235,8 +235,8 @@ public class EventListener {
 			extendedEntity.onUpdate();
 
 		// ========== Extended Player ==========
-		if(entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entity;
+		if(entity instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)entity;
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(playerExt != null)
 				playerExt.onUpdate();
@@ -249,7 +249,7 @@ public class EventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		EntityPlayer player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayerEntity();
 		Entity entity = event.getTarget();
         if(player == null || entity == null)
 			return;

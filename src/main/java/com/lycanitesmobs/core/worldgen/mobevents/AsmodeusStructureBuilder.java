@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,7 +21,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void build(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 		int originX = pos.getX();
 		int originY = pos.getY();
 		int originZ = pos.getZ();

@@ -18,7 +18,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -113,7 +113,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                     Item Use
 	// ==================================================
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack itemStack = player.getHeldItem(hand);
         IBlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
@@ -171,7 +171,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                   On Right Click
 	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
         if(world.isRemote)
             return new ActionResult(EnumActionResult.PASS, itemStack);
@@ -323,7 +323,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	 * @param stack
 	 * @param targetEntity
 	 */
-    public void applyItemEntityDataToEntity(World entityWorld, @Nullable EntityPlayer player, ItemStack stack, @Nullable Entity targetEntity) {
+    public void applyItemEntityDataToEntity(World entityWorld, @Nullable PlayerEntity player, ItemStack stack, @Nullable Entity targetEntity) {
         MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
         if (minecraftserver != null && targetEntity != null) {
             NBTTagCompound nbttagcompound = stack.getTagCompound();

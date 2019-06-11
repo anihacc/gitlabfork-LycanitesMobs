@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
@@ -122,7 +122,7 @@ public class DonationFamiliars {
     // ==================================================
     //              Get Familiars For Player
     // ==================================================
-    public Map<String, PetEntry> getFamiliarsForPlayer(EntityPlayer player) {
+    public Map<String, PetEntry> getFamiliarsForPlayer(PlayerEntity player) {
         long currentTime = System.currentTimeMillis() / 1000;
         if(this.jsonLoadedTime < 0 || currentTime - this.jsonLoadedTime > 60 * 60)
             this.readFromJSON();

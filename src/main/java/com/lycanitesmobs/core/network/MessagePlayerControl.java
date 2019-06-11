@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.network;
 
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -36,7 +36,7 @@ public class MessagePlayerControl implements IMessage, IMessageHandler<MessagePl
         mainThread.addScheduledTask(new Runnable() {
             @Override
             public void run() {
-                EntityPlayer player = ctx.getServerHandler().player;
+                PlayerEntity player = ctx.getServerHandler().player;
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                 playerExt.updateControlStates(message.controlStates);
             }

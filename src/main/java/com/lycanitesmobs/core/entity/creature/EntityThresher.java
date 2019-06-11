@@ -16,8 +16,8 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -73,7 +73,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         this.wanderAI = new EntityAIWander(this);
         this.tasks.addTask(7, wanderAI.setPauseRate(60));
         this.tasks.addTask(8, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -82,7 +82,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
         this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
         this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
@@ -118,9 +118,9 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
                         if(entityLivingBase.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                     }
-                    EntityPlayerMP player = null;
-                    if (entity instanceof EntityPlayerMP) {
-                        player = (EntityPlayerMP) entity;
+                    PlayerEntityMP player = null;
+                    if (entity instanceof PlayerEntityMP) {
+                        player = (PlayerEntityMP) entity;
                         if (player.capabilities.isCreativeMode)
                             continue;
                     }

@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.network.MessageCreatureKnowledge;
 import com.lycanitesmobs.core.pets.SummonSet;
 import jline.internal.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
@@ -231,13 +231,13 @@ public class Beastiary {
 			return;
 		}
 		MessageCreatureKnowledge message = new MessageCreatureKnowledge(newKnowledge);
-		LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.extendedPlayer.getPlayer());
+		LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.extendedPlayer.getPlayer());
 	}
 	
 	/** Sends the whole Beastiary progress to the client, use sparingly! **/
 	public void sendAllToClient() {
 		MessageBeastiary message = new MessageBeastiary(this);
-		LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.extendedPlayer.getPlayer());
+		LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.extendedPlayer.getPlayer());
 	}
 	
 	

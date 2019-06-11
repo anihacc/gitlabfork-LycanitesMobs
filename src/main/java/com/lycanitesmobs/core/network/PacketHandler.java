@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -68,7 +68,7 @@ public class PacketHandler {
 	 * @param message
 	 * @param player
 	 */
-	public void sendToPlayer(IMessage message, EntityPlayerMP player) {
+	public void sendToPlayer(IMessage message, PlayerEntityMP player) {
 		this.network.sendTo(message, player);
 	}
 	

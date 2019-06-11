@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -66,7 +66,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         if(ctx.side == Side.SERVER) {
             IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
             mainThread.addScheduledTask(() -> {
-				EntityPlayer player = ctx.getServerHandler().player;
+				PlayerEntity player = ctx.getServerHandler().player;
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 				PetManager petManager = playerExt.petManager;
 				PetEntry petEntry = petManager.getEntry(message.petEntryID);
@@ -82,7 +82,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         }
 
         // Client Side:
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null) return null;
         PetManager petManager = playerExt.petManager;

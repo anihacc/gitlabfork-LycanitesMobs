@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -79,7 +79,7 @@ public class PetEntry {
     //                 Create from Entity
     // ==================================================
     /** Returns a new PetEntry based off the provided entity for the provided player. **/
-    public static PetEntry createFromEntity(EntityPlayer player, EntityCreatureBase entity, String petType) {
+    public static PetEntry createFromEntity(PlayerEntity player, EntityCreatureBase entity, String petType) {
         CreatureInfo creatureInfo = entity.creatureInfo;
         String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
         PetEntry petEntry = new PetEntry(entryName, petType, player, creatureInfo.getName());
@@ -102,8 +102,8 @@ public class PetEntry {
         this.host = host;
 
         ExtendedPlayer playerExt = null;
-        if(host != null && host instanceof EntityPlayer)
-            playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)host);
+        if(host != null && host instanceof PlayerEntity)
+            playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)host);
         this.summonSet = new SummonSet(playerExt);
         this.summonSet.summonableOnly = false;
         this.summonSet.setSummonType(summonType);
@@ -139,8 +139,8 @@ public class PetEntry {
 
     public PetEntry setOwner(EntityLivingBase owner) {
         this.host = owner;
-        if(host != null && host instanceof EntityPlayer) {
-            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((EntityPlayer) host);
+        if(host != null && host instanceof PlayerEntity) {
+            ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity) host);
             this.summonSet.playerExt = playerExt;
         }
         return this;
@@ -407,9 +407,9 @@ public class PetEntry {
             entityCreature.applySubspecies(this.subspeciesID);
 
             // Tamed Behaviour:
-            if(entityCreature instanceof EntityCreatureTameable && this.host instanceof EntityPlayer) {
+            if(entityCreature instanceof EntityCreatureTameable && this.host instanceof PlayerEntity) {
                 EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
-                entityTameable.setPlayerOwner((EntityPlayer)this.host);
+                entityTameable.setPlayerOwner((PlayerEntity)this.host);
                 this.summonSet.applyBehaviour(entityTameable);
             }
         }

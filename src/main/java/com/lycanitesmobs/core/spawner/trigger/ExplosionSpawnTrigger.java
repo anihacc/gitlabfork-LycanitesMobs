@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -39,7 +39,7 @@ public class ExplosionSpawnTrigger extends EntitySpawnTrigger {
 
 
 	/** Called every time an explosion is created. **/
-	public boolean onExplosion(World world, EntityPlayer player, Explosion explosion) {
+	public boolean onExplosion(World world, PlayerEntity player, Explosion explosion) {
 		// TODO Figure out strength/size workaround.
 
 		// Player Only:

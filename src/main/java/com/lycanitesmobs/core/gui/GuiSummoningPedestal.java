@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.client.GuiScrollingList;
@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import java.io.IOException;
 
 public class GuiSummoningPedestal extends GuiBaseContainer {
-    public EntityPlayer player;
+    public PlayerEntity player;
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
@@ -39,7 +39,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     // ==================================================
     //                    Constructor
     // ==================================================
-    public GuiSummoningPedestal(EntityPlayer player, TileEntitySummoningPedestal summoningPedestal) {
+    public GuiSummoningPedestal(PlayerEntity player, TileEntitySummoningPedestal summoningPedestal) {
         super(new ContainerSummoningPedestal(summoningPedestal, player.inventory));
         this.summoningPedestal = summoningPedestal;
         this.player = player;

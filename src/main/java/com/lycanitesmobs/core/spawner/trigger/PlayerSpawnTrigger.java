@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 	public boolean useWorldTime = false;
 
 	/** Stores the position of a player from the last tick for calculating distance. **/
-	protected Map<EntityPlayer, BlockPos> lastTickPositions = new HashMap<>();
+	protected Map<PlayerEntity, BlockPos> lastTickPositions = new HashMap<>();
 
 
 	/** Constructor **/
@@ -58,7 +58,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 
 
 	/** Called every player tick. **/
-	public void onTick(EntityPlayer player, long ticks) {
+	public void onTick(PlayerEntity player, long ticks) {
 		// Creative:
 		if(!this.creative && player.isCreative()) {
 			return;

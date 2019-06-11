@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.container;
 import com.lycanitesmobs.core.inventory.ContainerBase;
 import com.lycanitesmobs.core.inventory.SlotBase;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -35,7 +35,7 @@ public class ContainerSummoningPedestal extends ContainerBase {
     //                  Interact
     // ========================================
     @Override
-    public boolean canInteractWith(EntityPlayer player) {
+    public boolean canInteractWith(PlayerEntity player) {
         if(this.summoningPedestal == null)
             return false;
         return player == this.summoningPedestal.getPlayer();
@@ -46,7 +46,7 @@ public class ContainerSummoningPedestal extends ContainerBase {
     //                 Inventory
     // ========================================
     @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotID) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
         return ItemStack.EMPTY;
     }
 }

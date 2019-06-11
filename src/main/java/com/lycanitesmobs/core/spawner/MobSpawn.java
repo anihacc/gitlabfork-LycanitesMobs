@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -374,7 +374,7 @@ public class MobSpawn {
 	/**
 	 * Called when a mob is spawned from this Mob Spawn.
 	 **/
-	public void onSpawned(EntityLiving entityLiving, EntityPlayer player) {
+	public void onSpawned(EntityLiving entityLiving, PlayerEntity player) {
 		if(!"".equals(this.mobNameTag)) {
 			entityLiving.setCustomNameTag(this.mobNameTag);
 		}

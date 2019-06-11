@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.inventory.SlotEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -71,7 +71,7 @@ public class ContainerEquipmentForge extends ContainerBase {
 
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(PlayerEntity player) {
 		if(this.equipmentForge == null) {
 			return false;
 		}
@@ -214,7 +214,7 @@ public class ContainerEquipmentForge extends ContainerBase {
 	 * Disabled until fixed later.
 	 */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slotID) {
+	public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
 		return ItemStack.EMPTY;
 	}
 }

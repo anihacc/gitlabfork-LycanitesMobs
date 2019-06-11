@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
@@ -73,7 +73,7 @@ public class MessageEntityVelocity implements IMessage, IMessageHandler<MessageE
 		if(ctx.side != Side.CLIENT)
 			return null;
 
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		World world = player.getEntityWorld();
 		Entity entity = world.getEntityByID(message.entityID);
 		entity.motionX += (double)message.motionX / 8000.0D;

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -64,7 +64,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickable {
     //                Open GUI
     // ========================================
     /** Called by the GUI Handler when opening a GUI. **/
-    public Object getGUI(EntityPlayer player) {
+    public Object getGUI(PlayerEntity player) {
         return null;
     }
 }

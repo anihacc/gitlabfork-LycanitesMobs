@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -74,7 +74,7 @@ public abstract class MobEventTrigger {
 
 
 	/** Returns if this trigger can be triggered (checks conditions, etc). **/
-	public boolean canTrigger(World world, EntityPlayer player) {
+	public boolean canTrigger(World world, PlayerEntity player) {
 		if(!this.mobEvent.canStart(world, player))
 			return false;
 		return this.triggerConditionsMet(world, player);
@@ -82,7 +82,7 @@ public abstract class MobEventTrigger {
 
 
 	/** Checks all Conditions specific to this Trigger. **/
-	public boolean triggerConditionsMet(World world, EntityPlayer player) {
+	public boolean triggerConditionsMet(World world, PlayerEntity player) {
 		if(this.conditions.size() == 0) {
 			return true;
 		}
@@ -106,7 +106,7 @@ public abstract class MobEventTrigger {
 
 
 	/** Triggers an actual spawn, this does not check conditions, it just triggers. **/
-	public boolean trigger(World world, EntityPlayer player, BlockPos pos, int level) {
+	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level) {
 		LycanitesMobs.printDebug("MobEvents", "Trigger Fired: " + this + " for: " + this.mobEvent.name + " channel: " + this.mobEvent.channel);
 		return this.mobEvent.trigger(world, player, pos, level);
 	}

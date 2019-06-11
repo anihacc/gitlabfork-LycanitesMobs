@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 
@@ -195,8 +195,8 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.entity.motionY = this.pickedUpByEntity.motionY;
 			this.entity.motionZ = this.pickedUpByEntity.motionZ;
 			this.entity.fallDistance = 0;
-			if (!this.entity.getEntityWorld().isRemote && this.entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) this.entity;
+			if (!this.entity.getEntityWorld().isRemote && this.entity instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity) this.entity;
 				player.capabilities.allowFlying = true;
 				this.entity.noClip = true;
 			}
@@ -217,20 +217,20 @@ public class ExtendedEntity implements IExtendedEntity {
 		if(!this.entity.getEntityWorld().isRemote) {
 
             // Player Flying:
-			if(this.entity instanceof EntityPlayer) {
+			if(this.entity instanceof PlayerEntity) {
 				if(pickedUpByEntity != null) {
-                    this.playerAllowFlyingSnapshot = ((EntityPlayer) this.entity).capabilities.allowFlying;
-                    this.playerIsFlyingSnapshot = ((EntityPlayer)this.entity).capabilities.isFlying;
+                    this.playerAllowFlyingSnapshot = ((PlayerEntity) this.entity).capabilities.allowFlying;
+                    this.playerIsFlyingSnapshot = ((PlayerEntity)this.entity).capabilities.isFlying;
                 }
 				else {
-                    ((EntityPlayer)this.entity).capabilities.allowFlying = this.playerAllowFlyingSnapshot;
-                    ((EntityPlayer)this.entity).capabilities.isFlying = this.playerIsFlyingSnapshot;
+                    ((PlayerEntity)this.entity).capabilities.allowFlying = this.playerAllowFlyingSnapshot;
+                    ((PlayerEntity)this.entity).capabilities.isFlying = this.playerIsFlyingSnapshot;
                     this.entity.noClip = false;
                 }
 			}
 
             // Teleport To Initial Pickup Position:
-            if(this.pickedUpByEntity != null && !(this.entity instanceof EntityPlayer)) {
+            if(this.pickedUpByEntity != null && !(this.entity instanceof PlayerEntity)) {
                 double[] pickupOffset = this.getPickedUpOffset();
                 this.entity.attemptTeleport(this.pickedUpByEntity.posX + pickupOffset[0], this.pickedUpByEntity.posY + pickupOffset[1], this.pickedUpByEntity.posZ + pickupOffset[2]);
             }
@@ -256,7 +256,7 @@ public class ExtendedEntity implements IExtendedEntity {
         if(this.pickedUpByEntity instanceof EntityCreatureBase) {
             pickupOffset = ((EntityCreatureBase) this.pickedUpByEntity).getPickupOffset(this.entity);
         }
-        if(CreatureManager.getInstance().config.disablePickupOffsets && this.entity instanceof EntityPlayer) {
+        if(CreatureManager.getInstance().config.disablePickupOffsets && this.entity instanceof PlayerEntity) {
             return new double[] {0, 0, 0};
         }
         return pickupOffset;

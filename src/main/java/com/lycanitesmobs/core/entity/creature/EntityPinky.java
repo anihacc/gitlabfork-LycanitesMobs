@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -57,7 +57,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         this.playerControlAI = new EntityAIPlayerControl(this);
         this.tasks.addTask(9, playerControlAI);
         this.tasks.addTask(10, new EntityAIWander(this).setSpeed(1.0D));
-        this.tasks.addTask(11, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(11, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(12, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -71,7 +71,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
             this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPig.class).setTameTargetting(true));
             this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
         }
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPigZombie.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
@@ -178,8 +178,8 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         if(!possibleTargets.isEmpty()) {
             for(EntityLivingBase possibleTarget : possibleTargets) {
                 boolean doDamage = true;
-                if(this.getRider() instanceof EntityPlayer) {
-                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((EntityPlayer)this.getRider(), possibleTarget))) {
+                if(this.getRider() instanceof PlayerEntity) {
+                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
                         doDamage = false;
                     }
                 }

@@ -13,7 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -69,7 +69,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         this.tasks.addTask(7, new EntityAIFollowParent(this));
         this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
         this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
@@ -77,7 +77,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
         this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
         this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
         this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
@@ -342,8 +342,8 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        if(rider instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)rider;
+        if(rider instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity)rider;
             // Type:
             List<EntityProjectileRapidFire> projectiles = new ArrayList<EntityProjectileRapidFire>();
 

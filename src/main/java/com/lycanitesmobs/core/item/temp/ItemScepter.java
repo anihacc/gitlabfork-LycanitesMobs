@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
@@ -52,27 +52,27 @@ public class ItemScepter extends ItemBase {
     // ========== Prevent Swing ==========
     @Override
     public boolean onEntitySwing(EntityLivingBase entity, ItemStack itemStack) {
-        if(entity instanceof EntityPlayer) {
+        if(entity instanceof PlayerEntity) {
             entity.setActiveHand(EnumHand.MAIN_HAND);
             return true;
         }
         return super.onEntitySwing(entity, itemStack);
     }
     @Override
-    public boolean onLeftClickEntity(ItemStack itemStack, EntityPlayer player, Entity entity) {
+    public boolean onLeftClickEntity(ItemStack itemStack, PlayerEntity player, Entity entity) {
         return true;
     }
 
     // ========== Start ==========
     @Override
-    public void onItemLeftClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public void onItemLeftClick(ItemStack itemStackIn, World worldIn, PlayerEntity playerIn, EnumHand hand) {
         if(hand == EnumHand.OFF_HAND)
             return;
         //playerIn.setActiveHand(hand);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         //if(hand == EnumHand.MAIN_HAND)
             //return new ActionResult(EnumActionResult.PASS, itemStackIn);
         player.setActiveHand(hand);

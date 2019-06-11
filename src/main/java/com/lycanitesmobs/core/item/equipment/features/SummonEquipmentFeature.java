@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.spawner.MobSpawn;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -114,15 +114,15 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 					entityCreature.setTemporary(this.summonDuration * 20);
 					entityCreature.setSizeScale(this.sizeScale);
 
-					if(attacker instanceof EntityPlayer && entityCreature instanceof EntityCreatureTameable) {
+					if(attacker instanceof PlayerEntity && entityCreature instanceof EntityCreatureTameable) {
 						EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
-						entityTameable.setPlayerOwner((EntityPlayer)attacker);
+						entityTameable.setPlayerOwner((PlayerEntity)attacker);
 						entityTameable.setSitting(false);
 						entityTameable.setFollowing(true);
 						entityTameable.setPassive(false);
 						entityTameable.setAssist(true);
 						entityTameable.setAggressive(true);
-						entityTameable.setPVP(target instanceof EntityPlayer);
+						entityTameable.setPVP(target instanceof PlayerEntity);
 					}
 
 					float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());

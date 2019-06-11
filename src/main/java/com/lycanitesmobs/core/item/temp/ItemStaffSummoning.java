@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -53,8 +53,8 @@ public class ItemStaffSummoning extends ItemScepter {
     
     public void damageItemCharged(ItemStack itemStack, EntityLivingBase entity, float power) {
 		ExtendedPlayer playerExt = null;
-		if(entity instanceof EntityPlayer) {
-			playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)entity);
+		if(entity instanceof PlayerEntity) {
+			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
             this.damage_item(itemStack, playerExt.staffPortal.summonAmount, entity);
@@ -92,12 +92,12 @@ public class ItemStaffSummoning extends ItemScepter {
     }
     
     // ========== Additional Costs ==========
-    public boolean getAdditionalCosts(EntityPlayer player) {
+    public boolean getAdditionalCosts(PlayerEntity player) {
     	return true;
     }
     
     // ========== Minion Behaviour ==========
-    public void applyMinionBehaviour(EntityCreatureTameable minion, EntityPlayer player) {
+    public void applyMinionBehaviour(EntityCreatureTameable minion, PlayerEntity player) {
     	SummonSet summonSet = ExtendedPlayer.getForPlayer(player).getSelectedSummonSet();
         summonSet.applyBehaviour(minion);
         minion.applySubspecies(summonSet.subspecies);
@@ -111,8 +111,8 @@ public class ItemStaffSummoning extends ItemScepter {
     public void onPlayerStoppedUsing(ItemStack itemStack, World world, EntityLivingBase entity, int useRemaining) {
     	super.onPlayerStoppedUsing(itemStack, world, entity, useRemaining);
 		ExtendedPlayer playerExt = null;
-		if(entity instanceof EntityPlayer) {
-			playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)entity);
+		if(entity instanceof PlayerEntity) {
+			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
 		}
 		if(playerExt != null) {
 			playerExt.staffPortal = null;
@@ -125,7 +125,7 @@ public class ItemStaffSummoning extends ItemScepter {
 	// ==================================================
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt != null) {
 			// Summon Selected Mob:
@@ -171,8 +171,8 @@ public class ItemStaffSummoning extends ItemScepter {
     @Override
     public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
     	ExtendedPlayer playerExt = null;
-    	if(entity instanceof EntityPlayer) {
-			playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)entity);
+    	if(entity instanceof PlayerEntity) {
+			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
 		}
     	if(playerExt != null && playerExt.staffPortal != null) {
 			int successCount = playerExt.staffPortal.summonCreatures();

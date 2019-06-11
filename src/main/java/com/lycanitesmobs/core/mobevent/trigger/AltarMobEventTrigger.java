@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,9 +39,9 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 	 * @return
 	 */
 	public boolean onActivate(Entity entity, World world, BlockPos pos, int level) {
-		EntityPlayer player = null;
-		if(entity instanceof EntityPlayer) {
-			player = (EntityPlayer)entity;
+		PlayerEntity player = null;
+		if(entity instanceof PlayerEntity) {
+			player = (PlayerEntity)entity;
 		}
 		if(!this.canTrigger(world, player)) {
 			return false;

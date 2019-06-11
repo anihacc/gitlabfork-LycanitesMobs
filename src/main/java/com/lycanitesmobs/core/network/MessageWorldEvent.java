@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 	@Override
 	public IMessage onMessage(MessageWorldEvent message, MessageContext ctx) {
 		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		World world = player.getEntityWorld();
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		

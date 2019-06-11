@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -111,7 +111,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param hand The hand the player is holding the equipment in.
 	 * @return True so that the item becomes active.
 	 */
-	public boolean onUseSecondary(World world, EntityPlayer shooter, EnumHand hand) {
+	public boolean onUseSecondary(World world, PlayerEntity shooter, EnumHand hand) {
 		return true;
 	}
 
@@ -207,7 +207,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			world.spawnEntity(mainProjectile);
 		}
 
-		if(shooter instanceof EntityPlayer && mainProjectile != null) {
+		if(shooter instanceof PlayerEntity && mainProjectile != null) {
 			world.playSound(null, shooter.getPosition(), mainProjectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (shooter.getRNG().nextFloat() * 0.4F + 0.8F));
 		}
 	}

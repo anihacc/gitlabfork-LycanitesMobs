@@ -16,7 +16,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,14 +55,14 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
         this.tasks.addTask(0, new EntityAISwimming(this));
         //this.tasks.addTask(2, new EntityAIPlayerControl(this));
         this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
+        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.tasks.addTask(6, new EntityAIAttackMelee(this));
         this.tasks.addTask(7, this.aiSit);
         this.tasks.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.tasks.addTask(9, new EntityAIFollowParent(this).setSpeed(1.0D));
         this.tasks.addTask(10, new EntityAIWander(this));
         this.tasks.addTask(11, new EntityAIBeg(this));
-        this.tasks.addTask(12, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(12, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(13, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -71,7 +71,7 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
         this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
         this.targetTasks.addTask(3, new EntityAITargetOwnerThreats(this));
         this.targetTasks.addTask(4, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
         this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
@@ -120,8 +120,8 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
             if(!possibleTargets.isEmpty()) {
                 for(EntityLivingBase possibleTarget : possibleTargets) {
                     boolean doDamage = true;
-                    if(this.getRider() instanceof EntityPlayer) {
-                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((EntityPlayer)this.getRider(), possibleTarget))) {
+                    if(this.getRider() instanceof PlayerEntity) {
+                        if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
                             doDamage = false;
                         }
                     }

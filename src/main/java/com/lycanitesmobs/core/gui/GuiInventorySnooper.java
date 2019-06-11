@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.gui;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class GuiInventorySnooper extends GuiInventory {
 
-	public GuiInventorySnooper(EntityPlayer entityPlayer) {
+	public GuiInventorySnooper(PlayerEntity entityPlayer) {
 		super(entityPlayer);
 	}
 	

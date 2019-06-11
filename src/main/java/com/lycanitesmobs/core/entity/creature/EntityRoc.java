@@ -15,7 +15,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -59,7 +59,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(0));
         this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));
 
         this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
@@ -69,7 +69,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
         this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
         this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityCreeper.class));
-        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
         this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
         this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
     }
@@ -110,7 +110,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
                 // Random Dropping:
                 if(this.hasPickupEntity()) {
                     if (this.ticksExisted % 100 == 0 && this.getRNG().nextBoolean()) {
-                        if (this.getPickupEntity() instanceof EntityPlayer) {
+                        if (this.getPickupEntity() instanceof PlayerEntity) {
                             for (int distToGround = 0; distToGround < 8; distToGround++) {
                                 Block searchBlock = this.getEntityWorld().getBlockState(new BlockPos((int) this.posX, (int) this.posY - distToGround, (int) this.posZ)).getBlock();
                                 if (searchBlock != null && searchBlock != Blocks.AIR) {
@@ -275,7 +275,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
     /** Takes an initial chunk coordinate for a random wander position and ten allows the entity to make changes to the position or react to it. **/
     @Override
     public BlockPos getWanderPosition(BlockPos wanderPosition) {
-        if(this.hasPickupEntity() && this.getPickupEntity() instanceof EntityPlayer)
+        if(this.hasPickupEntity() && this.getPickupEntity() instanceof PlayerEntity)
             return new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return super.getWanderPosition(wanderPosition);
     }

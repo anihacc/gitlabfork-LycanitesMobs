@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.ExtendedPlayer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -38,7 +38,7 @@ public class MessagePlayerAttack implements IMessage, IMessageHandler<MessagePla
         mainThread.addScheduledTask(new Runnable() {
             @Override
             public void run() {
-                EntityPlayer player = ctx.getServerHandler().player;
+                PlayerEntity player = ctx.getServerHandler().player;
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                 if(message.attackEntityID != 0)
                     playerExt.meleeAttack(player.getEntityWorld().getEntityByID(message.attackEntityID));

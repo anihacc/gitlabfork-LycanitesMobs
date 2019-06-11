@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -32,7 +32,7 @@ public class ItemScepterPoisonRay extends ItemScepter {
 	// ==================================================
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
         this.projectileTarget = null;
         return super.onItemRightClick(world, player, hand);

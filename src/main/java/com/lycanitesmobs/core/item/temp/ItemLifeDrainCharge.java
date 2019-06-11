@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemCharge;
 
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -26,7 +26,7 @@ public class ItemLifeDrainCharge extends ItemCharge {
     //                  Get Projectile
     // ==================================================
     @Override
-    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, PlayerEntity entityPlayer) {
         return new EntityLifeDrain(world, entityPlayer, 20, 10);
     }
 }

@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -200,8 +200,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** Sets the owner of this block. **/
     public void setOwner(EntityLivingBase entity) {
-        if(entity instanceof EntityPlayer) {
-            EntityPlayer entityPlayer = (EntityPlayer)entity;
+        if(entity instanceof PlayerEntity) {
+            PlayerEntity entityPlayer = (PlayerEntity)entity;
             this.ownerUUID = entityPlayer.getUniqueID();
             this.ownerName = entity.getName();
         }
@@ -220,7 +220,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     /** Returns the player that this belongs to or null if owned by no player. **/
 	@Nullable
-    public EntityPlayer getPlayer() {
+    public PlayerEntity getPlayer() {
         if(this.ownerUUID == null) {
 			return null;
 		}
@@ -325,17 +325,17 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     }
 
     @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(PlayerEntity player) {
         return false;
     }
 
     @Override
-    public void openInventory(EntityPlayer player) {
+    public void openInventory(PlayerEntity player) {
 
     }
 
     @Override
-    public void closeInventory(EntityPlayer player) {
+    public void closeInventory(PlayerEntity player) {
 
     }
 
@@ -552,7 +552,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     //                Open GUI
     // ========================================
     @Override
-    public Object getGUI(EntityPlayer player) {
+    public Object getGUI(PlayerEntity player) {
         if(this.getWorld().isRemote)
             return new GuiSummoningPedestal(player, this);
         return new ContainerSummoningPedestal(this, player.inventory);

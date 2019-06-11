@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class EntityAIWatchClosest extends EntityAIBase {
     // Targets:
@@ -54,7 +54,7 @@ public class EntityAIWatchClosest extends EntityAIBase {
         else {
             if(this.host.getAttackTarget() != null)
                 this.closestEntity = this.host.getAttackTarget();
-            if(this.watchedClass == EntityPlayer.class)
+            if(this.watchedClass == PlayerEntity.class)
                 this.closestEntity = this.host.getEntityWorld().getClosestPlayerToEntity(this.host, (double)this.maxDistanceForPlayer);
             else
                 this.closestEntity = this.host.getEntityWorld().findNearestEntityWithinAABB(this.watchedClass, this.host.getEntityBoundingBox().grow((double)this.maxDistanceForPlayer, 3.0D, (double)this.maxDistanceForPlayer), this.host);

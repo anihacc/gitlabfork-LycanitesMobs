@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -32,7 +32,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	/** Set to true when any Beastiary GUI is active in order to prevent the GUI Scaling going out of sync. **/
 	static boolean GUI_ACTIVE;
 
-	public EntityPlayer player;
+	public PlayerEntity player;
 	public ExtendedPlayer playerExt;
 	public EntityLivingBase creaturePreviewEntity;
 	public float creaturePreviewTicks = 0;
@@ -66,7 +66,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 * Constructor
 	 * @param player The player to create the GUI instance for.
 	 */
-	public GuiBeastiary(EntityPlayer player) {
+	public GuiBeastiary(PlayerEntity player) {
 		super();
 		this.player = player;
 		this.playerExt = ExtendedPlayer.getForPlayer(player);

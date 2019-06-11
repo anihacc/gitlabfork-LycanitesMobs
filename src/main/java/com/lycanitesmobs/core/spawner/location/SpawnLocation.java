@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.CoordSorterFurthest;
 import com.lycanitesmobs.core.spawner.CoordSorterNearest;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -80,7 +80,7 @@ public class SpawnLocation {
 
 
     /** Returns a list of positions to spawn at. **/
-    public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
+    public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
         int yPos = this.getOffset(world.rand, this.rangeMin.getY(), this.rangeMax.getY());
         Vec3i offset = new Vec3i(

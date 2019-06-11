@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -39,7 +39,7 @@ public class MessageSummonSetSelection implements IMessage, IMessageHandler<Mess
             mainThread.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
-                    EntityPlayer player = ctx.getServerHandler().player;
+                    PlayerEntity player = ctx.getServerHandler().player;
                     ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                     playerExt.setSelectedSummonSet(message.summonSetID);
                 }
@@ -48,7 +48,7 @@ public class MessageSummonSetSelection implements IMessage, IMessageHandler<Mess
         }
 
         // Client Side:
-        EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+        PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
         if(playerExt == null) return null;
         playerExt.setSelectedSummonSet(message.summonSetID);

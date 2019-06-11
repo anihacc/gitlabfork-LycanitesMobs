@@ -7,13 +7,13 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
 public class GuiMinionSelection extends GuiBaseScreen {
-	public EntityPlayer player;
+	public PlayerEntity player;
 	public ExtendedPlayer playerExt;
 	
 	int centerX;
@@ -26,7 +26,7 @@ public class GuiMinionSelection extends GuiBaseScreen {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public static void openToPlayer(EntityPlayer player) {
+	public static void openToPlayer(PlayerEntity player) {
 		if(player != null && player.getEntityWorld() != null)
 			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.PLAYER.id, player.getEntityWorld(), GuiHandler.PlayerGuiType.MINION_SELECTION.id, 0, 0);
 	}
@@ -39,7 +39,7 @@ public class GuiMinionSelection extends GuiBaseScreen {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public GuiMinionSelection(EntityPlayer player) {
+	public GuiMinionSelection(PlayerEntity player) {
 		super();
 		this.player = player;
 		this.playerExt = ExtendedPlayer.getForPlayer(player);

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.core.entity.EntityPortal;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -50,7 +50,7 @@ public class ItemStaffBlood extends ItemStaffSummoning {
     
     // ========== Additional Costs ==========
     @Override
-    public boolean getAdditionalCosts(EntityPlayer player) {
+    public boolean getAdditionalCosts(PlayerEntity player) {
     	if(player.getHealth() <= 7)
     		return false;
     	player.setHealth(player.getHealth() - 6);

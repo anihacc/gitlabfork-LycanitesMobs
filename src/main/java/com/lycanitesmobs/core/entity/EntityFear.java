@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.core.entity.ai.EntityAIWander;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -102,7 +102,7 @@ public class EntityFear extends EntityCreatureBase {
         }
         
         // Set Rotation:
-        if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof EntityPlayer)) {
+        if(this.hasPickupEntity() && !(this.getPickupEntity() instanceof PlayerEntity)) {
         	this.getPickupEntity().rotationYaw = this.rotationYaw;
         	this.getPickupEntity().rotationPitch = this.rotationPitch;
         }
@@ -148,7 +148,7 @@ public class EntityFear extends EntityCreatureBase {
         this.stepHeight = feared.stepHeight;
 		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
 		
-        if(feared instanceof EntityLivingBase && !(feared instanceof EntityPlayer)) {
+        if(feared instanceof EntityLivingBase && !(feared instanceof PlayerEntity)) {
 	        EntityLivingBase fearedEntityLiving = (EntityLivingBase)feared;
 	        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
         }
@@ -179,8 +179,8 @@ public class EntityFear extends EntityCreatureBase {
     			return ((EntityCreatureBase)this.pickupEntity).isFlying();
     		if(this.pickupEntity instanceof EntityFlying)
     			return true;
-    		if(this.pickupEntity instanceof EntityPlayer)
-    			return ((EntityPlayer)this.pickupEntity).capabilities.isFlying;
+    		if(this.pickupEntity instanceof PlayerEntity)
+    			return ((PlayerEntity)this.pickupEntity).capabilities.isFlying;
     	}
     	return false;
     }
@@ -192,7 +192,7 @@ public class EntityFear extends EntityCreatureBase {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean isInvisibleToPlayer(EntityPlayer player) {
+    public boolean isInvisibleToPlayer(PlayerEntity player) {
         return true;
     }
 

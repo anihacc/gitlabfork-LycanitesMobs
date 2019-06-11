@@ -13,7 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
@@ -126,13 +126,13 @@ public class EntityHellfireWall extends EntityProjectileBase {
         }
 
         boolean obliterate = true;
-        if(target instanceof EntityPlayer)
+        if(target instanceof PlayerEntity)
             obliterate = false;
         else if(target instanceof EntityTameable) {
-            obliterate = !(((EntityTameable)target).getOwner() instanceof EntityPlayer);
+            obliterate = !(((EntityTameable)target).getOwner() instanceof PlayerEntity);
         }
         else if(target instanceof EntityCreatureTameable) {
-            obliterate = !(((EntityCreatureTameable)target).getOwner() instanceof EntityPlayer);
+            obliterate = !(((EntityCreatureTameable)target).getOwner() instanceof PlayerEntity);
         }
         if(target instanceof IGroupBoss)
             obliterate = false;

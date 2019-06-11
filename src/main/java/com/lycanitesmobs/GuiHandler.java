@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.inventory.ContainerCreature;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,7 +47,7 @@ public class GuiHandler implements IGuiHandler {
     //                      Server
     // ==================================================
 	@Override
-	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getServerGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
 		// ========== Tile Entity ==========
 		if(id == GuiType.TILEENTITY.id) {
 			TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
@@ -76,7 +76,7 @@ public class GuiHandler implements IGuiHandler {
     //                      Client
     // ==================================================
 	@Override
-	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+	public Object getClientGuiElement(int id, PlayerEntity player, World world, int x, int y, int z) {
 		// ========== Tile Entity ==========
 		if(id == GuiType.TILEENTITY.id) {
 			TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));

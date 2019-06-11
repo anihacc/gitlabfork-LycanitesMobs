@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
 import com.lycanitesmobs.core.item.equipment.features.SlotEquipmentFeature;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -151,7 +151,7 @@ public class SlotEquipment extends SlotBase {
 
 
 	@Override
-	public ItemStack onTake(EntityPlayer player, ItemStack itemStack) {
+	public ItemStack onTake(PlayerEntity player, ItemStack itemStack) {
 		Item item = itemStack.getItem();
 
 		// Equipment Part:
@@ -179,7 +179,7 @@ public class SlotEquipment extends SlotBase {
 
 
 	@Override
-	public boolean canTakeStack(EntityPlayer player) {
+	public boolean canTakeStack(PlayerEntity player) {
 		if(!this.childSlots.isEmpty()) {
 			for(SlotEquipment childSlot : this.childSlots) {
 				if(!childSlot.getStack().isEmpty()) {

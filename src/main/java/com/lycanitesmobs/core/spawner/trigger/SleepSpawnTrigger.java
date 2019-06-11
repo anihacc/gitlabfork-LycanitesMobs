@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +23,7 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 
 
 	/** Called every time a player attempts to use a bed. **/
-	public boolean onSleep(World world, EntityPlayer player, BlockPos spawnPos, IBlockState blockState) {
+	public boolean onSleep(World world, PlayerEntity player, BlockPos spawnPos, IBlockState blockState) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 		// Chance:

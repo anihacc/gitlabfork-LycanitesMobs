@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -23,7 +23,7 @@ public class ItemFoodPaleoSalad extends ItemCustomFood {
     // ==================================================
   	//                     Effects
   	// ==================================================
-    protected void onFoodEaten(ItemStack itemStack, World world, EntityPlayer player) {
+    protected void onFoodEaten(ItemStack itemStack, World world, PlayerEntity player) {
         player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, this.getEffectDuration(), 2));
         player.addPotionEffect(new PotionEffect(MobEffects.INSTANT_HEALTH, 1, 3));
     }

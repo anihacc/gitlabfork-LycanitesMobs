@@ -2,9 +2,10 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -49,12 +50,12 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 
 		this.listType = "whitelist";
 		this.blockIds.add(Blocks.AIR.getRegistryName().toString());
-		this.blockIds.add(Blocks.TALLGRASS.getRegistryName().toString());
+		this.blockIds.add(Blocks.TALL_GRASS.getRegistryName().toString());
 		super.loadFromJSON(json);
     }
 
     @Override
-    public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
+    public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
 		LycanitesMobs.printDebug("JSONSpawner", "Getting " + this.limit + " Random Spawn Positions");
 
@@ -74,7 +75,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 * @param triggerPos The trigger position to search around.
 	 * @return Returns a BlockPos or null if no coord was found.
 	 */
-	public BlockPos getRandomPosition(World world, EntityPlayer player, BlockPos triggerPos) {
+	public BlockPos getRandomPosition(World world, PlayerEntity player, BlockPos triggerPos) {
 		int[] xz = this.getRandomXZCoord(world, triggerPos);
 		int x = xz[0];
 		int z = xz[1];
@@ -90,10 +91,10 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 */
 	public int[] getRandomXZCoord(World world, BlockPos triggerPos) {
 		double difficultyScale = this.normalDifficultyRangeScale;
-		if(world.getDifficulty().getDifficultyId() <= 1) {
+		if(world.getDifficulty().getId() <= 1) {
 			difficultyScale = this.easyDifficultyRangeScale;
 		}
-		else if(world.getDifficulty().getDifficultyId() >= 3) {
+		else if(world.getDifficulty().getId() >= 3) {
 			difficultyScale = this.hardDifficultyRangeScale;
 		}
 
@@ -134,10 +135,10 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 	 */
 	public int getRandomYCoord(World world, BlockPos triggerPos) {
 		double difficultyScale = this.normalDifficultyRangeScale;
-		if(world.getDifficulty().getDifficultyId() <= 1) {
+		if(world.getDifficulty().getId() <= 1) {
 			difficultyScale = this.easyDifficultyRangeScale;
 		}
-		else if(world.getDifficulty().getDifficultyId() >= 3) {
+		else if(world.getDifficulty().getId() >= 3) {
 			difficultyScale = this.hardDifficultyRangeScale;
 		}
 		int rangeMaxY = Math.round((float)this.rangeMax.getY() * (float)difficultyScale);

@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -127,7 +127,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 
 
     @Override
-    public boolean isMet(World world, EntityPlayer player, BlockPos position) {
+    public boolean isMet(World world, PlayerEntity player, BlockPos position) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		int time = (int)Math.floor(world.getWorldTime() % 24000D);
 		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 23999D);

@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.Beastiary;
 import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -49,7 +49,7 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 	@Override
 	public IMessage onMessage(MessageBeastiary message, MessageContext ctx) {
 		if(ctx.side != Side.CLIENT) return null;
-		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null) return null;
 		if(message.entryAmount < 0) return null;

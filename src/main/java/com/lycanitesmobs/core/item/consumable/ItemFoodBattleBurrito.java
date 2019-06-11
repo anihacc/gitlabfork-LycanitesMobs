@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -25,7 +25,7 @@ public class ItemFoodBattleBurrito extends ItemCustomFood {
   	//                     Effects
   	// ==================================================
     @Override
-    protected void onFoodEaten(ItemStack itemStack, World world, EntityPlayer player) {
+    protected void onFoodEaten(ItemStack itemStack, World world, PlayerEntity player) {
         super.onFoodEaten(itemStack, world, player);
         player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, this.getEffectDuration(), 3));
 		player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, this.getEffectDuration(), 3));

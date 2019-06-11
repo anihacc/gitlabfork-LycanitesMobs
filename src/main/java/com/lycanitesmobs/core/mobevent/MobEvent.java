@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
@@ -156,7 +156,7 @@ public class MobEvent {
 	 * @param world The world to start the event in.
 	 * @param player The player that triggered the event, this can be null for world based events where all player based checks will fail.
 	 **/
-	public boolean canStart(World world, EntityPlayer player) {
+	public boolean canStart(World world, PlayerEntity player) {
 		if(world.provider == null) {
 			return false;
 		}
@@ -210,7 +210,7 @@ public class MobEvent {
 	 * @param level The level of the event.
 	 * @return
 	 */
-	public boolean trigger(World world, EntityPlayer player, BlockPos pos, int level) {
+	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level) {
 		LycanitesMobs.printDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
@@ -234,7 +234,7 @@ public class MobEvent {
 	 * @param level The level of the event.
 	 * @param ticks How many ticks the event has been active for.
 	 */
-	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onUpdate(world, player, pos, level, ticks);
 		}
@@ -249,7 +249,7 @@ public class MobEvent {
 	 * @param level The level of the event.
 	 * @param ticks How many ticks the event has been active for.
 	 */
-	public void onSpawn(EntityLiving entity, World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void onSpawn(EntityLiving entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}

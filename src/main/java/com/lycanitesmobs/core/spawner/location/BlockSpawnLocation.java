@@ -3,13 +3,11 @@ package com.lycanitesmobs.core.spawner.location;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.IFluidBlock;
-import scala.Int;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +59,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
     /** Returns a list of positions to spawn at. **/
     @Override
-    public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
+    public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
 		Map<Block, Integer> validBlocksFound = new HashMap<>();
 
@@ -85,17 +83,12 @@ public class BlockSpawnLocation extends SpawnLocation {
 			for(int x = triggerPos.getX() - this.rangeMax.getX(); x <= triggerPos.getX() + this.rangeMax.getX(); x++) {
 				for(int z = triggerPos.getZ() - this.rangeMax.getZ(); z <= triggerPos.getZ() + this.rangeMax.getZ(); z++) {
 					BlockPos spawnPos = new BlockPos(x, y, z);
-					IBlockState blockState = world.getBlockState(spawnPos);
+					BlockState blockState = world.getBlockState(spawnPos);
 
 					// Ignore Flowing Liquids:
 					if(blockState.getBlock() instanceof IFluidBlock) {
 						float filled = ((IFluidBlock)blockState.getBlock()).getFilledPercentage(world, spawnPos);
 						if (filled != 1 && filled != -1) {
-							continue;
-						}
-					}
-					if (blockState.getBlock() instanceof BlockLiquid) {
-						if (blockState.getBlock().getMetaFromState(blockState) != 0) {
 							continue;
 						}
 					}
@@ -145,7 +138,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 	public boolean isValidBlock(World world, BlockPos blockPos) {
 		Block block = world.getBlockState(blockPos).getBlock();
 		if(!this.surface || !this.underground) {
-			if(world.canSeeSky(blockPos)) {
+			if(world.canBlockSeeSky(blockPos)) {
 				if(!this.surface) {
 					return false;
 				}

@@ -13,7 +13,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -85,8 +85,8 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
         if(tileentity instanceof TileEntitySummoningPedestal) {
             TileEntitySummoningPedestal tileEntitySummoningPedestal = (TileEntitySummoningPedestal)tileentity;
             tileEntitySummoningPedestal.setOwner(placer);
-            if(placer instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer)placer;
+            if(placer instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity)placer;
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                 if(playerExt != null) {
                     tileEntitySummoningPedestal.setSummonSet(playerExt.getSelectedSummonSet());
@@ -111,7 +111,7 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!world.isRemote) {
             if(playerIn != null && playerIn.getEntityWorld() != null) {
                 playerIn.openGui(LycanitesMobs.instance, GuiHandler.GuiType.TILEENTITY.id, playerIn.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());

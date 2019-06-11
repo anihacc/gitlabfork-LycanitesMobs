@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.Village;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ public class VillageSpawnLocation extends RandomSpawnLocation {
 
 
 	@Override
-	public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
+	public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
 		LycanitesMobs.printDebug("JSONSpawner", "Getting Nearest Village Within Range");
 
 		Village village = world.getVillageCollection().getNearestVillage(triggerPos, this.villageRange);

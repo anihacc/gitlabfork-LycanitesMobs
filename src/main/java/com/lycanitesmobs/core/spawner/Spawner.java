@@ -14,7 +14,7 @@ import com.lycanitesmobs.core.spawner.location.SpawnLocation;
 import com.lycanitesmobs.core.spawner.trigger.ChunkSpawnTrigger;
 import com.lycanitesmobs.core.spawner.trigger.SpawnTrigger;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -108,7 +108,7 @@ public class Spawner {
 
 
 	/** Stores how many times each player has triggered any of this spawners Spawn Triggers, the count is reset when a wave is spawned. **/
-	protected Map<EntityPlayer, Integer> triggerCounts = new HashMap<>();
+	protected Map<PlayerEntity, Integer> triggerCounts = new HashMap<>();
 
 
     /** Loads this Spawner from the provided JSON data. **/
@@ -247,7 +247,7 @@ public class Spawner {
 
 
 	/** Returns true if this Spawner is considered enabled, this is checked first before major logging and more in depth checks are done in canSpawn(). **/
-	public boolean isEnabled(World world, EntityPlayer player) {
+	public boolean isEnabled(World world, PlayerEntity player) {
 		if(!this.enabled || CreatureManager.getInstance().spawnConfig.disableAllSpawning || !world.getGameRules().getBoolean("doMobSpawning")) {
 			return false;
 		}
@@ -272,7 +272,7 @@ public class Spawner {
 
 
     /** Returns true if Triggers are allowed to operate for this Spawner. **/
-    public boolean canSpawn(World world, EntityPlayer player, BlockPos triggerPos) {
+    public boolean canSpawn(World world, PlayerEntity player, BlockPos triggerPos) {
     	if(!SpawnerManager.getInstance().globalSpawnConditions.isEmpty()) {
 			LycanitesMobs.printDebug("JSONSpawner", "Global Conditions Required: " + SpawnerManager.getInstance().globalSpawnConditions.size());
 			for(SpawnCondition condition : SpawnerManager.getInstance().globalSpawnConditions) {
@@ -317,7 +317,7 @@ public class Spawner {
 	 * @param chain How far along a spawner chain this trigger is, this increases whenever the actions of one spawner trigger another spawner and is used to prevent loops, etc.
 	 * @return True on a successful spawn and false on failure.
 	 **/
-	public boolean trigger(World world, EntityPlayer player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int countAmount, int chain) {
+	public boolean trigger(World world, PlayerEntity player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int countAmount, int chain) {
 		if(!this.isEnabled(world, player)) {
 			return false;
 		}
@@ -377,7 +377,7 @@ public class Spawner {
 	 * @param chain How far along a spawner chain this trigger is, this increases whenever the actions of one spawner trigger another spawner and is used to prevent loops, etc.
      * @return True on a successful spawn and false on failure.
      **/
-    public boolean doSpawn(World world, EntityPlayer player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int chain) {
+    public boolean doSpawn(World world, PlayerEntity player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int chain) {
     	int mobCount = this.mobCountMin;
     	if(this.mobCountMax > this.mobCountMin) {
     		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
@@ -508,7 +508,7 @@ public class Spawner {
 		 * @param triggerPos The location that the spawn was triggered, usually used as the center for spawning around or on.
 		 * @return True on a successful spawn and false on failure.
 		 **/
-	public List<BlockPos> getSpawnPos(World world, EntityPlayer player, BlockPos triggerPos) {
+	public List<BlockPos> getSpawnPos(World world, PlayerEntity player, BlockPos triggerPos) {
 		LycanitesMobs.printDebug("JSONSpawner", "Searching for Spawn Positions...");
 		List<BlockPos> spawnPositions = new ArrayList<>();
 
@@ -569,7 +569,7 @@ public class Spawner {
 	 * @param biomes A list of all biomes within the spawning area. If null, biome checks will be ignored.
      * @return The MobSpawn of the mob to spawn or null if no mob can be spawned at the position.
      **/
-    public List<MobSpawn> getMobSpawns(World world, EntityPlayer player, int blockCount, List<Biome> biomes) {
+    public List<MobSpawn> getMobSpawns(World world, PlayerEntity player, int blockCount, List<Biome> biomes) {
     	List<MobSpawn> allMobSpawns = new ArrayList<>();
 
     	// Global Spawns:
@@ -636,7 +636,7 @@ public class Spawner {
 	 * @param forgeForced If true, the Forge Can Spawn Event wants to force this mob to spawn.
 	 * @return True if the check has passed.
 	 **/
-	public boolean mobInstanceSpawnCheck(EntityLiving entityLiving, MobSpawn mobSpawn, World world, EntityPlayer player, BlockPos spawnPos, int level, boolean forgeForced) {
+	public boolean mobInstanceSpawnCheck(EntityLiving entityLiving, MobSpawn mobSpawn, World world, PlayerEntity player, BlockPos spawnPos, int level, boolean forgeForced) {
 		// Lycanites Mobs:
 		if (entityLiving instanceof EntityCreatureBase) {
 			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
@@ -687,7 +687,7 @@ public class Spawner {
 	 * @param world The world to spawn in.
 	 * @param entityLiving The entity to spawn.
 	 */
-	public void spawnEntity(World world, ExtendedWorld worldExt, EntityLiving entityLiving, int level, MobSpawn mobSpawn, EntityPlayer player, int chain) {
+	public void spawnEntity(World world, ExtendedWorld worldExt, EntityLiving entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
 		// Before Spawn:
 		entityLiving.timeUntilPortal = entityLiving.getPortalCooldown();
 
