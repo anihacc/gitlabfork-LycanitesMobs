@@ -4,6 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.util.ITooltipFlag;
@@ -32,7 +33,7 @@ public class BlockDoubleSlab extends BlockPillar {
     // ==================================================
     @Override
     public String getLocalizedName() {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+        return LanguageManager.translate(this.getTranslationKey() + ".name");
     }
 
     @Override
@@ -41,7 +42,7 @@ public class BlockDoubleSlab extends BlockPillar {
     }
 
     public String getDescription(ItemStack itemStack, @Nullable World world) {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+        return LanguageManager.translate(this.getTranslationKey() + ".description");
     }
 
 

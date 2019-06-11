@@ -5,7 +5,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -42,8 +44,7 @@ public class LanguageManager {
 	 */
 	public static String translate(String key) {
 		if(!getInstance().map.containsKey(key)) {
-			//LycanitesMobs.printInfo("", "Translating " + key + " to " + I18n.translateToLocal(key));
-			return I18n.translateToLocal(key);
+			return I18n.format(key);
 		}
 		return getInstance().map.get(key).replace("\\n", "\n");
 	}
@@ -58,8 +59,11 @@ public class LanguageManager {
 	 * @throws IOException
 	 */
 	public void loadLocaleData(InputStream inputStreamIn) throws IOException {
-		inputStreamIn = net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.map, inputStreamIn);
-		if (inputStreamIn == null) return;
+		// TODO Load JSON instead.
+		//inputStreamIn = net.minecraftforge.fml.common.FMLCommonHandler.instance().loadLanguage(this.map, inputStreamIn);
+		if (inputStreamIn == null) {
+			return;
+		}
 		for (String s : IOUtils.readLines(inputStreamIn, StandardCharsets.UTF_8)) {
 			if (!s.isEmpty() && s.charAt(0) != '#') {
 				String[] splitters = Iterables.toArray(SPLITTER.split(s), String.class);
