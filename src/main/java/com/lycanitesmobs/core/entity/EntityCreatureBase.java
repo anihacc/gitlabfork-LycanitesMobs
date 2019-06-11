@@ -23,7 +23,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -1430,9 +1430,9 @@ public abstract class EntityCreatureBase extends EntityLiving {
 		this.getEntityWorld().spawnEntity(transformedEntity);
 
 		// Remove Parts:
-		this.setDead();
+		this.remove();
 		if(partner != null && destroyPartner) {
-			partner.setDead();
+			partner.remove();
 		}
 
 		return transformedEntity;
@@ -1458,7 +1458,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         if(this.despawnCheck()) {
             if(!this.isBoundPet())
         	    this.inventory.dropInventory();
-        	this.setDead();
+        	this.remove();
         }
 
         // Fire Immunity:
@@ -3789,7 +3789,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     		if(leftoverStack != null)
     			entityItem.setItem(leftoverStack);
     		else
-    			entityItem.setDead();
+    			entityItem.remove();
     	}
     }
     
@@ -4117,7 +4117,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
         if(nbtTagCompound.hasKey("IsBoundPet")) {
             if(nbtTagCompound.getBoolean("IsBoundPet")) {
                 if(!this.hasPetEntry())
-                    this.setDead();
+                    this.remove();
             }
         }
     	

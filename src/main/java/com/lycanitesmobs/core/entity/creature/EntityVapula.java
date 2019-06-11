@@ -148,7 +148,7 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
 
         // Silverfish Extermination:
         if(target instanceof EntitySilverfish) {
-            target.setDead();
+            target.remove();
         }
         return true;
     }

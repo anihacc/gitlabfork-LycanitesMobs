@@ -71,7 +71,7 @@ public class EntityHellfireWave extends EntityProjectileBase {
 
         // Time Update:
         if(this.time++ >= this.timeMax)
-            this.setDead();
+            this.remove();
 
         // Populate:
         if(this.hellfireWalls == null) {
@@ -100,7 +100,7 @@ public class EntityHellfireWave extends EntityProjectileBase {
                 hellfireWalls[row][col].posZ = this.posZ + z;
                 hellfireWalls[row][col].projectileLife = 2 * 20;
                 if(this.isDead)
-                    hellfireWalls[row][col].setDead();
+                    hellfireWalls[row][col].remove();
             }
         }
     }

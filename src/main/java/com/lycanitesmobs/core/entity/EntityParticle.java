@@ -51,7 +51,7 @@ public class EntityParticle extends EntityThrowable {
         this.prevPosZ = this.posZ;
 
         if(this.particleAge++ >= this.particleAgeMax)
-            this.setDead();
+            this.remove();
 
         this.motionY -= 0.04D * (double)this.particleGravity;
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);

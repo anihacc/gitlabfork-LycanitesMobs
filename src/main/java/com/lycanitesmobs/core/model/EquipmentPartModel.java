@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.model;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;

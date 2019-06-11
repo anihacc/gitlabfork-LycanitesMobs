@@ -314,7 +314,7 @@ public class PetEntry {
             // Remove Entity If Spawned:
             if(this.entity != null) {
                 this.saveEntityNBT();
-                this.entity.setDead();
+                this.entity.remove();
                 this.entity = null;
             }
 
@@ -441,7 +441,7 @@ public class PetEntry {
             return;
         this.onDespawnEntity(this.entity);
         this.saveEntityNBT();
-        this.entity.setDead();
+        this.entity.remove();
         this.entity = null;
     }
 

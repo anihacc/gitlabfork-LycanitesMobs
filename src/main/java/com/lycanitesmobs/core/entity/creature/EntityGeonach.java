@@ -149,7 +149,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 
         // Silverfish Extermination:
         if(target instanceof EntitySilverfish) {
-            target.setDead();
+            target.remove();
         }
 
 		this.nextAttackPhase();

@@ -72,7 +72,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     @Override
     public void onRemove() {
         if(this.summoningPortal != null && !this.summoningPortal.isDead) {
-            this.summoningPortal.setDead();
+            this.summoningPortal.remove();
         }
     }
 

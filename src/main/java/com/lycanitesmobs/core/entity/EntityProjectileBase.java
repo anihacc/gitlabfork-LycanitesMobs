@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -131,15 +131,15 @@ public class EntityProjectileBase extends EntityThrowable {
     	// Terrain Destruction
     	if(!this.getEntityWorld().isRemote) {
     		if(!this.waterProof && this.isInWater())
-    			this.setDead();
+    			this.remove();
     		else if(!this.lavaProof && this.isInLava())
-    			this.setDead();
+    			this.remove();
     	}
 
     	// Life Timeout:
         if(!this.getEntityWorld().isRemote || this.clientOnly) {
             if(this.projectileLife-- <= 0)
-                this.setDead();
+                this.remove();
 		}
 
         // Sync Scale:
@@ -337,7 +337,7 @@ public class EntityProjectileBase extends EntityThrowable {
             boolean entityPierced = this.ripper && entityCollision;
             boolean blockPierced = this.pierceBlocks && blockCollision;
  	        if(!this.getEntityWorld().isRemote && !entityPierced && !blockPierced) {
- 	            this.setDead();
+ 	            this.remove();
 				if(this.getImpactSound() != null) {
 					this.playSound(this.getImpactSound(), 1.0F, 1.0F / (this.getEntityWorld().rand.nextFloat() * 0.4F + 0.8F));
 				}

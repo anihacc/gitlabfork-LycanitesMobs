@@ -27,7 +27,7 @@ import com.lycanitesmobs.core.renderer.RenderRegister;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipment;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentPart;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;

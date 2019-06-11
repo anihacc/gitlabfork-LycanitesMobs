@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.spawner.MobSpawn;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTorch;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;

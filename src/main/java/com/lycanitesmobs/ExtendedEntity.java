@@ -125,7 +125,7 @@ public class ExtendedEntity implements IExtendedEntity {
             this.forceRemoveChecked = true;
         }
         if (this.forceRemove && this.forceRemoveTicks-- <= 0)
-            this.entity.setDead();
+            this.entity.remove();
 
         // Safe Position:
 		if (this.lastSafePos == null) {

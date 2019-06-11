@@ -118,7 +118,7 @@ public class EntityPortal extends EntityProjectileBase {
             // Summoning Pedestal:
             if(this.summoningPedestal != null) {
                 if(this.summonClass == null) {
-                    this.setDead();
+                    this.remove();
                     return;
                 }
             }
@@ -126,12 +126,12 @@ public class EntityPortal extends EntityProjectileBase {
             // Summoning Staff:
             else {
                 if(this.shootingEntity == null || !this.shootingEntity.isEntityAlive() || this.portalItem == null) {
-                    this.setDead();
+                    this.remove();
                     return;
                 }
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(this.shootingEntity);
 				if(playerExt != null && playerExt.staffPortal != this) {
-					this.setDead();
+					this.remove();
 					return;
 				}
             }

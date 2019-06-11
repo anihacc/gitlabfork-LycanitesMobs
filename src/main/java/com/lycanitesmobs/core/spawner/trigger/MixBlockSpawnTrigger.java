@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;

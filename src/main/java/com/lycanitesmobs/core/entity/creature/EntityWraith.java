@@ -60,7 +60,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         if(!this.getEntityWorld().isRemote) {
             if(this.detonateTimer == 0) {
                 this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, 1, true);
-                this.setDead();
+                this.remove();
             }
             else if(this.detonateTimer > 0) {
                 this.detonateTimer--;

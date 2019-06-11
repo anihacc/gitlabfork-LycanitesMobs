@@ -247,7 +247,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                         this.onMinionDeath(minion);
                         this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, false);
                         minion.hellfireEnergy = 0;
-                        minion.setDead();
+                        minion.remove();
                         continue;
                     }
                 }
@@ -302,7 +302,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                         this.onMinionDeath(minion);
                         this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, false);
                         minion.hellfireEnergy = 0;
-                        minion.setDead();
+                        minion.remove();
                         continue;
                     }
                 }
@@ -471,7 +471,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
         // Remove Excess Orbs:
         while(hellfireOrbs.size() > hellfireChargeCount) {
-            hellfireOrbs.get(hellfireOrbs.size() - 1).setDead();
+            hellfireOrbs.get(hellfireOrbs.size() - 1).remove();
             hellfireOrbs.remove(hellfireOrbs.size() - 1);
         }
 
@@ -572,11 +572,11 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
     public void hellfireWallCleanup() {
         if(this.hellfireWallLeft != null) {
-            this.hellfireWallLeft.setDead();
+            this.hellfireWallLeft.remove();
             this.hellfireWallLeft = null;
         }
         if(this.hellfireWallRight != null) {
-            this.hellfireWallRight.setDead();
+            this.hellfireWallRight.remove();
             this.hellfireWallRight = null;
         }
     }
@@ -604,7 +604,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
             this.hellfireBarrierHealth = 100;
             if(this.hellfireBarriers.size() > 0) {
                 EntityHellfireBarrier hellfireBarrier = this.hellfireBarriers.get(this.hellfireBarriers.size() - 1);
-                hellfireBarrier.setDead();
+                hellfireBarrier.remove();
                 this.hellfireBarriers.remove(this.hellfireBarriers.size() - 1);
             }
         }
@@ -620,7 +620,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         if(this.getEntityWorld().isRemote || this.hellfireBarriers.size() < 1)
             return;
         for(EntityHellfireBarrier hellfireBarrier : this.hellfireBarriers) {
-            hellfireBarrier.setDead();
+            hellfireBarrier.remove();
         }
         this.hellfireBarriers = new ArrayList<EntityHellfireBarrier>();
         this.hellfireBarrierHealth = 100;
@@ -656,11 +656,11 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     public boolean isDamageEntityApplicable(Entity entity) {
         if(entity instanceof EntityPigZombie) {
-            entity.setDead();
+            entity.remove();
             return false;
         }
         if(entity instanceof EntityIronGolem) {
-            entity.setDead();
+            entity.remove();
             return false;
         }
         if(entity instanceof PlayerEntity) {

@@ -189,7 +189,7 @@ public class EventListener {
                 LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
                     if(forceRemoveID.equalsIgnoreCase(event.getEntity().getName())) {
-                        event.getEntity().setDead();
+                        event.getEntity().remove();
                         break;
                     }
                 }
@@ -405,7 +405,7 @@ public class EventListener {
         Block block = world.getBlockState(pos).getBlock();
         Item bucket = ObjectManager.buckets.get(block);
         if(bucket != null && world.getBlockState(pos).getValue(BlockLiquid.LEVEL) == 0) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
         }
         
         if(bucket == null)

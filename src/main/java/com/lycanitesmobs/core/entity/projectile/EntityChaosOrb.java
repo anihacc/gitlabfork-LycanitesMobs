@@ -53,7 +53,7 @@ public class EntityChaosOrb extends EntityProjectileModel {
     public void onUpdate() {
     	super.onUpdate();
     	if(this.posY > this.getEntityWorld().getHeight() + 20) {
-			this.setDead();
+			this.remove();
 		}
 		if(!this.getEntityWorld().isRemote && this.updateTick % 5 == 0) {
     		this.addVelocity((0.5D - this.rand.nextDouble()) * 0.5D, (0.5D - this.rand.nextDouble()) * 1D, (0.5D - this.rand.nextDouble()) * 0.5D);

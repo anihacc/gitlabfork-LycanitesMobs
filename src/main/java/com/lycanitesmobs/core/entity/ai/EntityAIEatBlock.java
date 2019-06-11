@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -126,7 +126,7 @@ public class EntityAIEatBlock extends EntityAIBase {
          
          if(this.isValidBlock(blockState)) {
              //if(this.host.getEntityWorld().getGameRules().getGameRuleBooleanValue("mobGriefing"))
-        	 this.host.getEntityWorld().setBlockToAir(new BlockPos(i, j - 1, k)); // Might be something else was x, y, z, false
+        	 this.host.getEntityWorld().removeBlock(new BlockPos(i, j - 1, k)); // Might be something else was x, y, z, false
          }
 
          this.host.getEntityWorld().playEvent(2001, new BlockPos(i, j - 1, k), Block.getIdFromBlock(blockState.getBlock()));

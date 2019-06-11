@@ -90,7 +90,7 @@ public class EntityFear extends EntityCreatureBase {
         
         // Clean Up:
         if(this.fearedEntity == null || !this.fearedEntity.isEntityAlive() || !(this.fearedEntity instanceof EntityLivingBase)) {
-        	this.setDead();
+        	this.remove();
         	return;
         }
 
@@ -118,7 +118,7 @@ public class EntityFear extends EntityCreatureBase {
 
         // Remove When Fear is Over:
         if(ObjectManager.getPotionEffect("fear") == null || !fearedEntityLiving.isPotionActive(ObjectManager.getPotionEffect("fear"))) {
-            this.setDead();
+            this.remove();
             return;
         }
 

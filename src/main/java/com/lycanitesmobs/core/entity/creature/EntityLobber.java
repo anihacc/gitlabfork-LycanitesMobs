@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySnowman;

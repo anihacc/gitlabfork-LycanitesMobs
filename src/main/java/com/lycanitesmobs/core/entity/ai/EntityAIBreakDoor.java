@@ -76,7 +76,7 @@ public class EntityAIBreakDoor extends EntityAIDoorInteract {
         }
 
         if(this.breakingTime == 240 && this.host.getEntityWorld().getDifficulty() == EnumDifficulty.HARD) {
-            this.host.getEntityWorld().setBlockToAir(new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ));
+            this.host.getEntityWorld().removeBlock(new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ));
             this.host.getEntityWorld().playEvent(1012, new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ), 0);
             this.host.getEntityWorld().playEvent(2001, new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ), 0);
         }

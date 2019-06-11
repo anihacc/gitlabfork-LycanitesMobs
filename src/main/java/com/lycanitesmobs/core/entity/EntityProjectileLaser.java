@@ -224,7 +224,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
             );
     	}
     	else if(!this.isDead) {
-    		this.setDead();
+    		this.remove();
     	}
     }
     

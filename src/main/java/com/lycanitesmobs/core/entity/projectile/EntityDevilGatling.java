@@ -57,10 +57,10 @@ public class EntityDevilGatling extends EntityProjectileBase {
     	super.onUpdate();
 
     	if(this.posY > this.getEntityWorld().getHeight() + 20)
-    		this.setDead();
+    		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
-    		this.setDead();
+    		this.remove();
     }
 	
     

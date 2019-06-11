@@ -108,7 +108,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 	    	rapidTime--;
     	}
     	else if(!this.isDead) {
-    		this.setDead();
+    		this.remove();
     	}
     }
 	

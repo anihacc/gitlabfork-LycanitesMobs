@@ -49,7 +49,7 @@ public class EntityHellShield extends EntityProjectileBase {
     public void onUpdate() {
     	super.onUpdate();
     	if(this.posY > this.getEntityWorld().getHeight() + 20)
-    		this.setDead();
+    		this.remove();
     }
 	
     

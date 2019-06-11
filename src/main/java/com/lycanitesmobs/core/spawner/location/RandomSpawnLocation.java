@@ -2,9 +2,8 @@ package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

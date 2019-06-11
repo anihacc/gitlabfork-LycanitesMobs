@@ -67,10 +67,10 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
     	}
     	
     	if(this.posY > this.getEntityWorld().getHeight() + 20)
-    		this.setDead();
+    		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
-    		this.setDead();
+    		this.remove();
     }
 	
     

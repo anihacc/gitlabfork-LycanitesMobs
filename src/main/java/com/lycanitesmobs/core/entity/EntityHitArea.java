@@ -38,7 +38,7 @@ public class EntityHitArea extends Entity {
     @Override
     public void onUpdate() {
         if((this.owner == null || this.owner.isDead) && !this.getEntityWorld().isRemote)
-            this.setDead();
+            this.remove();
         super.onUpdate();
         if(!this.getEntityWorld().isRemote) {
             this.dataManager.set(WIDTH, this.width);

@@ -128,7 +128,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
                 this.aiAttackRanged.setEnabled(false);
                 if (this.vespidInfectionTime++ >= 60 * 20) {
                     this.spawnVespidSwarm();
-                    this.setDead();
+                    this.remove();
                 }
             } else {
                 this.aiAttackMelee.setEnabled(false);

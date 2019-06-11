@@ -10,7 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -129,13 +129,13 @@ public class BlockFireBase extends BlockBase {
     public void updateTick(World world, BlockPos pos, BlockState state, Random rand) {
         if (!world.getGameRules().getBoolean("doFireTick")) {
             if(this.removeOnNoFireTick)
-                world.setBlockToAir(pos);
+                world.removeBlock(pos);
             return;
         }
 
         // Prevent Self Replacement:
         if (!this.canPlaceBlockAt(world, pos) || this.removeOnTick)
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
 
         Block blockBelow = world.getBlockState(pos.down()).getBlock();
         boolean isOnFireSource = this.isBlockFireSource(blockBelow, world, pos.down(), EnumFacing.UP);
@@ -143,7 +143,7 @@ public class BlockFireBase extends BlockBase {
 
         // Environmental Extinguish:
         if (!isOnFireSource && this.canDie(world, pos) && rand.nextFloat() < 0.2F + (float)age * 0.03F) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
             return;
         }
 
@@ -155,27 +155,27 @@ public class BlockFireBase extends BlockBase {
 
         // Schedule Next Update:
         if(this.loopTicks)
-            world.scheduleUpdate(pos, this, this.tickRate(world) + rand.nextInt(10));
+            world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world) + rand.nextInt(10));
 
         // Natural Extinguish:
         if (!isOnFireSource) {
             // On Air:
             if(world.getBlockState(pos.down()).getBlock() == Blocks.AIR) {
-				world.setBlockToAir(pos);
+				world.removeBlock(pos);
 				return;
 			}
 
             // Can't spread, old or on none solid surface:
             if (!this.canNeighborCatchFire(world, pos)) {
                 if (!world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) || age > 3) {
-                    world.setBlockToAir(pos);
+                    world.removeBlock(pos);
                 }
                 return;
             }
 
             // End of life and can't spread below:
             if (!this.canCatchFire(world, pos.down(), EnumFacing.UP) && age == 15 && rand.nextInt(4) == 0) {
-                world.setBlockToAir(pos);
+                world.removeBlock(pos);
                 return;
             }
         }
@@ -248,7 +248,7 @@ public class BlockFireBase extends BlockBase {
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos triggerPos) {
         if (!world.getBlockState(pos.down()).isSideSolid(world, pos, EnumFacing.UP) && !this.canNeighborCatchFire(world, pos)) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
         }
     }
 
@@ -315,7 +315,7 @@ public class BlockFireBase extends BlockBase {
 
     /** Burns away a block, typically setting it to air but can change it to other things depending on the type of fire block. **/
     public void burnBlockDestroy(World world, BlockPos pos) {
-        world.setBlockToAir(pos);
+        world.removeBlock(pos);
     }
 
     /** Returns true if the block at the provided position and face can catch fire. **/

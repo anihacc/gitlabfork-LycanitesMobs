@@ -77,7 +77,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
     	}
     	
     	if((this.laserEntity == null || !this.laserEntity.isEntityAlive()) && !this.isDead)
-    		this.setDead();
+    		this.remove();
     	
     	if(this.isEntityAlive())
     		this.moveToTarget();

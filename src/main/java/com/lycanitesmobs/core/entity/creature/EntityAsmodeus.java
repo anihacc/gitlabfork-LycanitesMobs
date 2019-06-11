@@ -537,11 +537,11 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     public boolean isDamageEntityApplicable(Entity entity) {
         if(entity instanceof EntityPigZombie) {
-            entity.setDead();
+            entity.remove();
             return false;
         }
         if(entity instanceof EntityIronGolem) {
-            entity.setDead();
+            entity.remove();
             return false;
         }
         if(entity instanceof PlayerEntity) {

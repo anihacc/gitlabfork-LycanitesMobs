@@ -6,7 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -110,7 +110,7 @@ public class BlockBase extends Block {
 	public void onBlockAdded(World world, BlockPos pos, BlockState state) {
 		// Initial Block Ticking:
 		if(this.tickRate > 0)
-			world.scheduleUpdate(pos, this, this.tickRate(world));
+			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world));
 	}
 	
 	
@@ -161,7 +161,7 @@ public class BlockBase extends Block {
         // Crushable:
 		if(this.canBeCrushed)
 			if(block == Blocks.SAND || block == Blocks.GRAVEL)
-	        	world.setBlockToAir(pos);
+	        	world.removeBlock(pos);
         super.neighborChanged(state, world, pos, block, triggerPos);
     }
     
@@ -183,7 +183,7 @@ public class BlockBase extends Block {
 
         // Remove On Tick:
         if (this.removeOnTick && this.canRemove(world, pos, state, rand))
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
 
         // Looping Tick:
         else if (this.tickRate > 0 && this.loopTicks)

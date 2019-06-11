@@ -165,7 +165,7 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 
 		// Vespid Extermination:
 		if (target instanceof EntityVespid) {
-			target.setDead();
+			target.remove();
 		}
 
 		return true;

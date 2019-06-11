@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -113,7 +113,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 					else {
 						if (y > minY + 3 && y >= topY)
 							break;
-						world.setBlockToAir(buildPos);
+						world.removeBlock(buildPos);
 					}
 				}
 			}
