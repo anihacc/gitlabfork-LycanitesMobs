@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "lycanitesmobs:poisoncloud" } }
+		{ "apply": { "model": "lycanitesmobs:block/poisoncloud" } }
 	]
 }

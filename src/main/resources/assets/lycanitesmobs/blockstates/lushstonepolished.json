@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model" : "lycanitesmobs:lushstonepolished" }
+		"normal": { "model": "lycanitesmobs:block/lushstonepolished" }
 	}
 }

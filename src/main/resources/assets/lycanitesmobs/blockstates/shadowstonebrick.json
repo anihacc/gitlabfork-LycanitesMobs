@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model" : "lycanitesmobs:shadowstonebrick" }
+		"normal": { "model": "lycanitesmobs:block/shadowstonebrick" }
 	}
 }

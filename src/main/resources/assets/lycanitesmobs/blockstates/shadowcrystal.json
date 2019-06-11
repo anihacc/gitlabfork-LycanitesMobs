@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model" : "lycanitesmobs:shadowcrystal" }
+		"normal": { "model": "lycanitesmobs:block/shadowcrystal" }
 	}
 }

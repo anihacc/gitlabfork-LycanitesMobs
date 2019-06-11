@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -22,27 +22,31 @@ import java.util.Iterator;
 import java.util.Map;
 
 public abstract class JSONLoader {
+	public File getMinecraftDir() {
+		return new File(".");
+	}
+	
 	/**
 	 * Loads all JSON files into this manager. Should only be done on pre-init.
 	 * @param groupInfo The group that this manager should load from.
 	 * @param name The name of this manager, used for debug keys and logging, etc.
-	 * @param assetPath The path to load json files from relative to the group assets folder and the config folder.
+	 * @param dataPath The path to load json files from relative to the group data folder and the config folder.
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
 	 */
-	public void loadAllJson(ModInfo groupInfo, String name, String assetPath, String mapKey, boolean loadCustom) {
+	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom) {
 		LycanitesMobs.printDebug(name, "Loading JSON " + name + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
 
 		// Load Default:
-		Path path = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.filename, assetPath);
+		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.filename, dataPath);
 		Map<String, JsonObject> defaultJsons = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJsons, mapKey, null);
 
 		// Load Custom:
-		String configPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
-		File customDir = new File(configPath + assetPath);
+		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+		File customDir = new File(configPath + dataPath);
 		customDir.mkdirs();
 		path = customDir.toPath();
 		Map<String, JsonObject> customJsons = new HashMap<>();
@@ -50,7 +54,7 @@ public abstract class JSONLoader {
 
 
 		// Write Defaults:
-		this.writeDefaultJSONObjects(gson, defaultJsons, customJsons, jsons, loadCustom, assetPath);
+		this.writeDefaultJSONObjects(gson, defaultJsons, customJsons, jsons, loadCustom, dataPath);
 
 
 		// Parse Json:
@@ -106,7 +110,7 @@ public abstract class JSONLoader {
 				try {
 					try {
 						reader = Files.newBufferedReader(filePath);
-						JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+						JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
 						boolean validJSON = true;
 						if(jsonType != null) {
 							if(!json.has("type")) {
@@ -142,7 +146,7 @@ public abstract class JSONLoader {
 
 
 	/** Cycles through both maps of JSON Objects, a default and a custom map and determines if the defaults should overwrite the custom JSON. Puts the chosen JSON into the mixed map. **/
-	public void writeDefaultJSONObjects(Gson gson, Map<String, JsonObject> defaultJSONs, Map<String, JsonObject> customJSONs, Map<String, JsonObject> mixedJSONs, boolean custom, String assetPath) {
+	public void writeDefaultJSONObjects(Gson gson, Map<String, JsonObject> defaultJSONs, Map<String, JsonObject> customJSONs, Map<String, JsonObject> mixedJSONs, boolean custom, String dataPath) {
 		// Add Default/Overridden JSON:
 		for(String jsonName : defaultJSONs.keySet()) {
 			try {
@@ -161,7 +165,7 @@ public abstract class JSONLoader {
 
 				// Write Default:
 				if(loadDefault) {
-					this.saveJsonObject(gson, defaultJSON, jsonName, assetPath);
+					this.saveJsonObject(gson, defaultJSON, jsonName, dataPath);
 					mixedJSONs.put(jsonName, defaultJSON);
 				}
 				else if(customJSON != null) {
@@ -204,7 +208,7 @@ public abstract class JSONLoader {
 			try {
 				try {
 					reader = Files.newBufferedReader(path);
-					JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+					JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
 					return json;
 				}
 				catch (JsonParseException e) {
@@ -264,10 +268,10 @@ public abstract class JSONLoader {
 
 
 	/** Saves a JSON object into the config folder. **/
-	public void saveJsonObject(Gson gson, JsonObject jsonObject, String name, String assetPath) {
-		String configPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+	public void saveJsonObject(Gson gson, JsonObject jsonObject, String name, String dataPath) {
+		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
 		try {
-			File jsonFile = new File(configPath + (!"".equals(assetPath) ? assetPath + "/" : "") + name + ".json");
+			File jsonFile = new File(configPath + (!"".equals(dataPath) ? dataPath + "/" : "") + name + ".json");
 			jsonFile.getParentFile().mkdirs();
 			jsonFile.createNewFile();
 			FileOutputStream outputStream = new FileOutputStream(jsonFile);

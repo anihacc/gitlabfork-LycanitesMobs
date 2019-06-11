@@ -1,6 +1,6 @@
 {
     "variants": {
-        "half=bottom,variant=default": { "model": "lycanitesmobs:desertstonetile_slab" },
-        "half=top,variant=default": { "model": "lycanitesmobs:desertstonetile_slab_upper" }
+        "half=bottom,variant=default": { "model": "lycanitesmobs:block/desertstonetile_slab" },
+        "half=top,variant=default": { "model": "lycanitesmobs:block/desertstonetile_slab_upper" }
     }
 }

@@ -223,6 +223,16 @@ public class Utilities {
 	// ==================================================
 	//                   File Loading
 	// ==================================================
+	/**
+	 * Returns A Path instance for the provided asset path of the jar file that the provided class is in.
+	 * @param clazz The class to base the jar file off of.
+	 * @param dataDomain The mod domain name.
+	 * @param dataPath The path inside of the mod's assets directory. Ex: "creatures"
+	 * @return
+	 */
+	public static Path getDataPath(Class clazz, String dataDomain, String dataPath) {
+		return getPath(clazz, dataDomain, dataPath, "data");
+	}
 
 	/**
 	 * Returns A Path instance for the provided asset path of the jar file that the provided class is in.
@@ -232,10 +242,22 @@ public class Utilities {
 	 * @return
 	 */
 	public static Path getAssetPath(Class clazz, String assetDomain, String assetPath) {
+		return getPath(clazz, assetDomain, assetPath, "assets");
+	}
+
+	/**
+	 * Returns A Path instance for the provided asset path of the jar file that the provided class is in.
+	 * @param clazz The class to base the jar file off of.
+	 * @param domain The mod domain name.
+	 * @param subpath The path inside of the mod's assets directory. Ex: "textures/blocks"
+	 * @param type The type of path, can be assets, data, etc.
+	 * @return
+	 */
+	public static Path getPath(Class clazz, String domain, String subpath, String type) {
 		Path path = null;
-		String assetDir = "/assets/" + assetDomain + (!"".equals(assetPath) ? "/" + assetPath : "");
+		String assetDir = "/" + type + "/" + domain + (!"".equals(subpath) ? "/" + subpath : "");
 		try {
-			URL url = clazz.getResource("/assets/" + assetDomain + "/" + ".root");
+			URL url = clazz.getResource("/" + type + "/" + domain + "/" + ".root");
 			URI uri = url.toURI();
 			if ("file".equals(uri.getScheme())) {
 				path = Paths.get(clazz.getResource(assetDir).toURI());

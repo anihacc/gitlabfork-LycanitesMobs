@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class BlockSpawnLocation extends SpawnLocation {
     /** A list of blocks to either spawn in or not spawn in depending on if it is a blacklist or whitelist. **/
-    public List<String> blockIds = new ArrayList<>();
+	public List<String> blockIds = new ArrayList<>();
 
-    /** Determines if the block list is a blacklist or whitelist. **/
+	/** Determines if the block list is a blacklist or whitelist. **/
     public String listType = "whitelist";
 
 	/** If true, positions that can see the sky are allowed. **/
@@ -142,8 +142,8 @@ public class BlockSpawnLocation extends SpawnLocation {
     }
 
 	/** Returns if the provided block position is valid. **/
-    public boolean isValidBlock(World world, BlockPos blockPos) {
-    	Block block = world.getBlockState(blockPos).getBlock();
+	public boolean isValidBlock(World world, BlockPos blockPos) {
+		Block block = world.getBlockState(blockPos).getBlock();
 		if(!this.surface || !this.underground) {
 			if(world.canSeeSky(blockPos)) {
 				if(!this.surface) {
@@ -163,5 +163,5 @@ public class BlockSpawnLocation extends SpawnLocation {
 		else {
 			return this.blockIds.contains(block.getRegistryName().toString());
 		}
-    }
+	}
 }

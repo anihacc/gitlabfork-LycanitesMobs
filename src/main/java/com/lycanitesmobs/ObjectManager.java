@@ -2,12 +2,8 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
@@ -301,7 +297,7 @@ public class ObjectManager {
 			if(item instanceof ItemBase) {
 				ItemBase itemBase = (ItemBase) item;
 				if (itemBase.useItemColors()) {
-					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientProxy.itemColor, item);
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientManager.itemColor, item);
 				}
 			}
             if(item instanceof ItemEquipmentPart) {

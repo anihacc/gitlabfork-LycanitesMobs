@@ -24,5 +24,6 @@ GradleHome
 # other
 eclipse
 run
-classes
-Media
+
+# Files from Forge MDK
+forge*changelog.txt

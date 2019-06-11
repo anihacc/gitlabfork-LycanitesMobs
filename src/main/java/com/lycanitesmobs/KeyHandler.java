@@ -1,6 +1,7 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.gui.*;
+import com.lycanitesmobs.core.gui.GuiMinionSelection;
+import com.lycanitesmobs.core.gui.TabManager;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryCreatures;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryIndex;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryPets;
@@ -13,13 +14,11 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.RayTraceResult;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.glfw.GLFW;
 
 public class KeyHandler {
 	public static KeyHandler instance;
@@ -27,14 +26,14 @@ public class KeyHandler {
 	
 	public boolean inventoryOpen = false;
 	
-	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", Keyboard.KEY_X, "Lycanites Mobs");
-	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", Keyboard.KEY_NONE, "Lycanites Mobs");
+	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", GLFW.GLFW_KEY_X, "Lycanites Mobs");
+	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 
-	public KeyBinding beastiary = new KeyBinding("key.beastiary", Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding index = new KeyBinding("key.index", Keyboard.KEY_G, "Lycanites Mobs");
-	public KeyBinding pets = new KeyBinding("key.pets", Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding summoning = new KeyBinding("key.summoning", Keyboard.KEY_NONE, "Lycanites Mobs");
-	public KeyBinding minionSelection = new KeyBinding("key.minions", Keyboard.KEY_R, "Lycanites Mobs");
+	public KeyBinding beastiary = new KeyBinding("key.beastiary", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyBinding index = new KeyBinding("key.index", GLFW.GLFW_KEY_G, "Lycanites Mobs");
+	public KeyBinding pets = new KeyBinding("key.pets", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyBinding summoning = new KeyBinding("key.summoning", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
+	public KeyBinding minionSelection = new KeyBinding("key.minions", GLFW.GLFW_KEY_R, "Lycanites Mobs");
 	
 	// ==================================================
     //                     Constructor

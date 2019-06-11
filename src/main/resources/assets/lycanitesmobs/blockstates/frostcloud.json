@@ -1,5 +1,5 @@
 {
 	"multipart": [
-		{ "apply": { "model" : "lycanitesmobs:frostcloud" } }
+		{ "apply": { "model": "lycanitesmobs:block/frostcloud" } }
 	]
 }

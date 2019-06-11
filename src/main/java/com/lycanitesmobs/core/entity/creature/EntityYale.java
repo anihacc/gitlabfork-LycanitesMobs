@@ -85,7 +85,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         this.tasks.addTask(3, new EntityAIMate(this));
         this.tasks.addTask(4, new EntityAITempt(this).setItemList("vegetables"));
         this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(6, new EntityAIEatBlock(this).setBlocks(Blocks.GRASS).setReplaceBlock(Blocks.DIRT));
+        this.tasks.addTask(6, new EntityAIEatBlock(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
         this.tasks.addTask(7, new EntityAIWander(this).setPauseRate(30));
         this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
         this.tasks.addTask(11, new EntityAILookIdle(this));

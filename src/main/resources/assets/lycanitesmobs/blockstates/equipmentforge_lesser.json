@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "lycanitesmobs:equipmentforge_lesser" },
-        "facing=south": { "model": "lycanitesmobs:equipmentforge_lesser", "y": 180 },
-        "facing=west":  { "model": "lycanitesmobs:equipmentforge_lesser", "y": 270 },
-        "facing=east":  { "model": "lycanitesmobs:equipmentforge_lesser", "y": 90 }
+        "facing=north": { "model": "lycanitesmobs:block/equipmentforge_lesser" },
+        "facing=south": { "model": "lycanitesmobs:block/equipmentforge_lesser", "y": 180 },
+        "facing=west":  { "model": "lycanitesmobs:block/equipmentforge_lesser", "y": 270 },
+        "facing=east":  { "model": "lycanitesmobs:block/equipmentforge_lesser", "y": 90 }
     }
 }
