@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class BlockSpawnLocation extends SpawnLocation {
     /** A list of blocks to either spawn in or not spawn in depending on if it is a blacklist or whitelist. **/
-    public List<Block> blocks = new ArrayList<>();
+    public List<String> blockIds = new ArrayList<>();
 
     /** Determines if the block list is a blacklist or whitelist. **/
     public String listType = "whitelist";
@@ -38,9 +38,8 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
-		if(json.has("blocks")) {
-			this.blocks = JSONHelper.getJsonBlocks(json);
-		}
+		if(json.has("blocks"))
+			this.blockIds = JSONHelper.getJsonStrings(json.get("blocks").getAsJsonArray());
 
 		if(json.has("listType"))
 			this.listType = json.get("listType").getAsString();
@@ -129,7 +128,7 @@ public class BlockSpawnLocation extends SpawnLocation {
 
 		// Require All Block Types:
 		if(this.requiredBlockTypes > 0) {
-        	if(validBlocksFound.size() < this.blocks.size()) {
+        	if(validBlocksFound.size() < this.blockIds.size()) {
         		return new ArrayList<>();
 			}
 			for(int blocksFoundOfType : validBlocksFound.values()) {
@@ -159,10 +158,10 @@ public class BlockSpawnLocation extends SpawnLocation {
 		}
 
 		if("blacklist".equalsIgnoreCase(this.listType)) {
-			return !this.blocks.contains(block);
+			return !this.blockIds.contains(block.getRegistryName().toString());
 		}
 		else {
-			return this.blocks.contains(block);
+			return this.blockIds.contains(block.getRegistryName().toString());
 		}
     }
 }

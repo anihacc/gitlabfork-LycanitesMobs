@@ -65,7 +65,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.0.0";
+	public static final String versionNumber = "2.0.0.1";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -92,7 +92,7 @@ public class LycanitesMobs {
     @CapabilityInject(IExtendedPlayer.class)
     public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 	
-	// Creative Tab:
+	// Creative Tabs:
     public static final CreativeTabs itemsTab = new CreativeTabItems(CreativeTabs.getNextID(), modid + ".items");
     public static final CreativeTabs blocksTab = new CreativeTabBlocks(CreativeTabs.getNextID(), modid + ".blocks");
 	public static final CreativeTabs creaturesTab = new CreativeTabCreatures(CreativeTabs.getNextID(), modid + ".creatures");
@@ -126,7 +126,7 @@ public class LycanitesMobs {
 		proxy.initLanguageManager();
 
 		// Config:
-        ConfigBase.versionCheck("2.0.0.1", version);
+        ConfigBase.versionCheck("2.0.0.0", version);
 		config = ConfigBase.getConfig(modInfo, "general");
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
