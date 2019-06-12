@@ -16,7 +16,7 @@ public class CreativeTabCreatures extends CreativeTabs {
 	
 	// ========== Tab Icon ==========
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ItemStack getTabIconItem() {
 		if(ObjectManager.getItem("beastspawn") != null)
 			return new ItemStack(ObjectManager.getItem("beastspawn"));

@@ -300,7 +300,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

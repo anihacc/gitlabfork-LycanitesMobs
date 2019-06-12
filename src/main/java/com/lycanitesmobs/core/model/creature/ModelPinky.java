@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelPinky extends ModelBipedCustom {
 	
 	// Conditions:

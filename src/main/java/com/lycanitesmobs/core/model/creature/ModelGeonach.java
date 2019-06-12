@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelGeonach extends ModelTemplateElemental {
 	
 	// ==================================================

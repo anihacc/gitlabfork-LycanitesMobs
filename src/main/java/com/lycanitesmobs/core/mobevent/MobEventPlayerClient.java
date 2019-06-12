@@ -90,7 +90,7 @@ public class MobEventPlayerClient {
     // ==================================================
     //                       GUI
     // ==================================================
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
         if(player.capabilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
@@ -126,7 +126,7 @@ public class MobEventPlayerClient {
 		}
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture() {
         if(AssetManager.getTexture("guimobevent" + this.mobEvent.title) == null)
             AssetManager.addTexture("guimobevent" + this.mobEvent.title, LycanitesMobs.modInfo, "textures/mobevents/" + this.mobEvent.title.toLowerCase() + ".png");

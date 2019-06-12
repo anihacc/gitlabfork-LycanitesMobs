@@ -4,9 +4,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.model.ModelObjOld;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.model.ModelItemBase;
-import net.minecraft.client.model.ModelBase;
+import com.lycanitesmobs.core.model.ModelObjOld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
@@ -22,7 +22,7 @@ public class AssetManager {
 	public static Map<String, ResourceLocation> textures = new HashMap<>();
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
 	public static Map<String, SoundEvent> sounds = new HashMap<>();
-	public static Map<String, ModelBase> models = new HashMap<>();
+	public static Map<String, ModelCreatureBase> creatureModels = new HashMap<>();
 	public static Map<String, IModel> objModels = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
 	
@@ -55,9 +55,9 @@ public class AssetManager {
 	}
 	
 	// ========== Model ==========
-	public static void addModel(String name, ModelBase model) {
+	public static void addModel(String name, ModelCreatureBase model) {
 		name = name.toLowerCase();
-		models.put(name, model);
+		creatureModels.put(name, model);
 	}
 	
 	// ========== Obj Model ==========
@@ -101,29 +101,29 @@ public class AssetManager {
 	}
 	
 	// ========== Model ==========
-	public static ModelBase getModel(String name) {
+	public static ModelCreatureBase getCreatureModel(String name) {
 		name = name.toLowerCase();
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(name);
 		if(creatureInfo != null) {
 
 		}
-		if(!models.containsKey(name))
+		if(!creatureModels.containsKey(name))
 			return null;
-		return models.get(name);
+		return creatureModels.get(name);
 	}
 
-	public static ModelBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public static ModelCreatureBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (entityCreature.creatureInfo == null) {
 			return null;
 		}
 
 		// Subpsecies Model:
 		if(entityCreature.getSubspecies() != null && entityCreature.getSubspecies().modelClass != null) {
-			if(models.containsKey(entityCreature.getSubspecies().modelClass.toString())) {
-				return models.get(entityCreature.getSubspecies().modelClass.toString());
+			if(creatureModels.containsKey(entityCreature.getSubspecies().modelClass.toString())) {
+				return creatureModels.get(entityCreature.getSubspecies().modelClass.toString());
 			}
-			ModelBase creatureModel = entityCreature.getSubspecies().modelClass.getConstructor().newInstance();
-			models.put(entityCreature.getSubspecies().modelClass.toString(), creatureModel);
+			ModelCreatureBase creatureModel = entityCreature.getSubspecies().modelClass.getConstructor().newInstance();
+			creatureModels.put(entityCreature.getSubspecies().modelClass.toString(), creatureModel);
 			return creatureModel;
 		}
 
@@ -131,17 +131,17 @@ public class AssetManager {
 		return getCreatureModel(entityCreature.creatureInfo);
 	}
 
-	public static ModelBase getCreatureModel(CreatureInfo creatureInfo) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public static ModelCreatureBase getCreatureModel(CreatureInfo creatureInfo) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (creatureInfo == null || creatureInfo.modelClass == null) {
 			return null;
 		}
 
 		// Main Model:
-		if (models.containsKey(creatureInfo.modelClass.toString())) {
-			return models.get(creatureInfo.modelClass.toString());
+		if (creatureModels.containsKey(creatureInfo.modelClass.toString())) {
+			return creatureModels.get(creatureInfo.modelClass.toString());
 		}
-		ModelBase creatureModel = creatureInfo.modelClass.getConstructor().newInstance();
-		models.put(creatureInfo.modelClass.toString(), creatureModel);
+		ModelCreatureBase creatureModel = creatureInfo.modelClass.getConstructor().newInstance();
+		creatureModels.put(creatureInfo.modelClass.toString(), creatureModel);
 		return creatureModel;
 	}
 	

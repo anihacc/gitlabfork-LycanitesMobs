@@ -171,7 +171,7 @@ public class ItemEquipmentPart extends ItemBase {
 		return new NBTTagCompound();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
@@ -256,7 +256,7 @@ public class ItemEquipmentPart extends ItemBase {
 	//                   Get Sub Items
 	// ==================================================
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(!this.isInCreativeTab(tab)) {
 			return;

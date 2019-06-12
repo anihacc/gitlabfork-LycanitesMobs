@@ -190,7 +190,7 @@ public class EntityFear extends EntityCreatureBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean isInvisibleToPlayer(PlayerEntity player) {
         return true;
     }

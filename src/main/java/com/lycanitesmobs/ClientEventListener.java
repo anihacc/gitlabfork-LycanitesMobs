@@ -15,7 +15,7 @@ public class ClientEventListener {
     //                Client Fog Color
     // ==================================================
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
         if(!(event.getEntity() instanceof LivingEntity))
             return;
@@ -31,7 +31,7 @@ public class ClientEventListener {
     //                First Person Fire
     // ==================================================
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {
         if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isBurning() || event.getPlayer().isPotionActive(MobEffects.FIRE_RESISTANCE))) {
             event.setCanceled(true);

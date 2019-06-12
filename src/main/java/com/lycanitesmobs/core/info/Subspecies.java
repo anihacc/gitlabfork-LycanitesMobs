@@ -7,10 +7,13 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,8 +71,8 @@ public class Subspecies {
     public String rarity = "uncommon";
 
 	/** The model class used by this subspecies. If null a hardcoded default model is searched for. **/
-	@SideOnly(Side.CLIENT)
-	public Class<? extends net.minecraft.client.model.ModelBase> modelClass;
+	@OnlyIn(Dist.CLIENT)
+	public Class<? extends ModelCreatureBase> modelClass;
 
     /** The weight of this subspecies, used when randomly determining the subspecies of a mob. A base species uses the static baseSpeciesWeight value. **/
     public int weight;

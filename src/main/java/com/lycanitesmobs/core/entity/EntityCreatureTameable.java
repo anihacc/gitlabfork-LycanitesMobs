@@ -695,7 +695,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
     //                       Healing
     // ==================================================
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte status) {
         if(status == 7)
             this.playTameEffect(true);

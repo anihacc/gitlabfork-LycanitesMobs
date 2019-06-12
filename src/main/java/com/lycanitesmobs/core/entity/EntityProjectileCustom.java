@@ -188,7 +188,7 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getBrightnessForRender() {
 		if(this.projectileInfo == null || !this.projectileInfo.glow)
 			return super.getBrightnessForRender();

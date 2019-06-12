@@ -231,7 +231,7 @@ public class EntityBeholder extends EntityCreatureRideable {
         	return super.getBrightness();
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public int getBrightnessForRender() {
         if(isAttackOnCooldown())

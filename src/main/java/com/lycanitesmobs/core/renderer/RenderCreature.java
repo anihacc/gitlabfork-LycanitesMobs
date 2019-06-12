@@ -1,42 +1,25 @@
 package com.lycanitesmobs.core.renderer;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.model.ModelCustom;
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.lang.reflect.InvocationTargetException;
 
-@SideOnly(Side.CLIENT)
-public class RenderCreature extends RenderLiving<EntityCreatureBase> {
+@OnlyIn(Dist.CLIENT)
+public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCreatureBase> {
 	public boolean multipass = true;
-	protected ModelBase defaultModel;
-
-    private static final DynamicTexture textureBrightness = new DynamicTexture(16, 16);
+	protected ModelCreatureBase defaultModel;
 	
 	/** A color table for mobs that can be dyed or pet collars. Follows the same pattern as the vanilla sheep. */
 	public static final float[][] colorTable = new float[][] {{1.0F, 1.0F, 1.0F}, {0.85F, 0.5F, 0.2F}, {0.7F, 0.3F, 0.85F}, {0.4F, 0.6F, 0.85F}, {0.9F, 0.9F, 0.2F}, {0.5F, 0.8F, 0.1F}, {0.95F, 0.5F, 0.65F}, {0.3F, 0.3F, 0.3F}, {0.6F, 0.6F, 0.6F}, {0.3F, 0.5F, 0.6F}, {0.5F, 0.25F, 0.7F}, {0.2F, 0.3F, 0.7F}, {0.4F, 0.3F, 0.2F}, {0.4F, 0.5F, 0.2F}, {0.6F, 0.2F, 0.2F}, {0.1F, 0.1F, 0.1F}};
@@ -44,14 +27,12 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public RenderCreature(String entityID, RenderManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public RenderCreature(String entityID, EntityRendererManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
     	super(renderManager, AssetManager.getCreatureModel(CreatureManager.getInstance().getCreature(entityID)), shadowSize);
-		this.defaultModel = this.mainModel;
-
-        if(this.mainModel instanceof ModelCustom) {
-            ModelCustom modelCustom = (ModelCustom)this.mainModel;
-            modelCustom.addCustomLayers(this);
-        }
+		
+    	this.defaultModel = this.field_77045_g;
+		ModelCreatureBase modelCreatureBase = this.field_77045_g;
+		modelCreatureBase.addCustomLayers(this);
 
         this.multipass = LycanitesMobs.config.getBool("Client", "Model Multipass", this.multipass, "Set to false to disable multipass rendering. This renders model layers twice so that they can show each over through alpha textures, disable for performance on low end systems.");
     }
@@ -74,13 +55,13 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 	@Override
 	public void doRender(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
-			this.mainModel = AssetManager.getCreatureModel(entity);
+			this.field_77045_g = AssetManager.getCreatureModel(entity);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.mainModel = this.defaultModel;
+		this.field_77045_g = this.defaultModel;
 
-		if(this.mainModel == null) {
+		if(this.field_77045_g == null) {
 			return;
 		}
 
@@ -147,18 +128,18 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
     @Override
     protected boolean canRenderName(EntityCreatureBase entity) {
         if(!Minecraft.isGuiEnabled()) return false;
-    	if(entity == this.renderManager.renderViewEntity) return false;
-    	if(entity.isInvisibleToPlayer(Minecraft.getMinecraft().player)) return false;
+    	//if(entity == this.field_76990_c.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
+    	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;
     	if(entity.getControllingPassenger() != null) return false;
     	
     	if(entity.getAlwaysRenderNameTagForRender()) {
     		if(entity instanceof EntityCreatureTameable)
     			if(((EntityCreatureTameable)entity).isTamed())
-    				return entity == this.renderManager.pointedEntity;
+    				return entity == this.field_76990_c.pointedEntity;
     		return true;
     	}
     	
-    	return entity.hasCustomName() && entity == this.renderManager.pointedEntity;
+    	return entity.hasCustomName() && entity == this.field_76990_c.pointedEntity;
     }
     
     

@@ -233,7 +233,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
         return 1.0F;
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

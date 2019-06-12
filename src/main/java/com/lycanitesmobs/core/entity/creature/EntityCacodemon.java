@@ -260,7 +260,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         if(isAttackOnCooldown())
             return 15728880;

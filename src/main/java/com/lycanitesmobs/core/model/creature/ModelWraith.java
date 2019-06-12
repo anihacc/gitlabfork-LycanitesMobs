@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelWraith extends ModelTemplateElemental {
 
 	// ==================================================

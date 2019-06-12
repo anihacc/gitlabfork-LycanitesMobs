@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.model;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class EquipmentPartModel implements IBakedModel {
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
 		return null;
 	}
 
@@ -39,6 +39,6 @@ public class EquipmentPartModel implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return new ItemOverrideList(new ArrayList<>());
+		return ItemOverrideList.EMPTY;
 	}
 }

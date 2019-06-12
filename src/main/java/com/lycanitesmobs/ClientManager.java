@@ -1,9 +1,6 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockFluidBase;
-import com.lycanitesmobs.core.entity.EntityFear;
-import com.lycanitesmobs.core.entity.EntityHitArea;
-import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.gui.GuiTabMain;
 import com.lycanitesmobs.core.gui.TabManager;
@@ -16,7 +13,7 @@ import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageLoader;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
-import com.lycanitesmobs.core.model.ModelCustom;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
 import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
 import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
@@ -27,7 +24,6 @@ import com.lycanitesmobs.core.renderer.RenderRegister;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipment;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentPart;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
@@ -37,11 +33,9 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAir;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -158,11 +152,11 @@ public class ClientManager extends CommonProxy {
 
 	// ========== Creatures ==========
 	public void loadCreatureModel(CreatureInfo creature, String modelClassName) throws ClassNotFoundException {
-		creature.modelClass = (Class<? extends ModelCustom>) Class.forName(modelClassName);
+		creature.modelClass = (Class<? extends ModelCreatureBase>) Class.forName(modelClassName);
 	}
 
 	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {
-		subspecies.modelClass = (Class<? extends ModelCustom>) Class.forName(modelClassName);
+		subspecies.modelClass = (Class<? extends ModelCreatureBase>) Class.forName(modelClassName);
 	}
 
 	

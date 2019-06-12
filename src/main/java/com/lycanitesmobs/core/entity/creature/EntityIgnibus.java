@@ -421,7 +421,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         if(isAttackOnCooldown())
             return 15728880;

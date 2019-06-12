@@ -97,7 +97,7 @@ public class ItemSlabCustom extends ItemBlock
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack)
     {
         BlockPos blockpos = pos;

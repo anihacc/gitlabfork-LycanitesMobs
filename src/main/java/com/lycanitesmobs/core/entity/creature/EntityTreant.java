@@ -175,7 +175,7 @@ public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlan
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getEntityBoundingBox().grow(50, 20, 50).offset(0, -10, 0);
     }

@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
-public class ModelObjOld extends ModelCustom {
+@OnlyIn(Dist.CLIENT)
+public class ModelObjOld extends ModelCreatureBase {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;

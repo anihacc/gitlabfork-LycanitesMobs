@@ -35,7 +35,7 @@ public class EffectBase extends Effect {
 	// ==================================================
 	//                    Visuals
 	// ==================================================
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
 		if (mc.currentScreen == null) {
@@ -51,7 +51,7 @@ public class EffectBase extends Effect {
 		Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUDEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc, float alpha) {
 		ResourceLocation texture = AssetManager.getTexture("effect." + this.name);

@@ -29,7 +29,7 @@ public class ItemStaffSummoning extends ItemScepter {
         this.setup();
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public float apply(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }

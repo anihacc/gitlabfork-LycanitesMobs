@@ -29,7 +29,7 @@ public class ItemScepter extends ItemBase {
         this.setMaxDamage(this.getDurability());
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
-            @SideOnly(Side.CLIENT)
+            @OnlyIn(Dist.CLIENT)
             public float apply(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }
@@ -214,7 +214,7 @@ public class ItemScepter extends ItemBase {
     }
 
     // ========== Holding Angle ==========
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isFull3D() {
         return true;

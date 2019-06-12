@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.vecmath.Vector4f;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ModelLightBall extends ModelObj {
 	LayerEffect ballGlowLayer;
 

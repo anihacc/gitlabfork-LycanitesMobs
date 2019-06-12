@@ -17,7 +17,7 @@ public class CreativeTabBlocks extends CreativeTabs {
 	
 	// ========== Tab Icon ==========
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ItemStack getTabIconItem() {
 		if(ObjectManager.getBlock("summoningpedestal") != null)
 			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("summoningpedestal")));

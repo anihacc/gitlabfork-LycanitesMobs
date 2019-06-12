@@ -16,7 +16,7 @@ public class CreativeTabItems extends CreativeTabs {
 	
 	// ========== Tab Icon ==========
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public ItemStack getTabIconItem() {
 		if(ObjectManager.getItem("soulgazer") != null)
 			return new ItemStack(ObjectManager.getItem("soulgazer"));

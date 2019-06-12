@@ -9,16 +9,16 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.layer.LayerBase;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
@@ -29,8 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
-public class ModelObj extends ModelCustom implements IAnimationModel {
+@OnlyIn(Dist.CLIENT)
+public class ModelObj extends ModelCreatureBase implements IAnimationModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -125,10 +125,10 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
         ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-            InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(modelPartsLocation).getInputStream();
+            InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-				JsonArray jsonArray = JsonUtils.fromJson(gson, reader, JsonArray.class);
+				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class);
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -155,10 +155,10 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animationLocation).getInputStream();
+			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}
@@ -222,6 +222,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
     public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
+		boolean isChild = false; // TODO Baby heads!
 		if(scale < 0) {
             renderAsTrophy = true;
 			scale = -scale;
@@ -274,7 +275,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
             this.animator.doTranslate(0F, modelYPosOffset, 0F);
 
             // Child Scaling:
-            if(this.isChild && !renderAsTrophy) {
+            if(isChild && !renderAsTrophy) {
                 this.childScale(partName);
                 if(this.bigChildHead && (partName.equals("head") || partName.equals("mouth")))
                     this.translate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
@@ -335,8 +336,8 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 				continue;
 
 			// Animate:
-			if(entity instanceof EntityLiving) {
-				this.animatePart(partName, (EntityLiving) entity, time, distance, loop, -lookY, lookX, scale);
+			if(entity instanceof LivingEntity) {
+				this.animatePart(partName, (LivingEntity)entity, time, distance, loop, -lookY, lookX, scale);
 			}
 
 			// Trophy Positioning:
@@ -417,7 +418,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
      * @param lookX An x looking rotation used by the head, etc.
      * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
      */
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	float rotX = 0F;
     	float rotY = 0F;
     	float rotZ = 0F;
@@ -441,7 +442,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
         if(entity == null)
             return null;
         if(this.modelStates.containsKey(entity)) {
-            if(entity.isDead) {
+            if(!entity.isAlive()) {
                 this.modelStates.remove(entity);
                 return null;
             }

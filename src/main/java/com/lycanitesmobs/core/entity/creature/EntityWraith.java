@@ -152,7 +152,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         return super.getBrightness();
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return super.getBrightnessForRender();
     }

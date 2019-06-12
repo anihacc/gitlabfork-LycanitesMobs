@@ -165,7 +165,7 @@ public class ItemBase extends Item {
 	//                     Visuals
 	// ==================================================
     // ========== Holding Angle ==========
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isFull3D() {
         return super.isFull3D();

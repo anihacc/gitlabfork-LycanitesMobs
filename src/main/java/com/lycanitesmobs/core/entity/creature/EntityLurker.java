@@ -174,7 +174,7 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
     // ==================================================
     //                       Visuals
     // ==================================================
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public boolean isInvisibleToPlayer(PlayerEntity player) {
     	if(this.isTamed() && this.getOwner() == player)

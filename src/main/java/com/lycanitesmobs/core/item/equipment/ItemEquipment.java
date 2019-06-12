@@ -102,7 +102,7 @@ public class ItemEquipment extends ItemBase {
 		return new NBTTagCompound();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {

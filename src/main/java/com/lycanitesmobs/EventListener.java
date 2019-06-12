@@ -435,7 +435,7 @@ public class EventListener {
 	// ==================================================
 	//                 Debug Overlay
 	// ==================================================
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
 		if(!LycanitesMobs.config.getBool("Debug", "Overlay", false)) {

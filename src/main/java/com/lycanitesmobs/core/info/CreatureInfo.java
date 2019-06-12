@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,8 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,11 +37,11 @@ public class CreatureInfo {
 	protected String name;
 
 	/** The entity class used by this creature. **/
-	public Class<? extends EntityLiving> entityClass;
+	public Class<? extends LivingEntity> entityClass;
 
 	/** The model class used by this creature. **/
-	@SideOnly(Side.CLIENT)
-	public Class<? extends net.minecraft.client.model.ModelBase> modelClass;
+	@OnlyIn(Dist.CLIENT)
+	public Class<? extends ModelCreatureBase> modelClass;
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;

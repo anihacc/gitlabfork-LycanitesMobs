@@ -231,7 +231,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                   Get Sub Items
 	// ==================================================
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
     	if(this.modInfo == null || this.creatureType == null || !this.isInCreativeTab(tab)) {
 			return;

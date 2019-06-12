@@ -203,7 +203,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
         return 1.0F;
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

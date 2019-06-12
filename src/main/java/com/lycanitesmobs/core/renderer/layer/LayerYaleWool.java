@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.vecmath.Vector4f;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerYaleWool extends LayerBase {
 
     // ==================================================

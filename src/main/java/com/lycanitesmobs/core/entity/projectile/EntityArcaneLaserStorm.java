@@ -201,7 +201,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
         return 1.0F;
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public int getBrightnessForRender() {
         return 15728880;

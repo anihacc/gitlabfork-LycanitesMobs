@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.model.ModelCustom;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -16,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderProjectileModel extends Render {
 	public ModelBase mainModel;
 
@@ -25,8 +24,8 @@ public class RenderProjectileModel extends Render {
   	// ==================================================
     public RenderProjectileModel(String entityID, RenderManager renderManager) {
     	super(renderManager);
-    	this.mainModel = AssetManager.getModel(entityID);
-        if(this.mainModel instanceof ModelCustom) {
+    	this.mainModel = AssetManager.getCreatureModel(entityID);
+        if(this.mainModel instanceof ModelCreatureBase) {
             //ModelCustom modelCustom = (ModelCustom)this.mainModel;
             //modelCustom.addCustomLayers(this);
         }

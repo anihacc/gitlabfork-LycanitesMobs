@@ -26,7 +26,7 @@ public class BlockWallCustom extends WallBlock {
         this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_wall"));
 	}
 
-    /*@SideOnly(Side.CLIENT)
+    /*@OnlyIn(Dist.CLIENT)
 	@Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this, 1));

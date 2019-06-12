@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LanguageLoader implements IResourceManagerReloadListener {
 	public static LanguageLoader INSTANCE;
 

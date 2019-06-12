@@ -111,7 +111,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
     // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getEntityBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
@@ -772,7 +772,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         return 1.0F;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.model.ModelCustom;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     public RenderCreature renderer;
     public String name;
@@ -34,11 +34,11 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     public void doRenderLayer(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
-        if(this.renderer.getMainModel() instanceof ModelCustom) {
+        if(this.renderer.getMainModel() instanceof ModelCreatureBase) {
             ResourceLocation layerTexture = this.getLayerTexture(entity);
             if(layerTexture != null)
                 this.renderer.bindTexture(layerTexture);
-            ((ModelCustom)this.renderer.getMainModel()).render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
+            ((ModelCreatureBase)this.renderer.getMainModel()).render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
         }
     }
 
@@ -59,8 +59,8 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     }
 
     public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
-        if(this.renderer.getMainModel() instanceof ModelCustom) {
-            ((ModelCustom)this.renderer.getMainModel()).canBaseRenderPart(partName, entity, trophy);
+        if(this.renderer.getMainModel() instanceof ModelCreatureBase) {
+            ((ModelCreatureBase)this.renderer.getMainModel()).canBaseRenderPart(partName, entity, trophy);
         }
         return true;
     }
