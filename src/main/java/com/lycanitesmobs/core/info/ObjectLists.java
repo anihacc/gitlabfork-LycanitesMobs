@@ -5,13 +5,12 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.item.ItemCustom;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.*;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.Potion;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.common.ToolType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class ObjectLists {
 	// Maps:
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
 	public static Map<String, List<Class>> entityLists = new HashMap<>();
-	public static Map<String, List<Potion>> effectLists = new HashMap<>();
+	public static Map<String, List<Effect>> effectLists = new HashMap<>();
 	
 	
     // ==================================================
@@ -74,14 +73,14 @@ public class ObjectLists {
 			entityLists.get(list).add(entity);
 		}
 	}
-	
-	public static void addEffect(String list, Potion potion) {
-		if(potion == null)
+
+	public static void addEffect(String list, Effect effect) {
+		if(effect == null)
 			return;
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
 			effectLists.put(list, new ArrayList<>());
-		effectLists.get(list).add(potion);
+		effectLists.get(list).add(effect);
 	}
 	
 
@@ -102,11 +101,11 @@ public class ObjectLists {
 		return entityLists.get(list).toArray(new Class[entityLists.get(list).size()]);
 	}
 
-	public static Potion[] getEffects(String list) {
+	public static Effect[] getEffects(String list) {
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
-			return new Potion[0];
-		return effectLists.get(list).toArray(new Potion[effectLists.get(list).size()]);
+			return new Effect[] {};
+		return effectLists.get(list).toArray(new Effect[effectLists.get(list).size()]);
 	}
 	
 
@@ -121,7 +120,7 @@ public class ObjectLists {
 			return false;
 		for(ItemStack listStack : itemLists.get(list))
 			if(testStack.getItem() == listStack.getItem()
-			&& testStack.getItemDamage() == listStack.getItemDamage())
+			&& testStack.getDamage() == listStack.getDamage())
 				return true;
 		return false;
 	}
@@ -139,22 +138,6 @@ public class ObjectLists {
 			return false;
 		return effectLists.get(list).contains(testPotion);
 	}
-
-    public static boolean isInOreDictionary(String oreEntry, Item item) {
-        return isInOreDictionary(oreEntry, new ItemStack(item));
-    }
-    public static boolean isInOreDictionary(String oreEntry, Block block) {
-        return isInOreDictionary(oreEntry, new ItemStack(block));
-    }
-    public static boolean isInOreDictionary(String oreEntry, ItemStack itemStack) {
-        if(itemStack == null) return false;
-        List<ItemStack> ores = OreDictionary.getOres(oreEntry);
-        if(ores == null) return false;
-        for(ItemStack ore : ores)
-            if(ore.getItem() == itemStack.getItem())
-                return true;
-        return false;
-    }
 
 
     // ==================================================
@@ -194,18 +177,20 @@ public class ObjectLists {
 		
 		// Fruit: (For exotic pets!)
 		ObjectLists.addItem("fruit", Items.APPLE);
-		ObjectLists.addItem("fruit", Items.MELON);
+		ObjectLists.addItem("fruit", Items.MELON_SLICE);
 		ObjectLists.addItem("fruit", Blocks.PUMPKIN);
 		ObjectLists.addItem("fruit", Items.PUMPKIN_PIE);
 
 		// Raw Fish: (Very smelly!)
-		ObjectLists.addItem("rawfish", Items.FISH);
+		ObjectLists.addItem("rawfish", Items.COD);
+		ObjectLists.addItem("rawfish", Items.SALMON);
 
 		// Cooked Fish: (For those fish fiends!)
-		ObjectLists.addItem("cookedfish", Items.COOKED_FISH);
-		
+		ObjectLists.addItem("cookedfish", Items.COOKED_COD);
+		ObjectLists.addItem("cookedfish", Items.COOKED_SALMON);
+
 		// Cactus Food: (Jousts love these!)
-		ObjectLists.addItem("cactusfood", new ItemStack(Items.DYE, 1, 2)); // Cactus Green
+		ObjectLists.addItem("cactusfood", Items.field_222079_lj); // Green Dye
 		
 		// Mushrooms: (Fungi treats!)
         ObjectLists.addItem("mushrooms", Items.MUSHROOM_STEW);
@@ -217,7 +202,7 @@ public class ObjectLists {
 		
 		// Sweets: (Sweet sugary goodness!)
 		ObjectLists.addItem("sweets", Items.SUGAR);
-		ObjectLists.addItem("sweets", new ItemStack(Items.DYE, 1, 15)); // Cocoa Beans
+		ObjectLists.addItem("sweets", Items.COCOA_BEANS);
 		ObjectLists.addItem("sweets", Items.COOKIE);
 		ObjectLists.addItem("sweets", Blocks.CAKE);
 		ObjectLists.addItem("sweets", Items.PUMPKIN_PIE);
@@ -231,36 +216,36 @@ public class ObjectLists {
 		}
 		
 		// ========== Effects ==========
-		// Buffs:
-		ObjectLists.addEffect("buffs", MobEffects.STRENGTH);
-		ObjectLists.addEffect("buffs", MobEffects.HASTE);
-		ObjectLists.addEffect("buffs", MobEffects.FIRE_RESISTANCE);
-		ObjectLists.addEffect("buffs", MobEffects.INSTANT_HEALTH);
-		ObjectLists.addEffect("buffs", MobEffects.INVISIBILITY);
-		ObjectLists.addEffect("buffs", MobEffects.JUMP_BOOST);
-		ObjectLists.addEffect("buffs", MobEffects.SPEED);
-		ObjectLists.addEffect("buffs", MobEffects.NIGHT_VISION);
-		ObjectLists.addEffect("buffs", MobEffects.REGENERATION);
-		ObjectLists.addEffect("buffs", MobEffects.RESISTANCE);
-		ObjectLists.addEffect("buffs", MobEffects.WATER_BREATHING);
-		ObjectLists.addEffect("buffs", MobEffects.HEALTH_BOOST);
-		ObjectLists.addEffect("buffs", MobEffects.ABSORPTION);
-		ObjectLists.addEffect("buffs", MobEffects.SATURATION);
-        ObjectLists.addEffect("buffs", MobEffects.GLOWING);
-        ObjectLists.addEffect("buffs", MobEffects.LEVITATION);
-        ObjectLists.addEffect("buffs", MobEffects.LUCK);
+		/*/ Buffs:
+		ObjectLists.addEffect("buffs", Effects.STRENGTH);
+		ObjectLists.addEffect("buffs", Effects.HASTE);
+		ObjectLists.addEffect("buffs", Effects.FIRE_RESISTANCE);
+		ObjectLists.addEffect("buffs", Effects.INSTANT_HEALTH);
+		ObjectLists.addEffect("buffs", Effects.INVISIBILITY);
+		ObjectLists.addEffect("buffs", Effects.JUMP_BOOST);
+		ObjectLists.addEffect("buffs", Effects.SPEED);
+		ObjectLists.addEffect("buffs", Effects.NIGHT_VISION);
+		ObjectLists.addEffect("buffs", Effects.REGENERATION);
+		ObjectLists.addEffect("buffs", Effects.RESISTANCE);
+		ObjectLists.addEffect("buffs", Effects.WATER_BREATHING);
+		ObjectLists.addEffect("buffs", Effects.HEALTH_BOOST);
+		ObjectLists.addEffect("buffs", Effects.ABSORPTION);
+		ObjectLists.addEffect("buffs", Effects.SATURATION);
+        ObjectLists.addEffect("buffs", Effects.GLOWING);
+        ObjectLists.addEffect("buffs", Effects.LEVITATION);
+        ObjectLists.addEffect("buffs", Effects.LUCK);
 		
 		// Debuffs:
-        ObjectLists.addEffect("buffs", MobEffects.BLINDNESS);
-        ObjectLists.addEffect("buffs", MobEffects.NAUSEA);
-        ObjectLists.addEffect("buffs", MobEffects.MINING_FATIGUE);
-        ObjectLists.addEffect("buffs", MobEffects.INSTANT_DAMAGE);
-        ObjectLists.addEffect("buffs", MobEffects.HUNGER);
-        ObjectLists.addEffect("buffs", MobEffects.SLOWNESS);
-        ObjectLists.addEffect("buffs", MobEffects.POISON);
-        ObjectLists.addEffect("buffs", MobEffects.WEAKNESS);
-        ObjectLists.addEffect("buffs", MobEffects.WITHER);
-        ObjectLists.addEffect("buffs", MobEffects.UNLUCK);
+        ObjectLists.addEffect("debuffs", Effects.BLINDNESS);
+        ObjectLists.addEffect("debuffs", Effects.NAUSEA);
+        ObjectLists.addEffect("debuffs", Effects.MINING_FATIGUE);
+        ObjectLists.addEffect("debuffs", Effects.INSTANT_DAMAGE);
+        ObjectLists.addEffect("debuffs", Effects.HUNGER);
+        ObjectLists.addEffect("debuffs", Effects.SLOWNESS);
+        ObjectLists.addEffect("debuffs", Effects.POISON);
+        ObjectLists.addEffect("debuffs", Effects.WEAKNESS);
+        ObjectLists.addEffect("debuffs", Effects.WITHER);
+        ObjectLists.addEffect("debuffs", Effects.UNLUCK);*/
 	}
 	
 	// ========== Add From Config Value ==========
@@ -277,7 +262,7 @@ public class ObjectLists {
 				int dropMeta = 0;
 				if (customDropValues.length > 1)
 					dropMeta = Integer.parseInt(customDropValues[1]);
-				if (Item.getByNameOrId(dropName) != null) {
+				/*if (Item.getByNameOrId(dropName) != null) {
 					Item customItem = Item.getByNameOrId(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customItem, 1, dropMeta));
 					LycanitesMobs.printDebug("ItemSetup", "As Item: " + customItem);
@@ -286,7 +271,7 @@ public class ObjectLists {
 					Block customBlock = Block.getBlockFromName(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customBlock, 1, dropMeta));
 					LycanitesMobs.printDebug("ItemSetup", "As Block: " + customBlock);
-				}
+				}*/
 			}
 		}
 	}
@@ -299,11 +284,11 @@ public class ObjectLists {
 	public static boolean isSword(Item item) {
 		if(item == null)
 			return false;
-		if(item instanceof ItemSword)
+		if(item instanceof SwordItem)
 			return true;
-		if(item instanceof ItemShears)
+		if(item instanceof ShearsItem)
 			return false;
-		return item.getDestroySpeed(new ItemStack(item), Blocks.MELON_BLOCK.getDefaultState()) > 1F;
+		return item.getDestroySpeed(new ItemStack(item), Blocks.MELON.getDefaultState()) > 1F;
 	}
 
     // ========== Pickaxe ==========
@@ -313,7 +298,7 @@ public class ObjectLists {
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = item.getTranslationKey().split("\\.");
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
                 if("Pickaxe".equalsIgnoreCase(toolName) || "Hammer".equalsIgnoreCase(toolName))
@@ -322,9 +307,9 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemPickaxe)
+            if(item instanceof PickaxeItem)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "pickaxe", null, null) != -1)
+            if(item.getHarvestLevel(new ItemStack(item), ToolType.PICKAXE, null, null) != -1)
                 return true;
             return item.getDestroySpeed(new ItemStack(item), Blocks.STONE.getDefaultState()) > 1F;
 
@@ -340,7 +325,7 @@ public class ObjectLists {
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = item.getTranslationKey().split("\\.");
             for(String toolNamePart : toolNameParts)
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
@@ -350,11 +335,11 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemAxe)
+            if(item instanceof AxeItem)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "axe", null, null) != -1)
+            if(item.getHarvestLevel(new ItemStack(item), ToolType.AXE, null, null) != -1)
                 return true;
-            return item.getDestroySpeed(new ItemStack(item), Blocks.LOG.getDefaultState()) > 1F;
+            return item.getDestroySpeed(new ItemStack(item), Blocks.OAK_LOG.getDefaultState()) > 1F;
 
         }
         catch(Exception e) {}
@@ -368,7 +353,7 @@ public class ObjectLists {
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = item.getTranslationKey().split("\\.");
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
                 if("Shovel".equalsIgnoreCase(toolName) || "Excavator".equalsIgnoreCase(toolName) || "Mattock".equalsIgnoreCase(toolName))
@@ -377,9 +362,9 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemSpade)
+            if(item instanceof ShovelItem)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "shovel", null, null) != -1)
+            if(item.getHarvestLevel(new ItemStack(item), ToolType.SHOVEL, null, null) != -1)
                 return true;
             return item.getDestroySpeed(new ItemStack(item), Blocks.DIRT.getDefaultState()) > 1F;
 
@@ -395,7 +380,7 @@ public class ObjectLists {
 	public static boolean isName(Item item, String name) {
 		if(item == null)
 			return false;
-		String itemName = item.getUnlocalizedName().toLowerCase();
+		String itemName = item.getTranslationKey().toLowerCase();
 		if(itemName.contains(name))
 			return true;
 		return false;
@@ -405,7 +390,7 @@ public class ObjectLists {
 		if(block == null)
 			return false;
 		name = name.toLowerCase();
-		String blockName = block.getUnlocalizedName().toLowerCase();
+		String blockName = block.getTranslationKey().toLowerCase();
 		if(blockName.contains(name)) {
 			return true;
 		}

@@ -5,35 +5,23 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.ItemBlockBase;
-import com.lycanitesmobs.core.item.ItemSlabCustom;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.model.ModelEquipmentPart;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.Minecraft;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.stats.StatBase;
+import net.minecraft.potion.Effect;
+import net.minecraft.stats.Stat;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +42,7 @@ public class ObjectManager {
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
-    public static Map<String, StatBase> stats = new HashMap<>();
+    public static Map<String, Stat> stats = new HashMap<>();
 	
 	public static ModInfo currentModInfo;
 
@@ -88,15 +76,15 @@ public class ObjectManager {
 		blocks.put(name, block);
         if(block instanceof BlockSlabCustom) {
             BlockSlabCustom blockSlab = (BlockSlabCustom)block;
-            ItemSlabCustom itemSlabCustom = new ItemSlabCustom(blockSlab, blockSlab, blockSlab.getDoubleBlock());
-            items.put(name, itemSlabCustom);
-            itemGroups.put(itemSlabCustom, currentModInfo);
+            //ItemSlabCustom itemSlabCustom = new ItemSlabCustom(blockSlab, blockSlab, blockSlab.getDoubleBlock());
+            //items.put(name, itemSlabCustom);
+            //itemGroups.put(itemSlabCustom, currentModInfo);
         }
         else {
-            ItemBlock itemBlock = new ItemBlockBase(block);
-            itemBlock.setRegistryName(block.getRegistryName());
-            items.put(name, itemBlock);
-            itemGroups.put(itemBlock, currentModInfo);
+            //BlockItem itemBlock = new ItemBlockBase(block);
+            //itemBlock.setRegistryName(block.getRegistryName());
+            //items.put(name, itemBlock);
+            //itemGroups.put(itemBlock, currentModInfo);
         }
         return block;
 	}
@@ -106,9 +94,9 @@ public class ObjectManager {
         ModInfo group = currentModInfo;
         Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
 		fluids.put(fluidName, fluid);
-		if(!FluidRegistry.registerFluid(fluid)) {
-		    LycanitesMobs.printWarning("", "Another fluid was registered as " + fluidName);
-        }
+		//if(!FluidRegistry.registerFluid(fluid)) {
+		//    LycanitesMobs.printWarning("", "Another fluid was registered as " + fluidName);
+        //}
         return fluid;
 	}
 
@@ -124,8 +112,8 @@ public class ObjectManager {
 		items.put(name, item);
         itemGroups.put(item, currentModInfo);
 
-        // Fluid Dispenser:
-        if(item instanceof ItemBucket) {
+        /*/ Fluid Dispenser:
+        if(item instanceof BucketItem) {
             IBehaviorDispenseItem ibehaviordispenseitem = new BehaviorDefaultDispenseItem() {
                 private final BehaviorDefaultDispenseItem dispenseBehavior = new BehaviorDefaultDispenseItem();
 
@@ -136,7 +124,7 @@ public class ObjectManager {
                 }
             };
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, ibehaviordispenseitem);
-        }
+        }*/
 
         return item;
 	}
@@ -152,7 +140,7 @@ public class ObjectManager {
     public static Class addTileEntity(String name, Class tileEntityClass) {
         name = name.toLowerCase();
         tileEntities.put(name, tileEntityClass);
-        GameRegistry.registerTileEntity(tileEntityClass, LycanitesMobs.modid + "." + name);
+        //GameRegistry.registerTileEntity(tileEntityClass, LycanitesMobs.modid + "." + name);
         return tileEntityClass;
     }
 
@@ -162,11 +150,11 @@ public class ObjectManager {
 			return null;
 		}
 
-        EffectBase potion = new EffectBase(name, isBad, color);
-		effects.put(name, potion);
-		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", potion);
+        EffectBase effect = new EffectBase(name, isBad, color);
+		effects.put(name, effect);
+		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", effect);
 
-		return potion;
+		return effect;
 	}
 
 	// ========== Special Entity ==========
@@ -184,11 +172,11 @@ public class ObjectManager {
 
 
     // ========== Stat ==========
-    public static void addStat(String name, StatBase stat) {
+    public static void addStat(String name, Stat stat) {
         name = name.toLowerCase();
         if(stats.containsKey(name))
             return;
-        stat.registerStat();
+        //stat.registerStat();
         stats.put(name, stat);
     }
 	
@@ -232,7 +220,7 @@ public class ObjectManager {
     }
 
     // ========== Stat ==========
-    public static StatBase getStat(String name) {
+    public static Stat getStat(String name) {
         name = name.toLowerCase();
         if(!stats.containsKey(name)) return null;
         return stats.get(name);
@@ -250,7 +238,7 @@ public class ObjectManager {
                 LycanitesMobs.printWarning("", "Block: " + block + " has no Registry Name!");
             }
             //event.getRegistry().register(block); Registered with ItemBlock
-			LycanitesMobs.proxy.addBlockRender(currentModInfo, block);
+			//LycanitesMobs.proxy.addBlockRender(currentModInfo, block);
         }
     }
 
@@ -261,14 +249,14 @@ public class ObjectManager {
 	            LycanitesMobs.printWarning("", "Item: " + item + " has no Registry Name!");
             }
             event.getRegistry().register(item);
-            LycanitesMobs.proxy.addItemRender(itemGroups.get(item), item);
+            //LycanitesMobs.proxy.addItemRender(itemGroups.get(item), item);
         }
     }
 
     // ========== Potions ==========
-    public static void registerPotions(RegistryEvent.Register<Potion> event) {
-        for(EffectBase potion : effects.values()) {
-        	event.getRegistry().register(potion);
+    public static void registerPotions(RegistryEvent.Register<Effect> event) {
+        for(EffectBase effect : effects.values()) {
+        	event.getRegistry().register(effect);
 		}
     }
 
@@ -291,13 +279,13 @@ public class ObjectManager {
     // ==================================================
     //           Register Block and Item Models
     // ==================================================
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void RegisterModels() {
 		for(Item item : items.values()) {
 			if(item instanceof ItemBase) {
 				ItemBase itemBase = (ItemBase) item;
 				if (itemBase.useItemColors()) {
-					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientManager.itemColor, item);
+					Minecraft.getInstance().getItemColors().register(ClientManager.itemColor, item);
 				}
 			}
             if(item instanceof ItemEquipmentPart) {
