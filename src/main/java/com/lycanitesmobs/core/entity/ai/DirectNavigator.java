@@ -130,7 +130,7 @@ public class DirectNavigator {
 	// ==================================================
   	//                      Movement
   	// ==================================================
-	public void flightMovement(float moveStrafe, float moveForward) {
+	public void flightMovement(double moveStrafe, double moveForward) {
 		if(this.host.isInWater()) {
             this.host.moveSwimmingWithHeading(moveStrafe, moveForward);
             this.host.move(MoverType.SELF, this.host.motionX, this.host.motionY, this.host.motionZ);

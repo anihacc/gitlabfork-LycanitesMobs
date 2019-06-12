@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -113,8 +113,8 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
                 for (Entity entity : this.getNearbyEntities(Entity.class, null, this.whirlpoolRange)) {
                     if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy)
                         continue;
-                    if(entity instanceof EntityLivingBase) {
-                        EntityLivingBase entityLivingBase = (EntityLivingBase)entity;
+                    if(entity instanceof LivingEntity) {
+                        LivingEntity entityLivingBase = (LivingEntity)entity;
                         if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                     }
@@ -146,7 +146,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
             rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
@@ -281,8 +281,8 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof EntityLivingBase) {
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 5 * 20, 1));
+        if(entity != null && entity instanceof LivingEntity) {
+            ((LivingEntity)entity).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

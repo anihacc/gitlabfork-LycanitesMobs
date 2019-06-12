@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ public class EntityHellShield extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityHellShield(World world, EntityLivingBase entityLivingBase) {
+    public EntityHellShield(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -74,7 +74,7 @@ public class EntityHellShield extends EntityProjectileBase {
     }
 
     @Override
-    public boolean canDamage(EntityLivingBase entity) {
+    public boolean canDamage(LivingEntity entity) {
         return false;
     }
 

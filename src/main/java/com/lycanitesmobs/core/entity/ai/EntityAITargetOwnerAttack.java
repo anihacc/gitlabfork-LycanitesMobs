@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityAITargetOwnerAttack extends EntityAITarget {
 	// Targets:
@@ -35,9 +35,9 @@ public class EntityAITargetOwnerAttack extends EntityAITarget {
     	if(this.host.getOwner() == null)
     		return false;
 
-        if (!(this.host.getOwner() instanceof EntityLivingBase))
+        if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
-        EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
+        LivingEntity owner = (LivingEntity)this.host.getOwner();
     	this.target = owner.getLastAttackedEntity();
     	if(this.target == null) {
     		return false;
@@ -54,7 +54,7 @@ public class EntityAITargetOwnerAttack extends EntityAITarget {
     @Override
     public void startExecuting() {
     	if(this.isTargetValid(target)) {
-			lastAttackTime = ((EntityLivingBase)this.host.getOwner()).getLastAttackedEntityTime();
+			lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastAttackedEntityTime();
 			super.startExecuting();
 		}
     }
@@ -74,10 +74,10 @@ public class EntityAITargetOwnerAttack extends EntityAITarget {
     // ==================================================
   	//                    Valid Target
   	// ==================================================
-    private boolean isTargetValid(EntityLivingBase target) {
+    private boolean isTargetValid(LivingEntity target) {
     	if(target == null)
             return false;
-    	if(!target.isEntityAlive())
+    	if(!target.isAlive())
             return false;
 		if(target == this.host)
             return false;
@@ -93,7 +93,7 @@ public class EntityAITargetOwnerAttack extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
 }

@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,9 +49,9 @@ public class EntityAITargetOwnerThreats extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
     protected Entity getOwner() { return this.host.getOwner(); }
     
     
@@ -59,7 +59,7 @@ public class EntityAITargetOwnerThreats extends EntityAITarget {
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
     	// Owner Check:
     	if(!this.tamedHost.isTamed())
     		return false;

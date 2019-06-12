@@ -9,14 +9,13 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
@@ -270,7 +269,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     // ==================================================
     // ========== Can Attack Entity ==========
     @Override
-    public boolean canAttackEntity(EntityLivingBase targetEntity) {
+    public boolean canAttackEntity(LivingEntity targetEntity) {
     	if(targetEntity == this.getMasterTarget())
     		return false;
     	if(targetEntity instanceof EntityConba)
@@ -309,8 +308,8 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
 }

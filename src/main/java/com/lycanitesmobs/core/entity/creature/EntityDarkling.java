@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
@@ -9,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
@@ -36,7 +35,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 
     // Latching
-    EntityLivingBase latchEntity = null;
+    LivingEntity latchEntity = null;
     int latchEntityID = 0;
     double latchHeight = 0.5D;
     double latchAngle = 90D;
@@ -115,7 +114,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
 
             // Server:
             if(!this.getEntityWorld().isRemote) {
-                if(this.getLatchTarget().isEntityAlive() && !this.isInWater()) {
+                if(this.getLatchTarget().isAlive() && !this.isInWater()) {
                     if (this.updateTick % 40 == 0) {
                         float damage = this.getAttackDamage(1);
                         if (this.attackMelee(this.getLatchTarget(), damage))
@@ -144,7 +143,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
     //                     Latching
     // ==================================================
-    public EntityLivingBase getLatchTarget() {
+    public LivingEntity getLatchTarget() {
         try {
             if (this.getEntityWorld().isRemote) {
                 this.latchHeight = this.dataManager.get(LATCH_HEIGHT);
@@ -155,8 +154,8 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
                     this.latchEntityID = latchEntityID;
                     if (latchEntityID != 0) {
                         Entity possilbeLatchEntity = this.getEntityWorld().getEntityByID(latchEntityID);
-                        if (possilbeLatchEntity != null && possilbeLatchEntity instanceof EntityLivingBase)
-                            this.latchEntity = (EntityLivingBase) possilbeLatchEntity;
+                        if (possilbeLatchEntity != null && possilbeLatchEntity instanceof LivingEntity)
+                            this.latchEntity = (LivingEntity) possilbeLatchEntity;
                     }
                 }
             }
@@ -165,7 +164,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
         return this.latchEntity;
     }
 
-    public void setLatchTarget(EntityLivingBase entity) {
+    public void setLatchTarget(LivingEntity entity) {
         this.latchEntity = entity;
         if(this.getEntityWorld().isRemote)
             return;
@@ -201,9 +200,9 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     public boolean attackMelee(Entity target, double damageScale) {
         // Disable Knockback:
         double targetKnockbackResistance = 0;
-        if(target instanceof EntityLivingBase) {
-            targetKnockbackResistance = ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-            ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        if(target instanceof LivingEntity) {
+            targetKnockbackResistance = ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         }
 
         // Melee Attack:
@@ -211,12 +210,12 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     		return false;
 
         // Restore Knockback:
-        if(target instanceof EntityLivingBase)
-            ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+        if(target instanceof LivingEntity)
+            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
     	
     	// Latch:
-        if(!this.hasLatchTarget() && target instanceof EntityLivingBase && !this.isInWater()) {
-        	this.setLatchTarget((EntityLivingBase) target);
+        if(!this.hasLatchTarget() && target instanceof LivingEntity && !this.isInWater()) {
+        	this.setLatchTarget((LivingEntity) target);
         }
         
         return true;
@@ -265,10 +264,10 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
   	//                     Immunities
   	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall"))
             return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -21,7 +21,7 @@ public class ExtendedEntity implements IExtendedEntity {
     public static int FORCE_REMOVE_ENTITY_TICKS = 40;
 
     // Entity Instance:
-	public EntityLivingBase entity;
+	public LivingEntity entity;
 
 	// Equipment:
 	public int equipmentProjectileCooldown = 0;
@@ -47,7 +47,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	// ==================================================
     //                   Get for Entity
     // ==================================================
-	public static ExtendedEntity getForEntity(EntityLivingBase entity) {
+	public static ExtendedEntity getForEntity(LivingEntity entity) {
 		if(entity == null) {
 			//LycanitesMobs.printWarning("", "Tried to access an ExtendedEntity from a null Entity.");
 			return null;
@@ -93,11 +93,11 @@ public class ExtendedEntity implements IExtendedEntity {
     //                      Entity
     // ==================================================
     /** Initially sets the entity. **/
-    public void setEntity(EntityLivingBase entity) {
+    public void setEntity(LivingEntity entity) {
         this.entity = entity;
     }
 
-    public EntityLivingBase getEntity() {
+    public LivingEntity getEntity() {
         return this.entity;
     }
 	
@@ -136,7 +136,7 @@ public class ExtendedEntity implements IExtendedEntity {
 		}
 
         // Fear Entity:
-        if (this.fearEntity != null && !this.fearEntity.isEntityAlive())
+        if (this.fearEntity != null && !this.fearEntity.isAlive())
             this.fearEntity = null;
 
         // Picked Up By Entity:
@@ -164,12 +164,12 @@ public class ExtendedEntity implements IExtendedEntity {
 
         // Check:
 		if(!this.entity.getEntityWorld().isRemote) {
-			if (!this.pickedUpByEntity.isEntityAlive()) {
+			if (!this.pickedUpByEntity.isAlive()) {
 				this.setPickedUpByEntity(null);
 				return;
 			}
-			if (this.pickedUpByEntity instanceof EntityLivingBase) {
-				if (((EntityLivingBase) this.pickedUpByEntity).getHealth() <= 0) {
+			if (this.pickedUpByEntity instanceof LivingEntity) {
+				if (((LivingEntity) this.pickedUpByEntity).getHealth() <= 0) {
 					this.setPickedUpByEntity(null);
 					return;
 				}

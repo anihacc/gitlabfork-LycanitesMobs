@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -22,7 +22,7 @@ import java.util.HashSet;
 
 public class EntityProjectileLaser extends EntityProjectileBase {
 	// Properties:
-	public EntityLivingBase shootingEntity;
+	public LivingEntity shootingEntity;
     /** The entity that this laser should appear from. **/
 	public Entity followEntity;
 	public int shootingEntityRef = -1;
@@ -85,11 +85,11 @@ public class EntityProjectileLaser extends EntityProjectileBase {
         this.followEntity = followEntity;
     }
 
-    public EntityProjectileLaser(World world, EntityLivingBase par2EntityLivingBase, int setTime, int setDelay) {
-        this(world, par2EntityLivingBase, setTime, setDelay, null);
+    public EntityProjectileLaser(World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+        this(world, par2LivingEntity, setTime, setDelay, null);
     }
 
-    public EntityProjectileLaser(World world, EntityLivingBase entityLiving, int setTime, int setDelay, Entity followEntity) {
+    public EntityProjectileLaser(World world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
         super(world, entityLiving);
         this.shootingEntity = entityLiving;
         this.laserTime = setTime;
@@ -259,7 +259,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 			boolean lockedLaser = false;
 			if(this.shootingEntity != null && this.useEntityAttackTarget) {
 				if(this.shootingEntity instanceof EntityCreatureBase && ((EntityCreatureBase)this.shootingEntity).getAttackTarget() != null) {
-					EntityLivingBase attackTarget = ((EntityCreatureBase)this.shootingEntity).getAttackTarget();
+					LivingEntity attackTarget = ((EntityCreatureBase)this.shootingEntity).getAttackTarget();
 					this.targetX = attackTarget.posX;
 					this.targetY = attackTarget.posY + (attackTarget.height / 2);
 					this.targetZ = attackTarget.posZ;
@@ -294,12 +294,12 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 			this.laserEnd.onUpdateEnd(newTargetX, newTargetY, newTargetZ);
 			
 			// Damage:
-			if(this.laserTime % this.laserDelay == 0 && this.isEntityAlive()) {
+			if(this.laserTime % this.laserDelay == 0 && this.isAlive()) {
                 if (target != null && target.entityHit != null) {
                     if(this.laserEnd.getDistance(target.entityHit) <= (this.laserWidth * 10)) {
                         boolean doDamage = true;
-                        if (target.entityHit instanceof EntityLivingBase) {
-                            doDamage = this.canDamage((EntityLivingBase) target.entityHit);
+                        if (target.entityHit instanceof LivingEntity) {
+                            doDamage = this.canDamage((LivingEntity) target.entityHit);
                         }
                         if (doDamage)
                             this.updateDamage(target.entityHit);
@@ -341,7 +341,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.posX, this.posY, this.posZ, this });
 		    }
 	        else {
-		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, EntityLivingBase.class, EntityProjectileLaser.class });
+		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, LivingEntity.class, EntityProjectileLaser.class });
 		    	constructor.setAccessible(true);
 		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.shootingEntity, this });
 	        }
@@ -372,8 +372,8 @@ public class EntityProjectileLaser extends EntityProjectileBase {
             if(this.shootingEntityRef == -1) this.shootingEntity = null;
     		else {
     			Entity possibleShootingEntity = this.getEntityWorld().getEntityByID(this.shootingEntityRef);
-    			if(possibleShootingEntity != null && possibleShootingEntity instanceof EntityLivingBase)
-    				this.shootingEntity = (EntityLivingBase)possibleShootingEntity;
+    			if(possibleShootingEntity != null && possibleShootingEntity instanceof LivingEntity)
+    				this.shootingEntity = (LivingEntity)possibleShootingEntity;
     			else
     				this.shootingEntity = null;
     		}
@@ -447,9 +447,9 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 		double targetKnockbackResistance = 0;
 		if(this.knockbackChance < 1) {
 			if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-				if(target instanceof EntityLivingBase) {
-					targetKnockbackResistance = ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-					((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+				if(target instanceof LivingEntity) {
+					targetKnockbackResistance = ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+					((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 				}
 			}
 		}
@@ -472,14 +472,14 @@ public class EntityProjectileLaser extends EntityProjectileBase {
             }
         }
         
-        if(target instanceof EntityLivingBase)
-        	this.onDamage((EntityLivingBase)target, damageInit, attackSuccess);
+        if(target instanceof LivingEntity)
+        	this.onDamage((LivingEntity)target, damageInit, attackSuccess);
     	
         // Restore Knockback:
         if(this.knockbackChance < 1) {
             if(this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-                if(target instanceof EntityLivingBase)
-                    ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+                if(target instanceof LivingEntity)
+                    ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
             }
         }
 
@@ -568,13 +568,13 @@ public class EntityProjectileLaser extends EntityProjectileBase {
    	// ========== Read ===========
     @Override
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	if(nbtTagCompound.hasKey("LaserTime"))
-    		this.setTime(nbtTagCompound.getInteger("LaserTime"));
-    	if(nbtTagCompound.hasKey("OffsetX"))
+    	if(nbtTagCompound.contains("LaserTime"))
+    		this.setTime(nbtTagCompound.getInt("LaserTime"));
+    	if(nbtTagCompound.contains("OffsetX"))
     		this.offsetX = nbtTagCompound.getDouble("OffsetX");
-    	if(nbtTagCompound.hasKey("OffsetY"))
+    	if(nbtTagCompound.contains("OffsetY"))
     		this.offsetY = nbtTagCompound.getDouble("OffsetY");
-    	if(nbtTagCompound.hasKey("OffsetZ"))
+    	if(nbtTagCompound.contains("OffsetZ"))
     		this.offsetZ = nbtTagCompound.getDouble("OffsetZ");
         super.readEntityFromNBT(nbtTagCompound);
     }
@@ -582,10 +582,10 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     // ========== Write ==========
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-    	nbtTagCompound.setInteger("LaserTime", this.laserTime);
-    	nbtTagCompound.setDouble("OffsetX", this.offsetX);
-    	nbtTagCompound.setDouble("OffsetY", this.offsetY);
-    	nbtTagCompound.setDouble("OffsetZ", this.offsetZ);
+    	nbtTagCompound.putInt("LaserTime", this.laserTime);
+    	nbtTagCompound.putDouble("OffsetX", this.offsetX);
+    	nbtTagCompound.putDouble("OffsetY", this.offsetY);
+    	nbtTagCompound.putDouble("OffsetZ", this.offsetZ);
         super.writeEntityToNBT(nbtTagCompound);
     }
 }

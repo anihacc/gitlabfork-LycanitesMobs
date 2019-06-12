@@ -12,7 +12,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -89,7 +89,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
             rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
@@ -171,7 +171,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     @Override
     public void attackRanged(Entity target, float range) {
         // Update Laser:
-        if(this.projectile != null && this.projectile.isEntityAlive()) {
+        if(this.projectile != null && this.projectile.isAlive()) {
             this.projectile.setTime(20);
         }
         else {
@@ -208,7 +208,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
             this.setAttackTarget(null);
 
         // Update Laser:
-        if(this.abilityProjectile != null && this.abilityProjectile.isEntityAlive()) {
+        if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
             this.abilityProjectile.setTime(20);
         }
         else {
@@ -218,10 +218,10 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
         // Create New Laser:
         if(this.abilityProjectile == null) {
             // Type:
-            if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof EntityLivingBase))
+            if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
                 return;
 
-            this.abilityProjectile = new EntityWaterJet(this.getEntityWorld(), (EntityLivingBase)this.getControllingPassenger(), 25, 20, this);
+            this.abilityProjectile = new EntityWaterJet(this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
             this.abilityProjectile.setOffset(0, 1, 1);
 
             // Launch:
@@ -239,8 +239,8 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof EntityLivingBase) {
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 5 * 20, 1));
+        if(entity != null && entity instanceof LivingEntity) {
+            ((LivingEntity)entity).addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

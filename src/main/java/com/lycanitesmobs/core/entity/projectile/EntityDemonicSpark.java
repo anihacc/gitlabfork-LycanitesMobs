@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ public class EntityDemonicSpark extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityDemonicSpark(World world, EntityLivingBase entityLivingBase) {
+    public EntityDemonicSpark(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 

@@ -16,7 +16,7 @@ import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -150,7 +150,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
     /** Returns true if the provided entity is within melee attack range and is considered large. This is used for when the vanilla attack range fails on big entities. **/
     public boolean canMeleeBigEntity(Entity targetEntity) {
-        if(targetEntity == null || !(targetEntity instanceof EntityLivingBase))
+        if(targetEntity == null || !(targetEntity instanceof LivingEntity))
             return false;
         float targetWidth = targetEntity.width;
         float targetHeight = targetEntity.height;

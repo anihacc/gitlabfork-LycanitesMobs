@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -175,8 +175,8 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 	public void specialAttack() {
 		// Petrifying Caw:
 		double distance = 5.0D;
-		List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
-				if(!possibleTarget.isEntityAlive()
+		List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+				if(!possibleTarget.isAlive()
 						|| possibleTarget == EntityCockatrice.this
 						|| EntityCockatrice.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityCockatrice.this.isOnSameTeam(possibleTarget)
@@ -186,7 +186,7 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 			return true;
 		});
 		if(!possibleTargets.isEmpty()) {
-			for(EntityLivingBase possibleTarget : possibleTargets) {
+			for(LivingEntity possibleTarget : possibleTargets) {
 				boolean doDamage = true;
 				if(this.getRider() instanceof PlayerEntity) {
 					if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {

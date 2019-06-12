@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -52,9 +52,9 @@ public class ItemScepterLifeDrain extends ItemScepter {
 	//                      Attack
 	// ==================================================
     @Override
-    public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
+    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
     	if(!world.isRemote) {
-    		if(this.projectileTarget != null && this.projectileTarget.isEntityAlive()) {
+    		if(this.projectileTarget != null && this.projectileTarget.isAlive()) {
     			projectileTarget.setTime(20);
     		}
     		else {

@@ -3,17 +3,17 @@ package com.lycanitesmobs.core.entity.ai;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityOwnable;
 
 public class EntityAITargetDefend extends EntityAITarget {
 	/** The entity class to defend. **/
-	protected Class<? extends EntityLivingBase> defendClass;
+	protected Class<? extends LivingEntity> defendClass;
 
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetDefend(EntityCreatureBase setHost, Class<? extends EntityLivingBase> defendClass) {
+    public EntityAITargetDefend(EntityCreatureBase setHost, Class<? extends LivingEntity> defendClass) {
         super(setHost);
         this.setMutexBits(1);
         this.defendClass = defendClass;
@@ -43,12 +43,12 @@ public class EntityAITargetDefend extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() {
+    protected LivingEntity getTarget() {
     	return this.host.getAttackTarget();
     }
 
     @Override
-    protected void setTarget(EntityLivingBase newTarget) {
+    protected void setTarget(LivingEntity newTarget) {
     	this.host.setAttackTarget(newTarget);
     }
     
@@ -57,7 +57,7 @@ public class EntityAITargetDefend extends EntityAITarget {
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
 
 		// Owner Check:
 		if(this.host.getOwner() != null) {
@@ -65,7 +65,7 @@ public class EntityAITargetDefend extends EntityAITarget {
 		}
 
 		// Has Target Check:
-		EntityLivingBase targetTarget = target.getRevengeTarget();
+		LivingEntity targetTarget = target.getRevengeTarget();
 		if(target instanceof EntityCreature) {
 			targetTarget = ((EntityCreature)target).getAttackTarget();
 		}

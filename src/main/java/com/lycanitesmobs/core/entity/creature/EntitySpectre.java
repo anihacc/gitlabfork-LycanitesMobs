@@ -6,7 +6,7 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -103,7 +103,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
 			}
 			this.pullEnergy = Math.min(this.pullEnergy, this.pullEnergyMax);
 			if(this.canPull()) {
-				for (EntityLivingBase entity : this.getNearbyEntities(EntityLivingBase.class, null, this.pullRange)) {
+				for (LivingEntity entity : this.getNearbyEntities(LivingEntity.class, null, this.pullRange)) {
 					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entity))
 						continue;
 					PlayerEntityMP player = null;
@@ -181,9 +181,9 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

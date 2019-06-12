@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.IAnimals;
@@ -16,7 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals, IGroupAlpha {
@@ -78,7 +77,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
    	// ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public void setAttackTarget(EntityLivingBase entity) {
+    public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
     		this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 10 * 20, 2, false, true));
@@ -91,10 +90,10 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus"))
     		return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
     
     

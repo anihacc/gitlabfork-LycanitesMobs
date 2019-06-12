@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -60,12 +60,12 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
 		if(target == null || attacker == null) {
 			return;
 		}
 
-		EntityLivingBase effectTarget = target;
+		LivingEntity effectTarget = target;
 		if("self".equalsIgnoreCase(this.effectTarget)) {
 			effectTarget = attacker;
 		}

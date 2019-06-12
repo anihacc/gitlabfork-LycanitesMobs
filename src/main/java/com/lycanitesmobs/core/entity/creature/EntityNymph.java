@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
@@ -71,9 +71,9 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 			// Healing Aura:
 			if(this.healingRate > 0 && !this.isPetType("familiar")) {
 				if (this.updateTick % this.healingRate == 0) {
-					List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 					for (Object entityObj : aoeTargets) {
-						EntityLivingBase target = (EntityLivingBase) entityObj;
+						LivingEntity target = (LivingEntity) entityObj;
 						if (target != this && !(target instanceof EntityNymph) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
 							target.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 3 * 20, 0));
 						}

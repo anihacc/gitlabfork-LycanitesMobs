@@ -104,9 +104,9 @@ public class EntityReaper extends EntityCreatureTameable implements IMob, IGroup
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
 
     /** Returns true if this mob should be damaged by the sun. **/

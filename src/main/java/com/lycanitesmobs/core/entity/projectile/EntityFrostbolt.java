@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -22,7 +22,7 @@ public class EntityFrostbolt extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityFrostbolt(World world, EntityLivingBase entityLivingBase) {
+    public EntityFrostbolt(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -45,7 +45,7 @@ public class EntityFrostbolt extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
         entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(8), 0));
     	return true;
     }

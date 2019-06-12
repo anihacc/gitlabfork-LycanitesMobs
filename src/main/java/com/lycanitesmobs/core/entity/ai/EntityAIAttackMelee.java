@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.MathHelper;
 public class EntityAIAttackMelee extends EntityAIBase {
 	// Targets:
 	private EntityCreatureBase host;
-    private EntityLivingBase attackTarget;
+    private LivingEntity attackTarget;
     private Path pathToTarget;
     
     // Properties:
@@ -86,7 +86,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
         attackTarget = this.host.getAttackTarget();
         if(attackTarget == null)
             return false;
-        if(!attackTarget.isEntityAlive())
+        if(!attackTarget.isAlive())
             return false;
         if(this.host.getDistance(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
         	return false;
@@ -124,7 +124,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
         this.attackTarget = this.host.getAttackTarget();
         if(this.attackTarget == null)
         	return false;
-        if(!this.host.isEntityAlive() || !attackTarget.isEntityAlive())
+        if(!this.host.isAlive() || !attackTarget.isAlive())
         	return false;
         if(this.host.getDistance(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
         	return false;
@@ -165,7 +165,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
  	//                       Update
  	// ==================================================
     public void updateTask() {
-        EntityLivingBase attackTarget = this.host.getAttackTarget();
+        LivingEntity attackTarget = this.host.getAttackTarget();
         this.host.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 
 		// Path To Target:
@@ -222,7 +222,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
 	 * @param attackTarget The entity to attack.
 	 * @return The maximum attack range.
 	 */
-	protected double getAttackRange(EntityLivingBase attackTarget) {
+	protected double getAttackRange(LivingEntity attackTarget) {
 		double range = this.host.getMeleeAttackRange();
 		range += this.attackRange + attackTarget.width;
 		return range;

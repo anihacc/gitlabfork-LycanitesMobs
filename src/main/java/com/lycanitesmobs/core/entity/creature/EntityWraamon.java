@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
@@ -81,9 +81,9 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
     public boolean attackMelee(Entity target, double damageScale) {
         // Disable Knockback:
         double targetKnockbackResistance = 0;
-        if(target instanceof EntityLivingBase) {
-            targetKnockbackResistance = ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-            ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        if(target instanceof LivingEntity) {
+            targetKnockbackResistance = ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         }
 
         // Melee Attack:
@@ -91,8 +91,8 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
     		return false;
 
         // Restore Knockback:
-        if(target instanceof EntityLivingBase)
-            ((EntityLivingBase)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+        if(target instanceof LivingEntity)
+            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
         
         return true;
     }
@@ -116,10 +116,10 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
   	//                     Immunities
   	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall"))
             return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

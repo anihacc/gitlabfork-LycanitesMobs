@@ -10,7 +10,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityBanshee extends EntityCreatureTameable implements IMob, IGroupShadow {
@@ -132,9 +131,9 @@ public class EntityBanshee extends EntityCreatureTameable implements IMob, IGrou
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

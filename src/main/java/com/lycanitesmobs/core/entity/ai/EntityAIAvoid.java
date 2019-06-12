@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.Vec3d;
@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAIAvoid extends EntityAIBase {
     // Targets:
     private EntityCreatureBase host;
-    private EntityLivingBase avoidTarget;
+    private LivingEntity avoidTarget;
     
     // Properties:
     private double farSpeed = 1.0D;
@@ -63,7 +63,7 @@ public class EntityAIAvoid extends EntityAIBase {
         	return false;
         }
     	
-        if(!this.avoidTarget.isEntityAlive())
+        if(!this.avoidTarget.isAlive())
             return false;
     	
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.avoidTarget.getClass()))

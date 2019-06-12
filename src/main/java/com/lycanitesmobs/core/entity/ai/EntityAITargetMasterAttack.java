@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAITargetMasterAttack extends EntityAIBase {
@@ -35,7 +35,7 @@ public class EntityAITargetMasterAttack extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
     	if(this.host.getAttackTarget() != null) {
-    		if(!this.host.getAttackTarget().isEntityAlive())
+    		if(!this.host.getAttackTarget().isAlive())
     			return false;
     	}
     	if(this.host.getMasterAttackTarget() == null)
@@ -50,7 +50,7 @@ public class EntityAITargetMasterAttack extends EntityAIBase {
     @Override
     public void updateTask() {
     	if(this.host.getAttackTarget() == null) {
-    		EntityLivingBase target = this.host.getMasterAttackTarget();
+    		LivingEntity target = this.host.getMasterAttackTarget();
     		if(isTargetValid(target))
     			this.host.setAttackTarget(target);
     	}
@@ -60,9 +60,9 @@ public class EntityAITargetMasterAttack extends EntityAIBase {
     // ==================================================
   	//                    Valid Target
   	// ==================================================
-    private boolean isTargetValid(EntityLivingBase target) {
+    private boolean isTargetValid(LivingEntity target) {
     	if(target == null) return false;
-    	if(!target.isEntityAlive()) return false;
+    	if(!target.isAlive()) return false;
 		if(target == this.host) return false;
 		if(!this.host.canAttackClass(target.getClass()))
             return false;

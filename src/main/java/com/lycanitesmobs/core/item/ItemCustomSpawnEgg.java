@@ -17,7 +17,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -151,7 +151,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
                 d0 = 0.5D;
             }
 
-			EntityLivingBase entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
+			LivingEntity entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
 	        if(entity != null) {
 	            if(itemStack.hasDisplayName()) {
 					entity.setCustomNameTag(itemStack.getDisplayName());
@@ -193,7 +193,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 					}
 
 					if (world.getBlockState(pos).getMaterial() == Material.WATER) {
-						EntityLivingBase entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+						LivingEntity entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
 						if (entity != null)
 							if (itemStack.hasDisplayName()) {
 								entity.setCustomNameTag(itemStack.getDisplayName());
@@ -281,13 +281,13 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	 * @param z Z spawn coordinate.
 	 * @return The spawned entity instance.
 	 */
-	public EntityLivingBase spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
+	public LivingEntity spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo == null) {
 			return null;
 		}
 
-		EntityLivingBase entity = creatureInfo.createEntity(world);
+		LivingEntity entity = creatureInfo.createEntity(world);
 		if(entity != null) {
 			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
 			entity.rotationYawHead = entity.rotationYaw;

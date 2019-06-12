@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -122,15 +121,15 @@ public class ElementInfo {
 	 * @param duration The duration of the buffs. If 0 or below, no debuff is applied.
 	 * @param amplifier The amplifier of the buffs. If 0 or below, no debuff is applied.
 	 */
-	public void buffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
+	public void buffEntity(LivingEntity targetEntity, int duration, int amplifier) {
 		if(duration <= 0 || amplifier < 0) {
 			return;
 		}
 		duration = Math.round((float)duration * (float)this.buffDurationMultiplier);
 		for(String buff : this.buffs) {
-			Potion potion = GameRegistry.findRegistry(Potion.class).getValue(new ResourceLocation(buff));
-			if(potion != null) {
-				targetEntity.addPotionEffect(new PotionEffect(potion, duration, amplifier));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(buff));
+			if(effect != null) {
+				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 			}
 		}
 	}
@@ -142,7 +141,7 @@ public class ElementInfo {
 	 * @param duration The duration (in seconds) of the debuffs. If 0 or below, no debuff is applied.
 	 * @param amplifier The amplifier of the debuffs. If 0 or below, no debuff is applied.
 	 */
-	public void debuffEntity(EntityLivingBase targetEntity, int duration, int amplifier) {
+	public void debuffEntity(LivingEntity targetEntity, int duration, int amplifier) {
 		if(duration <= 0 || amplifier < 0) {
 			return;
 		}
@@ -152,9 +151,9 @@ public class ElementInfo {
 				targetEntity.setFire(duration / 20);
 				continue;
 			}
-			Potion potion = GameRegistry.findRegistry(Potion.class).getValue(new ResourceLocation(debuff));
-			if(potion != null) {
-				targetEntity.addPotionEffect(new PotionEffect(potion, duration, amplifier));
+			Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(debuff));
+			if(effect != null) {
+				targetEntity.addPotionEffect(new EffectInstance(effect, duration, amplifier));
 			}
 		}
 	}
@@ -165,7 +164,7 @@ public class ElementInfo {
 	 * @param effect The effect to check.
 	 * @return True if the effect can be applied.
 	 */
-	public boolean isEffectApplicable(PotionEffect effect) {
+	public boolean isEffectApplicable(EffectInstance effect) {
 		if(effect == null || effect.getPotion() == null || effect.getPotion().getRegistryName() == null) {
 			return false;
 		}

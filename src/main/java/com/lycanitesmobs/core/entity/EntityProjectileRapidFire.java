@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.ResourceLocation;
@@ -14,7 +14,7 @@ import java.lang.reflect.Constructor;
 
 public class EntityProjectileRapidFire extends EntityProjectileBase {
 	// Properties:
-	public EntityLivingBase shootingEntity;
+	public LivingEntity shootingEntity;
 	private float projectileWidth = 0.2f;
 	private float projectileHeight = 0.2f;
 	
@@ -50,7 +50,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
         this.noClip = true;
     }
 
-    public EntityProjectileRapidFire(Class entityClass, World world, EntityLivingBase entityLivingBase, int setTime, int setDelay) {
+    public EntityProjectileRapidFire(Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
         super(world, entityLivingBase);
         this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
@@ -72,7 +72,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 		this.noClip = true;
 	}
 
-	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, EntityLivingBase entityLivingBase, int setTime, int setDelay) {
+	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
 		super(world, entityLivingBase);
 		this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
@@ -150,7 +150,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 					projectile.shoot(this.motionX, this.motionY, this.motionZ, (float)this.projectileInfo.velocity, 0);
 				}
 	        	else {
-					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, EntityLivingBase.class});
+					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, LivingEntity.class});
 					constructor.setAccessible(true);
 					projectile = (IProjectile) constructor.newInstance(new Object[]{world, this.shootingEntity});
 					projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);

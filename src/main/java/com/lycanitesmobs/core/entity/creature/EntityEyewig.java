@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityVillager;
@@ -69,7 +69,7 @@ public class EntityEyewig extends EntityCreatureRideable {
     //                      Updates
     // ==================================================
 	// ========== Rider Effects ==========
-	public void riderEffects(EntityLivingBase rider) {
+	public void riderEffects(LivingEntity rider) {
     	if(rider.isPotionActive(MobEffects.POISON))
     		rider.removePotionEffect(MobEffects.POISON);
     	if(rider.isPotionActive(MobEffects.BLINDNESS))
@@ -102,7 +102,7 @@ public class EntityEyewig extends EntityCreatureRideable {
             this.setAttackTarget(null);
 
     	// Update Laser:
-    	if(this.abilityProjectile != null && this.abilityProjectile.isEntityAlive()) {
+    	if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
     		this.abilityProjectile.setTime(20);
     	}
     	else {
@@ -112,10 +112,10 @@ public class EntityEyewig extends EntityCreatureRideable {
     	// Create New Laser:
     	if(this.abilityProjectile == null) {
 	    	// Type:
-    		if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof EntityLivingBase))
+    		if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
     			return;
     		
-    		this.abilityProjectile = new EntityPoisonRay(this.getEntityWorld(), (EntityLivingBase)this.getControllingPassenger(), 25, 20, this);
+    		this.abilityProjectile = new EntityPoisonRay(this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
     		this.abilityProjectile.setOffset(0, 0.5F, 0);
 	    	
 	    	// Launch:
@@ -138,7 +138,7 @@ public class EntityEyewig extends EntityCreatureRideable {
     @Override
     public void attackRanged(Entity target, float range) {
     	// Update Laser:
-    	if(this.projectile != null && this.projectile.isEntityAlive()) {
+    	if(this.projectile != null && this.projectile.isAlive()) {
     		this.projectile.setTime(20);
     	}
     	else {

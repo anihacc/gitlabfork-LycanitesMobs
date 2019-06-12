@@ -270,7 +270,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
     @Override
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
     	super.readEntityFromNBT(nbtTagCompound);
-    	if(nbtTagCompound.hasKey("HasFur")) {
+    	if(nbtTagCompound.contains("HasFur")) {
     		this.setFur(nbtTagCompound.getBoolean("HasFur"));
     	}
     }
@@ -280,6 +280,6 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
     	super.writeEntityToNBT(nbtTagCompound);
-    	nbtTagCompound.setBoolean("HasFur", this.hasFur());
+    	nbtTagCompound.putBoolean("HasFur", this.hasFur());
     }
 }

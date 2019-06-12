@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.stats.StatBase;
@@ -512,7 +512,7 @@ public class CreatureInfo {
 	 * @param rare If true, there will be much higher odds of a subspecies being picked.
 	 * @return A Subspecies or null if using the base species.
 	 */
-	public Subspecies getRandomSubspecies(EntityLivingBase entity, boolean rare) {
+	public Subspecies getRandomSubspecies(LivingEntity entity, boolean rare) {
 		LycanitesMobs.printDebug("Subspecies", "~0===== Subspecies =====0~");
 		LycanitesMobs.printDebug("Subspecies", "Selecting random subspecies for: " + entity);
 		if(rare) {
@@ -587,7 +587,7 @@ public class CreatureInfo {
 		return null;
 	}
 
-	public Subspecies getRandomSubspecies(EntityLivingBase entity) {
+	public Subspecies getRandomSubspecies(LivingEntity entity) {
 		return this.getRandomSubspecies(entity, false);
 	}
 
@@ -598,7 +598,7 @@ public class CreatureInfo {
 	 * @param partnerSubspecies The subspecies of the partner. Null if the partner is default.
 	 * @return
 	 */
-	public Subspecies getChildSubspecies(EntityLivingBase entity, int hostSubspeciesIndex, Subspecies partnerSubspecies) {
+	public Subspecies getChildSubspecies(LivingEntity entity, int hostSubspeciesIndex, Subspecies partnerSubspecies) {
 		Subspecies hostSubspecies = this.getSubspecies(hostSubspeciesIndex);
 		int partnerSubspeciesIndex = (partnerSubspecies != null ? partnerSubspecies.index : 0);
 		if(hostSubspeciesIndex == partnerSubspeciesIndex)

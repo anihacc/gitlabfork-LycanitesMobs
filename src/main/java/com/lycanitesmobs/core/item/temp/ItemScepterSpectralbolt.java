@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public class ItemScepterSpectralbolt extends ItemScepter {
 	//                      Attack
 	// ==================================================
     @Override
-    public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
+    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
     	if(!world.isRemote) {
     		EntitySpectralbolt projectile = new EntitySpectralbolt(world, entity);
         	world.spawnEntity(projectile);

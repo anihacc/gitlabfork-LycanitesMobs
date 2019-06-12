@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.IMob;
@@ -147,21 +147,21 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
    	// ==================================================
 	// ========== Damage ==========
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
 		if(source.isExplosion()) {
 			this.heal(damage);
 			return false;
 		}
     	if(type.equals("cactus") || type.equals("inWall")) return false;
-    	    return super.isDamageTypeApplicable(type, source, damage);
+    	    return super.isInvulnerableTo(type, source, damage);
     }
 
 	@Override
-	public boolean isDamageEntityApplicable(Entity entity) {
+	public boolean isInvulnerableTo(Entity entity) {
 		if(entity instanceof EntityWither) {
 			return false;
 		}
-		return super.isDamageEntityApplicable(entity);
+		return super.isInvulnerableTo(entity);
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
     public boolean canBurn() { return false; }
 
     @Override
-	public boolean canBeTargetedBy(EntityLivingBase entity) {
+	public boolean canBeTargetedBy(LivingEntity entity) {
     	if(entity instanceof EntityWither) {
     		return false;
 		}

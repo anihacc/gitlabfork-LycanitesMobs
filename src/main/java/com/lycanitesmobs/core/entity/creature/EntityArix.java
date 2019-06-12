@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -182,9 +181,9 @@ public class EntityArix extends EntityCreatureTameable implements IMob, IGroupIc
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("ooze")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

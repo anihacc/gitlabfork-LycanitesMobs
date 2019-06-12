@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.spawner.MobSpawn;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -99,7 +99,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
 		if(target == null || attacker == null || attacker.getEntityWorld().isRemote) {
 			return;
 		}

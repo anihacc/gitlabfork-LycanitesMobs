@@ -4,7 +4,7 @@ import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -68,7 +68,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
                     this.detonateTimer = 0;
                 }
                 else {
-                    for (EntityLivingBase entity : this.getNearbyEntities(EntityLivingBase.class, null, 1)) {
+                    for (LivingEntity entity : this.getNearbyEntities(LivingEntity.class, null, 1)) {
                         if (this.getPlayerOwner() != null && entity == this.getPlayerOwner())
                             continue;
                         if (entity instanceof EntityCreatureTameable) {
@@ -165,8 +165,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readEntityFromNBT(nbtTagCompound);
-		if(nbtTagCompound.hasKey("DetonateTimer")) {
-			this.detonateTimer = nbtTagCompound.getInteger("DetonateTimer");
+		if(nbtTagCompound.contains("DetonateTimer")) {
+			this.detonateTimer = nbtTagCompound.getInt("DetonateTimer");
 		}
 	}
 
@@ -175,7 +175,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeEntityToNBT(nbtTagCompound);
 		if(this.detonateTimer > -1) {
-			nbtTagCompound.setInteger("DetonateTimer", this.detonateTimer);
+			nbtTagCompound.putInt("DetonateTimer", this.detonateTimer);
 		}
 	}
 }

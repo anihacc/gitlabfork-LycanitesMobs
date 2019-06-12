@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAIChase extends EntityAIBase {
 	// Targets:
     private EntityCreatureBase host;
-    private EntityLivingBase target;
+    private LivingEntity target;
     
     // Properties:
     private double speed = 1.0D;
@@ -64,7 +64,7 @@ public class EntityAIChase extends EntityAIBase {
  	//                 Continue Executing
  	// ==================================================
     public boolean shouldContinueExecuting() {
-		if (!this.host.isEntityAlive()) {
+		if (!this.host.isAlive()) {
 			return false;
 		}
 		boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.target;

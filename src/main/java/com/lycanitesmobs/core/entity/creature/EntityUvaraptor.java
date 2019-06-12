@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
@@ -97,7 +97,7 @@ public class EntityUvaraptor extends EntityCreatureRideable implements IGroupPre
         }
     }
     
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
     	if(rider.isPotionActive(MobEffects.POISON))
     		rider.removePotionEffect(MobEffects.POISON);
     	if(rider.isPotionActive(MobEffects.SLOWNESS))

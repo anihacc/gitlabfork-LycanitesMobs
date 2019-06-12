@@ -202,43 +202,43 @@ public class SummonSet {
    	// ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-		if(nbtTagCompound.hasKey("SummonType"))
+		if(nbtTagCompound.contains("SummonType"))
     		this.setSummonType(nbtTagCompound.getString("SummonType"));
 
-		if(nbtTagCompound.hasKey("Subspecies"))
-			this.setSubspecies(nbtTagCompound.getInteger("Subspecies"));
+		if(nbtTagCompound.contains("Subspecies"))
+			this.setSubspecies(nbtTagCompound.getInt("Subspecies"));
     	
-    	if(nbtTagCompound.hasKey("Sitting"))
+    	if(nbtTagCompound.contains("Sitting"))
     		this.sitting = nbtTagCompound.getBoolean("Sitting");
     	
-    	if(nbtTagCompound.hasKey("Following"))
+    	if(nbtTagCompound.contains("Following"))
     		this.following = nbtTagCompound.getBoolean("Following");
     	
-    	if(nbtTagCompound.hasKey("Passive"))
+    	if(nbtTagCompound.contains("Passive"))
     		this.passive = nbtTagCompound.getBoolean("Passive");
     	
-    	if(nbtTagCompound.hasKey("Aggressive"))
+    	if(nbtTagCompound.contains("Aggressive"))
     		this.aggressive = nbtTagCompound.getBoolean("Aggressive");
     	
-    	if(nbtTagCompound.hasKey("PVP"))
+    	if(nbtTagCompound.contains("PVP"))
     		this.pvp = nbtTagCompound.getBoolean("PVP");
     }
     
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
-		nbtTagCompound.setString("SummonType", this.summonType);
+		nbtTagCompound.putString("SummonType", this.summonType);
 
-		nbtTagCompound.setInteger("Subspecies", this.getSubspecies());
+		nbtTagCompound.putInt("Subspecies", this.getSubspecies());
     	
-    	nbtTagCompound.setBoolean("Sitting", this.sitting);
+    	nbtTagCompound.putBoolean("Sitting", this.sitting);
     	
-    	nbtTagCompound.setBoolean("Following", this.following);
+    	nbtTagCompound.putBoolean("Following", this.following);
     	
-    	nbtTagCompound.setBoolean("Passive", this.passive);
+    	nbtTagCompound.putBoolean("Passive", this.passive);
     	
-    	nbtTagCompound.setBoolean("Aggressive", this.aggressive);
+    	nbtTagCompound.putBoolean("Aggressive", this.aggressive);
     	
-    	nbtTagCompound.setBoolean("PVP", this.pvp);
+    	nbtTagCompound.putBoolean("PVP", this.pvp);
     }
 }

@@ -1,7 +1,7 @@
 package com.lycanitesmobs;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
@@ -17,9 +17,9 @@ public class ClientEventListener {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
-        if(!(event.getEntity() instanceof EntityLivingBase))
+        if(!(event.getEntity() instanceof LivingEntity))
             return;
-        EntityLivingBase entityLiving = (EntityLivingBase)event.getEntity();
+        LivingEntity entityLiving = (LivingEntity)event.getEntity();
         if(event.getState().getMaterial() == Material.LAVA && (!event.getEntity().isBurning() || entityLiving.isPotionActive(MobEffects.FIRE_RESISTANCE))) {
             event.setDensity(0.5F);
             event.setCanceled(true);

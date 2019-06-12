@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.entity;
 
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityItemCustom extends EntityItem {
+public class EntityItemCustom extends ItemEntity {
 	
 	// ==================================================
    	//                     Constructor

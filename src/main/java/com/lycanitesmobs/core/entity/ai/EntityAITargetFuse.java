@@ -4,7 +4,7 @@ import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityAITargetFuse extends EntityAITarget {
 	// Targets:
@@ -66,14 +66,14 @@ public class EntityAITargetFuse extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() {
+    protected LivingEntity getTarget() {
     	if(this.host instanceof IFusable) {
-			return (EntityLivingBase) ((IFusable) this.host).getFusionTarget();
+			return (LivingEntity) ((IFusable) this.host).getFusionTarget();
 		}
     	return null;
     }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) {
+    protected void setTarget(LivingEntity newTarget) {
 		if(this.host instanceof IFusable && newTarget instanceof IFusable) {
 			((IFusable)this.host).setFusionTarget((IFusable)newTarget);
 		}
@@ -84,7 +84,7 @@ public class EntityAITargetFuse extends EntityAITarget {
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
         // Target Class Check:
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
@@ -128,7 +128,7 @@ public class EntityAITargetFuse extends EntityAITarget {
 		}
 
         // Check for other fusion target:
-        EntityLivingBase fuseTarget = this.getTarget();
+        LivingEntity fuseTarget = this.getTarget();
         if(fuseTarget != null && !this.isValidTarget(fuseTarget)) {
             return false;
         }

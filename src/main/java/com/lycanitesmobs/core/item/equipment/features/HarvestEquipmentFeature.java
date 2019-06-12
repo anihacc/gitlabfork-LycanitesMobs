@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -184,7 +184,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param pos The position of the destroyed block.
 	 * @param entityLiving The entity that destroyed the block.
 	 */
-	public void onBlockDestroyed(World world, BlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	public void onBlockDestroyed(World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving)
 	{
 		LycanitesMobs.printWarning("", "Area Harvesting! " + this.harvestRange);
 		// Block and Random Area Harvesting:

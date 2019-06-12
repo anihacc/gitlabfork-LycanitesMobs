@@ -136,9 +136,9 @@ public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, 
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-            return super.isDamageTypeApplicable(type, source, damage);
+            return super.isInvulnerableTo(type, source, damage);
     }
     
     @Override

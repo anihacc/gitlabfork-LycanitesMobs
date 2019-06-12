@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.ObjectLists;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -32,7 +32,7 @@ public class EntityDevilGatling extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityDevilGatling(World world, EntityLivingBase entityLivingBase) {
+    public EntityDevilGatling(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -79,7 +79,7 @@ public class EntityDevilGatling extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
+    public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
     	super.onDamage(target, damage, attackSuccess);
 
         // Remove Buffs:

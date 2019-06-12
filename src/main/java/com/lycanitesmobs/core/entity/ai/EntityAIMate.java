@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
@@ -66,7 +66,7 @@ public class EntityAIMate extends EntityAIBase {
   	//                Continue Executing
   	// ==================================================
     public boolean shouldContinueExecuting() {
-        return this.partner != null && this.partner.isEntityAlive() && this.partner.isInLove() && this.mateTime < mateTimeMax;
+        return this.partner != null && this.partner.isAlive() && this.partner.isInLove() && this.mateTime < mateTimeMax;
     }
     
     
@@ -106,7 +106,7 @@ public class EntityAIMate extends EntityAIBase {
         Iterator possibleMate = possibleMates.iterator();
         
         while(possibleMate.hasNext())  {
-        	EntityLivingBase nextEntity = (EntityLivingBase)possibleMate.next();
+        	LivingEntity nextEntity = (LivingEntity)possibleMate.next();
         	if(nextEntity instanceof EntityCreatureAgeable) {
 	        	EntityCreatureAgeable testMate = (EntityCreatureAgeable)nextEntity;
 	            if(this.host.canBreedWith(testMate) && this.host.getDistance(testMate) < closestDistance) {

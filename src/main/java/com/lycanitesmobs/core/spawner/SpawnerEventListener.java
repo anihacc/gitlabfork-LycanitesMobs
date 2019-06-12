@@ -3,10 +3,11 @@ package com.lycanitesmobs.core.spawner;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -212,7 +213,7 @@ public class SpawnerEventListener {
 	/** This uses the player update events to update Tick Spawn Triggers. **/
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null || !(entity instanceof PlayerEntity) || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		
@@ -241,7 +242,7 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onEntityDeath(LivingDeathEvent event) {
 		// Get Killed:
-		EntityLivingBase killedEntity = event.getEntityLiving();
+		LivingEntity killedEntity = event.getEntityLiving();
 		if(killedEntity == null || killedEntity.getEntityWorld() == null || killedEntity.getEntityWorld().isRemote || event.isCanceled() || !(killedEntity instanceof EntityLiving)) {
 			return;
 		}
@@ -266,7 +267,7 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onEntitySpawn(LivingSpawnEvent event) {
 		// Get Spawned:
-		EntityLivingBase spawnedEntity = event.getEntityLiving();
+		LivingEntity spawnedEntity = event.getEntityLiving();
 		if(spawnedEntity == null || spawnedEntity.getEntityWorld() == null || spawnedEntity.getEntityWorld().isRemote || event.isCanceled() || !(spawnedEntity instanceof EntityLiving)) {
 			return;
 		}

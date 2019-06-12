@@ -8,7 +8,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -244,7 +244,7 @@ public class Subspecies {
 	 * Returns if this Subspecies is allowed to be used on the spawned entity.
 	 * @return True if this Subspecies is allowed.
 	 */
-	public boolean canSpawn(EntityLivingBase entityLiving) {
+	public boolean canSpawn(LivingEntity entityLiving) {
 		if(entityLiving != null) {
 			World world = entityLiving.getEntityWorld();
 

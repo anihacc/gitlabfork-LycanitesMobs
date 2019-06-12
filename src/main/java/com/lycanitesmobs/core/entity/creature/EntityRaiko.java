@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -159,7 +159,7 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.BLINDNESS))
             rider.removePotionEffect(MobEffects.BLINDNESS);
         if(rider.isPotionActive(ObjectManager.getEffect("weight")))
@@ -203,8 +203,8 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
     		return false;
 
         // Pickup:
-        if(target instanceof EntityLivingBase && this.getControllingPassenger() == null) {
-            EntityLivingBase entityLivingBase = (EntityLivingBase)target;
+        if(target instanceof LivingEntity && this.getControllingPassenger() == null) {
+            LivingEntity entityLivingBase = (LivingEntity)target;
             if (this.canPickupEntity(entityLivingBase)) {
                 this.pickupEntity(entityLivingBase);
             }
@@ -241,7 +241,7 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
     public boolean isStrongSwimmer() { return false; }
     
     @Override
-    public void pickupEntity(EntityLivingBase entity) {
+    public void pickupEntity(LivingEntity entity) {
     	super.pickupEntity(entity);
         if(this.getEntityWorld().getBlockState(this.getPosition()) != null && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
     	    this.leap(1.0F, 2.0D);
@@ -325,7 +325,7 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        EntityLivingBase nearestTarget = this.getNearestEntity(EntityLivingBase.class, null, 4, false);
+        LivingEntity nearestTarget = this.getNearestEntity(LivingEntity.class, null, 4, false);
         if(this.canPickupEntity(nearestTarget))
             this.pickupEntity(nearestTarget);
 

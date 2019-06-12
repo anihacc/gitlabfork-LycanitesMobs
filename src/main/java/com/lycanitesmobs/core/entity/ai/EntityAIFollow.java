@@ -66,7 +66,7 @@ public abstract class EntityAIFollow extends EntityAIBase {
     	Entity target = this.getTarget();
 	    if(target == null)
 	        return false;
-        if(!target.isEntityAlive())
+        if(!target.isAlive())
         	return false;
 
         double distance = this.host.getDistance(target);
@@ -86,7 +86,7 @@ public abstract class EntityAIFollow extends EntityAIBase {
     	Entity target = this.getTarget();
     	if(target == null)
     		return false;
-        if(!target.isEntityAlive())
+        if(!target.isAlive())
         	return false;
         
         double distance = this.host.getDistance(target);

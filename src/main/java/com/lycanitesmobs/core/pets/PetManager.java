@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.pets;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PetManager {
-	public EntityLivingBase host;
+	public LivingEntity host;
     /** The next ID to use when adding an entry to the main list. **/
     protected int nextID = 0;
     /** A list of all pet entries, useful for looking up everything summoned by an entity as well as ensuring that no entries are added as multiple types. **/
@@ -41,7 +41,7 @@ public class PetManager {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public PetManager(EntityLivingBase host) {
+	public PetManager(LivingEntity host) {
 		this.host = host;
 	}
 
@@ -250,7 +250,7 @@ public class PetManager {
     // ========== Read ===========
     /** Reads a list of Pet Entries from a player's NBTTag. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        if(!nbtTagCompound.hasKey("PetManager"))
+        if(!nbtTagCompound.contains("PetManager"))
             return;
         this.entryNBTs = new HashMap<String, NBTTagCompound>();
 

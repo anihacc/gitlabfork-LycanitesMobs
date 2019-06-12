@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -122,7 +122,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.WEAKNESS))
             rider.removePotionEffect(MobEffects.WEAKNESS);
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))

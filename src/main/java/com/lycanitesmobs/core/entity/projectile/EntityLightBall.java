@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -28,7 +28,7 @@ public class EntityLightBall extends EntityProjectileModel {
         super(world);
     }
 
-    public EntityLightBall(World world, EntityLivingBase entityLivingBase) {
+    public EntityLightBall(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
         this.shootingEntity = entityLivingBase;
     }
@@ -76,7 +76,7 @@ public class EntityLightBall extends EntityProjectileModel {
  	// ==================================================
 	//========== Entity Living Damage ==========
 	@Override
-	public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.GLOWING, this.getEffectDuration(20), 0));
 		return true;
 	}

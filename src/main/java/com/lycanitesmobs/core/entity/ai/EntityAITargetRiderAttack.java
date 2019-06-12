@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityAITargetRiderAttack extends EntityAITarget {
 	// Targets:
@@ -71,9 +71,9 @@ public class EntityAITargetRiderAttack extends EntityAITarget {
     // ==================================================
   	//                    Valid Target
   	// ==================================================
-    private boolean isTargetValid(EntityLivingBase target) {
+    private boolean isTargetValid(LivingEntity target) {
     	if(target == null) return false;
-    	if(!target.isEntityAlive()) return false;
+    	if(!target.isAlive()) return false;
 		if(target == this.host) return false;
 		if(!this.host.canAttackClass(target.getClass())) return false;
     	return true;
@@ -84,7 +84,7 @@ public class EntityAITargetRiderAttack extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
 }

@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -27,7 +27,7 @@ public class EntityIcefireball extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityIcefireball(World world, EntityLivingBase entityLivingBase) {
+    public EntityIcefireball(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -50,7 +50,7 @@ public class EntityIcefireball extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	return true;
     }
     

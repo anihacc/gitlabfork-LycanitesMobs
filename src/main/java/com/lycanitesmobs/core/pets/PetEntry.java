@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -46,7 +46,7 @@ public class PetEntry {
     public boolean spawningActive = true;
 
     /** The entity that this entry belongs to. **/
-    public EntityLivingBase host;
+    public LivingEntity host;
     /** The summon set to use when spawning, etc. **/
     public SummonSet summonSet;
     /** The current entity instance that this entry is using. **/
@@ -96,7 +96,7 @@ public class PetEntry {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public PetEntry(String name, String type, EntityLivingBase host, String summonType) {
+	public PetEntry(String name, String type, LivingEntity host, String summonType) {
         this.name = name;
         this.type = type;
         this.host = host;
@@ -137,7 +137,7 @@ public class PetEntry {
         return this;
     }
 
-    public PetEntry setOwner(EntityLivingBase owner) {
+    public PetEntry setOwner(LivingEntity owner) {
         this.host = owner;
         if(host != null && host instanceof PlayerEntity) {
             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer((PlayerEntity) host);
@@ -177,14 +177,14 @@ public class PetEntry {
     }
 
     public float getHealth() {
-        if(this.entity != null && this.entity instanceof EntityLivingBase)
-            this.entityHealth = ((EntityLivingBase)this.entity).getHealth();
+        if(this.entity != null && this.entity instanceof LivingEntity)
+            this.entityHealth = ((LivingEntity)this.entity).getHealth();
         return this.entityHealth;
     }
 
     public float getMaxHealth() {
-        if(this.entity != null && this.entity instanceof EntityLivingBase)
-            this.entityMaxHealth = ((EntityLivingBase)this.entity).getMaxHealth();
+        if(this.entity != null && this.entity instanceof LivingEntity)
+            this.entityMaxHealth = ((LivingEntity)this.entity).getMaxHealth();
         return this.entityMaxHealth;
     }
 
@@ -259,7 +259,7 @@ public class PetEntry {
         // Active Spawning:
         if(this.spawningActive) {
             // Dead Check:
-            if(this.entity != null && !this.entity.isEntityAlive()) {
+            if(this.entity != null && !this.entity.isAlive()) {
                 this.saveEntityNBT();
                 this.entity = null;
                 this.isRespawning = true;
@@ -295,8 +295,8 @@ public class PetEntry {
                     LycanitesMobs.printDebug("Pet", "Unable to teleport a pet.");
                 }
 
-                if(entity instanceof EntityLivingBase) {
-                    EntityLivingBase entityLiving = (EntityLivingBase)this.entity;
+                if(entity instanceof LivingEntity) {
+                    LivingEntity entityLiving = (LivingEntity)this.entity;
                     if(this.entityTick % 20 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth())
                         entityLiving.setHealth(Math.min(entityLiving.getHealth() + 1, entityLiving.getMaxHealth()));
                     this.entityHealth = entityLiving.getHealth();
@@ -417,8 +417,8 @@ public class PetEntry {
         this.spawnCount++;
 
         // Respawn with half health:
-        if(this.entity instanceof EntityLivingBase && this.isRespawning) {
-            EntityLivingBase entityLiving = (EntityLivingBase)this.entity;
+        if(this.entity instanceof LivingEntity && this.isRespawning) {
+            LivingEntity entityLiving = (LivingEntity)this.entity;
             entityLiving.setHealth(entityLiving.getMaxHealth() / 2);
         }
 
@@ -517,27 +517,27 @@ public class PetEntry {
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        if(nbtTagCompound.hasKey("Active"))
+        if(nbtTagCompound.contains("Active"))
             this.active = nbtTagCompound.getBoolean("Active");
-        if(nbtTagCompound.hasKey("RespawnTime"))
-            this.respawnTime = nbtTagCompound.getInteger("RespawnTime");
-        if(nbtTagCompound.hasKey("Respawning"))
+        if(nbtTagCompound.contains("RespawnTime"))
+            this.respawnTime = nbtTagCompound.getInt("RespawnTime");
+        if(nbtTagCompound.contains("Respawning"))
             this.isRespawning = nbtTagCompound.getBoolean("Respawning");
-        if(nbtTagCompound.hasKey("SpawningActive"))
+        if(nbtTagCompound.contains("SpawningActive"))
             this.spawningActive = nbtTagCompound.getBoolean("SpawningActive");
 
         this.summonSet.readFromNBT(nbtTagCompound);
 
         // Load Entity:
-        if(nbtTagCompound.hasKey("EntityName"))
+        if(nbtTagCompound.contains("EntityName"))
             this.setEntityName(nbtTagCompound.getString("EntityName"));
-        if(nbtTagCompound.hasKey("SubspeciesID"))
-            this.setEntitySubspeciesID(nbtTagCompound.getInteger("SubspeciesID"));
-        if(nbtTagCompound.hasKey("EntitySize"))
+        if(nbtTagCompound.contains("SubspeciesID"))
+            this.setEntitySubspeciesID(nbtTagCompound.getInt("SubspeciesID"));
+        if(nbtTagCompound.contains("EntitySize"))
             this.setEntitySize(nbtTagCompound.getDouble("EntitySize"));
-        if(nbtTagCompound.hasKey("Color"))
+        if(nbtTagCompound.contains("Color"))
             this.setColor(nbtTagCompound.getString("Color"));
-        if(nbtTagCompound.hasKey("EntityNBT"))
+        if(nbtTagCompound.contains("EntityNBT"))
             this.entityNBT = nbtTagCompound.getCompoundTag("EntityNBT");
     }
 
@@ -546,23 +546,23 @@ public class PetEntry {
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
         if(this.name == null || "".equals(this.name))
             return;
-        nbtTagCompound.setBoolean("Active", this.active);
-        nbtTagCompound.setInteger("RespawnTime", this.respawnTime);
-        nbtTagCompound.setBoolean("Respawning", this.isRespawning);
-        nbtTagCompound.setBoolean("SpawningActive", this.spawningActive);
+        nbtTagCompound.putBoolean("Active", this.active);
+        nbtTagCompound.putInt("RespawnTime", this.respawnTime);
+        nbtTagCompound.putBoolean("Respawning", this.isRespawning);
+        nbtTagCompound.putBoolean("SpawningActive", this.spawningActive);
 
-        nbtTagCompound.setInteger("ID", this.petEntryID);
-        nbtTagCompound.setString("EntryName", this.name);
-        nbtTagCompound.setString("Type", this.getType());
+        nbtTagCompound.putInt("ID", this.petEntryID);
+        nbtTagCompound.putString("EntryName", this.name);
+        nbtTagCompound.putString("Type", this.getType());
         this.summonSet.writeToNBT(nbtTagCompound);
 
         // Save Entity:
         if (this.usesSpirit()) {
             this.saveEntityNBT();
-            nbtTagCompound.setString("EntityName", this.entityName);
-            nbtTagCompound.setInteger("SubspeciesID", this.subspeciesID);
-            nbtTagCompound.setDouble("EntitySize", this.entitySize);
-            nbtTagCompound.setString("Color", this.color);
+            nbtTagCompound.putString("EntityName", this.entityName);
+            nbtTagCompound.putInt("SubspeciesID", this.subspeciesID);
+            nbtTagCompound.putDouble("EntitySize", this.entitySize);
+            nbtTagCompound.putString("Color", this.color);
             nbtTagCompound.setTag("EntityNBT", this.entityNBT);
         }
     }
@@ -582,10 +582,10 @@ public class PetEntry {
         if(this.entity instanceof EntityCreatureBase) {
             EntityCreatureBase entityCreatureBase = (EntityCreatureBase)this.entity;
 
-            entityCreatureBase.inventory.writeToNBT(this.entityNBT);
+            entityCreatureBase.inventory.write(this.entityNBT);
 
             NBTTagCompound extTagCompound = new NBTTagCompound();
-            entityCreatureBase.extraMobBehaviour.writeToNBT(extTagCompound);
+            entityCreatureBase.extraMobBehaviour.write(extTagCompound);
             this.entityNBT.setTag("ExtraBehaviour", extTagCompound);
 
             if(this.entity instanceof EntityCreatureAgeable) {
@@ -609,10 +609,10 @@ public class PetEntry {
         if(this.entity instanceof EntityCreatureBase) {
             EntityCreatureBase entityCreatureBase = (EntityCreatureBase)this.entity;
 
-            entityCreatureBase.inventory.readFromNBT(this.entityNBT);
+            entityCreatureBase.inventory.read(this.entityNBT);
 
             if(this.entityNBT.hasKey("ExtraBehaviour"))
-                entityCreatureBase.extraMobBehaviour.readFromNBT(this.entityNBT.getCompoundTag("ExtraBehaviour"));
+                entityCreatureBase.extraMobBehaviour.read(this.entityNBT.getCompoundTag("ExtraBehaviour"));
 
             if(this.entity instanceof EntityCreatureAgeable) {
                 EntityCreatureAgeable entityCreatureAgeable = (EntityCreatureAgeable)this.entity;

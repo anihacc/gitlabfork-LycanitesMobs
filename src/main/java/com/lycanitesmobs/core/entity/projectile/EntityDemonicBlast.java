@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -34,7 +34,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityDemonicBlast(World world, EntityLivingBase entityLivingBase) {
+    public EntityDemonicBlast(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -124,7 +124,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.WITHER, this.getEffectDuration(10), 0));
 		if(ObjectManager.getEffect("decay") != null) {
 			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));

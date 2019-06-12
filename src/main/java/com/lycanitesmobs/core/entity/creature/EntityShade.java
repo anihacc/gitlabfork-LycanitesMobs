@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.PlayerEntity;
@@ -147,8 +147,8 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
     public void specialAttack() {
         // Horrific Howl:
         double distance = 5.0D;
-        List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
-			if(!possibleTarget.isEntityAlive()
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+			if(!possibleTarget.isAlive()
 					|| possibleTarget == EntityShade.this
 					|| EntityShade.this.isRidingOrBeingRiddenBy(possibleTarget)
 					|| EntityShade.this.isOnSameTeam(possibleTarget)
@@ -158,7 +158,7 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
 			return true;
 		});
         if(!possibleTargets.isEmpty()) {
-            for(EntityLivingBase possibleTarget : possibleTargets) {
+            for(LivingEntity possibleTarget : possibleTargets) {
                 boolean doDamage = true;
                 if(this.getRider() instanceof PlayerEntity) {
                     if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
@@ -203,9 +203,9 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
 
     @Override

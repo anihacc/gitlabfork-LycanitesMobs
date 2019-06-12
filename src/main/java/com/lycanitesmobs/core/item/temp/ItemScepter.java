@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -30,7 +30,7 @@ public class ItemScepter extends ItemBase {
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)
-            public float apply(ItemStack itemStack, World world, EntityLivingBase entity) {
+            public float apply(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }
         });
@@ -51,7 +51,7 @@ public class ItemScepter extends ItemBase {
 	// ==================================================
     // ========== Prevent Swing ==========
     @Override
-    public boolean onEntitySwing(EntityLivingBase entity, ItemStack itemStack) {
+    public boolean onEntitySwing(LivingEntity entity, ItemStack itemStack) {
         if(entity instanceof PlayerEntity) {
             entity.setActiveHand(EnumHand.MAIN_HAND);
             return true;
@@ -82,7 +82,7 @@ public class ItemScepter extends ItemBase {
     // ========== Using ==========
     // Was onUsingItemTick() but acted weird, using the EventListener to replicate.
     @Override
-    public void onUsingTick(ItemStack itemStack, EntityLivingBase entity, int useRemaining) {
+    public void onUsingTick(ItemStack itemStack, LivingEntity entity, int useRemaining) {
     	if(itemStack == null || entity == null || entity.getEntityWorld() == null)
     		return;
     	int useTime = this.getMaxItemUseDuration(itemStack) - useRemaining;
@@ -103,7 +103,7 @@ public class ItemScepter extends ItemBase {
     
     // ========== Stop ==========
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
     	int useTime = this.getMaxItemUseDuration(stack) - timeLeft;
     	float power = (float)useTime / (float)this.getChargeTime(stack);
     	
@@ -127,11 +127,11 @@ public class ItemScepter extends ItemBase {
     }
 
     // ========== Durability ==========
-    public void damageItemRapid(ItemStack itemStack, EntityLivingBase entity) {
+    public void damageItemRapid(ItemStack itemStack, LivingEntity entity) {
         itemStack.damageItem(1, entity);
     }
     
-    public void damageItemCharged(ItemStack itemStack, EntityLivingBase entity, float power) {
+    public void damageItemCharged(ItemStack itemStack, LivingEntity entity, float power) {
     	itemStack.damageItem(Math.max((int)power, 1), entity);
     }
     
@@ -159,7 +159,7 @@ public class ItemScepter extends ItemBase {
 	// ==================================================
 	//                      Attack
 	// ==================================================
-    public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
+    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
     	if(!world.isRemote) {
         	//EntityThrowable projectile = new EntityThrowable(world, player);
         	//world.spawnEntity(projectile);
@@ -168,7 +168,7 @@ public class ItemScepter extends ItemBase {
     	return false;
     }
     
-    public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
+    public boolean chargedAttack(ItemStack itemStack, World world, LivingEntity entity, float power) {
     	if(!world.isRemote) {
         	//EntityThrowable projectile = new EntityThrowable(world, player);
     		//projectile.setDamage((int)(projectile.getDamage() * power));
@@ -200,7 +200,7 @@ public class ItemScepter extends ItemBase {
     // ==================================================
     //                     Sounds
     // ==================================================
-    public void playSound(ItemStack itemStack, World world, EntityLivingBase entity, float power, EntityProjectileBase projectile) {
+    public void playSound(ItemStack itemStack, World world, LivingEntity entity, float power, EntityProjectileBase projectile) {
         this.playSound(world, entity.posX, entity.posY, entity.posZ, projectile.getLaunchSound(), SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
     }
 

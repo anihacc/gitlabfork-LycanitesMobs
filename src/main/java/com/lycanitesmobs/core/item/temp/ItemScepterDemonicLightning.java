@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public class ItemScepterDemonicLightning extends ItemScepter {
 	//                      Attack
 	// ==================================================
     @Override
-    public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
+    public boolean chargedAttack(ItemStack itemStack, World world, LivingEntity entity, float power) {
     	if(!world.isRemote) {
     		EntityDemonicBlast projectile = new EntityDemonicBlast(world, entity);
     		projectile.setDamage((int)(projectile.getDamage(null) * power * 2));

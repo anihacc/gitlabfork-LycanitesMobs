@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -80,9 +80,9 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 			// Light Aura:
 			if(!this.isPetType("familiar")) {
 				if (this.updateTick % 10 == 0) {
-					List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 					for (Object entityObj : aoeTargets) {
-						EntityLivingBase target = (EntityLivingBase) entityObj;
+						LivingEntity target = (LivingEntity) entityObj;
 						if(target == this) {
 							continue;
 						}
@@ -164,7 +164,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     }
 
     @Override
-	public boolean canAttackEntity(EntityLivingBase targetEntity) {
+	public boolean canAttackEntity(LivingEntity targetEntity) {
     	if(targetEntity == this.playPartner) {
     		return false;
 		}

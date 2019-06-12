@@ -7,17 +7,17 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 public class EntityAITargetAttack extends EntityAITarget {
 	// Targets:
-    public Class targetClass = EntityLivingBase.class;
+    public Class targetClass = LivingEntity.class;
     private List<Class> targetClasses = null;
     
     // Properties:
@@ -31,7 +31,7 @@ public class EntityAITargetAttack extends EntityAITarget {
   	// ==================================================
     public EntityAITargetAttack(EntityCreatureBase setHost) {
         super(setHost);
-        this.setMutexBits(1);
+        this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
@@ -100,16 +100,16 @@ public class EntityAITargetAttack extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getAttackTarget(); }
+    protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setAttackTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
     
     
     // ==================================================
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
         // Target Class Check:
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
@@ -119,7 +119,7 @@ public class EntityAITargetAttack extends EntityAITarget {
             return false;
 
 		// Peaceful Difficulty Check:
-		if(this.host.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL && target instanceof PlayerEntity)
+		if(this.host.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL && target instanceof PlayerEntity)
 			return false;
 
 		// Tamed Targeting Check:
@@ -150,13 +150,13 @@ public class EntityAITargetAttack extends EntityAITarget {
         if(this.allySize > 0 && this.enemySize > 0) {
             try {
                 double hostPackRange = 32D;
-                double hostPackSize = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getEntityBoundingBox().grow(hostPackRange, hostPackRange, hostPackRange)).size();
+                double hostPackSize = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(hostPackRange, hostPackRange, hostPackRange)).size();
                 double hostPackScale = hostPackSize / this.allySize;
 
                 double targetPackRange = 64D;
-                double targetPackSize = target.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, target.getEntityBoundingBox().grow(targetPackRange, targetPackRange, targetPackRange), new Predicate<EntityLivingBase>() {
+                double targetPackSize = target.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(targetPackRange, targetPackRange, targetPackRange), new Predicate<LivingEntity>() {
                     @Override
-                    public boolean apply(EntityLivingBase entity) {
+                    public boolean apply(LivingEntity entity) {
                         return entity.getClass().isAssignableFrom(EntityAITargetAttack.this.targetClass);
                     }
                 }).size();
@@ -202,7 +202,7 @@ public class EntityAITargetAttack extends EntityAITarget {
 		this.target = null;
         
         double distance = this.getTargetDistance();
-        double heightDistance = 4.0D + this.host.height;
+        double heightDistance = 4.0D + this.host.getHeight();
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);
@@ -217,12 +217,19 @@ public class EntityAITargetAttack extends EntityAITarget {
 	//                  Get New Target
 	// ==================================================
 	@Override
-	public EntityLivingBase getNewTarget(double rangeX, double rangeY, double rangeZ) {
+	public LivingEntity getNewTarget(double rangeX, double rangeY, double rangeZ) {
 		// Faster Player Targeting:
 		if(this.targetClass == PlayerEntity.class) {
-			EntityLivingBase newTarget = null;
+			LivingEntity newTarget = null;
 			try {
-				List<PlayerEntity> possibleTargets = this.host.getEntityWorld().getPlayers(PlayerEntity.class, this.targetSelector);
+				List<? extends PlayerEntity> players = this.host.getEntityWorld().getPlayers();
+				if (players.isEmpty())
+					return null;
+				List<PlayerEntity> possibleTargets = new ArrayList<>();
+				for(PlayerEntity player : players) {
+					if(this.isValidTarget(player))
+						possibleTargets.add(player);
+				}
 				if (possibleTargets.isEmpty())
 					return null;
 				Collections.sort(possibleTargets, this.nearestSorter);

@@ -14,7 +14,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
@@ -110,7 +110,7 @@ public class EventListener {
     // ==================================================
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if(event.getObject() instanceof EntityLivingBase) {
+        if(event.getObject() instanceof LivingEntity) {
             event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedEntity"), new ICapabilitySerializable<NBTTagCompound>() {
                 IExtendedEntity instance = LycanitesMobs.EXTENDED_ENTITY.getDefaultInstance();
 
@@ -184,7 +184,7 @@ public class EventListener {
 			return;
 
         // ========== Force Remove Entity ==========
-        if(!(event.getEntity() instanceof EntityLivingBase)) {
+        if(!(event.getEntity() instanceof LivingEntity)) {
             if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
                 LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
@@ -203,7 +203,7 @@ public class EventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onLivingDeathEvent(LivingDeathEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null) return;
 
 		// ========== Extended Entity ==========
@@ -226,7 +226,7 @@ public class EventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null) return;
 
 		// ========== Extended Entity ==========
@@ -310,7 +310,7 @@ public class EventListener {
 		if(event.getSource() == null || event.getEntityLiving() == null)
 			return;
 
-        EntityLivingBase damagedEntity = event.getEntityLiving();
+        LivingEntity damagedEntity = event.getEntityLiving();
         ExtendedEntity damagedEntityExt = ExtendedEntity.getForEntity(damagedEntity);
 
         EntityDamageSource entityDamageSource = null;
@@ -334,7 +334,7 @@ public class EventListener {
 
 				// Copy Mount Immunities to Rider:
 				EntityCreatureRideable creatureRideable = (EntityCreatureRideable)event.getEntityLiving().getRidingEntity();
-				if(!creatureRideable.isDamageTypeApplicable(event.getSource().damageType, event.getSource(), event.getAmount())) {
+				if(!creatureRideable.isInvulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
 					return;

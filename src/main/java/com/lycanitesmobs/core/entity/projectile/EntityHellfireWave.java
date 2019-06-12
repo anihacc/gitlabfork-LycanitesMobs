@@ -6,7 +6,7 @@ import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -32,7 +32,7 @@ public class EntityHellfireWave extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityHellfireWave(World world, EntityLivingBase shooterEntity) {
+    public EntityHellfireWave(World world, LivingEntity shooterEntity) {
         super(world, shooterEntity);
     }
 
@@ -111,15 +111,15 @@ public class EntityHellfireWave extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isImmuneToFire())
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 
     //========== Do Damage Check ==========
-    public boolean canDamage(EntityLivingBase targetEntity) {
-        EntityLivingBase owner = this.getThrower();
+    public boolean canDamage(LivingEntity targetEntity) {
+        LivingEntity owner = this.getThrower();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

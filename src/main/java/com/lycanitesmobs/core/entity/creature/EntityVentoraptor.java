@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
@@ -99,7 +99,7 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.WEAKNESS))
             rider.removePotionEffect(MobEffects.WEAKNESS);
         if(rider.isPotionActive(MobEffects.SLOWNESS))

@@ -3,28 +3,28 @@ package com.lycanitesmobs.core.entity.ai;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class EntityAITarget extends EntityAIBase {
+public abstract class EntityAITarget extends Goal {
     // Targets:
     protected EntityCreatureBase host;
-    protected EntityLivingBase target;
+    protected LivingEntity target;
     
     // Targeting:
-    protected Predicate<EntityLivingBase> targetSelector;
-    protected Predicate<EntityLivingBase> allySelector;
+    protected Predicate<LivingEntity> targetSelector;
+    protected Predicate<LivingEntity> allySelector;
     protected TargetSorterNearest nearestSorter;
 
     protected boolean checkSight = true;
@@ -81,7 +81,7 @@ public abstract class EntityAITarget extends EntityAIBase {
     public boolean shouldContinueExecuting() {
         if(this.getTarget() == null)
             return false;
-        if(!this.getTarget().isEntityAlive())
+        if(!this.getTarget().isAlive())
             return false;
 
         // Target Out of Range:
@@ -111,17 +111,17 @@ public abstract class EntityAITarget extends EntityAIBase {
     // ==================================================
  	//                    Host Target
  	// ==================================================
-    protected EntityLivingBase getTarget() { return null; }
-    protected void setTarget(EntityLivingBase newTarget) {}
+    protected LivingEntity getTarget() { return null; }
+    protected void setTarget(LivingEntity newTarget) {}
 
 
     // ==================================================
     //                  Get New Target
     // ==================================================
-    public EntityLivingBase getNewTarget(double rangeX, double rangeY, double rangeZ) {
-        EntityLivingBase newTarget = null;
+    public LivingEntity getNewTarget(double rangeX, double rangeY, double rangeZ) {
+        LivingEntity newTarget = null;
         try {
-            List<EntityLivingBase> possibleTargets = this.getPossibleTargets(EntityLivingBase.class, rangeX, rangeY, rangeZ);
+            List<LivingEntity> possibleTargets = this.getPossibleTargets(LivingEntity.class, rangeX, rangeY, rangeZ);
 
             if (possibleTargets.isEmpty())
                 return null;
@@ -139,8 +139,8 @@ public abstract class EntityAITarget extends EntityAIBase {
     // ==================================================
     //               Get Possible Targets
     // ==================================================
-    public <T extends EntityLivingBase> List<T> getPossibleTargets(Class <? extends T > clazz, double rangeX, double rangeY, double rangeZ) {
-        return this.host.getEntityWorld().getEntitiesWithinAABB(clazz, this.host.getEntityBoundingBox().grow(rangeX, rangeY, rangeZ), this.targetSelector);
+    public <T extends LivingEntity> List<T> getPossibleTargets(Class <? extends T > clazz, double rangeX, double rangeY, double rangeZ) {
+        return this.host.getEntityWorld().getEntitiesWithinAABB(clazz, this.host.getBoundingBox().grow(rangeX, rangeY, rangeZ), this.targetSelector);
     }
     
     
@@ -150,8 +150,8 @@ public abstract class EntityAITarget extends EntityAIBase {
     protected double getTargetDistance() {
         if(this.targetingRange > 0)
             return this.targetingRange;
-    	IAttributeInstance attributeInstance = this.host.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-        return attributeInstance == null ? 16.0D : attributeInstance.getAttributeValue();
+    	IAttributeInstance attributeInstance = this.host.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        return attributeInstance == null ? 16.0D : attributeInstance.getValue();
     }
 
 
@@ -163,11 +163,11 @@ public abstract class EntityAITarget extends EntityAIBase {
             return;
         try {
             double d0 = this.getTargetDistance();
-            List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getEntityBoundingBox().grow(d0, 4.0D, d0), this.allySelector);
+            List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), this.allySelector);
             Iterator possibleAllies = allies.iterator();
 
             while (possibleAllies.hasNext()) {
-                EntityLivingBase possibleAlly = (EntityLivingBase)possibleAllies.next();
+                LivingEntity possibleAlly = (LivingEntity)possibleAllies.next();
                 if(possibleAlly instanceof EntityCreatureBase) {
                     EntityCreatureBase possibleCreatureAlly = (EntityCreatureBase)possibleAlly;
                     if (possibleCreatureAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleCreatureAlly.canAttackClass(this.target.getClass()) && possibleCreatureAlly.canAttackEntity(this.target))
@@ -195,19 +195,19 @@ public abstract class EntityAITarget extends EntityAIBase {
      * @param targetCreative If true, creative players can pass this check.
      * @return
      */
-    protected boolean isEntityTargetable(EntityLivingBase checkTarget, boolean targetCreative) {
+    protected boolean isEntityTargetable(LivingEntity checkTarget, boolean targetCreative) {
         if(checkTarget == null)
             return false;
         if(checkTarget == this.host)
             return false;
-        if(!checkTarget.isEntityAlive())
+        if(!checkTarget.isAlive())
             return false;
 
         // Player Checks:
 		if(checkTarget instanceof PlayerEntity) {
 			if(!targetCreative && ((PlayerEntity)checkTarget).isCreative())
 				return false;
-			if(((PlayerEntity)checkTarget).isSpectator())
+			if(checkTarget.isSpectator())
 				return false;
 		}
         
@@ -220,7 +220,7 @@ public abstract class EntityAITarget extends EntityAIBase {
             return false;
         
         // Sight Check:
-        if(this.checkSight && !checkTarget.isPotionActive(MobEffects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget))
+        if(this.checkSight && !checkTarget.isPotionActive(Effects.field_188423_x) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:
@@ -241,7 +241,7 @@ public abstract class EntityAITarget extends EntityAIBase {
 	 * @param target The target entity to check.
 	 * @return True if the entity can be targeted by this AI.
 	 */
-	protected boolean isValidTarget(EntityLivingBase target) {
+	protected boolean isValidTarget(LivingEntity target) {
     	return true;
     }
 
@@ -250,12 +250,12 @@ public abstract class EntityAITarget extends EntityAIBase {
 	 * @param checkTarget The target entity to check.
 	 * @return True if the target is to be considered an ally to help.
 	 */
-    protected boolean isAllyTarget(EntityLivingBase checkTarget) {
+    protected boolean isAllyTarget(LivingEntity checkTarget) {
         if(checkTarget == null)
             return false;
         if(checkTarget == this.host)
             return false;
-        if(!checkTarget.isEntityAlive())
+        if(!checkTarget.isAlive())
             return false;
 
 		// Player Check:
@@ -278,7 +278,7 @@ public abstract class EntityAITarget extends EntityAIBase {
     // ==================================================
  	//                     Is Nearby
  	// ==================================================
-    private boolean isNearby(EntityLivingBase target) {
+    private boolean isNearby(LivingEntity target) {
         this.targetSearchDelay = 10 + this.host.getRNG().nextInt(5);
         Path path = this.host.getNavigator().getPathToEntityLiving(target);
 

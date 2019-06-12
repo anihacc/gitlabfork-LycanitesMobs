@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -92,9 +92,9 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
         // Static Aura Attack:
         if(!this.getEntityWorld().isRemote && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
-            List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+            List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
-                EntityLivingBase target = (EntityLivingBase)entityObj;
+                LivingEntity target = (LivingEntity)entityObj;
                 if(target != this && !(target instanceof IGroupElectric) && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
                     target.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage(1));
                 }
@@ -105,9 +105,9 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
         if(this.getEntityWorld().isRemote) {
             this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
 
-            List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+            List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
-                EntityLivingBase target = (EntityLivingBase)entityObj;
+                LivingEntity target = (LivingEntity)entityObj;
                 if(this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
                     this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, target.posX + (this.rand.nextDouble() - 0.5D) * (double) target.width, target.posY + this.rand.nextDouble() * (double) target.height, target.posZ + (this.rand.nextDouble() - 0.5D) * (double) target.width, 0.0D, 0.0D, 0.0D);
                 }
@@ -158,10 +158,10 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
    	// ==================================================
     // ========== Damage ==========
     /** Returns whether or not the given damage type is applicable, if not no damage will be taken. **/
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if("lightning".equalsIgnoreCase(type))
             return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
     
     @Override

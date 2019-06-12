@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -84,7 +84,7 @@ public class PotionEffects {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null) {
 			return;
 		}
@@ -201,9 +201,9 @@ public class PotionEffects {
 
 				// Spread:
 				if(entity.getEntityWorld().getTotalWorldTime() % 20 == 0) {
-					List aoeTargets = this.getNearbyEntities(entity, EntityLivingBase.class, null, 10);
+					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 10);
 					for(Object entityObj : aoeTargets) {
-						EntityLivingBase target = (EntityLivingBase)entityObj;
+						LivingEntity target = (LivingEntity)entityObj;
 						if(target != entity && !entity.isOnSameTeam(target)) {
 							int amplifier = entity.getActivePotionEffect(plague).getAmplifier();
 							int duration = entity.getActivePotionEffect(plague).getDuration();
@@ -323,7 +323,7 @@ public class PotionEffects {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityJump(LivingJumpEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null)
 			return;
 
@@ -364,10 +364,10 @@ public class PotionEffects {
 		if(event.getEntityLiving() == null)
 			return;
 
-		EntityLivingBase target = event.getEntityLiving();
-		EntityLivingBase attacker = null;
-		if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof EntityLivingBase) {
-			attacker = (EntityLivingBase) event.getSource().getTrueSource();
+		LivingEntity target = event.getEntityLiving();
+		LivingEntity attacker = null;
+		if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof LivingEntity) {
+			attacker = (LivingEntity) event.getSource().getTrueSource();
 		}
 		if(attacker == null) {
 			return;
@@ -437,8 +437,8 @@ public class PotionEffects {
         // Leeching
 		EffectBase leech = ObjectManager.getEffect("leech");
 		if(leech != null && event.getSource().getTrueSource() != null) {
-            if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
-                EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
+            if(event.getSource().getTrueSource() instanceof LivingEntity) {
+                LivingEntity attackingEntity = (LivingEntity)(event.getSource().getTrueSource());
                 if(attackingEntity.isPotionActive(leech)) {
                     float damage = event.getAmount();
                     float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier();
@@ -454,7 +454,7 @@ public class PotionEffects {
 	// ==================================================
 	@SubscribeEvent
 	public void onEntityHeal(LivingHealEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntityLiving();
 		if(entity == null)
 			return;
 

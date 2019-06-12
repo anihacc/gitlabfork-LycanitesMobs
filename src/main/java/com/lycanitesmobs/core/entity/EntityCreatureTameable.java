@@ -3,13 +3,12 @@ package com.lycanitesmobs.core.entity;
 import com.google.common.base.Optional;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.PlayerEntity;
@@ -124,10 +123,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
   	// ==================================================
     // ========== Despawning ==========
     @Override
-    protected boolean canDespawn() {
+    protected boolean canDespawnNaturally() {
     	if(this.isTamed())
     		return false;
-        return super.canDespawn();
+        return super.canDespawnNaturally();
     }
     
     @Override
@@ -283,7 +282,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	// Sit:
     	if(command.equals("Sit")) {
     		this.playTameSound();
-            this.setAttackTarget((EntityLivingBase)null);
+            this.setAttackTarget((LivingEntity)null);
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
@@ -441,7 +440,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	}
 	
 	@Override
-	public boolean canAttackEntity(EntityLivingBase targetEntity) {
+	public boolean canAttackEntity(LivingEntity targetEntity) {
 		if(this.isPassive())
 			return false;
 		if(this.isTamed()) {
@@ -507,10 +506,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	// ==================================================
 	// ========== Damage ==========
 	@Override
-	public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+	public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
 		if("inWall".equals(type) && this.isTamed())
 			return false;
-		return super.isDamageTypeApplicable(type, source, damage);
+		return super.isInvulnerableTo(type, source, damage);
 	}
 
 
@@ -1007,49 +1006,49 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 			this.setOwnerId(null);
         }
         
-        if(nbtTagCompound.hasKey("Sitting")) {
+        if(nbtTagCompound.contains("Sitting")) {
 	        this.setSitting(nbtTagCompound.getBoolean("Sitting"));
         }
         else {
         	this.setSitting(false);
         }
         
-        if(nbtTagCompound.hasKey("Following")) {
+        if(nbtTagCompound.contains("Following")) {
 	        this.setFollowing(nbtTagCompound.getBoolean("Following"));
         }
         else {
         	this.setFollowing(true);
         }
         
-        if(nbtTagCompound.hasKey("Passive")) {
+        if(nbtTagCompound.contains("Passive")) {
 	        this.setPassive(nbtTagCompound.getBoolean("Passive"));
         }
         else {
         	this.setPassive(false);
         }
         
-        if(nbtTagCompound.hasKey("Aggressive")) {
+        if(nbtTagCompound.contains("Aggressive")) {
 	        this.setAggressive(nbtTagCompound.getBoolean("Aggressive"));
         }
         else {
         	this.setAggressive(false);
         }
         
-        if(nbtTagCompound.hasKey("PVP")) {
+        if(nbtTagCompound.contains("PVP")) {
 	        this.setPVP(nbtTagCompound.getBoolean("PVP"));
         }
         else {
         	this.setPVP(true);
         }
         
-        if(nbtTagCompound.hasKey("Hunger")) {
+        if(nbtTagCompound.contains("Hunger")) {
         	this.setCreatureHunger(nbtTagCompound.getFloat("Hunger"));
         }
         else {
         	this.setCreatureHunger(this.getCreatureHungerMax());
         }
         
-        if(nbtTagCompound.hasKey("Stamina")) {
+        if(nbtTagCompound.contains("Stamina")) {
         	this.setStamina(nbtTagCompound.getFloat("Stamina"));
         }
     }
@@ -1061,13 +1060,13 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
         if(this.getOwnerId() != null) {
             nbtTagCompound.setUniqueId("OwnerId", this.getOwnerId());
         }
-        nbtTagCompound.setBoolean("Sitting", this.isSitting());
-        nbtTagCompound.setBoolean("Following", this.isFollowing());
-        nbtTagCompound.setBoolean("Passive", this.isPassive());
-        nbtTagCompound.setBoolean("Aggressive", this.isAggressive());
-        nbtTagCompound.setBoolean("PVP", this.isPVP());
-        nbtTagCompound.setFloat("Hunger", this.getCreatureHunger());
-        nbtTagCompound.setFloat("Stamina", this.getStamina());
+        nbtTagCompound.putBoolean("Sitting", this.isSitting());
+        nbtTagCompound.putBoolean("Following", this.isFollowing());
+        nbtTagCompound.putBoolean("Passive", this.isPassive());
+        nbtTagCompound.putBoolean("Aggressive", this.isAggressive());
+        nbtTagCompound.putBoolean("PVP", this.isPVP());
+        nbtTagCompound.putFloat("Hunger", this.getCreatureHunger());
+        nbtTagCompound.putFloat("Stamina", this.getStamina());
     }
     
     

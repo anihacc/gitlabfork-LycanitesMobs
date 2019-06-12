@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -73,7 +73,7 @@ public class EntityBeholder extends EntityCreatureRideable {
     //                      Updates
     // ==================================================
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))
             rider.removePotionEffect(MobEffects.MINING_FATIGUE);
         if(rider.isPotionActive(ObjectManager.getEffect("weight")))
@@ -93,8 +93,8 @@ public class EntityBeholder extends EntityCreatureRideable {
     	if(damageEntity != null && ("mob".equals(damageSrc.damageType) || "player".equals(damageSrc.damageType))) {
     		
     		// Eat Buffs:
-        	if(damageEntity instanceof EntityLivingBase) {
-        		EntityLivingBase targetLiving = (EntityLivingBase)damageEntity;
+        	if(damageEntity instanceof LivingEntity) {
+        		LivingEntity targetLiving = (LivingEntity)damageEntity;
         		List<Potion> goodEffects = new ArrayList<Potion>();
         		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
         			if(potionEffectObj instanceof PotionEffect) {
@@ -153,10 +153,10 @@ public class EntityBeholder extends EntityCreatureRideable {
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isDamageEntityApplicable(Entity entity) {
+    public boolean isInvulnerableTo(Entity entity) {
     	if(entity instanceof EntityBeholder)
     		return false;
-    	return super.isDamageEntityApplicable(entity);
+    	return super.isInvulnerableTo(entity);
     }
     
     @Override

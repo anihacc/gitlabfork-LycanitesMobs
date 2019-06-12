@@ -4,7 +4,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -59,8 +59,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
         }
 
 		if(this.hasRiderTarget()) {
-			if(this.getControllingPassenger() instanceof EntityLivingBase) {
-				EntityLivingBase riderLiving = (EntityLivingBase)this.getControllingPassenger();
+			if(this.getControllingPassenger() instanceof LivingEntity) {
+				LivingEntity riderLiving = (LivingEntity)this.getControllingPassenger();
 
 				// Run Mount Rider Effects:
 				this.riderEffects(riderLiving);
@@ -81,7 +81,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     	}
     }
     
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(!rider.canBreatheUnderwater() && this.canBreatheUnderwater() && rider.isInWater())
             rider.setAir(300);
     }
@@ -151,7 +151,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     @Override
     public void travel(float strafe, float up, float forward) {
         // Check if Mounted:
-        if (!this.isTamed() || !this.hasSaddle() || !this.hasRiderTarget() || !(this.getControllingPassenger() instanceof EntityLivingBase) || !this.riderControl()) {
+        if (!this.isTamed() || !this.hasSaddle() || !this.hasRiderTarget() || !(this.getControllingPassenger() instanceof LivingEntity) || !this.riderControl()) {
             super.travel(strafe, up, forward);
             return;
         }
@@ -160,8 +160,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 
     public void moveMountedWithHeading(float strafe, float up, float forward) {
         // Apply Rider Movement:
-        if(this.getControllingPassenger() instanceof EntityLivingBase) {
-            EntityLivingBase rider = (EntityLivingBase) this.getControllingPassenger();
+        if(this.getControllingPassenger() instanceof LivingEntity) {
+            LivingEntity rider = (LivingEntity) this.getControllingPassenger();
             this.prevRotationYaw = this.rotationYaw = rider.rotationYaw;
             this.rotationPitch = rider.rotationPitch * 0.5F;
             this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -386,7 +386,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     @Override
     public Team getTeam() {
         if(this.hasRiderTarget()) {
-            EntityLivingBase rider = this.getRider();
+            LivingEntity rider = this.getRider();
             if(rider != null)
                 return rider.getTeam();
         }
@@ -396,7 +396,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     @Override
     public boolean isOnSameTeam(Entity target) {
         if(this.hasRiderTarget()) {
-            EntityLivingBase rider = this.getRider();
+            LivingEntity rider = this.getRider();
             if(target == rider)
                 return true;
             if(rider != null)

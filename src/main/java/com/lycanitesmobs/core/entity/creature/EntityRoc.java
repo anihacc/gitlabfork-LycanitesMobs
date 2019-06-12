@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
@@ -143,7 +143,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.WEAKNESS))
             rider.removePotionEffect(MobEffects.WEAKNESS);
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))
@@ -173,8 +173,8 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
     	if(!super.attackMelee(target, damageScale))
     		return false;
 
-        if(target instanceof EntityLivingBase && this.getControllingPassenger() == null) {
-            EntityLivingBase entityLivingBase = (EntityLivingBase)target;
+        if(target instanceof LivingEntity && this.getControllingPassenger() == null) {
+            LivingEntity entityLivingBase = (LivingEntity)target;
             // Pickup:
             if (this.canPickupEntity(entityLivingBase)) {
                 this.pickupEntity(entityLivingBase);
@@ -190,7 +190,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
     }
 
     @Override
-    public boolean canAttackEntity(EntityLivingBase targetEntity) {
+    public boolean canAttackEntity(LivingEntity targetEntity) {
         ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(targetEntity);
         if(extendedEntity != null && extendedEntity.pickedUpByEntity != null)
             return false;
@@ -234,7 +234,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
 
     // ========== Pickup ==========
     @Override
-    public void pickupEntity(EntityLivingBase entity) {
+    public void pickupEntity(LivingEntity entity) {
         super.pickupEntity(entity);
         if(this.getEntityWorld().getBlockState(this.getPosition()) != null && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
             this.leap(0.5F, 4.0D);
@@ -246,7 +246,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
     }
 
     @Override
-    public boolean canPickupEntity(EntityLivingBase entity) {
+    public boolean canPickupEntity(LivingEntity entity) {
         if(this.creeperDropCooldown > 0 || this.hasPickupEntity())
             return false;
         return super.canPickupEntity(entity);
@@ -322,7 +322,7 @@ public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHun
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        EntityLivingBase nearestTarget = this.getNearestEntity(EntityLivingBase.class, null, 4, false);
+        LivingEntity nearestTarget = this.getNearestEntity(LivingEntity.class, null, 4, false);
         if(this.canPickupEntity(nearestTarget)) {
             this.pickupEntity(nearestTarget);
         }

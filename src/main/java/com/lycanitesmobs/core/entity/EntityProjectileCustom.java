@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -41,7 +41,7 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public EntityProjectileCustom(World world, EntityLivingBase entityLiving, ProjectileInfo projectileInfo) {
+	public EntityProjectileCustom(World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
 		super(world, entityLiving);
 		if(projectileInfo != null)
 			this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F);
@@ -125,7 +125,7 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	//                      Projectile
 	// ==================================================
 	@Override
-	public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
+	public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 		super.onDamage(target, damage, attackSuccess);
 		if(!this.getEntityWorld().isRemote && attackSuccess && this.projectileInfo != null) {
 			for(ElementInfo element : this.projectileInfo.elements) {

@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -27,7 +27,7 @@ public class EntityCrystalShard extends EntityProjectileModel {
         super(world);
     }
 
-    public EntityCrystalShard(World world, EntityLivingBase entityLivingBase) {
+    public EntityCrystalShard(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -74,7 +74,7 @@ public class EntityCrystalShard extends EntityProjectileModel {
  	// ==================================================
 	//========== Entity Living Collision ==========
 	@Override
-	public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		if(ObjectManager.getEffect("aphagia") != null) {
 			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 0));
 		}

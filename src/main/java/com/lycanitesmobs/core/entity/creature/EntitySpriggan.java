@@ -151,7 +151,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
     @Override
     public void attackRanged(Entity target, float range) {
     	// Update Laser:
-    	if(this.projectile != null && this.projectile.isEntityAlive()) {
+    	if(this.projectile != null && this.projectile.isAlive()) {
     		this.projectile.setTime(20);
     	}
     	else {

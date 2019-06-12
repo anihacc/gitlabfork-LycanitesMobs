@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.creature.EntityBeholder;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -36,7 +36,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
         this.setSize(projectileWidth, projectileHeight);
     }
 
-    public EntityArcaneLaserStorm(World world, EntityLivingBase entityLiving) {
+    public EntityArcaneLaserStorm(World world, LivingEntity entityLiving) {
         super(world, entityLiving);
         this.setSize(projectileWidth, projectileHeight);
     }

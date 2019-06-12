@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.entity.ai.EntityAIFollowParent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +21,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -93,8 +92,8 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     // ========== Despawning ==========
     /** Returns whether this mob should despawn overtime or not. Config defined forced despawns override everything except tamed creatures and tagged creatures. **/
     @Override
-    protected boolean canDespawn() {
-    	if(!super.canDespawn())
+    protected boolean canDespawnNaturally() {
+    	if(!super.canDespawnNaturally())
     		return false;
     	return !this.hasParent();
     }
@@ -127,13 +126,13 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
         if(!this.getEntityWorld().isRemote) {
         	// Check if back segment is alive:
         	if(this.hasMaster()) {
-        		if(!this.getMasterTarget().isEntityAlive())
+        		if(!this.getMasterTarget().isAlive())
         			this.setMasterTarget(null);
         	}
 
         	// Check if front segment is alive:
         	if(this.hasParent()) {
-        		if(!this.getParentTarget().isEntityAlive())
+        		if(!this.getParentTarget().isAlive())
         			this.setParentTarget(null);
         	}
 
@@ -230,7 +229,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
    	//                     Targets
    	// ==================================================
 	@Override
-	public void setParentTarget(EntityLivingBase setTarget) {
+	public void setParentTarget(LivingEntity setTarget) {
 		if(setTarget instanceof EntityConcapedeSegment || setTarget instanceof EntityConcapedeHead)
 			((EntityCreatureBase)setTarget).setMasterTarget(this);
 		super.setParentTarget(setTarget);
@@ -259,9 +258,9 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
    	//                     Immunities
    	// ==================================================
 	@Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
     
     @Override
@@ -306,7 +305,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     /** Used when loading this mob from a saved chunk. **/
     @Override
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	if(nbtTagCompound.hasKey("ParentUUIDMost") && nbtTagCompound.hasKey("ParentUUIDLeast")) {
+    	if(nbtTagCompound.contains("ParentUUIDMost") && nbtTagCompound.contains("ParentUUIDLeast")) {
             this.parentUUID = new UUID(nbtTagCompound.getLong("ParentUUIDMost"), nbtTagCompound.getLong("ParentUUIDLeast"));
         }
         super.readEntityFromNBT(nbtTagCompound);
@@ -317,8 +316,8 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
     	if(this.getParentTarget() != null) {
-    		nbtTagCompound.setLong("ParentUUIDMost", this.getParentTarget().getUniqueID().getMostSignificantBits());
-    		nbtTagCompound.setLong("ParentUUIDLeast", this.getParentTarget().getUniqueID().getLeastSignificantBits());
+    		nbtTagCompound.putLong("ParentUUIDMost", this.getParentTarget().getUniqueID().getMostSignificantBits());
+    		nbtTagCompound.putLong("ParentUUIDLeast", this.getParentTarget().getUniqueID().getLeastSignificantBits());
     	}
         super.writeEntityToNBT(nbtTagCompound);
     }

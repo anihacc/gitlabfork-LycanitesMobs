@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -180,7 +180,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
 
     // ========== Can Attack Entity ==========
     @Override
-    public boolean canAttackEntity(EntityLivingBase targetEntity) {
+    public boolean canAttackEntity(LivingEntity targetEntity) {
         if(targetEntity instanceof EntityVespid || targetEntity instanceof EntityVespidQueen)
             return false;
         return super.canAttackEntity(targetEntity);
@@ -251,11 +251,11 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
     	super.readEntityFromNBT(nbtTagCompound);
         
-        if(nbtTagCompound.hasKey("VespidInfection")) {
+        if(nbtTagCompound.contains("VespidInfection")) {
         	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");
         }
-        if(nbtTagCompound.hasKey("VespidInfectionTime")) {
-        	this.vespidInfectionTime = nbtTagCompound.getInteger("VespidInfectionTime");
+        if(nbtTagCompound.contains("VespidInfectionTime")) {
+        	this.vespidInfectionTime = nbtTagCompound.getInt("VespidInfectionTime");
         }
     }
     
@@ -264,8 +264,8 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
         super.writeEntityToNBT(nbtTagCompound);
-    	nbtTagCompound.setBoolean("VespidInfection", this.vespidInfection);
+    	nbtTagCompound.putBoolean("VespidInfection", this.vespidInfection);
     	if(this.vespidInfection)
-        	nbtTagCompound.setInteger("VespidInfectionTime", this.vespidInfectionTime);
+        	nbtTagCompound.putInt("VespidInfectionTime", this.vespidInfectionTime);
     }
 }

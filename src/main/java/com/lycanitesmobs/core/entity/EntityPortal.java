@@ -125,7 +125,7 @@ public class EntityPortal extends EntityProjectileBase {
 
             // Summoning Staff:
             else {
-                if(this.shootingEntity == null || !this.shootingEntity.isEntityAlive() || this.portalItem == null) {
+                if(this.shootingEntity == null || !this.shootingEntity.isAlive() || this.portalItem == null) {
                     this.remove();
                     return;
                 }

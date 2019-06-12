@@ -7,7 +7,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 
@@ -71,7 +71,7 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
 
 	/** Returns true if the provided entity should trigger this Spawn Trigger. **/
-	public boolean isMatchingEntity(EntityLivingBase killedEntity) {
+	public boolean isMatchingEntity(LivingEntity killedEntity) {
 
 		// Check Entity Type:
 		if(!this.entityTypes.isEmpty()) {

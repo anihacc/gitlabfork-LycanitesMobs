@@ -4,7 +4,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -20,7 +20,7 @@ public class EntityThrowingScythe extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityThrowingScythe(World world, EntityLivingBase entityLivingBase) {
+    public EntityThrowingScythe(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 

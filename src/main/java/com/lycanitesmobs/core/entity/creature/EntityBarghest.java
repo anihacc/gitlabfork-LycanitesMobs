@@ -11,7 +11,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
@@ -107,8 +107,8 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
         if(this.leapedAbilityReady && this.onGround && !this.getEntityWorld().isRemote) {
             this.leapedAbilityReady = false;
             double distance = 4.0D;
-            List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
-				if (!possibleTarget.isEntityAlive()
+            List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), possibleTarget -> {
+				if (!possibleTarget.isAlive()
 						|| possibleTarget == EntityBarghest.this
 						|| EntityBarghest.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityBarghest.this.isOnSameTeam(possibleTarget)
@@ -119,7 +119,7 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
 				return true;
 			});
             if(!possibleTargets.isEmpty()) {
-                for(EntityLivingBase possibleTarget : possibleTargets) {
+                for(LivingEntity possibleTarget : possibleTargets) {
                     boolean doDamage = true;
                     if(this.getRider() instanceof PlayerEntity) {
                         if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
@@ -138,7 +138,7 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
         }
     }
     
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
     	if(rider.isPotionActive(MobEffects.SLOWNESS))
     		rider.removePotionEffect(MobEffects.SLOWNESS);
     	if(rider.isPotionActive(ObjectManager.getEffect("weight")))

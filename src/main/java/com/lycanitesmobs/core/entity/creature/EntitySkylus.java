@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -156,7 +156,7 @@ public class EntitySkylus extends EntityCreatureTameable implements IMob, IGroup
     }
 
     @Override
-    public void pickupEntity(EntityLivingBase entity) {
+    public void pickupEntity(LivingEntity entity) {
         super.pickupEntity(entity);
         this.leap(-1.0F, -0.5D);
     }
@@ -177,8 +177,8 @@ public class EntitySkylus extends EntityCreatureTameable implements IMob, IGroup
     		return false;
 
         // Pickup:
-        if(target instanceof EntityLivingBase) {
-            EntityLivingBase entityLivingBase = (EntityLivingBase)target;
+        if(target instanceof LivingEntity) {
+            LivingEntity entityLivingBase = (LivingEntity)target;
             if(this.canPickupEntity(entityLivingBase)) {
                 this.pickupEntity(entityLivingBase);
             }

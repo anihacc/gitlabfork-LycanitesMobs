@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -20,7 +20,7 @@ public class EntityQuill extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityQuill(World world, EntityLivingBase entityLivingBase) {
+    public EntityQuill(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 

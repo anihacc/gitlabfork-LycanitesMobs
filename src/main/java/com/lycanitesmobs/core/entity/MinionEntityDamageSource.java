@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.text.ITextComponent;
 
@@ -38,7 +38,7 @@ public class MinionEntityDamageSource extends EntityDamageSource {
     //                    Chat Message
     // ==================================================
     @Override
-    public ITextComponent getDeathMessage(EntityLivingBase slainEntity) {
+    public ITextComponent getDeathMessage(LivingEntity slainEntity) {
         return this.minionDamageSource.getDeathMessage(slainEntity);
         /*String minionName = this.getSourceOfDamage().getCommandSenderName();
         String ownerName = this.minionOwner.getCommandSenderName();
@@ -48,7 +48,7 @@ public class MinionEntityDamageSource extends EntityDamageSource {
         String ownedName = ownerName + ownerSuffix + minionName;
         IChatComponent minionTitle = new ChatComponentText(ownedName);
 
-        ItemStack itemstack = this.damageSourceEntity instanceof EntityLivingBase ? ((EntityLivingBase)this.damageSourceEntity).getHeldItem() : null;
+        ItemStack itemstack = this.damageSourceEntity instanceof LivingEntity ? ((LivingEntity)this.damageSourceEntity).getHeldItem() : null;
         String s = "death.attack." + this.damageType;
         String s1 = s + ".item";
         return itemstack != null && itemstack.hasDisplayName() && StatCollector.canTranslate(s1) ? new ChatComponentTranslation(s1, new Object[] {slainEntity.func_145748_c_(), minionTitle, itemstack.func_151000_E()}): new ChatComponentTranslation(s, new Object[] {slainEntity.func_145748_c_(), minionTitle});*/

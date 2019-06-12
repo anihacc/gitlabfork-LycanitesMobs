@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -103,7 +103,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                     extendedEntity.setPickedUpByEntity(this);
                 if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
-                    if(this.getPickupEntity() instanceof EntityLivingBase) {
+                    if(this.getPickupEntity() instanceof LivingEntity) {
                         if(ObjectManager.getEffect("penetration") != null)
                             this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
@@ -133,10 +133,10 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
 
         // Penetrating Screech:
         double distance = 10.0D;
-        List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<EntityLivingBase>() {
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(EntityLivingBase possibleTarget) {
-                if(!possibleTarget.isEntityAlive()
+            public boolean apply(LivingEntity possibleTarget) {
+                if(!possibleTarget.isAlive()
                         || possibleTarget == EntityStrider.this
                         || EntityStrider.this.isRidingOrBeingRiddenBy(possibleTarget)
                         || EntityStrider.this.isOnSameTeam(possibleTarget)
@@ -148,7 +148,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
             }
         });
         if(!possibleTargets.isEmpty()) {
-            for(EntityLivingBase possibleTarget : possibleTargets) {
+            for(LivingEntity possibleTarget : possibleTargets) {
                 boolean doDamage = true;
                 if(this.getRider() instanceof PlayerEntity) {
                     if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
@@ -194,9 +194,9 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof EntityLivingBase) {
+        if(entity != null && entity instanceof LivingEntity) {
             if(ObjectManager.getPotionEffect("fallresist") != null)
-                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("fallresist"), 3 * 20, 1));
+                ((LivingEntity)entity).addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("fallresist"), 3 * 20, 1));
         }
     }*/
 
@@ -260,8 +260,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
             return false;
 
         // Pickup:
-        if(target instanceof EntityLivingBase) {
-            EntityLivingBase entityLivingBase = (EntityLivingBase)target;
+        if(target instanceof LivingEntity) {
+            LivingEntity entityLivingBase = (LivingEntity)target;
             if (this.canPickupEntity(entityLivingBase) && this.canEntityBeSeen(target)) {
                 this.pickupEntity(entityLivingBase);
                 this.pickupCooldown = 100;
@@ -308,7 +308,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     }
 
     // ========== Pickup ==========
-    public boolean canPickupEntity(EntityLivingBase entity) {
+    public boolean canPickupEntity(LivingEntity entity) {
         if(this.pickupCooldown > 0)
             return false;
         return super.canPickupEntity(entity);

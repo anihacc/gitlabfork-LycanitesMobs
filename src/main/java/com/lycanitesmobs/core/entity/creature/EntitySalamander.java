@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -104,7 +104,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
             rider.removePotionEffect(ObjectManager.getEffect("penetration"));
@@ -157,10 +157,10 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     public void specialAttack() {
         // Firey Burst:
         double distance = 5.0D;
-        List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<EntityLivingBase>() {
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
             @Override
-            public boolean apply(EntityLivingBase possibleTarget) {
-                if(!possibleTarget.isEntityAlive()
+            public boolean apply(LivingEntity possibleTarget) {
+                if(!possibleTarget.isAlive()
                         || possibleTarget == EntitySalamander.this
                         || EntitySalamander.this.isRidingOrBeingRiddenBy(possibleTarget)
                         || EntitySalamander.this.isOnSameTeam(possibleTarget)
@@ -171,7 +171,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
             }
         });
         if(!possibleTargets.isEmpty()) {
-            for(EntityLivingBase possibleTarget : possibleTargets) {
+            for(LivingEntity possibleTarget : possibleTargets) {
                 boolean doDamage = true;
                 if(this.getRider() instanceof PlayerEntity) {
                     if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
@@ -229,8 +229,8 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
-        if(entity != null && entity instanceof EntityLivingBase) {
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 5 * 20, 1));
+        if(entity != null && entity instanceof LivingEntity) {
+            ((LivingEntity)entity).addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 5 * 20, 1));
         }
     }
 

@@ -7,7 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -28,7 +28,7 @@ public class EntityPoop extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityPoop(World world, EntityLivingBase entityLivingBase) {
+    public EntityPoop(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -50,7 +50,7 @@ public class EntityPoop extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(3), 0));
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, this.getEffectDuration(5), 0));
     	return true;

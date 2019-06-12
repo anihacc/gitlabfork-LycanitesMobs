@@ -6,9 +6,10 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
-public class EntityProjectileBase extends EntityThrowable {
+public class EntityProjectileBase extends ThrowableEntity {
 	public String entityName = "projectile";
 	public ModInfo modInfo;
 	public long updateTick;
@@ -69,7 +70,7 @@ public class EntityProjectileBase extends EntityThrowable {
         this.setup();
     }
 
-    public EntityProjectileBase(World world, EntityLivingBase entityLiving) {
+    public EntityProjectileBase(World world, LivingEntity entityLiving) {
         super(world, entityLiving);
         this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
         this.dataManager.register(SCALE, this.projectileScale);
@@ -194,8 +195,8 @@ public class EntityProjectileBase extends EntityThrowable {
      		if(this.getThrower() != null && rayTraceResult.entityHit == this.getThrower())
      			return;
      		boolean doDamage = true;
- 			if(rayTraceResult.entityHit instanceof EntityLivingBase) {
- 				doDamage = this.canDamage((EntityLivingBase)rayTraceResult.entityHit);
+ 			if(rayTraceResult.entityHit instanceof LivingEntity) {
+ 				doDamage = this.canDamage((LivingEntity)rayTraceResult.entityHit);
  			}
  			if(!this.getEntityWorld().isRemote) {
 				if (this.getThrower() == null || rayTraceResult.entityHit != this.getThrower()) {
@@ -203,10 +204,10 @@ public class EntityProjectileBase extends EntityThrowable {
 				}
 			}
 			if(doDamage) {
- 				if(rayTraceResult.entityHit instanceof EntityLivingBase) {
- 					EntityLivingBase target = (EntityLivingBase)rayTraceResult.entityHit;
+ 				if(rayTraceResult.entityHit instanceof LivingEntity) {
+ 					LivingEntity target = (LivingEntity)rayTraceResult.entityHit;
  					if(this.onEntityLivingDamage(target)) {
- 						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((EntityLivingBase)movingObjectPosition.entityHit));
+ 						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((LivingEntity)movingObjectPosition.entityHit));
 
                         boolean attackSuccess = false;
  						float damage = this.getDamage(target);
@@ -219,7 +220,7 @@ public class EntityProjectileBase extends EntityThrowable {
 							boolean stopKnockback = false;
 							if (this.knockbackChance < 1) {
 								if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-									if (target instanceof EntityLivingBase) {
+									if (target instanceof LivingEntity) {
 										targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
 										target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 										stopKnockback = true;
@@ -346,11 +347,11 @@ public class EntityProjectileBase extends EntityThrowable {
      }
      
      //========== Do Damage Check ==========
-     public boolean canDamage(EntityLivingBase targetEntity) {
+     public boolean canDamage(LivingEntity targetEntity) {
          if(this.getEntityWorld().isRemote)
              return false;
 
-    	 EntityLivingBase owner = this.getThrower();
+    	 LivingEntity owner = this.getThrower();
 	     if(owner != null) {
 
             if(owner instanceof EntityCreatureBase) {
@@ -395,13 +396,13 @@ public class EntityProjectileBase extends EntityThrowable {
 	 * @param damage The full amount of damage that was meant to be dealt.
 	 * @param attackSuccess True if the entity was damaged, false if it wasn't.
 	 */
-     public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {}
+     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {}
      
      //========== Entity Collision ==========
      public void onEntityCollision(Entity entity) {}
      
      //========== Entity Living Collision ==========
-     public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	 return true;
      }
      

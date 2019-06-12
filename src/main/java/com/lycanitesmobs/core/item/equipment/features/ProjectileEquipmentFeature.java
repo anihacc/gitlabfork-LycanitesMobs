@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -120,7 +120,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The entity using the equipment.
 	 * @param count How long (in ticks) the equipment has been used for.
 	 */
-	public void onHoldSecondary(EntityLivingBase shooter, int count) {
+	public void onHoldSecondary(LivingEntity shooter, int count) {
 		ExtendedEntity shooterExt = ExtendedEntity.getForEntity(shooter);
 		if(shooterExt == null) {
 			return;
@@ -138,7 +138,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param target The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
 		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || !"hit".equals(this.projectileTrigger)) {
 			return;
 		}
@@ -153,7 +153,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * Fires a projectile from this feature.
 	 * @param shooter The entity firing the projectile.
 	 */
-	public void fireProjectile(EntityLivingBase shooter) {
+	public void fireProjectile(LivingEntity shooter) {
 		if(shooter == null || shooter.getEntityWorld().isRemote) {
 			return;
 		}
@@ -213,7 +213,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	/** Returns the Vec3f in front or behind the provided entity's position coords with the given distance and angle (in degrees), use a negative distance for behind. **/
-	public Vec3d getFacingPosition(EntityLivingBase entity, double distance, double angle) {
+	public Vec3d getFacingPosition(LivingEntity entity, double distance, double angle) {
 		angle = Math.toRadians(angle);
 		double xAmount = -Math.sin(angle);
 		double zAmount = Math.cos(angle);

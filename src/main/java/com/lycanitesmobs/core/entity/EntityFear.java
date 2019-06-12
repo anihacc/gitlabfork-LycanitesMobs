@@ -69,7 +69,7 @@ public class EntityFear extends EntityCreatureBase {
   	// ==================================================
     // ========== Despawning ==========
     @Override
-    protected boolean canDespawn() {
+    protected boolean canDespawnNaturally() {
     	return false;
     }
 	
@@ -88,12 +88,12 @@ public class EntityFear extends EntityCreatureBase {
 		}
         
         // Clean Up:
-        if(this.fearedEntity == null || !this.fearedEntity.isEntityAlive() || !(this.fearedEntity instanceof EntityLivingBase)) {
+        if(this.fearedEntity == null || !this.fearedEntity.isAlive() || !(this.fearedEntity instanceof LivingEntity)) {
         	this.remove();
         	return;
         }
 
-        EntityLivingBase fearedEntityLiving = (EntityLivingBase)this.fearedEntity;
+        LivingEntity fearedEntityLiving = (LivingEntity)this.fearedEntity;
         
         // Pickup Entity For Fear Movement Override:
         if(this.canPickupEntity(fearedEntityLiving)) {
@@ -122,7 +122,7 @@ public class EntityFear extends EntityCreatureBase {
         }
 
         // Copy Movement Debuffs:
-		if(this.fearedEntity instanceof EntityLivingBase) {
+		if(this.fearedEntity instanceof LivingEntity) {
 			if (fearedEntityLiving.isPotionActive(MobEffects.LEVITATION)) {
 				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(MobEffects.LEVITATION);
 				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
@@ -147,8 +147,8 @@ public class EntityFear extends EntityCreatureBase {
         this.stepHeight = feared.stepHeight;
 		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
 		
-        if(feared instanceof EntityLivingBase && !(feared instanceof PlayerEntity)) {
-	        EntityLivingBase fearedEntityLiving = (EntityLivingBase)feared;
+        if(feared instanceof LivingEntity && !(feared instanceof PlayerEntity)) {
+	        LivingEntity fearedEntityLiving = (LivingEntity)feared;
 	        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
         }
     }
@@ -158,7 +158,7 @@ public class EntityFear extends EntityCreatureBase {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	return false;
     }
     

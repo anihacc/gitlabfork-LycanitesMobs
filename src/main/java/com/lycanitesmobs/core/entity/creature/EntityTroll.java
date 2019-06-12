@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -144,8 +144,8 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     	if(this.stoneForm) {
     		if(damageSrc.getTrueSource() != null) {
     			Item heldItem = null;
-        		if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
-                    EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
+        		if(damageSrc.getTrueSource() instanceof LivingEntity) {
+                    LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
     	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
     	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
     	    		}

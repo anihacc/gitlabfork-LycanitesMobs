@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.*;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.passive.EntityVillager;
@@ -136,7 +136,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
     }
 
 	@Override
-	public boolean canBeTargetedBy(EntityLivingBase entity) {
+	public boolean canBeTargetedBy(LivingEntity entity) {
 		if(entity instanceof EntityIronGolem || entity instanceof EntityVillager) {
 			return false;
 		}
@@ -166,10 +166,10 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall"))
     		return false;
-		return super.isDamageTypeApplicable(type, source, damage);
+		return super.isInvulnerableTo(type, source, damage);
     }
 
 

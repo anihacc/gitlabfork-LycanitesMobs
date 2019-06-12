@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -272,7 +272,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public void onUsingTick(ItemStack itemStack, EntityLivingBase user, int count) {
+	public void onUsingTick(ItemStack itemStack, LivingEntity user, int count) {
 		if(!user.isHandActive()) {
 			return;
 		}
@@ -310,7 +310,7 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, BlockState blockState, BlockPos pos, EntityLivingBase entityLiving)
+	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity entityLiving)
 	{
 		if(worldIn.isRemote) {
 			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
@@ -334,7 +334,7 @@ public class ItemEquipment extends ItemBase {
 	 * @return True on successful hit.
 	 */
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
+	public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
 		// Knockback:
 		double knockback = this.getDamageKnockback(itemStack);
 		if(knockback != 0 && attacker != null && target != null) {

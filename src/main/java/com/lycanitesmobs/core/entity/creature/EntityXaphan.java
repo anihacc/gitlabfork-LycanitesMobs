@@ -82,11 +82,11 @@ public class EntityXaphan extends EntityCreatureTameable implements IMob {
     //                      Attacks
     // ==================================================
 	@Override
-	public boolean isDamageEntityApplicable(Entity entity) {
+	public boolean isInvulnerableTo(Entity entity) {
 		if(entity instanceof EntityXaphan && this.getPlayerOwner() == ((EntityXaphan)entity).getPlayerOwner()) {
 			return false;
 		}
-		return super.isDamageEntityApplicable(entity);
+		return super.isInvulnerableTo(entity);
 	}
     
     // ========== Ranged Attack ==========

@@ -19,7 +19,7 @@ import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -277,7 +277,7 @@ public class ProjectileInfo {
 	 * @param world The world to create the projectile in.
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
-	public EntityProjectileBase createProjectile(World world, EntityLivingBase entityLivingBase) {
+	public EntityProjectileBase createProjectile(World world, LivingEntity entityLivingBase) {
 		return new EntityProjectileCustom(world, entityLivingBase, this);
 	}
 

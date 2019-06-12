@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -16,7 +16,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
 	private int posIDStart = 13;
 	
 	// Properties:
-	public EntityLivingBase shootingEntity;
+	public LivingEntity shootingEntity;
 	public EntityProjectileLaser laserEntity;
 	private float projectileWidth = 0.2f;
 	private float projectileHeight = 0.2f;
@@ -41,7 +41,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
         this.setStats();
     }
     
-    public EntityProjectileLaserEnd(World world, EntityLivingBase shooter, EntityProjectileLaser laser) {
+    public EntityProjectileLaserEnd(World world, LivingEntity shooter, EntityProjectileLaser laser) {
         super(world, shooter);
         this.shootingEntity = shooter;
         this.laserEntity = laser;
@@ -76,10 +76,10 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
     		return;
     	}
     	
-    	if((this.laserEntity == null || !this.laserEntity.isEntityAlive()) && !this.isDead)
+    	if((this.laserEntity == null || !this.laserEntity.isAlive()) && !this.isDead)
     		this.remove();
     	
-    	if(this.isEntityAlive())
+    	if(this.isAlive())
     		this.moveToTarget();
     	
     	this.dataManager.set(POS_X, (float) this.posX);

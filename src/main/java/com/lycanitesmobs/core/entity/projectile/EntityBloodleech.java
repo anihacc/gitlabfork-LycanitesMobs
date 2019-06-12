@@ -5,7 +5,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -22,7 +22,7 @@ public class EntityBloodleech extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityBloodleech(World world, EntityLivingBase entityLivingBase) {
+    public EntityBloodleech(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -46,7 +46,7 @@ public class EntityBloodleech extends EntityProjectileBase {
  	// ==================================================
     //========== On Damage ==========
     @Override
-    public void onDamage(EntityLivingBase target, float damage, boolean attackSuccess) {
+    public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
     	if(this.getThrower() != null)
             this.getThrower().heal(damage);
     	super.onDamage(target, damage, attackSuccess);

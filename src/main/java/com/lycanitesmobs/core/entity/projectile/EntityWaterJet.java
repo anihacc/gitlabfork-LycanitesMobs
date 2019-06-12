@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -29,12 +29,12 @@ public class EntityWaterJet extends EntityProjectileLaser {
 		super(world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityWaterJet(World par1World, EntityLivingBase par2EntityLivingBase, int setTime, int setDelay) {
-		super(par1World, par2EntityLivingBase, setTime, setDelay);
+	public EntityWaterJet(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+		super(par1World, par2LivingEntity, setTime, setDelay);
 	}
 
-	public EntityWaterJet(World par1World, EntityLivingBase par2EntityLivingBase, int setTime, int setDelay, Entity followEntity) {
-		super(par1World, par2EntityLivingBase, setTime, setDelay, followEntity);
+	public EntityWaterJet(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
+		super(par1World, par2LivingEntity, setTime, setDelay, followEntity);
 	}
     
     // ========== Setup Projectile ==========
@@ -69,8 +69,8 @@ public class EntityWaterJet extends EntityProjectileLaser {
     public boolean updateDamage(Entity target) {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
-        	if(target instanceof EntityLivingBase && ObjectManager.getEffect("penetration") != null)
-    			((EntityLivingBase)target).addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 0));
+        	if(target instanceof LivingEntity && ObjectManager.getEffect("penetration") != null)
+    			((LivingEntity)target).addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -15,7 +15,7 @@ public class EntityProjectileModel extends EntityProjectileBase {
 		super(world);
 	}
 
-	public EntityProjectileModel(World world, EntityLivingBase entityLiving) {
+	public EntityProjectileModel(World world, LivingEntity entityLiving) {
 		super(world, entityLiving);
 	}
 

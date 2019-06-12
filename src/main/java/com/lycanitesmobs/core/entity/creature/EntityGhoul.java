@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.monster.IMob;
@@ -60,7 +60,7 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
     // ==================================================
     // ========== On Kill ==========
     @Override
-    public void onKillEntity(EntityLivingBase entityLivingBase) {
+    public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
 
         if(this.getEntityWorld().getDifficulty().getDifficultyId() >= 2 && entityLivingBase instanceof EntityVillager) {

@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.IAnimals;
@@ -108,7 +108,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     
     // ========== Attack Entity ==========
     @Override
-    public boolean canAttackEntity(EntityLivingBase entity) {
+    public boolean canAttackEntity(LivingEntity entity) {
     	if(entity instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || entity.getHealth() / entity.getMaxHealth() <= 0.25F))
     		return false;
     	else return super.canAttackEntity(entity);
@@ -116,7 +116,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     
     // ========== Set Attack Target ==========
     @Override
-    public void setAttackTarget(EntityLivingBase entity) {
+    public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
     		this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 * 20, 2, false, false));

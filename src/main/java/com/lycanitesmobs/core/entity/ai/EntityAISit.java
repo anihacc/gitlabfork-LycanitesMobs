@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
@@ -57,9 +57,9 @@ public class EntityAISit extends EntityAIBase {
         else if(!this.host.onGround && !this.host.isCurrentlyFlying())
             return false;
 
-        if (!(this.host.getOwner() instanceof EntityLivingBase))
+        if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
-        EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
+        LivingEntity owner = (LivingEntity)this.host.getOwner();
         if(owner != null && this.host.getDistance(owner) < 144.0D && owner.getRevengeTarget() != null && !this.host.isPassive())
         	return false;
         

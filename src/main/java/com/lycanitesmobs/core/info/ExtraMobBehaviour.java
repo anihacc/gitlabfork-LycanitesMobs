@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class ExtraMobBehaviour {
 	// ========== Mob ==========
@@ -56,141 +56,141 @@ public class ExtraMobBehaviour {
     // ==================================================
    	// ========== Read ===========
     /** Called from this host passing a compound storing all the extra behaviour options. **/
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void read(CompoundNBT nbtTagCompound) {
     	// Stat Multipliers:
-        if(nbtTagCompound.hasKey("MultiplierHealth")) {
+        if(nbtTagCompound.contains("MultiplierHealth")) {
             this.multiplierHealth = nbtTagCompound.getDouble("MultiplierHealth");
         }
-    	if(nbtTagCompound.hasKey("MultiplierDefense")) {
+    	if(nbtTagCompound.contains("MultiplierDefense")) {
     		this.multiplierDefense = nbtTagCompound.getDouble("MultiplierDefense");
     	}
-		if(nbtTagCompound.hasKey("MultiplierArmor")) {
+		if(nbtTagCompound.contains("MultiplierArmor")) {
 			this.multiplierArmor = nbtTagCompound.getDouble("MultiplierArmor");
 		}
-    	if(nbtTagCompound.hasKey("MultiplierSpeed")) {
+    	if(nbtTagCompound.contains("MultiplierSpeed")) {
     		this.multiplierSpeed = nbtTagCompound.getDouble("MultiplierSpeed");
     	}
-    	if(nbtTagCompound.hasKey("MultiplierDamage")) {
+    	if(nbtTagCompound.contains("MultiplierDamage")) {
     		this.multiplierDamage = nbtTagCompound.getDouble("MultiplierDamage");
     	}
-    	if(nbtTagCompound.hasKey("MultiplierHaste")) {
+    	if(nbtTagCompound.contains("MultiplierHaste")) {
     		this.multiplierHaste = nbtTagCompound.getDouble("MultiplierHaste");
     	}
-    	if(nbtTagCompound.hasKey("MultiplierEffect")) {
+    	if(nbtTagCompound.contains("MultiplierEffect")) {
     		this.multiplierEffect = nbtTagCompound.getDouble("MultiplierEffect");
     	}
-    	if(nbtTagCompound.hasKey("MultiplierPierce")) {
+    	if(nbtTagCompound.contains("MultiplierPierce")) {
     		this.multiplierEffect = nbtTagCompound.getDouble("MultiplierPierce");
     	}
 
     	// Stat Boosts:
-        if(nbtTagCompound.hasKey("BoostHealth")) {
-            this.boostHealth = nbtTagCompound.getInteger("BoostHealth");
+        if(nbtTagCompound.contains("BoostHealth")) {
+            this.boostHealth = nbtTagCompound.getInt("BoostHealth");
         }
-    	if(nbtTagCompound.hasKey("BoostDefense")) {
-    		this.boostDefense = nbtTagCompound.getInteger("BoostDefense");
+    	if(nbtTagCompound.contains("BoostDefense")) {
+    		this.boostDefense = nbtTagCompound.getInt("BoostDefense");
     	}
-		if(nbtTagCompound.hasKey("BoostArmor")) {
-			this.boostArmor = nbtTagCompound.getInteger("BoostArmor");
+		if(nbtTagCompound.contains("BoostArmor")) {
+			this.boostArmor = nbtTagCompound.getInt("BoostArmor");
 		}
-    	if(nbtTagCompound.hasKey("BoostSpeed")) {
-    		this.boostSpeed = nbtTagCompound.getInteger("BoostSpeed");
+    	if(nbtTagCompound.contains("BoostSpeed")) {
+    		this.boostSpeed = nbtTagCompound.getInt("BoostSpeed");
     	}
-    	if(nbtTagCompound.hasKey("BoostDamage")) {
-    		this.boostDamage = nbtTagCompound.getInteger("BoostDamage");
+    	if(nbtTagCompound.contains("BoostDamage")) {
+    		this.boostDamage = nbtTagCompound.getInt("BoostDamage");
     	}
-    	if(nbtTagCompound.hasKey("BoostHaste")) {
-    		this.boostHaste = nbtTagCompound.getInteger("BoostHaste");
+    	if(nbtTagCompound.contains("BoostHaste")) {
+    		this.boostHaste = nbtTagCompound.getInt("BoostHaste");
     	}
-    	if(nbtTagCompound.hasKey("BoostEffect")) {
-    		this.boostEffect = nbtTagCompound.getInteger("BoostEffect");
+    	if(nbtTagCompound.contains("BoostEffect")) {
+    		this.boostEffect = nbtTagCompound.getInt("BoostEffect");
     	}
-    	if(nbtTagCompound.hasKey("BoostPierce")) {
-    		this.boostEffect = nbtTagCompound.getInteger("BoostPierce");
+    	if(nbtTagCompound.contains("BoostPierce")) {
+    		this.boostEffect = nbtTagCompound.getInt("BoostPierce");
     	}
 
     	// Overrides:
-    	if(nbtTagCompound.hasKey("AggressiveOverride")) {
+    	if(nbtTagCompound.contains("AggressiveOverride")) {
     		this.aggressiveOverride = nbtTagCompound.getBoolean("AggressiveOverride");
     	}
-    	if(nbtTagCompound.hasKey("FlightOverride")) {
+    	if(nbtTagCompound.contains("FlightOverride")) {
     		this.flightOverride = nbtTagCompound.getBoolean("FlightOverride");
     	}
-    	if(nbtTagCompound.hasKey("SwimmingOverride")) {
+    	if(nbtTagCompound.contains("SwimmingOverride")) {
     		this.swimmingOverride = nbtTagCompound.getBoolean("SwimmingOverride");
     	}
-    	if(nbtTagCompound.hasKey("WaterBreathingOverride")) {
+    	if(nbtTagCompound.contains("WaterBreathingOverride")) {
     		this.waterBreathingOverride = nbtTagCompound.getBoolean("WaterBreathingOverride");
     	}
-    	if(nbtTagCompound.hasKey("FireImmunityOverride")) {
+    	if(nbtTagCompound.contains("FireImmunityOverride")) {
     		this.fireImmunityOverride = nbtTagCompound.getBoolean("FireImmunityOverride");
     	}
-    	if(nbtTagCompound.hasKey("StealthOverride")) {
+    	if(nbtTagCompound.contains("StealthOverride")) {
     		this.stealthOverride = nbtTagCompound.getBoolean("StealthOverride");
     	}
-    	if(nbtTagCompound.hasKey("ItemPickupOverride")) {
+    	if(nbtTagCompound.contains("ItemPickupOverride")) {
     		this.itemPickupOverride = nbtTagCompound.getBoolean("ItemPickupOverride");
     	}
-    	if(nbtTagCompound.hasKey("InventorySizeOverride")) {
-    		this.inventorySizeOverride = nbtTagCompound.getInteger("InventorySizeOverride");
+    	if(nbtTagCompound.contains("InventorySizeOverride")) {
+    		this.inventorySizeOverride = nbtTagCompound.getInt("InventorySizeOverride");
     	}
-    	if(nbtTagCompound.hasKey("ItemDropMultiplierOverride")) {
+    	if(nbtTagCompound.contains("ItemDropMultiplierOverride")) {
     		this.itemDropMultiplierOverride = nbtTagCompound.getDouble("ItemDropMultiplierOverride");
     	}
     	
     	// AI:
-    	if(nbtTagCompound.hasKey("AIAttackPlayers")) {
+    	if(nbtTagCompound.contains("AIAttackPlayers")) {
     		this.aiAttackPlayers = nbtTagCompound.getBoolean("AIAttackPlayers");
-    		this.host.targetTasks.removeTask(this.host.aiTargetPlayer);
+    		this.host.field_70715_bh.removeTask(this.host.aiTargetPlayer);
     		if(this.aiAttackPlayers) {
-    			this.host.targetTasks.addTask(9, this.host.aiTargetPlayer);
+    			this.host.field_70715_bh.addTask(9, this.host.aiTargetPlayer);
     		}
     	}
-    	if(nbtTagCompound.hasKey("AIDefendAnimals")) {
+    	if(nbtTagCompound.contains("AIDefendAnimals")) {
     		this.aiDefendAnimals = nbtTagCompound.getBoolean("AIDefendAnimals");
-    		this.host.targetTasks.removeTask(this.host.aiDefendAnimals);
+    		this.host.field_70715_bh.removeTask(this.host.aiDefendAnimals);
     		if(this.aiDefendAnimals) {
-    			this.host.targetTasks.addTask(10, this.host.aiDefendAnimals);
+    			this.host.field_70715_bh.addTask(10, this.host.aiDefendAnimals);
     		}
     	}
     }
     
     // ========== Write ==========
     /** Called from this host passing a compound writing all the extra behaviour options. **/
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public void write(CompoundNBT nbtTagCompound) {
     	// Stat Multipliers:
-        nbtTagCompound.setDouble("MultiplierHealth", this.multiplierHealth);
-    	nbtTagCompound.setDouble("MultiplierDefense", this.multiplierDefense);
-		nbtTagCompound.setDouble("MultiplierArmor", this.multiplierArmor);
-    	nbtTagCompound.setDouble("MultiplierSpeed", this.multiplierSpeed);
-    	nbtTagCompound.setDouble("MultiplierDamage", this.multiplierDamage);
-    	nbtTagCompound.setDouble("MultiplierHaste", this.multiplierHaste);
-    	nbtTagCompound.setDouble("MultiplierEffect", this.multiplierEffect);
-    	nbtTagCompound.setDouble("MultiplierPierce", this.multiplierPierce);
+        nbtTagCompound.putDouble("MultiplierHealth", this.multiplierHealth);
+    	nbtTagCompound.putDouble("MultiplierDefense", this.multiplierDefense);
+		nbtTagCompound.putDouble("MultiplierArmor", this.multiplierArmor);
+    	nbtTagCompound.putDouble("MultiplierSpeed", this.multiplierSpeed);
+    	nbtTagCompound.putDouble("MultiplierDamage", this.multiplierDamage);
+    	nbtTagCompound.putDouble("MultiplierHaste", this.multiplierHaste);
+    	nbtTagCompound.putDouble("MultiplierEffect", this.multiplierEffect);
+    	nbtTagCompound.putDouble("MultiplierPierce", this.multiplierPierce);
 
     	// Stat Boosts:
-        nbtTagCompound.setInteger("BoostHealth", this.boostHealth);
-    	nbtTagCompound.setInteger("BoostDefense", this.boostDefense);
-		nbtTagCompound.setInteger("BoostArmor", this.boostArmor);
-    	nbtTagCompound.setInteger("BoostSpeed", this.boostSpeed);
-    	nbtTagCompound.setInteger("BoostDamage", this.boostDamage);
-    	nbtTagCompound.setInteger("BoostHaste", this.boostHaste);
-    	nbtTagCompound.setInteger("BoostEffect", this.boostEffect);
-    	nbtTagCompound.setInteger("BoostPierce", this.boostPierce);
+        nbtTagCompound.putInt("BoostHealth", this.boostHealth);
+    	nbtTagCompound.putInt("BoostDefense", this.boostDefense);
+		nbtTagCompound.putInt("BoostArmor", this.boostArmor);
+    	nbtTagCompound.putInt("BoostSpeed", this.boostSpeed);
+    	nbtTagCompound.putInt("BoostDamage", this.boostDamage);
+    	nbtTagCompound.putInt("BoostHaste", this.boostHaste);
+    	nbtTagCompound.putInt("BoostEffect", this.boostEffect);
+    	nbtTagCompound.putInt("BoostPierce", this.boostPierce);
 
     	// Overrides:
-    	nbtTagCompound.setBoolean("AggressiveOverride", this.aggressiveOverride);
-    	nbtTagCompound.setBoolean("FlightOverride", this.flightOverride);
-    	nbtTagCompound.setBoolean("SwimmingOverride", this.swimmingOverride);
-    	nbtTagCompound.setBoolean("WaterBreathingOverride", this.waterBreathingOverride);
-    	nbtTagCompound.setBoolean("FireImmunityOverride", this.fireImmunityOverride);
-    	nbtTagCompound.setBoolean("StealthOverride", this.stealthOverride);
-    	nbtTagCompound.setBoolean("ItemPickupOverride", this.itemPickupOverride);
-    	nbtTagCompound.setInteger("InventorySizeOverride", this.inventorySizeOverride);
-    	nbtTagCompound.setDouble("ItemDropMultiplierOverride", this.itemDropMultiplierOverride);
+    	nbtTagCompound.putBoolean("AggressiveOverride", this.aggressiveOverride);
+    	nbtTagCompound.putBoolean("FlightOverride", this.flightOverride);
+    	nbtTagCompound.putBoolean("SwimmingOverride", this.swimmingOverride);
+    	nbtTagCompound.putBoolean("WaterBreathingOverride", this.waterBreathingOverride);
+    	nbtTagCompound.putBoolean("FireImmunityOverride", this.fireImmunityOverride);
+    	nbtTagCompound.putBoolean("StealthOverride", this.stealthOverride);
+    	nbtTagCompound.putBoolean("ItemPickupOverride", this.itemPickupOverride);
+    	nbtTagCompound.putInt("InventorySizeOverride", this.inventorySizeOverride);
+    	nbtTagCompound.putDouble("ItemDropMultiplierOverride", this.itemDropMultiplierOverride);
     	
     	// AI:
-    	nbtTagCompound.setBoolean("AIAttackPlayers", this.aiAttackPlayers);
-    	nbtTagCompound.setBoolean("AIDefendAnimals", this.aiDefendAnimals);
+    	nbtTagCompound.putBoolean("AIAttackPlayers", this.aiAttackPlayers);
+    	nbtTagCompound.putBoolean("AIDefendAnimals", this.aiDefendAnimals);
     }
 }

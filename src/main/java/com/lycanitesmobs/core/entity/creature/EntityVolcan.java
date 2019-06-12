@@ -6,9 +6,8 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySnowman;
@@ -101,9 +100,9 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 
 		// Burning Aura Attack:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0) {
-			List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+			List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 			for(Object entityObj : aoeTargets) {
-				EntityLivingBase target = (EntityLivingBase)entityObj;
+				LivingEntity target = (LivingEntity)entityObj;
 				if(target != this && !(target instanceof IGroupFire) && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
 					target.setFire(2);
 				}
@@ -203,9 +202,9 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus") || type.equals("inWall")) return false;
-    	    return super.isDamageTypeApplicable(type, source, damage);
+    	    return super.isInvulnerableTo(type, source, damage);
     }
     
     @Override

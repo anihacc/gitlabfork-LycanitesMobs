@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 public class EntityAIAttackRanged extends EntityAIBase {
     // Targets:
 	private final EntityCreatureBase host;
-    private EntityLivingBase attackTarget;
+    private LivingEntity attackTarget;
 
     // Properties
     private int attackTime;
@@ -126,10 +126,10 @@ public class EntityAIAttackRanged extends EntityAIBase {
             if(rideableHost.getControllingPassenger() instanceof PlayerEntity)
                 return false;
         }
-        EntityLivingBase possibleAttackTarget = this.host.getAttackTarget();
+        LivingEntity possibleAttackTarget = this.host.getAttackTarget();
         if(possibleAttackTarget == null)
             return false;
-        if(!possibleAttackTarget.isEntityAlive())
+        if(!possibleAttackTarget.isAlive())
             return false;
         this.attackTarget = possibleAttackTarget;
         return true;
@@ -149,10 +149,10 @@ public class EntityAIAttackRanged extends EntityAIBase {
     	// Should Execute:
     	if(!this.enabled)
     		return false;
-        EntityLivingBase possibleAttackTarget = this.host.getAttackTarget();
+        LivingEntity possibleAttackTarget = this.host.getAttackTarget();
         if(possibleAttackTarget == null)
             return false;
-        if(!possibleAttackTarget.isEntityAlive())
+        if(!possibleAttackTarget.isAlive())
             return false;
         this.attackTarget = possibleAttackTarget;
         return true;

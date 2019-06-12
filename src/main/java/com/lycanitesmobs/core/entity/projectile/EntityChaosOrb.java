@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ public class EntityChaosOrb extends EntityProjectileModel {
         super(world);
     }
 
-    public EntityChaosOrb(World world, EntityLivingBase entityLivingBase) {
+    public EntityChaosOrb(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -76,7 +76,7 @@ public class EntityChaosOrb extends EntityProjectileModel {
  	// ==================================================
 	//========== Entity Living Collision ==========
 	@Override
-	public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		if(ObjectManager.getEffect("instability") != null) {
 			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("instability"), this.getEffectDuration(5), 0));
 		}

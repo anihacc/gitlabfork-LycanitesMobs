@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -17,7 +17,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -150,8 +149,8 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     		return false;
     	
     	// Leech:
-    	if(this.getSubspeciesIndex() > 2 && target instanceof EntityLivingBase) {
-    		EntityLivingBase targetLiving = (EntityLivingBase)target;
+    	if(this.getSubspeciesIndex() > 2 && target instanceof LivingEntity) {
+    		LivingEntity targetLiving = (LivingEntity)target;
     		List<Potion> goodEffects = new ArrayList<>();
     		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
     			if(potionEffectObj instanceof PotionEffect) {
@@ -196,9 +195,9 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("inWall")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
     
     /** Returns true if this mob should be damaged by the sun. **/

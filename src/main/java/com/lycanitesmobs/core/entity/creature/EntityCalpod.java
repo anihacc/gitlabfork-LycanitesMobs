@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.BlockLog;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -89,7 +89,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityLivingBase minion = new EntityCalpod(this.getEntityWorld());
+    	LivingEntity minion = new EntityCalpod(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).setMinion(true);

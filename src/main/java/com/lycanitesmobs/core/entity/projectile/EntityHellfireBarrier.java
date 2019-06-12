@@ -6,7 +6,7 @@ import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -33,8 +33,8 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
         super(par1World);
     }
 
-    public EntityHellfireBarrier(World par1World, EntityLivingBase par2EntityLivingBase) {
-        super(par1World, par2EntityLivingBase);
+    public EntityHellfireBarrier(World par1World, LivingEntity par2LivingEntity) {
+        super(par1World, par2LivingEntity);
     }
 
     public EntityHellfireBarrier(World par1World, double par2, double par4, double par6) {
@@ -132,15 +132,15 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isImmuneToFire())
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
     	return true;
     }
 
     //========== Do Damage Check ==========
-    public boolean canDamage(EntityLivingBase targetEntity) {
-        EntityLivingBase owner = this.getThrower();
+    public boolean canDamage(LivingEntity targetEntity) {
+        LivingEntity owner = this.getThrower();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
                 return false;

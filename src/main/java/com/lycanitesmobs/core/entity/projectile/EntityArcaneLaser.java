@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -27,11 +27,11 @@ public class EntityArcaneLaser extends EntityProjectileLaser {
 		super(world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityArcaneLaser(World world, EntityLivingBase entityLiving, int setTime, int setDelay) {
+	public EntityArcaneLaser(World world, LivingEntity entityLiving, int setTime, int setDelay) {
 		super(world, entityLiving, setTime, setDelay);
 	}
 
-	public EntityArcaneLaser(World world, EntityLivingBase entityLiving, int setTime, int setDelay, Entity followEntity) {
+	public EntityArcaneLaser(World world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
 		super(world, entityLiving, setTime, setDelay, followEntity);
 	}
     

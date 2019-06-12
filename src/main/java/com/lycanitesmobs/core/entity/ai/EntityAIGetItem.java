@@ -101,7 +101,7 @@ public class EntityAIGetItem extends EntityAIBase {
     public boolean shouldContinueExecuting() {
     	if(this.target == null)
             return false;
-        if(!this.target.isEntityAlive())
+        if(!this.target.isAlive())
             return false;
         
         double distance = this.host.getDistance(target);

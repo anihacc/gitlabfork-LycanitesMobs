@@ -457,22 +457,22 @@ public class ExtendedWorld extends WorldSavedData {
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		// Events:
-		if(nbtTagCompound.hasKey("WorldEventStartTargetTime"))  {
-			this.worldEventStartTargetTime = nbtTagCompound.getInteger("WorldEventStartTargetTime");
+		if(nbtTagCompound.contains("WorldEventStartTargetTime"))  {
+			this.worldEventStartTargetTime = nbtTagCompound.getInt("WorldEventStartTargetTime");
 		}
-        if(nbtTagCompound.hasKey("WorldEventLastStartedTime"))  {
-            this.worldEventLastStartedTime = nbtTagCompound.getInteger("WorldEventLastStartedTime");
+        if(nbtTagCompound.contains("WorldEventLastStartedTime"))  {
+            this.worldEventLastStartedTime = nbtTagCompound.getInt("WorldEventLastStartedTime");
         }
-		if(nbtTagCompound.hasKey("WorldEventName"))  {
+		if(nbtTagCompound.contains("WorldEventName"))  {
 			this.worldEventName = nbtTagCompound.getString("WorldEventName");
 		}
-		if(nbtTagCompound.hasKey("WorldEventCount"))  {
-			this.worldEventCount = nbtTagCompound.getInteger("WorldEventCount");
+		if(nbtTagCompound.contains("WorldEventCount"))  {
+			this.worldEventCount = nbtTagCompound.getInt("WorldEventCount");
 		}
 		// TODO Load all active mob events, not just the world event.
 
 		// Dungeons:
-		if(nbtTagCompound.hasKey("Dungeons"))  {
+		if(nbtTagCompound.contains("Dungeons"))  {
 			NBTTagList nbtDungeonList = nbtTagCompound.getTagList("Dungeons", 10);
 			for(int i = 0; i < nbtDungeonList.tagCount(); i++) {
 				try {
@@ -497,10 +497,10 @@ public class ExtendedWorld extends WorldSavedData {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
     	// Events:
-		nbtTagCompound.setLong("WorldEventStartTargetTime", this.worldEventStartTargetTime);
-		nbtTagCompound.setLong("WorldEventLastStartedTime", this.worldEventLastStartedTime);
-    	nbtTagCompound.setString("WorldEventName", this.worldEventName);
-    	nbtTagCompound.setInteger("WorldEventCount", this.worldEventCount);
+		nbtTagCompound.putLong("WorldEventStartTargetTime", this.worldEventStartTargetTime);
+		nbtTagCompound.putLong("WorldEventLastStartedTime", this.worldEventLastStartedTime);
+    	nbtTagCompound.putString("WorldEventName", this.worldEventName);
+    	nbtTagCompound.putInt("WorldEventCount", this.worldEventCount);
     	// TODO Save all active mob events, not just the world event.
 
 		// Dungeons:

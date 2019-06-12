@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemSaddle;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -542,7 +543,7 @@ public class InventoryCreature implements IInventory {
     //                        NBT
     // ==================================================
    	// ========== Read ===========
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void read(CompoundNBT nbtTagCompound) {
     	// Read Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
@@ -561,7 +562,7 @@ public class InventoryCreature implements IInventory {
     }
     
     // ========== Write ==========
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public void write(CompoundNBT nbtTagCompound) {
     	// Write Items:
         NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         for(int i = 0; i < this.getSizeInventory(); i++) {

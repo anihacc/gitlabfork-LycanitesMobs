@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -23,7 +23,7 @@ public class EntityArcaneLaserEnd extends EntityProjectileLaserEnd {
         super(world, par2, par4, par6, laser);
     }
     
-    public EntityArcaneLaserEnd(World world, EntityLivingBase shooter, EntityProjectileLaser laser) {
+    public EntityArcaneLaserEnd(World world, LivingEntity shooter, EntityProjectileLaser laser) {
         super(world, shooter, laser);
     }
     

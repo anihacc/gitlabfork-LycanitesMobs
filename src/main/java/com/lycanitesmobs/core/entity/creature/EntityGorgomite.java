@@ -7,7 +7,7 @@ import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -79,7 +79,7 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityLivingBase minion = new EntityGorgomite(this.getEntityWorld());
+    	LivingEntity minion = new EntityGorgomite(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).setMinion(true);
@@ -127,8 +127,8 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("cactus")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
 }

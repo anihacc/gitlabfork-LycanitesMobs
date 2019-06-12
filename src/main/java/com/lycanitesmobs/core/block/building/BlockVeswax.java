@@ -50,7 +50,7 @@ public class BlockVeswax extends BlockBase {
     //                   Placement
     // ==================================================
     /*@Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack itemStack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
         orientationMeta += 8;
         world.setBlockState(pos, state.withProperty(HIVE, orientationMeta), 2);

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAIPlayerControl extends EntityAIBase {
@@ -58,7 +58,7 @@ public class EntityAIPlayerControl extends EntityAIBase {
     		return false;
     	if(!this.host.hasRiderTarget())
     		return false;
-    	if(!(this.host.getControllingPassenger() instanceof EntityLivingBase))
+    	if(!(this.host.getControllingPassenger() instanceof LivingEntity))
     		return false;
     	return true;
     }

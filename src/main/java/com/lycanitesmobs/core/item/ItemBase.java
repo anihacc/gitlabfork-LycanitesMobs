@@ -9,7 +9,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -109,13 +109,13 @@ public class ItemBase extends Item {
 
     // ========== Using ==========
     @Override
-    public void onUsingTick(ItemStack itemStack, EntityLivingBase entity, int useRemaining) {
+    public void onUsingTick(ItemStack itemStack, LivingEntity entity, int useRemaining) {
     	super.onUsingTick(itemStack, entity, useRemaining);
     }
     
     // ========== Stop ==========
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
     	super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
     }
 

@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -29,12 +29,12 @@ public class EntityPoisonRay extends EntityProjectileLaser {
 		super(world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityPoisonRay(World par1World, EntityLivingBase par2EntityLivingBase, int setTime, int setDelay) {
-		super(par1World, par2EntityLivingBase, setTime, setDelay);
+	public EntityPoisonRay(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+		super(par1World, par2LivingEntity, setTime, setDelay);
 	}
 
-	public EntityPoisonRay(World par1World, EntityLivingBase par2EntityLivingBase, int setTime, int setDelay, Entity followEntity) {
-		super(par1World, par2EntityLivingBase, setTime, setDelay, followEntity);
+	public EntityPoisonRay(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
+		super(par1World, par2LivingEntity, setTime, setDelay, followEntity);
 	}
     
     // ========== Setup Projectile ==========
@@ -70,8 +70,8 @@ public class EntityPoisonRay extends EntityProjectileLaser {
     public boolean updateDamage(Entity target) {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
-        	if(target instanceof EntityLivingBase)
-    			((EntityLivingBase)target).addPotionEffect(new PotionEffect(MobEffects.POISON, this.getEffectDuration(5), 0));
+        	if(target instanceof LivingEntity)
+    			((LivingEntity)target).addPotionEffect(new PotionEffect(MobEffects.POISON, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }

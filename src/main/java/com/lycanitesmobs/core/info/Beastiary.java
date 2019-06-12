@@ -246,7 +246,7 @@ public class Beastiary {
     // ==================================================
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-    	if(!nbtTagCompound.hasKey("CreatureKnowledge"))
+    	if(!nbtTagCompound.contains("CreatureKnowledge"))
     		return;
     	this.creatureKnowledgeList.clear();
     	NBTTagList knowledgeList = nbtTagCompound.getTagList("CreatureKnowledge", 10);

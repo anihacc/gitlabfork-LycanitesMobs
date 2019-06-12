@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.ai;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -12,7 +12,7 @@ public class EntityAIWatchClosest extends EntityAIBase {
     protected Entity closestEntity;
 
     // Properties
-    private Class watchedClass = EntityLivingBase.class;
+    private Class watchedClass = LivingEntity.class;
     private float maxDistanceForPlayer = 4.0F;
     private int lookTime;
     private int lookTimeMin = 40;
@@ -68,7 +68,7 @@ public class EntityAIWatchClosest extends EntityAIBase {
    	//                 Continue Executing
    	// ==================================================
     public boolean shouldContinueExecuting() {
-    	if(!this.closestEntity.isEntityAlive())
+    	if(!this.closestEntity.isAlive())
     		return false;
     	if(this.host.getDistance(this.closestEntity) > (double)(this.maxDistanceForPlayer * this.maxDistanceForPlayer))
     		return false;

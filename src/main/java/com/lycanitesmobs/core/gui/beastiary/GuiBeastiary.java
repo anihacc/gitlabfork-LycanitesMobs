@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -34,7 +34,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 
 	public PlayerEntity player;
 	public ExtendedPlayer playerExt;
-	public EntityLivingBase creaturePreviewEntity;
+	public LivingEntity creaturePreviewEntity;
 	public float creaturePreviewTicks = 0;
 
 	public ScaledResolution scaledResolution;
@@ -468,5 +468,5 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 * @param creatureInfo The Creature Info used to create the entity.
 	 * @param entity The display entity instance.
 	 */
-	public void onCreateDisplayEntity(CreatureInfo creatureInfo, EntityLivingBase entity) {}
+	public void onCreateDisplayEntity(CreatureInfo creatureInfo, LivingEntity entity) {}
 }

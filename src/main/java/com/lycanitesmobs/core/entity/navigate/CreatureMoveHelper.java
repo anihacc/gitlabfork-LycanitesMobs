@@ -1,14 +1,15 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class CreatureMoveHelper extends EntityMoveHelper {
+public class CreatureMoveHelper extends MovementController {
 
     protected EntityCreatureBase entityCreature;
     /** Used by flight movement for changing course, makes for smoother movement. **/
@@ -126,7 +127,7 @@ public class CreatureMoveHelper extends EntityMoveHelper {
 
         // Look At Target or Movement Direction:
         if (this.entityCreature.getAttackTarget() != null) {
-            EntityLivingBase entitylivingbase = this.entityCreature.getAttackTarget();
+            LivingEntity entitylivingbase = this.entityCreature.getAttackTarget();
             double distanceX = entitylivingbase.posX - this.entityCreature.posX;
             double distanceZ = entitylivingbase.posZ - this.entityCreature.posZ;
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);

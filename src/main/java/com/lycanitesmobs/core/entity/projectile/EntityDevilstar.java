@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -26,7 +26,7 @@ public class EntityDevilstar extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityDevilstar(World world, EntityLivingBase entityLivingBase) {
+    public EntityDevilstar(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -73,7 +73,7 @@ public class EntityDevilstar extends EntityProjectileBase {
  	// ==================================================
 	//========== Entity Living Collision ==========
 	@Override
-	public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		if(ObjectManager.getEffect("decay") != null) {
 			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}

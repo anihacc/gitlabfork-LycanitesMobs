@@ -5,7 +5,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -24,7 +24,7 @@ public class EntityBoulderBlast extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityBoulderBlast(World world, EntityLivingBase entityLivingBase) {
+    public EntityBoulderBlast(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -48,7 +48,7 @@ public class EntityBoulderBlast extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(5), 0));
     	return true;
     }

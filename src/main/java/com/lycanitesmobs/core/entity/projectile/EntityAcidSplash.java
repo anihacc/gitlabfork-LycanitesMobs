@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -25,7 +25,7 @@ public class EntityAcidSplash extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityAcidSplash(World world, EntityLivingBase entityLivingBase) {
+    public EntityAcidSplash(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -49,7 +49,7 @@ public class EntityAcidSplash extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		Potion penetration = ObjectManager.getEffect("penetration");
 		if(penetration != null)
 			entityLiving.addPotionEffect(new PotionEffect(penetration, this.getEffectDuration(10), 1));

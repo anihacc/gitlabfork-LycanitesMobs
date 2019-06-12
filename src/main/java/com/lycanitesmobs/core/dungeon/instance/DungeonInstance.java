@@ -166,7 +166,7 @@ public class DungeonInstance {
 		this.schematic = DungeonManager.getInstance().getSchematic(nbtTagCompound.getString("Schematic"));
 		this.seed = nbtTagCompound.getLong("Seed");
 		this.complete = nbtTagCompound.getBoolean("Complete");
-		this.chunksBuilt = nbtTagCompound.getInteger("ChunksBuilt");
+		this.chunksBuilt = nbtTagCompound.getInt("ChunksBuilt");
 		if(this.schematic == null) {
 			this.complete = true;
 		}
@@ -190,10 +190,10 @@ public class DungeonInstance {
 			return null;
 
 		nbtTagCompound.setUniqueId("Id", this.uuid);
-		nbtTagCompound.setString("Schematic", this.schematic.name);
-		nbtTagCompound.setLong("Seed", this.seed);
-		nbtTagCompound.setBoolean("Complete", this.complete);
-		nbtTagCompound.setInteger("ChunksBuilt", this.chunksBuilt);
+		nbtTagCompound.putString("Schematic", this.schematic.name);
+		nbtTagCompound.putLong("Seed", this.seed);
+		nbtTagCompound.putBoolean("Complete", this.complete);
+		nbtTagCompound.putInt("ChunksBuilt", this.chunksBuilt);
 		nbtTagCompound.setIntArray("OriginPos", new int[] {this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()});
 		nbtTagCompound.setIntArray("ChunkMin", new int[] {this.chunkMin.z, this.chunkMin.z});
 		nbtTagCompound.setIntArray("ChunkMax", new int[] {this.chunkMax.z, this.chunkMax.z});

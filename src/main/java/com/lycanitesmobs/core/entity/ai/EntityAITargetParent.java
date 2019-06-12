@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -10,7 +10,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 public class EntityAITargetParent extends EntityAITarget {
 	// Targets:
 	private EntityCreatureAgeable host;
-    private Class targetClass = EntityLivingBase.class;
+    private Class targetClass = LivingEntity.class;
     
     // Properties:
     private boolean tameTargeting = true;
@@ -65,16 +65,16 @@ public class EntityAITargetParent extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getParentTarget(); }
+    protected LivingEntity getTarget() { return this.host.getParentTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setParentTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setParentTarget(newTarget); }
     
     
     // ==================================================
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
         // Target Class Check:
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;

@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
@@ -212,19 +212,19 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         if(this.getEntityWorld().isRemote && this.updateTick % 200 == 0) {
             if(!this.triteMinions.isEmpty()) {
                 for (EntityTrite minion : this.triteMinions.toArray(new EntityTrite[this.triteMinions.size()])) {
-                    if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
+                    if(minion == null || !minion.isAlive() || minion.getMasterTarget() != this)
                         this.triteMinions.remove(minion);
                 }
             }
             if(!this.astarothMinions.isEmpty()) {
                 for (EntityAstaroth minion : this.astarothMinions.toArray(new EntityAstaroth[this.astarothMinions.size()])) {
-                    if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
+                    if(minion == null || !minion.isAlive() || minion.getMasterTarget() != this)
                         this.astarothMinions.remove(minion);
                 }
             }
             if(!this.cacodemonMinions.isEmpty()) {
                 for (EntityCacodemon minion : this.cacodemonMinions.toArray(new EntityCacodemon[this.cacodemonMinions.size()])) {
-                    if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
+                    if(minion == null || !minion.isAlive() || minion.getMasterTarget() != this)
                         this.cacodemonMinions.remove(minion);
                 }
             }
@@ -257,7 +257,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         }
 
         // Return to center with no target.
-        if(this.getAttackTarget() == null || !this.getAttackTarget().isEntityAlive()) {
+        if(this.getAttackTarget() == null || !this.getAttackTarget().isAlive()) {
             this.setCurrentArenaNode(this.arenaNodeNetwork.centralNode);
             return;
         }
@@ -495,7 +495,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
 
     // ========== Minion Death ==========
     @Override
-    public void onMinionDeath(EntityLivingBase minion) {
+    public void onMinionDeath(LivingEntity minion) {
         if(minion instanceof EntityTrite && this.triteMinions.contains(minion)) {
             this.triteMinions.remove(minion);
         }
@@ -535,7 +535,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     }
 
     @Override
-    public boolean isDamageEntityApplicable(Entity entity) {
+    public boolean isInvulnerableTo(Entity entity) {
         if(entity instanceof EntityPigZombie) {
             entity.remove();
             return false;
@@ -550,7 +550,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
                 return false;
             }
         }
-        return super.isDamageEntityApplicable(entity);
+        return super.isInvulnerableTo(entity);
     }
 
 
@@ -576,13 +576,13 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
         super.readEntityFromNBT(nbtTagCompound);
-        if(nbtTagCompound.hasKey("DevilstarStreamCharge")) {
-            this.devilstarStreamCharge = nbtTagCompound.getInteger("DevilstarStreamCharge");
+        if(nbtTagCompound.contains("DevilstarStreamCharge")) {
+            this.devilstarStreamCharge = nbtTagCompound.getInt("DevilstarStreamCharge");
         }
-        if(nbtTagCompound.hasKey("DevilstarStreamTime")) {
-            this.devilstarStreamTime = nbtTagCompound.getInteger("DevilstarStreamTime");
+        if(nbtTagCompound.contains("DevilstarStreamTime")) {
+            this.devilstarStreamTime = nbtTagCompound.getInt("DevilstarStreamTime");
         }
-        if(nbtTagCompound.hasKey("AstarothIDs")) {
+        if(nbtTagCompound.contains("AstarothIDs")) {
             NBTTagList astarothIDs = nbtTagCompound.getTagList("AstarothIDs", 10);
             for(int i = 0; i < astarothIDs.tagCount(); i++) {
                 NBTTagCompound astarothID = astarothIDs.getCompoundTagAt(i);
@@ -600,8 +600,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
         super.writeEntityToNBT(nbtTagCompound);
-        nbtTagCompound.setInteger("DevilstarStreamCharge", this.devilstarStreamCharge);
-        nbtTagCompound.setInteger("DevilstarStreamTime", this.devilstarStreamTime);
+        nbtTagCompound.putInt("DevilstarStreamCharge", this.devilstarStreamCharge);
+        nbtTagCompound.putInt("DevilstarStreamTime", this.devilstarStreamTime);
         if(this.getBattlePhase() > 0) {
             NBTTagList astarothIDs = new NBTTagList();
             for(EntityAstaroth entityAstaroth : this.astarothMinions) {

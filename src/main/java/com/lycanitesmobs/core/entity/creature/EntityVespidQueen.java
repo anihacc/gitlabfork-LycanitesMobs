@@ -12,7 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -21,7 +21,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
@@ -151,7 +150,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(EntityVespid.class, 32D) < this.vespidQueenSwarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
-				EntityLivingBase minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
+				LivingEntity minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
 				if(minion instanceof EntityCreatureAgeable) {
 		    		((EntityCreatureAgeable)minion).setGrowingAge(((EntityCreatureAgeable) minion).growthTime);
 		    	}
@@ -159,8 +158,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 		}
 	}
 	
-    public EntityLivingBase spawnAlly(double x, double y, double z) {
-    	EntityLivingBase minion = new EntityVespid(this.getEntityWorld());
+    public LivingEntity spawnAlly(double x, double y, double z) {
+    	LivingEntity minion = new EntityVespid(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
@@ -377,7 +376,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     
     // ========== Can Attack Entity ==========
     @Override
-    public boolean canAttackEntity(EntityLivingBase targetEntity) {
+    public boolean canAttackEntity(LivingEntity targetEntity) {
     	if(targetEntity instanceof EntityConba)
         	if(((EntityConba)targetEntity).vespidInfection)
         		return false;
@@ -411,8 +410,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
 }

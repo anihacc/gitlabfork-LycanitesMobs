@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.temp.ItemScepter;
 
 import com.lycanitesmobs.core.entity.creature.EntityWraith;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -41,7 +41,7 @@ public class ItemWraithSigil extends ItemScepter {
     //                      Attack
     // ==================================================
     @Override
-    public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
+    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
         if(!world.isRemote) {
             for(int i = -2; i <= 2; i++) {
                 EntityWraith minion = new EntityWraith(world);

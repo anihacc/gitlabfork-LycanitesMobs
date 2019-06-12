@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 import java.util.Iterator;
 import java.util.List;
@@ -81,7 +81,7 @@ public class EntityAITargetRiderRevenge extends EntityAITargetAttack {
                 List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getEntityBoundingBox().grow(d0, 4.0D, d0), new Predicate<Entity>() {
                     @Override
                     public boolean apply(Entity input) {
-                        return input instanceof EntityLivingBase;
+                        return input instanceof LivingEntity;
                     }
                 });
                 Iterator possibleAllies = allies.iterator();

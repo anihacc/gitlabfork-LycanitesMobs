@@ -4,11 +4,11 @@ import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityAITargetAvoid extends EntityAITarget {
 	// Targets:
-    private Class targetClass = EntityLivingBase.class;
+    private Class targetClass = LivingEntity.class;
     
     // Properties:
     private int targetChance = 0;
@@ -66,16 +66,16 @@ public class EntityAITargetAvoid extends EntityAITarget {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected EntityLivingBase getTarget() { return this.host.getAvoidTarget(); }
+    protected LivingEntity getTarget() { return this.host.getAvoidTarget(); }
     @Override
-    protected void setTarget(EntityLivingBase newTarget) { this.host.setAvoidTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setAvoidTarget(newTarget); }
     
     
     // ==================================================
  	//                 Valid Target Check
  	// ==================================================
     @Override
-    protected boolean isValidTarget(EntityLivingBase target) {
+    protected boolean isValidTarget(LivingEntity target) {
         // Target Class Check:
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
@@ -101,7 +101,7 @@ public class EntityAITargetAvoid extends EntityAITarget {
 		}
 
 		// Check for other avoid target AIs:
-        EntityLivingBase avoidTarget = this.getTarget();
+        LivingEntity avoidTarget = this.getTarget();
         if(avoidTarget != null && !this.isValidTarget(avoidTarget)) {
             return false;
         }

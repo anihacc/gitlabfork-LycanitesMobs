@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ public class EntityMagma extends EntityProjectileBase {
         super(par1World);
     }
 
-    public EntityMagma(World par1World, EntityLivingBase entityLivingBase) {
+    public EntityMagma(World par1World, LivingEntity entityLivingBase) {
         super(par1World, entityLivingBase);
     }
 
@@ -50,7 +50,7 @@ public class EntityMagma extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	if(!entityLiving.isImmuneToFire())
     		entityLiving.setFire(this.getEffectDuration(5) / 20);
     	return true;

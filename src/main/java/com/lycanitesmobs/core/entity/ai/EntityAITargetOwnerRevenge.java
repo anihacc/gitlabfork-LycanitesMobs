@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityAITargetOwnerRevenge extends EntityAITargetAttack {
 	
@@ -51,9 +51,9 @@ public class EntityAITargetOwnerRevenge extends EntityAITargetAttack {
     		return false;
     	if(this.host.getOwner() == null)
     		return false;
-        if (!(this.host.getOwner() instanceof EntityLivingBase))
+        if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
-        EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
+        LivingEntity owner = (LivingEntity)this.host.getOwner();
         int i = owner.getRevengeTimer();
         if(i == this.revengeTime)
         	return false;
@@ -67,7 +67,7 @@ public class EntityAITargetOwnerRevenge extends EntityAITargetAttack {
  	//                 Start Executing
  	// ==================================================
     public void startExecuting() {
-        EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
+        LivingEntity owner = (LivingEntity)this.host.getOwner();
         this.target = owner.getRevengeTarget();
         this.revengeTime = owner.getRevengeTimer();
         if(this.callForHelp) {

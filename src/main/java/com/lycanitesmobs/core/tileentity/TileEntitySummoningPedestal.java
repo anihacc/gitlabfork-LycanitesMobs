@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -199,7 +199,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     //           Summoning Pedestal
     // ========================================
     /** Sets the owner of this block. **/
-    public void setOwner(EntityLivingBase entity) {
+    public void setOwner(LivingEntity entity) {
         if(entity instanceof PlayerEntity) {
             PlayerEntity entityPlayer = (PlayerEntity)entity;
             this.ownerUUID = entityPlayer.getUniqueID();
@@ -444,7 +444,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
 
-        if(nbtTagCompound.hasKey("OwnerUUID")) {
+        if(nbtTagCompound.contains("OwnerUUID")) {
             String uuidString = nbtTagCompound.getString("OwnerUUID");
             if(!"".equals(uuidString))
                 this.ownerUUID = UUID.fromString(uuidString);
@@ -455,14 +455,14 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
             this.ownerUUID = null;
         }
 
-        if(nbtTagCompound.hasKey("OwnerName")) {
+        if(nbtTagCompound.contains("OwnerName")) {
             this.ownerName = nbtTagCompound.getString("OwnerName");
         }
         else {
             this.ownerName = "";
         }
 
-        if(nbtTagCompound.hasKey("SummonSet")) {
+        if(nbtTagCompound.contains("SummonSet")) {
             NBTTagCompound summonSetNBT = nbtTagCompound.getCompoundTag("SummonSet");
             SummonSet summonSet = new SummonSet(null);
             summonSet.readFromNBT(summonSetNBT);
@@ -472,7 +472,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			this.summonSet = null;
 		}
 
-        if(nbtTagCompound.hasKey("MinionIDs")) {
+        if(nbtTagCompound.contains("MinionIDs")) {
             NBTTagList minionIDs = nbtTagCompound.getTagList("MinionIDs", 10);
             this.loadMinionIDs = new String[minionIDs.tagCount()];
             for(int i = 0; i < minionIDs.tagCount(); i++) {
@@ -484,13 +484,13 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         }
 
         // Fuel:
-		if(nbtTagCompound.hasKey("Fuel")) {
-			this.summoningFuel = nbtTagCompound.getInteger("Fuel");
+		if(nbtTagCompound.contains("Fuel")) {
+			this.summoningFuel = nbtTagCompound.getInt("Fuel");
 		}
-		if(nbtTagCompound.hasKey("FuelMax")) {
-			this.summoningFuelMax = nbtTagCompound.getInteger("FuelMax");
+		if(nbtTagCompound.contains("FuelMax")) {
+			this.summoningFuelMax = nbtTagCompound.getInt("FuelMax");
 		}
-		if(nbtTagCompound.hasKey("Items")) {
+		if(nbtTagCompound.contains("Items")) {
 			NonNullList<ItemStack> itemStacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 			ItemStackHelper.loadAllItems(nbtTagCompound, itemStacks); // Reads ItemStack into a List from "Items" tag.
 
@@ -515,10 +515,10 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         super.writeToNBT(nbtTagCompound);
 
         if(this.ownerUUID == null) {
-            nbtTagCompound.setString("OwnerUUID", "");
+            nbtTagCompound.putString("OwnerUUID", "");
         }
         else {
-            nbtTagCompound.setString("OwnerUUID", this.ownerUUID.toString());
+            nbtTagCompound.putString("OwnerUUID", this.ownerUUID.toString());
         }
 
         if(this.summonSet != null) {
@@ -527,11 +527,11 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
             nbtTagCompound.setTag("SummonSet", summonSetNBT);
         }
 
-        nbtTagCompound.setString("OwnerName", this.ownerName);
+        nbtTagCompound.putString("OwnerName", this.ownerName);
 
         if(this.minions.size() > 0) {
             NBTTagList minionIDs = new NBTTagList();
-            for(EntityLivingBase minion : this.minions) {
+            for(LivingEntity minion : this.minions) {
                 NBTTagCompound minionID = new NBTTagCompound();
                 minionID.setString("ID", minion.getUniqueID().toString());
                 minionIDs.appendTag(minionID);
@@ -540,8 +540,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         }
 
         // Fuel:
-		nbtTagCompound.setInteger("Fuel", this.summoningFuel);
-		nbtTagCompound.setInteger("FuelMax", this.summoningFuelMax);
+		nbtTagCompound.putInt("Fuel", this.summoningFuel);
+		nbtTagCompound.putInt("FuelMax", this.summoningFuelMax);
 		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
 
         return nbtTagCompound;

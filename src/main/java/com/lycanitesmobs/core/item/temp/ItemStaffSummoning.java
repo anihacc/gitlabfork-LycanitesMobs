@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
 import com.lycanitesmobs.core.pets.SummonSet;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.IItemPropertyGetter;
@@ -30,7 +30,7 @@ public class ItemStaffSummoning extends ItemScepter {
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)
-            public float apply(ItemStack itemStack, World world, EntityLivingBase entity) {
+            public float apply(ItemStack itemStack, World world, LivingEntity entity) {
                 return entity != null && entity.isHandActive() && entity.getActiveItemStack() == itemStack ? 1.0F : 0.0F;
             }
         });
@@ -47,11 +47,11 @@ public class ItemStaffSummoning extends ItemScepter {
     }
     
     @Override
-    public void damageItemRapid(ItemStack itemStack, EntityLivingBase entity) {
+    public void damageItemRapid(ItemStack itemStack, LivingEntity entity) {
         return;
     }
     
-    public void damageItemCharged(ItemStack itemStack, EntityLivingBase entity, float power) {
+    public void damageItemCharged(ItemStack itemStack, LivingEntity entity, float power) {
 		ExtendedPlayer playerExt = null;
 		if(entity instanceof PlayerEntity) {
 			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);
@@ -108,7 +108,7 @@ public class ItemStaffSummoning extends ItemScepter {
     
     // ========== On Stop Using ==========
     @Override
-    public void onPlayerStoppedUsing(ItemStack itemStack, World world, EntityLivingBase entity, int useRemaining) {
+    public void onPlayerStoppedUsing(ItemStack itemStack, World world, LivingEntity entity, int useRemaining) {
     	super.onPlayerStoppedUsing(itemStack, world, entity, useRemaining);
 		ExtendedPlayer playerExt = null;
 		if(entity instanceof PlayerEntity) {
@@ -151,11 +151,11 @@ public class ItemStaffSummoning extends ItemScepter {
     
     // ========== Rapid ==========
     @Override
-    public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
+    public boolean rapidAttack(ItemStack itemStack, World world, LivingEntity entity) {
     	return false;
     }
 
-    private void damage_item(ItemStack itemStack, int amountToDamage, EntityLivingBase entity)
+    private void damage_item(ItemStack itemStack, int amountToDamage, LivingEntity entity)
     {
         itemStack.damageItem(amountToDamage, entity);
         if (itemStack.getCount() == 0) {
@@ -169,7 +169,7 @@ public class ItemStaffSummoning extends ItemScepter {
     
     // ========== Charged ==========
     @Override
-    public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
+    public boolean chargedAttack(ItemStack itemStack, World world, LivingEntity entity, float power) {
     	ExtendedPlayer playerExt = null;
     	if(entity instanceof PlayerEntity) {
 			playerExt = ExtendedPlayer.getForPlayer((PlayerEntity)entity);

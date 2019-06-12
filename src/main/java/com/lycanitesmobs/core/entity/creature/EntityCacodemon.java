@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
@@ -9,7 +8,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.passive.EntityVillager;
@@ -94,7 +93,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     }
 
     @Override
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.WITHER))
             rider.removePotionEffect(MobEffects.WITHER);
         if(rider.isBurning())
@@ -177,10 +176,10 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isDamageEntityApplicable(Entity entity) {
+    public boolean isInvulnerableTo(Entity entity) {
     	if(entity instanceof EntityCacodemon)
     		return false;
-    	return super.isDamageEntityApplicable(entity);
+    	return super.isInvulnerableTo(entity);
     }
     
     @Override

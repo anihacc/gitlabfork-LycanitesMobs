@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
@@ -12,7 +11,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
@@ -109,10 +108,10 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
         if(this.leapedAbilityReady && this.onGround && !this.getEntityWorld().isRemote) {
             this.leapedAbilityReady = false;
             double distance = 4.0D;
-            List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<EntityLivingBase>() {
+            List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
                 @Override
-                public boolean apply(EntityLivingBase possibleTarget) {
-                    if (!possibleTarget.isEntityAlive()
+                public boolean apply(LivingEntity possibleTarget) {
+                    if (!possibleTarget.isAlive()
                             || possibleTarget == EntityMaug.this
                             || EntityMaug.this.isRidingOrBeingRiddenBy(possibleTarget)
                             || EntityMaug.this.isOnSameTeam(possibleTarget)
@@ -124,7 +123,7 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
                 }
             });
             if(!possibleTargets.isEmpty()) {
-                for(EntityLivingBase possibleTarget : possibleTargets) {
+                for(LivingEntity possibleTarget : possibleTargets) {
                     boolean doDamage = true;
                     if(this.getRider() instanceof PlayerEntity) {
                         if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
@@ -140,7 +139,7 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
         }
     }
     
-    public void riderEffects(EntityLivingBase rider) {
+    public void riderEffects(LivingEntity rider) {
     	if(rider.isPotionActive(MobEffects.SLOWNESS))
     		rider.removePotionEffect(MobEffects.SLOWNESS);
         if(rider.isPotionActive(MobEffects.HUNGER))
@@ -239,9 +238,9 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
         if(type.equals("ooze")) return false;
-        return super.isDamageTypeApplicable(type, source, damage);
+        return super.isInvulnerableTo(type, source, damage);
     }
     
     @Override

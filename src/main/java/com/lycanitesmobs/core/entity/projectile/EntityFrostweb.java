@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -25,7 +25,7 @@ public class EntityFrostweb extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityFrostweb(World world, EntityLivingBase entityLivingBase) {
+    public EntityFrostweb(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -47,7 +47,7 @@ public class EntityFrostweb extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
         entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(2), 0));
     	return true;
     }

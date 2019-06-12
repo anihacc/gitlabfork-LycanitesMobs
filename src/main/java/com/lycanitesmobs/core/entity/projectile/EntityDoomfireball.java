@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -29,7 +29,7 @@ public class EntityDoomfireball extends EntityProjectileBase {
         super(world);
     }
 
-    public EntityDoomfireball(World world, EntityLivingBase entityLivingBase) {
+    public EntityDoomfireball(World world, LivingEntity entityLivingBase) {
         super(world, entityLivingBase);
     }
 
@@ -51,7 +51,7 @@ public class EntityDoomfireball extends EntityProjectileBase {
  	// ==================================================
     //========== Entity Living Collision ==========
     @Override
-    public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
+    public boolean onEntityLivingDamage(LivingEntity entityLiving) {
         super.onEntityLivingDamage(entityLiving);
     	if(!entityLiving.isImmuneToFire()) {
             entityLiving.setFire(this.getEffectDuration(5) / 20);

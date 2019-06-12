@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -96,9 +96,9 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 			EffectBase plague = ObjectManager.getEffect("plague");
 			if(plague != null) {
 				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(5), 1);
-				List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+				List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 				for(Object entityObj : aoeTargets) {
-					EntityLivingBase target = (EntityLivingBase) entityObj;
+					LivingEntity target = (LivingEntity) entityObj;
 					if (target != this && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isPotionApplicable(potionEffect)) {
 						target.addPotionEffect(potionEffect);
 					}
@@ -176,9 +176,9 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
     	if(type.equals("inWall")) return false;
-    	return super.isDamageTypeApplicable(type, source, damage);
+    	return super.isInvulnerableTo(type, source, damage);
     }
 
 	@Override

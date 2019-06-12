@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
@@ -78,9 +78,9 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
   	// ==================================================
     // ========== Despawning ==========
     @Override
-    protected boolean canDespawn() {
+    protected boolean canDespawnNaturally() {
     	if(this.inventory.hasBagItems()) return false;
-        return super.canDespawn();
+        return super.canDespawnNaturally();
     }
 	
 	
@@ -124,7 +124,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     //                     Attacks
     // ==================================================
     @Override
-	public boolean canAttackEntity(EntityLivingBase targetEntity) {
+	public boolean canAttackEntity(LivingEntity targetEntity) {
     	if((targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
 			return false;
 		return super.canAttackEntity(targetEntity);

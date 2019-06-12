@@ -356,21 +356,21 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     @Override
 	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
         super.readEntityFromNBT(nbtTagCompound);
-        if(nbtTagCompound.hasKey("Age")) {
-        	this.setGrowingAge(nbtTagCompound.getInteger("Age"));
+        if(nbtTagCompound.contains("Age")) {
+        	this.setGrowingAge(nbtTagCompound.getInt("Age"));
         }
         else {
         	this.setGrowingAge(0);
         }
         
-        if(nbtTagCompound.hasKey("InLove")) {
-        	this.loveTime = nbtTagCompound.getInteger("InLove");
+        if(nbtTagCompound.contains("InLove")) {
+        	this.loveTime = nbtTagCompound.getInt("InLove");
         }
         else {
         	this.loveTime = 0;
         }
         
-        if(nbtTagCompound.hasKey("HasBeenFarmed")) {
+        if(nbtTagCompound.contains("HasBeenFarmed")) {
         	if(nbtTagCompound.getBoolean("HasBeenFarmed")) {
         		this.setFarmed();
         	}
@@ -381,8 +381,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     @Override
 	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
         super.writeEntityToNBT(nbtTagCompound);
-        nbtTagCompound.setInteger("Age", this.getGrowingAge());
-        nbtTagCompound.setInteger("InLove", this.loveTime);
-        nbtTagCompound.setBoolean("HasBeenFarmed", this.hasBeenFarmed);
+        nbtTagCompound.putInt("Age", this.getGrowingAge());
+        nbtTagCompound.putInt("InLove", this.loveTime);
+        nbtTagCompound.putBoolean("HasBeenFarmed", this.hasBeenFarmed);
     }
 }
