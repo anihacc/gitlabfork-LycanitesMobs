@@ -56,7 +56,7 @@ public class EntityProjectileBase extends EntityThrowable {
     public boolean clientOnly = false;
 
     // Data Manager:
-    protected static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntityProjectileBase.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntityProjectileBase.class, DataSerializers.field_187193_c);
 
 
 	// ==================================================

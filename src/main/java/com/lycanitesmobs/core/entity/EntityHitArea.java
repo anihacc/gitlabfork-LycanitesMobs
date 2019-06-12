@@ -13,8 +13,8 @@ public class EntityHitArea extends Entity {
     public Entity owner;
 
     // Datawatcher:
-    protected static final DataParameter<Float> WIDTH = EntityDataManager.<Float>createKey(EntityHitArea.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> HEIGHT = EntityDataManager.<Float>createKey(EntityHitArea.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> WIDTH = EntityDataManager.<Float>createKey(EntityHitArea.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> HEIGHT = EntityDataManager.<Float>createKey(EntityHitArea.class, DataSerializers.field_187193_c);
 
     public EntityHitArea(Entity ownerEntity, float width, float height) {
         super(ownerEntity.getEntityWorld());

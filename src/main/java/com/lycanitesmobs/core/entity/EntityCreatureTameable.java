@@ -49,10 +49,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	public EntityAISit aiSit;
 
     // Datawatcher:
-    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
     protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 
     /** Used for the TAMED WATCHER_ID, this holds a series of booleans that describe the tamed status as well as instructed behaviour. **/
 	public static enum TAMED_ID {

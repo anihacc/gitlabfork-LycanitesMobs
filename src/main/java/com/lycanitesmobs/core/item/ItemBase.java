@@ -27,10 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-//import thaumcraft.api.research.IScanThing;
-
-@Optional.Interface(iface=Thaumcraft.interfaceScanThing, modid=Thaumcraft.modid, striprefs=true)
-public class ItemBase extends Item {//implements IScanThing {
+public class ItemBase extends Item {
 	public static int descriptionWidth = 200;
 	
 	public String itemName = "unamed_item";
@@ -39,15 +36,14 @@ public class ItemBase extends Item {//implements IScanThing {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemBase() {
-        super();
-        this.setMaxStackSize(64);
+    public ItemBase(Properties properties) {
+    	super(properties);
+        //this.setMaxStackSize(64);
     }
-    
+
     public void setup() {
         this.setRegistryName(this.modInfo.filename, this.itemName);
-    	this.setUnlocalizedName(this.itemName);
-        this.setCreativeTab(LycanitesMobs.itemsTab);
+        //this.setCreativeTab(LycanitesMobs.itemsTab);
     }
     
     
@@ -189,20 +185,4 @@ public class ItemBase extends Item {//implements IScanThing {
     public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
         return 16777215;
     }
-
-
-	// ==================================================
-	//                   Thaumcraft
-	// ==================================================
-	@Optional.Method(modid=Thaumcraft.modid)
-	//@Override
-	public boolean checkThing(PlayerEntity player, Object obj) {
-		return false;
-	}
-
-	@Optional.Method(modid=Thaumcraft.modid)
-	//@Override
-	public String getResearchKey(PlayerEntity player, Object object) {
-		return null;
-	}
 }

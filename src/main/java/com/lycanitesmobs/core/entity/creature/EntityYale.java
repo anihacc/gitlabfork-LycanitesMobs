@@ -48,7 +48,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         }
     }, 2, 1);
 
-    protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
     
     // ==================================================
  	//                    Constructor

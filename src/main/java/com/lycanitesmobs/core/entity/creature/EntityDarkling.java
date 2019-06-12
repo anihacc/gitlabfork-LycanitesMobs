@@ -31,9 +31,9 @@ import net.minecraft.world.World;
 public class EntityDarkling extends EntityCreatureTameable implements IMob, IGroupShadow {
 
     // Data Manager:
-    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.VARINT);
-    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
+    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 
     // Latching
     EntityLivingBase latchEntity = null;

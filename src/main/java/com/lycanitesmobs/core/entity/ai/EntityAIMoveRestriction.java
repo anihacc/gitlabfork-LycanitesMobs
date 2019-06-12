@@ -2,10 +2,11 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIMoveRestriction extends EntityAIBase {
+public class EntityAIMoveRestriction extends Goal {
 	// Targets:
     private EntityCreatureBase host;
     
@@ -36,6 +37,7 @@ public class EntityAIMoveRestriction extends EntityAIBase {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+    @Override
     public boolean shouldExecute() {
         if(this.host.hasHome())
             return false;
@@ -54,6 +56,7 @@ public class EntityAIMoveRestriction extends EntityAIBase {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
+    @Override
     public boolean shouldContinueExecuting() {
         return !this.host.getNavigator().noPath();
     }
@@ -62,6 +65,7 @@ public class EntityAIMoveRestriction extends EntityAIBase {
     // ==================================================
   	//                     Start
   	// ==================================================
+    @Override
     public void startExecuting() {
         this.host.getNavigator().tryMoveToXYZ(this.movePosX, this.movePosY, this.movePosZ, this.speed);
     }

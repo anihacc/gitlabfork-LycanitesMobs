@@ -38,8 +38,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     public boolean hasBeenFarmed = false;
 
     // Datawatcher:
-    protected static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LOVE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
+    protected static final DataParameter<Integer> LOVE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
     
 	// ==================================================
   	//                    Constructor

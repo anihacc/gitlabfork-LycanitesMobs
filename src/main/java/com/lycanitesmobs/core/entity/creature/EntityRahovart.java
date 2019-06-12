@@ -48,7 +48,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
 
     // First Phase:
     public List<EntityBelph> hellfireBelphMinions = new ArrayList<EntityBelph>();

@@ -28,7 +28,7 @@ import java.util.List;
 public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGroupDemon {
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
 
     public int hellfireEnergy = 0;
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();

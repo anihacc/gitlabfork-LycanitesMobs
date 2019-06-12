@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.*;
 import com.lycanitesmobs.api.IGroupBoss;
@@ -23,6 +22,8 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -82,7 +83,7 @@ public abstract class EntityCreatureBase extends LivingEntity {
 	/** The Subspecies of this creature, if null this creature is the default common species. **/
 	public Subspecies subspecies = null;
 	/** What attribute is this creature, used for effects such as Bane of Arthropods. **/
-	public EnumCreatureAttribute attribute = EnumCreatureAttribute.UNDEAD;
+	public CreatureAttribute attribute = CreatureAttribute.UNDEAD;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
 	public ExtraMobBehaviour extraMobBehaviour;
 
@@ -167,7 +168,7 @@ public abstract class EntityCreatureBase extends LivingEntity {
 	/** How long this mob should usually block for in ticks. **/
 	public int blockingTime = 60;
 	/** The entity picked up by this entity (if any). **/
-    public EntityLivingBase pickupEntity;
+    public LivingEntity pickupEntity;
     /** If true, this entity will have a solid collision box allowing other entities to stand on top of it as well as blocking player movement based on mass more effectively. **/
     public boolean solidCollision = false;
 
@@ -212,20 +213,20 @@ public abstract class EntityCreatureBase extends LivingEntity {
     /** Whether the mob should use it's leash AI or not. **/
     private boolean leashAIActive = false;
     /** Movement AI for mobs that are leashed. **/
-    private EntityAIBase leashMoveTowardsRestrictionAI = new EntityAIMoveRestriction(this);
+    private Goal leashMoveTowardsRestrictionAI = new EntityAIMoveRestriction(this);
     /** The flight navigator class, a makeshift class that handles flight and free swimming movement, replaces the pathfinder. **/
     public DirectNavigator directNavigator;
 
 
     // Targets:
     /** A target used for alpha creatures or connected mobs such as following concapede segements. **/
-    private EntityLivingBase masterTarget;
+    private LivingEntity masterTarget;
     /** A target used usually for child mobs or connected mobs such as leading concapede segments. **/
-    private EntityLivingBase parentTarget;
+    private LivingEntity parentTarget;
     /** A target that this mob should usually run away from. **/
-    private EntityLivingBase avoidTarget;
+    private LivingEntity avoidTarget;
     /** A target that this mob just normally always attack if set. **/
-    private EntityLivingBase fixateTarget;
+    private LivingEntity fixateTarget;
 	/** Used to identify the fixate target when loading this saved entity. **/
 	private UUID fixateUUID = null;
 
@@ -251,7 +252,7 @@ public abstract class EntityCreatureBase extends LivingEntity {
     /** An extra animation boolean. **/
     public boolean extraAnimation01 = false;
     /** Holds Information for this mobs boss health should it be displayed in the boss health bar. Used by bosses and rare subspecies. **/
-    public BossInfoServer bossInfo;
+    public ServerBossInfo bossInfo;
     /** If positive, this creature entity is only being used for rendering in a GUI, etc and should play animation based off of this instead. **/
     public float onlyRenderTicks = -1;
 
@@ -261,45 +262,45 @@ public abstract class EntityCreatureBase extends LivingEntity {
 	public boolean initialized = false;
 
 	/** Used to sync what targets this creature has. **/
-    protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
     /** Used to sync which attack phase this creature is in. **/
-	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
 	/** Used to sync what animation states this creature is in. **/
-	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
 	/** Used to sync the current attack cooldown animation, useful for when creature attack cooldowns change dynamically. **/
-	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
 
 	/** Used to sync if this creature is climbing or not. TODO Perhaps move this into ANIMATION_STATE_BITS. **/
-	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
 	/** Used to sync the stealth percentage of this creature. Where 0.0 is unstealthed and 1.0 is fully stealthed, see burrowing Crusks for an example. **/
-	protected static final DataParameter<Float> STEALTH = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> STEALTH = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 
 	/** Used to sync the baby status of this creature. **/
-	protected static final DataParameter<Boolean> BABY = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> BABY = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187198_h);
 	/** Used to sync the dyed coloring of this creature. This will go towards colorable pet collars or saddles, etc in the future. **/
-	protected static final DataParameter<Byte> COLOR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> COLOR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
 	/** Used to sync the size scale of this creature. **/
-	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 	/** Used to sync the stat level of this creature. **/
-	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
 	/** Used to sync the subspecies ID used by this creature. **/
-	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
 
 	/** Used to sync the central arena position that this creature is using if any. See Asmodeus jumping for an example. **/
-	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.OPTIONAL_BLOCK_POS);
+	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187201_k);
 
 	/** Used to sync the Head Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 	/** Used to sync the Chest Equipment slot of this creature. Used by Pet (Horse) Armor. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 	/** Used to sync the Legs Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 	/** Used to sync the Feet Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 	/** Used to sync the Bag Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 	/** Used to sync the Saddle Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEM_STACK);
+	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
 
     /** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum TARGET_BITS {
@@ -354,24 +355,22 @@ public abstract class EntityCreatureBase extends LivingEntity {
 
     // Override AI:
     public EntityAITargetAttack aiTargetPlayer = new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class);
-    public EntityAITargetRevenge aiDefendAnimals = new EntityAITargetRevenge(this).setHelpClasses(IAnimals.class);
+    public EntityAITargetRevenge aiDefendAnimals = new EntityAITargetRevenge(this).setHelpClasses(AnimalEntity.class);
 
 
     // ==================================================
   	//                    Constructor
   	// ==================================================
     public EntityCreatureBase(World world) {
-        super(world);
+        super(EntityType.ZOMBIE, world);
 
         // Size:
 		this.setWidth = (float)this.creatureInfo.width;
 		this.setDepth = (float)this.creatureInfo.width;
 		this.setHeight = (float)this.creatureInfo.height;
-        this.width = this.setWidth;
-        this.height = this.setHeight;
 
         // Movement:
-        this.moveHelper = this.createMoveHelper();
+        this.move = this.createMoveHelper();
 
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
@@ -400,6 +399,11 @@ public abstract class EntityCreatureBase extends LivingEntity {
             groundNavigator.setCanSwim(true);
         }
     }
+
+    @Override
+	public EntityType getType() {
+    	return super.getType();
+	}
 
 	// ========== Attributes and Stats ==========
 	/** Creates and sets all the entity attributes with default values. **/
@@ -1998,11 +2002,9 @@ public abstract class EntityCreatureBase extends LivingEntity {
 
     // ========== Move Swimming with Heading ==========
     public void moveSwimmingWithHeading(float strafe, float forward) {
-        super.moveRelative(strafe, 0, forward, 0.1F);
-        this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.8999999761581421D;
-        this.motionY *= 0.8999999761581421D;
-        this.motionZ *= 0.8999999761581421D;
+        super.moveRelative(strafe, new Vec3d(0, forward, 0.1F));
+        this.move(MoverType.SELF, this.getMotion());
+        this.setMotion(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D);
     }
 
     // ========== Get New Navigator ==========
@@ -3108,25 +3110,6 @@ public abstract class EntityCreatureBase extends LivingEntity {
     /** Returns whether or not this mob is hostile towards players, changes if a mob is tamed, etc too. **/
     public boolean isHostile() {
     	return this.isAggressive();
-    }
-    
-    /** Overrides the vanilla method when check for EnumCreatureType.monster, it will return true if this mob is hostile and false if it is not regardless of this creature's actual EnumCreatureType. Takes tameable mobs into account too. **/
-    @Override
-	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) {
-    	// If the mob spawner is checking then we should return if it should take a place in the mob spawn count or not.
-    	if(forSpawnCount) {
-    		if(this.isMinion()) // Minions shouldn't take up the spawn count.
-    			return false;
-    		for(EnumCreatureType creatureType : this.creatureInfo.creatureSpawn.vanillaSpawnerTypes) {
-    			if(creatureType == type)
-    				return true;
-    		}
-    		return false;
-    	}
-
-		if(type.getCreatureClass() == IMob.class) // If checking for EnumCretureType.monster (IMob) return whether or not this creature is hostile instead.
-			return this.isHostile();
-        return type.getCreatureClass().isAssignableFrom(this.getClass());
     }
     
     // ========== Movement ==========

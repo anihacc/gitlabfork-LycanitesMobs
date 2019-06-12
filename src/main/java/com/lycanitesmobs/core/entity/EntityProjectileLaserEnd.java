@@ -23,9 +23,9 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
 	private double projectileSpeed;
 
     // Datawatcher:
-    protected static final DataParameter<Float> POS_X = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Y = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Z = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_X = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> POS_Y = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> POS_Z = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.field_187193_c);
 	
     // ==================================================
  	//                   Constructors
