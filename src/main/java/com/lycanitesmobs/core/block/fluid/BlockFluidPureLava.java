@@ -2,28 +2,18 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFluidBase;
-
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class BlockFluidPureLava extends BlockFluidBase {
@@ -31,36 +21,18 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFluidPureLava(Fluid fluid) {
-		super(fluid, Material.LAVA, LycanitesMobs.modInfo, "purelava");
+	public BlockFluidPureLava(FlowingFluid fluid, Block.Properties properties) {
+		super(fluid, properties, LycanitesMobs.modInfo, "purelava");
 
-        this.setLightOpacity(1);
-        this.setLightLevel(1.0F);
-	}
-
-
-	// ==================================================
-	//                      Info
-	// ==================================================
-	@Override
-	public String getLocalizedName() {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".name");
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(this.getDescription(stack, world));
-	}
-
-	public String getDescription(ItemStack itemStack, @Nullable World world) {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+        //this.setLightOpacity(1);
+        //this.setLightLevel(1.0F);
 	}
     
     
 	// ==================================================
 	//                       Fluid
 	// ==================================================
-	@Override
+	/*@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		BlockState blockState = world.getBlockState(pos);
 		
@@ -109,36 +81,36 @@ public class BlockFluidPureLava extends BlockFluidBase {
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		if(world.getBlockState(pos).getMaterial().isLiquid()) return this.canDisplace(world, pos);
 		return super.displaceIfPossible(world, pos);
-	}
+	}*/
     
     
 	// ==================================================
 	//                      Collision
 	// ==================================================
 	@Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-		if(entity instanceof EntityItem)
+	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		if(entity instanceof ItemEntity)
 			entity.attackEntityFrom(DamageSource.LAVA, 10F);
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
+		super.onEntityCollision(blockState, world, pos, entity);
 	}
     
     
 	// ==================================================
 	//                      Particles
 	// ==================================================
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(BlockState blockState, World world, BlockPos pos, Random random) {
-        float f; 
-        float f1;
-        float f2;
-        
-        if (random.nextInt(100) == 0) {
-	        f = (float)pos.getX() + random.nextFloat();
-	        f1 = (float)pos.getY() + random.nextFloat() * 0.5F;
-	        f2 = (float)pos.getZ() + random.nextFloat();
-	        world.spawnParticle(EnumParticleTypes.LAVA, (double)f, (double)f1, (double)f2, 0.0D, 0.0D, 0.0D);
-        }
-        super.randomDisplayTick(blockState, world, pos, random);
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+		float f;
+		float f1;
+		float f2;
+
+		if (random.nextInt(100) == 0) {
+			f = (float)pos.getX() + random.nextFloat();
+			f1 = (float)pos.getY() + random.nextFloat() * 0.5F;
+			f2 = (float)pos.getZ() + random.nextFloat();
+			world.addParticle(ParticleTypes.LAVA, (double)f, (double)f1, (double)f2, 0.0D, 0.0D, 0.0D);
+		}
+		super.animateTick(state, world, pos, random);
     }
 }

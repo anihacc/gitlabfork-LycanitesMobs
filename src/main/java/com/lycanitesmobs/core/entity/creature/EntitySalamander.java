@@ -106,8 +106,8 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     @Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
+        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
+            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
         if(rider.isBurning())
             rider.extinguish();
     }

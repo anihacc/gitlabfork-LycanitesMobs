@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
 public class BlockSoulcube extends BlockBase {
@@ -10,9 +8,9 @@ public class BlockSoulcube extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSoulcube(ModInfo group, String name) {
-		super(Material.IRON);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
+	public BlockSoulcube(Block.Properties properties, String name) {
+		super(properties);
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
 		this.group = group;
@@ -20,9 +18,9 @@ public class BlockSoulcube extends BlockBase {
 		this.setup();
 		
 		// Stats:
-		this.setHardness(5F);
-        this.setResistance(10F);
-		this.setHarvestLevel("pickaxe", 2);
-		this.setSoundType(SoundType.GLASS);
+		//this.setHardness(5F);
+        //this.setResistance(10F);
+		//this.setHarvestLevel("pickaxe", 2);
+		//this.setSoundType(SoundType.GLASS);
 	}
 }

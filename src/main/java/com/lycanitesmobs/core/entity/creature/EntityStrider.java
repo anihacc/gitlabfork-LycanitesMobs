@@ -104,8 +104,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                 if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof EntityLivingBase) {
-                        if(ObjectManager.getPotionEffect("penetration") != null)
-                            this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("penetration"), this.getEffectDuration(5), 1));
+                        if(ObjectManager.getEffect("penetration") != null)
+                            this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
                 }
             }

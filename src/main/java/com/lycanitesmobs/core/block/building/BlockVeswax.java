@@ -2,30 +2,24 @@ package com.lycanitesmobs.core.block.building;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
-
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class BlockVeswax extends BlockBase {
-    public static final PropertyInteger HIVE = PropertyInteger.create("hive", 0, 15);
-	
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockVeswax() {
-		super(Material.WOOD);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
+	public BlockVeswax(Block.Properties properties) {
+		super(properties);
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
 		this.group = LycanitesMobs.modInfo;
@@ -33,43 +27,35 @@ public class BlockVeswax extends BlockBase {
 		this.setup();
 		
 		// Stats:
-		this.setHardness(0.6F);
-		this.setHarvestLevel("axe", 0);
-        this.setSoundType(SoundType.WOOD);
+		//this.setHardness(0.6F);
+		//this.setHarvestLevel("axe", 0);
+        //this.setSoundType(SoundType.WOOD);
 		this.tickRate = 100;
 		this.removeOnTick = true;
+
+		this.setDefaultState(this.stateContainer.getBaseState().with(AGE, 0));
 	}
 
 
-    // ==================================================
-    //                   Block States
-    // ==================================================
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(HIVE, meta);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(HIVE);
-    }
-
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, HIVE);
-    }
+	// ==================================================
+	//                   Block States
+	// ==================================================
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(AGE);
+	}
 
 
     // ==================================================
     //                   Placement
     // ==================================================
-    @Override
+    /*@Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack itemStack) {
         int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
         orientationMeta += 8;
         world.setBlockState(pos, state.withProperty(HIVE, orientationMeta), 2);
         super.onBlockPlacedBy(world, pos, state, placer, itemStack);
-    }
+    }*/
 
 
     // ==================================================
@@ -77,20 +63,21 @@ public class BlockVeswax extends BlockBase {
     // ==================================================
     // ========== Tick Rate ==========
     @Override
-    public int tickRate(World world) {
-        return this.tickRate + world.rand.nextInt(100);
+    public int tickRate(IWorldReader world) {
+        return this.tickRate;
     }
 
     // ========== Tick Update ==========
     @Override
-    public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
+    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
         if(world.isRemote)
             return;
-        if(this.getMetaFromState(state) >= 8)
+		int age = state.get(AGE);
+        if(age >= 8)
             return;
         double range = 32D;
         if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
             return;
-        super.updateTick(world, pos, state, random);
+        super.tick(state, world, pos, random);
     }
 }

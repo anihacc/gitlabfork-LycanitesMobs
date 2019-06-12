@@ -1,102 +1,78 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.GuiHandler;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockEquipmentForge extends BlockBase implements ITileEntityProvider {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+public class BlockEquipmentForge extends BlockBase {
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public int level;
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockEquipmentForge(ModInfo group, int level) {
-		super(level <= 1 ? Material.WOOD : level == 2 ? Material.ROCK : Material.IRON);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	public BlockEquipmentForge(Block.Properties properties, ModInfo group, int level) {
+		super(properties);
+		// TODO Get material from level.
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
+        //this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		
 		// Properties:
 		this.group = group;
 		this.level = level;
 		if(level <= 1) {
 			this.blockName = "equipmentforge_lesser";
-			this.setHarvestLevel("axe", 1);
-			this.setSoundType(SoundType.WOOD);
-			this.setResistance(10F);
+			//this.setHarvestLevel("axe", 1);
+			//this.setSoundType(SoundType.WOOD);
+			//this.setResistance(10F);
 		}
 		else if(level == 2) {
 			this.blockName = "equipmentforge_greater";
-			this.setHarvestLevel("pickaxe", 1);
-			this.setSoundType(SoundType.STONE);
-			this.setResistance(20F);
+			//this.setHarvestLevel("pickaxe", 1);
+			//this.setSoundType(SoundType.STONE);
+			//this.setResistance(20F);
 		}
 		else {
 			this.blockName = "equipmentforge_master";
-			this.setHarvestLevel("pickaxe", 2);
-			this.setSoundType(SoundType.METAL);
-			this.setResistance(1000F);
+			//this.setHarvestLevel("pickaxe", 2);
+			//this.setSoundType(SoundType.METAL);
+			//this.setResistance(1000F);
 		}
 		this.setup();
 		
 		// Stats:
-		this.setHardness(5F);
+		//this.setHardness(5F);
 
         // Tile Entity:
-        this.hasTileEntity = true;
+        //this.hasTileEntity = true;
 	}
 
-    @Override
+    /*@Override
     public BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {FACING});
-    }
-
-
-	// ==================================================
-	//                      Info
-	// ==================================================
-	@Override
-	public String getLocalizedName() {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".name");
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(this.getDescription(stack, world));
-	}
-
-	public String getDescription(ItemStack itemStack, @Nullable World world) {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
-	}
+    }*/
 
 
     // ==================================================
     //                     Block Events
     // ==================================================
-    @Override
+    /*@Override
     public void onBlockAdded(World world, BlockPos pos, BlockState state) {
 		this.setDefaultFacing(world, pos, state);
         super.onBlockAdded(world, pos, state);
@@ -156,14 +132,14 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
             }
         }
         return true;
-    }
+    }*/
 
 
     // ==================================================
     //                    Tile Entity
     // ==================================================
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
 		TileEntityEquipmentForge tileEntityEquipmentForge = new TileEntityEquipmentForge();
 		tileEntityEquipmentForge.setLevel(this.level);
         return tileEntityEquipmentForge;
@@ -173,7 +149,7 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
     // ==================================================
     //                    Block State
     // ==================================================
-	@Override
+	/*@Override
 	public BlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
 
@@ -192,5 +168,5 @@ public class BlockEquipmentForge extends BlockBase implements ITileEntityProvide
 	@Override
 	public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-	}
+	}*/
 }

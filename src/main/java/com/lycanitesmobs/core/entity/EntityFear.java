@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.core.entity.ai.EntityAIWander;
@@ -117,7 +116,7 @@ public class EntityFear extends EntityCreatureBase {
         }
 
         // Remove When Fear is Over:
-        if(ObjectManager.getPotionEffect("fear") == null || !fearedEntityLiving.isPotionActive(ObjectManager.getPotionEffect("fear"))) {
+        if(ObjectManager.getEffect("fear") == null || !fearedEntityLiving.isPotionActive(ObjectManager.getEffect("fear"))) {
             this.remove();
             return;
         }
@@ -129,7 +128,7 @@ public class EntityFear extends EntityCreatureBase {
 				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
-			Potion instability = ObjectManager.getPotionEffect("instability");
+			Potion instability = ObjectManager.getEffect("instability");
 			if (instability != null && fearedEntityLiving.isPotionActive(instability)) {
 				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(instability);
 				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));

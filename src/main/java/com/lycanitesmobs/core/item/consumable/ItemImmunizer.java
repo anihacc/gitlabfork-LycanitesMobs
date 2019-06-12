@@ -34,8 +34,8 @@ public class ItemImmunizer extends ItemBase {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 
-			if(!world.isRemote && ObjectManager.getPotionEffect("immunization") != null) {
-				player.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("immunization"), 10 * 20));
+			if(!world.isRemote && ObjectManager.getEffect("immunization") != null) {
+				player.addPotionEffect(new PotionEffect(ObjectManager.getEffect("immunization"), 10 * 20));
 			}
 
 			return new ActionResult(EnumActionResult.SUCCESS, itemStack);

@@ -174,7 +174,7 @@ public class ExtendedEntity implements IExtendedEntity {
 					return;
 				}
 			}
-			Potion weight = ObjectManager.getPotionEffect("weight");
+			Potion weight = ObjectManager.getEffect("weight");
 			if (weight != null) {
 				if (this.entity.isPotionActive(weight)) {
 					this.setPickedUpByEntity(null);

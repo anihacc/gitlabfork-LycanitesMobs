@@ -47,7 +47,7 @@ public class ObjectManager {
 	public static Map<String, Fluid> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
-	public static Map<String, PotionBase> potionEffects = new HashMap<>();
+	public static Map<String, EffectBase> effects = new HashMap<>();
 
 	// Entity Maps:
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
@@ -157,13 +157,13 @@ public class ObjectManager {
     }
 
     // ========== Potion Effect ==========
-	public static PotionBase addPotionEffect(String name, ConfigBase config, boolean isBad, int color, boolean goodEffect) {
+	public static EffectBase addPotionEffect(String name, ConfigBase config, boolean isBad, int color, boolean goodEffect) {
 		if(!config.getBool("Effects", name + " enabled", true, "Set to false to disable this potion effect.")) {
 			return null;
 		}
 
-        PotionBase potion = new PotionBase(name, isBad, color);
-		potionEffects.put(name, potion);
+        EffectBase potion = new EffectBase(name, isBad, color);
+		effects.put(name, potion);
 		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", potion);
 
 		return potion;
@@ -218,10 +218,10 @@ public class ObjectManager {
     }
 	
 	// ========== Potion Effect ==========
-	public static PotionBase getPotionEffect(String name) {
+	public static EffectBase getEffect(String name) {
 		name = name.toLowerCase();
-		if(!potionEffects.containsKey(name)) return null;
-		return potionEffects.get(name);
+		if(!effects.containsKey(name)) return null;
+		return effects.get(name);
 	}
 
     // ========== Damage Source ==========
@@ -267,7 +267,7 @@ public class ObjectManager {
 
     // ========== Potions ==========
     public static void registerPotions(RegistryEvent.Register<Potion> event) {
-        for(PotionBase potion : potionEffects.values()) {
+        for(EffectBase potion : effects.values()) {
         	event.getRegistry().register(potion);
 		}
     }

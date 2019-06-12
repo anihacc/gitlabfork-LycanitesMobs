@@ -110,7 +110,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
                         continue;
                     if(entity instanceof EntityLivingBase) {
                         EntityLivingBase entityLivingBase = (EntityLivingBase)entity;
-                        if(entityLivingBase.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entityLivingBase))
+                        if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                         if(!entity.isInWater() && !this.spawnEventType.equalsIgnoreCase("sharknado"))
                             continue;
@@ -150,8 +150,8 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
         if(rider.isPotionActive(MobEffects.BLINDNESS))
             rider.removePotionEffect(MobEffects.BLINDNESS);
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
+            rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
 
     // ========== Extra Animations ==========

@@ -2,54 +2,41 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockSlabCustom extends BlockSlab {
-    public static final PropertyEnum<Variant> VARIANT = PropertyEnum.<Variant>create("variant", Variant.class);
-    public static enum Variant implements IStringSerializable {
-        DEFAULT;
-        public String getName() {
-            return "default";
-        }
-    }
-
+public class BlockSlabCustom extends SlabBlock {
     protected Block doubleBlock;
+    public String blockName = "BlockBase";
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSlabCustom(BlockBase block, Block doubleBlock) {
-		super(block.getDefaultState().getMaterial());
+	public BlockSlabCustom(Block.Properties properties, BlockBase block, Block doubleBlock) {
+		super(properties);
         this.doubleBlock = doubleBlock;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM).withProperty(VARIANT, Variant.DEFAULT));
         String slabName = "_slab";
         this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + slabName));
-        this.setUnlocalizedName(block.blockName + slabName);
         block.copyAttributesTo(this);
 	}
 
     @Override
-    public String getUnlocalizedName(int meta) {
-        return super.getUnlocalizedName();
-    }
-
-    @Override
-    public boolean isDouble() {
+    public boolean func_220074_n(BlockState blockState) {
         return false; // Double slabs are defined as BlockSlabDouble.
     }
 
@@ -62,48 +49,18 @@ public class BlockSlabCustom extends BlockSlab {
     //                      Info
     // ==================================================
     @Override
-    public String getLocalizedName() {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+    public ITextComponent getNameTextComponent() {
+        return new TranslationTextComponent(LanguageManager.translate(this.getTranslationKey()));
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(this.getDescription(stack, world));
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        tooltip.add(new TranslationTextComponent(this.getDescription(stack, world)));
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable World world) {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
-    }
-
-
-    // ==================================================
-    //                   Block States
-    // ==================================================
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {HALF, VARIANT});
-    }
-
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(HALF, meta == 0 ? BlockSlab.EnumBlockHalf.BOTTOM : BlockSlab.EnumBlockHalf.TOP);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        if (state.getValue(HALF) == BlockSlab.EnumBlockHalf.BOTTOM)
-            return 0;
-        return 1;
-    }
-
-    @Override
-    public IProperty<?> getVariantProperty() {
-        return VARIANT;
-    }
-
-    @Override
-    public Comparable<?> getTypeForItem(ItemStack stack) {
-        return Variant.DEFAULT;
+    public String getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
+        return LanguageManager.translate("block." + this.blockName + ".description");
     }
 
 

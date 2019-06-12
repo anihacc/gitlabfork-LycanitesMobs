@@ -1,53 +1,42 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class BlockSummoningPedestal extends BlockBase implements ITileEntityProvider {
-    public enum EnumSummoningPedestal implements IStringSerializable {
-        NONE("none"),
-        CLIENT("client"),
-        PLAYER("player");
+public class BlockSummoningPedestal extends BlockBase {
+    public enum EnumSummoningPedestal {
+        NONE(0),
+        CLIENT(1),
+        PLAYER(2);
 
-        private String name;
-        EnumSummoningPedestal(String name) {
-            this.name = name;
+        private int ownerId;
+        EnumSummoningPedestal(int ownerId) {
+            this.ownerId = ownerId;
         }
 
-        @Override
-        public String getName() {
-            return this.name;
+        public int getOwnerId() {
+            return this.ownerId;
         }
     }
-    public static final PropertyEnum PROPERTY_OWNER = PropertyEnum.create("owner", EnumSummoningPedestal.class);
+    public static final IntegerProperty PROPERTY_OWNER = BlockStateProperties.AGE_0_2;
 
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSummoningPedestal(ModInfo group) {
-		super(Material.IRON);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
-        this.setDefaultState(this.getBlockState().getBaseState().withProperty(PROPERTY_OWNER, EnumSummoningPedestal.NONE));
+	public BlockSummoningPedestal(Block.Properties properties, ModInfo group) {
+		super(properties);
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
+        this.setDefaultState(this.getDefaultState().with(PROPERTY_OWNER, 0));
 		
 		// Properties:
 		this.group = group;
@@ -55,25 +44,20 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
 		this.setup();
 		
 		// Stats:
-		this.setHardness(5F);
-        this.setResistance(10F);
-		this.setHarvestLevel("pickaxe", 2);
-		this.setSoundType(SoundType.METAL);
+		//this.setHardness(5F);
+        //this.setResistance(10F);
+		//this.setHarvestLevel("pickaxe", 2);
+		//this.setSoundType(SoundType.METAL);
 
         // Tile Entity:
-        this.hasTileEntity = true;
+        //this.hasTileEntity = true;
 	}
-
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, PROPERTY_OWNER);
-    }
 
 
     // ==================================================
     //                     Block Events
     // ==================================================
-    @Override
+    /*@Override
     public void onBlockAdded(World world, BlockPos pos, BlockState state) {
         super.onBlockAdded(world, pos, state);
     }
@@ -118,14 +102,14 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
             }
         }
         return true;
-    }
+    }*/
 
 
     // ==================================================
     //                    Tile Entity
     // ==================================================
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
         return new TileEntitySummoningPedestal();
     }
 
@@ -134,9 +118,9 @@ public class BlockSummoningPedestal extends BlockBase implements ITileEntityProv
     //                    Block State
     // ==================================================
     public static void setState(EnumSummoningPedestal owner, World worldIn, BlockPos pos) {
-        BlockState iblockstate = worldIn.getBlockState(pos);
+        BlockState blockState = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
-        worldIn.setBlockState(pos, iblockstate.getBlock().getBlockState().getBaseState().withProperty(PROPERTY_OWNER, owner), 3);
+        worldIn.setBlockState(pos, blockState.getBlock().getDefaultState().with(PROPERTY_OWNER, owner.getOwnerId()), 3);
 
         if (tileentity != null) {
             tileentity.validate();

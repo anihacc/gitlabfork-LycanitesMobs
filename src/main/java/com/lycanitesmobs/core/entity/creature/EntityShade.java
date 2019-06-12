@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -167,8 +166,8 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
                     }
                 }
                 if(doDamage) {
-                    if (ObjectManager.getPotionEffect("fear") != null)
-                        possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("fear"), this.getEffectDuration(5), 1));
+                    if (ObjectManager.getEffect("fear") != null)
+                        possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
                         possibleTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 10 * 20, 0));
                 }

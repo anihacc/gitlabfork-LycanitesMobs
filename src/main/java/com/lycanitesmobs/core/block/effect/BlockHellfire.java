@@ -3,27 +3,25 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.PotionBase;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.config.ConfigBase;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -32,8 +30,8 @@ public class BlockHellfire extends BlockFireBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockHellfire() {
-		super(Material.FIRE, LycanitesMobs.modInfo, "hellfire");
+	public BlockHellfire(Block.Properties properties) {
+        super(properties, LycanitesMobs.modInfo, "hellfire");
 
         // Stats:
         this.tickRate = 30;
@@ -44,43 +42,44 @@ public class BlockHellfire extends BlockFireBase {
         this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Hellfire", true);
         this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Hellfire On No Fire Tick", false);
 
-        this.setLightOpacity(1);
-        this.setLightLevel(0.8F);
+        //this.setLightOpacity(1);
+        //this.setLightLevel(0.8F);
 	}
 
 
     // ==================================================
     //                       Break
     // ==================================================
-    @Override
+    /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("hellfirecharge");
-    }
+    }*/
 
 
     // ==================================================
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
+    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+        super.onEntityCollision(blockState, world, pos, entity);
 
-        if(entity instanceof EntityLivingBase) {
-			PotionBase decay = ObjectManager.getPotionEffect("decay");
-			if(decay != null) {
-				PotionEffect effect = new PotionEffect(decay, 5 * 20, 0);
-				EntityLivingBase entityLiving = (EntityLivingBase) entity;
-				if (entityLiving.isPotionApplicable(effect)) {
-					entityLiving.addPotionEffect(effect);
-				}
-			}
+        if(entity instanceof LivingEntity) {
+            Effect decay = ObjectManager.getEffect("decay");
+            if(decay != null) {
+                EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
+                LivingEntity entityLiving = (LivingEntity)entity;
+                if(entityLiving.isPotionApplicable(effect))
+                    entityLiving.addPotionEffect(effect);
+            }
         }
 
-        if(entity instanceof EntityItem && ((EntityItem)entity).getItem() != null)
-            if(((EntityItem)entity).getItem().getItem() == ObjectManager.getItem("hellfirecharge"))
+        if(entity instanceof ItemEntity)
+            if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("doomfirecharge"))
                 return;
+
         if(entity.isImmuneToFire())
             return;
+
         entity.attackEntityFrom(DamageSource.IN_FIRE, 2);
         entity.setFire(5);
     }
@@ -90,8 +89,8 @@ public class BlockHellfire extends BlockFireBase {
     //                        Fire
     // ==================================================
     @Override
-    public boolean isBlockFireSource(Block block, World world, BlockPos pos, EnumFacing side) {
-        if(block == Blocks.OBSIDIAN)
+    public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        if(state.getBlock() == Blocks.OBSIDIAN)
             return true;
         return false;
     }
@@ -100,22 +99,20 @@ public class BlockHellfire extends BlockFireBase {
     // ==================================================
     //                      Particles
     // ==================================================
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
-
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+        double x = pos.getX();
+        double y = pos.getY();
+        double z = pos.getZ();
         if(random.nextInt(24) == 0)
             world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("hellfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
-        for(int particleCount = 0; particleCount < 12; ++particleCount) {
-            float particleX = (float)x + random.nextFloat();
-            float particleY = (float)y + random.nextFloat() * 0.5F;
-            float particleZ = (float)z + random.nextFloat();
-            world.spawnParticle(EnumParticleTypes.REDSTONE, (double)particleX, (double)particleY, (double)particleZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        if (random.nextInt(100) == 0) {
+            x = pos.getX() + random.nextFloat();
+            z = pos.getZ() + random.nextFloat();
+            world.addParticle(RedstoneParticleData.REDSTONE_DUST, x, y, z, 0.0D, 0.0D, 0.0D);
         }
+        super.animateTick(state, world, pos, random);
     }
 }

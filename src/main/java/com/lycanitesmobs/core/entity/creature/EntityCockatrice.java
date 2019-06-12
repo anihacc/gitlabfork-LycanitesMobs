@@ -194,11 +194,11 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 					}
 				}
 				if(doDamage) {
-					if (ObjectManager.getPotionEffect("paralysis") != null)
-						possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("paralysis"), this.getEffectDuration(5), 1));
+					if (ObjectManager.getEffect("paralysis") != null)
+						possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getEffect("paralysis"), this.getEffectDuration(5), 1));
 
-					if (ObjectManager.getPotionEffect("aphagia") != null)
-						possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("aphagia"), this.getEffectDuration(5), 1));
+					if (ObjectManager.getEffect("aphagia") != null)
+						possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 1));
 					else
 						possibleTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 10 * 20, 0));
 				}

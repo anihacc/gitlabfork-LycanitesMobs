@@ -165,8 +165,8 @@ public class EntityQuetzodracl extends EntityCreatureRideable implements IMob, I
     public void riderEffects(EntityLivingBase rider) {
         if(rider.isPotionActive(MobEffects.BLINDNESS))
             rider.removePotionEffect(MobEffects.BLINDNESS);
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
+            rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
 
 
@@ -239,8 +239,8 @@ public class EntityQuetzodracl extends EntityCreatureRideable implements IMob, I
     public void dropPickupEntity() {
     	// Drop Weight Effect:
         if(this.hasPickupEntity()) {
-            if(ObjectManager.getPotionEffect("weight") != null)
-                this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("weight"), this.getEffectDuration(5), 1));
+            if(ObjectManager.getEffect("weight") != null)
+                this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
         }
     	super.dropPickupEntity();
     }

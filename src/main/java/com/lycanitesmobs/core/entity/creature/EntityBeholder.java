@@ -12,7 +12,6 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -77,8 +76,8 @@ public class EntityBeholder extends EntityCreatureRideable {
     public void riderEffects(EntityLivingBase rider) {
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))
             rider.removePotionEffect(MobEffects.MINING_FATIGUE);
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
+            rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
 
     

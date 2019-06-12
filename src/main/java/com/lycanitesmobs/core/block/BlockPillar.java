@@ -1,58 +1,26 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
+import net.minecraft.block.Block;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.util.Direction;
 
 public class BlockPillar extends BlockBase {
-    public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class);
+    public static EnumProperty<Direction.Axis> AXIS;
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockPillar(Material material, ModInfo group, String name) {
-		super(material, group, name);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.Y));
+	public BlockPillar(Block.Properties properties, ModInfo group, String name) {
+		super(properties, group, name);
+        this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y));
 	}
-
-
-    // ==================================================
-    //                      Info
-    // ==================================================
-    @Override
-    public String getLocalizedName() {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".name");
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(this.getDescription(stack, world));
-    }
-
-    public String getDescription(ItemStack itemStack, @Nullable World world) {
-        return LanguageManager.translate(this.getUnlocalizedName() + ".description");
-    }
 
 
     // ==================================================
     //                   Block States
     // ==================================================
-    @Override
+    /*@Override
     public BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {AXIS});
     }
@@ -86,22 +54,22 @@ public class BlockPillar extends BlockBase {
             i |= 8;
 
         return i;
-    }
+    }*/
 
 
     // ==================================================
     //                    Placement
     // ==================================================
-    @Override
+    /*@Override
     public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer).withProperty(AXIS, facing.getAxis());
-    }
+    }*/
 
 
     // ==================================================
     //                     Rotation
     // ==================================================
-    @Override
+    /*@Override
     public boolean rotateBlock(net.minecraft.world.World world, BlockPos pos, EnumFacing axis) {
         net.minecraft.block.state.BlockState state = world.getBlockState(pos);
         for (net.minecraft.block.properties.IProperty<?> prop : state.getProperties().keySet()) {
@@ -111,10 +79,10 @@ public class BlockPillar extends BlockBase {
             }
         }
         return false;
-    }
+    }*/
 
     /** Returns a blockstate for the provided rotation. **/
-    @Override
+    /*@Override
     public BlockState withRotation(BlockState state, Rotation rot) {
         switch (rot) {
             case COUNTERCLOCKWISE_90:
@@ -132,5 +100,5 @@ public class BlockPillar extends BlockBase {
             default:
                 return state;
         }
-    }
+    }*/
 }

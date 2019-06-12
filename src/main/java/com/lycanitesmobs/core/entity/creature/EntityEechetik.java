@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.PotionBase;
+import com.lycanitesmobs.EffectBase;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
@@ -17,7 +17,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -94,7 +93,7 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 
 		// Plague Aura Attack:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
-			PotionBase plague = ObjectManager.getPotionEffect("plague");
+			EffectBase plague = ObjectManager.getEffect("plague");
 			if(plague != null) {
 				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(5), 1);
 				List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);

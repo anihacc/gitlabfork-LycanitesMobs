@@ -1,94 +1,30 @@
 package com.lycanitesmobs.core.block.building;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.block.BlockBase;
-
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class BlockPropolis extends BlockBase {
+public class BlockPropolis extends BlockVeswax {
 	
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockPropolis() {
-		super(Material.CLAY);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
+	public BlockPropolis(Block.Properties properties) {
+		super(properties);
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
-		this.group = LycanitesMobs.modInfo;
 		this.blockName = "propolis";
-		this.setup();
 		
 		// Stats:
-		this.setHardness(0.6F);
-		this.setHarvestLevel("shovel", 0);
-		this.setSoundType(SoundType.GROUND);
-		this.tickRate = 100;
-		this.removeOnTick = true;
+		//this.setHardness(0.6F);
+		//this.setHarvestLevel("shovel", 0);
+		//this.setSoundType(SoundType.GROUND);
 	}
-
-
-    // ==================================================
-    //                   Block States
-    // ==================================================
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(BlockVeswax.HIVE, meta);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(BlockVeswax.HIVE);
-    }
-
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, BlockVeswax.HIVE);
-    }
-    
-    
-	// ==================================================
-	//                   Placement
-	// ==================================================
-    @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack itemStack) {
-        int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
-        orientationMeta += 8;
-        world.setBlockState(pos, state.withProperty(BlockVeswax.HIVE, orientationMeta), 2);
-        super.onBlockPlacedBy(world, pos, state, placer, itemStack);
-    }
-    
-    
-	// ==================================================
-	//                     Ticking
-	// ==================================================
-    // ========== Tick Rate ==========
-    @Override
-    public int tickRate(World world) {
-    	return this.tickRate + world.rand.nextInt(100);
-    }
-
-    // ========== Tick Update ==========
-    @Override
-    public void updateTick(World world, BlockPos pos, BlockState state, Random random) {
-		if(world.isRemote)
-			return;
-		if(this.getMetaFromState(state) >= 8)
-			return;
-		double range = 32D;
-		if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
-			return;
-        super.updateTick(world, pos, state, random);
-    }
 }

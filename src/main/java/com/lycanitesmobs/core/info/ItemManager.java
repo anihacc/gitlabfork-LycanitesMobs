@@ -120,36 +120,36 @@ public class ItemManager {
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("ambercake"));
 
 		ItemCustomFood rawMeat =  new ItemCustomFood("arisaurmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(new Potion(new EffectInstance(Effects.SATURATION)), 45, 2, 0.8F);
-		if(ObjectManager.getPotionEffect("paralysis") != null) {
-			rawMeat.setPotionEffect(ObjectManager.getPotionEffect("paralysis"), 10, 2, 0.8F);
+		if(ObjectManager.getEffect("paralysis") != null) {
+			rawMeat.setPotionEffect(ObjectManager.getEffect("paralysis"), 10, 2, 0.8F);
 		}
 		ObjectManager.addItem("arisaurmeatraw", rawMeat);
 		ObjectLists.addItem("vegetables", ObjectManager.getItem("arisaurmeatraw"));
 
 		ItemCustomFood arisaurCooked = new ItemCustomFood("arisaurmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setAlwaysEdible();
-		if(ObjectManager.getPotionEffect("rejuvenation") != null) {
-			arisaurCooked.setPotionEffect(ObjectManager.getPotionEffect("rejuvenation"), 30, 1, 1.0F);
+		if(ObjectManager.getEffect("rejuvenation") != null) {
+			arisaurCooked.setPotionEffect(ObjectManager.getEffect("rejuvenation"), 30, 1, 1.0F);
 		}
 		ObjectManager.addItem("arisaurmeatcooked", arisaurCooked);
 		ObjectLists.addItem("vegetables", ObjectManager.getItem("arisaurmeatcooked"));
 		
 		ItemCustomFood paleosalad = new ItemCustomFood("paleosalad", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
-		if(ObjectManager.getPotionEffect("rejuvenation") != null) {
-			paleosalad.setPotionEffect(ObjectManager.getPotionEffect("rejuvenation"), 600, 1, 1.0F);
+		if(ObjectManager.getEffect("rejuvenation") != null) {
+			paleosalad.setPotionEffect(ObjectManager.getEffect("rejuvenation"), 600, 1, 1.0F);
 		}
 		ObjectManager.addItem("paleosalad", paleosalad.setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("vegetables", ObjectManager.getItem("paleosalad"));
 
 		Potion rawFoodEffectID = Potions.WEAKNESS;
-		if(ObjectManager.getPotionEffect("penetration") != null) {
-			rawFoodEffectID = ObjectManager.getPotionEffect("penetration");
+		if(ObjectManager.getEffect("penetration") != null) {
+			rawFoodEffectID = ObjectManager.getEffect("penetration");
 		}
 		ObjectManager.addItem("silexmeatraw", new ItemCustomFood("silexmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(rawFoodEffectID, 45, 2, 0.8F));
 		ObjectLists.addItem("rawfish", ObjectManager.getItem("silexmeatraw"));
 
 		Potion cookedFoodEffectID = Potions.SPEED;
-		if(ObjectManager.getPotionEffect("swiftswimming") != null) {
-			cookedFoodEffectID = ObjectManager.getPotionEffect("swiftswimming");
+		if(ObjectManager.getEffect("swiftswimming") != null) {
+			cookedFoodEffectID = ObjectManager.getEffect("swiftswimming");
 		}
 		ObjectManager.addItem("silexmeatcooked", new ItemCustomFood("silexmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(cookedFoodEffectID, 60, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("silexmeatcooked"));
@@ -191,8 +191,8 @@ public class ItemManager {
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("bulwarkburger"));
 
 		Potion ikaRawFoodEffect = Potions.BLINDNESS;
-		if(ObjectManager.getPotionEffect("weight") != null) {
-			ikaRawFoodEffect = ObjectManager.getPotionEffect("weight");
+		if(ObjectManager.getEffect("weight") != null) {
+			ikaRawFoodEffect = ObjectManager.getEffect("weight");
 		}
 		ObjectManager.addItem("ikameatraw", new ItemCustomFood("ikameatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(ikaRawFoodEffect, 45, 2, 0.8F));
 		ObjectLists.addItem("rawfish", ObjectManager.getItem("ikameatraw"));
@@ -204,23 +204,23 @@ public class ItemManager {
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("seashellmaki"));
 
 		ItemCustomFood rawChupacabraMeat = new ItemCustomFood("chupacabrameatraw", group, 4, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(new Potion(new EffectInstance(Effects.HUNGER)), 45, 2, 0.8F);
-		if(ObjectManager.getPotionEffect("fear") != null) {
-			rawChupacabraMeat.setPotionEffect(ObjectManager.getPotionEffect("fear"), 10, 2, 0.8F);
+		if(ObjectManager.getEffect("fear") != null) {
+			rawChupacabraMeat.setPotionEffect(ObjectManager.getEffect("fear"), 10, 2, 0.8F);
 		}
 		ObjectManager.addItem("chupacabrameatraw", rawChupacabraMeat);
 		ObjectLists.addItem("rawmeat", ObjectManager.getItem("chupacabrameatraw"));
 
 		ItemCustomFood cookedMeat = new ItemCustomFood("chupacabrameatcooked", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setAlwaysEdible();
-		if(ObjectManager.getPotionEffect("leech") != null) {
-			cookedMeat.setPotionEffect(ObjectManager.getPotionEffect("leech"), 30, 1, 1.0F);
+		if(ObjectManager.getEffect("leech") != null) {
+			cookedMeat.setPotionEffect(ObjectManager.getEffect("leech"), 30, 1, 1.0F);
 		}
 		ObjectManager.addItem("chupacabrameatcooked", cookedMeat);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("chupacabrameatcooked"));
 		
 		ItemCustomFood meal = new ItemCustomFood("bloodchili", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
 		meal.setMaxStackSize(16);
-		if(ObjectManager.getPotionEffect("leech") != null) {
-			meal.setPotionEffect(ObjectManager.getPotionEffect("leech"), 600, 1, 1.0F);
+		if(ObjectManager.getEffect("leech") != null) {
+			meal.setPotionEffect(ObjectManager.getEffect("leech"), 600, 1, 1.0F);
 		}
 		ObjectManager.addItem("bloodchili", meal, 3, 1, 6);
 

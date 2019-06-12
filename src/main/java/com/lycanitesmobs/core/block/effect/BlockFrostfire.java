@@ -2,31 +2,25 @@ package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
-
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -35,8 +29,8 @@ public class BlockFrostfire extends BlockFireBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public BlockFrostfire() {
-        super(Material.FIRE, LycanitesMobs.modInfo, "frostfire");
+    public BlockFrostfire(Block.Properties properties) {
+        super(properties, LycanitesMobs.modInfo, "frostfire");
 
         // Stats:
         this.tickRate = 30;
@@ -47,40 +41,40 @@ public class BlockFrostfire extends BlockFireBase {
         this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Frostfire", true);
         this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Frostfire on No Fire Tick", false);
 
-        this.setLightOpacity(1);
-        this.setLightLevel(0);
+        //this.setLightOpacity(1);
+        //this.setLightLevel(0);
     }
 
 
     // ==================================================
     //                       Break
     // ==================================================
-    @Override
+    /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("icefirecharge");
-    }
+    }*/
 
 
     // ==================================================
     //                        Fire
     // ==================================================
     @Override
-    public boolean canCatchFire(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public boolean canCatchFire(IBlockReader world, BlockPos pos, Direction face) {
         Block block = world.getBlockState(pos).getBlock();
-        if(block ==  Blocks.ICE)
+        if(block ==  Blocks.ICE || block == Blocks.PACKED_ICE)
             return true;
         return false;
     }
 
     @Override
-    public boolean isBlockFireSource(Block block, World world, BlockPos pos, EnumFacing side) {
-        if(block == Blocks.SNOW)
+    public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
+        if(state.getBlock() == Blocks.SNOW || state.getBlock() == Blocks.SNOW_BLOCK)
             return true;
         return false;
     }
 
     @Override
-    public int getBlockFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    public int getBlockFlammability(IBlockReader world, BlockPos pos, Direction face) {
         Block block = world.getBlockState(pos).getBlock();
         if(block ==  Blocks.ICE)
             return 20;
@@ -115,27 +109,20 @@ public class BlockFrostfire extends BlockFireBase {
     //                Collision Effects
     // ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
+    public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+        super.onEntityCollision(blockState, world, pos, entity);
 
-        if(entity instanceof EntityItem) // Frost shouldn't destroy items.
+        if(entity instanceof LivingEntity) {
+            EffectInstance effect = new EffectInstance(Effects.field_76421_d, 3 * 20, 0);
+            LivingEntity entityLiving = (LivingEntity)entity;
+            if(entityLiving.isPotionApplicable(effect))
+                entityLiving.addPotionEffect(effect);
+            else
+                return; // Entities immune to slow are immune to frostfire damage.
+        }
+
+        if(entity instanceof ItemEntity)
             return;
-
-        if(entity.isBurning())
-            entity.extinguish();
-
-        PotionEffect effectSlowness = new PotionEffect(MobEffects.SLOWNESS, 5 * 20, 0);
-        if(entity instanceof EntityCreatureBase) {
-            EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
-			if(!entityCreature.canFreeze()) {
-				return;
-			}
-            entityCreature.addPotionEffect(effectSlowness);
-        }
-        if(entity instanceof EntityLivingBase) {
-            EntityLivingBase entityLiving = (EntityLivingBase)entity;
-            entityLiving.addPotionEffect(effectSlowness);
-        }
 
         entity.attackEntityFrom(DamageSource.MAGIC, 2);
     }
@@ -144,22 +131,20 @@ public class BlockFrostfire extends BlockFireBase {
     // ==================================================
     //                      Particles
     // ==================================================
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
-
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+        double x = pos.getX();
+        double y = pos.getY();
+        double z = pos.getZ();
         if(random.nextInt(24) == 0)
             world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
-        for(int particleCount = 0; particleCount < 12; ++particleCount) {
-            float particleX = (float)x + random.nextFloat();
-            float particleY = (float)y + random.nextFloat() * 0.5F;
-            float particleZ = (float)z + random.nextFloat();
-            world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, (double)particleX, (double)particleY, (double)particleZ, 0.0D, 0.0D, 0.0D, new int[0]);
+        if (random.nextInt(100) == 0) {
+            x = pos.getX() + random.nextFloat();
+            z = pos.getZ() + random.nextFloat();
+            world.addParticle(ParticleTypes.ITEM_SNOWBALL, x, y, z, 0.0D, 0.0D, 0.0D);
         }
+        super.animateTick(state, world, pos, random);
     }
 }

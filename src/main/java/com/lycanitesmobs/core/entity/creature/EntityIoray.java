@@ -91,10 +91,10 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
 	@Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("paralysis")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("paralysis"));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
+        if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
+            rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
+        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
+            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
     }
 
 	

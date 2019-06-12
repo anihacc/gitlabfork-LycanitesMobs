@@ -120,7 +120,7 @@ public class PotionEffects {
 
 		// ========== Debuffs ==========
 		// Paralysis
-		PotionBase paralysis = ObjectManager.getPotionEffect("paralysis");
+		EffectBase paralysis = ObjectManager.getEffect("paralysis");
 		if(paralysis != null) {
 			if(!invulnerable && entity.isPotionActive(paralysis)) {
 				entity.motionX = 0;
@@ -132,7 +132,7 @@ public class PotionEffects {
 		}
 		
 		// Weight
-		PotionBase weight = ObjectManager.getPotionEffect("weight");
+		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
 			if(!invulnerable && entity.isPotionActive(weight) && !entity.isPotionActive(MobEffects.STRENGTH)) {
 				if(entity.motionY > -0.2D)
@@ -141,7 +141,7 @@ public class PotionEffects {
 		}
 		
 		// Fear
-		PotionBase fear = ObjectManager.getPotionEffect("fear");
+		EffectBase fear = ObjectManager.getEffect("fear");
 		if(fear != null && !entity.getEntityWorld().isRemote) {
 			if(!invulnerable && entity.isPotionActive(fear)) {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
@@ -156,7 +156,7 @@ public class PotionEffects {
 		}
 
 		// Instability
-		PotionBase instability = ObjectManager.getPotionEffect("instability");
+		EffectBase instability = ObjectManager.getEffect("instability");
 		if(instability != null && !entity.getEntityWorld().isRemote && !(entity instanceof IGroupBoss)) {
 			if(!invulnerable && entity.isPotionActive(instability)) {
 				if(entity.getEntityWorld().rand.nextDouble() <= 0.1) {
@@ -186,7 +186,7 @@ public class PotionEffects {
 		}
 
 		// Plague
-		PotionBase plague = ObjectManager.getPotionEffect("plague");
+		EffectBase plague = ObjectManager.getEffect("plague");
 		if(plague != null && !entity.getEntityWorld().isRemote) {
 			if(!invulnerable && entity.isPotionActive(plague)) {
 
@@ -220,7 +220,7 @@ public class PotionEffects {
 		}
 
 		// Smited
-		PotionBase smited = ObjectManager.getPotionEffect("smited");
+		EffectBase smited = ObjectManager.getEffect("smited");
 		if(smited != null && !entity.getEntityWorld().isRemote) {
 			if(!invulnerable && entity.isPotionActive(smited) && entity.getEntityWorld().getTotalWorldTime() % 20 == 0) {
 				float brightness = entity.getBrightness();
@@ -231,7 +231,7 @@ public class PotionEffects {
 		}
 
 		// Bleed
-		PotionBase bleed = ObjectManager.getPotionEffect("bleed");
+		EffectBase bleed = ObjectManager.getEffect("bleed");
 		if(bleed != null && !entity.getEntityWorld().isRemote) {
 			if(!invulnerable && entity.isPotionActive(bleed) && entity.getEntityWorld().getTotalWorldTime() % 20 == 0 && !entity.isRiding()) {
 				if(entity.prevDistanceWalkedModified != entity.distanceWalkedModified) {
@@ -241,7 +241,7 @@ public class PotionEffects {
 		}
 
 		// Smouldering
-		PotionBase smouldering = ObjectManager.getPotionEffect("smouldering");
+		EffectBase smouldering = ObjectManager.getEffect("smouldering");
 		if(smouldering != null && !entity.getEntityWorld().isRemote) {
 			if(!invulnerable && entity.isPotionActive(smouldering) && entity.getEntityWorld().getTotalWorldTime() % 20 == 0) {
 				entity.setFire(4 + (4 * entity.getActivePotionEffect(smouldering).getAmplifier()));
@@ -251,7 +251,7 @@ public class PotionEffects {
 
 		// ========== Buffs ==========
 		// Swiftswimming
-		PotionBase swiftswimming = ObjectManager.getPotionEffect("swiftswimming");
+		EffectBase swiftswimming = ObjectManager.getEffect("swiftswimming");
 		if(swiftswimming != null && entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)entity;
 			if(entity.isPotionActive(swiftswimming) && entity.isInWater()) {
@@ -270,9 +270,9 @@ public class PotionEffects {
 		}
 
 		// Immunisation
-		PotionBase immunization = ObjectManager.getPotionEffect("immunization");
+		EffectBase immunization = ObjectManager.getEffect("immunization");
 		if(immunization != null && !entity.getEntityWorld().isRemote) {
-			if(entity.isPotionActive(ObjectManager.getPotionEffect("immunization"))) {
+			if(entity.isPotionActive(ObjectManager.getEffect("immunization"))) {
 				if(entity.isPotionActive(MobEffects.POISON)) {
 					entity.removePotionEffect(MobEffects.POISON);
 				}
@@ -285,32 +285,32 @@ public class PotionEffects {
 				if(entity.isPotionActive(MobEffects.NAUSEA)) {
 					entity.removePotionEffect(MobEffects.NAUSEA);
 				}
-				if(ObjectManager.getPotionEffect("paralysis") != null) {
-					if(entity.isPotionActive(ObjectManager.getPotionEffect("paralysis"))) {
-						entity.removePotionEffect(ObjectManager.getPotionEffect("paralysis"));
+				if(ObjectManager.getEffect("paralysis") != null) {
+					if(entity.isPotionActive(ObjectManager.getEffect("paralysis"))) {
+						entity.removePotionEffect(ObjectManager.getEffect("paralysis"));
 					}
 				}
 			}
 		}
 
 		// Cleansed
-		PotionBase cleansed = ObjectManager.getPotionEffect("cleansed");
-		if(ObjectManager.getPotionEffect("cleansed") != null && !entity.getEntityWorld().isRemote) {
-			if(entity.isPotionActive(ObjectManager.getPotionEffect("cleansed"))) {
+		EffectBase cleansed = ObjectManager.getEffect("cleansed");
+		if(ObjectManager.getEffect("cleansed") != null && !entity.getEntityWorld().isRemote) {
+			if(entity.isPotionActive(ObjectManager.getEffect("cleansed"))) {
 				if(entity.isPotionActive(MobEffects.WITHER)) {
 					entity.removePotionEffect(MobEffects.WITHER);
 				}
 				if(entity.isPotionActive(MobEffects.UNLUCK)) {
 					entity.removePotionEffect(MobEffects.UNLUCK);
 				}
-				if(ObjectManager.getPotionEffect("fear") != null) {
-					if(entity.isPotionActive(ObjectManager.getPotionEffect("fear"))) {
-						entity.removePotionEffect(ObjectManager.getPotionEffect("fear"));
+				if(ObjectManager.getEffect("fear") != null) {
+					if(entity.isPotionActive(ObjectManager.getEffect("fear"))) {
+						entity.removePotionEffect(ObjectManager.getEffect("fear"));
 					}
 				}
-				if(ObjectManager.getPotionEffect("insomnia") != null) {
-					if(entity.isPotionActive(ObjectManager.getPotionEffect("insomnia"))) {
-						entity.removePotionEffect(ObjectManager.getPotionEffect("insomnia"));
+				if(ObjectManager.getEffect("insomnia") != null) {
+					if(entity.isPotionActive(ObjectManager.getEffect("insomnia"))) {
+						entity.removePotionEffect(ObjectManager.getEffect("insomnia"));
 					}
 				}
 			}
@@ -337,14 +337,14 @@ public class PotionEffects {
 		}
 			
 		// Anti-Jumping:
-		PotionBase paralysis = ObjectManager.getPotionEffect("paralysis");
+		EffectBase paralysis = ObjectManager.getEffect("paralysis");
 		if(paralysis != null) {
 			if(entity.isPotionActive(paralysis)) {
 				if(event.isCancelable()) event.setCanceled(true);
 			}
 		}
 
-		PotionBase weight = ObjectManager.getPotionEffect("weight");
+		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
 			if(entity.isPotionActive(weight)) {
 				if(event.isCancelable()) event.setCanceled(true);
@@ -375,7 +375,7 @@ public class PotionEffects {
 
 		// ========== Debuffs ==========
 		// Lifeleak
-		PotionBase lifeleak = ObjectManager.getPotionEffect("lifeleak");
+		EffectBase lifeleak = ObjectManager.getEffect("lifeleak");
 		if(lifeleak != null && !event.getEntityLiving().getEntityWorld().isRemote) {
 			if(attacker.isPotionActive(lifeleak)) {
 				if (event.isCancelable()) {
@@ -401,7 +401,7 @@ public class PotionEffects {
 
 		// ========== Debuffs ==========
         // Fall Resistance
-		PotionBase fallresist = ObjectManager.getPotionEffect("fallresist");
+		EffectBase fallresist = ObjectManager.getEffect("fallresist");
 		if(fallresist != null) {
             if(event.getEntityLiving().isPotionActive(fallresist)) {
                 if("fall".equals(event.getSource().damageType)) {
@@ -412,7 +412,7 @@ public class PotionEffects {
         }
 
 		// Penetration
-		PotionBase penetration = ObjectManager.getPotionEffect("penetration");
+		EffectBase penetration = ObjectManager.getEffect("penetration");
 		if(penetration != null) {
 			if(event.getEntityLiving().isPotionActive(penetration)) {
 				float damage = event.getAmount();
@@ -422,7 +422,7 @@ public class PotionEffects {
 		}
 
 		// Fear
-		PotionBase fear = ObjectManager.getPotionEffect("fear");
+		EffectBase fear = ObjectManager.getEffect("fear");
 		if(fear != null) {
 			if(event.getEntityLiving().isPotionActive(fear)) {
 				if("inWall".equals(event.getSource().damageType)) {
@@ -435,7 +435,7 @@ public class PotionEffects {
 
         // ========== Buffs ==========
         // Leeching
-		PotionBase leech = ObjectManager.getPotionEffect("leech");
+		EffectBase leech = ObjectManager.getEffect("leech");
 		if(leech != null && event.getSource().getTrueSource() != null) {
             if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
                 EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
@@ -459,7 +459,7 @@ public class PotionEffects {
 			return;
 
 		// Rejuvenation:
-		PotionBase rejuvenation = ObjectManager.getPotionEffect("rejuvenation");
+		EffectBase rejuvenation = ObjectManager.getEffect("rejuvenation");
 		if(rejuvenation != null) {
 			if(entity.isPotionActive(rejuvenation)) {
 				event.setAmount((float)Math.ceil(event.getAmount() * (2 * (1 + entity.getActivePotionEffect(rejuvenation).getAmplifier()))));
@@ -467,7 +467,7 @@ public class PotionEffects {
 		}
 
 		// Decay:
-		PotionBase decay = ObjectManager.getPotionEffect("decay");
+		EffectBase decay = ObjectManager.getEffect("decay");
 		if(decay != null) {
 			if(entity.isPotionActive(decay)) {
 				event.setAmount((float)Math.floor(event.getAmount() / (2 * (1 + entity.getActivePotionEffect(decay).getAmplifier()))));
@@ -487,7 +487,7 @@ public class PotionEffects {
 			return;
 
 		// Insomnia:
-		PotionBase insomnia = ObjectManager.getPotionEffect("insomnia");
+		EffectBase insomnia = ObjectManager.getEffect("insomnia");
 		if(insomnia != null && player.isPotionActive(insomnia)) {
 			event.setResult(PlayerEntity.SleepResult.NOT_SAFE);
 		}
@@ -507,7 +507,7 @@ public class PotionEffects {
 
 		// ========== Debuffs ==========
 		// Aphagia
-		PotionBase aphagia = ObjectManager.getPotionEffect("aphagia");
+		EffectBase aphagia = ObjectManager.getEffect("aphagia");
 		if(aphagia != null && !event.getEntityLiving().getEntityWorld().isRemote) {
 			if(event.getEntityLiving().isPotionActive(aphagia)) {
 				if(event.isCancelable()) {

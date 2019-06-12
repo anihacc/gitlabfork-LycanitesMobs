@@ -1,14 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.PotionBase;
+import com.lycanitesmobs.EffectBase;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.passive.EntityChicken;
@@ -79,7 +78,7 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
         
         // Lurker Blind Stalking:
         if(this.getAttackTarget() != null) {
-        	PotionBase stalkingEffect = ObjectManager.getPotionEffect("plague");
+        	EffectBase stalkingEffect = ObjectManager.getEffect("plague");
         	if(stalkingEffect != null && this.getAttackTarget().isPotionActive(stalkingEffect))
         		this.setAvoidTarget(this.getAttackTarget());
         	else
@@ -112,7 +111,7 @@ public class EntityLurker extends EntityCreatureTameable implements IGroupHunter
 	    			if(this.isTamingItem(itemstack))
 	    				return false;
 	    		}
-				PotionBase stalkingEffect = ObjectManager.getPotionEffect("plague");
+				EffectBase stalkingEffect = ObjectManager.getEffect("plague");
 	    		if(stalkingEffect != null) {
 					if(!this.getAttackTarget().isPotionActive(stalkingEffect))
 						return false;

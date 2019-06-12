@@ -1,27 +1,22 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.config.ConfigBase;
-
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.config.ConfigBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -30,9 +25,9 @@ public class BlockPoopCloud extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockPoopCloud() {
-		super(Material.PLANTS);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
+	public BlockPoopCloud(Block.Properties properties) {
+		super(properties);
+		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
 		
 		// Properties:
 		this.group = LycanitesMobs.modInfo;
@@ -45,38 +40,19 @@ public class BlockPoopCloud extends BlockBase {
 		this.loopTicks = false;
 		this.canBeCrushed = true;
 		
-		this.noEntityCollision = true;
+		//this.noEntityCollision = true;
 		this.noBreakCollision = true;
 		this.isOpaque = false;
 		
-		this.setBlockUnbreakable();
-		this.setLightOpacity(1);
+		//this.setBlockUnbreakable();
+		//this.setLightOpacity(1);
 	}
-
-
-    // ==================================================
-    //                   Block States
-    // ==================================================
-    @Override
-    public BlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(AGE, meta);
-    }
-
-    @Override
-    public int getMetaFromState(BlockState state) {
-        return state.getValue(AGE);
-    }
-
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, AGE);
-    }
 
 
 	// ==================================================
 	//                     Break
 	// ==================================================
-    @Override
+    /*@Override
     public Item getItemDropped(BlockState blockState, Random random, int fortune) {
         return ObjectManager.getItem("poopcharge");
     }
@@ -89,55 +65,50 @@ public class BlockPoopCloud extends BlockBase {
     @Override
     public int quantityDropped(Random random) {
         return 1;
-    }
+    }*/
     
     
 	// ==================================================
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
-        if(entity instanceof EntityLivingBase) {
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5 * 20, 0));
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 2 * 20, 0));
-        }
-    }
+	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.onEntityCollision(blockState, world, pos, entity);
+
+		if(entity instanceof LivingEntity) {
+			LivingEntity entityLiving = (LivingEntity)entity;
+			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76421_d, 3 * 20, 0)); // Slowness
+			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76431_k, 3 * 20, 0)); // Nausea
+		}
+	}
     
     
 	// ==================================================
 	//                      Particles
 	// ==================================================
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
+		if(random.nextInt(24) == 0)
+			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("poopcloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("poopcloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
-        for(int particleCount = 0; particleCount < 12; ++particleCount) {
-            float particleX = (float)x + random.nextFloat();
-            float particleY = (float)y + random.nextFloat() * 0.5F;
-            float particleZ = (float)z + random.nextFloat();
-            world.spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-                    (double)particleX, (double)particleY, (double)particleZ,
-                    0.0D, 0.0D, 0.0D,
-                    Blocks.TALLGRASS.getStateId(Blocks.DIRT.getDefaultState())
-            );
-        }
-    }
+		if (random.nextInt(100) == 0) {
+			x += random.nextFloat();
+			z += random.nextFloat();
+			world.addParticle(ParticleTypes.CLOUD, x, y, z, 0.0D, 0.0D, 0.0D); // Set to dirt
+		}
+		super.animateTick(state, world, pos, random);
+	}
 
 
     // ==================================================
     //                      Rendering
     // ==================================================
-    @SideOnly(Side.CLIENT)
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
 }

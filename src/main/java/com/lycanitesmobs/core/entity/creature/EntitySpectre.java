@@ -104,7 +104,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
 			this.pullEnergy = Math.min(this.pullEnergy, this.pullEnergyMax);
 			if(this.canPull()) {
 				for (EntityLivingBase entity : this.getNearbyEntities(EntityLivingBase.class, null, this.pullRange)) {
-					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entity))
+					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entity))
 						continue;
 					PlayerEntityMP player = null;
 					if (entity instanceof PlayerEntityMP) {

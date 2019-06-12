@@ -1,22 +1,18 @@
 package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
-
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.block.BlockBase;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.config.ConfigBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -25,9 +21,10 @@ public class BlockFrostweb extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFrostweb() {
-		super(Material.WEB);
-        this.setCreativeTab(LycanitesMobs.blocksTab);
+	public BlockFrostweb(Block.Properties properties) {
+		super(properties);
+		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+        //this.setCreativeTab(LycanitesMobs.blocksTab);
 		
 		// Properties:
 		this.group = LycanitesMobs.modInfo;
@@ -40,20 +37,20 @@ public class BlockFrostweb extends BlockBase {
 		this.loopTicks = false;
 		this.canBeCrushed = false;
 		
-		this.noEntityCollision = true;
+		//this.noEntityCollision = true;
 		this.noBreakCollision = false;
 		this.isOpaque = false;
 		
-		this.setHardness(0.1F);
-		this.setHarvestLevel("sword", 0);
-		this.setLightOpacity(1);
+		//this.setHardness(0.1F);
+		//this.setHarvestLevel("sword", 0);
+		//this.setLightOpacity(1);
 	}
 
 
 	// ==================================================
 	//                     Break
 	// ==================================================
-    @Override
+    /*@Override
     public Item getItemDropped(BlockState blockState, Random random, int fortune) {
         return ObjectManager.getItem("frostwebcharge");
     }
@@ -66,48 +63,43 @@ public class BlockFrostweb extends BlockBase {
     @Override
     public int quantityDropped(Random random) {
         return 1;
-    }
+    }*/
     
     
 	// ==================================================
 	//                Collision Effects
 	// ==================================================
-    @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
-		entity.setInWeb();
+	@Override
+	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.onEntityCollision(blockState, world, pos, entity);
+		entity.setMotionMultiplier(blockState, new Vec3d(0.25D, (double)0.05F, 0.25D));
 	}
     
     
 	// ==================================================
 	//                      Particles
 	// ==================================================
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
 
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("poisoncloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
-        for(int particleCount = 0; particleCount < 12; ++particleCount) {
-            float particleX = (float)x + random.nextFloat();
-            float particleY = (float)y + random.nextFloat() * 0.5F;
-            float particleZ = (float)z + random.nextFloat();
-            world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, (double)particleX, (double)particleY, (double)particleZ, 0.0D, 0.0D, 0.0D, new int[0]);
-        }
-    }
+		if (random.nextInt(100) == 0) {
+			x += random.nextFloat();
+			z += random.nextFloat();
+			world.addParticle(ParticleTypes.ITEM_SNOWBALL, x, y, z, 0.0D, 0.0D, 0.0D);
+		}
+		super.animateTick(state, world, pos, random);
+	}
 
 
     // ==================================================
     //                      Rendering
     // ==================================================
-    @SideOnly(Side.CLIENT)
-    @Override
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
 }

@@ -127,8 +127,8 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
                         }
                     }
                     if(doDamage) {
-                        if (ObjectManager.getPotionEffect("weight") != null)
-                            possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("weight"), this.getEffectDuration(5), 1));
+                        if (ObjectManager.getEffect("weight") != null)
+                            possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
                         else
                             possibleTarget.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10 * 20, 0));
                     }
@@ -141,8 +141,8 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
     public void riderEffects(EntityLivingBase rider) {
     	if(rider.isPotionActive(MobEffects.SLOWNESS))
     		rider.removePotionEffect(MobEffects.SLOWNESS);
-    	if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-    		rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+    	if(rider.isPotionActive(ObjectManager.getEffect("weight")))
+    		rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
 
 	

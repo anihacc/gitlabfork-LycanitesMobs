@@ -13,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -56,8 +55,8 @@ public class EntityHellfireball extends EntityProjectileBase {
     	if(!entityLiving.isImmuneToFire()) {
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
         }
-        if(ObjectManager.getPotionEffect("decay") != null) {
-            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("decay"), this.getEffectDuration(60), 0));
+        if(ObjectManager.getEffect("decay") != null) {
+            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
         }
     	return true;
     }

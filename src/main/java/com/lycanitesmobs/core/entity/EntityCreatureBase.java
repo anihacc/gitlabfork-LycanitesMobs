@@ -57,7 +57,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
@@ -69,7 +68,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class EntityCreatureBase extends EntityLiving {
+public abstract class EntityCreatureBase extends LivingEntity {
     public static Boolean ENABLE_HITAREAS = false;
 	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setShouldWatch(true);
 	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setShouldWatch(true);
@@ -3316,8 +3315,8 @@ public abstract class EntityCreatureBase extends EntityLiving {
 			return false;
 		if((entity.getRidingEntity() != null && !(entity.getRidingEntity() instanceof EntityBoat) && !(entity.getRidingEntity() instanceof EntityMinecart)) || entity.getControllingPassenger() != null)
 			return false;
-        if(ObjectManager.getPotionEffect("weight") != null)
-            if((entity).isPotionActive(ObjectManager.getPotionEffect("weight")))
+        if(ObjectManager.getEffect("weight") != null)
+            if((entity).isPotionActive(ObjectManager.getEffect("weight")))
                 return false;
 		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof EntityFear;
     }

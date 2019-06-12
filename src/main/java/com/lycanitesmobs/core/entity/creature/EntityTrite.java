@@ -94,8 +94,8 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
     public boolean isPotionApplicable(PotionEffect potionEffect) {
 		if(potionEffect.getPotion() == MobEffects.WITHER)
 			return false;
-		if(ObjectManager.getPotionEffect("decay") != null)
-			if(potionEffect.getPotion() == ObjectManager.getPotionEffect("decay")) return false;
+		if(ObjectManager.getEffect("decay") != null)
+			if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;
         super.isPotionApplicable(potionEffect);
         return true;
     }

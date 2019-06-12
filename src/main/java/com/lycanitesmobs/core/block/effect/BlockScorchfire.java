@@ -1,23 +1,24 @@
 package com.lycanitesmobs.core.block.effect;
 
+import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.config.ConfigBase;
-
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.config.ConfigBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
 
@@ -26,8 +27,8 @@ public class BlockScorchfire extends BlockFireBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockScorchfire() {
-		super(Material.FIRE, LycanitesMobs.modInfo, "scorchfire");
+	public BlockScorchfire(Block.Properties properties) {
+		super(properties, LycanitesMobs.modInfo, "scorchfire");
 
         // Stats:
         this.tickRate = 30;
@@ -38,43 +39,45 @@ public class BlockScorchfire extends BlockFireBase {
         this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Scorchfire", true);
         this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Scorchfire on No Fire Tick", false);
 		
-		this.setLightOpacity(1);
-        this.setLightLevel(0.8F);
+		//this.setLightOpacity(1);
+        //this.setLightLevel(0.8F);
 	}
 
 
     // ==================================================
     //                       Break
     // ==================================================
-    @Override
+    /*@Override
     public Item getItemDropped(BlockState state, Random random, int zero) {
         return ObjectManager.getItem("scorchfirecharge");
-    }
+    }*/
     
     
 	// ==================================================
 	//                Collision Effects
 	// ==================================================
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, BlockState state, Entity entity) {
-        super.onEntityCollidedWithBlock(world, pos, state, entity);
-		if(entity instanceof EntityItem && ((EntityItem)entity).getItem() != null)
-    		if(((EntityItem)entity).getItem().getItem() == ObjectManager.getItem("scorchfirecharge"))
-    			return;
+	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
+		super.onEntityCollision(blockState, world, pos, entity);
 
-        /**if(ObjectManager.getPotionEffect("penetration") != null) {
-            PotionEffect effectPenetration = new PotionEffect(ObjectManager.getPotionEffect("penetration"), 5 * 20, 0);
-            if(entity instanceof EntityLivingBase) {
-                EntityLivingBase entityLiving = (EntityLivingBase)entity;
-                if(!entityLiving.isPotionApplicable(effectPenetration))
-                    return;
-                entityLiving.addPotionEffect(effectPenetration);
-            }
-        }**/
+		if(entity instanceof LivingEntity) {
+			Effect penetration = ObjectManager.getEffect("penetration");
+			if(penetration != null) {
+				EffectInstance effect = new EffectInstance(penetration, 3 * 20, 0);
+				LivingEntity entityLiving = (LivingEntity)entity;
+				if(entityLiving.isPotionApplicable(effect))
+					entityLiving.addPotionEffect(effect);
+			}
+		}
+
+		if(entity instanceof ItemEntity)
+			if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("scorchfirecharge"))
+				return;
 
 		if(entity.isImmuneToFire())
 			return;
-    	entity.attackEntityFrom(DamageSource.IN_FIRE, 1);
+
+		entity.attackEntityFrom(DamageSource.IN_FIRE, 1);
 		entity.setFire(3);
 	}
 
@@ -82,23 +85,21 @@ public class BlockScorchfire extends BlockFireBase {
     // ==================================================
     //                      Particles
     // ==================================================
-    @SideOnly(Side.CLIENT)
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        super.randomDisplayTick(state, world, pos, random);
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+		double x = pos.getX();
+		double y = pos.getY();
+		double z = pos.getZ();
+		if(random.nextInt(24) == 0)
+			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("scorchfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("scorchfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-
-        for(int particleCount = 0; particleCount < 12; ++particleCount) {
-            float particleX = (float)x + random.nextFloat();
-            float particleY = (float)y + random.nextFloat() * 0.5F;
-            float particleZ = (float)z + random.nextFloat();
-            world.spawnParticle(EnumParticleTypes.FLAME, (double)particleX, (double)particleY, (double)particleZ, 0.0D, 0.0D, 0.0D, new int[0]);
-            world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (double)particleX, (double)particleY, (double)particleZ, 0.0D, 0.0D, 0.0D, new int[0]);
-        }
-    }
+		if (random.nextInt(100) == 0) {
+			x = pos.getX() + random.nextFloat();
+			z = pos.getZ() + random.nextFloat();
+			world.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
+			world.addParticle(ParticleTypes.LARGE_SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
+		}
+		super.animateTick(state, world, pos, random);
+	}
 }

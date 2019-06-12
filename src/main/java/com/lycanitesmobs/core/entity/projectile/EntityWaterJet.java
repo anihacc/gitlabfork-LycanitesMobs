@@ -69,8 +69,8 @@ public class EntityWaterJet extends EntityProjectileLaser {
     public boolean updateDamage(Entity target) {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
-        	if(target instanceof EntityLivingBase && ObjectManager.getPotionEffect("penetration") != null)
-    			((EntityLivingBase)target).addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("penetration"), this.getEffectDuration(5), 0));
+        	if(target instanceof EntityLivingBase && ObjectManager.getEffect("penetration") != null)
+    			((EntityLivingBase)target).addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }

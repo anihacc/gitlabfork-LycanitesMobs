@@ -115,7 +115,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
                         continue;
                     if(entity instanceof EntityLivingBase) {
                         EntityLivingBase entityLivingBase = (EntityLivingBase)entity;
-                        if(entityLivingBase.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entityLivingBase))
+                        if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                     }
                     PlayerEntityMP player = null;
@@ -148,10 +148,10 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     @Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("paralysis")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("paralysis"));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
+        if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
+            rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
+        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
+            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
     }
 
     // ========== Extra Animations ==========
