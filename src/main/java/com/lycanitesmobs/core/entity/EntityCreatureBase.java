@@ -106,8 +106,6 @@ public abstract class EntityCreatureBase extends MobEntity {
 	public float setHeight;
     /** The size scale of this mob. Randomly varies normally by 10%. **/
 	public double sizeScale = 1.0D;
-    /** An array of additional hitboxes for large entities. **/
-    public EntityHitArea[][][] hitAreas;
     /** A scale relative to this entity's width for melee and ranged hit collision. **/
     public float hitAreaWidthScale = 1;
     /** A scale relative to this entity's height for melee and ranged hit collision. **/
@@ -2719,12 +2717,6 @@ public abstract class EntityCreatureBase extends MobEntity {
                 return true;
         }
         return false;
-    }
-
-    // ========== Attacked From Part ==========
-    /** Called when this entity has been attacked from a specific hit area entity, uses the HitArea Entity, DamageSource and damage value. **/
-    public boolean attackEntityFromArea(EntityHitArea entityHitArea, DamageSource damageSrc, float damage) {
-        return this.attackEntityFrom(damageSrc, damage);
     }
     
     // ========== Defense ==========

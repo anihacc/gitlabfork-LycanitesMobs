@@ -6,20 +6,20 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityProjectileCustom extends EntityProjectileBase {
 
 	/** Used to sync the Projectile Info's name to use. **/
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(EntityProjectileCustom.class, DataSerializers.STRING);
+	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(EntityProjectileCustom.class, DataSerializers.field_187194_d);
 
 	/** The Projectile Info to base this projectile from. **/
 	public ProjectileInfo projectileInfo;
@@ -86,7 +86,7 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 
 		// Stats:
 		this.setProjectileScale(this.projectileInfo.scale);
-		this.setSize(this.projectileInfo.width * this.projectileScale, this.projectileInfo.height * this.projectileScale);
+		//this.setSize(this.projectileInfo.width * this.projectileScale, this.projectileInfo.height * this.projectileScale); TODO EntityType dynamic sizes.
 		this.projectileLife = this.projectileInfo.lifetime;
 		this.setDamage(this.projectileInfo.damage);
 		this.setPierce(this.projectileInfo.pierce);
@@ -106,12 +106,12 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	//                      Update
 	// ==================================================
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		if(this.projectileInfo == null && this.getEntityWorld().isRemote) {
 			this.loadProjectileInfo(this.getStringFromDataManager(PROJECTILE_NAME));
 		}
 
-		super.onUpdate();
+		super.tick();
 
 		if(this.projectileInfo != null && !this.getEntityWorld().isRemote) {
 			for (ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
@@ -151,19 +151,19 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	//                       NBT
 	// ==================================================
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+	public void writeAdditional(CompoundNBT compound) {
+		super.writeAdditional(compound);
 
 		if(this.projectileInfo != null) {
-			compound.setString("ProjectileName", this.projectileInfo.getName());
+			compound.putString("ProjectileName", this.projectileInfo.getName());
 		}
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		if(compound.hasKey("ProjectileName")) {
+		if(compound.contains("ProjectileName")) {
 			this.loadProjectileInfo(compound.getString("ProjectileName"));
 		}
 	}

@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -34,7 +33,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
  	// ==================================================
     public EntityProjectileRapidFire(Class entityClass, World world, int setTime, int setDelay) {
         super(world);
-        this.setSize(projectileWidth, projectileHeight);
+        //this.setSize(projectileWidth, projectileHeight);
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
@@ -43,7 +42,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 
     public EntityProjectileRapidFire(Class entityClass, World world, double par2, double par4, double par6, int setTime, int setDelay) {
         super(world, par2, par4, par6);
-        this.setSize(projectileWidth, projectileHeight);
+        //this.setSize(projectileWidth, projectileHeight);
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
@@ -52,7 +51,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 
     public EntityProjectileRapidFire(Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
         super(world, entityLivingBase);
-        this.setSize(projectileWidth, projectileHeight);
+        //this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
         this.shootingEntity = entityLivingBase;
         this.offsetX = this.posX - entityLivingBase.posX;
@@ -65,7 +64,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 
 	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
 		super(world, par2, par4, par6);
-		this.setSize(projectileWidth, projectileHeight);
+		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.rapidTime = setTime;
 		this.rapidDelay = setDelay;
@@ -74,7 +73,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 
 	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
 		super(world, entityLivingBase);
-		this.setSize(projectileWidth, projectileHeight);
+		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.shootingEntity = entityLivingBase;
 		this.offsetX = this.posX - entityLivingBase.posX;
@@ -90,7 +89,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
+    public void tick() {
     	if(this.shootingEntity != null) {
     		this.posX = shootingEntity.posX + this.offsetX;
     		this.posY = shootingEntity.posY + this.offsetY;
@@ -107,7 +106,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 	    	
 	    	rapidTime--;
     	}
-    	else if(!this.isDead) {
+    	else if(this.isAlive()) {
     		this.remove();
     	}
     }
@@ -135,28 +134,28 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 	        if(this.shootingEntity == null) {
 				if(this.projectileInfo != null) {
 					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.posX, this.posY, this.posZ);
-					projectile.shoot(this.motionX, this.motionY, this.motionZ, (float)this.projectileInfo.velocity, 0);
+					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, (float)this.projectileInfo.velocity, 0);
 				}
 				else {
 					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, double.class, double.class, double.class});
 					constructor.setAccessible(true);
 					projectile = (IProjectile) constructor.newInstance(new Object[]{world, this.posX, this.posY, this.posZ});
-					projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, 1, 1);
 				}
 	        }
 	        else {
 	        	if(this.projectileInfo != null) {
 					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.shootingEntity);
-					projectile.shoot(this.motionX, this.motionY, this.motionZ, (float)this.projectileInfo.velocity, 0);
+					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, (float)this.projectileInfo.velocity, 0);
 				}
 	        	else {
 					Constructor constructor = projectileClass.getDeclaredConstructor(new Class[]{World.class, LivingEntity.class});
 					constructor.setAccessible(true);
 					projectile = (IProjectile) constructor.newInstance(new Object[]{world, this.shootingEntity});
-					projectile.shoot(this.motionX, this.motionY, this.motionZ, 1, 1);
+					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, 1, 1);
 				}
-                if(projectile instanceof EntityThrowable) {
-                    EntityThrowable entityThrowable = (EntityThrowable)projectile;
+                if(projectile instanceof ThrowableEntity) {
+                    ThrowableEntity entityThrowable = (ThrowableEntity)projectile;
                     entityThrowable.setPosition(this.shootingEntity.posX + this.offsetX, this.shootingEntity.posY + this.offsetY, this.shootingEntity.posZ + this.offsetZ);
                 }
 	        }
@@ -165,7 +164,7 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
                 ((EntityProjectileBase) projectile).setProjectileScale(this.projectileScale);
             }
 	        
-	        world.spawnEntity((Entity)projectile);
+	        world.func_217376_c((Entity)projectile);
 		}
 		catch (Exception e) {
 			System.out.println("[WARNING] [LycanitesMobs] EntityRapidFire was unable to instantiate the given projectile class.");

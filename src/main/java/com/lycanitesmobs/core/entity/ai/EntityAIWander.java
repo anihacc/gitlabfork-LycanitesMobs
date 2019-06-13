@@ -2,10 +2,11 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIWander extends EntityAIBase {
+public class EntityAIWander extends Goal {
 	// Targets:
     private EntityCreatureBase host;
     

@@ -5,11 +5,12 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -34,7 +35,7 @@ public class EntityPortal extends EntityProjectileBase {
     public TileEntitySummoningPedestal summoningPedestal;
 
     // Datawatcher:
-    protected static final DataParameter<String> OWNER_NAME = EntityDataManager.<String>createKey(EntityPortal.class, DataSerializers.STRING);
+    protected static final DataParameter<String> OWNER_NAME = EntityDataManager.createKey(EntityPortal.class, DataSerializers.field_187194_d);
 	
     // ==================================================
  	//                   Constructors
@@ -42,7 +43,6 @@ public class EntityPortal extends EntityProjectileBase {
     public EntityPortal(World world) {
         super(world);
         this.setStats();
-        this.isImmuneToFire = true;
     }
 
     public EntityPortal(World world, PlayerEntity shooter, Class summonClass, ItemStaffSummoning portalItem) {
@@ -83,11 +83,11 @@ public class EntityPortal extends EntityProjectileBase {
  	// ==================================================
     // ========== Main Update ==========
     @Override
-    public void onUpdate() {
+    public void tick() {
         if(this.shootingEntity != null || this.summoningPedestal != null) {
 			this.projectileLife = 5;
 		}
-        super.onUpdate();
+        super.tick();
 
         // ==========Summoning Pedestal ==========
         if(!this.getEntityWorld().isRemote) {
@@ -99,9 +99,9 @@ public class EntityPortal extends EntityProjectileBase {
 
         // ==========Sync Shooter Name ==========
         if(!this.getEntityWorld().isRemote) {
-            // Summoning Staff or Summoning Pedestal (with active player):
+            // Summoning Staff or Summoning Pedestal (with active player): TODO Change to UUID!
             if(this.shootingEntity != null)
-                this.dataManager.set(OWNER_NAME, this.shootingEntity.getName());
+                this.dataManager.set(OWNER_NAME, this.shootingEntity.getName().toString());
             // Summoning Pedestal:
             else if(this.summoningPedestal != null)
                 this.dataManager.set(OWNER_NAME, this.summoningPedestal.getOwnerName());
@@ -114,7 +114,7 @@ public class EntityPortal extends EntityProjectileBase {
         }
 
     	// ========== Check for Despawn ==========
-    	if(!this.getEntityWorld().isRemote && !this.isDead) {
+    	if(!this.getEntityWorld().isRemote && this.isAlive()) {
             // Summoning Pedestal:
             if(this.summoningPedestal != null) {
                 if(this.summonClass == null) {
@@ -147,7 +147,7 @@ public class EntityPortal extends EntityProjectileBase {
             if(playerExt != null && this.portalItem != null) {
                 if(++this.summonTick >= this.portalItem.getRapidTime(null)) {
                     this.summonDuration = this.portalItem.getSummonDuration();
-                    if(this.shootingEntity.capabilities.isCreativeMode)
+                    if(this.shootingEntity.playerAbilities.isCreativeMode)
                         this.summonAmount += this.portalItem.getSummonAmount();
                     else {
                         float summonMultiplier = (float) (CreatureManager.getInstance().getCreature(this.summonClass).summonCost + this.portalItem.getSummonCostBoost()) * this.portalItem.getSummonCostMod();
@@ -179,7 +179,7 @@ public class EntityPortal extends EntityProjectileBase {
                 float distance = this.rand.nextFloat() * 2;
                 double x = distance * Math.cos(angle) + Math.sin(angle);
                 double z = distance * Math.sin(angle) - Math.cos(angle);
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL,
+                this.getEntityWorld().addParticle(ParticleTypes.PORTAL,
                         this.posX + x,
                         this.posY + (4.0F * this.rand.nextFloat()) - 2.0F,
                         this.posZ + z,
@@ -244,7 +244,7 @@ public class EntityPortal extends EntityProjectileBase {
                 if (this.shootingEntity != null)
                     this.shootingEntity.addStat(ObjectManager.getStat(entityCreature.creatureInfo.getName() + ".summon"), 1);
             }
-	    	this.getEntityWorld().spawnEntity(entity);
+	    	this.getEntityWorld().func_217376_c(entity);
     	}
         int amount = this.summonAmount;
     	this.summonAmount = 0;
@@ -272,10 +272,10 @@ public class EntityPortal extends EntityProjectileBase {
 	        
 			// Apply Raytrace to Look Target:
 			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.posX, this.shootingEntity.posY, this.shootingEntity.posZ, this.targetX, this.targetY, this.targetZ, 1.0F, null);
-	        if(target != null && target.hitVec != null) {
-				this.targetX = target.hitVec.x;
-				this.targetY = target.hitVec.y;
-				this.targetZ = target.hitVec.z;
+	        if(target != null) {
+				this.targetX = target.getHitVec().x;
+				this.targetY = target.getHitVec().y;
+				this.targetZ = target.getHitVec().z;
 	        }
 	        
 	        this.targetY += 1.0D;
@@ -321,8 +321,8 @@ public class EntityPortal extends EntityProjectileBase {
             AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
 
         if(this.ownerName != null) {
-            if(this.ownerName.equalsIgnoreCase(LycanitesMobs.proxy.getClientPlayer().getName()))
-                return AssetManager.getTexture(this.entityName + "_client");
+            //if(this.ownerName.equalsIgnoreCase(LycanitesMobs.proxy.getClientPlayer().getName())) TODO Check if owned by client player on client side. Maybe make a new proxy?
+                //return AssetManager.getTexture(this.entityName + "_client");
             if(!this.ownerName.equalsIgnoreCase(""))
                 return AssetManager.getTexture(this.entityName + "_player");
         }
@@ -331,6 +331,6 @@ public class EntityPortal extends EntityProjectileBase {
 
     @Override
     public float getTextureOffsetY() {
-        return this.height / 2;
+        return this.getSize(Pose.STANDING).height / 2;
     }
 }

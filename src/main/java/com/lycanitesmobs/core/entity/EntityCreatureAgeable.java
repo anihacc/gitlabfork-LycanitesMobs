@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -57,10 +57,10 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 	
 	// ========== Init ==========
     @Override
-    protected void entityInit() {
-        super.entityInit();
-        this.dataManager.register(AGE, (int)0);
-        this.dataManager.register(LOVE, (int)0);
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(AGE, 0);
+        this.dataManager.register(LOVE, 0);
     }
     
     // ========== Name ==========
@@ -102,8 +102,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
   	// ==================================================
     // ========== Living Update ==========
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
         // Growing:
         if(this.getEntityWorld().isRemote)
@@ -133,12 +133,12 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
         	this.setFarmed();
             --this.loveTime;
             if(this.getEntityWorld().isRemote) {
-	            EnumParticleTypes particle = EnumParticleTypes.HEART;
+	            IParticleData particle = ParticleTypes.HEART;
 	            if(this.loveTime % 10 == 0) {
 	                double d0 = this.rand.nextGaussian() * 0.02D;
 	                double d1 = this.rand.nextGaussian() * 0.02D;
 	                double d2 = this.rand.nextGaussian() * 0.02D;
-	                this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+	                this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
 	            }
             }
         }
@@ -192,9 +192,9 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 						baby.setGrowingAge(baby.growthTime);
 						baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 						baby.setFarmed();
-						this.getEntityWorld().spawnEntity(baby);
+						this.getEntityWorld().func_217376_c(baby);
 						if (itemStack.hasDisplayName()) {
-							baby.setCustomNameTag(itemStack.getDisplayName());
+							baby.setCustomName(itemStack.getDisplayName());
 						}
 						this.consumePlayersItem(player, itemStack);
 					}
@@ -246,10 +246,10 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     }
 	
 	protected final void setAgeScale(float age) {
-        super.setSize(this.scaledWidth * age, this.scaledHeight * age);
+        //super.setSize(this.scaledWidth * age, this.scaledHeight * age); TODO EntityType dynamic sizes
     }
 	
-	@Override
+	/*@Override
 	protected void setSize(float width, float height) {
         boolean validWidth = this.scaledWidth > 0.0F;
         this.scaledWidth = width;
@@ -257,12 +257,12 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
         if(!validWidth)
             this.setAgeScale(1.0F);
         super.setSize(width, height);
-    }
+    }*/
 
     /** When called, this reapplies the initial width and height this mob and then applies sizeScale. **/
     @Override
 	public void updateSize() {
-        this.setSize(this.setWidth, this.setHeight);
+        //this.setSize(this.setWidth, this.setHeight);
         this.setScaleForAge(this.isChild());
     }
 	
@@ -284,9 +284,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 	
 	// ========== Breeding Item ==========
 	public boolean isBreedingItem(ItemStack itemStack) {
-		return itemStack != null
-				&& itemStack.getItem() == null
-				&& itemStack.getItemDamage() == -1;
+		return false;
     }
 	
 	// ========== Valid Partner ==========
@@ -329,12 +327,12 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.HEART, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+                this.getEntityWorld().addParticle(ParticleTypes.HEART, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
 
             this.onCreateBaby(partner, baby);
 
-            this.getEntityWorld().spawnEntity(baby);
+            this.getEntityWorld().func_217376_c(baby);
         }
     }
 
@@ -354,8 +352,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
   	// ==================================================
 	// ========== Read ==========
     @Override
-	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readEntityFromNBT(nbtTagCompound);
+	public void read(CompoundNBT nbtTagCompound) {
+        super.read(nbtTagCompound);
         if(nbtTagCompound.contains("Age")) {
         	this.setGrowingAge(nbtTagCompound.getInt("Age"));
         }
@@ -379,8 +377,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 	
 	// ========== Write ==========
     @Override
-	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeEntityToNBT(nbtTagCompound);
+	public void writeAdditional(CompoundNBT nbtTagCompound) {
+        super.writeAdditional(nbtTagCompound);
         nbtTagCompound.putInt("Age", this.getGrowingAge());
         nbtTagCompound.putInt("InLove", this.loveTime);
         nbtTagCompound.putBoolean("HasBeenFarmed", this.hasBeenFarmed);

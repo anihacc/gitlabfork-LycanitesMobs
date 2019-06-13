@@ -1,39 +1,41 @@
 package com.lycanitesmobs.core.entity;
 
-import com.google.common.base.Optional;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.item.ItemFood;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
-public class EntityCreatureTameable extends EntityCreatureAgeable implements IEntityOwnable {
+public class EntityCreatureTameable extends EntityCreatureAgeable {
 	
 	// Stats:
 	public float hunger = this.getCreatureHungerMax();
@@ -49,7 +51,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 
     // Datawatcher:
     protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
-    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187203_m);
     protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
     protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
 
@@ -71,10 +73,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	
 	// ========== Init ==========
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(TAMED, (byte)0);
-        this.dataManager.register(OWNER_ID, Optional.absent());
+        this.dataManager.register(OWNER_ID, Optional.empty());
         this.dataManager.register(HUNGER, this.getCreatureHungerMax());
         this.dataManager.register(STAMINA, this.getStaminaMax());
     }
@@ -88,7 +90,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Name ==========
     @Override
-    public String getName() {
+    public ITextComponent getName() {
     	if(!this.isTamed() || !CreatureManager.getInstance().config.ownerTags)
     		return super.getName();
     	
@@ -103,7 +105,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	if(this.hasCustomName())
     		return super.getName();// + " (" + ownedName + ")";
     	else
-    		return ownedName;
+    		return new TranslationTextComponent(ownedName);
     }
 
 	/**
@@ -138,7 +140,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
         if(this.getPetEntry() != null) {
 			if(this.getPetEntry().entity != this && this.getPetEntry().entity != null)
 				return true;
-			if(this.getPetEntry().host == null || this.getPetEntry().host.isDead)
+			if(this.getPetEntry().host == null || !this.getPetEntry().host.isAlive())
 				return true;
 		}
 
@@ -178,8 +180,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     //                       Update
     // ==================================================
     @Override
-    public void onLivingUpdate() {
-    	super.onLivingUpdate();
+    public void livingTick() {
+    	super.livingTick();
     	this.staminaUpdate();
 	}
     
@@ -251,19 +253,18 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     	// Feed:
     	if(command.equals("Feed")) {
     		int healAmount = 4;
-    		if(itemStack.getItem() instanceof ItemFood) {
-    			ItemFood itemFood = (ItemFood)itemStack.getItem();
-    			healAmount = itemFood.getHealAmount(itemStack);
+    		if(itemStack.getItem().func_219971_r()) { // If item has food data
+    			healAmount = itemStack.getItem().func_219967_s().func_221466_a(); // Get food data of item and get food heal amount.
     		}
     		this.heal((float)healAmount);
             this.playEatSound();
             if(this.getEntityWorld().isRemote) {
-                EnumParticleTypes particle = EnumParticleTypes.HEART;
+                IParticleData particle = ParticleTypes.HEART;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 for(int i = 0; i < 25; i++)
-                	this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+                	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
     	}
@@ -386,7 +387,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 return true;
 
             // Check Player PvP:
-			if(target instanceof PlayerEntity && (!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP())) {
+			if(target instanceof PlayerEntity && (!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP())) {
 				return true;
 			}
 
@@ -394,15 +395,15 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
             if(target instanceof EntityCreatureTameable) {
             	EntityCreatureTameable tamedTarget = (EntityCreatureTameable)target;
             	if(tamedTarget.isTamed()) {
-            		if(!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getPlayerOwner() == this.getPlayerOwner()) {
+            		if(!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getPlayerOwner() == this.getPlayerOwner()) {
 						return true;
 					}
 				}
             }
-			else if(target instanceof IEntityOwnable) {
-				IEntityOwnable tamedTarget = (IEntityOwnable)target;
+			else if(target instanceof TameableEntity) {
+				TameableEntity tamedTarget = (TameableEntity)target;
 				if(tamedTarget.getOwner() != null) {
-					if(!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getOwner() == this.getOwner()) {
+					if(!this.getEntityWorld().getServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getOwner() == this.getOwner()) {
 						return true;
 					}
 				}
@@ -433,21 +434,21 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
     // ========== Can Attack ==========
 	@Override
-	public boolean canAttackClass(Class targetClass) {
+	public boolean canAttack(EntityType targetClass) {
 		if(this.isPassive())
 			return false;
-		return super.canAttackClass(targetClass);
+		return super.canAttack(targetClass);
 	}
 	
 	@Override
-	public boolean canAttackEntity(LivingEntity targetEntity) {
+	public boolean canAttack(LivingEntity targetEntity) {
 		if(this.isPassive())
 			return false;
 		if(this.isTamed()) {
             if(this.getOwner() == targetEntity)
                 return false;
             if(!this.getEntityWorld().isRemote) {
-                boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();
+                boolean canPVP = this.getEntityWorld().getServer().isPVPEnabled() && this.isPVP();
                 if(targetEntity instanceof PlayerEntity && !canPVP)
                     return false;
                 if(targetEntity instanceof EntityCreatureTameable) {
@@ -461,7 +462,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 }
             }
         }
-		return super.canAttackEntity(targetEntity);
+		return super.canAttack(targetEntity);
 	}
 
     // ========= Get Damage Source ==========
@@ -483,15 +484,15 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ========== Attacked From ==========
     @Override
     public boolean attackEntityFrom(DamageSource damageSrc, float damage) {
-        if (this.isEntityInvulnerable(damageSrc))
+        if (this.isInvulnerableTo(damageSrc))
             return false;
         else {
             if(!this.isPassive())
             	this.setSitting(false);
 
             Entity entity = damageSrc.getImmediateSource();
-            if(entity instanceof EntityThrowable)
-            	entity = ((EntityThrowable)entity).getThrower();
+            if(entity instanceof ThrowableEntity)
+            	entity = ((ThrowableEntity)entity).getThrower();
             
             if(this.isTamed() && this.getOwner() == entity)
             	return false;
@@ -522,7 +523,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	 */
 	public void setOwnerId(UUID ownerUUID) {
 		this.ownerUUID = ownerUUID;
-		this.dataManager.set(OWNER_ID, Optional.fromNullable(ownerUUID));
+		this.dataManager.set(OWNER_ID, Optional.ofNullable(ownerUUID));
 		this.setTamed(ownerUUID != null);
 	}
 
@@ -532,7 +533,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 		if(uuid == null) {
 			return super.getOwner();
 		}
-		return this.getEntityWorld().getPlayerEntityByUUID(uuid);
+		return this.getEntityWorld().getPlayerByUuid(uuid);
 	}
 
 	/**
@@ -547,7 +548,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	public UUID getOwnerId() {
 		if(this.getEntityWorld().isRemote) {
 			try {
-				return this.getUUIDFromDataManager(OWNER_ID).orNull();
+				return this.getUUIDFromDataManager(OWNER_ID).orElse(null);
 			} catch (Exception ignored) {}
 		}
 		return this.ownerUUID;
@@ -568,21 +569,21 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 		if(this.ownerUUID == null) {
 			return null;
 		}
-		return this.getEntityWorld().getPlayerEntityByUUID(this.ownerUUID);
+		return this.getEntityWorld().getPlayerByUuid(this.ownerUUID);
 	}
 
 	/**
-	 * Gets the display name of the entity that owns this entity or an empty string if none.
+	 * Gets the display name of the entity that owns this entity or an empty string if none. TODO Maybe this hack is no longer needed now.
 	 * @return The owner display name.
 	 */
 	public String getOwnerName() {
 		Entity owner = this.getOwner();
 		if(owner != null) {
 			if(owner instanceof PlayerEntity) {
-				return ((PlayerEntity)owner).getDisplayNameString();
+				return owner.getDisplayName().toString();
 			}
 			else {
-				return owner.getName();
+				return owner.getDisplayName().toString();
 			}
 		}
 		return "";
@@ -611,7 +612,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
         else {
             this.dataManager.set(TAMED, (byte) (tamed - (tamed & TAMED_ID.IS_TAMED.id)));
         }
-        this.setAlwaysRenderNameTag(isTamed);
+        this.setCustomNameVisible(isTamed);
     }
     
     public boolean isTamingItem(ItemStack itemstack) {
@@ -643,7 +644,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 				this.unsetTemporary();
 				String tameMessage = LanguageManager.translate("message.pet.tamed");
 				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
-				player.sendMessage(new TextComponentString(tameMessage));
+				player.sendMessage(new TranslationTextComponent(tameMessage));
 				this.playTameEffect(this.isTamed());
 				player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1);
 				if (this.timeUntilPortal > this.getPortalCooldown()) {
@@ -657,7 +658,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 			else {
 				String tameFailedMessage = LanguageManager.translate("message.pet.tamefail");
 				tameFailedMessage = tameFailedMessage.replace("%creature%", this.getSpeciesName());
-				player.sendMessage(new TextComponentString(tameFailedMessage));
+				player.sendMessage(new TranslationTextComponent(tameFailedMessage));
 				this.playTameEffect(this.isTamed());
 			}
 		}
@@ -928,21 +929,13 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
     //                     Abilities
     // ==================================================
-    /** Overrides the vanilla method when check for EnumCreatureType.monster, it will return true if this mob is hostile and false if it is not regardless of this creature's actual EnumCreatureType. Takes tameable mobs into account too. **/
-    @Override
-	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) {
-    	if(forSpawnCount && this.isTamed()) // Tamed creatures should no longer take up the mob spawn count.
-    		return false;
-        return super.isCreatureType(type, forSpawnCount);
-    }
-    
     // =========== Movement ==========
     public boolean canBeTempted() { return !this.isTamed(); }
 
-    @Override
-    public boolean shouldDismountInWater(Entity rider) {
+    /*@Override
+    public boolean shouldDismountInWater(Entity rider) { TODO Possibly in EntityType as some obfuscated method?
         return false;
-    }
+    }*/
 
 	@Override
 	public boolean canBeSteered() {
@@ -954,15 +947,15 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     //                       Client
     // ==================================================
     protected void playTameEffect(boolean success) {
-        EnumParticleTypes particle = EnumParticleTypes.HEART;
+        IParticleData particle = ParticleTypes.HEART;
         if(!success)
-        	particle = EnumParticleTypes.SMOKE_NORMAL;
+        	particle = ParticleTypes.SMOKE;
 
         for(int i = 0; i < 7; ++i) {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+            this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
         }
     }
     
@@ -995,8 +988,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readEntityFromNBT(nbtTagCompound);
+    public void read(CompoundNBT nbtTagCompound) {
+        super.read(nbtTagCompound);
 
 		// UUID NBT:
         if(nbtTagCompound.hasUniqueId("OwnerId")) {
@@ -1055,10 +1048,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Write ==========
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeEntityToNBT(nbtTagCompound);
+    public void writeAdditional(CompoundNBT nbtTagCompound) {
+        super.writeAdditional(nbtTagCompound);
         if(this.getOwnerId() != null) {
-            nbtTagCompound.setUniqueId("OwnerId", this.getOwnerId());
+            nbtTagCompound.putUniqueId("OwnerId", this.getOwnerId());
         }
         nbtTagCompound.putBoolean("Sitting", this.isSitting());
         nbtTagCompound.putBoolean("Following", this.isFollowing());

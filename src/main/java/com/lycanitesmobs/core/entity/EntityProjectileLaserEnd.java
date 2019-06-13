@@ -50,7 +50,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
     
     public void setStats() {
         this.setSpeed(1.0D);
-        this.setSize(projectileWidth, projectileHeight);
+        //this.setSize(projectileWidth, projectileHeight);
         if(laserEntity != null) {
 	        this.targetX = this.laserEntity.posX;
 	        this.targetY = this.laserEntity.posY;
@@ -68,7 +68,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
  	// ==================================================
     // ========== Main Update ==========
     @Override
-    public void onUpdate() {
+    public void tick() {
     	if(this.getEntityWorld().isRemote) {
     		this.posX = this.dataManager.get(POS_X);
     		this.posY = this.dataManager.get(POS_Y);
@@ -76,7 +76,7 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
     		return;
     	}
     	
-    	if((this.laserEntity == null || !this.laserEntity.isAlive()) && !this.isDead)
+    	if((this.laserEntity == null || !this.laserEntity.isAlive()) && this.isAlive())
     		this.remove();
     	
     	if(this.isAlive())

@@ -8,9 +8,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -40,8 +40,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 	
 	// ========== Init ==========
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
     }
     
     
@@ -49,8 +49,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     //                       Update
     // ==================================================
     @Override
-    public void onLivingUpdate() {
-    	super.onLivingUpdate();
+    public void livingTick() {
+    	super.livingTick();
 
         if(this.lastRiddenByEntity != this.getControllingPassenger()) {
             if(this.lastRiddenByEntity != null)
@@ -66,11 +66,11 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 				this.riderEffects(riderLiving);
 
 				// Protect Rider from Potion Effects:
-				for(Object possibleEffect : riderLiving.getActivePotionEffects().toArray(new Object[riderLiving.getActivePotionEffects().size()])) {
-					if(possibleEffect instanceof PotionEffect) {
-						PotionEffect potionEffect = (PotionEffect)possibleEffect;
-						if(!this.isPotionApplicable(potionEffect))
-							riderLiving.removePotionEffect(potionEffect.getPotion());
+				for(Object possibleEffect : riderLiving.getActivePotionEffects().toArray(new Object[0])) {
+					if(possibleEffect instanceof EffectInstance) {
+						EffectInstance effectInstance = (EffectInstance)possibleEffect;
+						if(!this.isPotionApplicable(effectInstance))
+							riderLiving.removePotionEffect(effectInstance.getPotion());
 					}
 				}
 			}
@@ -149,16 +149,16 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     
     // ========== Move with Heading ==========
     @Override
-    public void travel(float strafe, float up, float forward) {
+    public void travel(Vec3d direction) {
         // Check if Mounted:
         if (!this.isTamed() || !this.hasSaddle() || !this.hasRiderTarget() || !(this.getControllingPassenger() instanceof LivingEntity) || !this.riderControl()) {
-            super.travel(strafe, up, forward);
+            super.travel(direction);
             return;
         }
-        this.moveMountedWithHeading(strafe, up, forward);
+        this.moveMountedWithHeading(direction.getX(), direction.getY(), direction.getZ());
     }
 
-    public void moveMountedWithHeading(float strafe, float up, float forward) {
+    public void moveMountedWithHeading(double strafe, double up, double forward) {
         // Apply Rider Movement:
         if(this.getControllingPassenger() instanceof LivingEntity) {
             LivingEntity rider = (LivingEntity) this.getControllingPassenger();
@@ -202,16 +202,15 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 
             // Jumping Behaviour:
             if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
-                this.motionY = this.getMountJumpHeight() * (double) this.getJumpPower();
-                if (this.isPotionActive(MobEffects.JUMP_BOOST))
-                    this.motionY += (double) ((float) (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier() + 1) * 0.1F);
+                this.setMotion(this.getMotion().add(0, this.getMountJumpHeight() * (double) this.getJumpPower(), 0));
+                if (this.isPotionActive(Effects.field_76430_j)) // Jump Boost
+					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
                 this.setMountJumping(true);
                 this.isAirBorne = true;
                 if (forward > 0.0F) {
                     float f2 = MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F);
                     float f3 = MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F);
-                    this.motionX += (double) (-0.4F * f2 * this.jumpPower);
-                    this.motionZ += (double) (0.4F * f3 * this.jumpPower);
+					this.setMotion(this.getMotion().add(-0.4F * f2 * this.jumpPower, 0, 0.4F * f3 * this.jumpPower));
                 }
                 if (!this.getEntityWorld().isRemote)
                     this.playJumpSound();
@@ -250,14 +249,12 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 
         // Apply Movement:
         if(this.canPassengerSteer()) {
-            this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+            this.setAIMoveSpeed((float)this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
             if(!this.useDirectNavigator()) {
                 if(this.isFlying() && !this.isInWater() && !this.isInLava()) {
-                    this.moveRelative(strafe, 0, forward, 0.1F);
-                    this.move(MoverType.SELF, this.motionX, verticalMotion / 16, this.motionZ);
-                    this.motionX *= 0.8999999761581421D;
-                    this.motionY *= 0.8999999761581421D;
-                    this.motionZ *= 0.8999999761581421D;
+                    this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
+                    this.move(MoverType.SELF, new Vec3d(this.getMotion().x, verticalMotion / 16, this.getMotion().z));
+                    this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
                 }
                 else if(this.isInWater() || this.isInLava()) {
 					if(!this.isStrongSwimmer()) {
@@ -265,14 +262,12 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 						strafe *= 0.25f;
 						forward *= 0.25f;
 					}
-                    this.moveRelative(strafe, 0, forward, 0.1F);
-                    this.move(MoverType.SELF, this.motionX, verticalMotion / 16, this.motionZ);
-                    this.motionX *= 0.8999999761581421D;
-                    this.motionY *= 0.8999999761581421D;
-                    this.motionZ *= 0.8999999761581421D;
+					this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
+                    this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
+					this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
                 }
                 else
-                    super.travel(strafe, up, forward);
+                    super.travel(new Vec3d(strafe, up, forward));
             }
             else
                 this.directNavigator.flightMovement(strafe, forward);

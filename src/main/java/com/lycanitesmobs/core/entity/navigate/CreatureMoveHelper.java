@@ -3,8 +3,7 @@ package com.lycanitesmobs.core.entity.navigate;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityLookHelper;
-import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -22,7 +21,7 @@ public class CreatureMoveHelper extends MovementController {
 
     /** Called on update to move the entity. **/
     @Override
-    public void onUpdateMoveHelper() {
+    public void tick() {
         // Rider:
         if(this.isControlledByRider()) {
             return;
@@ -41,7 +40,7 @@ public class CreatureMoveHelper extends MovementController {
         }
 
         // Walking:
-        super.onUpdateMoveHelper();
+        super.tick();
     }
 
 
@@ -60,7 +59,7 @@ public class CreatureMoveHelper extends MovementController {
     // ==================== Movements ====================
     /** Used by strong swimmers for fast, smooth movement. **/
     public void onUpdateSwimming() {
-        if (this.action == EntityMoveHelper.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
+        if (this.field_188491_h == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
             double x = this.posX - this.entityCreature.posX;
             double y = this.posY - this.entityCreature.posY;
             double z = this.posZ - this.entityCreature.posZ;
@@ -70,25 +69,28 @@ public class CreatureMoveHelper extends MovementController {
             float f = (float)(MathHelper.atan2(z, x) * (180D / Math.PI)) - 90.0F;
             this.entityCreature.rotationYaw = this.limitAngle(this.entityCreature.rotationYaw, f, 90.0F);
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw;
-            float f1 = (float)(this.speed * this.entityCreature.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+            float f1 = (float)(this.speed * this.entityCreature.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
             this.entityCreature.setAIMoveSpeed(this.entityCreature.getAIMoveSpeed() + (f1 - this.entityCreature.getAIMoveSpeed()) * 0.125F);
+
             double d4 = Math.sin((double)(this.entityCreature.ticksExisted + this.entityCreature.getEntityId()) * 0.5D) * 0.05D;
             double d5 = Math.cos((double)(this.entityCreature.rotationYaw * 0.017453292F));
             double d6 = Math.sin((double)(this.entityCreature.rotationYaw * 0.017453292F));
-            this.entityCreature.motionX += d4 * d5;
-            this.entityCreature.motionZ += d4 * d6;
+            double motionX = d4 * d5;
+            double motionZ = d4 * d6;
             d4 = Math.sin((double)(this.entityCreature.ticksExisted + this.entityCreature.getEntityId()) * 0.75D) * 0.05D;
-            this.entityCreature.motionY += d4 * (d6 + d5) * 0.25D;
-            this.entityCreature.motionY += (double)this.entityCreature.getAIMoveSpeed() * y * 0.1D;
-            EntityLookHelper entitylookhelper = this.entityCreature.getLookHelper();
+            double motionY = d4 * (d6 + d5) * 0.25D;
+            motionY += (double)this.entityCreature.getAIMoveSpeed() * y * 0.1D;
+            this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
+
+            LookController lookController = this.entityCreature.getLookHelper();
             double d7 = this.entityCreature.posX + x / distance * 2.0D;
             double d8 = (double)this.entityCreature.getEyeHeight() + this.entityCreature.posY + y / distance;
             double d9 = this.entityCreature.posZ + z / distance * 2.0D;
-            double d10 = entitylookhelper.getLookPosX();
-            double d11 = entitylookhelper.getLookPosY();
-            double d12 = entitylookhelper.getLookPosZ();
+            double d10 = lookController.getLookPosX();
+            double d11 = lookController.getLookPosY();
+            double d12 = lookController.getLookPosZ();
 
-            if (!entitylookhelper.getIsLooking()) {
+            if (!lookController.getIsLooking()) {
                 d10 = d7;
                 d11 = d8;
                 d12 = d9;
@@ -103,7 +105,7 @@ public class CreatureMoveHelper extends MovementController {
 
     /** Used by flyers for swift, fast air movement. **/
     public void onUpdateFlying() {
-        if (this.action == EntityMoveHelper.Action.MOVE_TO) {
+        if (this.field_188491_h == MovementController.Action.MOVE_TO) {
             double xDistance = this.posX - this.entityCreature.posX;
             double yDistance = this.posY - this.entityCreature.posY;
             double zDistance = this.posZ - this.entityCreature.posZ;
@@ -113,14 +115,15 @@ public class CreatureMoveHelper extends MovementController {
                 this.courseChangeCooldown += this.entityCreature.getRNG().nextInt(5) + 2;
                 distance = (double)MathHelper.sqrt(distance);
                 if(distance >= 1D) {
-                    this.entityCreature.setAIMoveSpeed((float)this.entityCreature.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                    this.entityCreature.setAIMoveSpeed((float)this.entityCreature.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
                     double speed = (this.entityCreature.getAIMoveSpeed() / 2.4D) * this.getSpeed();
-                    this.entityCreature.motionX += xDistance / distance * speed;
-                    this.entityCreature.motionY += yDistance / distance * speed;
-                    this.entityCreature.motionZ += zDistance / distance * speed;
+                    double motionX = xDistance / distance * speed;
+                    double motionY = yDistance / distance * speed;
+                    double motionZ = zDistance / distance * speed;
+                    this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
                 }
                 else {
-                    this.action = EntityMoveHelper.Action.WAIT;
+                    this.field_188491_h = MovementController.Action.WAIT;
                 }
             }
         }
@@ -132,8 +135,8 @@ public class CreatureMoveHelper extends MovementController {
             double distanceZ = entitylivingbase.posZ - this.entityCreature.posZ;
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
         }
-        else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
-            this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(this.entityCreature.motionX, this.entityCreature.motionZ)) * (180F / (float)Math.PI);
+        else if(this.field_188491_h == MovementController.Action.MOVE_TO) {
+            this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(this.entityCreature.getMotion().getX(), this.entityCreature.getMotion().getZ())) * (180F / (float)Math.PI);
         }
     }
 }
