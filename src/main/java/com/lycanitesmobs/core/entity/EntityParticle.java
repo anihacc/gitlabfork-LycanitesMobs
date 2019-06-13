@@ -2,14 +2,14 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityParticle extends EntityThrowable {
+public class EntityParticle extends ThrowableEntity {
 	// Particle:
 	public int particleAge = 0;
 	public int particleAgeMax = 20;
@@ -21,7 +21,7 @@ public class EntityParticle extends EntityThrowable {
     //                      Constructor
     // ==================================================
 	public EntityParticle(World world, double x, double y, double z, String texture, ModInfo group) {
-		super(world);
+		super(EntityType.SNOWBALL, world);
 		this.posX = x;
 		this.posY = y;
 		this.posZ = z;
@@ -31,20 +31,16 @@ public class EntityParticle extends EntityThrowable {
 		this.texture = texture;
 		this.group = group;
 	}
-	
-	
-    // ==================================================
-    //                        Init
-    // ==================================================
+
 	@Override
-	protected void entityInit() {}
+	public void registerData() {}
 	
 	
     // ==================================================
     //                       Update
     // ==================================================
 	@Override
-    public void onUpdate() {
+    public void tick() {
 		System.out.println("Doing something!");
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
@@ -53,7 +49,7 @@ public class EntityParticle extends EntityThrowable {
         if(this.particleAge++ >= this.particleAgeMax)
             this.remove();
 
-        this.motionY -= 0.04D * (double)this.particleGravity;
+        /*this.motionY -= 0.04D * (double)this.particleGravity;
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
         this.motionX *= 0.9800000190734863D;
         this.motionY *= 0.9800000190734863D;
@@ -62,7 +58,7 @@ public class EntityParticle extends EntityThrowable {
         if(this.onGround) {
             this.motionX *= 0.699999988079071D;
             this.motionZ *= 0.699999988079071D;
-        }
+        }*/
     }
 
 	
@@ -86,8 +82,11 @@ public class EntityParticle extends EntityThrowable {
     // ==================================================
     //                        NBT
     // ==================================================
-	public void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {}
-    public void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {}
+	@Override
+	public void writeAdditional(CompoundNBT par1NBTTagCompound) {}
+
+	@Override
+    public void read(CompoundNBT par1NBTTagCompound) {}
 	
 	
     // ==================================================

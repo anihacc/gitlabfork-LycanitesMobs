@@ -1,24 +1,25 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.TallGrassBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -57,21 +58,21 @@ public class EntityProjectileBase extends ThrowableEntity {
     public boolean clientOnly = false;
 
     // Data Manager:
-    protected static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(EntityProjectileBase.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityProjectileBase.class, DataSerializers.field_187193_c);
 
 
 	// ==================================================
  	//                   Constructors
  	// ==================================================
     public EntityProjectileBase(World world) {
-        super(world);
+        super(EntityType.SNOWBALL, world);
         this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
         this.setup();
     }
 
     public EntityProjectileBase(World world, LivingEntity entityLiving) {
-        super(world, entityLiving);
+        this(world);
         this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
         this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
@@ -79,7 +80,7 @@ public class EntityProjectileBase extends ThrowableEntity {
     }
 
     public EntityProjectileBase(World world, double x, double y, double z) {
-        super(world, x, y, z);
+        this(world);
         this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
         this.setup();
@@ -98,13 +99,18 @@ public class EntityProjectileBase extends ThrowableEntity {
 			return null;
 		}
 	}
+
+	@Override
+	public void registerData() {
+
+	}
 	
     
     // ==================================================
  	//                      Update
  	// ==================================================
     @Override
-    public void onUpdate() {
+    public void tick() {
     	this.updateTick++;
 
         if(!this.movement) {
@@ -115,19 +121,15 @@ public class EntityProjectileBase extends ThrowableEntity {
         double initY = this.posY;
         double initZ = this.posZ;
 
-		super.onUpdate();
+		super.tick();
 
         if(!this.movement) {
             this.posX = initX;
             this.posY = initY;
             this.posZ = initZ;
-            this.motionX = 0;
-            this.motionY = 0;
-            this.motionZ = 0;
+            this.setMotion(0, 0, 0);
             this.setPosition(this.posX, this.posY, this.posZ);
         }
-
-    	this.isInWeb = false;
     	
     	// Terrain Destruction
     	if(!this.getEntityWorld().isRemote) {
@@ -191,21 +193,25 @@ public class EntityProjectileBase extends ThrowableEntity {
          BlockPos impactPos = this.getPosition();
      	
      	// Entity Hit:
-     	if(rayTraceResult.entityHit != null) {
-     		if(this.getThrower() != null && rayTraceResult.entityHit == this.getThrower())
+		 Entity entityHit = null;
+		if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && rayTraceResult.hitInfo instanceof Entity) {
+			entityHit = (Entity)rayTraceResult.hitInfo;
+		}
+     	if(entityHit != null) {
+     		if(this.getThrower() != null && entityHit == this.getThrower())
      			return;
      		boolean doDamage = true;
- 			if(rayTraceResult.entityHit instanceof LivingEntity) {
- 				doDamage = this.canDamage((LivingEntity)rayTraceResult.entityHit);
+ 			if(entityHit instanceof LivingEntity) {
+ 				doDamage = this.canDamage((LivingEntity)entityHit);
  			}
  			if(!this.getEntityWorld().isRemote) {
-				if (this.getThrower() == null || rayTraceResult.entityHit != this.getThrower()) {
-					this.onEntityCollision(rayTraceResult.entityHit);
+				if (this.getThrower() == null || entityHit != this.getThrower()) {
+					this.onEntityCollision(entityHit);
 				}
 			}
 			if(doDamage) {
- 				if(rayTraceResult.entityHit instanceof LivingEntity) {
- 					LivingEntity target = (LivingEntity)rayTraceResult.entityHit;
+ 				if(entityHit instanceof LivingEntity) {
+ 					LivingEntity target = (LivingEntity)entityHit;
  					if(this.onEntityLivingDamage(target)) {
  						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((LivingEntity)movingObjectPosition.entityHit));
 
@@ -221,8 +227,8 @@ public class EntityProjectileBase extends ThrowableEntity {
 							if (this.knockbackChance < 1) {
 								if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
 									if (target instanceof LivingEntity) {
-										targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-										target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+										targetKnockbackResistance = target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+										target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
 										stopKnockback = true;
 									}
 								}
@@ -250,7 +256,7 @@ public class EntityProjectileBase extends ThrowableEntity {
 
 							// Restore Knockback:
 							if (stopKnockback) {
-								target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+								target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 							}
 						}
  					}
@@ -259,9 +265,9 @@ public class EntityProjectileBase extends ThrowableEntity {
  			collided = true;
             entityCollision = true;
 
-     		int i = (int)Math.floor(rayTraceResult.entityHit.posX);
-     		int j = (int)Math.floor(rayTraceResult.entityHit.posY);
-            int k = (int)Math.floor(rayTraceResult.entityHit.posZ);
+     		int i = (int)Math.floor(entityHit.posX);
+     		int j = (int)Math.floor(entityHit.posY);
+            int k = (int)Math.floor(entityHit.posZ);
             impactPos = new BlockPos(i, j, k);
             if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
             	try {
@@ -273,12 +279,12 @@ public class EntityProjectileBase extends ThrowableEntity {
      	
      	// Block Hit:
      	else {
-			int i = rayTraceResult.getBlockPos().getX();
-			int j = rayTraceResult.getBlockPos().getY();
-			int k = rayTraceResult.getBlockPos().getZ();
+			int i = (int)rayTraceResult.getHitVec().getX();
+			int j = (int)rayTraceResult.getHitVec().getY();
+			int k = (int)rayTraceResult.getHitVec().getZ();
 			BlockPos blockPos = new BlockPos(i, j, k);
 			BlockState blockState = this.getEntityWorld().getBlockState(blockPos);
-			if (blockState.getBlock() instanceof BlockTallGrass || blockState.getBlock() == Blocks.DOUBLE_PLANT) {
+			if (blockState.getBlock() instanceof TallGrassBlock || blockState.getBlock() == Blocks.TALL_GRASS) {
 				if (this.cutsGrass) {
 					world.destroyBlock(blockPos, false);
 				}
@@ -295,7 +301,7 @@ public class EntityProjectileBase extends ThrowableEntity {
              
  	        if(collided) {
                 blockCollision = true;
- 	            switch(rayTraceResult.sideHit) {
+ 	            /*switch(rayTraceResult.sideHit) { TODO Block Collision Side
                     case DOWN:
  		                --j;
  		                break;
@@ -313,7 +319,7 @@ public class EntityProjectileBase extends ThrowableEntity {
  		                break;
                     case EAST:
  		                ++i;
- 	            }
+ 	            }*/
 
                 impactPos = new BlockPos(i, j, k);
  	            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
@@ -356,7 +362,7 @@ public class EntityProjectileBase extends ThrowableEntity {
 
             if(owner instanceof EntityCreatureBase) {
                 EntityCreatureBase ownerCreature = (EntityCreatureBase)owner;
-                if(!ownerCreature.canAttackEntity(targetEntity))
+                if(!ownerCreature.canAttack(targetEntity))
                     return false;
             }
 	    	
@@ -368,7 +374,7 @@ public class EntityProjectileBase extends ThrowableEntity {
 		    }
 		    
 		    // Player PVP:
-		    if(!this.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+		    if(!this.getEntityWorld().getServer().isPVPEnabled()) {
 		    	if(owner instanceof PlayerEntity) {
 			    	if(targetEntity instanceof PlayerEntity)
 			    		return false;
@@ -449,7 +455,7 @@ public class EntityProjectileBase extends ThrowableEntity {
      // ==================================================
      public void setProjectileScale(float scale) {
      	 this.projectileScale = scale;
-         this.setSize(scale, scale);
+         //this.getSize(Pose.STANDING).setSize(scale, scale); TODO Move to EntityType
          if(this.getEntityWorld().isRemote && !this.clientOnly)
              return;
          if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
@@ -536,22 +542,22 @@ public class EntityProjectileBase extends ThrowableEntity {
 	//                       NBT
 	// ==================================================
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+	public void writeAdditional(CompoundNBT compound) {
+		super.writeAdditional(compound);
 
-		compound.setFloat("ProjectileScale", this.projectileScale);
-		compound.setInteger("ProjectileLife", this.projectileLife);
+		compound.putFloat("ProjectileScale", this.projectileScale);
+		compound.putInt("ProjectileLife", this.projectileLife);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+	public void read(CompoundNBT compound) {
+		super.read(compound);
 
-		if(compound.hasKey("ProjectileScale")) {
+		if(compound.contains("ProjectileScale")) {
 			this.setProjectileScale(compound.getFloat("ProjectileScale"));
 		}
-		if(compound.hasKey("ProjectileLife")) {
-			this.projectileLife = compound.getInteger("ProjectileLife");
+		if(compound.contains("ProjectileLife")) {
+			this.projectileLife = compound.getInt("ProjectileLife");
 		}
 	}
      

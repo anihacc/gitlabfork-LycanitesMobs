@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -12,7 +12,7 @@ public class EntityItemCustom extends ItemEntity {
    	//                     Constructor
    	// ==================================================
 	public EntityItemCustom(World world) {
-		super(world);
+		super(EntityType.ITEM, world);
 	}
 	
 	public EntityItemCustom(World world, double x, double y, double z) {
@@ -40,10 +40,7 @@ public class EntityItemCustom extends ItemEntity {
 	// ==================================================
    	//                    Immunities
    	// ==================================================
-    public void setCanBurn(boolean canBurn) {
-    	this.isImmuneToFire = !canBurn;
-    	this.setFlag(0, false);
-    }
+	// TODO Fire Immunity handled by EntityType
     
     
     // ==================================================

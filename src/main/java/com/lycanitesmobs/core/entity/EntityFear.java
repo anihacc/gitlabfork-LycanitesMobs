@@ -5,16 +5,19 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
 import com.lycanitesmobs.core.entity.ai.EntityAIWander;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityFear extends EntityCreatureBase {
     public Entity fearedEntity;
@@ -26,17 +29,17 @@ public class EntityFear extends EntityCreatureBase {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        //this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasStepSound = false;
         this.hasAttackSound = false;
         this.spreadFire = false;
-        this.setSize(0.8f, 1.8f);
+        //this.setSize(0.8f, 1.8f);
 
         this.setupMob();
         
         // AI Tasks:
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIWander(this).setPauseRate(0));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIWander(this).setPauseRate(0));
     }
 
     public EntityFear(World world, Entity feared) {
@@ -53,10 +56,7 @@ public class EntityFear extends EntityCreatureBase {
 
         // Stats:
         this.experienceValue = 0;
-        this.inventory = new InventoryCreature(this.getName(), this);
-
-        // Fire Immunity:
-        this.isImmuneToFire = true;
+        this.inventory = new InventoryCreature(this.getName().toString(), this);
     }
 	
 	// ========== Default Drops ==========
@@ -79,8 +79,8 @@ public class EntityFear extends EntityCreatureBase {
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         
         // Server Side Only:
         if(this.getEntityWorld().isRemote) {
@@ -109,9 +109,7 @@ public class EntityFear extends EntityCreatureBase {
         // Follow Fear Target If Not Picked Up:
         if(this.getPickupEntity() == null) {
         	this.setPosition(this.fearedEntity.posX, this.fearedEntity.posY, this.fearedEntity.posZ);
-			this.motionX = this.fearedEntity.motionX;
-			this.motionY = this.fearedEntity.motionY;
-			this.motionZ = this.fearedEntity.motionZ;
+			this.setMotion(this.fearedEntity.getMotion());
 			this.fallDistance = 0;
         }
 
@@ -123,15 +121,15 @@ public class EntityFear extends EntityCreatureBase {
 
         // Copy Movement Debuffs:
 		if(this.fearedEntity instanceof LivingEntity) {
-			if (fearedEntityLiving.isPotionActive(MobEffects.LEVITATION)) {
-				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(MobEffects.LEVITATION);
-				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (fearedEntityLiving.isPotionActive(Effects.field_188424_y)) {
+				EffectInstance activeDebuff = fearedEntityLiving.getActivePotionEffect(Effects.field_188424_y);
+				this.addPotionEffect(new EffectInstance(Effects.field_188424_y, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
-			Potion instability = ObjectManager.getEffect("instability");
+			Effect instability = ObjectManager.getEffect("instability");
 			if (instability != null && fearedEntityLiving.isPotionActive(instability)) {
-				PotionEffect activeDebuff = fearedEntityLiving.getActivePotionEffect(instability);
-				this.addPotionEffect(new PotionEffect(MobEffects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+				EffectInstance activeDebuff = fearedEntityLiving.getActivePotionEffect(instability);
+				this.addPotionEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 		}
     }
@@ -142,14 +140,14 @@ public class EntityFear extends EntityCreatureBase {
   	// ==================================================
     public void setFearedEntity(Entity feared) {
     	this.fearedEntity = feared;
-        this.setSize(feared.width, feared.height);
+        //this.setSize(feared.width, feared.height); TODO Entity Type Size
         this.noClip = feared.noClip;
         this.stepHeight = feared.stepHeight;
 		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
 		
         if(feared instanceof LivingEntity && !(feared instanceof PlayerEntity)) {
 	        LivingEntity fearedEntityLiving = (LivingEntity)feared;
-	        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
+	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
         }
     }
 	
@@ -163,7 +161,7 @@ public class EntityFear extends EntityCreatureBase {
     }
     
     @Override
-    public boolean isPotionApplicable(PotionEffect par1PotionEffect) {
+    public boolean isPotionApplicable(EffectInstance effectInstance) {
         return false;
     }
     
@@ -176,10 +174,10 @@ public class EntityFear extends EntityCreatureBase {
     	if(this.pickupEntity != null) {
     		if(this.pickupEntity instanceof EntityCreatureBase)
     			return ((EntityCreatureBase)this.pickupEntity).isFlying();
-    		if(this.pickupEntity instanceof EntityFlying)
+    		if(this.pickupEntity instanceof FlyingEntity)
     			return true;
     		if(this.pickupEntity instanceof PlayerEntity)
-    			return ((PlayerEntity)this.pickupEntity).capabilities.isFlying;
+    			return ((PlayerEntity)this.pickupEntity).playerAbilities.isFlying;
     	}
     	return false;
     }
