@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.ItemBase;
+import net.minecraft.item.Item;
 
 
 public class ItemTreat extends ItemBase {
@@ -11,13 +12,12 @@ public class ItemTreat extends ItemBase {
 	 * Constructor
 	 * @param creatureType The creature type this treat is used to tame.
 	 */
-    public ItemTreat(CreatureType creatureType) {
-        super();
+    public ItemTreat(Item.Properties properties, CreatureType creatureType) {
+		super(properties);
 		this.itemName = creatureType.getTreatName();
 		this.modInfo = creatureType.modInfo;
 		this.creatureType = creatureType;
-        this.setMaxStackSize(16);
-        this.setUnlocalizedName(this.itemName);
+		properties.maxStackSize(16);
         this.setup();
     }
 

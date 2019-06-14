@@ -3,15 +3,14 @@ package com.lycanitesmobs.core.item.special;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.item.ItemBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -23,33 +22,28 @@ public class ItemSoulkey extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulkey(String itemName, int rank) {
-        super();
+    public ItemSoulkey(Item.Properties properties, String itemName, int rank) {
+        super(properties);
         this.itemName = itemName;
         this.rank = rank;
         this.setup();
     }
-	
-    
-	// ==================================================
-	//                      Update
-	// ==================================================
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5) {
-		super.onUpdate(itemStack, world, entity, par4, par5);
-	}
     
     
 	// ==================================================
 	//                       Use
 	// ==================================================
     @Override
-    public EnumActionResult onItemUse(PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack itemStack = player.getHeldItem(hand);
+    public ActionResultType onItemUse(ItemUseContext context) {
+        World world = context.getWorld();
+        BlockPos pos = context.getPos();
+        PlayerEntity player = context.getPlayer();
+        ItemStack itemStack = context.getItem();
+
         if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
             String message = LanguageManager.translate("message.soulkey.disabled");
-            player.sendMessage(new TextComponentString(message));
-            return EnumActionResult.FAIL;
+            player.sendMessage(new TranslationTextComponent(message));
+            return ActionResultType.FAIL;
         }
 
         // Get Possible Altars:
@@ -63,8 +57,8 @@ public class ItemSoulkey extends ItemBase {
         }
         if(possibleAltars.isEmpty()) {
             String message = LanguageManager.translate("message.soulkey.none");
-            player.sendMessage(new TextComponentString(message));
-            return EnumActionResult.FAIL;
+            player.sendMessage(new TranslationTextComponent(message));
+            return ActionResultType.FAIL;
         }
 
         // Activate First Valid Altar:
@@ -73,24 +67,24 @@ public class ItemSoulkey extends ItemBase {
 
                 // Valid Altar:
                 if(!player.getEntityWorld().isRemote) {
-                    if (!player.capabilities.isCreativeMode)
+                    if (!player.playerAbilities.isCreativeMode)
                         itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
                     if (itemStack.getCount() <= 0)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
                         String message = LanguageManager.translate("message.soulkey.badlocation");
-                        player.sendMessage(new TextComponentString(message));
-                        return EnumActionResult.FAIL;
+                        player.sendMessage(new TranslationTextComponent(message));
+                        return ActionResultType.FAIL;
                     }
                     String message = LanguageManager.translate("message.soulkey.active");
-                    player.sendMessage(new TextComponentString(message));
+                    player.sendMessage(new TranslationTextComponent(message));
                 }
-                return EnumActionResult.SUCCESS;
+                return ActionResultType.SUCCESS;
             }
         }
         String message = LanguageManager.translate("message.soulkey.invalid");
-        player.sendMessage(new TextComponentString(message));
+        player.sendMessage(new TranslationTextComponent(message));
 
-        return EnumActionResult.FAIL;
+        return ActionResultType.FAIL;
     }
 }

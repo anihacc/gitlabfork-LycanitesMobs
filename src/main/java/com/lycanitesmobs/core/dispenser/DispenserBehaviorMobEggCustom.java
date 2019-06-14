@@ -1,30 +1,26 @@
 package com.lycanitesmobs.core.dispenser;
 
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
-public class DispenserBehaviorMobEggCustom extends BehaviorDefaultDispenseItem {
+public class DispenserBehaviorMobEggCustom extends DefaultDispenseItemBehavior {
     @Override
     public ItemStack dispenseStack(IBlockSource blockSource, ItemStack itemStack) {
         if(!(itemStack.getItem() instanceof ItemCustomSpawnEgg))
             return itemStack;
 
-        EnumFacing facing = blockSource.getBlockState().getValue(BlockDispenser.FACING);
-        double x = blockSource.getX() + (double)facing.getFrontOffsetX();
-        double y = (double)((float)blockSource.getY() + 0.2F);
-        double z = blockSource.getZ() + (double)facing.getFrontOffsetZ();
-
         ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-        Entity entity = ((ItemCustomSpawnEgg)itemStack.getItem()).spawnCreature(blockSource.getWorld(), itemStack, x, y, z);
+        IPosition position = DispenserBlock.getDispensePosition(blockSource);
+        Entity entity = itemCustomSpawnEgg.spawnCreature(blockSource.getWorld(), itemStack, position.getX(), position.getY(), position.getZ());
         if (itemStack.hasDisplayName())
-            entity.setCustomNameTag(itemStack.getDisplayName());
+            entity.setCustomName(itemStack.getDisplayName());
         
-        itemStack.splitStack(1);
+        itemStack.split(1);
         return itemStack;
     }
 }

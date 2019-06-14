@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.*;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
+import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;

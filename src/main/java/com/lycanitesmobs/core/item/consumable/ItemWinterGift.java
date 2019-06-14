@@ -7,17 +7,18 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemWinterGift extends ItemBase {
@@ -25,8 +26,8 @@ public class ItemWinterGift extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemWinterGift() {
-        super();
+    public ItemWinterGift(Item.Properties properties) {
+		super(properties);
         this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "wintergift";
         this.setup();
@@ -39,9 +40,9 @@ public class ItemWinterGift extends ItemBase {
  	//                    Item Use
  	// ==================================================
     @Override
-     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
+     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(!player.capabilities.isCreativeMode) {
+        if(!player.playerAbilities.isCreativeMode) {
             itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
         }
 
@@ -52,7 +53,7 @@ public class ItemWinterGift extends ItemBase {
             this.openBad(itemStack, world, player);
         }
 
-        return new ActionResult(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult(ActionResultType.SUCCESS, itemStack);
      }
     
     
@@ -61,7 +62,7 @@ public class ItemWinterGift extends ItemBase {
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".good");
-		player.sendMessage(new TextComponentString(message));
+		player.sendMessage(new TranslationTextComponent(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Gifts:
@@ -73,7 +74,7 @@ public class ItemWinterGift extends ItemBase {
 				dropStack.setCount(1 + player.getRNG().nextInt(4));
 				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
 				entityItem.setPickupDelay(10);
-				world.spawnEntity(entityItem);
+				world.func_217376_c(entityItem);
 			}
 		}
     }
@@ -84,7 +85,7 @@ public class ItemWinterGift extends ItemBase {
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
-		player.sendMessage(new TextComponentString(message));
+		player.sendMessage(new TranslationTextComponent(message));
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 
         // One Random Trick:
@@ -105,20 +106,20 @@ public class ItemWinterGift extends ItemBase {
                     EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
 					entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("wildkin"))
-                        entityCreature.setCustomNameTag("Gooderness");
+                        entityCreature.setCustomName(new TranslationTextComponent("Gooderness"));
                     else if (entityCreature.creatureInfo.getName().equals("jabberwock"))
-                        entityCreature.setCustomNameTag("Rudolph");
+                        entityCreature.setCustomName(new TranslationTextComponent("Rudolph"));
                     else if (entityCreature.creatureInfo.getName().equals("ent"))
-                        entityCreature.setCustomNameTag("Salty Tree");
+                        entityCreature.setCustomName(new TranslationTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("treant"))
-                        entityCreature.setCustomNameTag("Salty Tree");
+                        entityCreature.setCustomName(new TranslationTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("phantom"))
-                        entityCreature.setCustomNameTag("Satan Claws");
+                        entityCreature.setCustomName(new TranslationTextComponent("Satan Claws"));
                     else if(entityCreature.creatureInfo.getName().equals("behemoth"))
-                        entityCreature.setCustomNameTag("Krampus");
+                        entityCreature.setCustomName(new TranslationTextComponent("Krampus"));
                 }
 
-	            world.spawnEntity(entity);
+	            world.func_217376_c(entity);
             }
 		}
     }

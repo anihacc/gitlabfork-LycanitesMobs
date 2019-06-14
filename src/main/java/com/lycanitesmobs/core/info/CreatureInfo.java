@@ -5,29 +5,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import com.lycanitesmobs.core.model.ModelCreatureBase;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.client.renderer.model.Model;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -41,13 +34,16 @@ public class CreatureInfo {
 
 	/** The model class used by this creature. **/
 	@OnlyIn(Dist.CLIENT)
-	public Class<? extends ModelCreatureBase> modelClass;
+	public Class<? extends Model> modelClass;
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;
 
 	/** The creature type this creature belongs to. **/
 	public CreatureType creatureType;
+
+	/** The entity type used to store base attributes of this creature. **/
+	protected EntityType entityType = EntityType.ZOMBIE;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -153,7 +149,7 @@ public class CreatureInfo {
 
 		// Entity Class:
 		try {
-			this.entityClass = (Class<? extends EntityLiving>) Class.forName(json.get("entityClass").getAsString());
+			this.entityClass = (Class<? extends LivingEntity>) Class.forName(json.get("entityClass").getAsString());
 		}
 		catch(Exception e) {
 			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
@@ -301,17 +297,17 @@ public class CreatureInfo {
 		}
 		LycanitesMobs.printDebug("", "Loading: " + this.getName());
 
-		// Add Stats:
+		/*/ Add Stats: TODO Creature Progression Stats
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
-		achievementStack.setTagInfo("Mob", new NBTTagString(this.getName()));
-		ObjectManager.addStat(this.getName() + ".kill", new StatBase(this.getName() + ".kill", new TextComponentString(this.getName() + ".kill")));
-		ObjectManager.addStat(this.getName() + ".learn", new StatBase(this.getName() + ".learn", new TextComponentString(this.getName() + ".learn")));
+		achievementStack.setTagInfo("Mob", new StringNBT(this.getName()));
+		ObjectManager.addStat(this.getName() + ".kill", new Stat(this.getName() + ".kill", new TranslationTextComponent(this.getName() + ".kill")));
+		ObjectManager.addStat(this.getName() + ".learn", new Stat(this.getName() + ".learn", new TranslationTextComponent(this.getName() + ".learn")));
 		if(this.isSummonable()) {
-			ObjectManager.addStat(this.getName() + ".summon", new StatBase(this.getName() + ".summon", new TextComponentString(this.getName() + ".summon")));
+			ObjectManager.addStat(this.getName() + ".summon", new Stat(this.getName() + ".summon", new TranslationTextComponent(this.getName() + ".summon")));
 		}
 		if(this.isTameable()) {
-			ObjectManager.addStat(this.getName() + ".tame", new StatBase(this.getName() + ".tame", new TextComponentString(this.getName() + ".tame")));
-		}
+			ObjectManager.addStat(this.getName() + ".tame", new Stat(this.getName() + ".tame", new TranslationTextComponent(this.getName() + ".tame")));
+		}*/
 
 		// Add Sounds:
 		this.addSounds("");
@@ -367,6 +363,15 @@ public class CreatureInfo {
 	 */
 	public String getEntityId() {
 		return this.modInfo.filename + ":" + this.getName();
+	}
+
+
+	/**
+	 * Returns the entity type of this creature.
+	 * @return Creature's entity type.
+	 */
+	public EntityType getEntityType() {
+		return this.entityType;
 	}
 
 
@@ -620,7 +625,7 @@ public class CreatureInfo {
 	 * @param world The world to create the entity in.
 	 * @return The created entity.
 	 */
-	public EntityLiving createEntity(World world) {
+	public LivingEntity createEntity(World world) {
 		try {
 			if(this.entityClass == null)
 				return null;

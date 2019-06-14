@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.*;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
+import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;

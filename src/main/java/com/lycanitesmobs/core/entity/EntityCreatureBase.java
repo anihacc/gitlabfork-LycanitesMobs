@@ -1411,6 +1411,11 @@ public abstract class EntityCreatureBase extends MobEntity {
         	this.remove();
         }
 
+        // Fire Immunity Override:
+		if(this.isBurning() && !this.canBurn()) {
+			this.extinguish();
+		}
+
         // Not Walking On Land:
         if((!this.canWalk() && !this.isCurrentlyFlying() && !this.isInWater() && this.isMoving()) || !this.canMove()) {
 			this.clearMovement();
@@ -3658,6 +3663,15 @@ public abstract class EntityCreatureBase extends MobEntity {
         return true;
     }
 
+    /** Deals fire damage to this entity if it is burning. **/
+    @Override
+	protected void dealFireDamage(int amount) {
+		if(!this.canBurn()) {
+			return;
+		}
+		super.dealFireDamage(amount);
+	}
+
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
     public boolean isPotionApplicable(EffectInstance effectInstance) {
@@ -3669,9 +3683,8 @@ public abstract class EntityCreatureBase extends MobEntity {
 		return true;
     }
 
-    /** Returns whether or not this entity can be set on fire, this will block both the damage and the fire effect, use isDamageTypeApplicable() to block fire but keep the effect. **/
+    /** Returns whether or not this entity can be set on fire, this will block both the damage and the fire effect, use isDamageTypeApplicable() to block fire but keep the effect. isImmuneToFire is now final so that is just false but ignored replaced by this. **/
     public boolean canBurn() {
-    	// TODO Creature Types
     	if(this.extraMobBehaviour != null)
     		if(this.extraMobBehaviour.fireImmunityOverride)
     			return false;

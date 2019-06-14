@@ -5,27 +5,30 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.UseAction;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -42,13 +45,12 @@ public class ItemEquipment extends ItemBase {
 	/**
 	 * Constructor
 	 */
-	public ItemEquipment() {
-		super();
+	public ItemEquipment(Item.Properties properties) {
+		super(properties);
 		this.itemName = "equipment";
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setRegistryName(this.modInfo.filename, this.itemName);
-		this.setUnlocalizedName(this.itemName);
-		this.setMaxStackSize(1);
+		properties.maxStackSize(1);
 	}
 
 
@@ -56,20 +58,20 @@ public class ItemEquipment extends ItemBase {
 	//                      Info
 	// ==================================================
 	@Override
-	public void addInformation(ItemStack itemStack, @Nullable World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
+	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, descriptionWidth);
-			for (Object formattedDescription : formattedDescriptionList) {
-				if (formattedDescription instanceof String)
-					tooltip.add("\u00a73" + formattedDescription);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, descriptionWidth);
+			for (String formattedDescription : formattedDescriptionList) {
+				tooltip.add(new TranslationTextComponent(formattedDescription));
 			}
 		}
 	}
 
 	@Override
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		ITEMSTACK_TO_RENDER = stack; // Render hack to get ItemStack when rendering TEISR. TODO Still needed?
 		return LanguageManager.translate("item.equipment.description");
 	}
 
@@ -80,26 +82,19 @@ public class ItemEquipment extends ItemBase {
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(equipmentPart.getItemStackDisplayName(itemStack) + " " + LanguageManager.translate("entity.level") + " " + partLevel);
+			descriptions.add(equipmentPart.getDisplayName(itemStack) + " " + LanguageManager.translate("entity.level") + " " + partLevel);
 		}
 		//descriptions.add(LanguageManager.translate("common.holdshift"));
 		return descriptions;
 	}
 
 
-	@Override
-	public int getMetadata(ItemStack stack) {
-		ITEMSTACK_TO_RENDER = stack; // Render hack.
-		return super.getMetadata(stack);
-	}
-
-
 	/** Gets or creates an NBT Compound for the provided itemstack. **/
-	public NBTTagCompound getTagCompound(ItemStack itemStack) {
-		if(itemStack.hasTagCompound()) {
-			return itemStack.getTagCompound();
+	public CompoundNBT getTagCompound(ItemStack itemStack) {
+		if(itemStack.hasTag()) {
+			return itemStack.getTag();
 		}
-		return new NBTTagCompound();
+		return new CompoundNBT();
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -120,8 +115,8 @@ public class ItemEquipment extends ItemBase {
 	 */
 	public NonNullList<ItemStack> getEquipmentPartStacks(ItemStack itemStack) {
 		NonNullList<ItemStack> itemStacks = NonNullList.withSize(PART_LIMIT, ItemStack.EMPTY);
-		NBTTagCompound nbt = this.getTagCompound(itemStack);
-		if(nbt.hasKey("Items")) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		if(nbt.contains("Items")) {
 			ItemStackHelper.loadAllItems(nbt, itemStacks); // Reads ItemStacks into a List from "Items" tag.
 		}
 		return itemStacks;
@@ -172,9 +167,9 @@ public class ItemEquipment extends ItemBase {
 		}
 		NonNullList<ItemStack> itemStacks = this.getEquipmentPartStacks(equipmentStack);
 		itemStacks.set(slotIndex, equipmentPartStack);
-		NBTTagCompound nbt = this.getTagCompound(equipmentStack);
+		CompoundNBT nbt = this.getTagCompound(equipmentStack);
 		ItemStackHelper.saveAllItems(nbt, itemStacks);
-		equipmentStack.setTagCompound(nbt);
+		equipmentStack.setTag(nbt);
 	}
 
 
@@ -242,17 +237,17 @@ public class ItemEquipment extends ItemBase {
 	//                       Using
 	// ==================================================
 	@Override
-	public EnumAction getItemUseAction(ItemStack itemStack) {
-		return EnumAction.NONE;
+	public UseAction getUseAction(ItemStack itemStack) {
+		return UseAction.SPEAR;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 18000;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
 		boolean active = false;
 
@@ -266,9 +261,9 @@ public class ItemEquipment extends ItemBase {
 
 		if(active) {
 			player.setActiveHand(hand);
-			return new ActionResult<>(EnumActionResult.PASS, itemStack);
+			return new ActionResult<>(ActionResultType.PASS, itemStack);
 		}
-		return new ActionResult<>(EnumActionResult.FAIL, itemStack);
+		return new ActionResult<>(ActionResultType.FAIL, itemStack);
 	}
 
 	@Override
@@ -289,7 +284,7 @@ public class ItemEquipment extends ItemBase {
 	//                     Harvesting
 	// ==================================================
 	@Override
-	public boolean canHarvestBlock(BlockState blockState, ItemStack itemStack) {
+	public boolean canHarvestBlock(ItemStack itemStack, BlockState blockState) {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
 			if(harvestFeature.canHarvestBlock(blockState)) {
@@ -342,11 +337,11 @@ public class ItemEquipment extends ItemBase {
 			double zDist = attacker.posZ - target.posZ;
 			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 			double motionCap = 10;
-			if(target.motionX < motionCap && target.motionX > -motionCap && target.motionZ < motionCap && target.motionZ > -motionCap) {
+			if(target.getMotion().getX() < motionCap && target.getMotion().getX() > -motionCap && target.getMotion().getZ() < motionCap && target.getMotion().getZ() > -motionCap) {
 				target.addVelocity(
-						-(xDist / xzDist * knockback + target.motionX * knockback),
+						-(xDist / xzDist * knockback + target.getMotion().getX() * knockback),
 						0,
-						-(zDist / xzDist * knockback + target.motionZ * knockback)
+						-(zDist / xzDist * knockback + target.getMotion().getZ() * knockback)
 				);
 			}
 		}
@@ -378,11 +373,11 @@ public class ItemEquipment extends ItemBase {
 	 * @return The Attribute Modifier multimap with changes applied to it.
 	 */
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack itemStack) {
-		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(slot);
-		if (slot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), 0));
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack itemStack) {
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, itemStack);
+		if (slot == EquipmentSlotType.MAINHAND) {
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.getDamageAmount(itemStack), AttributeModifier.Operation.ADDITION));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -this.getDamageCooldown(itemStack), AttributeModifier.Operation.ADDITION));
 		}
 
 		return multimap;

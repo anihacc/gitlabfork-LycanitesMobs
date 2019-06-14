@@ -5,13 +5,16 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemSoulstone extends ItemBase {
@@ -19,21 +22,12 @@ public class ItemSoulstone extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstone(ModInfo group, String type) {
-        super();
+    public ItemSoulstone(Item.Properties properties, ModInfo group, String type) {
+		super(properties);
         this.itemName = "soulstone" + type;
 		this.modInfo = group;
         this.setup();
     }
-	
-    
-	// ==================================================
-	//                      Update
-	// ==================================================
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5) {
-		super.onUpdate(itemStack, world, entity, par4, par5);
-	}
     
     
 	// ==================================================
@@ -41,13 +35,13 @@ public class ItemSoulstone extends ItemBase {
 	// ==================================================
 	// ========== Entity Interaction ==========
     @Override
-    public boolean onItemRightClickOnEntity(PlayerEntity player, Entity entity, ItemStack itemStack) {
+	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
     		return false;
     	if(!(entity instanceof EntityCreatureTameable)) {
     		if(!player.getEntityWorld().isRemote)
-    			player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.invalid")));
+    			player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.invalid")));
     		return false;
     	}
 
@@ -55,19 +49,19 @@ public class ItemSoulstone extends ItemBase {
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 	 	if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.untamed")));
+				player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.untamed")));
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.exists")));
+				player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.exists")));
 			return false;
 		}
 
 		// Particle Effect:
     	if(player.getEntityWorld().isRemote) {
     		for(int i = 0; i < 32; ++i) {
-    			entity.getEntityWorld().spawnParticle(EnumParticleTypes.VILLAGER_HAPPY,
+    			entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
     					entity.posX + (4.0F * player.getRNG().nextFloat()) - 2.0F,
     					entity.posY + (4.0F * player.getRNG().nextFloat()) - 2.0F,
     					entity.posZ + (4.0F * player.getRNG().nextFloat()) - 2.0F,
@@ -84,7 +78,7 @@ public class ItemSoulstone extends ItemBase {
 
     		String message = LanguageManager.translate("message.soulstone." + petType + ".added");
     		message = message.replace("%creature%", creatureInfo.getTitle());
-    		player.sendMessage(new TextComponentString(message));
+    		player.sendMessage(new TranslationTextComponent(message));
             //player.addStat(ObjectManager.getStat("soulstone"), 1);
 
 			// Add Pet Entry:
@@ -95,9 +89,9 @@ public class ItemSoulstone extends ItemBase {
 			entityTameable.setPetEntry(petEntry);
 
 			// Consume Soulstone:
-			if (!player.capabilities.isCreativeMode)
-				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-			if (itemStack.getCount() <= 0)
+			if (!player.playerAbilities.isCreativeMode)
+				stack.setCount(Math.max(0, stack.getCount() - 1));
+			if (stack.getCount() <= 0)
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
 		}
 

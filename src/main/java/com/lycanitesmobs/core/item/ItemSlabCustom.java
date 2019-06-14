@@ -1,105 +1,86 @@
 package com.lycanitesmobs.core.item;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.state.IProperty;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 // This is a copy of ItemSlab and only altered to allow for any block to be the double slab.
-public class ItemSlabCustom extends ItemBlock
+public class ItemSlabCustom extends BlockItem
 {
-    private final BlockSlab singleSlab;
+    private final SlabBlock singleSlab;
     private final Block doubleSlab;
 
-    public ItemSlabCustom(Block block, BlockSlab singleSlab, Block doubleSlab)
-    {
-        super(block);
+    public ItemSlabCustom(Item.Properties properties, Block block, SlabBlock singleSlab, Block doubleSlab) {
+        super(block, properties);
         this.singleSlab = singleSlab;
         this.doubleSlab = doubleSlab;
-        this.setMaxDamage(0);
-        this.setHasSubtypes(true);
+        properties.maxDamage(0);
         this.setRegistryName(block.getRegistryName());
-    }
-
-    /**
-     * Converts the given ItemStack damage value into a metadata value to be placed in the world when this Item is
-     * placed as a Block (mostly used with ItemBlocks).
-     */
-    public int getMetadata(int damage)
-    {
-        return damage;
     }
 
     /**
      * Returns the unlocalized name of this item. This version accepts an ItemStack so different stacks can have
      * different names based on their damage or NBT.
      */
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        return this.singleSlab.getUnlocalizedName(stack.getMetadata());
+    public String getTranslationKey(ItemStack stack) {
+        return this.singleSlab.getTranslationKey();
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {
-        return this.block.getLocalizedName();
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return this.singleSlab.getNameTextComponent();
     }
 
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public EnumActionResult onItemUse(PlayerEntity player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack itemStack = player.getHeldItem(hand);
-        if (itemStack.getCount() != 0 && player.canPlayerEdit(pos.offset(facing), facing, itemStack))
-        {
+    public ActionResultType onItemUse(PlayerEntity player, World worldIn, BlockPos pos, Hand hand, Direction facing, float hitX, float hitY, float hitZ) {
+        // TODO Do we still need this custom BlockItem?
+        /*ItemStack itemStack = player.getHeldItem(hand);
+        if (itemStack.getCount() != 0 && player.canPlayerEdit(pos.offset(facing), facing, itemStack)) {
             Comparable<?> comparable = this.singleSlab.getTypeForItem(itemStack);
             BlockState iblockstate = worldIn.getBlockState(pos);
 
-            if (iblockstate.getBlock() == this.singleSlab)
-            {
+            if (iblockstate.getBlock() == this.singleSlab) {
                 IProperty<?> iproperty = this.singleSlab.getVariantProperty();
                 Comparable<?> comparable1 = iblockstate.getValue(iproperty);
-                BlockSlab.EnumBlockHalf blockslab$enumblockhalf = (BlockSlab.EnumBlockHalf)iblockstate.getValue(BlockSlab.HALF);
+                SlabBlock.EnumBlockHalf blockslab$enumblockhalf = (SlabBlock.EnumBlockHalf)iblockstate.getValue(SlabBlock.HALF);
 
-                if ((facing == EnumFacing.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP) && comparable1 == comparable)
-                {
+                if ((facing == EnumFacing.UP && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.BOTTOM || facing == EnumFacing.DOWN && blockslab$enumblockhalf == BlockSlab.EnumBlockHalf.TOP) && comparable1 == comparable) {
                     BlockState iblockstate1 = this.makeState(iproperty, comparable1);
                     AxisAlignedBB axisalignedbb = iblockstate1.getCollisionBoundingBox(worldIn, pos);
 
-                    if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, iblockstate1, 11))
-                    {
+                    if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, iblockstate1, 11)) {
                         SoundType soundtype = this.doubleSlab.getSoundType();
                         worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                         itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
                     }
 
-                    return EnumActionResult.SUCCESS;
+                    return ActionResultType.SUCCESS;
                 }
             }
 
             return this.tryPlace(player, itemStack, worldIn, pos.offset(facing), comparable) ? EnumActionResult.SUCCESS : super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
         }
-        else
-        {
-            return EnumActionResult.FAIL;
-        }
+        else {
+            return ActionResultType.FAIL;
+        }*/
+        return ActionResultType.FAIL;
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack)
-    {
+    /*@OnlyIn(Dist.CLIENT)
+    public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, PlayerEntity player, ItemStack stack) {
         BlockPos blockpos = pos;
         IProperty<?> iproperty = this.singleSlab.getVariantProperty();
         Comparable<?> comparable = this.singleSlab.getTypeForItem(stack);
@@ -145,10 +126,9 @@ public class ItemSlabCustom extends ItemBlock
         }
 
         return false;
-    }
+    }*/
 
-    protected <T extends Comparable<T>> BlockState makeState(IProperty<T> p_185055_1_, Comparable<?> p_185055_2_)
-    {
+    protected <T extends Comparable<T>> BlockState makeState(IProperty<T> p_185055_1_, Comparable<?> p_185055_2_) {
         return this.doubleSlab.getDefaultState();//.withProperty(p_185055_1_, (T)p_185055_2_);
     }
 }

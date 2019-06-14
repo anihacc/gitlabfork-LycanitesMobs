@@ -5,11 +5,12 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -224,24 +225,25 @@ public class CreatureManager extends JSONLoader {
 
 	/**
 	 * Registers all creatures added to this creature manager, called from the registry event.
-	 * @param event The enity register event.
-	 * @param modInfo The mod to register entities from.
+	 * @param event The entity register event.
 	 */
 	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		ModInfo modInfo = LycanitesMobs.modInfo;
 		LycanitesMobs.printDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures from the mod: " + modInfo.name + "...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
 			if(creatureInfo.modInfo != modInfo) {
 				continue;
 			}
-			EntityEntry entityEntry = EntityEntryBuilder.create()
-					.entity(creatureInfo.entityClass)
-					.id(creatureInfo.getEntityId(), this.getNextCreatureNetworkId())
-					.name(creatureInfo.getName())
-					.tracker(creatureInfo.isBoss() ? 160 : 80, 3, false)
-					.build();
-			event.getRegistry().register(entityEntry);
+
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			entityTypeBuilder.setTrackingRange(creatureInfo.isBoss() ? 160 : 80);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
+
+			EntityType entityType = entityTypeBuilder.build(creatureInfo.getEntityId());
+			EntityFactory.getInstance().addEntityType(entityType, creatureInfo.entityClass);
+			event.getRegistry().register(entityType);
 		}
 	}
 

@@ -10,22 +10,23 @@ import com.lycanitesmobs.core.block.BlockSummoningPedestal;
 import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
-import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
-import com.lycanitesmobs.core.block.fluid.BlockFluidPureLava;
+import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
+import com.lycanitesmobs.core.item.ItemBlockPlacer;
+import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.item.ItemMobToken;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.soulstone.*;
-import com.lycanitesmobs.core.item.special.*;
-import com.lycanitesmobs.core.item.temp.*;
+import com.lycanitesmobs.core.item.special.ItemSoulgazer;
+import com.lycanitesmobs.core.item.special.ItemSoulkey;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
+import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Items;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.fluids.Fluid;
 
 public class ItemManager {
 	public static ItemManager INSTANCE;
@@ -235,13 +236,12 @@ public class ItemManager {
 
 
 		// Special:
-		ObjectManager.addItem("frostyfur", new ItemFrostyFur());
-		ObjectManager.addItem("poisongland", new ItemPoisonGland());
-		ObjectManager.addItem("geistliver", new ItemGeistLiver());
-		ObjectManager.addItem("wraithsigil", new ItemWraithSigil());
+		ObjectManager.addItem("frostyfur", new ItemBlockPlacer("frostyfur", "frostcloud"));
+		ObjectManager.addItem("poisongland", new ItemBlockPlacer("poisongland", "poisoncloud"));
+		ObjectManager.addItem("geistliver", new ItemBlockPlacer("geistliver", "shadowfire"));
 
 
-		// Fluids:
+		/*/ Fluids: TODO New fluids
 		Fluid fluidOoze = ObjectManager.addFluid("ooze");
 		fluidOoze.setLuminosity(10).setDensity(3000).setViscosity(5000).setTemperature(0);
 		ObjectManager.addBlock("ooze", new BlockFluidOoze(fluidOoze));
@@ -252,62 +252,39 @@ public class ItemManager {
 		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
 		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
 		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
-		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));
+		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));*/
 
 
-		// Charges and Scepters:
-		ObjectManager.addItem("frostwebcharge", new ItemFrostwebCharge());
-		ObjectManager.addItem("frostwebscepter", new ItemScepterFrostweb(), 2, 1, 1);
-		ObjectManager.addItem("tundracharge", new ItemTundraCharge());
-		ObjectManager.addItem("tundrascepter", new ItemScepterTundra(), 2, 1, 1);
-		ObjectManager.addItem("icefirecharge", new ItemIcefireCharge());
-		ObjectManager.addItem("icefirescepter", new ItemScepterIcefire(), 2, 1, 1);
-		ObjectManager.addItem("blizzardcharge", new ItemBlizzardCharge());
-		ObjectManager.addItem("blizzardscepter", new ItemScepterBlizzard(), 2, 1, 1);
-		ObjectManager.addItem("doomfirecharge", new ItemDoomfireCharge());
-		ObjectManager.addItem("hellfirecharge", new ItemHellfireCharge());
-		ObjectManager.addItem("devilstarcharge", new ItemDevilstarCharge());
-		ObjectManager.addItem("demoniclightningcharge", new ItemDemonicLightningCharge());
-		ObjectManager.addItem("doomfirescepter", new ItemScepterDoomfire(), 2, 1, 1);
-		ObjectManager.addItem("hellfirescepter", new ItemScepterHellfire(), 2, 1, 1);
-		ObjectManager.addItem("devilstarscepter", new ItemScepterDevilstar(), 2, 1, 1);
-		ObjectManager.addItem("demoniclightningscepter", new ItemScepterDemonicLightning(), 2, 1, 1);
-		ObjectManager.addItem("throwingscythe", new ItemThrowingScythe());
-		ObjectManager.addItem("mudshotcharge", new ItemMudshotCharge());
-		ObjectManager.addItem("scythescepter", new ItemScepterScythe(), 2, 1, 1);
-		ObjectManager.addItem("mudshotscepter", new ItemScepterMudshot(), 2, 1, 1);
-		ObjectManager.addItem("aquapulsecharge", new ItemAquaPulseCharge());
-		ObjectManager.addItem("aquapulsescepter", new ItemScepterAquaPulse(), 2, 1, 1);
-		ObjectManager.addItem("whirlwindcharge", new ItemWhirlwindCharge());
-		ObjectManager.addItem("chaosorbcharge", new ItemChaosOrbCharge());
-		ObjectManager.addItem("acidsplashcharge", new ItemAcidSplashCharge());
-		ObjectManager.addItem("lightball", new ItemLightBall());
-		ObjectManager.addItem("lifedraincharge", new ItemLifeDrainCharge());
-		ObjectManager.addItem("lifedrainscepter", new ItemScepterLifeDrain(), 2, 1, 1);
-		ObjectManager.addItem("crystalshard", new ItemCrystalShard());
-		ObjectManager.addItem("frostboltcharge", new ItemFrostboltCharge());
-		ObjectManager.addItem("frostboltscepter", new ItemScepterFrostbolt(), 2, 1, 1);
-		ObjectManager.addItem("faeboltcharge", new ItemFaeboltCharge());
-		ObjectManager.addItem("aetherwavecharge", new ItemAetherwaveCharge());
-		ObjectManager.addItem("waterjetcharge", new ItemWaterJetCharge());
-		ObjectManager.addItem("waterjetscepter", new ItemScepterWaterJet(), 2, 1, 1);
-		ObjectManager.addItem("magmacharge", new ItemMagmaCharge());
-		ObjectManager.addItem("magmascepter", new ItemScepterMagma(), 2, 1, 1);
-		ObjectManager.addItem("scorchfirecharge", new ItemScorchfireCharge());
-		ObjectManager.addItem("scorchfirescepter", new ItemScepterScorchfire(), 2, 1, 1);
-		ObjectManager.addItem("poopcharge", new ItemPoopCharge());
-		ObjectManager.addItem("poopscepter", new ItemScepterPoop(), 2, 1, 1);
-		ObjectManager.addItem("boulderblastcharge", new ItemBoulderBlastCharge());
-		ObjectManager.addItem("boulderblastscepter", new ItemScepterBoulderBlast(), 2, 1, 1);
-		ObjectManager.addItem("arcanelaserstormcharge", new ItemArcaneLaserStormCharge());
-		ObjectManager.addItem("arcanelaserstormscepter", new ItemScepterArcaneLaserStorm(), 2, 1, 1);
-		ObjectManager.addItem("quill", new ItemQuill());
-		ObjectManager.addItem("quillscepter", new ItemScepterQuill(), 2, 1, 1);
-		ObjectManager.addItem("spectralboltcharge", new ItemSpectralboltCharge());
-		ObjectManager.addItem("spectralboltscepter", new ItemScepterSpectralbolt(), 2, 1, 1);
-		ObjectManager.addItem("bloodleechcharge", new ItemBloodleechCharge());
-		ObjectManager.addItem("bloodleechscepter", new ItemScepterBloodleech(), 2, 1, 1);
-		ObjectManager.addItem("poisonrayscepter", new ItemScepterPoisonRay(), 2, 1, 1);
+		// Old Projectile Charges and Scepters:
+		ObjectManager.addItem("frostwebcharge", new ItemCharge("frostwebcharge", EntityFrostweb.class));
+		ObjectManager.addItem("tundracharge", new ItemCharge("tundracharge", EntityFrostweb.class));
+		ObjectManager.addItem("icefirecharge", new ItemCharge("icefirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("blizzardcharge", new ItemCharge("blizzardcharge", EntityFrostweb.class));
+		ObjectManager.addItem("doomfirecharge", new ItemCharge("doomfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("hellfirecharge", new ItemCharge("hellfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("devilstarcharge", new ItemCharge("devilstarcharge", EntityFrostweb.class));
+		ObjectManager.addItem("demoniclightningcharge", new ItemCharge("demoniclightningcharge", EntityFrostweb.class));
+		ObjectManager.addItem("throwingscythe", new ItemCharge("throwingscythe", EntityFrostweb.class));
+		ObjectManager.addItem("mudshotcharge", new ItemCharge("mudshotcharge", EntityFrostweb.class));
+		ObjectManager.addItem("aquapulsecharge", new ItemCharge("aquapulsecharge", EntityFrostweb.class));
+		ObjectManager.addItem("whirlwindcharge", new ItemCharge("whirlwindcharge", EntityFrostweb.class));
+		ObjectManager.addItem("chaosorbcharge", new ItemCharge("chaosorbcharge", EntityFrostweb.class));
+		ObjectManager.addItem("acidsplashcharge", new ItemCharge("acidsplashcharge", EntityFrostweb.class));
+		ObjectManager.addItem("lightball", new ItemCharge("lightball", EntityFrostweb.class));
+		ObjectManager.addItem("lifedraincharge", new ItemCharge("lifedraincharge", EntityFrostweb.class));
+		ObjectManager.addItem("crystalshard", new ItemCharge("crystalshard", EntityFrostweb.class));
+		ObjectManager.addItem("frostboltcharge", new ItemCharge("frostboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("faeboltcharge", new ItemCharge("faeboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("aetherwavecharge", new ItemCharge("aetherwavecharge", EntityFrostweb.class));
+		ObjectManager.addItem("waterjetcharge", new ItemCharge("waterjetcharge", EntityFrostweb.class));
+		ObjectManager.addItem("magmacharge", new ItemCharge("magmacharge", EntityFrostweb.class));
+		ObjectManager.addItem("scorchfirecharge", new ItemCharge("scorchfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("poopcharge", new ItemCharge("poopcharge", EntityFrostweb.class));
+		ObjectManager.addItem("boulderblastcharge", new ItemCharge("boulderblastcharge", EntityFrostweb.class));
+		ObjectManager.addItem("arcanelaserstormcharge", new ItemCharge("arcanelaserstormcharge", EntityFrostweb.class));
+		ObjectManager.addItem("quill", new ItemCharge("quill", EntityFrostweb.class));
+		ObjectManager.addItem("spectralboltcharge", new ItemCharge("spectralboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("bloodleechcharge", new ItemCharge("bloodleechcharge", EntityFrostweb.class));
 
 
 		// Summoning Staves:
@@ -316,7 +293,6 @@ public class ItemManager {
 		ObjectManager.addItem("bloodsummoningstaff", new ItemStaffBlood("bloodsummoningstaff", "staffblood"));
 		ObjectManager.addItem("sturdysummoningstaff", new ItemStaffSturdy("sturdysummoningstaff", "staffsturdy"));
 		ObjectManager.addItem("savagesummoningstaff", new ItemStaffSavage("savagesummoningstaff", "staffsavage"));
-		ObjectManager.addBlock("frostweb", new BlockFrostweb());
 
 
 		// Building Blocks:
@@ -349,5 +325,6 @@ public class ItemManager {
 		AssetManager.addSound("poopcloud", group, "block.poopcloud");
 		ObjectManager.addBlock("poopcloud", new BlockPoopCloud());
 		ObjectManager.addBlock("quickweb", new BlockQuickWeb());
+		ObjectManager.addBlock("frostweb", new BlockFrostweb());
 	}
 }

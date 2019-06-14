@@ -3,58 +3,49 @@ package com.lycanitesmobs.core.item;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.BlockFence;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.*;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.spawner.AbstractSpawner;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 
 public class ItemCustomSpawnEgg extends ItemBase {
-	public CreatureType creatureType;
+	public CreatureInfo creatureInfo;
     
 	// ==================================================
 	//                    Constructor
 	// ==================================================
-    public ItemCustomSpawnEgg(String name, CreatureType creatureType) {
-        super();
-		this.setUnlocalizedName(name);
-		this.setHasSubtypes(true);
-		this.setCreativeTab(LycanitesMobs.creaturesTab);
+    public ItemCustomSpawnEgg(Item.Properties properties, String name, CreatureInfo creatureInfo) {
+        super(properties);
+		properties.group(LycanitesMobs.creaturesTab);
 
         this.itemName = name;
-        this.creatureType = creatureType;
+        this.creatureInfo = creatureInfo;
         this.setRegistryName(this.modInfo.filename, this.itemName);
 
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new DispenserBehaviorMobEggCustom());
+        DispenserBlock.registerDispenseBehavior(this, new DispenserBehaviorMobEggCustom());
 
 		LycanitesMobs.printDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
@@ -63,22 +54,10 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                  Get Display Name
 	// ==================================================
     @Override
-    public String getItemStackDisplayName(ItemStack itemStack) {
-		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureType.getTitle() + ": ";
-        String creatureName = this.getCreatureName(itemStack);
-        if (creatureName != null) {
-        	String creatureTitle;
-        	CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName);
-        	if(creatureInfo != null) {
-				creatureTitle = creatureInfo.getTitle();
-			}
-			else {
-				creatureTitle = LanguageManager.translate("entity." + this.modInfo.filename + "." + creatureName + ".name");
-			}
-            displayName += creatureTitle;
-        }
-
-        return displayName;
+    public ITextComponent getDisplayName(ItemStack itemStack) {
+		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureInfo.creatureType.getTitle() + ": ";
+		displayName += this.creatureInfo.getTitle();
+        return new TranslationTextComponent(displayName);
     }
     
     
@@ -86,26 +65,21 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                      Info
 	// ==================================================
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String description = this.getDescription(stack, worldIn, tooltip, flagIn);
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        String description = this.getDescription(stack, worldIn, tooltip, flag);
         if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
-            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+            FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
             List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
             for(Object formattedDescription : formattedDescriptionList) {
                 if(formattedDescription instanceof String)
-                    tooltip.add("\u00a7a" + formattedDescription);
+                    tooltip.add(new TranslationTextComponent((String)formattedDescription));
             }
         }
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
-        if(creatureInfo == null) {
-        	String creatureName = this.getCreatureName(itemStack);
-            LycanitesMobs.printWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
-            return "Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.";
-        }
-        return creatureInfo.getDescription();
+    @Override
+	public String getDescription(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        return this.creatureInfo.getDescription();
     }
     
     
@@ -113,57 +87,54 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                     Item Use
 	// ==================================================
     @Override
-    public EnumActionResult onItemUse(PlayerEntity player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack itemStack = player.getHeldItem(hand);
+	public ActionResultType onItemUse(ItemUseContext context) {
+		World world = context.getWorld();
+		BlockPos pos = context.getPos();
+		PlayerEntity player = context.getPlayer();
+		ItemStack itemStack = context.getItem();
+
         BlockState blockState = world.getBlockState(pos);
         Block block = blockState.getBlock();
 
         if (world.isRemote) {
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
-        if (!player.canPlayerEdit(pos.offset(facing), facing, itemStack)) {
-            return EnumActionResult.FAIL;
+        if (!player.canPlayerEdit(pos.offset(context.getFace()), context.getFace(), itemStack)) {
+            return ActionResultType.FAIL;
         }
         
         // Edit Spawner:
-        if(block == Blocks.MOB_SPAWNER) {
+        if(block == Blocks.SPAWNER) {
             TileEntity tileEntity = world.getTileEntity(pos);
-            MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner)tileEntity).getSpawnerBaseLogic();
-            CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
-            if(creatureInfo == null) {
-				return EnumActionResult.FAIL;
-			}
-            mobspawnerbaselogic.setEntityId(creatureInfo.getResourceLocation());
+			AbstractSpawner mobspawnerbaselogic = ((MobSpawnerTileEntity)tileEntity).getSpawnerBaseLogic();
+            mobspawnerbaselogic.setEntityType(this.creatureInfo.getEntityType());
             tileEntity.markDirty();
             world.notifyBlockUpdate(pos, blockState, blockState, 3);
-            if (!player.capabilities.isCreativeMode) {
+            if (!player.playerAbilities.isCreativeMode) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
 
-            return EnumActionResult.SUCCESS;
+            return ActionResultType.SUCCESS;
         }
         
         // Spawn Mob:
-        else {
-            pos = pos.offset(facing);
-            double d0 = 0.0D;
-            if (facing == EnumFacing.UP && blockState.getBlock() instanceof BlockFence) {
-                d0 = 0.5D;
-            }
+		pos = pos.offset(context.getFace());
+		double d0 = 0.0D;
+		if (context.getFace() == Direction.UP && blockState.getBlock() instanceof FenceBlock) {
+			d0 = 0.5D;
+		}
 
-			LivingEntity entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
-	        if(entity != null) {
-	            if(itemStack.hasDisplayName()) {
-					entity.setCustomNameTag(itemStack.getDisplayName());
-				}
-                this.applyItemEntityDataToEntity(world, player, itemStack, entity);
-	            if(!player.capabilities.isCreativeMode) {
-					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-				}
-	        }
-        }
+		LivingEntity entity = this.spawnCreature(world, itemStack, (double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
+		if(entity != null) {
+			if(itemStack.hasDisplayName()) {
+				entity.setCustomName(itemStack.getDisplayName());
+			}
+			if(!player.playerAbilities.isCreativeMode) {
+				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+			}
+		}
 
-        return EnumActionResult.SUCCESS;
+        return ActionResultType.SUCCESS;
     }
     
     
@@ -171,41 +142,39 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	//                   On Right Click
 	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
         if(world.isRemote)
-            return new ActionResult(EnumActionResult.PASS, itemStack);
+            return new ActionResult(ActionResultType.PASS, itemStack);
         else {
-            RayTraceResult rayTraceResult = this.rayTrace(world, player, true);
+            RayTraceResult rayTraceResult = this.func_219968_a(world, player, RayTraceContext.FluidMode.ANY);
 
-            if(rayTraceResult == null)
-                return new ActionResult(EnumActionResult.PASS, itemStack);
-            else {
-				if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
-					BlockPos pos = rayTraceResult.getBlockPos();
+            if(rayTraceResult.getType() != RayTraceResult.Type.BLOCK)
+                return new ActionResult(ActionResultType.PASS, itemStack);
 
-					if (!world.canMineBlockBody(player, pos)) {
-						return new ActionResult(EnumActionResult.FAIL, itemStack);
+            BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult)rayTraceResult;
+			BlockPos pos = blockRayTraceResult.getPos();
+
+			if (!world.canMineBlockBody(player, pos)) {
+				return new ActionResult(ActionResultType.FAIL, itemStack);
+			}
+
+			if (!player.canPlayerEdit(pos, blockRayTraceResult.getFace(), itemStack)) {
+				return new ActionResult(ActionResultType.PASS, itemStack);
+			}
+
+			if (world.getBlockState(pos).getMaterial() == Material.WATER) {
+				LivingEntity entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+				if (entity != null)
+					if (itemStack.hasDisplayName()) {
+						entity.setCustomName(itemStack.getDisplayName());
 					}
-
-					if (!player.canPlayerEdit(pos, rayTraceResult.sideHit, itemStack)) {
-						return new ActionResult(EnumActionResult.PASS, itemStack);
-					}
-
-					if (world.getBlockState(pos).getMaterial() == Material.WATER) {
-						LivingEntity entity = spawnCreature(world, itemStack, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
-						if (entity != null)
-							if (itemStack.hasDisplayName()) {
-								entity.setCustomNameTag(itemStack.getDisplayName());
-							}
-						if (!player.capabilities.isCreativeMode) {
-							itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-						}
-					}
+				if (!player.playerAbilities.isCreativeMode) {
+					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 				}
 			}
 
-			return new ActionResult(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult(ActionResultType.SUCCESS, itemStack);
         }
     }
     
@@ -222,56 +191,13 @@ public class ItemCustomSpawnEgg extends ItemBase {
     // ========== Get Color from ItemStack ==========
     @Override
     public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
-		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
-		return creatureInfo != null ? (tintIndex == 0 ? creatureInfo.eggBackColor : creatureInfo.eggForeColor) : 16777215;
-    }
-    
-    
-	// ==================================================
-	//                   Get Sub Items
-	// ==================================================
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-    	if(this.modInfo == null || this.creatureType == null || !this.isInCreativeTab(tab)) {
-			return;
-		}
-
-        for(CreatureInfo creatureInfo : this.creatureType.creatures.values()) {
-            ItemStack itemstack = new ItemStack(this, 1);
-			this.applyCreatureInfoToItemStack(itemstack, creatureInfo);
-            items.add(itemstack);
-        }
+		return this.creatureInfo != null ? (tintIndex == 0 ? this.creatureInfo.eggBackColor : this.creatureInfo.eggForeColor) : 16777215;
     }
 
 
 	// ==================================================
-	//                    Spawn Egg
+	//                     Spawning
 	// ==================================================
-	/**
-	 * Get Creature Info
-	 * @param itemStack The spawn egg item stack to get the creature from.
-	 * @return The Creature Info of the stack spawn egg or null if unknown.
-	 */
-	public CreatureInfo getCreatureInfo(ItemStack itemStack) {
-		String creatureName = this.getCreatureName(itemStack);
-		return CreatureManager.getInstance().getCreature(creatureName);
-	}
-
-	/**
-	 * Get Creature Name
-	 * @param itemStack The spawn egg item stack to get the creature name from.
-	 * @return The name of the creature that the spawn egg item stack should spawn.
-	 */
-	public String getCreatureName(ItemStack itemStack) {
-		NBTTagCompound itemStackNBT = itemStack.getTagCompound();
-		if (itemStackNBT == null || !itemStackNBT.hasKey("CreatureInfoSpawnEgg", 10)) {
-			return null;
-		}
-		NBTTagCompound spawnEggNBT = itemStackNBT.getCompoundTag("CreatureInfoSpawnEgg");
-		return !spawnEggNBT.hasKey("creaturename", 8) ? null : spawnEggNBT.getString("creaturename");
-	}
-
 	/**
 	 * Spawn Creature
 	 * @param world The world to spawn in.
@@ -282,64 +208,24 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	 * @return The spawned entity instance.
 	 */
 	public LivingEntity spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
-		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
-		if(creatureInfo == null) {
-			return null;
-		}
-
-		LivingEntity entity = creatureInfo.createEntity(world);
+		LivingEntity entity = this.creatureInfo.createEntity(world);
 		if(entity != null) {
 			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
 			entity.rotationYawHead = entity.rotationYaw;
 			entity.renderYawOffset = entity.rotationYaw;
 
-			if(entity instanceof EntityLiving) {
-				EntityLiving entityliving = (EntityLiving) entity;
-				entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entityliving)), null);
-				entityliving.playLivingSound();
+			if(itemStack.hasDisplayName()) {
+				entity.setCustomName(itemStack.getDisplayName());
 			}
-			world.spawnEntity(entity);
+
+			if(entity instanceof MobEntity) {
+				MobEntity mobEntity = (MobEntity)entity;
+				mobEntity.onInitialSpawn(world, world.getDifficultyForLocation(new BlockPos(mobEntity)), SpawnReason.SPAWN_EGG, null, null);
+				mobEntity.playAmbientSound();
+			}
+
+			world.func_217376_c(entity);
 		}
 		return entity;
 	}
-
-	/**
-	 * Applies creature info to a spawn egg item stack.
-	 * @param itemStack The spawn egg item stack top apply to.
-	 * @param creatureInfo The creature info to apply.
-	 */
-	public void applyCreatureInfoToItemStack(ItemStack itemStack, CreatureInfo creatureInfo) {
-		NBTTagCompound itemStackNBT = itemStack.hasTagCompound() ? itemStack.getTagCompound() : new NBTTagCompound();
-		NBTTagCompound spawnEggNBT = new NBTTagCompound();
-		spawnEggNBT.setString("creaturename", creatureInfo.getName());
-		itemStackNBT.setTag("CreatureInfoSpawnEgg", spawnEggNBT);
-		itemStack.setTagCompound(itemStackNBT);
-	}
-
-	/**
-	 * 
-	 * @param entityWorld
-	 * @param player
-	 * @param stack
-	 * @param targetEntity
-	 */
-    public void applyItemEntityDataToEntity(World entityWorld, @Nullable PlayerEntity player, ItemStack stack, @Nullable Entity targetEntity) {
-        MinecraftServer minecraftserver = entityWorld.getMinecraftServer();
-        if (minecraftserver != null && targetEntity != null) {
-            NBTTagCompound nbttagcompound = stack.getTagCompound();
-
-            if (nbttagcompound != null && nbttagcompound.hasKey("CreatureInfoSpawnEgg", 10)) {
-                if (!entityWorld.isRemote && targetEntity.ignoreItemEntityData() && (player == null || !minecraftserver.getPlayerList().canSendCommands(player.getGameProfile()))) {
-                    return;
-                }
-
-                NBTTagCompound entityNBT = new NBTTagCompound();
-                targetEntity.writeToNBT(entityNBT);
-                UUID uuid = targetEntity.getUniqueID();
-                entityNBT.merge(nbttagcompound.getCompoundTag("CreatureInfoSpawnEgg"));
-                targetEntity.setUniqueId(uuid);
-                targetEntity.readFromNBT(entityNBT);
-            }
-        }
-    }
 }

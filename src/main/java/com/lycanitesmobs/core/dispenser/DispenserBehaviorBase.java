@@ -1,22 +1,22 @@
 package com.lycanitesmobs.core.dispenser;
 
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class DispenserBehaviorBase extends BehaviorProjectileDispense {
-	ProjectileInfo projectileInfo;
+public class DispenserBehaviorBase extends ProjectileDispenseBehavior {
+	protected ProjectileInfo projectileInfo;
 
 	// ==================================================
 	//                      Constructor
@@ -36,16 +36,16 @@ public class DispenserBehaviorBase extends BehaviorProjectileDispense {
 	@Override
     public ItemStack dispenseStack(IBlockSource blockSource, ItemStack stack) {
         World world = blockSource.getWorld();
-        IPosition position = BlockDispenser.getDispensePosition(blockSource);
-        EnumFacing facing = blockSource.getBlockState().getValue(BlockDispenser.FACING);
+        IPosition position = DispenserBlock.getDispensePosition(blockSource);
+        Direction facing = blockSource.getBlockState().get(DispenserBlock.FACING);
         
         IProjectile iprojectile = this.getProjectileEntity(world, position, stack);
         if(iprojectile == null)
         	return stack;
         
-        iprojectile.shoot((double)facing.getFrontOffsetX(), (double)facing.getFrontOffsetY(), (double)facing.getFrontOffsetZ(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
-        world.spawnEntity((Entity)iprojectile);
-        stack.splitStack(1);
+        iprojectile.shoot((double)facing.getXOffset(), (double)facing.getYOffset(), (double)facing.getZOffset(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
+        world.func_217376_c((Entity)iprojectile);
+        stack.split(1);
         
         return stack;
     }

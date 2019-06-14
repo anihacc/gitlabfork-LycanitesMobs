@@ -2,15 +2,15 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -111,7 +111,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param hand The hand the player is holding the equipment in.
 	 * @return True so that the item becomes active.
 	 */
-	public boolean onUseSecondary(World world, PlayerEntity shooter, EnumHand hand) {
+	public boolean onUseSecondary(World world, PlayerEntity shooter, Hand hand) {
 		return true;
 	}
 
@@ -160,7 +160,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		World world = shooter.getEntityWorld();
 		EntityProjectileBase mainProjectile = null;
-		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.height * 0.65), shooter.posZ);
+		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.posZ);
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
 			offsetX = 0.75D;
@@ -183,7 +183,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-				world.spawnEntity(projectile);
+				world.func_217376_c(projectile);
 				mainProjectile = projectile;
 			}
 		}
@@ -194,7 +194,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
-				world.spawnEntity(projectile);
+				world.func_217376_c(projectile);
 				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				mainProjectile = projectile;
 			}
@@ -204,7 +204,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
 			mainProjectile.setPosition(firePos.x, firePos.y, firePos.z);
 			mainProjectile.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-			world.spawnEntity(mainProjectile);
+			world.func_217376_c(mainProjectile);
 		}
 
 		if(shooter instanceof PlayerEntity && mainProjectile != null) {

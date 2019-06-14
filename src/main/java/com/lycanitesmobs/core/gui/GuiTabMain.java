@@ -17,7 +17,7 @@ public class GuiTabMain extends GuiTab {
 
     @Override
     public void onTabClicked () {
-        GuiBeastiaryIndex.openToPlayer(Minecraft.getMinecraft().player);
+        GuiBeastiaryIndex.openToPlayer(Minecraft.getInstance().player);
     }
 
     @Override

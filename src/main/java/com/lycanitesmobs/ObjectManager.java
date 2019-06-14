@@ -2,6 +2,7 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -10,6 +11,10 @@ import com.lycanitesmobs.core.model.ModelEquipmentPart;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
@@ -19,9 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,12 +94,12 @@ public class ObjectManager {
 	// ========== Fluid ==========
 	public static Fluid addFluid(String fluidName) {
         ModInfo group = currentModInfo;
-        Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
-		fluids.put(fluidName, fluid);
+        //Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
+		//fluids.put(fluidName, fluid);
 		//if(!FluidRegistry.registerFluid(fluid)) {
 		//    LycanitesMobs.printWarning("", "Another fluid was registered as " + fluidName);
         //}
-        return fluid;
+        return null;
 	}
 
 	// ========== Bucket ==========
@@ -261,17 +263,19 @@ public class ObjectManager {
     }
 
 	// ========== Entities ==========
-	public static void registerSpecialEntities(RegistryEvent.Register<EntityEntry> event) {
+	public static void registerSpecialEntities(RegistryEvent.Register<EntityType<?>> event) {
 		// Special Entities:
 		for(String entityName : specialEntities.keySet()) {
 			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
-			EntityEntry entityEntry = EntityEntryBuilder.create()
-					.entity(specialEntities.get(entityName))
-					.id(registryName, getNextSpecialEntityNetworkId())
-					.name(entityName)
-					.tracker(80, 3, false)
-					.build();
-			event.getRegistry().register(entityEntry);
+
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			entityTypeBuilder.setTrackingRange(80);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
+
+			EntityType entityType = entityTypeBuilder.build(registryName);
+			EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
+			event.getRegistry().register(entityType);
 		}
 	}
 

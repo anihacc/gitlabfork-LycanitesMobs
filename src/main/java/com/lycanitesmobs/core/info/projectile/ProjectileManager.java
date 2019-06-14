@@ -6,24 +6,22 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.dispenser.projectile.*;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProjectileManager extends JSONLoader {
@@ -104,11 +102,10 @@ public class ProjectileManager extends JSONLoader {
 
 	/**
 	 * Registers all creatures added to this creature manager, called from the registry event.
-	 * @param event The enity register event.
-	 * @param modInfo The mod to register entities from.
+	 * @param event The entity register event.
 	 */
 	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		ModInfo modInfo = LycanitesMobs.modInfo;
 		LycanitesMobs.printDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
 
@@ -116,35 +113,41 @@ public class ProjectileManager extends JSONLoader {
 			if(projectileInfo.modInfo != modInfo) {
 				continue;
 			}
-			EntityEntry entityEntry = EntityEntryBuilder.create()
-					.entity(projectileInfo.entityClass)
-					.id(projectileInfo.getEntityId(), this.getNextProjectileNetworkId())
-					.name(projectileInfo.getName())
-					.tracker(40, 3, true)
-					.build();
-			event.getRegistry().register(entityEntry);
+
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			entityTypeBuilder.setTrackingRange(40);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+
+			EntityType entityType = entityTypeBuilder.build(projectileInfo.getEntityId());
+			EntityFactory.getInstance().addEntityType(entityType, projectileInfo.entityClass);
+			event.getRegistry().register(entityType);
 		}
 
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
 			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
-			EntityEntry entityEntry = EntityEntryBuilder.create()
-					.entity(this.oldSpriteProjectiles.get(entityName))
-					.id(registryName, this.getNextProjectileNetworkId())
-					.name(entityName)
-					.tracker(40, 3, true)
-					.build();
-			event.getRegistry().register(entityEntry);
+
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			entityTypeBuilder.setTrackingRange(40);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+
+			EntityType entityType = entityTypeBuilder.build(registryName);
+			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
+			event.getRegistry().register(entityType);
 		}
 
 		for(String entityName : this.oldModelProjectiles.keySet()) {
 			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
-			EntityEntry entityEntry = EntityEntryBuilder.create()
-					.entity(this.oldModelProjectiles.get(entityName))
-					.id(registryName, this.getNextProjectileNetworkId())
-					.name(entityName)
-					.tracker(40, 3, true)
-					.build();
-			event.getRegistry().register(entityEntry);
+
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			entityTypeBuilder.setTrackingRange(40);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+
+			EntityType entityType = entityTypeBuilder.build(registryName);
+			EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName));
+			event.getRegistry().register(entityType);
 		}
 	}
 
@@ -230,13 +233,13 @@ public class ProjectileManager extends JSONLoader {
 		this.addOldProjectile(name, entityClass);
 	}
 
-	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour) {
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, ProjectileDispenseBehavior dispenseBehaviour) {
 		this.addOldProjectile(name, entityClass, item, dispenseBehaviour, false);
 	}
 
-	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, BehaviorProjectileDispense dispenseBehaviour, boolean impactSound) {
+	public void addOldProjectile(String name, Class<? extends Entity> entityClass, Item item, ProjectileDispenseBehavior dispenseBehaviour, boolean impactSound) {
 		name = name.toLowerCase();
 		this.addOldProjectile(name, entityClass, impactSound);
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, dispenseBehaviour);
+		DispenserBlock.registerDispenseBehavior(item, dispenseBehaviour);
 	}
 }

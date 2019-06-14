@@ -1,27 +1,15 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ItemConfig;
+import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemFood;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.world.World;
+import net.minecraft.item.Food;
+import net.minecraft.item.Item;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-public class ItemCustomFood extends ItemFood {
+public class ItemCustomFood extends ItemBase {
 
     /** The various classes of foods, used mainly for generic configurable effect durations. **/
     public static enum FOOD_CLASS {
@@ -37,7 +25,7 @@ public class ItemCustomFood extends ItemFood {
     public FOOD_CLASS foodClass = FOOD_CLASS.NONE;
 
     /** The ID of the potion effect that will occur upon eating this food. Set using setPotionEffect(). */
-    protected PotionEffect effect;
+    protected EffectInstance effect;
     /** The ID of the chance effect that will occur upon eating this food. Set using setPotionEffect(). */
     protected float effectChance;
 
@@ -45,52 +33,27 @@ public class ItemCustomFood extends ItemFood {
     // ==================================================
   	//                    Constructors
   	// ==================================================
-	public ItemCustomFood(String setItemName, ModInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
-		super(feed, saturation, false);
+	public ItemCustomFood(Item.Properties properties, String setItemName, ModInfo group, String setTexturePath, int feed, float saturation, FOOD_CLASS foodClass) {
+		super(properties);
 		this.itemName = setItemName;
 		this.group = group;
 		this.texturePath = setTexturePath;
         this.foodClass = foodClass;
-		this.setMaxStackSize(64);
 		this.setRegistryName(this.group.filename, this.itemName);
-		this.setCreativeTab(LycanitesMobs.itemsTab);
-		this.setUnlocalizedName(itemName);
-		this.setPotionEffect(MobEffects.INSTANT_HEALTH, 1, this.getInstantHealing(), 1.0F);
-	}
-	public ItemCustomFood(String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
-		this(setItemName, group, setItemName.toLowerCase(), feed, saturation, foodClass);
-	}
+		properties.maxStackSize(64);
+		properties.group(LycanitesMobs.itemsTab);
 
-
-	// ==================================================
-	//                      Info
-	// ==================================================
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		return LanguageManager.translate(this.getUnlocalizedName(stack) + ".name").trim();
+		// Food: TODO Better Food Management in ItemManager
+		Food.Builder foodBuilder = new Food.Builder();
+		foodBuilder.func_221456_a(feed);
+		foodBuilder.func_221454_a(saturation);
+		foodBuilder.func_221451_a(); // Set Always Edible
+		foodBuilder.func_221452_a(new EffectInstance(Effects.field_76432_h, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
+		properties.func_221540_a(foodBuilder.func_221453_d()); // properties.food(foodBuilder.createFood());
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		String description = this.getDescription(stack, worldIn, tooltip, flagIn);
-		if(!"".equalsIgnoreCase(description)) {
-			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
-			for(Object formattedDescription : formattedDescriptionList) {
-				if(formattedDescription instanceof String)
-					tooltip.add("\u00a7a" + formattedDescription);
-			}
-		}
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-	}
-
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".description");
-	}
-
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		return super.getAttributeModifiers(slot, stack);
+	public ItemCustomFood(Item.Properties properties, String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {
+		this(properties, setItemName, group, setItemName, feed, saturation, foodClass);
 	}
 
 
@@ -118,19 +81,4 @@ public class ItemCustomFood extends ItemFood {
 			return ItemConfig.healingFeast;
 		return 0;
 	}
-
-    public ItemCustomFood setPotionEffect(Potion potion, int duration, int amplifier, float chance) {
-        PotionEffect potionEffect = new PotionEffect(potion, duration * 20, amplifier, false, false);
-        if(potion == MobEffects.INSTANT_HEALTH) {
-			potionEffect = new PotionEffect(potion, 1, amplifier);
-		}
-        this.effect = potionEffect;
-        this.setPotionEffect(potionEffect, chance);
-        return this;
-    }
-
-    public ItemCustomFood setAlwaysEdible() {
-        super.setAlwaysEdible();
-        return this;
-    }
 }

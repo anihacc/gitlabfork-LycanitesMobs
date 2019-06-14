@@ -9,21 +9,24 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
@@ -59,11 +62,11 @@ public class ItemEquipmentPart extends ItemBase {
 	 * Constructor
 	 * @param groupInfo The group that this part belongs to.
 	 */
-	public ItemEquipmentPart(ModInfo groupInfo) {
-		super();
+	public ItemEquipmentPart(Item.Properties properties, ModInfo groupInfo) {
+		super(properties);
 		this.modInfo = groupInfo;
-		this.setMaxStackSize(1);
-		this.setCreativeTab(LycanitesMobs.equipmentPartsTab);
+		properties.maxStackSize(1);
+		properties.group(LycanitesMobs.equipmentPartsTab);
 	}
 
 	/** Loads this feature from a JSON object. **/
@@ -102,7 +105,6 @@ public class ItemEquipmentPart extends ItemBase {
 		this.sortFeatures();
 
 		this.setRegistryName(this.modInfo.filename, this.itemName);
-		this.setUnlocalizedName(this.itemName);
 
 		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}
@@ -112,27 +114,27 @@ public class ItemEquipmentPart extends ItemBase {
 	//                      Info
 	// ==================================================
 	@Override
-	public String getItemStackDisplayName(ItemStack itemStack) {
-		String displayName = LanguageManager.translate(this.getUnlocalizedName(itemStack) + ".name");
+	public ITextComponent getDisplayName(ItemStack itemStack) {
+		String displayName = LanguageManager.translate(this.getTranslationKey(itemStack) + ".name");
 		displayName += " " + LanguageManager.translate("equipment.level") + " " + this.getLevel(itemStack);
-		return displayName;
+		return new TranslationTextComponent(displayName);
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, @Nullable World world, List<String> tooltip, ITooltipFlag tooltipFlag) {
+	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, descriptionWidth);
-			for (Object formattedDescription : formattedDescriptionList) {
-				if (formattedDescription instanceof String)
-					tooltip.add("\u00a73" + formattedDescription);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, descriptionWidth);
+			for (String formattedDescription : formattedDescriptionList) {
+				tooltip.add(new TranslationTextComponent(formattedDescription));
 			}
 		}
 	}
 
 	@Override
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		ITEMSTACK_TO_RENDER = stack; // Render hack to get ItemStack when rendering TEISR. TODO Still needed?
 		return LanguageManager.translate("item.equipmentpart.description");
 	}
 
@@ -152,23 +154,16 @@ public class ItemEquipmentPart extends ItemBase {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		return super.getAttributeModifiers(slot, stack);
 	}
 
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-		ITEMSTACK_TO_RENDER = stack; // Render hack.
-		return super.getMetadata(stack);
-	}
-
 	/** Gets or creates an NBT Compound for the provided itemstack. **/
-	public NBTTagCompound getTagCompound(ItemStack itemStack) {
-		if(itemStack.hasTagCompound()) {
-			return itemStack.getTagCompound();
+	public CompoundNBT getTagCompound(ItemStack itemStack) {
+		if(itemStack.hasTag()) {
+			return itemStack.getTag();
 		}
-		return new NBTTagCompound();
+		return new CompoundNBT();
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -216,36 +211,36 @@ public class ItemEquipmentPart extends ItemBase {
 
 	/** Sets the level of the provided Equipment Item Stack. **/
 	public void setLevel(ItemStack itemStack, int level) {
-		NBTTagCompound nbt = this.getTagCompound(itemStack);
-		if(!nbt.hasKey("equipmentLevel")) {
-			nbt.setInteger("equipmentLevel", level);
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		if(!nbt.contains("equipmentLevel")) {
+			nbt.putInt("equipmentLevel", level);
 		}
-		itemStack.setTagCompound(nbt);
+		itemStack.setTag(nbt);
 	}
 
 	/** Returns an Equipment Part Level for the provided ItemStack. **/
 	public int getLevel(ItemStack itemStack) {
-		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		CompoundNBT nbt = this.getTagCompound(itemStack);
 		int level = 1;
-		if(nbt.hasKey("equipmentLevel")) {
-			level = nbt.getInteger("equipmentLevel");
+		if(nbt.contains("equipmentLevel")) {
+			level = nbt.getInt("equipmentLevel");
 		}
 		return level;
 	}
 
 	/** Returns the dyed color for the provided ItemStack. **/
 	public Vector4f getColor(ItemStack itemStack) {
-		NBTTagCompound nbt = this.getTagCompound(itemStack);
+		CompoundNBT nbt = this.getTagCompound(itemStack);
 		float r = 1;
 		float g = 1;
 		float b = 1;
-		if(nbt.hasKey("equipmentColorR")) {
+		if(nbt.contains("equipmentColorR")) {
 			r = nbt.getFloat("equipmentColorR");
 		}
-		if(nbt.hasKey("equipmentColorG")) {
+		if(nbt.contains("equipmentColorG")) {
 			r = nbt.getFloat("equipmentColorG");
 		}
-		if(nbt.hasKey("equipmentColorB")) {
+		if(nbt.contains("equipmentColorB")) {
 			r = nbt.getFloat("equipmentColorB");
 		}
 		return new Vector4f(r, g, b, 1);
@@ -256,9 +251,8 @@ public class ItemEquipmentPart extends ItemBase {
 	//                   Get Sub Items
 	// ==================================================
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(!this.isInCreativeTab(tab)) {
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
+		if(!this.isInGroup(tab)) {
 			return;
 		}
 

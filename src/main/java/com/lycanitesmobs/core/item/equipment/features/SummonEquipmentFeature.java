@@ -1,26 +1,21 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.spawner.MobSpawn;
-import net.minecraft.entity.EntityLiving;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
-	/** The entity class to spawn. **/
-	public Class entityClass;
-
 	/** The id of the mob to summon. **/
 	public String summonMobId;
 
@@ -45,18 +40,6 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		super.loadFromJSON(json);
 
 		this.summonMobId = json.get("summonMobId").getAsString();
-		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
-		if(creatureInfo != null) {
-			this.entityClass = creatureInfo.entityClass;
-		}
-		else {
-			Class entityClass = null;
-			net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.ForgeRegistries.ENTITIES.getValue(new ResourceLocation(this.summonMobId));
-			if(entry != null) {
-				entityClass = entry.getEntityClass();
-			}
-			this.entityClass = entityClass;
-		}
 
 		if(json.has("summonChance"))
 			this.summonChance = json.get("summonChance").getAsDouble();
@@ -104,10 +87,23 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return;
 		}
 
+		EntityType entityType;
+		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
+		if(creatureInfo != null) {
+			entityType = creatureInfo.getEntityType();
+		}
+		else {
+			entityType = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(this.summonMobId));
+		}
+		if(entityType == null) {
+			return;
+		}
+
 		// Summon:
 		if(attacker.getRNG().nextDouble() <= this.summonChance) {
 			try {
-				EntityLiving entity = (EntityLiving)this.entityClass.getConstructor(World.class).newInstance(new Object[]{attacker.getEntityWorld()});
+				Entity entity = entityType.create(attacker.getEntityWorld());
+				entity.setLocationAndAngles(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ(), attacker.rotationYaw, 0.0F);
 				if(entity instanceof EntityCreatureBase) {
 					EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
 					entityCreature.setMinion(true);
@@ -134,7 +130,6 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						randomAngle = -randomAngle;
 					}*/
 					entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
-					attacker.getEntityWorld().spawnEntity(entity);
 				}
 			}
 			catch (Exception e) {

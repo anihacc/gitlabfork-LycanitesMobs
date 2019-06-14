@@ -2,32 +2,24 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.item.ItemBase;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.util.Hand;
 
 public class ItemSoulgazer extends ItemBase {
 	
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulgazer() {
-        super();
-        this.setMaxStackSize(1);
-        this.itemName = "soulgazer";
-        this.setup();
-        this.setContainerItem(this); // Infinite use in the crafting grid.
+    public ItemSoulgazer(Item.Properties properties) {
+        super(properties);
+		properties.maxStackSize(1);
+		properties.containerItem(this); // Infinite use in the crafting grid.
+		this.itemName = "soulgazer";
+		this.setup();
     }
-	
-    
-	// ==================================================
-	//                      Update
-	// ==================================================
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5) {
-		super.onUpdate(itemStack, world, entity, par4, par5);
-	}
     
     
 	// ==================================================
@@ -35,7 +27,7 @@ public class ItemSoulgazer extends ItemBase {
 	// ==================================================
 	// ========== Entity Interaction ==========
 	@Override
-    public boolean onItemRightClickOnEntity(PlayerEntity player, Entity entity, ItemStack itemStack) {
+	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
     		return false;

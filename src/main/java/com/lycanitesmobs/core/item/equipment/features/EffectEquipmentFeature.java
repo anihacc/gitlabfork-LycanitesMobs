@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class EffectEquipmentFeature extends EquipmentFeature {
@@ -77,9 +76,9 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Potion Effects:
-		Potion potion = GameRegistry.findRegistry(Potion.class).getValue(new ResourceLocation(this.effectType));
-		if(potion != null) {
-			effectTarget.addPotionEffect(new PotionEffect(potion, this.effectDuration, this.effectStrength));
+		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		if(effect != null) {
+			effectTarget.addPotionEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength));
 		}
 	}
 }

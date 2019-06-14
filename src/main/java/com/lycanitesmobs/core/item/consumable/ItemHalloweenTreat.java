@@ -7,17 +7,18 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ItemHalloweenTreat extends ItemBase {
@@ -25,8 +26,8 @@ public class ItemHalloweenTreat extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemHalloweenTreat() {
-        super();
+    public ItemHalloweenTreat(Item.Properties properties) {
+		super(properties);
         this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "halloweentreat";
         this.setup();
@@ -39,9 +40,9 @@ public class ItemHalloweenTreat extends ItemBase {
  	//                    Item Use
  	// ==================================================
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-         if(!player.capabilities.isCreativeMode) {
+         if(!player.playerAbilities.isCreativeMode) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
@@ -52,7 +53,7 @@ public class ItemHalloweenTreat extends ItemBase {
          		this.openBad(itemStack, world, player);
          }
 
-        return new ActionResult(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult(ActionResultType.SUCCESS, itemStack);
      }
     
     
@@ -61,7 +62,7 @@ public class ItemHalloweenTreat extends ItemBase {
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".good");
-		player.sendMessage(new TextComponentString(message));
+		player.sendMessage(new TranslationTextComponent(message));
         this.playSound(world, player.posX, player.posY, player.posZ, AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
@@ -73,7 +74,7 @@ public class ItemHalloweenTreat extends ItemBase {
                 dropStack.setCount(1 + player.getRNG().nextInt(4));
 				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
 				entityItem.setPickupDelay(10);
-				world.spawnEntity(entityItem);
+				world.func_217376_c(entityItem);
 			}
 		}
     }
@@ -84,7 +85,7 @@ public class ItemHalloweenTreat extends ItemBase {
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
-		player.sendMessage(new TextComponentString(message));
+		player.sendMessage(new TranslationTextComponent(message));
         this.playSound(world, player.posX, player.posY, player.posZ, AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
@@ -105,16 +106,16 @@ public class ItemHalloweenTreat extends ItemBase {
                     EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
 					entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("ent"))
-                        entityCreature.setCustomNameTag("Twisted Ent");
+                        entityCreature.setCustomName(new TranslationTextComponent("Twisted Ent"));
 					else if (entityCreature.creatureInfo.getName().equals("treant"))
-						entityCreature.setCustomNameTag("Wicked Treant");
+						entityCreature.setCustomName(new TranslationTextComponent("Wicked Treant"));
 					else if (entityCreature.creatureInfo.getName().equals("epion"))
-						entityCreature.setCustomNameTag("Vampire Bat");
+						entityCreature.setCustomName(new TranslationTextComponent("Vampire Bat"));
 					else if (entityCreature.creatureInfo.getName().equals("grue"))
-						entityCreature.setCustomNameTag("Shadow Clown");
+						entityCreature.setCustomName(new TranslationTextComponent("Shadow Clown"));
                 }
 
-	            world.spawnEntity(entity);
+	            world.func_217376_c(entity);
             }
 		}
     }

@@ -2,27 +2,27 @@ package com.lycanitesmobs.core.item;
 
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,30 +51,30 @@ public class ItemBase extends Item {
 	//                      Info
 	// ==================================================
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		return LanguageManager.translate(this.getUnlocalizedNameInefficiently(stack) + ".name").trim();
+	public ITextComponent getDisplayName(ItemStack stack) {
+		return new TranslationTextComponent(LanguageManager.translate(this.getTranslationKey(stack) + ".name").trim());
 	}
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	String description = this.getDescription(stack, worldIn, tooltip, flagIn);
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    	String description = this.getDescription(stack, worldIn, tooltip, flag);
     	if(!"".equalsIgnoreCase(description)) {
-    		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+    		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
     		List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, descriptionWidth);
     		for(Object formattedDescription : formattedDescriptionList) {
     			if(formattedDescription instanceof String)
-                    tooltip.add("\u00a7a" + formattedDescription);
+                    tooltip.add(new TranslationTextComponent((String)formattedDescription));
     		}
     	}
-    	super.addInformation(stack, worldIn, tooltip, flagIn);
+    	super.addInformation(stack, worldIn, tooltip, flag);
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-    	return LanguageManager.translate(this.getUnlocalizedName() + ".description");
+    public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    	return LanguageManager.translate(this.getTranslationKey() + ".description");
     }
 
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
         return super.getAttributeModifiers(slot, stack);
     }
 	
@@ -83,8 +83,8 @@ public class ItemBase extends Item {
 	//                      Update
 	// ==================================================
 	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5) {
-		super.onUpdate(itemStack, world, entity, par4, par5);
+	public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+		return super.onEntityItemUpdate(stack, entity);
 	}
     
     
@@ -93,19 +93,24 @@ public class ItemBase extends Item {
 	// ==================================================
     // ========== Use ==========
     @Override
-    public EnumActionResult onItemUse(PlayerEntity playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    	return super.onItemUse(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+    public ActionResultType onItemUse(ItemUseContext context) {
+    	return super.onItemUse(context);
     }
     
     // ========== Start ==========
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, EnumHand hand) {
-        return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        return new ActionResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
     }
 
-    public void onItemLeftClick(ItemStack itemStackIn, World worldIn, PlayerEntity playerIn, EnumHand hand) {
-        return;
-    }
+	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+		return super.onLeftClickEntity(stack, player, entity);
+	}
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
+    	return super.itemInteractionForEntity(stack, player, entity, hand);
+	}
 
     // ========== Using ==========
     @Override
@@ -121,13 +126,8 @@ public class ItemBase extends Item {
 
     // ========== Animation ==========
     @Override
-    public EnumAction getItemUseAction(ItemStack itemStack) {
-        return super.getItemUseAction(itemStack);
-    }
-    
-    // ========== Entity Interaction ==========
-    public boolean onItemRightClickOnEntity(PlayerEntity player, Entity entity, ItemStack itemStack) {
-    	return false;
+    public UseAction getUseAction(ItemStack itemStack) {
+        return super.getUseAction(itemStack);
     }
 
 	
@@ -164,17 +164,9 @@ public class ItemBase extends Item {
 	// ==================================================
 	//                     Visuals
 	// ==================================================
-    // ========== Holding Angle ==========
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public boolean isFull3D() {
-        return super.isFull3D();
-    }
-
-    // ========== Get Model Resource Location ==========
-    public ModelResourceLocation getModelResourceLocation() {
-        return new ModelResourceLocation(this.getRegistryName(), "inventory");
-    }
+	public ModelResourceLocation getModelResourceLocation() {
+		return null;
+	}
 
     // ========== Use Colors ==========
     public boolean useItemColors() {

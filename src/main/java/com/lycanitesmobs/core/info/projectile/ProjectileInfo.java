@@ -16,11 +16,13 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -38,10 +40,13 @@ public class ProjectileInfo {
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
 	public Class<? extends Entity> entityClass = EntityProjectileCustom.class;
 	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
-	public Class<? extends ModelBase> modelClass;
+	public Class<? extends Model> modelClass;
 
 	/** The group that this projectile belongs to. **/
 	public ModInfo modInfo;
+
+	/** The entity type used to store base attributes of this projectile. **/
+	protected EntityType entityType = EntityType.SNOWBALL;
 
 	// Item:
 	/** The item used to fire this projectile from a dispenser and on use. **/
@@ -130,7 +135,7 @@ public class ProjectileInfo {
 
 		if(json.has("modelClass")) {
 			try {
-				this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
+				this.modelClass = (Class<? extends Model>) Class.forName(json.get("modelClass").getAsString());
 			} catch (Exception e) {
 				LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 			}
@@ -216,13 +221,15 @@ public class ProjectileInfo {
 		// Charge Item:
 		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
 		if(this.chargeItem == null) {
-			this.chargeItem = new ItemCharge(this);
+			Item.Properties properties = new Item.Properties();
+			properties.group(ItemGroup.MISC); // TODO Item Group Creative Tabs?
+			this.chargeItem = new ItemCharge(properties, this);
 			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
 		}
 
 		// Dispenser:
 		this.dispenserBehaviour = new DispenserBehaviorBase();
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this.chargeItem, this.dispenserBehaviour);
+		DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
 
 		// Sounds:
 		AssetManager.addSound(name, modInfo, "projectile." + name);
@@ -246,6 +253,15 @@ public class ProjectileInfo {
 	 */
 	public String getEntityId() {
 		return this.modInfo.filename + ":" + this.getName();
+	}
+
+
+	/**
+	 * Returns the entity type of this projectile.
+	 * @return Projectiles's entity type.
+	 */
+	public EntityType getEntityType() {
+		return this.entityType;
 	}
 
 	/**

@@ -1,5 +1,8 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.ClientProxy;
+import com.lycanitesmobs.core.IProxy;
+import com.lycanitesmobs.core.ServerProxy;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
@@ -11,10 +14,10 @@ import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.item.CreativeTabBlocks;
-import com.lycanitesmobs.core.item.CreativeTabCreatures;
-import com.lycanitesmobs.core.item.CreativeTabEquipmentParts;
-import com.lycanitesmobs.core.item.CreativeTabItems;
+import com.lycanitesmobs.core.item.LMBlocksGroup;
+import com.lycanitesmobs.core.item.LMCreaturesGroup;
+import com.lycanitesmobs.core.item.LMEquipmentPartsGroup;
+import com.lycanitesmobs.core.item.LMItemsGroup;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
 import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
@@ -34,6 +37,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -42,8 +46,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -77,6 +80,7 @@ public class LycanitesMobs {
 
     public static ModInfo modInfo;
     public static ConfigBase config;
+    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     // Capabilities:
     @CapabilityInject(IExtendedEntity.class)
@@ -85,10 +89,10 @@ public class LycanitesMobs {
     public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 
     // Creative Tabs:
-    //public static final CreativeTabs itemsTab = new CreativeTabItems(CreativeTabs.getNextID(), modid + ".items");
-    //public static final CreativeTabs blocksTab = new CreativeTabBlocks(CreativeTabs.getNextID(), modid + ".blocks");
-    //public static final CreativeTabs creaturesTab = new CreativeTabCreatures(CreativeTabs.getNextID(), modid + ".creatures");
-    //public static final CreativeTabs equipmentPartsTab = new CreativeTabEquipmentParts(CreativeTabs.getNextID(), modid + ".equipmentparts");
+    public static final ItemGroup itemsTab = new LMItemsGroup(0, modid + ".items");
+    public static final ItemGroup blocksTab = new LMBlocksGroup(1, modid + ".blocks");
+    public static final ItemGroup creaturesTab = new LMCreaturesGroup(2, modid + ".creatures");
+    public static final ItemGroup equipmentPartsTab = new LMEquipmentPartsGroup(3, modid + ".equipmentparts");
 
     // Texture Path:
     public static String texturePath = "mods/lycanitesmobs/";
@@ -175,9 +179,6 @@ public class LycanitesMobs {
         // Elements:
         ElementManager.getInstance().loadConfig();
         ElementManager.getInstance().loadAllFromJSON(modInfo);
-
-        // Special Entities:
-        ObjectManager.addSpecialEntity("hitarea", EntityHitArea.class);
 
         // Creatures:
         CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
