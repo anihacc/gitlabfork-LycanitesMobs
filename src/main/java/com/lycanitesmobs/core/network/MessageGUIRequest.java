@@ -1,71 +1,49 @@
 package com.lycanitesmobs.core.network;
 
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRequest, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageGUIRequest {
 	public byte guiID;
 	
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageGUIRequest() {}
 	public MessageGUIRequest(byte guiID) {
 		this.guiID = guiID;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageGUIRequest message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			PlayerEntity player = ctx.getServerHandler().player;
+	public static void handle(MessageGUIRequest message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+			return;
+
+		ctx.get().enqueueWork(() -> {
+			PlayerEntity player = ctx.get().getSender();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			playerExt.requestGUI(message.guiID);
 		});
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		this.guiID = packet.readByte();
+	public static MessageGUIRequest decode(PacketBuffer packet) {
+		MessageGUIRequest message = new MessageGUIRequest();
+		message.guiID = packet.readByte();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeByte(this.guiID);
+	public static void encode(MessageGUIRequest message, PacketBuffer packet) {
+		packet.writeByte(message.guiID);
 	}
 	
 }

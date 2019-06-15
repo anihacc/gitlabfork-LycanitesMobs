@@ -1,73 +1,49 @@
 package com.lycanitesmobs.core.network;
 
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessagePlayerControl implements IMessage, IMessageHandler<MessagePlayerControl, IMessage> {
+import java.util.function.Supplier;
+
+public class MessagePlayerControl {
 	public byte controlStates;
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
+
 	public MessagePlayerControl() {}
 	public MessagePlayerControl(byte controlStates) {
 		this.controlStates = controlStates;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessagePlayerControl message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                PlayerEntity player = ctx.getServerHandler().player;
-                ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-                playerExt.updateControlStates(message.controlStates);
-            }
+	public static void handle(MessagePlayerControl message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+			return;
+
+		ctx.get().enqueueWork(() -> {
+			PlayerEntity player = ctx.get().getSender();
+			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+			playerExt.updateControlStates(message.controlStates);
         });
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		this.controlStates = packet.readByte();
+	public static MessagePlayerControl decode(PacketBuffer packet) {
+		MessagePlayerControl message = new MessagePlayerControl();
+		message.controlStates = packet.readByte();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeByte(this.controlStates);
+	public static void encode(MessagePlayerControl message, PacketBuffer packet) {
+		packet.writeByte(message.controlStates);
 	}
 	
 }

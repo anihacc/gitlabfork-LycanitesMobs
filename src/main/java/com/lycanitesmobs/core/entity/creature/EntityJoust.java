@@ -29,7 +29,7 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
         this.hasAttackSound = true;
         this.babySpawnChance = 0.1D;
         this.canGrow = true;
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.setupMob();
     }
 

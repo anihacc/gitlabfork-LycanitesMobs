@@ -5,18 +5,16 @@ import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerEntityMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.NonNullList;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-
-import java.util.UUID;
 
 public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
 	/** A list of item stacks in the forge. **/
@@ -27,14 +25,15 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 
 
 	@Override
-	public void onRemove() {
+	public void remove() {
 		// TODO Drop parts or piece.
+		super.remove();
 	}
 
 
 	@Override
-	public void update() {
-		super.update();
+	public void tick() {
+		super.tick();
 	}
 
 
@@ -130,21 +129,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
 	public void clear() {
 
 	}
@@ -163,25 +147,25 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	//             Network Packets
 	// ========================================
 	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound syncData = new NBTTagCompound();
+	public SUpdateTileEntityPacket getUpdatePacket() {
+		CompoundNBT syncData = new CompoundNBT();
 
 		// Server to Client:
 		if(!this.getWorld().isRemote) {
-			syncData.setInteger("ForgeLevel", this.level);
+			syncData.putInt("ForgeLevel", this.level);
 		}
 
-		return new SPacketUpdateTileEntity(this.getPos(), 1, syncData);
+		return new SUpdateTileEntityPacket(this.getPos(), 1, syncData);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
 		if(!this.getWorld().isRemote)
 			return;
 
-		NBTTagCompound syncData = packet.getNbtCompound();
-		if(syncData.hasKey("ForgeLevel"))
-			this.level = syncData.getInteger("ForgeLevel");
+		CompoundNBT syncData = packet.getNbtCompound();
+		if(syncData.contains("ForgeLevel"))
+			this.level = syncData.getInt("ForgeLevel");
 	}
 
 	@Override
@@ -194,19 +178,19 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	//                 NBT Data
 	// ========================================
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+	public void read(CompoundNBT nbtTagCompound) {
 		if(nbtTagCompound.contains("ForgeLevel")) {
 			this.level = nbtTagCompound.getInt("ForgeLevel");
 		}
 
-		super.readFromNBT(nbtTagCompound);
+		super.read(nbtTagCompound);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+	public CompoundNBT write(CompoundNBT nbtTagCompound) {
 		nbtTagCompound.putInt("ForgeLevel", this.level);
 
-		return super.writeToNBT(nbtTagCompound);
+		return super.write(nbtTagCompound);
 	}
 
 
@@ -217,8 +201,8 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		if(player.world.isRemote) {
 			return new GuiEquipmentForge(this, player.inventory);
 		}
-		if(player instanceof PlayerEntityMP) {
-			((PlayerEntityMP)player).connection.sendPacket(this.getUpdatePacket());
+		if(player instanceof ServerPlayerEntity) {
+			((ServerPlayerEntity)player).connection.sendPacket(this.getUpdatePacket());
 		}
 		return new ContainerEquipmentForge(this, player.inventory);
 	}
@@ -254,10 +238,5 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 			levelName = "master";
 		}
 		return LanguageManager.translate("tile.equipmentforge_" + levelName + ".name");
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
 	}
 }

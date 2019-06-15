@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
@@ -12,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -39,7 +37,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         this.spreadFire = true;
         this.setupMob();
         
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.stepHeight = 1.0F;
     }
 

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -10,7 +9,6 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -28,7 +26,7 @@ public class EntityChupacabra extends EntityCreatureTameable implements IAnimals
         this.hasAttackSound = true;
         this.setupMob();
         
-        this.attackTime = 15;
+        this.attackCooldownMax = 15;
     }
 
     // ========== Init AI ==========

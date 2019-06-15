@@ -1,45 +1,34 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageEntityGUICommand implements IMessage, IMessageHandler<MessageEntityGUICommand, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageEntityGUICommand {
 	int entityID;
 	public byte guiCommandID;
 	
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageEntityGUICommand() {}
 	public MessageEntityGUICommand(byte guiCommandID, Entity entity) {
 		this.entityID = entity.getEntityId();
 		this.guiCommandID = guiCommandID;
 	}
-	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
+
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageEntityGUICommand message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
-        IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			PlayerEntity player = ctx.getServerHandler().player;
+	public static void handle(MessageEntityGUICommand message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+			return;
+
+        ctx.get().enqueueWork(() -> {
+			PlayerEntity player = ctx.get().getSender();
 			World world = player.getEntityWorld();
 			Entity entity = world.getEntityByID(message.entityID);
 			if (entity instanceof EntityCreatureTameable) {
@@ -47,35 +36,24 @@ public class MessageEntityGUICommand implements IMessage, IMessageHandler<Messag
 				pet.performGUICommand(player, message.guiCommandID);
 			}
 		});
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		this.entityID = packet.readInt();
-		this.guiCommandID = packet.readByte();
+	public static MessageEntityGUICommand decode(PacketBuffer packet) {
+		MessageEntityGUICommand message = new MessageEntityGUICommand();
+		message.entityID = packet.readInt();
+		message.guiCommandID = packet.readByte();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeInt(this.entityID);
-		packet.writeByte(this.guiCommandID);
+	public static void encode(MessageEntityGUICommand message, PacketBuffer packet) {
+		packet.writeInt(message.entityID);
+		packet.writeByte(message.guiCommandID);
 	}
 	
 }

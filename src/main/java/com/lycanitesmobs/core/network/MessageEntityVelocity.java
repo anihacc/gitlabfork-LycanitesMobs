@@ -1,36 +1,24 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.io.IOException;
+import java.util.function.Supplier;
 
-public class MessageEntityVelocity implements IMessage, IMessageHandler<MessageEntityVelocity, IMessage> {
+public class MessageEntityVelocity {
     public int entityID;
     public int motionX;
     public int motionY;
     public int motionZ;
 
-
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageEntityVelocity() {}
 	public MessageEntityVelocity(Entity entity, double motionX, double motionY, double motionZ) {
 		this.entityID = entity.getEntityId();
-		double d0 = 3.9D;
 
 		if (motionX < -3.9D) {
 			motionX = -3.9D;
@@ -61,57 +49,38 @@ public class MessageEntityVelocity implements IMessage, IMessageHandler<MessageE
 		this.motionZ = (int)(motionZ * 8000.0D);
 	}
 
-
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageEntityVelocity message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT)
-			return null;
+	public static void handle(MessageEntityVelocity message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
+			return;
 
 		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		World world = player.getEntityWorld();
 		Entity entity = world.getEntityByID(message.entityID);
-		entity.motionX += (double)message.motionX / 8000.0D;
-		entity.motionY += (double)message.motionY / 8000.0D;
-		entity.motionZ += (double)message.motionZ / 8000.0D;
-
-		return null;
+		entity.setMotion(entity.getMotion().add((double)message.motionX / 8000.0D, (double)message.motionY / 8000.0D, (double)message.motionZ / 8000.0D));
 	}
 
-
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		this.entityID = packet.readVarInt();
-		this.motionX = packet.readShort();
-		this.motionY = packet.readShort();
-		this.motionZ = packet.readShort();
+	public static MessageEntityVelocity decode(PacketBuffer packet) {
+		MessageEntityVelocity message = new MessageEntityVelocity();
+		message.entityID = packet.readVarInt();
+		message.motionX = packet.readShort();
+		message.motionY = packet.readShort();
+		message.motionZ = packet.readShort();
+		return message;
 	}
 
-
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeVarInt(this.entityID);
-		packet.writeShort(this.motionX);
-		packet.writeShort(this.motionY);
-		packet.writeShort(this.motionZ);
+	public static void encode(MessageEntityVelocity message, PacketBuffer packet) {
+		packet.writeVarInt(message.entityID);
+		packet.writeShort(message.motionX);
+		packet.writeShort(message.motionY);
+		packet.writeShort(message.motionZ);
 	}
 }

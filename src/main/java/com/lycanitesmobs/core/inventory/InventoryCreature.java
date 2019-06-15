@@ -2,23 +2,18 @@ package com.lycanitesmobs.core.inventory;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemSaddle;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,17 +102,14 @@ public class InventoryCreature implements IInventory {
 	// ==================================================
   	//                     Details
   	// ==================================================
-    @Override
     public String getName() {
         return this.inventoryName;
     }
 
-    @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString(this.getName());
+        return new TranslationTextComponent(this.getName());
     }
 
-    @Override
 	public boolean hasCustomName() {
 		return true;
 	}
@@ -213,21 +205,6 @@ public class InventoryCreature implements IInventory {
 	public void closeInventory(PlayerEntity player) {}
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
     public void clear() {
 
     }
@@ -288,7 +265,7 @@ public class InventoryCreature implements IInventory {
             splitStacks[1] = itemStack;
         }
         else {
-        	splitStacks[1] = itemStack.splitStack(amount);
+        	splitStacks[1] = itemStack.split(amount);
             if(itemStack.getCount() == 0)
             	itemStack = null;
             splitStacks[0] = itemStack;
@@ -323,7 +300,7 @@ public class InventoryCreature implements IInventory {
 				ItemStack slotStack = this.getStackInSlot(slotID);
 				if(slotStack != null && slotStack != ItemStack.EMPTY && !slotStack.isEmpty()) {
 					if(slotStack.getCount() < slotStack.getMaxStackSize())
-						if(slotStack.getItem() == itemStack.getItem() && slotStack.getItemDamage() == itemStack.getItemDamage())
+						if(slotStack.getItem() == itemStack.getItem() && slotStack.getDamage() == itemStack.getDamage())
 							space += slotStack.getMaxStackSize() - slotStack.getCount();
 				}
 				else
@@ -349,7 +326,7 @@ public class InventoryCreature implements IInventory {
 			// If there is a stack in the slot:
 			if(slotStack != null && slotStack != ItemStack.EMPTY && !slotStack.isEmpty()) {
 				if(slotStack.getCount() < slotStack.getMaxStackSize())
-					if(slotStack.getItem() == itemStack.getItem() && slotStack.getItemDamage() == itemStack.getItemDamage()) {
+					if(slotStack.getItem() == itemStack.getItem() && slotStack.getDamage() == itemStack.getDamage()) {
 						int space = Math.max(slotStack.getMaxStackSize() - slotStack.getCount(), 0);
 						
 						// If there is more than or just enough room:
@@ -451,20 +428,20 @@ public class InventoryCreature implements IInventory {
 		}
 		
 		// Advanced Armor:
-		if(!this.basicArmor && itemStack.getItem() instanceof ItemArmor) {
-			ItemArmor armorstack = (ItemArmor)(itemStack.getItem());
-			if(armorstack.armorType == EntityEquipmentSlot.HEAD)
+		if(!this.basicArmor && itemStack.getItem() instanceof ArmorItem) {
+			ArmorItem armorstack = (ArmorItem)(itemStack.getItem());
+			if(armorstack.getEquipmentSlot() == EquipmentSlotType.HEAD)
 				return "head";
-			if(armorstack.armorType == EntityEquipmentSlot.CHEST)
+			if(armorstack.getEquipmentSlot() == EquipmentSlotType.CHEST)
 				return "chest";
-			if(armorstack.armorType == EntityEquipmentSlot.LEGS)
+			if(armorstack.getEquipmentSlot() == EquipmentSlotType.LEGS)
 				return "legs";
-			if(armorstack.armorType == EntityEquipmentSlot.FEET)
+			if(armorstack.getEquipmentSlot() == EquipmentSlotType.FEET)
 				return "feet";
 		}
 		
 		// Saddle:
-		if(itemStack.getItem() instanceof ItemSaddle && this.creature instanceof EntityCreatureRideable)
+		if(itemStack.getItem() instanceof SaddleItem && this.creature instanceof EntityCreatureRideable)
 			return "saddle";
 		
 		// Bag:
@@ -486,17 +463,17 @@ public class InventoryCreature implements IInventory {
     	ItemStack equipmentStack = this.getEquipmentStack(type);
     	if(equipmentStack == null)
     		return null;
-    	if(equipmentStack.getItem() instanceof ItemArmor) {
-    		ItemArmor armor = (ItemArmor)equipmentStack.getItem();
-    		if(armor.getArmorMaterial() == ItemArmor.ArmorMaterial.LEATHER)
+    	if(equipmentStack.getItem() instanceof ArmorItem) {
+    		ArmorItem armor = (ArmorItem) equipmentStack.getItem();
+    		if(armor.getArmorMaterial() == ArmorMaterial.LEATHER)
     			return "Leather";
-    		else if(armor.getArmorMaterial() == ItemArmor.ArmorMaterial.IRON)
+    		else if(armor.getArmorMaterial() == ArmorMaterial.IRON)
     			return "Iron";
-    		else if(armor.getArmorMaterial() == ItemArmor.ArmorMaterial.CHAIN)
+    		else if(armor.getArmorMaterial() == ArmorMaterial.CHAIN)
     			return "Chain";
-    		else if(armor.getArmorMaterial() == ItemArmor.ArmorMaterial.GOLD)
+    		else if(armor.getArmorMaterial() == ArmorMaterial.GOLD)
     			return "Gold";
-    		else if(armor.getArmorMaterial() == ItemArmor.ArmorMaterial.DIAMOND)
+    		else if(armor.getArmorMaterial() == ArmorMaterial.DIAMOND)
     			return "Diamond";
     	}
     	if(equipmentStack.getItem() == Items.IRON_HORSE_ARMOR)
@@ -515,8 +492,8 @@ public class InventoryCreature implements IInventory {
         for(String armorSlot : armorSlots) {
         	ItemStack armorStack = this.getEquipmentStack(armorSlot);
         	if(armorStack != null) {
-            	if(armorStack.getItem() instanceof ItemArmor)
-	                totalArmor += ((ItemArmor)armorStack.getItem()).damageReduceAmount;
+            	if(armorStack.getItem() instanceof ArmorItem)
+	                totalArmor += ((ArmorItem)armorStack.getItem()).getDamageReduceAmount();
             	else if(this.getEquipmentGrade(armorSlot) != null && this.armorValues.containsKey(this.getEquipmentGrade(armorSlot)))
             		totalArmor += this.armorValues.get(this.getEquipmentGrade(armorSlot));
         	}

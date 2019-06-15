@@ -3,18 +3,15 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.pets.PetEntry;
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.pets.PetManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessagePetEntryRemove, IMessage> {
+import java.util.function.Supplier;
+
+public class MessagePetEntryRemove {
     public int petEntryID;
 
 
@@ -26,81 +23,62 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
         this.petEntryID = petEntry.petEntryID;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessagePetEntryRemove message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side == Side.SERVER) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-            mainThread.addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    PlayerEntity player = ctx.getServerHandler().player;
-                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+	public static void handle(MessagePetEntryRemove message, Supplier<NetworkEvent.Context> ctx) {
+		// Server Side:
+		if(ctx.get().getDirection() == NetworkDirection.LOGIN_TO_SERVER) {
+			ctx.get().enqueueWork(() -> {
+				PlayerEntity player = ctx.get().getSender();
+				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
-                    PetManager petManager = playerExt.petManager;
-                    PetEntry petEntry = petManager.getEntry(message.petEntryID);
-                    if(petEntry == null) {
-                        LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from server!");
-                        return; // Nothing to remove!
-                    }
-                    petEntry.remove();
-                }
+				PetManager petManager = playerExt.petManager;
+				PetEntry petEntry = petManager.getEntry(message.petEntryID);
+				if(petEntry == null) {
+					LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from server!");
+					return; // Nothing to remove!
+				}
+				petEntry.remove();
             });
-            return null;
+            return;
         }
 
         // Client Side:
         PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) return null;
+		if(playerExt == null)
+			return;
 
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
 			LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from client!");
-            return null; // Nothing to remove!
+            return; // Nothing to remove!
         }
         petEntry.remove();
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
+	public static MessagePetEntryRemove decode(PacketBuffer packet) {
+		MessagePetEntryRemove message = new MessagePetEntryRemove();
 		try {
-            this.petEntryID = packet.readInt();
+            message.petEntryID = packet.readInt();
 		} catch (Exception e) {
 			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
+	public static void encode(MessagePetEntryRemove message, PacketBuffer packet) {
 		try {
-			packet.writeInt(this.petEntryID);
+			packet.writeInt(message.petEntryID);
 		} catch (Exception e) {
 			LycanitesMobs.printWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();

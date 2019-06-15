@@ -1,18 +1,18 @@
-package com.lycanitesmobs.core.inventory;
+package com.lycanitesmobs.core.container;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ContainerBase extends Container {
-	public Map<Integer, String> specialSlots = new HashMap<Integer, String>();
+	public Map<Integer, String> specialSlots = new HashMap<>();
 	public int playerInventoryStart = -1;
 	public int playerInventoryFinish = -1;
 	public int inventoryStart = -1;
@@ -23,8 +23,12 @@ public class ContainerBase extends Container {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public ContainerBase() {
-		super();
+	public ContainerBase(int windowId) {
+		super(ContainerType.field_221509_c, windowId);
+	}
+
+	public ContainerType<?> getType() {
+		return super.getType();
 	}
 	
 	
@@ -38,10 +42,10 @@ public class ContainerBase extends Container {
 	 * @param slotIndex The inventory index for this slot.
 	 */
 	public Slot addSlot(IInventory inventory, int slotIndex, int x, int y) {
-		return this.addSlotToContainer(new SlotBase(inventory, slotIndex, x, y));
+		return this.addSlot(new SlotBase(inventory, slotIndex, x, y));
 	}
 	
-	public void addPlayerSlots(InventoryPlayer playerInventory, int offsetX, int offsetY) {
+	public void addPlayerSlots(PlayerInventory playerInventory, int offsetX, int offsetY) {
 		// Player Hotbar:
 		this.playerInventoryStart = this.inventorySlots.size();
 		this.addSlotGrid(playerInventory, 8, 142, 1, 0, 8);

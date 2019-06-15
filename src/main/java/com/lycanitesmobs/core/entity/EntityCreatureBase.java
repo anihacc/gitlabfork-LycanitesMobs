@@ -14,7 +14,7 @@ import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.inventory.ContainerCreature;
+import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -47,6 +47,7 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
@@ -98,39 +99,37 @@ public abstract class EntityCreatureBase extends MobEntity {
 
 
 	// Size:
-    /** The width of this mob. XZ axis. **/
-	public float setWidth;
-    /** The depth of this mob. Overrides width's Z axis. This currently doesn't work, use width only for now. **/
-	public float setDepth;
-    /** The height of this mob. Y axis. **/
-	public float setHeight;
     /** The size scale of this mob. Randomly varies normally by 10%. **/
 	public double sizeScale = 1.0D;
     /** A scale relative to this entity's width for melee and ranged hit collision. **/
     public float hitAreaWidthScale = 1;
     /** A scale relative to this entity's height for melee and ranged hit collision. **/
     public float hitAreaHeightScale = 1;
-    /** How many ticks until this mob can attack again. **/
-    public int attackTime = 20;
-    /** A bounding box used for rendering, usually null as the base bounding box is used unless overridden. **/
-    //public AxisAlignedBB renderBoundingBox = null;
 
 
 	// Stats:
 	/** The level of this mob, higher levels increase the stat multipliers by a small amount. **/
 	protected int level = 1;
-    /** Which attack phase this mob is on. This will be replaced with a better system for boss mobs. **/
-	public byte attackPhase = 0;
-    /** How many attack phases this mob has. This will be replaced with a better system for boss mobs. **/
+
+	/** The cooldown between basic attacks in ticks. Set server side based on AI with an initial value. Used client side to perform attack animations and for cooldown states, etc. **/
+	private int attackCooldownMax = 5;
+	/** The current cooldown time remaining until the next basic attack is ready. Used client side for attack animations. **/
+	private int attackCooldown = 0;
+	/** How many attack phases this mob has, used for varied attack speeds, etc. **/
 	public byte attackPhaseMax = 0;
+    /** Which attack phase this mob is on, used for varied attack speeds, etc. **/
+	public byte attackPhase = 0;
+
+	/** The current Battle Phase of this mob, each Phase uses different behaviours. Used by bosses. **/
+	public int battlePhase = 0;
+
     /** How long this mob should run away for before it stops. **/
 	public int fleeTime = 200;
     /** How long has this mob been running away for. **/
 	public int currentFleeTime = 0;
     /** What percentage of health this mob will run away at, from 0.0F to 1.0F **/
 	public float fleeHealthPercent = 0;
-    /** The current Battle Phase of this mob, each Phase uses different behaviours. Used by bosses. **/
-    public int battlePhase = 0;
+
     /** The maximum amount of damage this mob can take. If 0 or less, this is ignored. **/
     public int damageMax = 0;
     /** The gorwing age of this mob. **/
@@ -229,10 +228,6 @@ public abstract class EntityCreatureBase extends MobEntity {
 	public int guiRefreshTick = 0;
 	/** The amount of ticks to wait before a GUI refresh. **/
 	public int guiRefreshTime = 2;
-    /** The cooldown between basic attacks in ticks. Set server side based on AI with an initial value. Used client side to perform attack animations and for cooldown states, etc. **/
-	private int attackCooldownMax = 5;
-	/** The current cooldown time remaining until the next basic attack is ready. Used client side for attack animations. **/
-	private int attackCooldown = 0;
     /** True if this mob should play a sound when attacking. Ranged mobs usually don't use this as their projectiles makes an attack sound instead. **/
 	public boolean hasAttackSound = false;
     /** True if this mob should play a sound when walking. Usually footsteps. **/
@@ -356,13 +351,6 @@ public abstract class EntityCreatureBase extends MobEntity {
     public EntityCreatureBase(World world) {
         super(EntityType.ZOMBIE, world);
 
-        // Size:
-		this.setWidth = (float)this.creatureInfo.width;
-		this.setDepth = (float)this.creatureInfo.width;
-		this.setHeight = (float)this.creatureInfo.height;
-		//this.size.width = this.setWidth; Override getSize()?
-		//this.size.height = this.setHeight;
-
         // Movement:
         this.field_70765_h = this.createMoveHelper();
 
@@ -387,15 +375,18 @@ public abstract class EntityCreatureBase extends MobEntity {
                 this.setPathPriority(PathNodeType.WATER, 0.0F);
         }
 
-        /*/ Swimming:
-        if(this.canWade() && this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround groundNavigator = (PathNavigateGround)this.getNavigator();
+        // Swimming:
+        if(this.canWade() && this.getNavigator() instanceof GroundPathNavigator) {
+			GroundPathNavigator groundNavigator = (GroundPathNavigator)this.getNavigator();
             groundNavigator.setCanSwim(true);
-        }*/
+        }
     }
 
     @Override
 	public EntityType getType() {
+    	if(this.creatureInfo != null) {
+    		return this.creatureInfo.getEntityType();
+		}
     	return super.getType();
 	}
 
@@ -442,14 +433,10 @@ public abstract class EntityCreatureBase extends MobEntity {
 	}
     
     // ========== Setup ==========
-    /** This should be called by the specific mob entity and set the default starting values. **/
+    /** This should be called by the specific mob entity and sets the default starting values. **/
     public void setupMob() {
         // Size:
-        this.setWidth *= this.creatureInfo.hitboxScale;
-        this.setHeight *= this.creatureInfo.hitboxScale;
-        this.updateSize();
-        if(this.creatureInfo.sizeScale != 1)
-            this.setSizeScale(this.creatureInfo.sizeScale);
+        this.setSizeScale(this.creatureInfo.sizeScale);
         
         // Stats:
         this.stepHeight = 0.5F;
@@ -1092,6 +1079,26 @@ public abstract class EntityCreatureBase extends MobEntity {
 	// ==================================================
 	//                       Stats
 	// ==================================================
+	/**
+	 * Returns the Entity Size of this creature for the given pose with it's size scale applied.
+	 * @param pose The pose to get the size of.
+	 * @return The scaled enity size of this creature.
+	 */
+	@Override
+	public EntitySize getSize(Pose pose) {
+    	return super.getSize(pose).scale((float)this.sizeScale);
+	}
+
+	/** Sets the size scale of this creature. **/
+	public void setSizeScale(double scale) {
+		this.sizeScale = scale;
+	}
+
+	/** Returns the model scale for rendering. **/
+	public double getRenderScale() {
+		return this.sizeScale;
+	}
+
 	/** Returns the level of this mob, higher levels have higher stats. **/
 	public int getLevel() {
 		if(this.getEntityWorld().isRemote) {
@@ -2271,38 +2278,6 @@ public abstract class EntityCreatureBase extends MobEntity {
             return Math.max(possibleSurfaceY - 1, y);
         }
         return y;
-    }
-
-	
-	// ==================================================
-  	//                        Size
-  	// ==================================================
-    /** Sets the width and height of this mob. This applies sizeScale to the provided arguments. **/
-	/*@Override
-	protected void setSize(float width, float height) {
-        width *= (float)this.sizeScale;
-        height *= (float)this.sizeScale;
-        super.setSize(width, height);
-        this.hitAreas = null;
-        if(!this.getEntityWorld().isRemote && this.getNavigator() != null && this.getNavigator().getNodeProcessor() instanceof ICreatureNodeProcessor) {
-            ((ICreatureNodeProcessor) this.getNavigator().getNodeProcessor()).updateEntitySize(this);
-        }
-    }*/
-
-    /** When called, this reapplies the initial width and height of this mob and then applies sizeScale. **/
-	public void updateSize() {
-        //this.setSize(Math.max(this.setWidth, 0.5F), Math.max(this.setHeight, 0.5F));
-    }
-
-    /** Sets the size scale and updates the mobs size. **/
-	public void setSizeScale(double scale) {
-		this.sizeScale = scale;
-        this.updateSize();
-    }
-
-    /** Returns the model scale for rendering. **/
-    public double getRenderScale() {
-        return this.sizeScale;
     }
     
     

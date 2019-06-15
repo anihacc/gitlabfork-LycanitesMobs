@@ -14,7 +14,6 @@ import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityAspid extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
@@ -31,7 +30,7 @@ public class EntityAspid extends EntityCreatureAgeable implements IAnimals, IGro
 
         this.canGrow = true;
         this.babySpawnChance = 0.1D;
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.fleeHealthPercent = 1.0F;
         this.isAggressiveByDefault = false;
         this.setupMob();

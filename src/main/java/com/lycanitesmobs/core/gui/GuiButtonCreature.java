@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.opengl.GL11;
 
-public class GuiButtonCreature extends GuiBaseButton {
+public class GuiButtonCreature extends ButtonBase {
 	public CreatureInfo creatureInfo;
 
 	public GuiButtonCreature(int buttonID, int x, int y, String text, CreatureInfo creatureInfo) {

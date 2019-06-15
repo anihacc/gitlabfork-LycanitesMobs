@@ -526,7 +526,7 @@ public class PetEntry {
         if(nbtTagCompound.contains("SpawningActive"))
             this.spawningActive = nbtTagCompound.getBoolean("SpawningActive");
 
-        this.summonSet.readFromNBT(nbtTagCompound);
+        this.summonSet.read(nbtTagCompound);
 
         // Load Entity:
         if(nbtTagCompound.contains("EntityName"))
@@ -554,7 +554,7 @@ public class PetEntry {
         nbtTagCompound.putInt("ID", this.petEntryID);
         nbtTagCompound.putString("EntryName", this.name);
         nbtTagCompound.putString("Type", this.getType());
-        this.summonSet.writeToNBT(nbtTagCompound);
+        this.summonSet.write(nbtTagCompound);
 
         // Save Entity:
         if (this.usesSpirit()) {

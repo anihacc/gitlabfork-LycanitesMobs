@@ -2,35 +2,34 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.container.ContainerBase;
+import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.inventory.ContainerBase;
-import com.lycanitesmobs.core.inventory.ContainerCreature;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
-import com.lycanitesmobs.core.network.MessageEntityGUICommand;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.network.MessageEntityGUICommand;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GuiCreature extends GuiBaseContainer {
 	public EntityCreatureBase creature;
 	public InventoryCreature creatureInventory;
-	public InventoryPlayer playerInventory;
 	
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public GuiCreature(EntityCreatureBase creature, InventoryPlayer playerInventory) {
-		super(new ContainerCreature(creature, playerInventory));
+	public GuiCreature(EntityCreatureBase creature, PlayerInventory playerInventory) {
+		super(new ContainerCreature(0, creature, playerInventory), playerInventory, creature.getDisplayName());
 		this.creature = creature;
 		this.creatureInventory = creature.inventory;
-		this.playerInventory = playerInventory;
 	}
 	
 	
@@ -38,8 +37,8 @@ public class GuiCreature extends GuiBaseContainer {
   	//                       Init
   	// ==================================================
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		this.xSize = 176;
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
@@ -54,7 +53,7 @@ public class GuiCreature extends GuiBaseContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName().toString()), 8, this.ySize - 96 + 2, 4210752);
     }
 	
 	
@@ -64,7 +63,7 @@ public class GuiCreature extends GuiBaseContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
         this.xSize = 176;
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
@@ -79,7 +78,7 @@ public class GuiCreature extends GuiBaseContainer {
 	// ========== Draw Creature Frame ===========
 	protected void drawFrames(int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
         
         // Status Frame:
         int statusWidth = 90;
@@ -90,13 +89,13 @@ public class GuiCreature extends GuiBaseContainer {
         int creatureWidth = 54;
         int creatureHeight = 54;
         this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
-        GuiInventory.drawEntityOnScreen(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature);
+		InventoryScreen.drawEntityOnScreen(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature);
 	}
 	
 	// ========== Draw Creature Health ===========
 	protected void drawHealth(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
         
         // Empty:
         int barWidth = 80;
@@ -116,9 +115,9 @@ public class GuiCreature extends GuiBaseContainer {
 	// ========== Draw Slots ===========
 	protected void drawSlots(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
         
-		ContainerBase container = (ContainerBase)this.inventorySlots;
+		ContainerBase container = this.getContainer();
 		List<Slot> creatureSlots = container.inventorySlots.subList(container.specialStart, container.inventoryFinish + 1);
 		int slotWidth = 18;
 		int slotHeight = 18;
@@ -157,63 +156,63 @@ public class GuiCreature extends GuiBaseContainer {
 
 		String buttonText = LanguageManager.translate("gui.pet.follow");
 		buttonY += buttonSpacing;
-		GuiButton button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		Button button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isFollowing() && !pet.isSitting()) {
-			button.enabled = false;
+			button.active = false;
 		}
-		this.buttonList.add(button);
+		this.buttons.add(button);
 
 		buttonText = LanguageManager.translate("gui.pet.wander");
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.WANDER.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.WANDER.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && !pet.isSitting()) {
-			button.enabled = false;
+			button.active = false;
 		}
-		this.buttonList.add(button);
+		this.buttons.add(button);
         
         buttonText = LanguageManager.translate("gui.pet.sit");
         buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.SIT.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.SIT.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && pet.isSitting()) {
-			button.enabled = false;
+			button.active = false;
 		}
-        this.buttonList.add(button);
+        this.buttons.add(button);
         
         buttonText = LanguageManager.translate("gui.pet.passive");
         buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isPassive()) {
-			button.enabled = false;
+			button.active = false;
 		}
-        this.buttonList.add(button);
+        this.buttons.add(button);
 
 		buttonText = LanguageManager.translate("gui.pet.defensive");
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && !pet.isAssisting() && !pet.isAggressive()) {
-			button.enabled = false;
+			button.active = false;
 		}
-		this.buttonList.add(button);
+		this.buttons.add(button);
 
 		buttonText = LanguageManager.translate("gui.pet.assist");
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAssisting() && !pet.isAggressive()) {
-			button.enabled = false;
+			button.active = false;
 		}
-		this.buttonList.add(button);
+		this.buttons.add(button);
         
         buttonText = LanguageManager.translate("gui.pet.aggressive");
         buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new GuiButton(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText);
+		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAggressive()) {
-			button.enabled = false;
+			button.active = false;
 		}
-        this.buttonList.add(button);
+        this.buttons.add(button);
         
         buttonText = LanguageManager.translate("gui.pet.pvp") + ": " + (pet.isPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText));
+        this.buttons.add(new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
     }
 	
 	
@@ -221,11 +220,8 @@ public class GuiCreature extends GuiBaseContainer {
   	//                     Actions
   	// ==================================================
 	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		if(guiButton != null) {
-			MessageEntityGUICommand message = new MessageEntityGUICommand((byte)guiButton.id, this.creature);
-			LycanitesMobs.packetHandler.sendToServer(message);			
-	    }
-		super.actionPerformed(guiButton);
+	public void actionPerformed(byte buttonId) {
+		MessageEntityGUICommand message = new MessageEntityGUICommand(buttonId, this.creature);
+		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 }

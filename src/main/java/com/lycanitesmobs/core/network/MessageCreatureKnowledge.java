@@ -3,79 +3,60 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageCreatureKnowledge implements IMessage, IMessageHandler<MessageCreatureKnowledge, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageCreatureKnowledge {
 	public String creatureName;
 	public int rank;
 	
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageCreatureKnowledge() {}
 	public MessageCreatureKnowledge(CreatureKnowledge creatureKnowledge) {
 		this.creatureName = creatureKnowledge.creatureName;
 		this.rank = creatureKnowledge.rank;
 	}
-	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
+
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageCreatureKnowledge message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
+	public static void handle(MessageCreatureKnowledge message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
+			return;
+
 		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
-			return null;
+			return;
 		
 		playerExt.beastiary.addCreatureKnowledge(new CreatureKnowledge(playerExt.beastiary, message.creatureName, message.rank));
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
+	public static MessageCreatureKnowledge decode(PacketBuffer packet) {
+		MessageCreatureKnowledge message = new MessageCreatureKnowledge();
 		try {
-			this.creatureName = packet.readString(256);
-			this.rank = packet.readInt();
+			message.creatureName = packet.readString(256);
+			message.rank = packet.readInt();
 		}
 		catch(Exception e) {
 			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeString(this.creatureName);
-        packet.writeInt(this.rank);
+	public static void encode(MessageCreatureKnowledge message, PacketBuffer packet) {
+		packet.writeString(message.creatureName);
+        packet.writeInt(message.rank);
 	}
 	
 }

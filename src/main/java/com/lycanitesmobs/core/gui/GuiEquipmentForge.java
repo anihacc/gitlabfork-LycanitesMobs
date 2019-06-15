@@ -2,22 +2,20 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.container.ContainerBase;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.core.inventory.ContainerBase;
-import com.lycanitesmobs.core.inventory.SlotEquipment;
+import com.lycanitesmobs.core.container.SlotEquipment;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
 import java.util.List;
 
 public class GuiEquipmentForge extends GuiBaseContainer {
-	public InventoryPlayer playerInventory;
 	public TileEntityEquipmentForge equipmentForge;
 	public String currentMode = "empty";
 	public boolean confirmation = false;
@@ -27,8 +25,8 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	 * @param equipmentForge
 	 * @param playerInventory
 	 */
-	public GuiEquipmentForge(TileEntityEquipmentForge equipmentForge, InventoryPlayer playerInventory) {
-		super(new ContainerEquipmentForge(equipmentForge, playerInventory));
+	public GuiEquipmentForge(TileEntityEquipmentForge equipmentForge, PlayerInventory playerInventory) {
+		super(new ContainerEquipmentForge(equipmentForge, playerInventory), playerInventory, new TranslationTextComponent(equipmentForge.getName()));
 		this.playerInventory = playerInventory;
 		this.equipmentForge = equipmentForge;
 	}
@@ -38,8 +36,8 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	 * Initializes this Forge GUI.
 	 */
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		this.xSize = 176;
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
@@ -56,7 +54,7 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		this.fontRenderer.drawString(this.equipmentForge.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName().toString()), 8, this.ySize - 96 + 2, 4210752);
     }
 
 
@@ -69,7 +67,7 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
         this.xSize = 176;
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
@@ -87,9 +85,9 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 	 */
 	protected void drawSlots(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
+        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
         
-		ContainerBase container = (ContainerBase)this.inventorySlots;
+		ContainerBase container = this.getContainer();
 		List<Slot> forgeSlots = container.inventorySlots.subList(container.inventoryStart, container.inventoryFinish);
 		int slotWidth = 18;
 		int slotHeight = 18;
@@ -154,21 +152,12 @@ public class GuiEquipmentForge extends GuiBaseContainer {
 			buttonText = LanguageManager.translate("gui.equipmentforge.deconstruct");
 		}
         buttonY += buttonSpacing;
-        this.buttonList.add(new GuiButton(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText));
+        this.buttons.add(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
     }
-
-
-	/**
-	 * Called when a control is interacted with by the user.
-	 * @param guiButton The button that was interacted with.
-	 * @throws IOException
-	 */
+    
 	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		if(guiButton != null) {
-			MessageTileEntityButton message = new MessageTileEntityButton((byte)guiButton.id, this.equipmentForge.getPos());
-			LycanitesMobs.packetHandler.sendToServer(message);
-	    }
-		super.actionPerformed(guiButton);
+	public void actionPerformed(byte buttonid) {
+		MessageTileEntityButton message = new MessageTileEntityButton(buttonid, this.equipmentForge.getPos());
+		LycanitesMobs.packetHandler.sendToServer(message);
 	}
 }

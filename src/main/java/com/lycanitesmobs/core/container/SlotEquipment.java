@@ -1,7 +1,6 @@
-package com.lycanitesmobs.core.inventory;
+package com.lycanitesmobs.core.container;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.container.ContainerEquipmentForge;
+import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public class SummonSet {
 	public ExtendedPlayer playerExt;
@@ -201,7 +201,7 @@ public class SummonSet {
     // ==================================================
    	// ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void read(CompoundNBT nbtTagCompound) {
 		if(nbtTagCompound.contains("SummonType"))
     		this.setSummonType(nbtTagCompound.getString("SummonType"));
 
@@ -226,7 +226,7 @@ public class SummonSet {
     
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public void write(CompoundNBT nbtTagCompound) {
 		nbtTagCompound.putString("SummonType", this.summonType);
 
 		nbtTagCompound.putInt("Subspecies", this.getSubspecies());

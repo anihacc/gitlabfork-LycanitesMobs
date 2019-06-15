@@ -1,14 +1,12 @@
 package com.lycanitesmobs.core.container;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.inventory.ContainerBase;
-import com.lycanitesmobs.core.inventory.SlotEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerEquipmentForge extends ContainerBase {
@@ -19,7 +17,7 @@ public class ContainerEquipmentForge extends ContainerBase {
 	 * @param equipmentForge The Equipment Forge Tile Entity.
 	 * @param playerInventory The Inventory of the accessing player.
 	 */
-	public ContainerEquipmentForge(TileEntityEquipmentForge equipmentForge, InventoryPlayer playerInventory) {
+	public ContainerEquipmentForge(TileEntityEquipmentForge equipmentForge, PlayerInventory playerInventory) {
 		super();
 		this.equipmentForge = equipmentForge;
 
@@ -36,33 +34,33 @@ public class ContainerEquipmentForge extends ContainerBase {
 
 			// Crafted Piece:
 			SlotEquipment slotEquipmentPiece = new SlotEquipment(this, slots++, x + (slotSize * 6), y, "piece");
-			this.addSlotToContainer(slotEquipmentPiece);
+			this.addSlot(slotEquipmentPiece);
 
 			// Base:
 			SlotEquipment slotEquipmentBase = new SlotEquipment(this, slots++, x + slotSize, y, "base");
-			this.addSlotToContainer(slotEquipmentBase);
+			this.addSlot(slotEquipmentBase);
 
 			// Head:
 			SlotEquipment slotEquipmentHead = new SlotEquipment(this, slots++, x + (slotSize * 2), y, "none");
-			this.addSlotToContainer(slotEquipmentHead);
+			this.addSlot(slotEquipmentHead);
 			slotEquipmentBase.addChildSlot(slotEquipmentHead);
 
 			// Tips:
 			SlotEquipment slotEquipmentTipA = new SlotEquipment(this, slots++, x + (slotSize * 3), y, "none");
-			this.addSlotToContainer(slotEquipmentTipA);
+			this.addSlot(slotEquipmentTipA);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipA);
 
 			SlotEquipment slotEquipmentTipB = new SlotEquipment(this, slots++, x + (slotSize * 2), y - slotSize, "none");
-			this.addSlotToContainer(slotEquipmentTipB);
+			this.addSlot(slotEquipmentTipB);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipB);
 
 			SlotEquipment slotEquipmentTipC = new SlotEquipment(this, slots++, x + (slotSize * 2), y + slotSize, "none");
-			this.addSlotToContainer(slotEquipmentTipC);
+			this.addSlot(slotEquipmentTipC);
 			slotEquipmentHead.addChildSlot(slotEquipmentTipC);
 
 			// Pommel:
 			SlotEquipment slotEquipmentPommel = new SlotEquipment(this, slots++, x, y, "none");
-			this.addSlotToContainer(slotEquipmentPommel);
+			this.addSlot(slotEquipmentPommel);
 			slotEquipmentBase.addChildSlot(slotEquipmentPommel);
 		}
 		this.inventoryFinish = this.inventoryStart + slots;

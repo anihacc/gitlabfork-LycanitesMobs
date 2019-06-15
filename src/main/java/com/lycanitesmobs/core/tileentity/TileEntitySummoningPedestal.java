@@ -2,29 +2,31 @@ package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
-import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
+import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
+import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.pets.SummonSet;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -70,10 +72,11 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** Can be called by a block when broken to alert this TileEntity that it is being removed. **/
     @Override
-    public void onRemove() {
-        if(this.summoningPortal != null && !this.summoningPortal.isDead) {
+    public void remove() {
+        if(this.summoningPortal != null && this.summoningPortal.isAlive()) {
             this.summoningPortal.remove();
         }
+        super.remove();
     }
 
 
@@ -82,7 +85,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** The main update called every tick. **/
     @Override
-    public void update() {
+    public void tick() {
         // Client Side Only:
         if(this.getWorld().isRemote) {
 
@@ -125,17 +128,17 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			}
 
 			// Summoning Portal:
-			if (this.summoningPortal == null || this.summoningPortal.isDead) {
+			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
 				this.summoningPortal = new EntityPortal(this.getWorld(), this);
 				this.summoningPortal.setProjectileScale(8);
-				this.getWorld().spawnEntity(this.summoningPortal);
+				this.getWorld().func_217376_c(this.summoningPortal);
 			}
 
 			// Update Minions:
 			if (this.updateTick % 100 == 0) {
 				this.capacity = 0;
 				for (EntityCreatureBase minion : this.minions.toArray(new EntityCreatureBase[this.minions.size()])) {
-					if (minion == null || minion.isDead)
+					if (minion == null || !minion.isAlive())
 						this.minions.remove(minion);
 					else {
 						this.capacity += (minion.creatureInfo.summonCost * this.capacityCharge);
@@ -157,7 +160,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
                         if(fuelStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)) {
 							refuel = this.summoningFuelAmount * 9;
                         }
-			            fuelStack.splitStack(1);
+			            fuelStack.split(1);
                         this.summoningFuel = refuel;
                         this.summoningFuelMax = refuel;
                     }
@@ -187,8 +190,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
         // Sync To Client:
         if(this.updateTick % 20 == 0) {
-            LycanitesMobs.packetHandler.sendToAllAround(new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()),
-                    new NetworkRegistry.TargetPoint(this.getWorld().provider.getDimension(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 5D));
+            MessageSummoningPedestalStats message = new MessageSummoningPedestalStats(this.capacity, this.summonProgress, this.summoningFuel, this.summoningFuelMax, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+            LycanitesMobs.packetHandler.sendToAllAround(message, this.getWorld(), new Vec3d(this.getPos()), 5);
         }
 
         this.updateTick++;
@@ -203,7 +206,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         if(entity instanceof PlayerEntity) {
             PlayerEntity entityPlayer = (PlayerEntity)entity;
             this.ownerUUID = entityPlayer.getUniqueID();
-            this.ownerName = entity.getName();
+            this.ownerName = entity.getName().toString();
         }
     }
 
@@ -224,7 +227,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         if(this.ownerUUID == null) {
 			return null;
 		}
-        return this.getWorld().getPlayerEntityByUUID(this.ownerUUID);
+        return this.getWorld().getPlayerByUuid(this.ownerUUID);
     }
 
     /** Returns the class that this is summoning. **/
@@ -349,31 +352,22 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     }
 
     @Override
-    public int getField(int id) {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value) {
-
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
     public void clear() {
 
     }
 
-    @Override
-    public String getName() {
-        return this.inventoryName;
+    /**
+     * Gets the display name of this tile entity.
+     * @return The display name.
+     */
+    public ITextComponent getName() {
+        return new TranslationTextComponent(this.inventoryName);
     }
 
-    @Override
+    /**
+     * Returns if this Tile Entity has a custom name.
+     * @return True if this Tile Entity has a custom name.
+     */
     public boolean hasCustomName() {
         return !"".equals(this.inventoryName);
     }
@@ -392,41 +386,41 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     //             Network Packets
     // ========================================
     @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound syncData = new NBTTagCompound();
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        CompoundNBT syncData = new CompoundNBT();
 
         // Both:
         if(this.summonSet != null) {
-            NBTTagCompound summonSetNBT = new NBTTagCompound();
-            this.summonSet.writeToNBT(summonSetNBT);
-            syncData.setTag("SummonSet", summonSetNBT);
+            CompoundNBT summonSetNBT = new CompoundNBT();
+            this.summonSet.write(summonSetNBT);
+            syncData.put("SummonSet", summonSetNBT);
         }
 
         // Server to Client:
         if(!this.getWorld().isRemote && this.getOwnerUUID() != null && this.getOwnerName() != null) {
-            syncData.setString("OwnerUUID", this.getOwnerUUID().toString());
-            syncData.setString("OwnerName", this.getOwnerName());
-            syncData.setString("InventoryName", this.getName());
+            syncData.putString("OwnerUUID", this.getOwnerUUID().toString());
+            syncData.putString("OwnerName", this.getOwnerName());
+            syncData.putString("InventoryName", this.inventoryName);
         }
 
-        return new SPacketUpdateTileEntity(this.getPos(), 1, syncData);
+        return new SUpdateTileEntityPacket(this.getPos(), 1, syncData);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
         if(!this.getWorld().isRemote)
             return;
 
-        NBTTagCompound syncData = packet.getNbtCompound();
-        if (syncData.hasKey("OwnerUUID"))
+        CompoundNBT syncData = packet.getNbtCompound();
+        if (syncData.contains("OwnerUUID"))
             this.ownerUUID = UUID.fromString(syncData.getString("OwnerUUID"));
-        if (syncData.hasKey("OwnerName"))
+        if (syncData.contains("OwnerName"))
             this.ownerName = syncData.getString("OwnerName");
-        if (syncData.hasKey("InventoryName"))
+        if (syncData.contains("InventoryName"))
             this.inventoryName = syncData.getString("InventoryName");
-        if (syncData.hasKey("SummonSet")) {
+        if (syncData.contains("SummonSet")) {
             SummonSet summonSet = new SummonSet(null);
-            summonSet.readFromNBT(syncData.getCompoundTag("SummonSet"));
+            summonSet.read(syncData.getCompound("SummonSet"));
             this.summonSet = summonSet;
         }
     }
@@ -441,8 +435,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // ========================================
     /** Reads from saved NBT data. **/
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readFromNBT(nbtTagCompound);
+    public void read(CompoundNBT nbtTagCompound) {
+        super.read(nbtTagCompound);
 
         if(nbtTagCompound.contains("OwnerUUID")) {
             String uuidString = nbtTagCompound.getString("OwnerUUID");
@@ -463,9 +457,9 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         }
 
         if(nbtTagCompound.contains("SummonSet")) {
-            NBTTagCompound summonSetNBT = nbtTagCompound.getCompoundTag("SummonSet");
+            CompoundNBT summonSetNBT = nbtTagCompound.getCompound("SummonSet");
             SummonSet summonSet = new SummonSet(null);
-            summonSet.readFromNBT(summonSetNBT);
+            summonSet.read(summonSetNBT);
             this.summonSet = summonSet;
         }
         else {
@@ -473,11 +467,11 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 		}
 
         if(nbtTagCompound.contains("MinionIDs")) {
-            NBTTagList minionIDs = nbtTagCompound.getTagList("MinionIDs", 10);
-            this.loadMinionIDs = new String[minionIDs.tagCount()];
-            for(int i = 0; i < minionIDs.tagCount(); i++) {
-                NBTTagCompound minionID = minionIDs.getCompoundTagAt(i);
-                if(minionID.hasKey("ID")) {
+            ListNBT minionIDs = nbtTagCompound.getList("MinionIDs", 10);
+            this.loadMinionIDs = new String[minionIDs.size()];
+            for(int i = 0; i < minionIDs.size(); i++) {
+                CompoundNBT minionID = minionIDs.getCompound(i);
+                if(minionID.contains("ID")) {
                     this.loadMinionIDs[i] = minionID.getString("ID");
                 }
             }
@@ -506,13 +500,13 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			}
 		}
 
-		super.readFromNBT(nbtTagCompound);
+		super.read(nbtTagCompound);
     }
 
     /** Writes to NBT data. **/
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeToNBT(nbtTagCompound);
+    public CompoundNBT write(CompoundNBT nbtTagCompound) {
+        super.write(nbtTagCompound);
 
         if(this.ownerUUID == null) {
             nbtTagCompound.putString("OwnerUUID", "");
@@ -522,21 +516,21 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         }
 
         if(this.summonSet != null) {
-            NBTTagCompound summonSetNBT = new NBTTagCompound();
-            this.summonSet.writeToNBT(summonSetNBT);
-            nbtTagCompound.setTag("SummonSet", summonSetNBT);
+            CompoundNBT summonSetNBT = new CompoundNBT();
+            this.summonSet.write(summonSetNBT);
+            nbtTagCompound.put("SummonSet", summonSetNBT);
         }
 
         nbtTagCompound.putString("OwnerName", this.ownerName);
 
         if(this.minions.size() > 0) {
-            NBTTagList minionIDs = new NBTTagList();
+            ListNBT minionIDs = new ListNBT();
             for(LivingEntity minion : this.minions) {
-                NBTTagCompound minionID = new NBTTagCompound();
-                minionID.setString("ID", minion.getUniqueID().toString());
-                minionIDs.appendTag(minionID);
+                CompoundNBT minionID = new CompoundNBT();
+                minionID.putString("ID", minion.getUniqueID().toString());
+                minionIDs.add(minionID);
             }
-            nbtTagCompound.setTag("MinionIDs", minionIDs);
+            nbtTagCompound.put("MinionIDs", minionIDs);
         }
 
         // Fuel:

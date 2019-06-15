@@ -1,18 +1,28 @@
 package com.lycanitesmobs.core.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
+import com.lycanitesmobs.core.container.ContainerBase;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.util.text.ITextComponent;
 
-public abstract class GuiBaseContainer extends GuiContainer {
+public abstract class GuiBaseContainer extends ContainerScreen<ContainerBase> implements Button.IPressable {
+    public int zLevel = 0;
+    public PlayerInventory playerInventory; // Here until parent is full deobfuscated.
+    public FontRenderer fontRenderer;
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public GuiBaseContainer(Container container) {
-        super(container);
+    public GuiBaseContainer(ContainerBase container, PlayerInventory playerInventory, ITextComponent containerName) {
+        super(container, playerInventory, containerName);
+        this.playerInventory = playerInventory;
+        this.fontRenderer = Minecraft.getInstance().fontRenderer;
     }
 
 
@@ -20,9 +30,8 @@ public abstract class GuiBaseContainer extends GuiContainer {
     //                   Draw Screen
     // ==================================================
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
@@ -30,7 +39,6 @@ public abstract class GuiBaseContainer extends GuiContainer {
     // ==================================================
     //                   Draw Texture
     // ==================================================
-    @Override
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
         this.drawTexturedModalRect(x, y, u, v, width, height, 1);
     }
@@ -47,4 +55,22 @@ public abstract class GuiBaseContainer extends GuiContainer {
         vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
+
+
+    // ==================================================
+    //                     Actions
+    // ==================================================
+    @Override
+    public void onPress(Button guiButton) {
+        if(!(guiButton instanceof ButtonBase)) {
+            return;
+        }
+        this.actionPerformed(((ButtonBase)guiButton).buttonId);
+    }
+
+    /**
+     * Called when a Button Base is pressed providing the press button's id.
+     * @param buttonId The id of the button pressed.
+     */
+    public void actionPerformed(byte buttonId) {}
 }

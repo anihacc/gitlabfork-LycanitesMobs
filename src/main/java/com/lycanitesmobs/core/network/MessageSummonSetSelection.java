@@ -1,84 +1,58 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.LycanitesMobs;
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageSummonSetSelection implements IMessage, IMessageHandler<MessageSummonSetSelection, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageSummonSetSelection {
 	public byte summonSetID;
 	
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageSummonSetSelection() {}
 	public MessageSummonSetSelection(ExtendedPlayer playerExt) {
 		this.summonSetID = (byte)playerExt.selectedSummonSet;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSummonSetSelection message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side == Side.SERVER) {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-            mainThread.addScheduledTask(new Runnable() {
-                @Override
-                public void run() {
-                    PlayerEntity player = ctx.getServerHandler().player;
-                    ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-                    playerExt.setSelectedSummonSet(message.summonSetID);
-                }
+	public static void handle(MessageSummonSetSelection message, Supplier<NetworkEvent.Context> ctx) {
+		// Server Side:
+		if(ctx.get().getDirection() == NetworkDirection.LOGIN_TO_SERVER) {
+			ctx.get().enqueueWork(() -> {
+				PlayerEntity player = ctx.get().getSender();
+				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+				playerExt.setSelectedSummonSet(message.summonSetID);
             });
-            return null;
+            return;
         }
 
         // Client Side:
         PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-        if(playerExt == null) return null;
+        if(playerExt == null)
+        	return;
         playerExt.setSelectedSummonSet(message.summonSetID);
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		this.summonSetID = packet.readByte();
+	public static MessageSummonSetSelection decode(PacketBuffer packet) {
+		MessageSummonSetSelection message = new MessageSummonSetSelection();
+		message.summonSetID = packet.readByte();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeByte(this.summonSetID);
+	public static void encode(MessageSummonSetSelection message, PacketBuffer packet) {
+		packet.writeByte(message.summonSetID);
 	}
 	
 }

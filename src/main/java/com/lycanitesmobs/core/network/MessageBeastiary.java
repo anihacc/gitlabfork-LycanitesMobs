@@ -3,27 +3,19 @@ package com.lycanitesmobs.core.network;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.Beastiary;
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Supplier;
 
-public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeastiary, IMessage> {
+public class MessageBeastiary {
 	public int entryAmount = 0;
 	public String[] creatureNames;
 	public int[] ranks;
 	
-	
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageBeastiary() {}
 	public MessageBeastiary(Beastiary beastiary) {
 		this.entryAmount = Math.min(201, beastiary.creatureKnowledgeList.size());
@@ -39,20 +31,19 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 		}
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageBeastiary message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
+	public static void handle(MessageBeastiary message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
+			return;
+
 		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt == null) return null;
-		if(message.entryAmount < 0) return null;
+		if(playerExt == null)
+			return;
+		if(message.entryAmount < 0)
+			return;
 
 		playerExt.getBeastiary().creatureKnowledgeList.clear();
 		for(int i = 0; i < message.entryAmount; i++) {
@@ -61,50 +52,38 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 			CreatureKnowledge creatureKnowledge = new CreatureKnowledge(playerExt.getBeastiary(), creatureName, rank);
 			playerExt.getBeastiary().creatureKnowledgeList.put(creatureKnowledge.creatureName, creatureKnowledge);
 		}
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        this.entryAmount = Math.min(200, packet.readInt());
-        if(this.entryAmount == 200) {
+	public static MessageBeastiary decode(PacketBuffer packet) {
+		MessageBeastiary message = new MessageBeastiary();
+		message.entryAmount = Math.min(200, packet.readInt());
+        if(message.entryAmount == 200) {
         	LycanitesMobs.printWarning("", "Received 200 or more creature entries, something went wrong with the Beastiary packet! Addition entries will be skipped to prevent OOM!");
 		}
-        if(this.entryAmount > 0) {
-            this.creatureNames = new String[this.entryAmount];
-            this.ranks = new int[this.entryAmount];
-            for(int i = 0; i < this.entryAmount; i++) {
-                this.creatureNames[i] = packet.readString(32767);
-                this.ranks[i] = packet.readInt();
+        if(message.entryAmount > 0) {
+			message.creatureNames = new String[message.entryAmount];
+			message.ranks = new int[message.entryAmount];
+            for(int i = 0; i < message.entryAmount; i++) {
+				message.creatureNames[i] = packet.readString(32767);
+				message.ranks[i] = packet.readInt();
             }
         }
+        return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        packet.writeInt(this.entryAmount);
-        if(this.entryAmount > 0) {
-            for(int i = 0; i < this.entryAmount; i++) {
-                packet.writeString(this.creatureNames[i]);
-                packet.writeInt(this.ranks[i]);
+	public static void encode(MessageBeastiary message, PacketBuffer packet) {
+        packet.writeInt(message.entryAmount);
+        if(message.entryAmount > 0) {
+            for(int i = 0; i < message.entryAmount; i++) {
+                packet.writeString(message.creatureNames[i]);
+                packet.writeInt(message.ranks[i]);
             }
         }
 	}
-	
 }

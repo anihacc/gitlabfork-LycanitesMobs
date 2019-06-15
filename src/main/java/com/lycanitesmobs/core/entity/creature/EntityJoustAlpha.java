@@ -29,7 +29,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.setupMob();
     }
 

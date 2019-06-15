@@ -1,14 +1,22 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class PacketHandler {
-	public final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(LycanitesMobs.modid);
+	private static final String PROTOCOL_VERSION = "1";
+	private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
+			.named(new ResourceLocation(LycanitesMobs.modid, "main_channel"))
+			.clientAcceptedVersions(PROTOCOL_VERSION::equals).serverAcceptedVersions(PROTOCOL_VERSION::equals)
+			.networkProtocolVersion(() -> PROTOCOL_VERSION)
+			.simpleChannel();
 	
 	
 	// ==================================================
@@ -17,46 +25,27 @@ public class PacketHandler {
 	/**
 	 * Initializes the Packet Handler where Messages are registered.
 	 */
-	public void init() {
+	public void register() {
 		int messageID = 0;
-		
-		// Server to Client:
-		this.network.registerMessage(MessageBeastiary.class, MessageBeastiary.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageCreatureKnowledge.class, MessageCreatureKnowledge.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessagePlayerStats.class, MessagePlayerStats.class, messageID++, Side.CLIENT);
-        this.network.registerMessage(MessagePetEntry.class, MessagePetEntry.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessagePetEntryRemove.class, MessagePetEntryRemove.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageSummonSet.class, MessageSummonSet.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageSummonSetSelection.class, MessageSummonSetSelection.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageEntityPickedUp.class, MessageEntityPickedUp.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageWorldEvent.class, MessageWorldEvent.class, messageID++, Side.CLIENT);
-        this.network.registerMessage(MessageMobEvent.class, MessageMobEvent.class, messageID++, Side.CLIENT);
-        this.network.registerMessage(MessageSummoningPedestalStats.class, MessageSummoningPedestalStats.class, messageID++, Side.CLIENT);
-		this.network.registerMessage(MessageEntityVelocity.class, MessageEntityVelocity.class, messageID++, Side.CLIENT);
-		
-		// Client to Server:
-		this.network.registerMessage(MessageEntityGUICommand.class, MessageEntityGUICommand.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageGUIRequest.class, MessageGUIRequest.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessagePlayerControl.class, MessagePlayerControl.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessagePlayerAttack.class, MessagePlayerAttack.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessagePetEntry.class, MessagePetEntry.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessagePetEntryRemove.class, MessagePetEntryRemove.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageSummonSet.class, MessageSummonSet.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageSummonSetSelection.class, MessageSummonSetSelection.class, messageID++, Side.SERVER);
-        this.network.registerMessage(MessageSummoningPedestalSummonSet.class, MessageSummoningPedestalSummonSet.class, messageID++, Side.SERVER);
-		this.network.registerMessage(MessageTileEntityButton.class, MessageTileEntityButton.class, messageID++, Side.SERVER);
-	}
-	
-	
-	// ==================================================
-	//                    Send To All
-	// ==================================================
-	/**
-	 * Sends a packet from the server to all players.
-	 * @param message
-	 */
-	public void sendToAll(IMessage message) {
-		this.network.sendToAll(message);
+
+		HANDLER.registerMessage(messageID++, MessageBeastiary.class, MessageBeastiary::encode, MessageBeastiary::decode, MessageBeastiary::handle);
+		HANDLER.registerMessage(messageID++, MessageCreatureKnowledge.class, MessageCreatureKnowledge::encode, MessageCreatureKnowledge::decode, MessageCreatureKnowledge::handle);
+		HANDLER.registerMessage(messageID++, MessagePlayerStats.class, MessagePlayerStats::encode, MessagePlayerStats::decode, MessagePlayerStats::handle);
+		HANDLER.registerMessage(messageID++, MessagePetEntry.class, MessagePetEntry::encode, MessagePetEntry::decode, MessagePetEntry::handle);
+		HANDLER.registerMessage(messageID++, MessagePetEntryRemove.class, MessagePetEntryRemove::encode, MessagePetEntryRemove::decode, MessagePetEntryRemove::handle);
+		HANDLER.registerMessage(messageID++, MessageSummonSet.class, MessageSummonSet::encode, MessageSummonSet::decode, MessageSummonSet::handle);
+		HANDLER.registerMessage(messageID++, MessageSummonSetSelection.class, MessageSummonSetSelection::encode, MessageSummonSetSelection::decode, MessageSummonSetSelection::handle);
+		HANDLER.registerMessage(messageID++, MessageEntityPickedUp.class, MessageEntityPickedUp::encode, MessageEntityPickedUp::decode, MessageEntityPickedUp::handle);
+		HANDLER.registerMessage(messageID++, MessageWorldEvent.class, MessageWorldEvent::encode, MessageWorldEvent::decode, MessageWorldEvent::handle);
+		HANDLER.registerMessage(messageID++, MessageMobEvent.class, MessageMobEvent::encode, MessageMobEvent::decode, MessageMobEvent::handle);
+		HANDLER.registerMessage(messageID++, MessageSummoningPedestalStats.class, MessageSummoningPedestalStats::encode, MessageSummoningPedestalStats::decode, MessageSummoningPedestalStats::handle);
+		HANDLER.registerMessage(messageID++, MessageEntityVelocity.class, MessageEntityVelocity::encode, MessageEntityVelocity::decode, MessageEntityVelocity::handle);
+		HANDLER.registerMessage(messageID++, MessageEntityGUICommand.class, MessageEntityGUICommand::encode, MessageEntityGUICommand::decode, MessageEntityGUICommand::handle);
+		HANDLER.registerMessage(messageID++, MessageGUIRequest.class, MessageGUIRequest::encode, MessageGUIRequest::decode, MessageGUIRequest::handle);
+		HANDLER.registerMessage(messageID++, MessagePlayerControl.class, MessagePlayerControl::encode, MessagePlayerControl::decode, MessagePlayerControl::handle);
+		HANDLER.registerMessage(messageID++, MessagePlayerAttack.class, MessagePlayerAttack::encode, MessagePlayerAttack::decode, MessagePlayerAttack::handle);
+		HANDLER.registerMessage(messageID++, MessageSummoningPedestalSummonSet.class, MessageSummoningPedestalSummonSet::encode, MessageSummoningPedestalSummonSet::decode, MessageSummoningPedestalSummonSet::handle);
+		HANDLER.registerMessage(messageID++, MessageTileEntityButton.class, MessageTileEntityButton::encode, MessageTileEntityButton::decode, MessageTileEntityButton::handle);
 	}
 	
 	
@@ -65,11 +54,11 @@ public class PacketHandler {
 	// ==================================================
 	/**
 	 * Sends a packet from the server to the specified player.
-	 * @param message
-	 * @param player
+	 * @param message The network packet message to send.
+	 * @param player The player to send to.
 	 */
-	public void sendToPlayer(IMessage message, PlayerEntityMP player) {
-		this.network.sendTo(message, player);
+	public <MSG> void sendToPlayer(MSG message, ServerPlayerEntity player) {
+		HANDLER.sendTo(message, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
 	}
 	
 	
@@ -77,12 +66,18 @@ public class PacketHandler {
 	//                 Send To All Around
 	// ==================================================
 	/**
-	 * Sends a packet from the server to all players near the specified target point.
-	 * @param message
-	 * @param point
+	 * Sends a packet from the server to all players near the specified block position within range.
+	 * @param message The network packet message to send.
+	 * @param pos The position to find players from.
+	 * @param range The range to find players within.
 	 */
-	public void sendToAllAround(IMessage message, NetworkRegistry.TargetPoint point) {
-		this.network.sendToAllAround(message, point);
+	public <MSG> void sendToAllAround(MSG message, World world, Vec3d pos, double range) {
+		for(PlayerEntity player : world.getPlayers()) {
+			if(player instanceof ServerPlayerEntity && player.getDistanceSq(pos) <= range) {
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+				HANDLER.sendTo(message, serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+			}
+		}
 	}
 	
 	
@@ -90,12 +85,17 @@ public class PacketHandler {
 	//                 Send To Dimension
 	// ==================================================
 	/**
-	 * Sends a packet to all players within the specified dimension.
-	 * @param message
-	 * @param dimensionID The ID of the dimension to use.
+	 * Sends a packet to all players within the specified world.
+	 * @param message The network packet message to send.
+	 * @param world The world to find players to send packets to.
 	 */
-	public void sendToDimension(IMessage message, int dimensionID) {
-		this.network.sendToDimension(message, dimensionID);
+	public <MSG> void sendToWorld(MSG message, World world) {
+		for(PlayerEntity player : world.getPlayers()) {
+			if(player instanceof ServerPlayerEntity) {
+				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
+				HANDLER.sendTo(message, serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+			}
+		}
 	}
 	
 	
@@ -104,9 +104,9 @@ public class PacketHandler {
 	// ==================================================
 	/**
 	 * Sends a packet from the client player to the server.
-	 * @param message
+	 * @param message The network packet message to send.
 	 */
-	public void sendToServer(IMessage message) {
-		this.network.sendToServer(message);
+	public <MSG> void sendToServer(MSG message) {
+		HANDLER.sendToServer(message);
 	}
 }

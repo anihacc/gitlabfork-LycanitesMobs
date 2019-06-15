@@ -1,20 +1,17 @@
 package com.lycanitesmobs.core.network;
 
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHandler<MessageSummoningPedestalSummonSet, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageSummoningPedestalSummonSet {
 	public String summonType;
 	public int subpsecies;
 	public byte behaviour;
@@ -22,11 +19,7 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
     public int y;
     public int z;
 
-
-	// ==================================================
-	//                    Constructors
-	// ==================================================
-	public MessageSummoningPedestalSummonSet() {}
+    public MessageSummoningPedestalSummonSet() {}
 	public MessageSummoningPedestalSummonSet(SummonSet summonSet, int x, int y, int z) {
 		this.summonType = summonSet.summonType;
 		this.subpsecies = summonSet.subspecies;
@@ -36,21 +29,15 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
         this.z = z;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageSummoningPedestalSummonSet message, final MessageContext ctx) {
-        // Server Side:
-        if(ctx.side != Side.SERVER)
-            return null;
-        IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.getEntityWorld();
-        mainThread.addScheduledTask(() -> {
-			PlayerEntity player = ctx.getServerHandler().player;
+	public static void handle(MessageSummoningPedestalSummonSet message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+			return;
+
+		ctx.get().enqueueWork(() -> {
+			PlayerEntity player = ctx.get().getSender();
 			TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
 			TileEntitySummoningPedestal summoningPedestal = null;
 			if(tileEntity instanceof TileEntitySummoningPedestal)
@@ -61,43 +48,32 @@ public class MessageSummoningPedestalSummonSet implements IMessage, IMessageHand
 				summoningPedestal.summonSet = new SummonSet(null);
 			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
 		});
-        return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        this.x = packet.readInt();
-        this.y = packet.readInt();
-        this.z = packet.readInt();
-        this.summonType = packet.readString(256);
-        this.subpsecies = packet.readInt();
-        this.behaviour = packet.readByte();
+	public static MessageSummoningPedestalSummonSet decode(PacketBuffer packet) {
+		MessageSummoningPedestalSummonSet message = new MessageSummoningPedestalSummonSet();
+        message.x = packet.readInt();
+        message.y = packet.readInt();
+        message.z = packet.readInt();
+        message.summonType = packet.readString(256);
+        message.subpsecies = packet.readInt();
+        message.behaviour = packet.readByte();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        packet.writeInt(this.x);
-        packet.writeInt(this.y);
-        packet.writeInt(this.z);
-        packet.writeString(this.summonType);
-        packet.writeInt(this.subpsecies);
-        packet.writeByte(this.behaviour);
+	public static void encode(MessageSummoningPedestalSummonSet message, PacketBuffer packet) {
+        packet.writeInt(message.x);
+        packet.writeInt(message.y);
+        packet.writeInt(message.z);
+        packet.writeString(message.summonType);
+        packet.writeInt(message.subpsecies);
+        packet.writeByte(message.behaviour);
 	}
 	
 }

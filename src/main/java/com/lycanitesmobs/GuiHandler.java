@@ -4,9 +4,10 @@ import com.lycanitesmobs.core.gui.*;
 import com.lycanitesmobs.core.gui.beastiary.*;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.inventory.ContainerCreature;
+import com.lycanitesmobs.core.container.ContainerCreature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -59,8 +60,8 @@ public class GuiHandler implements IGuiHandler {
 		// ========== Entity ==========
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
-			if(entity instanceof EntityCreatureBase)
-				return new ContainerCreature((EntityCreatureBase)entity, player.inventory);
+			if(entity instanceof EntityCreatureBase && player instanceof ServerPlayerEntity)
+				return new ContainerCreature(((ServerPlayerEntity)player).getNextWindowId();, (EntityCreatureBase)entity, player.inventory);
 		}
 		
 		// ========== Item ==========

@@ -2,27 +2,20 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageMobEvent implements IMessage, IMessageHandler<MessageMobEvent, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageMobEvent {
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
 
-
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageMobEvent() {}
 	public MessageMobEvent(String mobEventName, BlockPos pos, int level) {
         this.mobEventName = mobEventName;
@@ -30,62 +23,44 @@ public class MessageMobEvent implements IMessage, IMessageHandler<MessageMobEven
         this.level = level;
     }
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(final MessageMobEvent message, final MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
-        IThreadListener mainThread = Minecraft.getMinecraft();
-        mainThread.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
-                World world = player.getEntityWorld();
-                ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
+	public static void handle(MessageMobEvent message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
+			return;
 
-                if ("".equals(message.mobEventName))
-                    worldExt.stopMobEvent(message.mobEventName);
-                else {
-                    worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level);
-                }
-            }
+		ctx.get().enqueueWork(() -> {
+			PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+			World world = player.getEntityWorld();
+			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
+
+			if ("".equals(message.mobEventName))
+				worldExt.stopMobEvent(message.mobEventName);
+			else {
+				worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level);
+			}
         });
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        this.mobEventName = packet.readString(256);
-        this.pos = packet.readBlockPos();
-        this.level = packet.readInt();
+	public static MessageMobEvent decode(PacketBuffer packet) {
+		MessageMobEvent message = new MessageMobEvent();
+        message.mobEventName = packet.readString(256);
+        message.pos = packet.readBlockPos();
+        message.level = packet.readInt();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        packet.writeString(this.mobEventName);
-        packet.writeBlockPos(this.pos);
-        packet.writeInt(this.level);
+	public static void encode(MessageMobEvent message, PacketBuffer packet) {
+        packet.writeString(message.mobEventName);
+        packet.writeBlockPos(message.pos);
+        packet.writeInt(message.level);
 	}
 	
 }

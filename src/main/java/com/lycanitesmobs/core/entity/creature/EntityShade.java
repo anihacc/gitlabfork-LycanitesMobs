@@ -38,7 +38,7 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
         this.setupMob();
 
         this.stepHeight = 1.0F;
-        this.attackTime = 40;
+        this.attackCooldownMax = 40;
     }
 
     // ========== Init AI ==========

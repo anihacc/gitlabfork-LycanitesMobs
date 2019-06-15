@@ -2,25 +2,20 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorldEvent, IMessage> {
+import java.util.function.Supplier;
+
+public class MessageWorldEvent {
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
 
-
-	// ==================================================
-	//                    Constructors
-	// ==================================================
 	public MessageWorldEvent() {}
 	public MessageWorldEvent(String mobEventName, BlockPos pos, int level) {
 		this.mobEventName = mobEventName;
@@ -28,16 +23,13 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 		this.level = level;
 	}
 	
-	
-	// ==================================================
-	//                    On Message
-	// ==================================================
 	/**
 	 * Called when this message is received.
 	 */
-	@Override
-	public IMessage onMessage(MessageWorldEvent message, MessageContext ctx) {
-		if(ctx.side != Side.CLIENT) return null;
+	public static void handle(MessageWorldEvent message, Supplier<NetworkEvent.Context> ctx) {
+		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
+			return;
+
 		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
 		World world = player.getEntityWorld();
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
@@ -47,37 +39,26 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 		else {
             worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level);
 		}
-		return null;
 	}
 	
-	
-	// ==================================================
-	//                    From Bytes
-	// ==================================================
 	/**
 	 * Reads the message from bytes.
 	 */
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        this.mobEventName = packet.readString(256);
-		this.pos = packet.readBlockPos();
-		this.level = packet.readInt();
+	public static MessageWorldEvent decode(PacketBuffer packet) {
+		MessageWorldEvent message = new MessageWorldEvent();
+		message.mobEventName = packet.readString(256);
+		message.pos = packet.readBlockPos();
+		message.level = packet.readInt();
+		return message;
 	}
 	
-	
-	// ==================================================
-	//                     To Bytes
-	// ==================================================
 	/**
 	 * Writes the message into bytes.
 	 */
-	@Override
-	public void toBytes(ByteBuf buf) {
-		PacketBuffer packet = new PacketBuffer(buf);
-        packet.writeString(this.mobEventName);
-		packet.writeBlockPos(this.pos);
-		packet.writeInt(this.level);
+	public static void encode(MessageWorldEvent message, PacketBuffer packet) {
+        packet.writeString(message.mobEventName);
+		packet.writeBlockPos(message.pos);
+		packet.writeInt(message.level);
 	}
 	
 }

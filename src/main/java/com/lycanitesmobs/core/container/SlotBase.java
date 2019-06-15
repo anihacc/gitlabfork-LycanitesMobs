@@ -1,7 +1,8 @@
-package com.lycanitesmobs.core.inventory;
+package com.lycanitesmobs.core.container;
 
+import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotBase extends Slot {

@@ -5,18 +5,18 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityFear;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageBeastiary;
 import com.lycanitesmobs.core.network.MessageCreatureKnowledge;
 import com.lycanitesmobs.core.pets.SummonSet;
-import jline.internal.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -75,7 +75,7 @@ public class Beastiary {
 		// Invalid Entity:
 		if(!(entity instanceof EntityCreatureBase)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
-				this.extendedPlayer.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
+				this.extendedPlayer.player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.beastiary.unknown")));
 			}
 			return false;
 		}
@@ -101,7 +101,7 @@ public class Beastiary {
 		this.sendToClient(newKnowledge);
 		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
 			for(int i = 0; i < 32; ++i) {
-				entity.getEntityWorld().spawnParticle(EnumParticleTypes.VILLAGER_HAPPY,
+				entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
 						entity.posX + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
 						entity.posY + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
 						entity.posZ + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
@@ -124,7 +124,7 @@ public class Beastiary {
 		String message = LanguageManager.translate("message.beastiary.new");
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + creatureKnowledge.rank);
-		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
+		this.extendedPlayer.player.sendMessage(new TranslationTextComponent(message));
 		if(creatureInfo.isSummonable()) {
 			String summonMessage = LanguageManager.translate("message.beastiary.summonable");
 			if(creatureKnowledge.rank >= 3) {
@@ -134,7 +134,7 @@ public class Beastiary {
 				summonMessage = LanguageManager.translate("message.beastiary.summonable.colors");
 			}
 			summonMessage = summonMessage.replace("%creature%", creatureInfo.getTitle());
-			this.extendedPlayer.player.sendMessage(new TextComponentString(summonMessage));
+			this.extendedPlayer.player.sendMessage(new TranslationTextComponent(summonMessage));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class Beastiary {
 		String message = LanguageManager.translate("message.beastiary.known");
 		message = message.replace("%creature%", creatureInfo.getTitle());
 		message = message.replace("%rank%", "" + currentKnowledge.rank);
-		this.extendedPlayer.player.sendMessage(new TextComponentString(message));
+		this.extendedPlayer.player.sendMessage(new TranslationTextComponent(message));
 	}
 
 
@@ -231,13 +231,13 @@ public class Beastiary {
 			return;
 		}
 		MessageCreatureKnowledge message = new MessageCreatureKnowledge(newKnowledge);
-		LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.extendedPlayer.getPlayer());
+		LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.extendedPlayer.getPlayer());
 	}
 	
 	/** Sends the whole Beastiary progress to the client, use sparingly! **/
 	public void sendAllToClient() {
 		MessageBeastiary message = new MessageBeastiary(this);
-		LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.extendedPlayer.getPlayer());
+		LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.extendedPlayer.getPlayer());
 	}
 	
 	
@@ -245,20 +245,20 @@ public class Beastiary {
     //                        NBT
     // ==================================================
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void readFromNBT(CompoundNBT nbtTagCompound) {
     	if(!nbtTagCompound.contains("CreatureKnowledge"))
     		return;
     	this.creatureKnowledgeList.clear();
-    	NBTTagList knowledgeList = nbtTagCompound.getTagList("CreatureKnowledge", 10);
-    	for(int i = 0; i < knowledgeList.tagCount(); ++i) {
-	    	NBTTagCompound nbtKnowledge = knowledgeList.getCompoundTagAt(i);
-    		if(nbtKnowledge.hasKey("CreatureName")) {
+    	ListNBT knowledgeList = nbtTagCompound.getList("CreatureKnowledge", 10);
+    	for(int i = 0; i < knowledgeList.size(); ++i) {
+	    	CompoundNBT nbtKnowledge = knowledgeList.getCompound(i);
+    		if(nbtKnowledge.contains("CreatureName")) {
     			String creatureName = nbtKnowledge.getString("CreatureName");
 				int rank = 0;
-				if(nbtKnowledge.hasKey("Rank")) {
-					rank = nbtKnowledge.getInteger("Rank");
+				if(nbtKnowledge.contains("Rank")) {
+					rank = nbtKnowledge.getInt("Rank");
 				}
-				else if(nbtKnowledge.hasKey("Completion")) {
+				else if(nbtKnowledge.contains("Completion")) {
 					rank = 2;
 				}
 	    		CreatureKnowledge creatureKnowledge = new CreatureKnowledge(
@@ -272,15 +272,15 @@ public class Beastiary {
     }
 
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
-    	NBTTagList knowledgeList = new NBTTagList();
+    public void writeToNBT(CompoundNBT nbtTagCompound) {
+    	ListNBT knowledgeList = new ListNBT();
 		for(Entry<String, CreatureKnowledge> creatureKnowledgeEntry : creatureKnowledgeList.entrySet()) {
 			CreatureKnowledge creatureKnowledge = creatureKnowledgeEntry.getValue();
-			NBTTagCompound nbtKnowledge = new NBTTagCompound();
-			nbtKnowledge.setString("CreatureName", creatureKnowledge.creatureName);
-			nbtKnowledge.setInteger("Rank", creatureKnowledge.rank);
-			knowledgeList.appendTag(nbtKnowledge);
+			CompoundNBT nbtKnowledge = new CompoundNBT();
+			nbtKnowledge.putString("CreatureName", creatureKnowledge.creatureName);
+			nbtKnowledge.putInt("Rank", creatureKnowledge.rank);
+			knowledgeList.add(nbtKnowledge);
 		}
-		nbtTagCompound.setTag("CreatureKnowledge", knowledgeList);
+		nbtTagCompound.put("CreatureKnowledge", knowledgeList);
     }
 }

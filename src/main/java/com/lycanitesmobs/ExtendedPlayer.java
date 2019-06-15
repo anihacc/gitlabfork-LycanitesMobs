@@ -432,7 +432,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			for(int setID = 0; setID < this.summonSetMax; setID++) {
 				NBTTagCompound nbtSummonSet = (NBTTagCompound)nbtSummonSets.getCompoundTagAt(setID);
 				SummonSet summonSet = new SummonSet(this);
-				summonSet.readFromNBT(nbtSummonSet);
+				summonSet.read(nbtSummonSet);
 				this.summonSets.put(setID + 1, summonSet);
 			}
 		}
@@ -458,7 +458,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		for(int setID = 0; setID < this.summonSetMax; setID++) {
 			NBTTagCompound nbtSummonSet = new NBTTagCompound();
 			SummonSet summonSet = this.getSummonSet(setID + 1);
-			summonSet.writeToNBT(nbtSummonSet);
+			summonSet.write(nbtSummonSet);
 			nbtSummonSets.appendTag(nbtSummonSet);
 		}
 		extTagCompound.setTag("SummonSets", nbtSummonSets);

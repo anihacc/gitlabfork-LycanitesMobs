@@ -17,7 +17,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, IGroupAlpha {
@@ -31,7 +30,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.setupMob();
     }
 
