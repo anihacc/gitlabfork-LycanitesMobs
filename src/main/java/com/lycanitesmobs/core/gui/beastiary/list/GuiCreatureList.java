@@ -1,20 +1,15 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.text.Collator;
 import java.util.*;
 
-public class GuiCreatureList extends GuiScrollingList {
+public class GuiCreatureList extends GuiListBase<GuiBeastiary> {
 	public enum Type {
 		KNOWLEDGE((byte)0), SUMMONABLE((byte)1), PET((byte)2), MOUNT((byte)3), FAMILIAR((byte)4);
 		public byte id;
@@ -22,7 +17,6 @@ public class GuiCreatureList extends GuiScrollingList {
 	}
 
 	private Type listType;
-	private GuiBeastiary parentGui;
 	private GuiCreatureFilterList filterList;
 	private Map<Integer, CreatureInfo> creatureList = new HashMap<>();
 	private Map<Integer, PetEntry> petList = new HashMap<>();
@@ -40,9 +34,8 @@ public class GuiCreatureList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiCreatureList(Type listType, GuiBeastiary parentGui, GuiCreatureFilterList filterList, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 24, width, height);
+		super(parentGui, width, height, top, bottom, x, 24);
 		this.listType = listType;
-		this.parentGui = parentGui;
 		this.filterList = filterList;
 		if(this.filterList != null) {
 			this.filterList.addFilteredList(this);
@@ -50,6 +43,10 @@ public class GuiCreatureList extends GuiScrollingList {
 		this.refreshList();
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	/**
 	 * Reloads all items in this list.
@@ -62,7 +59,7 @@ public class GuiCreatureList extends GuiScrollingList {
 
 		// Creature Knowledge List:
 		if(this.listType == Type.KNOWLEDGE || this.listType == Type.SUMMONABLE) {
-			List<String> creatures = new ArrayList<>(this.parentGui.playerExt.getBeastiary().creatureKnowledgeList.keySet());
+			List<String> creatures = new ArrayList<>(this.screen.playerExt.getBeastiary().creatureKnowledgeList.keySet());
 			creatures.sort(Collator.getInstance(new Locale("US")));
 			for(String creatureName : creatures) {
 				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName.toLowerCase());
@@ -85,7 +82,7 @@ public class GuiCreatureList extends GuiScrollingList {
 				petType = "familiar";
 			}
 			List<PetEntry> creatures = new ArrayList<>();
-			creatures.addAll(this.parentGui.playerExt.petManager.getEntryList(petType));
+			creatures.addAll(this.screen.playerExt.petManager.getEntryList(petType));
 			creatures.sort(Comparator.comparing(PetEntry::getDisplayName));
 			for(PetEntry petEntry : creatures) {
 				CreatureInfo creatureInfo = petEntry.getCreatureInfo();
@@ -98,7 +95,7 @@ public class GuiCreatureList extends GuiScrollingList {
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		if(this.listType == Type.KNOWLEDGE || this.listType == Type.SUMMONABLE) {
 			return creatureList.size();
 		}
@@ -109,7 +106,7 @@ public class GuiCreatureList extends GuiScrollingList {
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 		if(this.listType == Type.KNOWLEDGE) {
@@ -212,7 +209,7 @@ public class GuiCreatureList extends GuiScrollingList {
 				this.parentGui.drawTexture(petEntry.getCreatureInfo().getIcon(), this.left + 2, boxTop + 2, 0, 1, 1, 16, 16);
 			}
 		}
-	}
+	}*/
 
 
 	/**

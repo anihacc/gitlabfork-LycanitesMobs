@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.dungeon.instance.SectorInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
@@ -248,7 +248,7 @@ public class DungeonTheme {
 
 		// Spawner:
 		else if(patternChar == 'S') {
-			return Blocks.MOB_SPAWNER.getStateFromMeta(1);
+			return Blocks.SPAWNER.getDefaultState();
 		}
 
 		// List Check:

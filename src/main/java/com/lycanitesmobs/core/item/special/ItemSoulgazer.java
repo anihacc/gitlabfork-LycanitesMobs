@@ -15,8 +15,6 @@ public class ItemSoulgazer extends ItemBase {
 	// ==================================================
     public ItemSoulgazer(Item.Properties properties) {
         super(properties);
-		properties.maxStackSize(1);
-		properties.containerItem(this); // Infinite use in the crafting grid.
 		this.itemName = "soulgazer";
 		this.setup();
     }
@@ -34,4 +32,9 @@ public class ItemSoulgazer extends ItemBase {
 
     	return playerExt.beastiary.discoverCreature(entity, 2, true);
     }
+
+    @Override
+	public ItemStack getContainerItem(ItemStack itemStack) {
+    	return new ItemStack(this, 1);
+	}
 }

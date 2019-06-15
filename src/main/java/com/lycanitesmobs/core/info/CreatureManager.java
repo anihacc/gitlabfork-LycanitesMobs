@@ -3,11 +3,10 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
-import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +18,8 @@ import java.util.Map;
 
 public class CreatureManager extends JSONLoader {
 	public static CreatureManager INSTANCE;
+	public static String[] DIFFICULTY_NAMES = new String[] {"easy", "normal", "hard"};
+	public static double[] DIFFICULTY_DEFAULTS = new double[] {0.8D, 1.0D, 1.1D};
 
 	/** Handles all global creature general config settings. **/
 	public CreatureConfig config;
@@ -90,57 +91,20 @@ public class CreatureManager extends JSONLoader {
 
 	/** Called during early start up, loads all global configs into this manager. **/
 	public void loadConfig() {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
-		this.config.loadConfig(config);
-		this.spawnConfig.loadConfig(ConfigBase.getConfig(LycanitesMobs.modInfo, "spawning"));
+		this.config.loadConfig();
+		this.spawnConfig.loadConfig();
 
 		// Difficulty:
-		String[] difficultyNames = new String[] {"easy", "normal", "hard"};
-		double[] difficultyDefaults = new double[] {0.8D, 1.0D, 1.1D};
 		difficultyMultipliers = new HashMap<>();
-		config.setCategoryComment("Difficulty Multipliers", "Here you can scale the stats of every mob on a per difficulty basis. Note that on easy, speed is kept at 1.0 by default as 0.5 makes them stupidly slow.");
-		int difficultyIndex = 0;
-		for(String difficultyName : difficultyNames) {
+		for(String difficultyName : DIFFICULTY_NAMES) {
 			for(String statName : CreatureStats.STAT_NAMES) {
-				double defaultValue = difficultyDefaults[difficultyIndex];
-				if("easy".equalsIgnoreCase(difficultyName) && "speed".equalsIgnoreCase(statName))
-					defaultValue = 1.0D;
-				if("hard".equalsIgnoreCase(difficultyName) && ("attackSpeed".equalsIgnoreCase(statName) || "rangedSpeed".equalsIgnoreCase(statName)))
-					defaultValue = 1.5D;
-				if("armor".equalsIgnoreCase(statName))
-					defaultValue = 1.0D;
-				if("sight".equalsIgnoreCase(statName))
-					defaultValue = 1.0D;
-				difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(), config.getDouble("Difficulty Multipliers", difficultyName + " " + statName, defaultValue));
+				difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(), ConfigCreatures.INSTANCE.difficultyMultipliers.get(difficultyName).get(statName).get());
 			}
-			difficultyIndex++;
 		}
 
 		// Level:
-		config.setCategoryComment("Mob Level Multipliers", "Normally mobs are level 1, but Spawners can increase their level. Here you can adjust the percentage of each stat that is added per extra level. So by default at level 2 a mobs health is increased by 10%, at level 3 20% and so on.");
 		for(String statName : CreatureStats.STAT_NAMES) {
-			double levelValue = 0.01D;
-			if("health".equalsIgnoreCase(statName))
-				levelValue = 0.1D;
-			if("defense".equalsIgnoreCase(statName))
-				levelValue = 0.01D;
-			if("armor".equalsIgnoreCase(statName))
-				levelValue = 0D;
-			if("speed".equalsIgnoreCase(statName))
-				levelValue = 0.01D;
-			if("damage".equalsIgnoreCase(statName))
-				levelValue = 0.02D;
-			if("attackSpeed".equalsIgnoreCase(statName))
-				levelValue = 0.01D;
-			if("rangedSpeed".equalsIgnoreCase(statName))
-				levelValue = 0.01D;
-			if("effect".equalsIgnoreCase(statName))
-				levelValue = 0.02D;
-			if("pierce".equalsIgnoreCase(statName))
-				levelValue = 0.02D;
-			if("sight".equalsIgnoreCase(statName))
-				levelValue = 0D;
-			levelMultipliers.put(statName.toUpperCase(), config.getDouble("Mob Level Multipliers", statName, levelValue));
+			levelMultipliers.put(statName.toUpperCase(), ConfigCreatures.INSTANCE.levelMultipliers.get(statName).get());
 		}
 	}
 
@@ -236,14 +200,8 @@ public class CreatureManager extends JSONLoader {
 				continue;
 			}
 
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
-			entityTypeBuilder.setTrackingRange(creatureInfo.isBoss() ? 160 : 80);
-			entityTypeBuilder.setUpdateInterval(3);
-			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
-
-			EntityType entityType = entityTypeBuilder.build(creatureInfo.getEntityId());
-			EntityFactory.getInstance().addEntityType(entityType, creatureInfo.entityClass);
-			event.getRegistry().register(entityType);
+			EntityFactory.getInstance().addEntityType(creatureInfo.getEntityType(), creatureInfo.entityClass);
+			event.getRegistry().register(creatureInfo.getEntityType());
 		}
 	}
 

@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.mobevent.effects;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -53,13 +52,13 @@ public class WorldMobEventEffect extends MobEventEffect {
 			// Day Time:
 			if (this.dayTime >= 0) {
 				int dayTime = 23999;
-				long currentTime = world.provider.getWorldTime();
+				long currentTime = world.getDayTime();
 				int targetTime = this.dayTime;
 				long excessTime = currentTime % dayTime;
 				if (excessTime > targetTime) {
 					targetTime += dayTime;
 				}
-				world.provider.setWorldTime(currentTime - excessTime + targetTime);
+				world.setDayTime(currentTime - excessTime + targetTime);
 			}
 		}
 	}

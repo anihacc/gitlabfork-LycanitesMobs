@@ -123,7 +123,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		}
 
 		// Dirt:
-		if(material == Material.CLAY || material == Material.SAND || material == Material.ORGANIC || SPADE_HARVEST.contains(block)) {
+		if(material == Material.EARTH || material == Material.CLAY || material == Material.SAND || material == Material.ORGANIC || SPADE_HARVEST.contains(block)) {
 			return this.harvestType.equalsIgnoreCase("shovel");
 		}
 

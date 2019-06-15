@@ -1,14 +1,10 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
 import com.lycanitesmobs.core.VersionChecker;
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
-public class GuiIndexList extends GuiScrollingList {
-	protected GuiBeastiary parentGui;
+public class GuiIndexList extends GuiListBase {
 	public VersionChecker.VersionInfo versionInfo;
 
 	/**
@@ -20,18 +16,21 @@ public class GuiIndexList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiIndexList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 10800, width, height);
-		this.parentGui = parentGui;
+		super(parentGui, width, height, top, bottom, x, 10800);
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return 1;
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 	}
@@ -82,5 +81,5 @@ public class GuiIndexList extends GuiScrollingList {
 			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.minor") + ":§r\n" + this.versionInfo.minorFixes;
 
 		return content;
-	}
+	}*/
 }

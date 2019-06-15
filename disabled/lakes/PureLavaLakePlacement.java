@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.worldgen.fluid;
+package com.lycanitesmobs.core.worldgen.lakes;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
@@ -11,10 +11,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.placement.LakeChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 
 import java.util.Random;
 
-public class WorldGenPureLavaLakes extends WorldGenLakes implements IWorldGenBase {
+public class PureLavaLakePlacement extends Placement<LakeChanceConfig> {
     public String name = "Pure Lava Lakes";
     public ModInfo group = LycanitesMobs.modInfo;
     public double generateUndergroundChance = 0.04D;
@@ -33,7 +35,7 @@ public class WorldGenPureLavaLakes extends WorldGenLakes implements IWorldGenBas
     // ==================================================
     //                    Constructors
     // ==================================================
-    public WorldGenPureLavaLakes() {
+    public PureLavaLakePlacement() {
         super(ObjectManager.getBlock("purelava"));
 
         ConfigSpawning config = ConfigSpawning.getConfig(this.group, "worldgen");

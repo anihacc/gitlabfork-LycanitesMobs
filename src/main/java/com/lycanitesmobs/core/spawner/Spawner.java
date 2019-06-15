@@ -7,21 +7,23 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import com.lycanitesmobs.core.spawner.location.SpawnLocation;
 import com.lycanitesmobs.core.spawner.trigger.ChunkSpawnTrigger;
 import com.lycanitesmobs.core.spawner.trigger.SpawnTrigger;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 import java.util.*;
 
@@ -351,7 +353,7 @@ public class Spawner {
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
 				String message = LanguageManager.translate(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(new TextComponentString(message));
+				player.sendMessage(new TranslationTextComponent(message));
 			}
 		}
 
@@ -452,9 +454,9 @@ public class Spawner {
 			LycanitesMobs.printDebug("JSONSpawner", "Spawn Mob: " + mobSpawn);
 
 			// Create Entity:
-			EntityLiving entityLiving = mobSpawn.createEntity(world);
+			LivingEntity entityLiving = mobSpawn.createEntity(world);
 			if (entityLiving == null) {
-				LycanitesMobs.printWarning("JSONSpawner", "Unable to instantiate an entity. Class: " + mobSpawn.entityClass);
+				LycanitesMobs.printWarning("JSONSpawner", "Unable to instantiate an entity. Class: " + mobSpawn.entityType);
 				continue;
 			}
 			EntityCreatureBase entityCreature = null;
@@ -466,15 +468,18 @@ public class Spawner {
 				LycanitesMobs.printDebug("JSONSpawner", "Mob is not a Lycanites Mob");
 			}
 
-			// Attempt To Spawn EntityLiving:
+			// Attempt To Spawn LivingEntity:
 			LycanitesMobs.printDebug("JSONSpawner", "Attempting to spawn " + entityLiving + "...");
 			entityLiving.setLocationAndAngles((double) spawnPos.getX() + 0.5D, (double) spawnPos.getY(), (double) spawnPos.getZ() + 0.5D, world.rand.nextFloat() * 360.0F, 0.0F);
 
 			// Forge Can Spawn Event:
-			Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, false);
-			if (canSpawn == Event.Result.DENY && !this.ignoreForgeCanSpawnEvent && !mobSpawn.ignoreForgeCanSpawnEvent) {
-				LycanitesMobs.printDebug("JSONSpawner", "Spawn Check Failed! Spawning blocked by Forge Can Spawn Event, this is caused another mod.");
-				continue;
+			Event.Result canSpawn = Event.Result.ALLOW;
+			if(entityLiving instanceof MobEntity) {
+				canSpawn = ForgeEventFactory.canEntitySpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null);
+				if (canSpawn == Event.Result.DENY && !this.ignoreForgeCanSpawnEvent && !mobSpawn.ignoreForgeCanSpawnEvent) {
+					LycanitesMobs.printDebug("JSONSpawner", "Spawn Check Failed! Spawning blocked by Forge Can Spawn Event, this is caused another mod.");
+					continue;
+				}
 			}
 
 			// Mob Instance Spawn Check:
@@ -487,9 +492,9 @@ public class Spawner {
 			this.spawnEntity(world, worldExt, entityLiving, level, mobSpawn, player, chain);
 
 			// Call Entity's Initial Spawn:
-			if (!ForgeEventFactory.doSpecialSpawn(entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F)) {
-				if (entityCreature != null) {
-					entityLiving.onInitialSpawn(world.getDifficultyForLocation(spawnPos), null);
+			if (entityLiving instanceof MobEntity) {
+				if (!ForgeEventFactory.doSpecialSpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null)) {
+					((MobEntity)entityLiving).onInitialSpawn(world, world.getDifficultyForLocation(spawnPos), SpawnReason.NATURAL, null, null);
 				}
 			}
 
@@ -636,7 +641,7 @@ public class Spawner {
 	 * @param forgeForced If true, the Forge Can Spawn Event wants to force this mob to spawn.
 	 * @return True if the check has passed.
 	 **/
-	public boolean mobInstanceSpawnCheck(EntityLiving entityLiving, MobSpawn mobSpawn, World world, PlayerEntity player, BlockPos spawnPos, int level, boolean forgeForced) {
+	public boolean mobInstanceSpawnCheck(LivingEntity entityLiving, MobSpawn mobSpawn, World world, PlayerEntity player, BlockPos spawnPos, int level, boolean forgeForced) {
 		// Lycanites Mobs:
 		if (entityLiving instanceof EntityCreatureBase) {
 			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
@@ -674,9 +679,9 @@ public class Spawner {
 		}
 
 		// Vanilla or Other Mod Mob:
-		if(!mobSpawn.ignoreMobInstanceConditions) {
+		if(!mobSpawn.ignoreMobInstanceConditions && entityLiving instanceof MobEntity) {
 			LycanitesMobs.printDebug("JSONSpawner", "None Lycanites Mobs Checks...");
-			return entityLiving.getCanSpawnHere();
+			return ((MobEntity)entityLiving).canSpawn(world, SpawnReason.NATURAL);
 		}
 		LycanitesMobs.printDebug("JSONSpawner", "All Mob Instance Checks Ignored");
 		return true;
@@ -687,7 +692,7 @@ public class Spawner {
 	 * @param world The world to spawn in.
 	 * @param entityLiving The entity to spawn.
 	 */
-	public void spawnEntity(World world, ExtendedWorld worldExt, EntityLiving entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
+	public void spawnEntity(World world, ExtendedWorld worldExt, LivingEntity entityLiving, int level, MobSpawn mobSpawn, PlayerEntity player, int chain) {
 		// Before Spawn:
 		entityLiving.timeUntilPortal = entityLiving.getPortalCooldown();
 
@@ -715,7 +720,7 @@ public class Spawner {
 		}
 
 		// Spawn:
-		world.spawnEntity(entityLiving);
+		world.func_217376_c(entityLiving);
 
 		// After Spawn:
 		mobSpawn.onSpawned(entityLiving, player);

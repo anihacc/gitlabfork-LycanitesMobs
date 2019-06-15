@@ -4,8 +4,8 @@ import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class PetManager {
     /** PetEntries that need to be removed. **/
     public List<PetEntry> removedEntries = new ArrayList<>();
     /** A map containing NBT Tag Compunds mapped to Unique Pet Entry Names. **/
-    public Map<String, NBTTagCompound> entryNBTs = new HashMap<>();
+    public Map<String, CompoundNBT> entryNBTs = new HashMap<>();
 	
     // ==================================================
     //                     Constructor
@@ -249,16 +249,16 @@ public class PetManager {
     // ==================================================
     // ========== Read ===========
     /** Reads a list of Pet Entries from a player's NBTTag. **/
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void readFromNBT(CompoundNBT nbtTagCompound) {
         if(!nbtTagCompound.contains("PetManager"))
             return;
-        this.entryNBTs = new HashMap<String, NBTTagCompound>();
+        this.entryNBTs = new HashMap<String, CompoundNBT>();
 
         // Load All NBT Data Into The Map:
-        NBTTagList entryList = nbtTagCompound.getTagList("PetManager", 10);
-        for(int i = 0; i < entryList.tagCount(); ++i) {
-            NBTTagCompound nbtEntry = (NBTTagCompound)entryList.getCompoundTagAt(i);
-            if(nbtEntry.hasKey("EntryName"))
+        ListNBT entryList = nbtTagCompound.getList("PetManager", 10);
+        for(int i = 0; i < entryList.size(); ++i) {
+            CompoundNBT nbtEntry = (CompoundNBT)entryList.get(i);
+            if(nbtEntry.contains("EntryName"))
                 this.entryNBTs.put(nbtEntry.getString("EntryName"), nbtEntry);
         }
 
@@ -271,8 +271,8 @@ public class PetManager {
         }
 
         // Create New Entries For Pets and Mounts:
-        for(NBTTagCompound nbtEntry : this.entryNBTs.values()) {
-            if(nbtEntry.hasKey("Type") && ("pet".equalsIgnoreCase(nbtEntry.getString("Type")) || "mount".equalsIgnoreCase(nbtEntry.getString("Type")))) {
+        for(CompoundNBT nbtEntry : this.entryNBTs.values()) {
+            if(nbtEntry.contains("Type") && ("pet".equalsIgnoreCase(nbtEntry.getString("Type")) || "mount".equalsIgnoreCase(nbtEntry.getString("Type")))) {
                 PetEntry petEntry = new PetEntry(nbtEntry.getString("EntryName"), nbtEntry.getString("Type"), this.host, nbtEntry.getString("SummonType"));
                 petEntry.readFromNBT(nbtEntry);
                 if(petEntry.active)
@@ -283,17 +283,17 @@ public class PetManager {
 
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
-        List<String> writtenEntries = new ArrayList<String>();
-        NBTTagList entryList = new NBTTagList();
+    public void writeToNBT(CompoundNBT nbtTagCompound) {
+        List<String> writtenEntries = new ArrayList<>();
+        ListNBT entryList = new ListNBT();
 
         // Save Entries In Use:
         for(PetEntry petEntry : this.allEntries.values()) {
             if(!petEntry.active)
                 continue;
-            NBTTagCompound nbtEntry = new NBTTagCompound();
+            CompoundNBT nbtEntry = new CompoundNBT();
             petEntry.writeToNBT(nbtEntry);
-            entryList.appendTag(nbtEntry);
+            entryList.add(nbtEntry);
             writtenEntries.add(petEntry.name);
         }
 
@@ -304,6 +304,6 @@ public class PetManager {
 //            }
 //        }
 
-        nbtTagCompound.setTag("PetManager", entryList);
+        nbtTagCompound.put("PetManager", entryList);
     }
 }

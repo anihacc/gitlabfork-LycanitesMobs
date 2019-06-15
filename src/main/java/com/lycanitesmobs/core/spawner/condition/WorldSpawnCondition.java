@@ -129,14 +129,14 @@ public class WorldSpawnCondition extends SpawnCondition {
     @Override
     public boolean isMet(World world, PlayerEntity player, BlockPos position) {
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
-		int time = (int)Math.floor(world.getWorldTime() % 24000D);
-		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 23999D);
+		int time = (int)Math.floor(world.getDayTime() % 24000D);
+		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getGameTime() : world.getDayTime()) / 23999D);
 
 		// Check Dimension:
 		if(this.dimensionIds != null) {
 			boolean dimensionIdFound = false;
 			for(int dimensionId : this.dimensionIds) {
-				if(world.provider.getDimension() == dimensionId) {
+				if(world.getDimension().getType().getId() == dimensionId) {
 					dimensionIdFound = true;
 					break;
 				}
@@ -186,15 +186,15 @@ public class WorldSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Difficulty:
-		if(this.difficultyMin >= 0 && world.getDifficulty().getDifficultyId() < this.difficultyMin) {
+		if(this.difficultyMin >= 0 && world.getDifficulty().getId() < this.difficultyMin) {
 			return false;
 		}
-		if(this.difficultyMax >= 0 && world.getDifficulty().getDifficultyId() > this.difficultyMax) {
+		if(this.difficultyMax >= 0 && world.getDifficulty().getId() > this.difficultyMax) {
 			return false;
 		}
 
 		// Check Moon Phase:
-		if(this.moonPhase >= 0 && world.provider.getMoonPhase(world.getWorldTime()) != this.moonPhase) {
+		if(this.moonPhase >= 0 && world.getMoonPhase() != this.moonPhase) {
 			return false;
 		}
 

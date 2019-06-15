@@ -39,7 +39,6 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	// ==================================================
     public ItemCustomSpawnEgg(Item.Properties properties, String name, CreatureInfo creatureInfo) {
         super(properties);
-		properties.group(LycanitesMobs.creaturesTab);
 
         this.itemName = name;
         this.creatureInfo = creatureInfo;

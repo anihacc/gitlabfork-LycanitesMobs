@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.helpers;
 
+import cpw.mods.modlauncher.api.INameMappingService;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -11,11 +11,11 @@ public class LMReflectionHelper {
 	 * Removes final from a field.
 	 * @param classToAccess
 	 * @param instance
-	 * @param fieldNames
+	 * @param fieldName
 	 * @return
 	 */
-	public static <T> Field removeFinal(Class <? super T > classToAccess, T instance, String... fieldNames) {
-    	Field field = ReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapFieldNames(classToAccess.getName(), fieldNames));
+	public static <T> Field removeFinal(Class <? super T > classToAccess, T instance, String fieldName) {
+    	/*Field field = ObfuscationReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD, fieldName));
     	
     	try {
     		Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -26,7 +26,8 @@ public class LMReflectionHelper {
     		e.printStackTrace();
     	}
     	
-    	return field;
+    	return field;*/
+    	return null;
 	}
 	
 	
@@ -35,10 +36,12 @@ public class LMReflectionHelper {
 	 * @param classToAccess
 	 * @param instance
 	 * @param value
-	 * @param fieldNames
+	 * @param fieldName
 	 */
-    public static <T, E> void setPrivateFinalValue(Class <? super T > classToAccess, T instance, E value, String... fieldNames) {
-    	Field field = ReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapFieldNames(classToAccess.getName(), fieldNames));
+    public static <T, E> void setPrivateFinalValue(Class <? super T > classToAccess, T instance, E value, String fieldName) {
+		ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldName);
+
+    	/*Field field = ObfuscationReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD, fieldName));
     	
     	try {
     		Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -49,6 +52,6 @@ public class LMReflectionHelper {
     	}
     	catch (Exception e) {
     		e.printStackTrace();
-    	}
+    	}*/
     }
 }

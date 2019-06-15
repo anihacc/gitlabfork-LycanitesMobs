@@ -11,28 +11,32 @@ import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
-import com.lycanitesmobs.core.item.ItemBlockPlacer;
-import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.core.item.ItemMobToken;
+import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.soulstone.*;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.item.special.ItemSoulkey;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 
 public class ItemManager {
 	public static ItemManager INSTANCE;
 
 	/** Handles all global item general config settings. **/
 	public ItemConfig config;
+
+	// Creative Tabs:
+	public final ItemGroup items = new LMItemsGroup(0, LycanitesMobs.modid + ".items");
+	public final ItemGroup blocks = new LMBlocksGroup(1, LycanitesMobs.modid + ".blocks");
+	public final ItemGroup creatures = new LMCreaturesGroup(2, LycanitesMobs.modid + ".creatures");
+	public final ItemGroup equipmentParts = new LMEquipmentPartsGroup(3, LycanitesMobs.modid + ".equipmentparts");
 
 
 	/** Returns the main Item Manager instance or creates it and returns it. **/
@@ -52,44 +56,137 @@ public class ItemManager {
 
 	/** Called during early start up, loads all items. **/
 	public void loadItems() {
-		ModInfo group = LycanitesMobs.modInfo;
-		ObjectManager.addItem("soulgazer", new ItemSoulgazer());
-		ObjectManager.addItem("equipment", new ItemEquipment());
-		ObjectManager.addItem("mobtoken", new ItemMobToken(group));
+		ModInfo modInfo = LycanitesMobs.modInfo;
+		Item.Properties itemProperties = new Item.Properties().group(this.items);
 
-		ObjectManager.addItem("soulkey", new ItemSoulkey("soulkey", 0));
-		ObjectManager.addItem("soulkeydiamond", new ItemSoulkey("soulkeydiamond", 1));
-		ObjectManager.addItem("soulkeyemerald", new ItemSoulkey("soulkeyemerald", 2));
+		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().maxStackSize(1).group(this.items)));
+		ObjectManager.addItem("equipment", new ItemEquipment(new Item.Properties().group(this.equipmentParts)));
+		ObjectManager.addItem("mobtoken", new ItemMobToken(new Item.Properties(), modInfo));
+		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
+
+		ObjectManager.addItem("soulkey", new ItemSoulkey(itemProperties, "soulkey", 0));
+		ObjectManager.addItem("soulkeydiamond", new ItemSoulkey(itemProperties, "soulkeydiamond", 1));
+		ObjectManager.addItem("soulkeyemerald", new ItemSoulkey(itemProperties, "soulkeyemerald", 2));
 
 
 		// Utilities:
-		ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(group));
-		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(group, 1));
-		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
-		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
-
-
-		// Soulstones:
-		ObjectManager.addItem("soulstone", new ItemSoulstone(group, ""));
-		ObjectManager.addItem("soulstonedemonic", new ItemSoulstoneDemonic(group));
-		ObjectManager.addItem("soulstonefreshwater", new ItemSoulstoneFreshwater(group));
-		ObjectManager.addItem("soulstoneinferno", new ItemSoulstoneInferno(group));
-		ObjectManager.addItem("soulstonemountain", new ItemSoulstoneMountain(group));
-		ObjectManager.addItem("soulstoneshadow", new ItemSoulstoneShadow(group));
+		ObjectManager.addBlock("summoningpedestal", new BlockSummoningPedestal(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 10).sound(SoundType.METAL), modInfo));
+		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(Block.Properties.create(Material.WOOD).hardnessAndResistance(5, 10).sound(SoundType.WOOD), modInfo, 1));
+		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(Block.Properties.create(Material.ROCK).hardnessAndResistance(5, 20).sound(SoundType.STONE), modInfo, 2));
+		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 1000).sound(SoundType.METAL), modInfo, 3));
 
 
 		// Buff Items:
-		ObjectManager.addItem("immunizer", new ItemImmunizer());
-		ObjectManager.addItem("cleansingcrystal", new ItemCleansingCrystal());
+		ObjectManager.addItem("immunizer", new ItemImmunizer(itemProperties));
+		ObjectManager.addItem("cleansingcrystal", new ItemCleansingCrystal(itemProperties));
 
 
 		// Seasonal Items:
-		ObjectManager.addItem("halloweentreat", new ItemHalloweenTreat());
-		ObjectManager.addItem("wintergift", new ItemWinterGift());
-		ObjectManager.addItem("wintergiftlarge", new ItemWinterGiftLarge());
+		ObjectManager.addItem("halloweentreat", new ItemHalloweenTreat(itemProperties));
+		ObjectManager.addItem("wintergift", new ItemWinterGift(itemProperties));
+		ObjectManager.addItem("wintergiftlarge", new ItemWinterGiftLarge(itemProperties));
 
 
-		// Foods:
+		// Special:
+		ObjectManager.addItem("frostyfur", new ItemBlockPlacer(itemProperties, "frostyfur", "frostcloud"));
+		ObjectManager.addItem("poisongland", new ItemBlockPlacer(itemProperties, "poisongland", "poisoncloud"));
+		ObjectManager.addItem("geistliver", new ItemBlockPlacer(itemProperties, "geistliver", "shadowfire"));
+
+
+		// Old Projectile Charges and Scepters:
+		ObjectManager.addItem("frostwebcharge", new ItemCharge(itemProperties, "frostwebcharge", EntityFrostweb.class));
+		ObjectManager.addItem("tundracharge", new ItemCharge(itemProperties, "tundracharge", EntityFrostweb.class));
+		ObjectManager.addItem("icefirecharge", new ItemCharge(itemProperties, "icefirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("blizzardcharge", new ItemCharge(itemProperties, "blizzardcharge", EntityFrostweb.class));
+		ObjectManager.addItem("doomfirecharge", new ItemCharge(itemProperties, "doomfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("hellfirecharge", new ItemCharge(itemProperties, "hellfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("devilstarcharge", new ItemCharge(itemProperties, "devilstarcharge", EntityFrostweb.class));
+		ObjectManager.addItem("demoniclightningcharge", new ItemCharge(itemProperties, "demoniclightningcharge", EntityFrostweb.class));
+		ObjectManager.addItem("throwingscythe", new ItemCharge(itemProperties, "throwingscythe", EntityFrostweb.class));
+		ObjectManager.addItem("mudshotcharge", new ItemCharge(itemProperties, "mudshotcharge", EntityFrostweb.class));
+		ObjectManager.addItem("aquapulsecharge", new ItemCharge(itemProperties, "aquapulsecharge", EntityFrostweb.class));
+		ObjectManager.addItem("whirlwindcharge", new ItemCharge(itemProperties, "whirlwindcharge", EntityFrostweb.class));
+		ObjectManager.addItem("chaosorbcharge", new ItemCharge(itemProperties, "chaosorbcharge", EntityFrostweb.class));
+		ObjectManager.addItem("acidsplashcharge", new ItemCharge(itemProperties, "acidsplashcharge", EntityFrostweb.class));
+		ObjectManager.addItem("lightball", new ItemCharge(itemProperties, "lightball", EntityFrostweb.class));
+		ObjectManager.addItem("lifedraincharge", new ItemCharge(itemProperties, "lifedraincharge", EntityFrostweb.class));
+		ObjectManager.addItem("crystalshard", new ItemCharge(itemProperties, "crystalshard", EntityFrostweb.class));
+		ObjectManager.addItem("frostboltcharge", new ItemCharge(itemProperties, "frostboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("faeboltcharge", new ItemCharge(itemProperties, "faeboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("aetherwavecharge", new ItemCharge(itemProperties, "aetherwavecharge", EntityFrostweb.class));
+		ObjectManager.addItem("waterjetcharge", new ItemCharge(itemProperties, "waterjetcharge", EntityFrostweb.class));
+		ObjectManager.addItem("magmacharge", new ItemCharge(itemProperties, "magmacharge", EntityFrostweb.class));
+		ObjectManager.addItem("scorchfirecharge", new ItemCharge(itemProperties, "scorchfirecharge", EntityFrostweb.class));
+		ObjectManager.addItem("poopcharge", new ItemCharge(itemProperties, "poopcharge", EntityFrostweb.class));
+		ObjectManager.addItem("boulderblastcharge", new ItemCharge(itemProperties, "boulderblastcharge", EntityFrostweb.class));
+		ObjectManager.addItem("arcanelaserstormcharge", new ItemCharge(itemProperties, "arcanelaserstormcharge", EntityFrostweb.class));
+		ObjectManager.addItem("quill", new ItemCharge(itemProperties, "quill", EntityFrostweb.class));
+		ObjectManager.addItem("spectralboltcharge", new ItemCharge(itemProperties, "spectralboltcharge", EntityFrostweb.class));
+		ObjectManager.addItem("bloodleechcharge", new ItemCharge(itemProperties, "bloodleechcharge", EntityFrostweb.class));
+
+
+		// Summoning Staves:
+		Item.Properties summoningStaffProperties = new Item.Properties().group(this.items).maxStackSize(1).maxDamage(500);
+		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning(summoningStaffProperties, "summoningstaff", "summoningstaff"));
+		ObjectManager.addItem("stablesummoningstaff", new ItemStaffStable(summoningStaffProperties, "stablesummoningstaff", "staffstable"));
+		ObjectManager.addItem("bloodsummoningstaff", new ItemStaffBlood(summoningStaffProperties, "bloodsummoningstaff", "staffblood"));
+		ObjectManager.addItem("sturdysummoningstaff", new ItemStaffSturdy(summoningStaffProperties, "sturdysummoningstaff", "staffsturdy"));
+		ObjectManager.addItem("savagesummoningstaff", new ItemStaffSavage(summoningStaffProperties, "savagesummoningstaff", "staffsavage"));
+
+
+		// Building Blocks:
+		BlockMaker.addStoneBlocks(modInfo, "lush", Blocks.TALL_GRASS);
+		BlockMaker.addStoneBlocks(modInfo, "desert", Blocks.SANDSTONE);
+		BlockMaker.addStoneBlocks(modInfo, "shadow", Blocks.OBSIDIAN);
+		BlockMaker.addStoneBlocks(modInfo, "demon", Items.NETHER_WART);
+		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(Block.Properties.create(Material.ROCK).sound(SoundType.STONE), "soulcubedemonic"));
+		ObjectManager.addBlock("propolis", new BlockPropolis(Block.Properties.create(Material.CLAY).sound(SoundType.WET_GRASS).hardnessAndResistance(0.6F).tickRandomly()));
+		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(0.6F).tickRandomly()));
+
+
+		// Effect Blocks:
+		Block.Properties fireProperties = Block.Properties.create(Material.FIRE).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		AssetManager.addSound("frostfire", modInfo, "block.frostfire");
+		ObjectManager.addBlock("frostfire", new BlockFrostfire(fireProperties));
+		AssetManager.addSound("icefire", modInfo, "block.icefire");
+		ObjectManager.addBlock("icefire", new BlockIcefire(fireProperties));
+		AssetManager.addSound("hellfire", modInfo, "block.hellfire");
+		ObjectManager.addBlock("hellfire", new BlockHellfire(fireProperties));
+		AssetManager.addSound("doomfire", modInfo, "block.doomfire");
+		ObjectManager.addBlock("doomfire", new BlockDoomfire(fireProperties));
+		AssetManager.addSound("scorchfire", modInfo, "block.scorchfire");
+		ObjectManager.addBlock("scorchfire", new BlockScorchfire(fireProperties));
+		AssetManager.addSound("shadowfire", modInfo, "block.shadowfire");
+		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
+
+		Block.Properties cloudProperties = Block.Properties.create(Material.MISCELLANEOUS).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		AssetManager.addSound("frostcloud", modInfo, "block.frostcloud");
+		ObjectManager.addBlock("frostcloud", new BlockFrostCloud(cloudProperties));
+		AssetManager.addSound("poisoncloud", modInfo, "block.poisoncloud");
+		ObjectManager.addBlock("poisoncloud", new BlockPoisonCloud(cloudProperties));
+		AssetManager.addSound("poopcloud", modInfo, "block.poopcloud");
+		ObjectManager.addBlock("poopcloud", new BlockPoopCloud(cloudProperties));
+
+		Block.Properties webProperties = Block.Properties.create(Material.WEB).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		ObjectManager.addBlock("quickweb", new BlockQuickWeb(webProperties));
+		ObjectManager.addBlock("frostweb", new BlockFrostweb(webProperties));
+
+
+		/*/ Fluids: TODO New fluids
+		Fluid fluidOoze = ObjectManager.addFluid("ooze");
+		fluidOoze.setLuminosity(10).setDensity(3000).setViscosity(5000).setTemperature(0);
+		ObjectManager.addBlock("ooze", new BlockFluidOoze(fluidOoze));
+		ObjectManager.addItem("bucketooze", new ItemBucketOoze(fluidOoze).setContainerItem(Items.BUCKET));
+		AssetManager.addSound("ooze", group, "block.ooze");
+		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
+
+		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
+		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
+		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
+		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));*/
+
+
+		/*/ Foods: TODO Json Foods
 		ObjectManager.addItem("battleburrito", new ItemFoodBattleBurrito("battleburrito", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
 		ObjectManager.addItem("explorersrisotto", new ItemFoodExplorersRisotto("explorersrisotto", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
 
@@ -98,7 +195,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("yetimeatcooked", new ItemCustomFood("yetimeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(new Potion(new EffectInstance(Effects.RESISTANCE)), 60, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("yetimeatcooked"));
-		
+
 		ObjectManager.addItem("palesoup", new ItemCustomFood("palesoup", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(new Potion(new EffectInstance(Effects.RESISTANCE)), 600, 1, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("palesoup"));
 
@@ -107,7 +204,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("pinkymeatcooked", new ItemCustomFood("pinkymeatcooked", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(Potions.STRENGTH, 60, 0, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("pinkymeatcooked"));
-		
+
 		ObjectManager.addItem("devillasagna", new ItemCustomFood("devillasagna", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(Potions.STRENGTH, 600, 0, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("devillasagna"));
 
@@ -116,7 +213,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("joustmeatcooked", new ItemCustomFood("joustmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(Potions.SWIFTNESS, 20, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("joustmeatcooked"));
-		
+
 		ObjectManager.addItem("ambercake", new ItemCustomFood("ambercake", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(Potions.SWIFTNESS, 120, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("ambercake"));
 
@@ -133,7 +230,7 @@ public class ItemManager {
 		}
 		ObjectManager.addItem("arisaurmeatcooked", arisaurCooked);
 		ObjectLists.addItem("vegetables", ObjectManager.getItem("arisaurmeatcooked"));
-		
+
 		ItemCustomFood paleosalad = new ItemCustomFood("paleosalad", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
 		if(ObjectManager.getEffect("rejuvenation") != null) {
 			paleosalad.setPotionEffect(ObjectManager.getEffect("rejuvenation"), 600, 1, 1.0F);
@@ -154,7 +251,7 @@ public class ItemManager {
 		}
 		ObjectManager.addItem("silexmeatcooked", new ItemCustomFood("silexmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(cookedFoodEffectID, 60, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("silexmeatcooked"));
-		
+
 		ObjectManager.addItem("lapisfishandchips", new ItemCustomFood("lapisfishandchips", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(cookedFoodEffectID, 600, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("lapisfishandchips"));
 
@@ -169,7 +266,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("concapedemeatcooked", new ItemCustomFood("concapedemeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(Potions.LEAPING, 20, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("concapedemeatcooked"));
-		
+
 		ObjectManager.addItem("tropicalcurry", new ItemCustomFood("tropicalcurry", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(Potions.LEAPING, 120, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("tropicalcurry"));
 
@@ -178,7 +275,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("yalemeatcooked", new ItemCustomFood("yalemeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(new Potion(new EffectInstance(Effects.HASTE)), 60, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("yalemeatcooked"));
-		
+
 		ObjectManager.addItem("peakskebab", new ItemCustomFood("peakskebab", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(new Potion(new EffectInstance(Effects.HASTE)), 600, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("peakskebab"));
 
@@ -187,7 +284,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("makameatcooked", new ItemCustomFood("makameatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(new Potion(new EffectInstance(Effects.ABSORPTION)), 20, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("makameatcooked"));
-		
+
 		ObjectManager.addItem("bulwarkburger", new ItemCustomFood("bulwarkburger", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(new Potion(new EffectInstance(Effects.ABSORPTION)), 120, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("bulwarkburger"));
 
@@ -200,7 +297,7 @@ public class ItemManager {
 
 		ObjectManager.addItem("ikameatcooked", new ItemCustomFood("ikameatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(Potions.WATER_BREATHING, 60, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("ikameatcooked"));
-		
+
 		ObjectManager.addItem("seashellmaki", new ItemCustomFood("seashellmaki", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(Potions.WATER_BREATHING, 600, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
 		ObjectLists.addItem("cookedfish", ObjectManager.getItem("seashellmaki"));
 
@@ -217,7 +314,7 @@ public class ItemManager {
 		}
 		ObjectManager.addItem("chupacabrameatcooked", cookedMeat);
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("chupacabrameatcooked"));
-		
+
 		ItemCustomFood meal = new ItemCustomFood("bloodchili", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
 		meal.setMaxStackSize(16);
 		if(ObjectManager.getEffect("leech") != null) {
@@ -230,101 +327,8 @@ public class ItemManager {
 
 		ObjectManager.addItem("aspidmeatcooked", new ItemCustomFood("aspidmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(Potions.REGENERATION, 10, 2, 1.0F).setAlwaysEdible());
 		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("aspidmeatcooked"));
-		
+
 		ObjectManager.addItem("mosspie", new ItemCustomFood("mosspie", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(Potions.REGENERATION, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("mosspie"));
-
-
-		// Special:
-		ObjectManager.addItem("frostyfur", new ItemBlockPlacer("frostyfur", "frostcloud"));
-		ObjectManager.addItem("poisongland", new ItemBlockPlacer("poisongland", "poisoncloud"));
-		ObjectManager.addItem("geistliver", new ItemBlockPlacer("geistliver", "shadowfire"));
-
-
-		/*/ Fluids: TODO New fluids
-		Fluid fluidOoze = ObjectManager.addFluid("ooze");
-		fluidOoze.setLuminosity(10).setDensity(3000).setViscosity(5000).setTemperature(0);
-		ObjectManager.addBlock("ooze", new BlockFluidOoze(fluidOoze));
-		ObjectManager.addItem("bucketooze", new ItemBucketOoze(fluidOoze).setContainerItem(Items.BUCKET));
-		AssetManager.addSound("ooze", group, "block.ooze");
-		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
-
-		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
-		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
-		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
-		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));*/
-
-
-		// Old Projectile Charges and Scepters:
-		ObjectManager.addItem("frostwebcharge", new ItemCharge("frostwebcharge", EntityFrostweb.class));
-		ObjectManager.addItem("tundracharge", new ItemCharge("tundracharge", EntityFrostweb.class));
-		ObjectManager.addItem("icefirecharge", new ItemCharge("icefirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("blizzardcharge", new ItemCharge("blizzardcharge", EntityFrostweb.class));
-		ObjectManager.addItem("doomfirecharge", new ItemCharge("doomfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("hellfirecharge", new ItemCharge("hellfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("devilstarcharge", new ItemCharge("devilstarcharge", EntityFrostweb.class));
-		ObjectManager.addItem("demoniclightningcharge", new ItemCharge("demoniclightningcharge", EntityFrostweb.class));
-		ObjectManager.addItem("throwingscythe", new ItemCharge("throwingscythe", EntityFrostweb.class));
-		ObjectManager.addItem("mudshotcharge", new ItemCharge("mudshotcharge", EntityFrostweb.class));
-		ObjectManager.addItem("aquapulsecharge", new ItemCharge("aquapulsecharge", EntityFrostweb.class));
-		ObjectManager.addItem("whirlwindcharge", new ItemCharge("whirlwindcharge", EntityFrostweb.class));
-		ObjectManager.addItem("chaosorbcharge", new ItemCharge("chaosorbcharge", EntityFrostweb.class));
-		ObjectManager.addItem("acidsplashcharge", new ItemCharge("acidsplashcharge", EntityFrostweb.class));
-		ObjectManager.addItem("lightball", new ItemCharge("lightball", EntityFrostweb.class));
-		ObjectManager.addItem("lifedraincharge", new ItemCharge("lifedraincharge", EntityFrostweb.class));
-		ObjectManager.addItem("crystalshard", new ItemCharge("crystalshard", EntityFrostweb.class));
-		ObjectManager.addItem("frostboltcharge", new ItemCharge("frostboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("faeboltcharge", new ItemCharge("faeboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("aetherwavecharge", new ItemCharge("aetherwavecharge", EntityFrostweb.class));
-		ObjectManager.addItem("waterjetcharge", new ItemCharge("waterjetcharge", EntityFrostweb.class));
-		ObjectManager.addItem("magmacharge", new ItemCharge("magmacharge", EntityFrostweb.class));
-		ObjectManager.addItem("scorchfirecharge", new ItemCharge("scorchfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("poopcharge", new ItemCharge("poopcharge", EntityFrostweb.class));
-		ObjectManager.addItem("boulderblastcharge", new ItemCharge("boulderblastcharge", EntityFrostweb.class));
-		ObjectManager.addItem("arcanelaserstormcharge", new ItemCharge("arcanelaserstormcharge", EntityFrostweb.class));
-		ObjectManager.addItem("quill", new ItemCharge("quill", EntityFrostweb.class));
-		ObjectManager.addItem("spectralboltcharge", new ItemCharge("spectralboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("bloodleechcharge", new ItemCharge("bloodleechcharge", EntityFrostweb.class));
-
-
-		// Summoning Staves:
-		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning("summoningstaff", "summoningstaff"));
-		ObjectManager.addItem("stablesummoningstaff", new ItemStaffStable("stablesummoningstaff", "staffstable"));
-		ObjectManager.addItem("bloodsummoningstaff", new ItemStaffBlood("bloodsummoningstaff", "staffblood"));
-		ObjectManager.addItem("sturdysummoningstaff", new ItemStaffSturdy("sturdysummoningstaff", "staffsturdy"));
-		ObjectManager.addItem("savagesummoningstaff", new ItemStaffSavage("savagesummoningstaff", "staffsavage"));
-
-
-		// Building Blocks:
-		BlockMaker.addStoneBlocks(group, "lush", Blocks.TALL_GRASS);
-		BlockMaker.addStoneBlocks(group, "desert", Blocks.SANDSTONE);
-		BlockMaker.addStoneBlocks(group, "shadow", Blocks.OBSIDIAN);
-		BlockMaker.addStoneBlocks(group, "demon", Items.NETHER_WART);
-		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(group, "soulcubedemonic"));
-		ObjectManager.addBlock("propolis", new BlockPropolis());
-		ObjectManager.addBlock("veswax", new BlockVeswax());
-		
-
-		// Effect Blocks:
-		AssetManager.addSound("frostcloud", group, "block.frostcloud");
-		ObjectManager.addBlock("frostcloud", new BlockFrostCloud());
-		AssetManager.addSound("frostfire", group, "block.frostfire");
-		ObjectManager.addBlock("frostfire", new BlockFrostfire());
-		AssetManager.addSound("icefire", group, "block.icefire");
-		ObjectManager.addBlock("icefire", new BlockIcefire());
-		AssetManager.addSound("hellfire", group, "block.hellfire");
-		ObjectManager.addBlock("hellfire", new BlockHellfire());
-		AssetManager.addSound("doomfire", group, "block.doomfire");
-		ObjectManager.addBlock("doomfire", new BlockDoomfire());
-		AssetManager.addSound("scorchfire", group, "block.scorchfire");
-		ObjectManager.addBlock("scorchfire", new BlockScorchfire());
-		AssetManager.addSound("shadowfire", group, "block.shadowfire");
-		ObjectManager.addBlock("shadowfire", new BlockShadowfire());
-		AssetManager.addSound("poisoncloud", group, "block.poisoncloud");
-		ObjectManager.addBlock("poisoncloud", new BlockPoisonCloud());
-		AssetManager.addSound("poopcloud", group, "block.poopcloud");
-		ObjectManager.addBlock("poopcloud", new BlockPoopCloud());
-		ObjectManager.addBlock("quickweb", new BlockQuickWeb());
-		ObjectManager.addBlock("frostweb", new BlockFrostweb());
+		ObjectLists.addItem("cookedmeat", ObjectManager.getItem("mosspie"));*/
 	}
 }

@@ -166,7 +166,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     	if(itemStack != null) {
     		
     		// Spawn Egg:
-    		if(itemStack.getItem() == this.creatureInfo.creatureType.getSpawnEgg())
+    		if(itemStack.getItem() == this.creatureInfo.getSpawnEgg())
     			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Spawn Baby");
     		
     		// Breeding Item:
@@ -184,7 +184,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     	// Spawn Baby:
     	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
+			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.creatureInfo;
 			if(spawnEggCreatureInfo != null) {
 				if (spawnEggCreatureInfo.entityClass != null && spawnEggCreatureInfo.entityClass.isAssignableFrom(this.getClass())) {
 					EntityCreatureAgeable baby = this.createChild(this);
@@ -241,29 +241,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 	// ==================================================
   	//                        Size
   	// ==================================================
-	public void setScaleForAge(boolean age) {
-        this.setAgeScale(age ? 0.5F : 1.0F);
-    }
-	
-	protected final void setAgeScale(float age) {
-        //super.setSize(this.scaledWidth * age, this.scaledHeight * age); TODO EntityType dynamic sizes
-    }
-	
-	/*@Override
-	protected void setSize(float width, float height) {
-        boolean validWidth = this.scaledWidth > 0.0F;
-        this.scaledWidth = width;
-        this.scaledHeight = height;
-        if(!validWidth)
-            this.setAgeScale(1.0F);
-        super.setSize(width, height);
-    }*/
-
-    /** When called, this reapplies the initial width and height this mob and then applies sizeScale. **/
-    @Override
-	public void updateSize() {
-        //this.setSize(this.setWidth, this.setHeight);
-        this.setScaleForAge(this.isChild());
+	public double setScaleForAge(boolean adult) {
+        return adult ? 0.5F : 1.0F;
     }
 	
 	

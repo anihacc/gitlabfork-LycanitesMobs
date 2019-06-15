@@ -17,12 +17,6 @@ public class ItemStaffSturdy extends ItemStaffSummoning {
 	// ==================================================
 	//                       Use
 	// ==================================================
-    // ========== Durability ==========
-    @Override
-    public int getDurability() {
-    	return 1000;
-    }
-    
     // ========== Rapid Time ==========
     @Override
     public int getRapidTime(ItemStack itemStack) {

@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -283,6 +284,13 @@ public class ItemEquipment extends ItemBase {
 	// ==================================================
 	//                     Harvesting
 	// ==================================================
+	@Override
+	@Nonnull
+	public java.util.Set<net.minecraftforge.common.ToolType> getToolTypes(ItemStack itemStack) {
+		// TODO Get tool types for more compatibility.
+		return super.getToolTypes(itemStack);
+	}
+
 	@Override
 	public boolean canHarvestBlock(ItemStack itemStack, BlockState blockState) {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {

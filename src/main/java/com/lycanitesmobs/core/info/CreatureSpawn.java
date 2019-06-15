@@ -6,12 +6,10 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Biomes;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +31,7 @@ public class CreatureSpawn {
 	public List<String> spawners = new ArrayList<>();
 
 	/** A list of Vanilla Creature Types to use. **/
-	public List<EnumCreatureType> vanillaSpawnerTypes = new ArrayList<>();
+	public List<EntityClassification> vanillaSpawnerTypes = new ArrayList<>();
 
 
 	// Dimensions:
@@ -115,13 +113,13 @@ public class CreatureSpawn {
 				SpawnerMobRegistry.createSpawn(creatureInfo, spawner);
 
 				if ("monster".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EnumCreatureType.MONSTER);
+					this.vanillaSpawnerTypes.add(EntityClassification.MONSTER);
 				else if ("creature".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EnumCreatureType.CREATURE);
+					this.vanillaSpawnerTypes.add(EntityClassification.CREATURE);
 				else if ("watercreature".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EnumCreatureType.WATER_CREATURE);
+					this.vanillaSpawnerTypes.add(EntityClassification.WATER_CREATURE);
 				else if ("ambient".equalsIgnoreCase(spawner))
-					this.vanillaSpawnerTypes.add(EnumCreatureType.AMBIENT);
+					this.vanillaSpawnerTypes.add(EntityClassification.AMBIENT);
 			}
 		}
 
@@ -184,25 +182,25 @@ public class CreatureSpawn {
 			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 		}
 
-		// Add Vanilla Spawns:
+		/*/ Add Vanilla Spawns: TODO Not possible anymore? Using custom spawner for everthing now anyway.
 		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
 			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
-				for(EnumCreatureType creatureType : this.vanillaSpawnerTypes) {
+				for(EntityClassification creatureType : this.vanillaSpawnerTypes) {
 					EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
 					for(Biome biome : this.biomesFromTags) {
-						if(biome == Biomes.HELL) {
+						if(biome == Biomes.NETHER) {
 							EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
 							break;
 						}
 					}
 				}
 			}
-		}
+		}*/
 
 		// Dungeon Spawn:
 		if(!CreatureManager.getInstance().spawnConfig.disableDungeonSpawners) {
 			if(this.dungeonWeight > 0) {
-				DungeonHooks.addDungeonMob(creatureInfo.getResourceLocation(), this.dungeonWeight);
+				DungeonHooks.addDungeonMob(creatureInfo.getEntityType(), this.dungeonWeight);
 				LycanitesMobs.printDebug("MobSetup", "Dungeon Spawn Added - Weight: " + this.dungeonWeight);
 			}
 		}
@@ -215,7 +213,7 @@ public class CreatureSpawn {
 	 * @return True if allowed, false if disallowed.
 	 */
 	public boolean isAllowedDimension(World world) {
-		if(world == null || world.provider == null) {
+		if(world == null) {
 			LycanitesMobs.printDebug("MobSpawns", "No world or dimension spawn settings were found, defaulting to valid.");
 			return true;
 		}
@@ -232,7 +230,7 @@ public class CreatureSpawn {
 
 		// Check IDs:
 		for(int dimensionId : this.dimensionIds) {
-			if(world.provider.getDimension() == dimensionId) {
+			if(world.getDimension().getType().getId() == dimensionId) {
 				LycanitesMobs.printDebug("MobSpawns", "Dimension is in " + this.dimensionListType + ".");
 				return this.dimensionListType.equalsIgnoreCase("whitelist");
 			}

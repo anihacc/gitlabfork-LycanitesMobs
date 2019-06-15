@@ -1,22 +1,25 @@
 package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
-public class GuiBaseScreen extends GuiScreen {
+public abstract class GuiBaseScreen extends Screen implements Button.IPressable {
+	public float zLevel = 0;
 
 	/**
 	 * Constructor.
 	 */
-    public GuiBaseScreen() {
-        super();
+    public GuiBaseScreen(ITextComponent screenName) {
+        super(screenName);
     }
 
 
@@ -40,9 +43,9 @@ public class GuiBaseScreen extends GuiScreen {
 	 */
     public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
-			GlStateManager.translate(0.5f,0.5f, 0);
+			GlStateManager.translatef(0.5f,0.5f, 0);
 			this.getFontRenderer().drawSplitString(str, x, y, wrapWidth, 0x444444);
-			GlStateManager.translate(-0.5f,-0.5f, 0);
+			GlStateManager.translatef(-0.5f,-0.5f, 0);
 		}
 		this.getFontRenderer().drawSplitString(str, x,  y, wrapWidth, textColor);
 	}
@@ -61,13 +64,13 @@ public class GuiBaseScreen extends GuiScreen {
 	 */
     public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
 		GlStateManager.enableBlend();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableAlpha();
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableAlphaTest();
 
-		this.mc.getTextureManager().bindTexture(texture);
+		this.getMinecraft().getTextureManager().bindTexture(texture);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -77,10 +80,10 @@ public class GuiBaseScreen extends GuiScreen {
 		buffer.pos(x, y, z).tex(0, 0).endVertex();
 		tessellator.draw();
 
-		GlStateManager.disableBlend();
-		GlStateManager.enableDepth();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.depthMask(true);
-		GlStateManager.enableAlpha();
+		GlStateManager.enableDepthTest();
+		GlStateManager.disableBlend();
     }
 
 
@@ -98,13 +101,13 @@ public class GuiBaseScreen extends GuiScreen {
 	 */
 	public void drawTexturedTiled(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
 		GlStateManager.enableBlend();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableAlpha();
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.disableAlphaTest();
 
-		this.mc.getTextureManager().bindTexture(texture);
+		this.getMinecraft().getTextureManager().bindTexture(texture);
 		float scaleX = 0.00390625F * resolution;
 		float scaleY = scaleX;
 		Tessellator tessellator = Tessellator.getInstance();
@@ -155,7 +158,6 @@ public class GuiBaseScreen extends GuiScreen {
 	 * @param height The height of the texture.
 	 */
 	@Deprecated
-    @Override
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
         this.drawTexturedModalRect(x, y, u, v, width, height, 1);
     }
@@ -171,7 +173,6 @@ public class GuiBaseScreen extends GuiScreen {
 	 * @param height The height of the texture.
 	 * @param resolution The resolution (width or height) of the texture.
 	 */
-	@Deprecated
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int resolution) {
         float scaleX = 0.00390625F * resolution;
         float scaleY = scaleX;
@@ -184,4 +185,22 @@ public class GuiBaseScreen extends GuiScreen {
         vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
+
+
+	// ==================================================
+	//                     Actions
+	// ==================================================
+	@Override
+	public void onPress(Button guiButton) {
+		if(!(guiButton instanceof ButtonBase)) {
+			return;
+		}
+		this.actionPerformed(((ButtonBase)guiButton).buttonId);
+	}
+
+	/**
+	 * Called when a Button Base is pressed providing the press button's id.
+	 * @param buttonId The id of the button pressed.
+	 */
+	public void actionPerformed(byte buttonId) {}
 }

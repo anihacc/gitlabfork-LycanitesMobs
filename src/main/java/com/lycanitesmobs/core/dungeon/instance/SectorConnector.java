@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.dungeon.instance;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
@@ -22,7 +22,7 @@ public class SectorConnector {
 	public SectorInstance childSector;
 
 	/** The facing direction of this connector. **/
-	public EnumFacing facing = EnumFacing.SOUTH;
+	public Direction facing;
 
 	/** Set to true when this connector is connected to a child sector or cannot be connected to anything (usually due to collisions). **/
 	public boolean closed = false;
@@ -38,7 +38,7 @@ public class SectorConnector {
 	 * @param level The level that this connector is on.
 	 * @param facing The facing of this sector (applied to child sectors).
 	 */
-	public SectorConnector(BlockPos position, SectorInstance parentSector, int level, EnumFacing facing) {
+	public SectorConnector(BlockPos position, SectorInstance parentSector, int level, Direction facing) {
 		this.position = position;
 		this.parentSector = parentSector;
 		this.level = level;
@@ -111,12 +111,12 @@ public class SectorConnector {
 		int startX = this.position.getX();
 		int stopX = this.position.getX();
 		int startY = Math.max(1, this.position.getY() + 1);
-		int stopY = Math.min(world.getHeight() - 1, this.position.getY() + 1 + entranceHeight);
+		int stopY = Math.min(world.getActualHeight() - 1, this.position.getY() + 1 + entranceHeight);
 		int startZ = this.position.getZ();
 		int stopZ = this.position.getZ();
 
 		// Calculate Rotation:
-		if(this.facing == EnumFacing.SOUTH || this.facing == EnumFacing.NORTH) {
+		if(this.facing == Direction.SOUTH || this.facing == Direction.NORTH) {
 			startX -= entranceRadius;
 			stopX += entranceRadius;
 			if(size.getX() % 2 != 0) {
@@ -162,24 +162,24 @@ public class SectorConnector {
 		}
 
 		// Build Center Block Marker:
-		sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, 0), Blocks.GOLD_BLOCK.getDefaultState(), EnumFacing.SOUTH, random);
+		sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, 0), Blocks.GOLD_BLOCK.getDefaultState(), Direction.SOUTH, random);
 
 		// Build Rotation Block Markers:
-		if(this.facing == EnumFacing.SOUTH) {
+		if(this.facing == Direction.SOUTH) {
 			for(int z = 1; z <= 3; z++)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), EnumFacing.SOUTH, random);
+				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
-		else if(this.facing == EnumFacing.EAST) {
+		else if(this.facing == Direction.EAST) {
 			for(int x = 1; x <= 3; x++)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), EnumFacing.SOUTH, random);
+				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
-		else if(this.facing == EnumFacing.NORTH) {
+		else if(this.facing == Direction.NORTH) {
 			for(int z = -1; z >= -3; z--)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), EnumFacing.SOUTH, random);
+				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 		else {
 			for(int x = -1; x >= -3; x--)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), EnumFacing.SOUTH, random);
+				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 	}
 }

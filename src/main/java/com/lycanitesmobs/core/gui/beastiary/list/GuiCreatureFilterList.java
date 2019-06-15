@@ -1,17 +1,14 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiCreatureFilterList extends GuiScrollingList {
+public class GuiCreatureFilterList extends GuiListBase<GuiBeastiary> {
 	protected List<GuiCreatureList> filteredLists = new ArrayList<>();
-	protected GuiBeastiary parentGui;
 
 	/**
 	 * Constructor
@@ -22,8 +19,12 @@ public class GuiCreatureFilterList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiCreatureFilterList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x, int slotHeight) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, slotHeight, width, height);
-		this.parentGui = parentGui;
+		super(parentGui, width, height, top, bottom, x, slotHeight);
+	}
+
+	@Override
+	public void createEntries() {
+
 	}
 
 
@@ -34,12 +35,12 @@ public class GuiCreatureFilterList extends GuiScrollingList {
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return 0;
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 		for(GuiCreatureList creatureList : this.filteredLists) {
@@ -67,7 +68,7 @@ public class GuiCreatureFilterList extends GuiScrollingList {
 
 
 	@Override
-	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {}
+	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {}*/
 
 
 	/**

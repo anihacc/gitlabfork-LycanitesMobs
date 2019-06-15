@@ -4,7 +4,7 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -161,7 +161,7 @@ public class DungeonInstance {
 	 * Loads this Dungeon Instance from the provided NBT data, this is mostly just if the dungeon is built and what its origin position is.
 	 * @param nbtTagCompound The NBT Data to read from.
 	 */
-	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+	public void readFromNBT(CompoundNBT nbtTagCompound) {
 		this.uuid = nbtTagCompound.getUniqueId("Id");
 		this.schematic = DungeonManager.getInstance().getSchematic(nbtTagCompound.getString("Schematic"));
 		this.seed = nbtTagCompound.getLong("Seed");
@@ -185,18 +185,18 @@ public class DungeonInstance {
 	 * @param nbtTagCompound The NBTData to write to.
 	 * @return The written to NBTData. Null if this Dungeon Instance cannot be saved.
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+	public CompoundNBT writeToNBT(CompoundNBT nbtTagCompound) {
 		if(this.uuid == null)
 			return null;
 
-		nbtTagCompound.setUniqueId("Id", this.uuid);
+		nbtTagCompound.putUniqueId("Id", this.uuid);
 		nbtTagCompound.putString("Schematic", this.schematic.name);
 		nbtTagCompound.putLong("Seed", this.seed);
 		nbtTagCompound.putBoolean("Complete", this.complete);
 		nbtTagCompound.putInt("ChunksBuilt", this.chunksBuilt);
-		nbtTagCompound.setIntArray("OriginPos", new int[] {this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()});
-		nbtTagCompound.setIntArray("ChunkMin", new int[] {this.chunkMin.z, this.chunkMin.z});
-		nbtTagCompound.setIntArray("ChunkMax", new int[] {this.chunkMax.z, this.chunkMax.z});
+		nbtTagCompound.putIntArray("OriginPos", new int[] {this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()});
+		nbtTagCompound.putIntArray("ChunkMin", new int[] {this.chunkMin.z, this.chunkMin.z});
+		nbtTagCompound.putIntArray("ChunkMax", new int[] {this.chunkMax.z, this.chunkMax.z});
 
 		LycanitesMobs.printDebug("Dungeon", "Saved Dungeon Instance to NBT: " + this);
 		return nbtTagCompound;

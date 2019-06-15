@@ -1,19 +1,15 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -21,11 +17,10 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
@@ -168,21 +163,21 @@ public class SpawnerEventListener {
 			return;
 
 		// Only Tick On World Time Ticks:
-		if(worldExt.lastSpawnerTime == world.getTotalWorldTime()) {
+		if(worldExt.lastSpawnerTime == world.getGameTime()) {
 			return;
 		}
-		worldExt.lastSpawnerTime = world.getTotalWorldTime();
+		worldExt.lastSpawnerTime = world.getGameTime();
 
 		// World Tick:
 		List<BlockPos> triggerPositions = new ArrayList<>();
-		for(PlayerEntity player : world.playerEntities) {
+		for(PlayerEntity player : world.getPlayers()) {
 			if(triggerPositions.isEmpty()) {
 				triggerPositions.add(player.getPosition());
 				continue;
 			}
 			boolean nearOtherPlayers = false;
 			for(BlockPos triggerPosition : triggerPositions) {
-				if(player.getDistanceSq(triggerPosition) <= 100 * 100) {
+				if(player.getDistanceSq(new Vec3d(triggerPosition)) <= 100 * 100) {
 					nearOtherPlayers = true;
 				}
 			}
@@ -243,7 +238,7 @@ public class SpawnerEventListener {
 	public void onEntityDeath(LivingDeathEvent event) {
 		// Get Killed:
 		LivingEntity killedEntity = event.getEntityLiving();
-		if(killedEntity == null || killedEntity.getEntityWorld() == null || killedEntity.getEntityWorld().isRemote || event.isCanceled() || !(killedEntity instanceof EntityLiving)) {
+		if(killedEntity == null || killedEntity.getEntityWorld() == null || killedEntity.getEntityWorld().isRemote || event.isCanceled()) {
 			return;
 		}
 		
@@ -255,7 +250,7 @@ public class SpawnerEventListener {
 
 		// Call Triggers:
 		for(KillSpawnTrigger spawnTrigger : this.killSpawnTriggers) {
-			spawnTrigger.onKill((PlayerEntity)killerEntity, (EntityLiving)killedEntity);
+			spawnTrigger.onKill((PlayerEntity)killerEntity, killedEntity);
 		}
 	}
 
@@ -268,13 +263,13 @@ public class SpawnerEventListener {
 	public void onEntitySpawn(LivingSpawnEvent event) {
 		// Get Spawned:
 		LivingEntity spawnedEntity = event.getEntityLiving();
-		if(spawnedEntity == null || spawnedEntity.getEntityWorld() == null || spawnedEntity.getEntityWorld().isRemote || event.isCanceled() || !(spawnedEntity instanceof EntityLiving)) {
+		if(spawnedEntity == null || spawnedEntity.getEntityWorld().isRemote || event.isCanceled()) {
 			return;
 		}
 
 		// Call Triggers:
 		for(EntitySpawnedSpawnTrigger spawnTrigger : this.entitySpawnedSpawnTriggers) {
-			spawnTrigger.onEntitySpawned((EntityLiving)spawnedEntity);
+			spawnTrigger.onEntitySpawned(spawnedEntity);
 		}
 	}
 
@@ -286,8 +281,8 @@ public class SpawnerEventListener {
 	public boolean chunkSpawnTriggersActive = false;
 
 	/** Called every time a new chunk is generated. **/
-	@SubscribeEvent
-	public void onChunkPopulate(PopulateChunkEvent.Post event) {
+	// TODO Looks like this event has been removed, might be a good idea to add this to worldgen instead somehow.
+	/*public void onChunkPopulate(PopulateChunkEvent.Post event) {
 		if(this.chunkSpawnTriggersActive) {
 			return;
 		}
@@ -300,7 +295,7 @@ public class SpawnerEventListener {
 		}
 
 		this.chunkSpawnTriggersActive = false;
-	}
+	}*/
 
 	
 	// ==================================================
@@ -310,15 +305,15 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onHarvestDrops(HarvestDropsEvent event) {
 		PlayerEntity player = event.getHarvester();
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
-		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) { // No Spawning for Creative Players
+		World world = (World)event.getWorld();
+		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) { // No Spawning for Creative Players
 			return;
 		}
 		
 		// Spawn On Block Harvest:
-		World world = event.getWorld();
         BlockPos blockPos = event.getPos();
 		BlockState blockState = event.getState();
 
@@ -334,14 +329,15 @@ public class SpawnerEventListener {
 	/** This uses the block break events to update Block Spawn Triggers. **/
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
-		this.onBlockBreak(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
+		World world = (World)event.getWorld();
+		this.onBlockBreak(world, event.getPos(), event.getState(), event.getPlayer(), 0);
     }
 
 	public void onBlockBreak(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) {
 			return;
 		}
 
@@ -357,15 +353,18 @@ public class SpawnerEventListener {
 	// ==================================================
 	/** This uses the block place events to update Block Spawn Triggers. **/
 	@SubscribeEvent
-	public void onBlockPlace(BlockEvent.PlaceEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getWorld().isRemote || event.isCanceled()) {
+	public void onBlockPlace(BlockEvent.EntityPlaceEvent.EntityPlaceEvent event) {
+		if(event.getState() == null || !(event.getWorld() instanceof World) || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
-		this.onBlockPlace(event.getWorld(), event.getPos(), event.getState(), event.getPlayer(), 0);
+		World world = (World)event.getWorld();
+		if(event.getEntity() instanceof PlayerEntity) {
+			this.onBlockPlace(world, event.getPos(), event.getState(), (PlayerEntity) event.getEntity(), 0);
+		}
 	}
 
 	public void onBlockPlace(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) {
 			return;
 		}
 
@@ -382,15 +381,15 @@ public class SpawnerEventListener {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		PlayerEntity player = event.getPlayerEntity();
-		if(player == null || player.getEntityWorld() == null || player.getEntityWorld().isRemote || event.isCanceled())
+		PlayerEntity player = event.getEntityPlayer();
+		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		
 		// Get Coords:
 		World world = player.getEntityWorld();
         BlockPos spawnPos = event.getPos().add(0, 0, 1);
 		
-		if(world == null || world.isRemote || world.provider.isDaytime())
+		if(world.isRemote || world.isDaytime())
 			return;
 		
 		// Run Spawners:
@@ -414,10 +413,10 @@ public class SpawnerEventListener {
 	/** This uses the item fished event to spawn mobs. **/
 	@SubscribeEvent
 	public void onFished(ItemFishedEvent event) {
-		PlayerEntity player = event.getPlayerEntity();
-		if(player == null || player.getEntityWorld() == null || player.getEntityWorld().isRemote || event.isCanceled())
+		PlayerEntity player = event.getEntityPlayer();
+		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
-		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(!testOnCreative && player.playerAbilities.isCreativeMode) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -446,7 +445,7 @@ public class SpawnerEventListener {
 			player = (PlayerEntity)explosion.getExplosivePlacedBy();
 		}
 
-		if(player != null && (!testOnCreative && player.capabilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -465,21 +464,24 @@ public class SpawnerEventListener {
 	/** This uses the block neighbor notify event with checks for lava and water mixing to spawn mobs. **/
 	@SubscribeEvent
 	public void onLavaMix(BlockEvent.NeighborNotifyEvent event) {
+		if(!(event.getWorld() instanceof World))
+			return;
 		boolean trigger = false;
+		World world = (World)event.getWorld();
 
 		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
-			for(EnumFacing side : event.getNotifiedSides()) {
+			for(Direction side : event.getNotifiedSides()) {
 				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
+				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.WATER) {
 					trigger = true;
 				}
 			}
 		}
 
 		else if(event.getState().getBlock() == Blocks.STONE) {
-			for(EnumFacing side : event.getNotifiedSides()) {
+			for(Direction side : event.getNotifiedSides()) {
 				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.FLOWING_LAVA) {
+				if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.LAVA) {
 					trigger = true;
 				}
 			}
@@ -488,12 +490,12 @@ public class SpawnerEventListener {
 		else if(event.getState().getBlock() == Blocks.COBBLESTONE) {
 			boolean water = false;
 			boolean lava = false;
-			for(EnumFacing side : event.getNotifiedSides()) {
+			for(Direction side : event.getNotifiedSides()) {
 				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
+				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.WATER) {
 					water = true;
 				}
-				else if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.FLOWING_LAVA) {
+				else if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.LAVA) {
 					lava = true;
 				}
 			}
@@ -509,7 +511,7 @@ public class SpawnerEventListener {
 			this.lastMixPos = event.getPos();
 
 			for(MixBlockSpawnTrigger spawnTrigger : this.mixBlockSpawnTriggers) {
-				spawnTrigger.onMix(event.getWorld(), event.getState(), event.getPos());
+				spawnTrigger.onMix(world, event.getState(), event.getPos());
 			}
 		}
 	}

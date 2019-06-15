@@ -5,13 +5,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.renderer.model.Model;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,7 +48,7 @@ public class CreatureInfo {
 	public CreatureType creatureType;
 
 	/** The entity type used to store base attributes of this creature. **/
-	protected EntityType entityType = EntityType.ZOMBIE;
+	protected EntityType entityType;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -53,6 +58,9 @@ public class CreatureInfo {
 
 	/** The Spawn Information for this creature. **/
 	public CreatureSpawn creatureSpawn;
+
+	/** The spawn egg item this type uses. **/
+	protected Item spawnEgg;
 
 
 	// Stats:
@@ -297,6 +305,15 @@ public class CreatureInfo {
 		}
 		LycanitesMobs.printDebug("", "Loading: " + this.getName());
 
+		// Spawn Egg:
+		if(this.creatureType != null) {
+			String spawnEggName = this.creatureType.getSpawnEggName();
+			Item.Properties spawnEggProperties = new Item.Properties();
+			spawnEggProperties.group(ItemManager.getInstance().creatures);
+			this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
+			ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
+		}
+
 		/*/ Add Stats: TODO Creature Progression Stats
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
 		achievementStack.setTagInfo("Mob", new StringNBT(this.getName()));
@@ -371,6 +388,14 @@ public class CreatureInfo {
 	 * @return Creature's entity type.
 	 */
 	public EntityType getEntityType() {
+		if(this.entityType == null) {
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			entityTypeBuilder.setTrackingRange(this.isBoss() ? 160 : 80);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
+			entityTypeBuilder.size((float)this.width, (float)this.height);
+			this.entityType = entityTypeBuilder.build(this.getEntityId());
+		}
 		return this.entityType;
 	}
 
@@ -461,6 +486,15 @@ public class CreatureInfo {
 			elementNames += element.getTitle();
 		}
 		return elementNames;
+	}
+
+
+	/**
+	 * Returns the the spawn egg this creature uses.
+	 * @return Spawn egg item.
+	 */
+	public Item getSpawnEgg() {
+		return this.spawnEgg;
 	}
 
 
@@ -560,7 +594,7 @@ public class CreatureInfo {
 		LycanitesMobs.printDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
 
 		// Get Weights:
-		int baseSpeciesWeightScaled = Subspecies.baseSpeciesWeight;
+		int baseSpeciesWeightScaled = Subspecies.BASE_WEIGHT;
 		if(rare) {
 			baseSpeciesWeightScaled = Math.round((float)baseSpeciesWeightScaled / 4);
 		}
@@ -612,8 +646,8 @@ public class CreatureInfo {
 		if(hostSubspeciesIndex == partnerSubspeciesIndex)
 			return hostSubspecies;
 
-		int hostWeight = (hostSubspecies != null ? hostSubspecies.weight : Subspecies.baseSpeciesWeight);
-		int partnerWeight = (partnerSubspecies != null ? partnerSubspecies.weight : Subspecies.baseSpeciesWeight);
+		int hostWeight = (hostSubspecies != null ? hostSubspecies.weight : Subspecies.BASE_WEIGHT);
+		int partnerWeight = (partnerSubspecies != null ? partnerSubspecies.weight : Subspecies.BASE_WEIGHT);
 		int roll = entity.getRNG().nextInt(hostWeight + partnerWeight);
 		if(roll > hostWeight)
 			return partnerSubspecies;

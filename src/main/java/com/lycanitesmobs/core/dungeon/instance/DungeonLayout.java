@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.dungeon.instance;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.ChunkPos;
 
 import java.util.*;
@@ -91,7 +91,7 @@ public class DungeonLayout {
 	 * @return The generated entrance sector.
 	 */
 	public SectorInstance start(Random random) {
-		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, -1, EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)]);
+		this.originConnector = new SectorConnector(this.dungeonInstance.originPos, null, -1, Direction.byHorizontalIndex(random.nextInt(100)));
 		DungeonSector entranceDungeonSector = this.dungeonInstance.schematic.getRandomSector("entrance", random);
 		SectorInstance entranceSector = new SectorInstance(this, entranceDungeonSector, random);
 		entranceSector.connect(this.originConnector);

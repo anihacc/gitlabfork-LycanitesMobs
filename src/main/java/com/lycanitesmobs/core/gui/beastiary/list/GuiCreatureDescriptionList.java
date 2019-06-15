@@ -1,16 +1,13 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-public class GuiCreatureDescriptionList extends GuiScrollingList {
-	protected GuiBeastiary parentGui;
+public class GuiCreatureDescriptionList extends GuiListBase {
 	public CreatureKnowledge creatureKnowledge;
 
 	/**
@@ -22,18 +19,22 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiCreatureDescriptionList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 10800, width, height);
-		this.parentGui = parentGui;
+		super(parentGui, width, height, top, bottom, x, 10800);
+	}
+
+	@Override
+	public void createEntries() {
+
 	}
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return 1;
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 	}
@@ -60,7 +61,7 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 		if(index == 0 && this.creatureKnowledge != null) {
 			this.parentGui.drawSplitString(this.getContent(), this.left + 6, boxTop, this.listWidth - 20, 0xFFFFFF, true);
 		}
-	}
+	}*/
 
 
 	public String getContent() {
@@ -75,7 +76,7 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 
 		// Taming:
 		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
+			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getTranslationKey() + ".name") + "\n\n";
 		}
 
 		// Summoning:
@@ -127,7 +128,6 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 	}
 
 	/** Overridden to change the background gradient without copying over an entire function. **/
-	@Override
 	protected void drawGradientRect(int left, int top, int right, int bottom, int color1, int color2) {
 		color1 = 0x33101010;
 		color2 = color1;

@@ -6,9 +6,9 @@ import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.mobevent.trigger.RandomMobEventTrigger;
 import com.lycanitesmobs.core.mobevent.trigger.TickMobEventTrigger;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.util.ArrayList;
@@ -76,19 +76,19 @@ public class MobEventListener {
 			return;
 
 		// Check If Events Are Completely Disabled:
-		if(!MobEventManager.getInstance().mobEventsEnabled || world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if(!MobEventManager.getInstance().mobEventsEnabled || world.getDifficulty() == Difficulty.PEACEFUL) {
 			if(worldExt.serverWorldEventPlayer != null)
 				worldExt.stopWorldEvent();
 			return;
 		}
 
         // Only Tick On World Time Ticks:
-        if(worldExt.lastEventScheduleTime == world.getTotalWorldTime())
+        if(worldExt.lastEventScheduleTime == world.getGameTime())
         	return;
-		worldExt.lastEventScheduleTime = world.getTotalWorldTime();
+		worldExt.lastEventScheduleTime = world.getGameTime();
 		
 		// Only Run If Players Are Present:
-		if(world.playerEntities.size() < 1) {
+		if(world.getPlayers().size() < 1) {
 			return;
 		}
 
@@ -106,13 +106,13 @@ public class MobEventListener {
 
         // Random Mob Events:
         if(MobEventManager.getInstance().mobEventsRandom) {
-			if (MobEventManager.getInstance().minEventsRandomDay > 0 && Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 24000D) < MobEventManager.getInstance().minEventsRandomDay) {
+			if (MobEventManager.getInstance().minEventsRandomDay > 0 && Math.floor((worldExt.useTotalWorldTime ? world.getGameTime() : world.getDayTime()) / 24000D) < MobEventManager.getInstance().minEventsRandomDay) {
 				return;
 			}
-			if (worldExt.getWorldEventStartTargetTime() <= 0 || worldExt.getWorldEventStartTargetTime() > world.getTotalWorldTime() + MobEventManager.getInstance().maxTicksUntilEvent) {
-				worldExt.setWorldEventStartTargetTime(world.getTotalWorldTime() + worldExt.getRandomEventDelay(world.rand));
+			if (worldExt.getWorldEventStartTargetTime() <= 0 || worldExt.getWorldEventStartTargetTime() > world.getGameTime() + MobEventManager.getInstance().maxTicksUntilEvent) {
+				worldExt.setWorldEventStartTargetTime(world.getGameTime() + worldExt.getRandomEventDelay(world.rand));
 			}
-			if (world.getTotalWorldTime() >= worldExt.getWorldEventStartTargetTime()) {
+			if (world.getGameTime() >= worldExt.getWorldEventStartTargetTime()) {
 				this.triggerRandomMobEvent(world, worldExt);
 			}
 		}

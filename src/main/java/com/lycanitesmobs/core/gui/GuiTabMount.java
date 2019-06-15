@@ -6,13 +6,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiTabMount extends GuiTab {
 	
-	public GuiTabMount(int id) {
-        super(id, GuiTab.startX, GuiTab.startY, new ResourceLocation("textures/items/saddle.png"));
+	public GuiTabMount(int id, IPressable pressable) {
+        super(id, GuiTab.startX, GuiTab.startY, new ResourceLocation("textures/items/saddle.png"), pressable);
     }
 
     @Override
     public void onTabClicked () {
-        KeyBinding.setKeyBindState(KeyHandler.instance.mountInventory.getKeyCode(), true); //TODO Add a better way that works!
+        KeyBinding.setKeyBindState(KeyHandler.instance.mountInventory.getKey(), true); //TODO Add a better way that works!
     }
 
     @Override

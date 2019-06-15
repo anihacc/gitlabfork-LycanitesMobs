@@ -17,6 +17,9 @@ public class PlayerSpawnCondition extends SpawnCondition {
     /** The username of the player. **/
     public String username = "";
 
+	/** The uuid of the player (with hyphens). **/
+	public String uuid = "";
+
 	/** The minimum local area difficulty level. **/
 	public float difficultyMin = -1;
 
@@ -64,6 +67,9 @@ public class PlayerSpawnCondition extends SpawnCondition {
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("username"))
 			this.username = json.get("username").getAsString();
+
+		if(json.has("uuid"))
+			this.uuid = json.get("uuid").getAsString();
 
 		if(json.has("difficultyMin"))
 			this.difficultyMin = json.get("difficultyMin").getAsFloat();
@@ -121,8 +127,13 @@ public class PlayerSpawnCondition extends SpawnCondition {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
     	// Check Username:
-        if(!"".equals(this.username) && !this.username.equalsIgnoreCase(player.getName())) {
+        if(!"".equals(this.username) && !this.username.equalsIgnoreCase(player.getName().toString())) {
         	return false;
+		}
+
+		// Check UUID:
+		if(!"".equals(this.uuid) && !this.uuid.equalsIgnoreCase(player.getUniqueID().toString())) {
+			return false;
 		}
 
 		// Check Local Area Difficulty:

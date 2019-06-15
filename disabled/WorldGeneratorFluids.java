@@ -1,16 +1,17 @@
 package com.lycanitesmobs.core.worldgen;
 
 import com.lycanitesmobs.core.IWorldGenBase;
-import com.lycanitesmobs.core.worldgen.fluid.WorldGenOozeLakes;
-import com.lycanitesmobs.core.worldgen.fluid.WorldGenPureLavaLakes;
+import com.lycanitesmobs.core.worldgen.lakes.OozeLakePlacement;
+import com.lycanitesmobs.core.worldgen.lakes.PureLavaLakePlacement;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.feature.LakesFeature;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.Random;
 
-public class WorldGeneratorFluids implements IWorldGenerator {
+public class WorldGeneratorFluids extends LakesFeature {
     protected final IWorldGenBase oozeLakes;
     protected final IWorldGenBase pureLavaLakes;
 
@@ -18,8 +19,8 @@ public class WorldGeneratorFluids implements IWorldGenerator {
     //                    Constructors
     // ==================================================
     public WorldGeneratorFluids() {
-        this.oozeLakes = new WorldGenOozeLakes();
-        this.pureLavaLakes = new WorldGenPureLavaLakes();
+        this.oozeLakes = new OozeLakePlacement();
+        this.pureLavaLakes = new PureLavaLakePlacement();
     }
 
 

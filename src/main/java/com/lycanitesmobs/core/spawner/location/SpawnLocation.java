@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.spawner.location;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.CoordSorterFurthest;
 import com.lycanitesmobs.core.spawner.CoordSorterNearest;
-import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -113,10 +113,10 @@ public class SpawnLocation {
 
 		if("difficulty".equalsIgnoreCase(this.sorting)) {
 			sorting = "random";
-			if(world.getDifficulty().getDifficultyId() <= 1) {
+			if(world.getDifficulty().getId() <= 1) {
 				sorting = "far";
 			}
-			else if(world.getDifficulty().getDifficultyId() >= 3) {
+			else if(world.getDifficulty().getId() >= 3) {
 				sorting = "near";
 			}
 		}

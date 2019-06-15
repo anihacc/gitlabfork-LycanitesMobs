@@ -30,8 +30,6 @@ public class ItemStaffSummoning extends ItemBase {
     public ItemStaffSummoning(Item.Properties properties, String itemName, String textureName) {
         super(properties);
         this.itemName = itemName;
-        properties.maxStackSize(1);
-        properties.defaultMaxDamage(this.getDurability());
         this.setup();
 
         this.addPropertyOverride(new ResourceLocation("using"), new IItemPropertyGetter() {
@@ -46,11 +44,6 @@ public class ItemStaffSummoning extends ItemBase {
 	// ==================================================
 	//                       Use
 	// ==================================================
-    // ========== Durability ==========
-    public int getDurability() {
-    	return 500;
-    }
-    
     public void damageItemCharged(ItemStack itemStack, LivingEntity entity, float power) {
 		ExtendedPlayer playerExt = null;
 		if(entity instanceof PlayerEntity) {
@@ -214,7 +207,7 @@ public class ItemStaffSummoning extends ItemBase {
     	return false;
     }
 
-    private void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+    protected void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
         itemStack.attemptDamageItem(amountToDamage, entity.getRNG(), entity);
         if (itemStack.getCount() == 0) {
             if (entity.getHeldItem(Hand.MAIN_HAND).equals(itemStack)) {

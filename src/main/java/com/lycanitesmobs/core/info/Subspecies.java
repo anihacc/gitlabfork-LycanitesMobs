@@ -5,17 +5,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -23,15 +21,17 @@ import java.util.*;
 public class Subspecies {
     // ========== Subspecies Global ==========
     /** The weight used by the default subspecies. **/
-    public static int baseSpeciesWeight = 400;
+    public static int BASE_WEIGHT = 400;
 
     /** Common weights used by most subspecies. **/
-    public static Map<String, Integer> commonWeights = new HashMap<String, Integer>() {{
+    public static Map<String, Integer> COMMON_WEIGHTS = new HashMap<String, Integer>() {{
     	put("common", 100);
     	put("uncommon", 20);
     	put("rare", 2);
     	put("legendary", 1);
     }};
+
+    public static String[] SUBSPECIES_NAMES = new String[] {"uncommon", "rare"};
 
 	/** A static map containing all the global multipliers for each stat for each subspecies. **/
 	public static Map<String, Double> statMultipliers = new HashMap<>();
@@ -88,52 +88,29 @@ public class Subspecies {
 	 * Loads global Subspecies config values, etc.
 	 * @param config The config instance to load values from.
 	 */
-	public static void loadGlobalSettings(ConfigBase config) {
-        baseSpeciesWeight = config.getInt("Mob Variations", "Subspecies Base Weight", baseSpeciesWeight, "The weight of base subspecies (regular mobs).");
-        commonWeights.put("uncommon", config.getInt("Mob Variations", "Subspecies Uncommon Weight", commonWeights.get("uncommon"), "The weight of uncommon subspecies (such as Azure, Verdant, Scarlet, etc)."));
-        commonWeights.put("rare", config.getInt("Mob Variations", "Subspecies Rare Weight", commonWeights.get("rare"), "The weight of rare subspecies (such as Lunar or Celestial)."));
+	public static void loadGlobalSettings() {
+        BASE_WEIGHT = ConfigCreatureSubspecies.INSTANCE.baseWeight.get();
+		for(String subspeciesName : Subspecies.SUBSPECIES_NAMES) {
+			COMMON_WEIGHTS.put(subspeciesName,  ConfigCreatureSubspecies.INSTANCE.commonWeights.get(subspeciesName).get());
+		}
 
-        // Difficulty:
-        String[] subspeciesNames = new String[] {"uncommon", "rare"};
 		statMultipliers = new HashMap<>();
-        config.setCategoryComment("Subspecies Multipliers", "Here you can scale the stats of every mob on a per subspecies basis.");
-        for(String subspeciesName : subspeciesNames) {
+        for(String subspeciesName : SUBSPECIES_NAMES) {
             for(String statName : CreatureStats.STAT_NAMES) {
-                double defaultValue = 1.0;
-				if("uncommon".equals(subspeciesName)) {
-					if("health".equals(statName)) {
-						defaultValue = 2;
-					}
-				}
-                if("rare".equals(subspeciesName)) {
-					if("health".equals(statName)) {
-						defaultValue = 20;
-					}
-					else if("attackSpeed".equals(statName)) {
-						defaultValue = 2;
-					}
-					else if("rangedSpeed".equals(statName)) {
-						defaultValue = 2;
-					}
-					else if("effect".equals(statName)) {
-						defaultValue = 2;
-					}
-				}
-                statMultipliers.put((subspeciesName + "-" + statName).toUpperCase(), config.getDouble("Subspecies Multipliers", subspeciesName + " " + statName, defaultValue));
+                statMultipliers.put((subspeciesName + "-" + statName).toUpperCase(), ConfigCreatureSubspecies.INSTANCE.subspeciesMultipliers.get(subspeciesName).get(statName).get());
             }
         }
 
+        uncommonDropScale = ConfigCreatureSubspecies.INSTANCE.uncommonDropScale.get();
+        rareDropScale = ConfigCreatureSubspecies.INSTANCE.rareDropScale.get();
 
-        uncommonDropScale = config.getInt("Mob Variations", "Subspecies Uncommon Item Drops Scale", uncommonDropScale, "When a creature with the uncommon subspecies (Azure, Verdant, etc) dies, its item drops amount is multiplied by this value.");
-        rareDropScale = config.getInt("Mob Variations", "Subspecies Rare Item Drops Scale", rareDropScale, "When a creature with the rare subspecies (Celestial, Lunar, etc) dies, its item drops amount is multiplied by this value.");
+        uncommonExperienceScale = ConfigCreatureSubspecies.INSTANCE.uncommonExperienceScale.get();
+        rareExperienceScale = ConfigCreatureSubspecies.INSTANCE.rareExperienceScale.get();
 
-        uncommonExperienceScale = config.getDouble("Mob Variations", "Subspecies Uncommon Experience Scale", uncommonExperienceScale, "When a creature with the uncommon subspecies (Azure, Verdant, etc) dies, its experience amount is multiplied by this value.");
-        rareExperienceScale = config.getDouble("Mob Variations", "Subspecies Rare Experience Scale", rareExperienceScale, "When a creature with the rare subspecies (Celestial, Lunar, etc) dies, its experience amount is multiplied by this value.");
+		uncommonSpawnDayMin = ConfigCreatureSubspecies.INSTANCE.uncommonSpawnDayMin.get();
+		rareSpawnDayMin = ConfigCreatureSubspecies.INSTANCE.rareSpawnDayMin.get();
 
-		uncommonSpawnDayMin = config.getInt("Mob Variations", "Subspecies Uncommon Spawn Day Min", uncommonSpawnDayMin, "The minimum amount of days before uncommon species start to spawn.");
-		rareSpawnDayMin = config.getInt("Mob Variations", "Subspecies Rare Spawn Day Min", rareSpawnDayMin, "The minimum amount of days before rare species start to spawn.");
-
-		rareHealthBars = config.getBool("Mob Variations", "Subspecies Rare Health Bars", rareHealthBars, "If set to true, rare subspecies such as the Lunar Grue or Celestial Geonach will display boss health bars.");
+		rareHealthBars = ConfigCreatureSubspecies.INSTANCE.rareHealthBars.get();
     }
 
 
@@ -209,7 +186,7 @@ public class Subspecies {
         this.color = color;
         this.skin = skin;
         this.rarity = rarity;
-        this.weight = commonWeights.get(rarity);
+        this.weight = COMMON_WEIGHTS.get(rarity);
     }
 
 
@@ -252,7 +229,7 @@ public class Subspecies {
 			World world = entityLiving.getEntityWorld();
 
 			// Spawn Day Limit:
-			int day = (int)Math.floor(world.getTotalWorldTime() / 23999D);
+			int day = (int)Math.floor(world.getGameTime() / 23999D);
 			int spawnDayMin = 0;
 			if("uncommon".equalsIgnoreCase(this.rarity)) {
 				spawnDayMin = uncommonSpawnDayMin;

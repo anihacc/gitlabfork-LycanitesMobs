@@ -1,12 +1,14 @@
 package com.lycanitesmobs;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.DisplayEffectsScreen;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.EffectType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EffectBase extends Effect {
 	public String name;
@@ -15,10 +17,9 @@ public class EffectBase extends Effect {
 	//                    Constructor
 	// ==================================================
 	public EffectBase(String name, boolean badEffect, int color) {
-		super(badEffect, color);
+		super(badEffect ? EffectType.HARMFUL : EffectType.BENEFICIAL, color);
 		this.name = name;
 		this.setRegistryName(LycanitesMobs.modid, name);
-		this.setPotionName("effect." + name);
 		AssetManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/effects/" + name + ".png");
 	}
 	
@@ -37,29 +38,25 @@ public class EffectBase extends Effect {
 	// ==================================================
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc) {
-		if (mc.currentScreen == null) {
-			return;
-		}
-
+	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z) {
 		ResourceLocation texture = AssetManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}
 
-		mc.getTextureManager().bindTexture(texture);
-		Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
+		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		gui.blit(x + 6, y + 7, 0, 0, 18, 18, 18, 18);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void renderHUDEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc, float alpha) {
+	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
 		ResourceLocation texture = AssetManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}
 
-		mc.getTextureManager().bindTexture(texture);
-		Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
+		Minecraft.getInstance().getTextureManager().bindTexture(texture);
+		gui.blit(x + 3, y + 3, 0, 0, 18, 18, 18, 18);
 	}
 }

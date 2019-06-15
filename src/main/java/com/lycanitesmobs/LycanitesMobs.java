@@ -8,16 +8,11 @@ import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
-import com.lycanitesmobs.core.config.ConfigBase;
+import com.lycanitesmobs.core.config.*;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.entity.EntityHitArea;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.item.LMBlocksGroup;
-import com.lycanitesmobs.core.item.LMCreaturesGroup;
-import com.lycanitesmobs.core.item.LMEquipmentPartsGroup;
-import com.lycanitesmobs.core.item.LMItemsGroup;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
 import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
@@ -30,14 +25,11 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
-import com.lycanitesmobs.core.worldgen.WorldGeneratorFluids;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -47,8 +39,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -58,7 +51,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -68,7 +60,7 @@ public class LycanitesMobs {
 
     public static final String modid = "lycanitesmobs";
     public static final String name = "Lycanites Mobs";
-    public static final String versionNumber = "2.0.0.1";
+    public static final String versionNumber = "2.1.0.0";
     public static final String versionMC = "1.12.2";
     public static final String version = versionNumber + " - MC " + versionMC;
     public static final String website = "http://lycanitesmobs.com";
@@ -79,7 +71,6 @@ public class LycanitesMobs {
     public static final PacketHandler packetHandler = new PacketHandler();
 
     public static ModInfo modInfo;
-    public static ConfigBase config;
     public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     // Capabilities:
@@ -88,20 +79,11 @@ public class LycanitesMobs {
     @CapabilityInject(IExtendedPlayer.class)
     public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 
-    // Creative Tabs:
-    public static final ItemGroup itemsTab = new LMItemsGroup(0, modid + ".items");
-    public static final ItemGroup blocksTab = new LMBlocksGroup(1, modid + ".blocks");
-    public static final ItemGroup creaturesTab = new LMCreaturesGroup(2, modid + ".creatures");
-    public static final ItemGroup equipmentPartsTab = new LMEquipmentPartsGroup(3, modid + ".equipmentparts");
-
     // Texture Path:
     public static String texturePath = "mods/lycanitesmobs/";
 
     // Potion Effects:
-    public PotionEffects potionEffects;
-
-    // Dungeon System:
-    public static WorldGeneratorDungeon dungeonGenerator;
+    public Effects effects;
 
     // Universal Bucket:
     static {
@@ -124,10 +106,8 @@ public class LycanitesMobs {
         ObjectManager.setCurrentModInfo(modInfo);
 
         // Config:
-        ConfigBase.versionCheck("2.0.0.0", version);
-        config = ConfigBase.getConfig(modInfo, "general");
-        config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
-        config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.spec);
+        ConfigGeneral.INSTANCE.versionCheck("2.1.0.0", version);
 
         // Event Listeners:
         MinecraftForge.EVENT_BUS.register(new EventListener());
@@ -135,29 +115,26 @@ public class LycanitesMobs {
         MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
 
         // Familiars:
-        DonationFamiliars.instance.familiarBlacklist = new ArrayList<>();
-        String[] familiarBlacklist = config.getStringList("Extras", "Familiar Username Blacklist", new String[] {"Jbams"}, "Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.");
-        DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(familiarBlacklist));
+        DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(ConfigExtra.INSTANCE.familiarBlacklist.get()));
 
         // Version Checker:
-        VersionChecker.enabled = config.getBool("Extras", "Version Checker", VersionChecker.enabled, "Set to false to disable the version checker.");
+        VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
 
         // Network:
-        packetHandler.init();
+        packetHandler.register();
         //ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
         // Change Health Limit:
-        LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue", "field_111118_b");
+        LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
         // Admin Entity Removal Tool:
-        config.setCategoryComment("Admin", "Special tools for server admins.");
-        ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = config.getStringList("Admin", "Force Remove Entity Names", new String[0], "Here you can add a list of entity IDs for entity that you want to be forcefully removed.");
+        ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
         if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
             printInfo("", "Lycanites Mobs will forcefully remove the following entities based on their registered IDs:");
             for (String removeEntityID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS)
                 printInfo("", removeEntityID);
         }
-        ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
+        ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
 
         // Blocks and Items:
         ItemManager.getInstance().loadConfig();
@@ -173,23 +150,22 @@ public class LycanitesMobs {
         ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 
         // Potion Effects:
-        this.potionEffects = new PotionEffects();
-        this.potionEffects.init(config);
+        this.effects = new Effects();
 
         // Elements:
         ElementManager.getInstance().loadConfig();
         ElementManager.getInstance().loadAllFromJSON(modInfo);
 
         // Creatures:
-        CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer.class);
-        CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity.class);
+        CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
+        CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
         CreatureManager.getInstance().startup(modInfo);
 
         // Projectiles:
         ProjectileManager.getInstance().startup(modInfo);
 
         // Spawners:
-        FMLCommonHandler.instance().bus().register(SpawnerEventListener.getInstance());
+        MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
         SpawnerManager.getInstance().loadAllFromJSON();
 
         // Altars:
@@ -197,18 +173,13 @@ public class LycanitesMobs {
         AltarInfo.createAltars();
 
         // Mob Events:
-        FMLCommonHandler.instance().bus().register(MobEventManager.getInstance());
-        FMLCommonHandler.instance().bus().register(MobEventListener.getInstance());
+        MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
+        MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
         MobEventManager.getInstance().loadConfig();
         MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
-        // World Generators:
-        GameRegistry.registerWorldGenerator(new WorldGeneratorFluids(), 0);
-
         // Dungeons:
         DungeonManager.getInstance().loadAllFromJSON();
-        dungeonGenerator = new WorldGeneratorDungeon();
-        GameRegistry.registerWorldGenerator(dungeonGenerator, 1000);
 
         // Mod Support:
         DLDungeons.init();
@@ -268,7 +239,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printInfo(String key, String message) {
-        if("".equals(key) || config.getBool("Debug", key, false)) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.info("[LycanitesMobs] [Info] [" + key + "] " + message);
         }
     }
@@ -280,7 +251,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printDebug(String key, String message) {
-        if("".equals(key) || config.getBool("Debug", key, false)) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.debug("[LycanitesMobs] [Debug] [" + key + "] " + message);
         }
     }
@@ -292,7 +263,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printWarning(String key, String message) {
-        if("".equals(key) || config.getBool("Debug", key, false)) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
         }
     }

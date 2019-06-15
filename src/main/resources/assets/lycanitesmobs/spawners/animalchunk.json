@@ -2,7 +2,7 @@
 	"name": "animalchunk",
 	"sharedName": "animal",
 	"type": "spawner",
-	"enabled": false,
+	"enabled": true,
 	"loadDefault": true,
 	"mobCountMin": 8,
 	"ignoreBiomes": false,

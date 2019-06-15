@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 	@Override
 	public List<BlockPos> getSpawnPositions(World world, PlayerEntity player, BlockPos triggerPos) {
 		LycanitesMobs.printDebug("JSONSpawner", "Getting Nearest Structures Within Range");
-		if(!(world instanceof WorldServer)) {
+		if(!(world instanceof ServerWorld)) {
 			LycanitesMobs.printWarning("", "[JSONSpawner] Structure spawn location was called with a non ServerWorld World instance.");
 			return new ArrayList<>();
 		}
 
 		BlockPos structurePos = null;
 		try {
-			structurePos = ((WorldServer) world).getChunkProvider().getNearestStructurePos(world, this.structureType, triggerPos, false);
+			structurePos = world.findNearestStructure(this.structureType, triggerPos, this.structureRange, false);
 		}
 		catch (Exception e) {}
 

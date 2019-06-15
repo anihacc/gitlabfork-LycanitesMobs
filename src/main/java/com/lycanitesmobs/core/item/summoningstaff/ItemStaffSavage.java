@@ -18,12 +18,6 @@ public class ItemStaffSavage extends ItemStaffSummoning {
 	// ==================================================
 	//                       Use
 	// ==================================================
-    // ========== Durability ==========
-    @Override
-    public int getDurability() {
-    	return 250;
-    }
-    
     // ========== Rapid Time ==========
     @Override
     public int getRapidTime(ItemStack itemStack) {

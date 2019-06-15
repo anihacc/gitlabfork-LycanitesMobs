@@ -4,17 +4,17 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraftforge.fml.client.GuiScrollingList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
-
-import java.io.IOException;
 
 public class GuiSummoningPedestal extends GuiBaseContainer {
     public PlayerEntity player;
@@ -22,7 +22,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     public TileEntitySummoningPedestal summoningPedestal;
     public SummonSet summonSet;
 
-    public GuiScrollingList list;
+    public ExtendedList list;
 
     public int centerX;
     public int centerY;
@@ -40,7 +40,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     //                    Constructor
     // ==================================================
     public GuiSummoningPedestal(PlayerEntity player, TileEntitySummoningPedestal summoningPedestal) {
-        super(new ContainerSummoningPedestal(summoningPedestal, player.inventory));
+        super(new ContainerSummoningPedestal(summoningPedestal, player.inventory), player.inventory, new TranslationTextComponent("gui.summoningpedestal"));
         this.summoningPedestal = summoningPedestal;
         this.player = player;
         this.playerExt = ExtendedPlayer.getForPlayer(player);
@@ -52,7 +52,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     }
 
     @Override
-    public boolean doesGuiPauseGame() {
+    public boolean isPauseScreen() {
         return false;
     }
 
@@ -61,10 +61,10 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     //                       Init
     // ==================================================
     @Override
-    public void initGui() {
-        super.initGui();
+    public void init() {
+        super.init();
 
-        this.buttonList.clear();
+        this.buttons.clear();
         this.windowWidth = 256;
         this.windowHeight = 166;
         this.halfX = this.windowWidth / 2;
@@ -91,7 +91,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         int listX = this.windowX + (buttonSpacing * 2);
 
         this.list = new GuiSummoningPedestalList(this, this.playerExt, listWidth, listHeight, listTop, listBottom, listX);
-        this.list.registerScrollButtons(this.buttonList, 51, 52);
     }
 
     protected void initControls() {
@@ -102,7 +101,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         int buttonX = this.windowX + 6;
         int buttonY = this.windowY;
 
-        this.buttonList.add(new GuiTabMain(TAB_BUTTON_ID, buttonX, buttonY - 24));
+        this.buttons.add(new GuiTabMain(TAB_BUTTON_ID, buttonX, buttonY - 24, this));
 
         buttonX = this.centerX + buttonSpacing;
         int buttonXRight = buttonX + buttonWidth + buttonSpacing;
@@ -110,16 +109,16 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
+        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "..."));
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "..."));
+        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
+        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
     }
 
 
@@ -127,14 +126,14 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     //                    Draw Screen
     // ==================================================
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        super.render(mouseX, mouseY, partialTicks);
         this.updateControls();
         this.drawGuiContainerForegroundLayer(partialTicks, mouseX, mouseY);
 
         // Pet List:
         if(this.hasPets())
-            this.list.drawScreen(mouseX, mouseY, partialTicks);
+            this.list.render(mouseX, mouseY, partialTicks);
     }
 
 
@@ -143,7 +142,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     // ==================================================
     protected void drawGuiContainerForegroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {
@@ -153,14 +152,14 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         }
 
         // Title:
-        this.getFontRenderer().drawString(this.getTitle(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
+        this.getFontRenderer().drawString(this.getTitle().toString(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
 
         // Spirit Title:
         this.getFontRenderer().drawString(this.getEnergyTitle(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
     }
 
-    public String getTitle() {
-        return LanguageManager.translate("gui." + "summoningpedestal.name");
+    public ITextComponent getTitle() {
+        return new TranslationTextComponent(LanguageManager.translate("gui." + "summoningpedestal.name"));
     }
 
     public String getEnergyTitle() {
@@ -174,7 +173,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(this.getTexture());
+        Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
 
         this.drawTexturedModalRect(this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
         this.drawTexturedModalRect(this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
@@ -233,7 +232,7 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
 
     public void drawProgressBar() {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
 
         int barWidth = 80;
         int barHeight = 11;
@@ -254,20 +253,20 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     //                     Controls
     // ==================================================
     public void updateControls() {
-        for(Object buttonObj : this.buttonList) {
-            if(buttonObj instanceof GuiButton) {
-                GuiButton button = (GuiButton)buttonObj;
+        for(Object buttonObj : this.buttons) {
+            if(buttonObj instanceof ButtonBase) {
+                ButtonBase button = (ButtonBase)buttonObj;
 
                 // Tab:
                 if(button instanceof GuiTabMain) {
-                    button.enabled = true;
+                    button.active = true;
                     button.visible = true;
                     continue;
                 }
 
                 // Inactive:
                 if(!this.hasSelectedPet()) {
-                    button.enabled = false;
+                    button.active = false;
                     button.visible = false;
                     continue;
                 }
@@ -277,19 +276,19 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         }
     }
 
-    public void updateButtons(GuiButton button) {
+    public void updateButtons(ButtonBase button) {
         // Behaviour Buttons:
-        if (button.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
-            button.displayString = LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
+        if (button.buttonId == EntityCreatureBase.GUI_COMMAND.SITTING.id)
+            button.setMessage(LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
-            button.displayString = LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
+        if (button.buttonId == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
+            button.setMessage(LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
-            button.displayString = (this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive"));
+        if (button.buttonId == EntityCreatureBase.GUI_COMMAND.STANCE.id)
+            button.setMessage((this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive")));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
-            button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
+        if (button.buttonId == EntityCreatureBase.GUI_COMMAND.PVP.id)
+            button.setMessage(LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
     }
 
 
@@ -301,42 +300,42 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     }
 
     @Override
-    protected void actionPerformed(GuiButton guiButton) throws IOException {
+    public void actionPerformed(byte buttonId) {
         // Inactive:
         if(!this.hasSelectedPet()) {
-            super.actionPerformed(guiButton);
+            super.actionPerformed(buttonId);
             return;
         }
 
         // Behaviour Button:
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
+        if(buttonId == EntityCreatureBase.GUI_COMMAND.SITTING.id)
             this.summonSet.sitting = !this.summonSet.sitting;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.FOLLOWING.id)
+        if(buttonId == EntityCreatureBase.GUI_COMMAND.FOLLOWING.id)
             this.summonSet.following = !this.summonSet.following;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
+        if(buttonId == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
             this.summonSet.passive = !this.summonSet.passive;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
+        if(buttonId == EntityCreatureBase.GUI_COMMAND.STANCE.id)
             this.summonSet.aggressive = !this.summonSet.aggressive;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
+        if(buttonId == EntityCreatureBase.GUI_COMMAND.PVP.id)
             this.summonSet.pvp = !this.summonSet.pvp;
 
-        if(guiButton.id < 100) {
+        if(buttonId < 100) {
             this.sendCommandsToServer();
         }
 
-        super.actionPerformed(guiButton);
+        super.actionPerformed(buttonId);
     }
 
 
     // ==================================================
     //                     Key Press
     // ==================================================
-    @Override
-    protected void keyTyped(char par1, int par2) throws IOException {
+    /*@Override
+    protected void keyTyped(char par1, int par2) {
         if(par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.getKeyCode())
             this.mc.player.closeScreen();
         super.keyTyped(par1, par2);
-    }
+    }*/
 
 
     // ==================================================

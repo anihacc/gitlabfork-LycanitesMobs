@@ -9,13 +9,17 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +29,7 @@ public class MobSpawn {
 	public CreatureInfo creatureInfo;
 
 	/** The entity class that this Mob Spawn should spawn if not using a MobInfo (for non-Lycanites Mobs entities). **/
-	public Class entityClass;
+	public EntityType<Entity> entityType;
 
 	/** If set to true, the Forge Can Spawn Event is fired but its result is ignored, use this to prevent other mods from stopping the spawn via the event. **/
 	protected boolean ignoreForgeCanSpawnEvent = false;
@@ -105,12 +109,8 @@ public class MobSpawn {
 				mobSpawn.loadFromJSON(json);
 			}
 			else {
-				Class entityClass = null;
-				net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.ForgeRegistries.ENTITIES.getValue(new ResourceLocation(mobId));
-				if(entry != null) {
-					entityClass = entry.getEntityClass();
-				}
-				mobSpawn = new MobSpawn(entityClass);
+				EntityType entityType = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(mobId));
+				mobSpawn = new MobSpawn(entityType);
 			}
 			if(mobSpawn != null) {
 				mobSpawn.loadFromJSON(json);
@@ -126,11 +126,11 @@ public class MobSpawn {
 	/** Constructors **/
 	public MobSpawn(CreatureInfo creatureInfo) {
 		this.creatureInfo = creatureInfo;
-		this.entityClass = creatureInfo.entityClass;
+		this.entityType = creatureInfo.getEntityType();
 	}
 
-	public MobSpawn(Class entityClass) {
-		this.entityClass = entityClass;
+	public MobSpawn(EntityType entityType) {
+		this.entityType = entityType;
 	}
 
 	/** Loads this Mob Spawn from the provided JSON data. **/
@@ -231,7 +231,7 @@ public class MobSpawn {
 			}
 
 			// Peaceful Difficulty:
-			if (world.getDifficulty() == EnumDifficulty.PEACEFUL && !this.creatureInfo.peaceful) {
+			if (world.getDifficulty() == Difficulty.PEACEFUL && !this.creatureInfo.peaceful) {
 				return false;
 			}
 		}
@@ -252,7 +252,7 @@ public class MobSpawn {
 			if(this.creatureInfo != null && this.creatureInfo.creatureSpawn.worldDayMin > 0) {
 				ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 				if(worldExt != null) {
-					int day = (int) Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 24000D);
+					int day = (int) Math.floor((worldExt.useTotalWorldTime ? world.getGameTime() : world.getDayTime()) / 24000D);
 					if(day < this.creatureInfo.creatureSpawn.worldDayMin) {
 						return false;
 					}
@@ -354,15 +354,19 @@ public class MobSpawn {
 	/**
 	 * Creates a new Entity instance for spawning. Returns null on failure.
 	 **/
-	public EntityLiving createEntity(World world) {
+	public LivingEntity createEntity(World world) {
 		try {
 			if(this.creatureInfo != null) {
 				return this.creatureInfo.createEntity(world);
 			}
-			if(this.entityClass == null) {
+			if(this.entityType == null) {
 				return null;
 			}
-			return (EntityLiving)this.entityClass.getConstructor(World.class).newInstance(new Object[]{world});
+			Entity entity = this.entityType.create(world);
+			if(entity instanceof LivingEntity)
+				return (LivingEntity)entity;
+			else if(entity != null)
+				entity.remove();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -374,12 +378,12 @@ public class MobSpawn {
 	/**
 	 * Called when a mob is spawned from this Mob Spawn.
 	 **/
-	public void onSpawned(EntityLiving entityLiving, PlayerEntity player) {
+	public void onSpawned(LivingEntity entityLiving, PlayerEntity player) {
 		if(!"".equals(this.mobNameTag)) {
-			entityLiving.setCustomNameTag(this.mobNameTag);
+			entityLiving.setCustomName(new TranslationTextComponent(this.mobNameTag));
 		}
-		if(!this.getNaturalDespawn()) {
-			entityLiving.enablePersistence();
+		if(!this.getNaturalDespawn() && entityLiving instanceof MobEntity) {
+			((MobEntity)entityLiving).enablePersistence();
 		}
 
 		if(entityLiving instanceof EntityCreatureBase) {
@@ -420,8 +424,8 @@ public class MobSpawn {
 		if(this.creatureInfo != null) {
 			return this.creatureInfo.getName();
 		}
-		if(this.entityClass != null) {
-			return this.entityClass.toString();
+		if(this.entityType != null) {
+			return this.entityType.toString();
 		}
 		return "Invalid Creature ID or Class";
 	}

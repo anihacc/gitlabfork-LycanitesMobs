@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.gui.beastiary;
 
-import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
+import com.lycanitesmobs.core.gui.ButtonBase;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -21,14 +21,14 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 	 */
 	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
-			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.INDEX.id, 0, 0);
+			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.INDEX.id, 0, 0);
 		}
 	}
 
 
 	@Override
-	public String getTitle() {
-		return LanguageManager.translate("gui.beastiary.index.title");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.index.title"));
 	}
 
 
@@ -50,13 +50,13 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		int buttonHeight = 20;
 		int buttonX = this.colRightX + buttonPadding;
 		int buttonY = this.colRightY + this.colRightHeight - buttonHeight;
-		GuiButton button;
+		ButtonBase button;
 
 		// Links:
-		button = new GuiButton(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website");
-		this.buttonList.add(button);
-		button = new GuiButton(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon");
-		this.buttonList.add(button);
+		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website", this);
+		this.buttons.add(button);
+		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon", this);
+		this.buttons.add(button);
 
 		// Lists:
 		this.indexList = new GuiIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2);
@@ -104,26 +104,22 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 
 		// Latest Changes:
 		this.indexList.versionInfo = latestVersion;
-		this.indexList.drawScreen(mouseX, mouseY, partialTicks);
+		this.indexList.render(mouseX, mouseY, partialTicks);
 	}
 
 
 	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		if(guiButton != null) {
-			if(guiButton.id == 100) {
-				try {
-					this.openURI(new URI(LycanitesMobs.website));
-				} catch (URISyntaxException e) {}
-			}
-			if(guiButton.id == 101) {
-				try {
-					this.openURI(new URI(LycanitesMobs.websitePatreon));
-				} catch (URISyntaxException e) {}
-			}
-			super.actionPerformed(guiButton);
+	public void actionPerformed(byte buttonId) {
+		if(buttonId == 100) {
+			try {
+				this.openURI(new URI(LycanitesMobs.website));
+			} catch (URISyntaxException e) {}
 		}
-
-		super.actionPerformed(guiButton);
+		if(buttonId == 101) {
+			try {
+				this.openURI(new URI(LycanitesMobs.websitePatreon));
+			} catch (URISyntaxException e) {}
+		}
+		super.actionPerformed(buttonId);
 	}
 }

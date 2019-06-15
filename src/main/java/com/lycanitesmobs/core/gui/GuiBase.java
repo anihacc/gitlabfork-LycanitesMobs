@@ -1,16 +1,18 @@
 package com.lycanitesmobs.core.gui;
 
-import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.text.ITextComponent;
 
-public class GuiBase extends Gui {
+public class GuiBase extends AbstractGui {
+    public int zLevel = 0;
 
     // ==================================================
     //                    Constructor
     // ==================================================
-    public GuiBase() {
+    public GuiBase(ITextComponent screenName) {
         super();
     }
 
@@ -18,7 +20,6 @@ public class GuiBase extends Gui {
     // ==================================================
     //                   Draw Texture
     // ==================================================
-    @Override
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
         this.drawTexturedModalRect(x, y, u, v, width, height, 1);
     }

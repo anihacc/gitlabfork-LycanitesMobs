@@ -4,15 +4,17 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
-import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
-import net.minecraft.util.math.BlockPos;
+import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
+import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public class AsmodeusStructureBuilder extends StructureBuilder {
 
@@ -30,10 +32,10 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getHeight() <= height)
+		if(world.getActualHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getHeight())
-			originY = Math.max(5, world.getHeight() - height - 1);
+		else if(originY + height >= world.getActualHeight())
+			originY = Math.max(5, world.getActualHeight() - height - 1);
 
 		// Build Floor:
 		if(ticks == 1 * 20) {
@@ -42,7 +44,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 3 * 20 && ticks % 10 == 0) {
-			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, true);
+			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, Explosion.Mode.NONE);
 		}
 
 		// Build Obstacles:
@@ -60,7 +62,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 			for(int i = 0; i < 5; i++) {
 				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
 				entityProjectileBase.projectileLife = 9 * 20;
-				world.spawnEntity(entityProjectileBase);
+				world.func_217376_c(entityProjectileBase);
 			}
 		}
 
@@ -68,7 +70,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		if(ticks == 29 * 20) {
 			EntityCreatureBase entityCreatureBase = new EntityAsmodeus(world);
 			entityCreatureBase.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.spawnEntity(entityCreatureBase);
+			world.func_217376_c(entityCreatureBase);
 			entityCreatureBase.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
@@ -99,7 +101,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {
-				int topY = world.getTopSolidOrLiquidBlock(new BlockPos(x, 0, z)).getY();
+				int topY = world.getHeight(Heightmap.Type.WORLD_SURFACE, new BlockPos(x, 0, z)).getY();
 				for(int y = minY; y <= maxY; y++) {
 					BlockPos buildPos = new BlockPos(x, y, z);
 					if(y == minY) {
@@ -113,7 +115,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 					else {
 						if (y > minY + 3 && y >= topY)
 							break;
-						world.removeBlock(buildPos);
+						world.removeBlock(buildPos, false);
 					}
 				}
 			}

@@ -1,18 +1,8 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import net.minecraft.entity.LivingEntity;
 
 public class EntitySpawnedSpawnTrigger extends EntitySpawnTrigger {
 
@@ -29,7 +19,7 @@ public class EntitySpawnedSpawnTrigger extends EntitySpawnTrigger {
 
 
 	/** Called every time an entity is spawned. **/
-	public void onEntitySpawned(EntityLiving spawnedEntity) {
+	public void onEntitySpawned(LivingEntity spawnedEntity) {
 
 		// Check Entity:
 		if(!this.isMatchingEntity(spawnedEntity)) {

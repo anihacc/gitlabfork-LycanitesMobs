@@ -1,14 +1,10 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockVine;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
 
 public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 

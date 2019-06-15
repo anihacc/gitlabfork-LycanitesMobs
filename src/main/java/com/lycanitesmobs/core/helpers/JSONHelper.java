@@ -7,7 +7,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.biome.Biome;
@@ -101,7 +100,10 @@ public class JSONHelper {
 					material = Material.WATER;
 				}
 				else if("ground".equalsIgnoreCase(materialName)) {
-					material = Material.GROUND;
+					material = Material.EARTH;
+				}
+				else if("earth".equalsIgnoreCase(materialName)) {
+					material = Material.EARTH;
 				}
 				else if("sand".equalsIgnoreCase(materialName)) {
 					material = Material.SAND;
@@ -116,16 +118,19 @@ public class JSONHelper {
 					material = Material.ROCK;
 				}
 				else if("grass".equalsIgnoreCase(materialName)) {
-					material = Material.GRASS;
+					material = Material.TALL_PLANTS;
+				}
+				else if("tallplants".equalsIgnoreCase(materialName)) {
+					material = Material.TALL_PLANTS;
+				}
+				else if("vine".equalsIgnoreCase(materialName)) {
+					material = Material.TALL_PLANTS;
 				}
 				else if("plants".equalsIgnoreCase(materialName)) {
 					material = Material.PLANTS;
 				}
 				else if("leaves".equalsIgnoreCase(materialName)) {
 					material = Material.LEAVES;
-				}
-				else if("vine".equalsIgnoreCase(materialName)) {
-					material = Material.VINE;
 				}
 				else if("cactus".equalsIgnoreCase(materialName)) {
 					material = Material.CACTUS;

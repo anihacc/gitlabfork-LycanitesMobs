@@ -4,9 +4,9 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,32 +36,33 @@ public class BlockMaker {
      * @param creationBlock The block (can be item or item stack also) used in the base crafting recipe, usually cobblestone (null will deault to cobblestone).
      * **/
     public static void addStoneBlocks(ModInfo group, String stoneName, Object creationItem, Object creationBlock) {
-        float hardness = 2F;
-        float resistance = 10F;
+        Block.Properties properties = Block.Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(2F, 10F);
+        Block.Properties crystalProperties = Block.Properties.create(Material.GLASS).sound(SoundType.GLASS).hardnessAndResistance(0.3F, 10F).lightValue(15);
 
-        BlockBase stoneBlock = (BlockBase) new BlockBase(Material.ROCK, group, stoneName + "stone").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab);
+        BlockBase stoneBlock = new BlockBase(properties, group, stoneName + "stone");
         ObjectManager.addBlock(stoneName + "stone", stoneBlock);
-        ObjectManager.addBlock(stoneName + "stone_stairs", new BlockStairsCustom(stoneBlock).setCreativeTab(LycanitesMobs.blocksTab));
-        Block stoneSlabDoubleBlock = new BlockDoubleSlab(Material.ROCK, group, stoneName + "stone_slab_double", stoneName + "stone_slab").setHardness(hardness).setResistance(resistance);
+        ObjectManager.addBlock(stoneName + "stone_stairs", new BlockStairsCustom(properties, stoneBlock));
+        Block stoneSlabDoubleBlock = new BlockDoubleSlab(properties, group, stoneName + "stone_slab_double", stoneName + "stone_slab");
         ObjectManager.addBlock(stoneName + "stone_slab_double", stoneSlabDoubleBlock);
-        ObjectManager.addBlock(stoneName + "stone_slab", new BlockSlabCustom(stoneBlock, stoneSlabDoubleBlock).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "stone_slab", new BlockSlabCustom(properties, stoneBlock, stoneSlabDoubleBlock));
 
-        BlockBase stoneBrickBlock = (BlockBase) new BlockBase(Material.ROCK, group, stoneName + "stonebrick").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab);
+        BlockBase stoneBrickBlock = new BlockBase(properties, group, stoneName + "stonebrick");
         ObjectManager.addBlock(stoneName + "stonebrick", stoneBrickBlock);
-        ObjectManager.addBlock(stoneName + "stonebrick_stairs", new BlockStairsCustom(stoneBrickBlock).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonebrick_slab", new BlockSlabCustom(stoneBrickBlock, stoneBrickBlock).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonebrick_fence", new BlockFenceCustom(stoneBrickBlock).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonebrick_wall", new BlockWallCustom(stoneBrickBlock).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "stonebrick_stairs", new BlockStairsCustom(properties, stoneBrickBlock));
+        ObjectManager.addBlock(stoneName + "stonebrick_slab", new BlockSlabCustom(properties, stoneBrickBlock, stoneBrickBlock));
+        ObjectManager.addBlock(stoneName + "stonebrick_fence", new BlockFenceCustom(properties, stoneBrickBlock));
+        ObjectManager.addBlock(stoneName + "stonebrick_wall", new BlockWallCustom(properties, stoneBrickBlock));
 
-        BlockBase stoneTileBlock = (BlockBase) new BlockBase(Material.ROCK, group, stoneName + "stonetile").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab);
+        BlockBase stoneTileBlock = new BlockBase(properties, group, stoneName + "stonetile");
         ObjectManager.addBlock(stoneName + "stonetile", stoneTileBlock);
-        ObjectManager.addBlock(stoneName + "stonetile_stairs", new BlockStairsCustom(stoneTileBlock).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonetile_slab", new BlockSlabCustom(stoneTileBlock, stoneTileBlock).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "stonetile_stairs", new BlockStairsCustom(properties, stoneTileBlock));
+        ObjectManager.addBlock(stoneName + "stonetile_slab", new BlockSlabCustom(properties, stoneTileBlock, stoneTileBlock));
 
-        ObjectManager.addBlock(stoneName + "stonepolished", new BlockBase(Material.ROCK, group, stoneName + "stonepolished").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonechiseled", new BlockBase(Material.ROCK, group, stoneName + "stonechiseled").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "stonepillar", new BlockPillar(Material.ROCK, group, stoneName + "stonepillar").setHardness(hardness).setResistance(resistance).setCreativeTab(LycanitesMobs.blocksTab));
-        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(Material.GLASS, group, stoneName + "crystal").setBlockStepSound(SoundType.GLASS).setHardness(0.3F).setResistance(resistance).setLightLevel(1.0F).setCreativeTab(LycanitesMobs.blocksTab));
+        ObjectManager.addBlock(stoneName + "stonepolished", new BlockBase(properties, group, stoneName + "stonepolished"));
+        ObjectManager.addBlock(stoneName + "stonechiseled", new BlockBase(properties, group, stoneName + "stonechiseled"));
+        ObjectManager.addBlock(stoneName + "stonepillar", new BlockPillar(properties, group, stoneName + "stonepillar"));
+
+        ObjectManager.addBlock(stoneName + "crystal", new BlockBase(crystalProperties, group, stoneName + "crystal"));
 
         STONE_ENTRIES.add(new BlockMakerEntry(stoneName, creationItem, creationBlock));
     }

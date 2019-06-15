@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.info;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.item.ItemCustom;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -144,14 +143,14 @@ public class ObjectLists {
     //               Create Custom Items
     // ==================================================
     public static void createCustomItems() {
-        ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
+        /*ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
         config.setCategoryComment("Custom Objects", "here you can add your own custom items! These items wont do anything and will have no crafting recipes you can however have them drop from mobs by adding them to the custom mob drops. To add items just create a comma seperated list of names (spaces will be removed), you will need to use the item.youritem.name and item.youritem.description lang file entries in your resource pack to name your item and you will also need to save a texture for your item as: assets/lycanitesmobs/items/youritem.png");
         String customItems = config.getString("Custom Objects", "Custom Items", "");
         if("".equals(customItems))
             return;
         for(String itemEntry : customItems.replace(" ", "").split(",")) {
             ObjectManager.addItem(itemEntry, new ItemCustom(itemEntry, LycanitesMobs.modInfo));
-        }
+        }*/
     }
 	
 	

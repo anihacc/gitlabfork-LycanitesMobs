@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.dungeon.definition;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -12,10 +12,10 @@ public class ThemeBlock {
 	/** Dungeon Theme Blocks define a block to be used in the theme along with other information. **/
 
 	/** The block to use. **/
-	public Block block = Blocks.STONE;
+	protected Block block = null;
 
-	/** The metadata of the block. **/
-	public int metadata = 0;
+	/** The block to use. **/
+	public String blockId;
 
 	/** The weight for randomly using this block. **/
 	public int weight = 8;
@@ -24,20 +24,23 @@ public class ThemeBlock {
 	/** Loads this Dungeon Theme from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("blockId")) {
-			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(json.get("blockId").getAsString().toLowerCase()));
-			if (this.block == null) {
-				LycanitesMobs.printWarning("", "Error adding Dungeon Theme Block: Unable to find a block with the id: " + json.get("blockId").getAsString());
-			}
+			this.blockId = json.get("blockId").getAsString().toLowerCase();
 		}
 		else {
 			LycanitesMobs.printWarning("", "Error adding Dungeon Theme Block: JSON value 'blockId' has not been set.");
 		}
 
-		if(json.has("metadata"))
-			this.metadata = json.get("metadata").getAsInt();
-
 		if(json.has("weight"))
 			this.weight = json.get("weight").getAsInt();
+	}
+
+
+	public Block getBlock() {
+		if(this.block == null)
+			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockId));
+		if(this.block == null)
+			return Blocks.AIR;
+		return this.block;
 	}
 
 
@@ -46,9 +49,6 @@ public class ThemeBlock {
 	 * @return A new block state.
 	 */
 	public BlockState getBlockState() {
-		if(this.metadata <= 0) {
-			return this.block.getDefaultState();
-		}
-		return this.block.getStateFromMeta(this.metadata);
+		return this.getBlock().getDefaultState();
 	}
 }

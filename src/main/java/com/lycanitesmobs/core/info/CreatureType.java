@@ -3,12 +3,14 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.item.Item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreatureType {
@@ -23,14 +25,14 @@ public class CreatureType {
 	/** A map of all creatures of this type by name. **/
 	public Map<String, CreatureInfo> creatures = new HashMap<>();
 
-	/** The name of the spawn egg item this type uses. **/
-	protected String spawnEggName = "beastspawn";
-
-	/** The spawn egg item this type uses. **/
-	protected Item spawnEgg;
+	/** A list of all creature of this type that are tameable. **/
+	public List<CreatureInfo> tameableCreatures = new ArrayList<>();
 
 	/** The treat item this type uses. **/
 	protected Item treat;
+
+	/** The soulstone item this type uses. **/
+	protected ItemSoulstone soulstone;
 
 
 	/**
@@ -45,10 +47,6 @@ public class CreatureType {
 	/** Loads this creature type from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
-
-		if(json.has("spawnEggName")) {
-			this.spawnEggName = json.get("spawnEggName").getAsString();
-		}
 	}
 
 	/**
@@ -89,6 +87,15 @@ public class CreatureType {
 
 
 	/**
+	 * Generates a spawn egg item name from this type. Ex: beastspawn
+	 * @return The spawn egg item name for this creature type.
+	 */
+	public String getSpawnEggName() {
+		return this.getName() + "spawn";
+	}
+
+
+	/**
 	 * Gets this creature type's treat item.
 	 * @return The treat item for this creature type.
 	 */
@@ -107,15 +114,9 @@ public class CreatureType {
 			return;
 		}
 		this.creatures.put(creatureInfo.getName(), creatureInfo);
-	}
-
-
-	/**
-	 * Returns the the spawn egg this creature type uses.
-	 * @return Spawn egg item.
-	 */
-	public Item getSpawnEgg() {
-		return this.spawnEgg;
+		if(creatureInfo.isTameable()) {
+			this.tameableCreatures.add(creatureInfo);
+		}
 	}
 
 
@@ -123,20 +124,17 @@ public class CreatureType {
 	 * Creates items for this creature type such as the spawn egg item or treat item, must be called after creatures are loaded so that an egg for each creature can be added.
 	 */
 	public void createItems() {
-		// Spawn Egg:
-		this.spawnEgg = ObjectManager.getItem(this.spawnEggName);
-		if(this.spawnEgg != null) {
-			return;
-		}
-		this.spawnEgg = new ItemCustomSpawnEgg(this.spawnEggName, this);
-		ObjectManager.addItem(this.spawnEggName, this.spawnEgg);
-
 		// Treat:
 		this.treat = ObjectManager.getItem(this.getTreatName());
 		if(this.treat != null) {
 			return;
 		}
-		this.treat = new ItemTreat(this);
+		Item.Properties treatProperties = new Item.Properties();
+		treatProperties.maxStackSize(16);
+		this.treat = new ItemTreat(treatProperties, this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);
+
+		// Soulstone:
+		// TODO Create soulstones for each group type (so long as there are tameable creatures).
 	}
 }

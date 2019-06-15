@@ -1,7 +1,6 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -13,14 +12,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
@@ -147,11 +144,7 @@ public class ObjectManager {
     }
 
     // ========== Potion Effect ==========
-	public static EffectBase addPotionEffect(String name, ConfigBase config, boolean isBad, int color, boolean goodEffect) {
-		if(!config.getBool("Effects", name + " enabled", true, "Set to false to disable this potion effect.")) {
-			return null;
-		}
-
+	public static EffectBase addPotionEffect(String name, boolean isBad, int color, boolean goodEffect) {
         EffectBase effect = new EffectBase(name, isBad, color);
 		effects.put(name, effect);
 		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", effect);
@@ -256,7 +249,7 @@ public class ObjectManager {
     }
 
     // ========== Potions ==========
-    public static void registerPotions(RegistryEvent.Register<Effect> event) {
+    public static void registerEffects(RegistryEvent.Register<Effect> event) {
         for(EffectBase effect : effects.values()) {
         	event.getRegistry().register(effect);
 		}

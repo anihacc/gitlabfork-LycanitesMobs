@@ -49,14 +49,11 @@ public class BlockFireBase extends BlockBase {
         this.loopTicks = true;
         this.canBeCrushed = true;
 
-        //this.blocksMovement = false; Block Properties
         this.noBreakCollision = false;
         this.isOpaque = false;
 
         this.tickRate = 30; // Default tick rate, configs can set this to 1 to remove this fire block from worlds.
         //this.setLightOpacity(1);
-        //this.setTickRandomly(this.tickRandomly);
-        //this.setSoundType(SoundType.CLOTH);
         //this.disableStats();
     }
 

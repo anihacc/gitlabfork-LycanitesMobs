@@ -1,16 +1,13 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryElements;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.*;
 
-public class GuiElementList extends GuiScrollingList {
-	private GuiBeastiaryElements parentGui;
+public class GuiElementList extends GuiListBase {
 	private Map<Integer, String> elementNames = new HashMap<>();
 
 	/**
@@ -23,8 +20,7 @@ public class GuiElementList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiElementList(GuiBeastiaryElements parentGui, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 24, width, height);
-		this.parentGui = parentGui;
+		super(parentGui, width, height, top, bottom, x, 24);
 
 		int i = 0;
 		List<ElementInfo> elements = new ArrayList<>();
@@ -35,14 +31,18 @@ public class GuiElementList extends GuiScrollingList {
 		}
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return this.elementNames.size();
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 		this.parentGui.elementInfo = ElementManager.getInstance().getElement(this.elementNames.get(index));
@@ -75,9 +75,9 @@ public class GuiElementList extends GuiScrollingList {
 		}
 		this.parentGui.getFontRenderer().drawString(elementInfo.getTitle(), this.left + 4, boxTop + 4, 0xFFFFFF);
 
-		/*/ Icon:
-		if (elementInfo.getIcon() != null) {
-			this.parentGui.drawTexture(elementInfo.getIcon(), this.left + 2, boxTop + 2, 0, 1, 1, 16, 16);
-		}*/
-	}
+		// Icon:
+		//if (elementInfo.getIcon() != null) {
+			//this.parentGui.drawTexture(elementInfo.getIcon(), this.left + 2, boxTop + 2, 0, 1, 1, 16, 16);
+		//}
+	}*/
 }

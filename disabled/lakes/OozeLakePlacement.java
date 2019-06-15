@@ -1,8 +1,7 @@
-package com.lycanitesmobs.core.worldgen.fluid;
+package com.lycanitesmobs.core.worldgen.lakes;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.IWorldGenBase;
 import com.lycanitesmobs.core.config.ConfigSpawning;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.util.math.BlockPos;
@@ -10,13 +9,16 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.feature.LakesFeature;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.placement.LakeChanceConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
 import java.util.Set;
 
-public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
+public class OozeLakePlacement extends Placement<LakeChanceConfig> {
     public String name = "Ooze Lakes";
     public ModInfo group = LycanitesMobs.modInfo;
     public double generateUndergroundChance = 0.04D;
@@ -35,7 +37,7 @@ public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
     // ==================================================
     //                    Constructors
     // ==================================================
-    public WorldGenOozeLakes() {
+    public OozeLakePlacement() {
         super(ObjectManager.getBlock("ooze"));
 
         ConfigSpawning config = ConfigSpawning.getConfig(this.group, "worldgen");
@@ -93,8 +95,8 @@ public class WorldGenOozeLakes extends WorldGenLakes implements IWorldGenBase {
     }
 
     @Override
-    public boolean generate(World world, Random random, BlockPos pos) {
-        return super.generate(world, random, pos);
+    public boolean place(World world, Random random, BlockPos pos) {
+        return super.place(world, random, pos);
     }
 
 

@@ -27,9 +27,6 @@ public class BlockVeswax extends BlockBase {
 		this.setup();
 		
 		// Stats:
-		//this.setHardness(0.6F);
-		//this.setHarvestLevel("axe", 0);
-        //this.setSoundType(SoundType.WOOD);
 		this.tickRate = 100;
 		this.removeOnTick = true;
 

@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.gui.beastiary;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.GuiHandler;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureDescriptionList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureTypeList;
@@ -10,10 +8,9 @@ import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.io.IOException;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiBeastiaryCreatures extends GuiBeastiary {
 	public GuiCreatureTypeList creatureTypeList;
@@ -27,7 +24,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 	 */
 	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
-			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.CREATURES.id, 0, 0);
+			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.CREATURES.id, 0, 0);
 		}
 	}
 
@@ -38,18 +35,18 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 
 	@Override
-	public String getTitle() {
+	public ITextComponent getTitle() {
 		if(this.creatureList != null && this.playerExt.selectedCreature != null) {
-			return "";
+			return new TranslationTextComponent("");
 			//return this.playerExt.selectedCreature.getTitle();
 		}
 		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {
-			return this.playerExt.selectedCreatureType.getTitle();
+			return new TranslationTextComponent(this.playerExt.selectedCreatureType.getTitle());
 		}
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
 			LanguageManager.translate("gui.beastiary.creatures.empty.title");
 		}
-		return LanguageManager.translate("gui.beastiary.creatures");
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.creatures"));
 	}
 
 
@@ -89,10 +86,10 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			return;
 		}
 
-		this.creatureTypeList.drawScreen(mouseX, mouseY, partialTicks);
+		this.creatureTypeList.render(mouseX, mouseY, partialTicks);
 		if(this.playerExt.selectedCreatureType != null) {
-			this.creatureList.drawScreen(mouseX, mouseY, partialTicks);
-			this.subspeciesList.drawScreen(mouseX, mouseY, partialTicks);
+			this.creatureList.render(mouseX, mouseY, partialTicks);
+			this.subspeciesList.render(mouseX, mouseY, partialTicks);
 		}
 	}
 
@@ -122,24 +119,24 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			// Element:
 			String text = "\u00A7l" + LanguageManager.translate("creature.stat.element") + ": " + "\u00A7r";
 			text += creatureInfo.elements != null ? creatureInfo.getElementNames() : "None";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 
 			// Level:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
 			text = "\u00A7l" + LanguageManager.translate("creature.stat.cost") + ": " + "\u00A7r";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(creatureInfo, AssetManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
 			text = "\u00A7l" + LanguageManager.translate("creature.stat.knowledge") + ": " + "\u00A7r";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
 
 			// Description:
 			this.descriptionList.creatureKnowledge = creatureKnowledge;
-			this.descriptionList.drawScreen(mouseX, mouseY, partialTicks);
+			this.descriptionList.render(mouseX, mouseY, partialTicks);
 		}
 
 		// Creature Type Display:
@@ -153,7 +150,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 		}
 
 		// Base Display:
@@ -161,11 +158,5 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			String text = LanguageManager.translate("gui.beastiary.creatures.select");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
-	}
-
-
-	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		super.actionPerformed(guiButton);
 	}
 }

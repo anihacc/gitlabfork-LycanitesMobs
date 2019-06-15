@@ -4,8 +4,6 @@ import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.info.ModInfo;
-import net.minecraft.client.renderer.Tessellator;
 
 import java.util.*;
 
@@ -25,6 +23,10 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 		this.refreshList();
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	@Override
 	public void refreshList() {
@@ -35,7 +37,7 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 		creatureTypes.addAll(CreatureManager.getInstance().creatureTypes.values());
 		creatureTypes.sort(Comparator.comparing(CreatureType::getTitle));
 		for(CreatureType creatureType : creatureTypes) {
-			if(this.parentGui.playerExt.beastiary.getCreaturesDescovered(creatureType) > 0) {
+			if(this.screen.playerExt.beastiary.getCreaturesDescovered(creatureType) > 0) {
 				this.creatureTypeList.put(groupIndex++, creatureType);
 			}
 		}
@@ -43,12 +45,12 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return this.creatureTypeList.size();
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.parentGui.playerExt.selectedCreatureType = this.creatureTypeList.get(index);
 		super.elementClicked(index, doubleClick);
@@ -72,14 +74,14 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 			return;
 		}
 		this.parentGui.getFontRenderer().drawString(creatureType.getTitle(), this.left + 4 , boxTop + 2, 0xFFFFFF, true);
-	}
+	}*/
 
 
 	@Override
 	public boolean canListCreature(CreatureInfo creatureInfo, GuiCreatureList.Type listType) {
-		if(this.parentGui.playerExt.selectedCreatureType == null || creatureInfo == null) {
+		if(this.screen.playerExt.selectedCreatureType == null || creatureInfo == null) {
 			return false;
 		}
-		return creatureInfo.creatureType == this.parentGui.playerExt.selectedCreatureType;
+		return creatureInfo.creatureType == this.screen.playerExt.selectedCreatureType;
 	}
 }

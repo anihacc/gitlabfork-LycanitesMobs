@@ -11,9 +11,10 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class PetEntry {
     /** The current entity instance that this entry is using. **/
     public Entity entity;
     /** The current entity NBT data. **/
-    public NBTTagCompound entityNBT;
+    public CompoundNBT entityNBT;
     /** Entity update tick, this counts up each tick as the entity is spawned and active and is paused when the entity is inactive. **/
     public int entityTick = 0;
     /** Entity Health **/
@@ -84,7 +85,7 @@ public class PetEntry {
         String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
         PetEntry petEntry = new PetEntry(entryName, petType, player, creatureInfo.getName());
         if(entity.hasCustomName()) {
-			petEntry.setEntityName(entity.getCustomNameTag());
+			petEntry.setEntityName(entity.getCustomName().toString());
 		}
         petEntry.setEntitySubspeciesID(entity.getSubspeciesIndex());
         petEntry.setEntitySize(entity.sizeScale);
@@ -287,7 +288,7 @@ public class PetEntry {
                 try {
                     if (this.teleportEntity) {
                         if (this.entity.getEntityWorld() != this.host.getEntityWorld())
-                            this.entity.changeDimension(this.host.getEntityWorld().provider.getDimension());
+                            this.entity.changeDimension(this.host.getEntityWorld().getDimension().getType());
                         this.entity.setPosition(this.host.posX, this.host.posY, this.host.posZ);
                     }
                 }
@@ -304,7 +305,7 @@ public class PetEntry {
                 }
 
                 if(entity.hasCustomName()) {
-                	this.entityName = this.entity.getCustomNameTag();
+                	this.entityName = this.entity.getCustomName().toString();
 				}
             }
         }
@@ -387,11 +388,11 @@ public class PetEntry {
             if(this.host.getRNG().nextBoolean())
                 randomAngle = -randomAngle;
             BlockPos spawnPos = entityCreature.getFacingPosition(this.host, -1, randomAngle);
-            if(!this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
+            if(this.entity.getEntityWorld().getBlockState(spawnPos).canEntitySpawn(this.entity.getEntityWorld(), spawnPos, this.entity.getType()))
                 this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
             else {
                 spawnPos = entityCreature.getFacingPosition(this.host, -1, -randomAngle);
-                if(this.entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP))
+                if(this.entity.getEntityWorld().getBlockState(spawnPos).canEntitySpawn(this.entity.getEntityWorld(), spawnPos, this.entity.getType()))
                     this.entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), this.host.rotationYaw, 0.0F);
             }
 
@@ -401,7 +402,7 @@ public class PetEntry {
 
             // Entity Name and Appearance:
             if(this.entityName != null && !"".equals(this.entityName)) {
-				entityCreature.setCustomNameTag(this.entityName);
+				entityCreature.setCustomName(new TranslationTextComponent(this.entityName));
 			}
             entityCreature.setSizeScale(this.entitySize);
             entityCreature.applySubspecies(this.subspeciesID);
@@ -423,7 +424,7 @@ public class PetEntry {
         }
 
         this.onSpawnEntity(this.entity);
-        this.host.getEntityWorld().spawnEntity(this.entity);
+        this.host.getEntityWorld().func_217376_c(this.entity);
     }
 
     /** Called when the entity for this entry is spawned just before it is added to the world. **/
@@ -475,7 +476,7 @@ public class PetEntry {
                 entityCreature.setTemporary(this.temporaryDuration);
 
             if(this.entityName != null && !"".equals(this.entityName))
-                entityCreature.setCustomNameTag(this.entityName);
+                entityCreature.setCustomName(new TranslationTextComponent(this.entityName));
             entityCreature.setSizeScale(this.entitySize);
             entityCreature.applySubspecies(this.subspeciesID);
         }
@@ -516,7 +517,7 @@ public class PetEntry {
     // ==================================================
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    public void readFromNBT(CompoundNBT nbtTagCompound) {
         if(nbtTagCompound.contains("Active"))
             this.active = nbtTagCompound.getBoolean("Active");
         if(nbtTagCompound.contains("RespawnTime"))
@@ -538,12 +539,12 @@ public class PetEntry {
         if(nbtTagCompound.contains("Color"))
             this.setColor(nbtTagCompound.getString("Color"));
         if(nbtTagCompound.contains("EntityNBT"))
-            this.entityNBT = nbtTagCompound.getCompoundTag("EntityNBT");
+            this.entityNBT = nbtTagCompound.getCompound("EntityNBT");
     }
 
     // ========== Write ==========
     /** Writes pet entry to NBTTag. **/
-    public void writeToNBT(NBTTagCompound nbtTagCompound) {
+    public void writeToNBT(CompoundNBT nbtTagCompound) {
         if(this.name == null || "".equals(this.name))
             return;
         nbtTagCompound.putBoolean("Active", this.active);
@@ -563,7 +564,7 @@ public class PetEntry {
             nbtTagCompound.putInt("SubspeciesID", this.subspeciesID);
             nbtTagCompound.putDouble("EntitySize", this.entitySize);
             nbtTagCompound.putString("Color", this.color);
-            nbtTagCompound.setTag("EntityNBT", this.entityNBT);
+            nbtTagCompound.put("EntityNBT", this.entityNBT);
         }
     }
 
@@ -575,7 +576,7 @@ public class PetEntry {
 		}
 
         if(this.entityNBT == null) {
-			this.entityNBT = new NBTTagCompound();
+			this.entityNBT = new CompoundNBT();
 		}
 
 		// Creature Base:
@@ -584,21 +585,21 @@ public class PetEntry {
 
             entityCreatureBase.inventory.write(this.entityNBT);
 
-            NBTTagCompound extTagCompound = new NBTTagCompound();
+            CompoundNBT extTagCompound = new CompoundNBT();
             entityCreatureBase.extraMobBehaviour.write(extTagCompound);
-            this.entityNBT.setTag("ExtraBehaviour", extTagCompound);
+            this.entityNBT.put("ExtraBehaviour", extTagCompound);
 
             if(this.entity instanceof EntityCreatureAgeable) {
                 EntityCreatureAgeable entityCreatureAgeable = (EntityCreatureAgeable)this.entity;
-                this.entityNBT.setInteger("Age", entityCreatureAgeable.getGrowingAge());
+                this.entityNBT.putInt("Age", entityCreatureAgeable.getGrowingAge());
             }
         }
 
         // Update Pet Name:
 		if(this.entity instanceof EntityCreatureBase && this.entity.hasCustomName()) {
-			this.entityName = this.entity.getCustomNameTag();
+			this.entityName = this.entity.getCustomName().toString();
 		}
-		this.entity.writeToNBT(this.entityNBT);
+		this.entity.writeWithoutTypeId(this.entityNBT);
     }
 
     // ========== Load Entity NBT ==========
@@ -611,13 +612,13 @@ public class PetEntry {
 
             entityCreatureBase.inventory.read(this.entityNBT);
 
-            if(this.entityNBT.hasKey("ExtraBehaviour"))
-                entityCreatureBase.extraMobBehaviour.read(this.entityNBT.getCompoundTag("ExtraBehaviour"));
+            if(this.entityNBT.contains("ExtraBehaviour"))
+                entityCreatureBase.extraMobBehaviour.read(this.entityNBT.getCompound("ExtraBehaviour"));
 
             if(this.entity instanceof EntityCreatureAgeable) {
                 EntityCreatureAgeable entityCreatureAgeable = (EntityCreatureAgeable)this.entity;
-                if(this.entityNBT.hasKey("Age"))
-                    entityCreatureAgeable.setGrowingAge(this.entityNBT.getInteger("Age"));
+                if(this.entityNBT.contains("Age"))
+                    entityCreatureAgeable.setGrowingAge(this.entityNBT.getInt("Age"));
                 else
                     entityCreatureAgeable.setGrowingAge(0);
             }

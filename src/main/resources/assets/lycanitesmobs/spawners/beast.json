@@ -1,7 +1,7 @@
 {
 	"name": "beast",
 	"type": "spawner",
-	"enabled": false,
+	"enabled": true,
 	"loadDefault": true,
 	"mobCountMin": 8,
 	"ignoreBiomes": false,

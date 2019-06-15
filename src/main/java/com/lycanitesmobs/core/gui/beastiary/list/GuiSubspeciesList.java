@@ -1,16 +1,14 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
+import com.lycanitesmobs.core.gui.GuiListBase;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.client.GuiScrollingList;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GuiSubspeciesList extends GuiScrollingList {
+public class GuiSubspeciesList extends GuiListBase {
 	private GuiBeastiary parentGui;
 	private CreatureInfo creature;
 	private Map<Integer, Integer> subspeciesList = new HashMap<>();
@@ -26,12 +24,16 @@ public class GuiSubspeciesList extends GuiScrollingList {
 	 * @param x The x position of the list.
 	 */
 	public GuiSubspeciesList(GuiBeastiary parentGui, boolean summoning, int width, int height, int top, int bottom, int x) {
-		super(Minecraft.getMinecraft(), width, height, top, bottom, x, 24, width, height);
+		super(parentGui, width, height, top, bottom, x, 24);
 		this.parentGui = parentGui;
 		this.summoning = summoning;
 		this.refreshList();
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	/**
 	 * Reloads all items in this list.
@@ -66,12 +68,12 @@ public class GuiSubspeciesList extends GuiScrollingList {
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return this.subspeciesList.size();
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		this.selectedIndex = index;
 		if(!this.summoning) {
@@ -129,5 +131,5 @@ public class GuiSubspeciesList extends GuiScrollingList {
 			return;
 		}
 		this.parentGui.getFontRenderer().drawString(subspecies.getTitle(), this.left + 20, nameY, 0xFFFFFF);
-	}
+	}*/
 }

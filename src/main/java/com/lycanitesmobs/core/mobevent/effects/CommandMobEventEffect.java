@@ -26,9 +26,9 @@ public class CommandMobEventEffect extends MobEventEffect {
 			return;
 		}
 
-		MinecraftServer server = world.getMinecraftServer();
+		MinecraftServer server = world.getServer();
 		if(server != null) {
-			server.getCommandManager().executeCommand(null, this.command);
+			server.getCommandManager().handleCommand(null, this.command);
 		}
 	}
 }

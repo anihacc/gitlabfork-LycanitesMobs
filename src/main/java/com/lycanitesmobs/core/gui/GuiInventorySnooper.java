@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.gui;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.lang.reflect.Field;
@@ -11,7 +11,7 @@ import java.util.List;
  * A sneaky snooping class that taps into GuiInventory to try and grab stuff from those stupid protected fields!
  *
  */
-public class GuiInventorySnooper extends GuiInventory {
+public class GuiInventorySnooper extends InventoryScreen {
 
 	public GuiInventorySnooper(PlayerEntity entityPlayer) {
 		super(entityPlayer);
@@ -23,11 +23,11 @@ public class GuiInventorySnooper extends GuiInventory {
 	 */
 	public String getButtonListFieldName() {
 		try {
-			for(Field field : GuiScreen.class.getDeclaredFields()) {
+			for(Field field : Screen.class.getDeclaredFields()) {
 				field.setAccessible(true);
 				Object object = field.get(this);
 				if(object instanceof List)
-					if((List)object == this.buttonList)
+					if(object == this.buttons)
 						return field.getName();
 			}
 		} catch(Exception e) {}

@@ -6,13 +6,13 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -157,7 +157,7 @@ public class MobEvent {
 	 * @param player The player that triggered the event, this can be null for world based events where all player based checks will fail.
 	 **/
 	public boolean canStart(World world, PlayerEntity player) {
-		if(world.provider == null) {
+		if(world == null) {
 			return false;
 		}
 
@@ -249,7 +249,7 @@ public class MobEvent {
 	 * @param level The level of the event.
 	 * @param ticks How many ticks the event has been active for.
 	 */
-	public void onSpawn(EntityLiving entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public void onSpawn(LivingEntity entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}

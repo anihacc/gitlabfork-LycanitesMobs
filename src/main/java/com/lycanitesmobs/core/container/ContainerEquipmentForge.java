@@ -18,7 +18,7 @@ public class ContainerEquipmentForge extends ContainerBase {
 	 * @param playerInventory The Inventory of the accessing player.
 	 */
 	public ContainerEquipmentForge(TileEntityEquipmentForge equipmentForge, PlayerInventory playerInventory) {
-		super();
+		super(0);
 		this.equipmentForge = equipmentForge;
 
 		// Player Inventory

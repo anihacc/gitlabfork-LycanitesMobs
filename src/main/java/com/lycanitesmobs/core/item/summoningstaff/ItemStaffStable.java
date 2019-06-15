@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.summoningstaff;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -17,12 +18,6 @@ public class ItemStaffStable extends ItemStaffSummoning {
 	// ==================================================
 	//                       Use
 	// ==================================================
-    // ========== Durability ==========
-    @Override
-    public int getDurability() {
-    	return 250;
-    }
-    
     // ========== Rapid Time ==========
     @Override
     public int getRapidTime(ItemStack itemStack) {
@@ -41,6 +36,12 @@ public class ItemStaffStable extends ItemStaffSummoning {
     public int getSummonDuration() {
     	return 180 * 20;
     }
+
+    @Override
+	protected void damage_item(ItemStack itemStack, int amountToDamage, ServerPlayerEntity entity) {
+		amountToDamage = Math.max(1, (int)Math.floor((double)amountToDamage / 2));
+		super.damage_item(itemStack, amountToDamage, entity);
+	}
     
 	
 	// ==================================================

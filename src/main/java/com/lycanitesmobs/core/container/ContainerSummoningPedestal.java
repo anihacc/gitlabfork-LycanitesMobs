@@ -12,7 +12,7 @@ public class ContainerSummoningPedestal extends ContainerBase {
     //                Constructor
     // ========================================
     public ContainerSummoningPedestal(TileEntitySummoningPedestal summoningPedestal, PlayerInventory playerInventory) {
-        super();
+        super(0);
         this.summoningPedestal = summoningPedestal;
         this.inventoryStart = this.inventorySlots.size();
 

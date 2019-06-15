@@ -40,11 +40,10 @@ public class BlockFrostCloud extends BlockBase {
 		this.removeOnTick = true;
 		this.loopTicks = false;
 		this.canBeCrushed = true;
-		
-		//this.noEntityCollision = true;
+
 		this.noBreakCollision = true;
 		this.isOpaque = false;
-		
+
 		//this.setBlockUnbreakable();
 		//this.setLightOpacity(1);
 	}

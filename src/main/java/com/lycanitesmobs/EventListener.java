@@ -7,31 +7,29 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.info.ItemConfig;
-import com.lycanitesmobs.core.info.ItemManager;
-import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -45,14 +43,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.OreDictionaryEntries;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class EventListener {
 
@@ -69,25 +62,23 @@ public class EventListener {
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         ObjectManager.registerBlocks(event);
-		ItemManager.getInstance().registerBlockOres();
     }
 
     // ========== Items ==========
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         ObjectManager.registerItems(event);
-        ItemManager.getInstance().registerItemOres();
     }
 
     // ========== Potions ==========
     @SubscribeEvent
-    public void registerPotions(RegistryEvent.Register<Potion> event) {
-        ObjectManager.registerPotions(event);
+    public void registerEffects(RegistryEvent.Register<Effect> event) {
+        ObjectManager.registerEffects(event);
     }
 
 	// ========== Entities ==========
 	@SubscribeEvent
-	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		ObjectManager.registerSpecialEntities(event);
 	}
 
@@ -97,11 +88,11 @@ public class EventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onWorldLoading(WorldEvent.Load event) {
-		if(event.getWorld() == null)
+		if(!(event.getWorld() instanceof World))
 			return;
 
 		// ========== Extended World ==========
-		ExtendedWorld.getForWorld(event.getWorld());
+		ExtendedWorld.getForWorld((World)event.getWorld());
 	}
 
 
@@ -111,53 +102,49 @@ public class EventListener {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedEntity"), new ICapabilitySerializable<NBTTagCompound>() {
-                IExtendedEntity instance = LycanitesMobs.EXTENDED_ENTITY.getDefaultInstance();
+            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedEntity"), new ICapabilitySerializable<CompoundNBT>() {
+				LazyOptional<IExtendedEntity> instance;
 
                 @Override
-                public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-                    return capability == LycanitesMobs.EXTENDED_ENTITY;
+                public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+                	if(this.instance == null) {
+                		this.instance = LazyOptional.of(LycanitesMobs.EXTENDED_ENTITY::getDefaultInstance);
+					}
+                	return this.instance.cast();
                 }
 
                 @Override
-                public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-                    return capability == LycanitesMobs.EXTENDED_ENTITY ? LycanitesMobs.EXTENDED_ENTITY.<T>cast(this.instance) : null;
+                public CompoundNBT serializeNBT() {
+                    return (CompoundNBT) LycanitesMobs.EXTENDED_ENTITY.getStorage().writeNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance.orElse(null), null);
                 }
 
                 @Override
-                public NBTTagCompound serializeNBT() {
-                    return (NBTTagCompound) LycanitesMobs.EXTENDED_ENTITY.getStorage().writeNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance, null);
-                }
-
-                @Override
-                public void deserializeNBT(NBTTagCompound nbt) {
-                    LycanitesMobs.EXTENDED_ENTITY.getStorage().readNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance, null, nbt);
+                public void deserializeNBT(CompoundNBT nbt) {
+                    LycanitesMobs.EXTENDED_ENTITY.getStorage().readNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance.orElse(null), null, nbt);
                 }
             });
         }
 
         if(event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedPlayer"), new ICapabilitySerializable<NBTTagCompound>() {
-                IExtendedPlayer instance = LycanitesMobs.EXTENDED_PLAYER.getDefaultInstance();
+            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedPlayer"), new ICapabilitySerializable<CompoundNBT>() {
+				LazyOptional<IExtendedPlayer> instance;
+
+				@Override
+				public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
+					if(this.instance == null) {
+						this.instance = LazyOptional.of(LycanitesMobs.EXTENDED_PLAYER::getDefaultInstance);
+					}
+					return this.instance.cast();
+				}
 
                 @Override
-                public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-                    return capability == LycanitesMobs.EXTENDED_PLAYER;
+                public CompoundNBT serializeNBT() {
+                    return (CompoundNBT) LycanitesMobs.EXTENDED_PLAYER.getStorage().writeNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance.orElse(null), null);
                 }
 
                 @Override
-                public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-                    return capability == LycanitesMobs.EXTENDED_PLAYER ? LycanitesMobs.EXTENDED_PLAYER.<T>cast(this.instance) : null;
-                }
-
-                @Override
-                public NBTTagCompound serializeNBT() {
-                    return (NBTTagCompound) LycanitesMobs.EXTENDED_PLAYER.getStorage().writeNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance, null);
-                }
-
-                @Override
-                public void deserializeNBT(NBTTagCompound nbt) {
-                    LycanitesMobs.EXTENDED_PLAYER.getStorage().readNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance, null, nbt);
+                public void deserializeNBT(CompoundNBT nbt) {
+                    LycanitesMobs.EXTENDED_PLAYER.getStorage().readNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance.orElse(null), null, nbt);
                 }
             });
         }
@@ -180,7 +167,7 @@ public class EventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityConstructing(EntityConstructing event) {
-		if(event.getEntity() == null || event.getEntity().getEntityWorld() == null || event.getEntity().getEntityWorld().isRemote)
+		if(event.getEntity() == null || event.getEntity().getEntityWorld().isRemote)
 			return;
 
         // ========== Force Remove Entity ==========
@@ -188,7 +175,7 @@ public class EventListener {
             if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
                 LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
-                    if(forceRemoveID.equalsIgnoreCase(event.getEntity().getName())) {
+                    if(forceRemoveID.equalsIgnoreCase(event.getEntity().getType().getRegistryName().toString())) {
                         event.getEntity().remove();
                         break;
                     }
@@ -249,21 +236,19 @@ public class EventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		PlayerEntity player = event.getPlayerEntity();
+		PlayerEntity player = event.getEntityPlayer();
 		Entity entity = event.getTarget();
-        if(player == null || entity == null)
+        if(player == null || !(entity instanceof LivingEntity))
 			return;
 
-        if (player.getHeldItem(event.getHand()) != null) {
-            ItemStack itemStack = player.getHeldItem(event.getHand());
-            Item item = itemStack.getItem();
-            if (item instanceof ItemBase) {
-				if (((ItemBase) item).onItemRightClickOnEntity(player, entity, itemStack)) {
-					if (event.isCancelable())
-						event.setCanceled(true);
-				}
+		/*ItemStack itemStack = player.getHeldItem(event.getHand());
+		Item item = itemStack.getItem();
+		if (item instanceof ItemBase) {
+			if (item.itemInteractionForEntity(itemStack, player, (LivingEntity)entity, event.getHand())) {
+				if (event.isCancelable())
+					event.setCanceled(true);
 			}
-        }
+		}*/
 	}
 
 
@@ -278,7 +263,7 @@ public class EventListener {
 		}
 
 		// Better Invisibility:
-		if(!event.getEntityLiving().isPotionActive(MobEffects.NIGHT_VISION)) {
+		if(!event.getEntityLiving().isPotionActive(Effects.field_76439_r)) {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -288,12 +273,12 @@ public class EventListener {
 		}
 
 		// Can Be Targeted:
-		if(event.getEntityLiving() instanceof EntityLiving && targetEntity instanceof EntityCreatureBase) {
+		if(event.getEntityLiving() instanceof MobEntity && targetEntity instanceof EntityCreatureBase) {
 			if(!((EntityCreatureBase)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
 				event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
-				((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+				((MobEntity)event.getEntityLiving()).setAttackTarget(null);
 			}
 		}
 	}
@@ -386,7 +371,7 @@ public class EventListener {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
                 EntityItemCustom entityItem = new EntityItemCustom(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
                 entityItem.setPickupDelay(10);
-                world.spawnEntity(entityItem);
+                world.func_217376_c(entityItem);
             }
         }
 	}
@@ -399,20 +384,20 @@ public class EventListener {
     public void onBucketFill(FillBucketEvent event) {
         World world = event.getWorld();
         RayTraceResult target = event.getTarget();
-        if(target == null)
+        if(target == null || !(target instanceof BlockRayTraceResult))
             return;
-        BlockPos pos = target.getBlockPos();
+        BlockPos pos = ((BlockRayTraceResult)target).getPos();
         Block block = world.getBlockState(pos).getBlock();
         Item bucket = ObjectManager.buckets.get(block);
-        if(bucket != null && world.getBlockState(pos).getValue(BlockLiquid.LEVEL) == 0) {
-            world.removeBlock(pos);
+        if(bucket != null && world.getFluidState(pos).getLevel() == 0) {
+            world.removeBlock(pos, true);
         }
         
         if(bucket == null)
         	return;
 
         event.setFilledBucket(new ItemStack(bucket));
-        event.setResult(Result.ALLOW);
+        event.setResult(Event.Result.ALLOW);
     }
 
 
@@ -421,7 +406,7 @@ public class EventListener {
 	// ==================================================
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
-		if(event.getState() == null || event.getWorld() == null || event.getPlayer() == null || event.getWorld().isRemote || event.isCanceled()) {
+		if(event.getState() == null || event.getWorld() == null || event.getPlayer() == null || event.getWorld().isRemote() || event.isCanceled()) {
 			return;
 		}
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getPlayer());
@@ -443,45 +428,43 @@ public class EventListener {
 		}
 
 		// Entity:
-		RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
-		if(mouseOver != null) {
-			Entity mouseOverEntity = mouseOver.entityHit;
-			if(mouseOverEntity != null) {
-				if(mouseOverEntity instanceof EntityCreatureBase) {
-					EntityCreatureBase mouseOverCreature = (EntityCreatureBase)mouseOverEntity;
+		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
+		if(mouseOver != null && mouseOver instanceof EntityRayTraceResult) {
+			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
+			if(mouseOverEntity instanceof EntityCreatureBase) {
+				EntityCreatureBase mouseOverCreature = (EntityCreatureBase)mouseOverEntity;
+				event.getLeft().add("");
+				event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
+				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
+				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames());
+				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
+				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
+				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
+				event.getLeft().add("");
+				event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
+				event.getLeft().add("Speed: " + mouseOverCreature.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
+				event.getLeft().add("");
+				event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
+				event.getLeft().add("Armor: " + mouseOverCreature.creatureStats.getArmor());
+				event.getLeft().add("");
+				event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
+				event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());
+				event.getLeft().add("Melee Range: " + mouseOverCreature.getMeleeAttackRange());
+				event.getLeft().add("Ranged Speed: " + mouseOverCreature.creatureStats.getRangedSpeed());
+				event.getLeft().add("Pierce: " + mouseOverCreature.creatureStats.getPierce());
+				event.getLeft().add("");
+				event.getLeft().add("Effect Duration: " + mouseOverCreature.creatureStats.getEffect() + " Base Seconds");
+				event.getLeft().add("Effect Amplifier: x" + mouseOverCreature.creatureStats.getAmplifier());
+				event.getLeft().add("");
+				event.getLeft().add("Has Attack Target: " + mouseOverCreature.hasAttackTarget());
+				event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
+				event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
+				event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
+				if(mouseOverEntity instanceof EntityCreatureTameable) {
+					EntityCreatureTameable mouseOverTameable = (EntityCreatureTameable)mouseOverCreature;
 					event.getLeft().add("");
-					event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
-					event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getMinecraft().player));
-					event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames());
-					event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
-					event.getLeft().add("Level: " + mouseOverCreature.getLevel());
-					event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
-					event.getLeft().add("");
-					event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());
-					event.getLeft().add("Speed: " + mouseOverCreature.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
-					event.getLeft().add("");
-					event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
-					event.getLeft().add("Armor: " + mouseOverCreature.creatureStats.getArmor());
-					event.getLeft().add("");
-					event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
-					event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());
-					event.getLeft().add("Melee Range: " + mouseOverCreature.getMeleeAttackRange());
-					event.getLeft().add("Ranged Speed: " + mouseOverCreature.creatureStats.getRangedSpeed());
-					event.getLeft().add("Pierce: " + mouseOverCreature.creatureStats.getPierce());
-					event.getLeft().add("");
-					event.getLeft().add("Effect Duration: " + mouseOverCreature.creatureStats.getEffect() + " Base Seconds");
-					event.getLeft().add("Effect Amplifier: x" + mouseOverCreature.creatureStats.getAmplifier());
-					event.getLeft().add("");
-					event.getLeft().add("Has Attack Target: " + mouseOverCreature.hasAttackTarget());
-					event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
-					event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
-					event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
-					if(mouseOverEntity instanceof EntityCreatureTameable) {
-						EntityCreatureTameable mouseOverTameable = (EntityCreatureTameable)mouseOverCreature;
-						event.getLeft().add("");
-						event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
-						event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());
-					}
+					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
+					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());
 				}
 			}
 		}

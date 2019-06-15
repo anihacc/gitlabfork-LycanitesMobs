@@ -2,15 +2,13 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
-
-import java.io.IOException;
 
 public class GuiMinionSelection extends GuiBaseScreen {
 	public PlayerEntity player;
@@ -27,8 +25,8 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                    Constructor
   	// ==================================================
 	public static void openToPlayer(PlayerEntity player) {
-		if(player != null && player.getEntityWorld() != null)
-			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.PLAYER.id, player.getEntityWorld(), GuiHandler.PlayerGuiType.MINION_SELECTION.id, 0, 0);
+		//if(player != null)
+			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.PLAYER.id, player.getEntityWorld(), GuiHandler.PlayerGuiType.MINION_SELECTION.id, 0, 0);
 	}
 	
 	public boolean doesGuiPauseGame() {
@@ -40,7 +38,7 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                    Constructor
   	// ==================================================
 	public GuiMinionSelection(PlayerEntity player) {
-		super();
+		super(new TranslationTextComponent("gui.minion.selection"));
 		this.player = player;
 		this.playerExt = ExtendedPlayer.getForPlayer(player);
 	}
@@ -50,8 +48,8 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                       Init
   	// ==================================================
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
 		this.windowWidth = 256;
@@ -66,13 +64,12 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                    Draw Screen
   	// ==================================================
 	@Override
-	public void drawScreen(int x, int y, float f) {
+	public void render(int x, int y, float f) {
         this.drawGuiContainerBackgroundLayer();
         this.updateControls();
         this.drawGuiContainerForegroundLayer();
-        
-        // Creature List:
-        super.drawScreen(x, y, f);
+
+        super.render(x, y, f);
 	}
 	
 	
@@ -87,7 +84,7 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	// ==================================================
 	protected void drawGuiContainerBackgroundLayer() {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIMinion"));
+        Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIMinion"));
 	}
 	
 	
@@ -96,34 +93,33 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	// ==================================================
 	protected void drawControls() {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int buttonSpacing = 2;
         int buttonWidth = 32;
         int buttonHeight = 32;
         int buttonX = this.centerX - Math.round(buttonWidth / 2);
         int buttonY = this.centerY - Math.round(buttonHeight / 2);
-        GuiButton button;
+        ButtonBase button;
         CreatureInfo creatureInfo;
         int offset = 32;
         
         creatureInfo = this.playerExt.getSummonSet(1).getCreatureInfo();
-        button = new GuiButtonCreature(1, buttonX, buttonY - Math.round(offset * 2), buttonWidth, buttonHeight, "" + 1, creatureInfo);
-    	this.buttonList.add(button);
+        button = new GuiButtonCreature(1, buttonX, buttonY - Math.round(offset * 2), buttonWidth, buttonHeight, "" + 1, creatureInfo, this);
+    	this.buttons.add(button);
     	
         creatureInfo = this.playerExt.getSummonSet(2).getCreatureInfo();
-        button = new GuiButtonCreature(2, buttonX + Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 2, creatureInfo);
-    	this.buttonList.add(button);
+        button = new GuiButtonCreature(2, buttonX + Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 2, creatureInfo, this);
+    	this.buttons.add(button);
     	
         creatureInfo = this.playerExt.getSummonSet(3).getCreatureInfo();
-        button = new GuiButtonCreature(3, buttonX + Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 3, creatureInfo);
-    	this.buttonList.add(button);
+        button = new GuiButtonCreature(3, buttonX + Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 3, creatureInfo, this);
+    	this.buttons.add(button);
     	
         creatureInfo = this.playerExt.getSummonSet(4).getCreatureInfo();
-        button = new GuiButtonCreature(4, buttonX - Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 4, creatureInfo);
-    	this.buttonList.add(button);
+        button = new GuiButtonCreature(4, buttonX - Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 4, creatureInfo, this);
+    	this.buttons.add(button);
     	
         creatureInfo = this.playerExt.getSummonSet(5).getCreatureInfo();
-        button = new GuiButtonCreature(5, buttonX - Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 5, creatureInfo);
-    	this.buttonList.add(button);
+        button = new GuiButtonCreature(5, buttonX - Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 5, creatureInfo, this);
+    	this.buttons.add(button);
         
         /*for(int setID = 1; setID <= 5; setID++) {
         	float offset = ((float)setID / 6) - 0.5F;
@@ -137,11 +133,11 @@ public class GuiMinionSelection extends GuiBaseScreen {
     }
 	
 	public void updateControls() {
-        for(Object buttonObj : this.buttonList) {
-        	if(buttonObj instanceof GuiButton) {
-        		GuiButton button = (GuiButton)buttonObj;
-        		button.visible = this.playerExt.getSummonSet(button.id).isUseable();
-        		button.enabled = button.id != this.playerExt.selectedSummonSet;
+        for(Object buttonObj : this.buttons) {
+        	if(buttonObj instanceof ButtonBase) {
+				ButtonBase button = (ButtonBase)buttonObj;
+        		button.visible = this.playerExt.getSummonSet(button.buttonId).isUseable();
+        		button.active = button.buttonId != this.playerExt.selectedSummonSet;
         	}
         }
 	}
@@ -151,13 +147,11 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                     Actions
   	// ==================================================
 	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		if(guiButton != null) {
-			this.playerExt.setSelectedSummonSet(guiButton.id);
-			MessageSummonSetSelection message = new MessageSummonSetSelection(this.playerExt);
-			LycanitesMobs.packetHandler.sendToServer(message);
-		}
-		super.actionPerformed(guiButton);
+	public void actionPerformed(byte buttonId) {
+		this.playerExt.setSelectedSummonSet(buttonId);
+		MessageSummonSetSelection message = new MessageSummonSetSelection(this.playerExt);
+		LycanitesMobs.packetHandler.sendToServer(message);
+		super.actionPerformed(buttonId);
 	}
 	
 	
@@ -165,9 +159,9 @@ public class GuiMinionSelection extends GuiBaseScreen {
   	//                     Key Press
   	// ==================================================
 	@Override
-	protected void keyTyped(char par1, int par2) throws IOException {
-		if(par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.getKeyCode())
-        	 this.mc.player.closeScreen();
-		super.keyTyped(par1, par2);
+	public boolean keyPressed(int par1, int par2, int par3) {
+		if(par2 == 1 || par2 == Minecraft.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode())
+        	 Minecraft.getInstance().player.closeScreen();
+		return super.keyPressed(par1, par2, par3);
 	}
 }

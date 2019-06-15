@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.Difficulty;
 
 /** Manages the stats of an EntityCreature. This applies difficulty multipliers, subspecies, levels, etc also. **/
 public class CreatureStats {
@@ -278,11 +278,11 @@ public class CreatureStats {
 	 * @return The stat multiplier.
 	 */
 	protected double getDifficultyMultiplier(String stat) {
-		EnumDifficulty difficulty = this.entity.getEntityWorld().getDifficulty();
+		Difficulty difficulty = this.entity.getEntityWorld().getDifficulty();
 		String difficultyName = "Easy";
-		if(difficulty.getDifficultyId() >= 3)
+		if(difficulty.getId() >= 3)
 			difficultyName = "Hard";
-		else if(difficulty == EnumDifficulty.NORMAL)
+		else if(difficulty == Difficulty.NORMAL)
 			difficultyName = "Normal";
 		return CreatureManager.getInstance().getDifficultyMultiplier(difficultyName.toUpperCase(), stat.toUpperCase());
 	}

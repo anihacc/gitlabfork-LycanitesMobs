@@ -2,21 +2,21 @@ package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.client.model.ModelBase;
+import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.model.ModelItemBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 
 public class ItemInfo {
 
 	// Core Info:
-	/** The name of this projectile. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
+	/** The name of this item. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
 	protected String name;
 
 	/** The entity class used by this item. Defaults to ItemGeneric but can be changed to special classes for unique behaviour, etc. **/
 	public Class<? extends Item> itemClass;
 	/** The model class used by this item. If null, the default vanilla json model loading is used. **/
-	public Class<? extends ModelBase> modelClass;
+	public Class<? extends ModelItemBase> modelClass;
 
 	/** The group that this item belongs to. **/
 	public ModInfo group;
@@ -40,7 +40,7 @@ public class ItemInfo {
 			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
 		}
 		try {
-			this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
+			this.modelClass = (Class<? extends ModelItemBase>) Class.forName(json.get("modelClass").getAsString());
 		}
 		catch(Exception e) {
 			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());

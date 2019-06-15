@@ -8,27 +8,28 @@ import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import com.lycanitesmobs.core.pets.SummonSet;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ExtendedPlayer implements IExtendedPlayer {
     public static Map<PlayerEntity, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
-	public static Map<String, NBTTagCompound> backupNBTTags = new HashMap<>();
+	public static Map<String, CompoundNBT> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
 	public PlayerEntity player;
@@ -99,7 +100,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         }
 
         // Server Side:
-        IExtendedPlayer iExtendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null);
+        IExtendedPlayer iExtendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null).orElse(null);
         if(!(iExtendedPlayer instanceof ExtendedPlayer))
             return null;
         ExtendedPlayer extendedPlayer = (ExtendedPlayer)iExtendedPlayer;
@@ -124,9 +125,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
     /** Called when the player entity is being cloned, backups all data so that it can be loaded into a new ExtendedPlayer for the clone. **/
     public void backupPlayer() {
         if(this.player != null) {
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+            CompoundNBT nbtTagCompound = new CompoundNBT();
             this.writeNBT(nbtTagCompound);
-            backupNBTTags.put(this.player.getName(), nbtTagCompound);
+            backupNBTTags.put(this.player.getUniqueID().toString(), nbtTagCompound);
         }
     }
 
@@ -134,11 +135,12 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void setPlayer(PlayerEntity player) {
         this.player = player;
         this.petManager.host = player;
-        if(this.player.getEntityWorld() == null || this.player.getEntityWorld().isRemote)
+		this.player.getEntityWorld();
+		if(this.player.getEntityWorld().isRemote)
             return;
-        if(backupNBTTags.containsKey(this.player.getName())) {
-            this.readNBT(backupNBTTags.get(this.player.getName()));
-            backupNBTTags.remove(this.player.getName());
+        if(backupNBTTags.containsKey(this.player.getUniqueID().toString())) {
+            this.readNBT(backupNBTTags.get(this.player.getUniqueID().toString()));
+            backupNBTTags.remove(this.player.getUniqueID().toString());
         }
 	}
 
@@ -148,10 +150,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
     /** Returns true if the provided entity is within melee attack range and is considered large. This is used for when the vanilla attack range fails on big entities. **/
     public boolean canMeleeBigEntity(Entity targetEntity) {
-        if(targetEntity == null || !(targetEntity instanceof LivingEntity))
+        if(!(targetEntity instanceof LivingEntity))
             return false;
-        float targetWidth = targetEntity.width;
-        float targetHeight = targetEntity.height;
+        float targetWidth = targetEntity.getWidth();
+        float targetHeight = targetEntity.getHeight();
         if(targetEntity instanceof EntityCreatureBase) {
         	EntityCreatureBase targetCreature = (EntityCreatureBase)targetEntity;
         	targetWidth *= targetCreature.hitAreaWidthScale;
@@ -173,7 +175,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         if(!this.hasAttacked && this.player.getHeldItemMainhand() != null && this.canMeleeBigEntity(targetEntity)) {
             this.player.attackTargetEntityWithCurrentItem(targetEntity);
             this.player.resetCooldown();
-            this.player.swingArm(EnumHand.MAIN_HAND);
+            this.player.swingArm(Hand.MAIN_HAND);
         }
     }
 
@@ -185,7 +187,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void onUpdate() {
 		this.timePlayed++;
         this.hasAttacked = false;
-		boolean creative = this.player.capabilities.isCreativeMode;
+		boolean creative = this.player.playerAbilities.isCreativeMode;
 
 		// Stats:
 		boolean sync = false;
@@ -210,8 +212,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.summonFocus++;
 			if(!this.player.getEntityWorld().isRemote && !creative && this.currentTick % 20 == 0
 					|| this.summonFocus < this.summonFocusMax
-					|| (this.player.getHeldItemMainhand() != null && this.player.getHeldItemMainhand().getItem() instanceof ItemStaffSummoning)
-                    || (this.player.getHeldItemOffhand() != null && this.player.getHeldItemOffhand().getItem() instanceof ItemStaffSummoning)) {
+					|| this.player.getHeldItemMainhand().getItem() instanceof ItemStaffSummoning
+                    || this.player.getHeldItemOffhand().getItem() instanceof ItemStaffSummoning) {
 				sync = true;
 			}
 		}
@@ -220,7 +222,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		if(!this.player.getEntityWorld().isRemote) {
 			if(sync) {
 				MessagePlayerStats message = new MessagePlayerStats(this);
-				LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP) this.player);
+				LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
 			}
 		}
 
@@ -247,7 +249,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			if (this.player.getEntityWorld().isRemote) {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
 				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
-					this.player.sendMessage(new TextComponentString(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
+					this.player.sendMessage(new TranslationTextComponent(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
 				}
 			}
 
@@ -259,7 +261,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.beastiary.sendAllToClient();
 			this.sendAllSummonSetsToPlayer();
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this);
-			LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
+			LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity) this.player);
 		}
 
         // Pet Manager:
@@ -343,7 +345,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		for(PetEntry petEntry : this.petManager.allEntries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
-                LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
+                LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity) this.player);
             }
 		}
 	}
@@ -351,7 +353,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public void sendPetEntryToPlayer(PetEntry petEntry) {
         if(this.player.getEntityWorld().isRemote) return;
         MessagePetEntry message = new MessagePetEntry(this, petEntry);
-        LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
+        LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
     }
 
 	public void sendPetEntryToServer(PetEntry petEntry) {
@@ -371,7 +373,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         if(this.player.getEntityWorld().isRemote) return;
         for(byte setID = 1; setID <= this.summonSetMax; setID++) {
             MessageSummonSet message = new MessageSummonSet(this, setID);
-            LycanitesMobs.packetHandler.sendToPlayer(message, (PlayerEntityMP)this.player);
+            LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity)this.player);
         }
     }
 
@@ -412,57 +414,57 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
    	// ========== Read ===========
     /** Reads a list of Creature Knowledge from a player's NBTTag. **/
-    public void readNBT(NBTTagCompound nbtTagCompound) {
-		NBTTagCompound extTagCompound = nbtTagCompound.getCompoundTag("LycanitesMobsPlayer");
+    public void readNBT(CompoundNBT nbtTagCompound) {
+		CompoundNBT extTagCompound = nbtTagCompound.getCompound("LycanitesMobsPlayer");
 
     	this.beastiary.readFromNBT(extTagCompound);
         this.petManager.readFromNBT(extTagCompound);
 
-		if(extTagCompound.hasKey("SummonFocus"))
-			this.summonFocus = extTagCompound.getInteger("SummonFocus");
+		if(extTagCompound.contains("SummonFocus"))
+			this.summonFocus = extTagCompound.getInt("SummonFocus");
 
-		if(extTagCompound.hasKey("Spirit"))
-			this.spirit = extTagCompound.getInteger("Spirit");
+		if(extTagCompound.contains("Spirit"))
+			this.spirit = extTagCompound.getInt("Spirit");
 
-		if(extTagCompound.hasKey("SelectedSummonSet"))
-			this.selectedSummonSet = extTagCompound.getInteger("SelectedSummonSet");
+		if(extTagCompound.contains("SelectedSummonSet"))
+			this.selectedSummonSet = extTagCompound.getInt("SelectedSummonSet");
 
-		if(extTagCompound.hasKey("SummonSets")) {
-			NBTTagList nbtSummonSets = extTagCompound.getTagList("SummonSets", 10);
+		if(extTagCompound.contains("SummonSets")) {
+			ListNBT nbtSummonSets = extTagCompound.getList("SummonSets", 10);
 			for(int setID = 0; setID < this.summonSetMax; setID++) {
-				NBTTagCompound nbtSummonSet = (NBTTagCompound)nbtSummonSets.getCompoundTagAt(setID);
+				CompoundNBT nbtSummonSet = (CompoundNBT)nbtSummonSets.get(setID);
 				SummonSet summonSet = new SummonSet(this);
 				summonSet.read(nbtSummonSet);
 				this.summonSets.put(setID + 1, summonSet);
 			}
 		}
 
-		if(extTagCompound.hasKey("TimePlayed"))
+		if(extTagCompound.contains("TimePlayed"))
 			this.timePlayed = extTagCompound.getLong("TimePlayed");
     }
 
     // ========== Write ==========
     /** Writes a list of Creature Knowledge to a player's NBTTag. **/
-    public void writeNBT(NBTTagCompound nbtTagCompound) {
-		NBTTagCompound extTagCompound = new NBTTagCompound();
+    public void writeNBT(CompoundNBT nbtTagCompound) {
+		CompoundNBT extTagCompound = new CompoundNBT();
 
     	this.beastiary.writeToNBT(extTagCompound);
 		this.petManager.writeToNBT(extTagCompound);
 
-		extTagCompound.setInteger("SummonFocus", this.summonFocus);
-		extTagCompound.setInteger("Spirit", this.spirit);
-		extTagCompound.setInteger("SelectedSummonSet", this.selectedSummonSet);
-		extTagCompound.setLong("TimePlayed", this.timePlayed);
+		extTagCompound.putInt("SummonFocus", this.summonFocus);
+		extTagCompound.putInt("Spirit", this.spirit);
+		extTagCompound.putInt("SelectedSummonSet", this.selectedSummonSet);
+		extTagCompound.putLong("TimePlayed", this.timePlayed);
 
-		NBTTagList nbtSummonSets = new NBTTagList();
+		ListNBT nbtSummonSets = new ListNBT();
 		for(int setID = 0; setID < this.summonSetMax; setID++) {
-			NBTTagCompound nbtSummonSet = new NBTTagCompound();
+			CompoundNBT nbtSummonSet = new CompoundNBT();
 			SummonSet summonSet = this.getSummonSet(setID + 1);
 			summonSet.write(nbtSummonSet);
-			nbtSummonSets.appendTag(nbtSummonSet);
+			nbtSummonSets.add(nbtSummonSet);
 		}
-		extTagCompound.setTag("SummonSets", nbtSummonSets);
+		extTagCompound.put("SummonSets", nbtSummonSets);
 
-    	nbtTagCompound.setTag("LycanitesMobsPlayer", extTagCompound);
+    	nbtTagCompound.put("LycanitesMobsPlayer", extTagCompound);
     }
 }

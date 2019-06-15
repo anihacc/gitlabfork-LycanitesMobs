@@ -50,15 +50,15 @@ public class MobEventPlayerServer {
     //                       Start
     // ==================================================
     public void onStart() {
-        this.startedWorldTime = world.getTotalWorldTime();
+        this.startedWorldTime = world.getGameTime();
         this.ticks = 0;
 
-        LycanitesMobs.printInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle() + " In Dimension: " + this.world.provider.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
+        LycanitesMobs.printInfo("", "Mob Event " + (this.extended ? "Extended" : "Started") + ": " + this.mobEvent.getTitle() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs");
     }
 
     public void changeStartedWorldTime(long newStartedTime) {
         this.startedWorldTime = newStartedTime;
-        LycanitesMobs.printInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle() + " In Dimension: " + this.world.provider.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getTotalWorldTime() - this.startedWorldTime)) / 20) + "secs");
+        LycanitesMobs.printInfo("", "Mob Event Start Time Changed: " + this.mobEvent.getTitle() + " In Dimension: " + this.world.getDimension() + " Duration: " + (this.mobEvent.duration / 20) + "secs" + " Time Remaining: " + ((this.mobEvent.duration - (this.world.getGameTime() - this.startedWorldTime)) / 20) + "secs");
     }
 
 

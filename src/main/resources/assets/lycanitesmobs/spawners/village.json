@@ -17,12 +17,13 @@
 	],
 	"locations": [
 		{
-			"type": "village",
+			"type": "structure",
 			"rangeMin": [0, 0, 0],
 			"rangeMax": [16, 16, 16],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true
+			"solidGround": true,
+			"structureType": "Village"
 		}
 	],
 	"mobSpawns": [

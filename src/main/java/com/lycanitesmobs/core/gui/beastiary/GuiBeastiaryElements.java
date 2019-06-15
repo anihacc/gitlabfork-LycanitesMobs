@@ -1,15 +1,12 @@
 package com.lycanitesmobs.core.gui.beastiary;
 
-import com.lycanitesmobs.GuiHandler;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiElementDescriptionList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.PlayerEntity;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-
-import java.io.IOException;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiBeastiaryElements extends GuiBeastiary {
 	public ElementInfo elementInfo;
@@ -22,7 +19,7 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 	 */
 	public static void openToPlayer(PlayerEntity player) {
 		if(player != null) {
-			player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.ELEMENTS.id, 0, 0);
+			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.ELEMENTS.id, 0, 0);
 		}
 	}
 
@@ -33,11 +30,11 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 
 
 	@Override
-	public String getTitle() {
+	public ITextComponent getTitle() {
 		if(this.elementInfo != null) {
-			return "";
+			return new TranslationTextComponent("");
 		}
-		return LanguageManager.translate("gui.beastiary.elements");
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.elements"));
 	}
 
 
@@ -60,11 +57,11 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 
 	@Override
 	protected void updateControls(int x, int y, float partialTicks) {
-		this.elementList.drawScreen(x, y, partialTicks);
+		this.elementList.render(x, y, partialTicks);
 
 		if(this.elementInfo != null) {
 			this.descriptionList.elementInfo = this.elementInfo;
-			this.descriptionList.drawScreen(x, y, partialTicks);
+			this.descriptionList.render(x, y, partialTicks);
 		}
 	}
 
@@ -77,11 +74,5 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 			String info = LanguageManager.translate("gui.beastiary.elements.about");
 			this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 		}
-	}
-
-
-	@Override
-	protected void actionPerformed(GuiButton guiButton) throws IOException {
-		super.actionPerformed(guiButton);
 	}
 }

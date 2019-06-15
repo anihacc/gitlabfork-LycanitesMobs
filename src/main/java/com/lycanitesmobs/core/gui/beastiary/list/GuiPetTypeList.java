@@ -1,9 +1,6 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import net.minecraft.client.renderer.Tessellator;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +21,14 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 		this.refreshList();
 	}
 
+	@Override
+	public void createEntries() {
+
+	}
 
 	@Override
 	public void refreshList() {
-		this.selectedIndex = this.parentGui.playerExt.selectedPetType;
+		//this.selectedIndex = this.screen.playerExt.selectedPetType;
 		this.petTypeList.clear();
 
 		this.petTypeList.put(0, "gui.beastiary.pets");
@@ -37,12 +38,12 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 
 
 	@Override
-	protected int getSize() {
+	protected int getItemCount() {
 		return this.petTypeList.size();
 	}
 
 
-	@Override
+	/*@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		super.elementClicked(index, doubleClick);
 
@@ -52,14 +53,14 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 				this.updateCreatureListType(creatureList);
 			}
 		}
-	}
+	}*/
 
 
 	/**
 	 * Updates the list type of the provided Creature List to match this filter list.
 	 * @param creatureList The Creature List to update.
 	 */
-	public void updateCreatureListType(GuiCreatureList creatureList) {
+	/*public void updateCreatureListType(GuiCreatureList creatureList) {
 		GuiCreatureList.Type listType = null;
 		if(this.selectedIndex == 0) {
 			listType = GuiCreatureList.Type.PET;
@@ -117,5 +118,5 @@ public class GuiPetTypeList extends GuiCreatureFilterList {
 			return true;
 		}
 		return false;
-	}
+	}*/
 }

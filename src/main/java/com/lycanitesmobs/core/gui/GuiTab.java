@@ -1,9 +1,6 @@
 package com.lycanitesmobs.core.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public abstract class GuiTab extends ButtonBase {
 	public ResourceLocation texture = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -12,17 +9,17 @@ public abstract class GuiTab extends ButtonBase {
     public static int startY = 0;
     public static int tabWidth = 28;
     public static int tabHeight = 32;
-    
+
     public int tabID = 0;
 
-    public GuiTab(int id, int posX, int posY, ResourceLocation icon) {
-        super(550 + id, posX, posY, tabWidth, tabHeight, "");
+    public GuiTab(int id, int posX, int posY, ResourceLocation icon, IPressable pressable) {
+        super(550 + id, posX, posY, tabWidth, tabHeight, "", pressable);
         this.icon = icon;
         this.tabID = id;
     }
 
-    @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    /*@Override
+    public void renderButton(int mouseX, int mouseY, float partialTicks) {
         if(this.visible) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -54,7 +51,7 @@ public abstract class GuiTab extends ButtonBase {
     }
 
     @Override
-    public boolean mousePressed (Minecraft mc, int mouseX, int mouseY) {
+    public boolean mousePressed (int mouseX, int mouseY) {
         int ySize = this.enabled ? tabWidth : tabHeight;
         int tabX = this.x;
         int tabY = this.y;
@@ -74,7 +71,7 @@ public abstract class GuiTab extends ButtonBase {
         if(inWindow)
             this.onTabClicked();
         return inWindow;
-    }
+    }*/
 
     public abstract void onTabClicked();
 

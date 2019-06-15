@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.world.World;
 
 public class MobEventSchedule {
@@ -59,12 +58,12 @@ public class MobEventSchedule {
 			return false;
 		}
 
-		if(world.provider.getDimension() != this.dimensionId) {
+		if(world.getDimension().getType().getId() != this.dimensionId) {
 			return false;
 		}
 
-		int time = (int)Math.floor(world.getWorldTime() % 24000D);
-		int day = (int)(Math.floor(world.getTotalWorldTime()) / 23999D);
+		int time = (int)Math.floor(world.getDayTime() % 24000D);
+		int day = (int)(Math.floor(world.getGameTime()) / 23999D);
 
 		if(day != this.worldDay) {
 			return false;

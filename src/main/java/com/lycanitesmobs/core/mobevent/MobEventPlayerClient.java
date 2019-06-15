@@ -3,17 +3,17 @@ package com.lycanitesmobs.core.mobevent;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.GuiOverlay;
+import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 public class MobEventPlayerClient {
@@ -24,7 +24,7 @@ public class MobEventPlayerClient {
     // Properties:
     public int ticks = 0;
     public World world;
-    public PositionedSoundRecord sound;
+    public SimpleSound sound;
 
     /** True if the started event was already running and show display as 'Event Extended' in chat. **/
     public boolean extended = false;
@@ -50,9 +50,9 @@ public class MobEventPlayerClient {
 		}
 		String eventMessage = LanguageManager.translate("event." + (extended ? "extended" : "started"));
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
-		player.sendMessage(new TextComponentString(eventMessage));
+		player.sendMessage(new TranslationTextComponent(eventMessage));
 
-		if(player.capabilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
+		if(player.playerAbilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}
 
@@ -64,8 +64,8 @@ public class MobEventPlayerClient {
             LycanitesMobs.printWarning("MobEvent", "Sound missing for: " + this.mobEvent.getTitle());
             return;
         }
-        this.sound = new PositionedSoundRecord(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()).getSoundName(), SoundCategory.RECORDS, 1.0F, 1.0F, false, 0, ISound.AttenuationType.NONE, 0.0F, 0.0F, 0.0F);
-        Minecraft.getMinecraft().getSoundHandler().playSound(this.sound);
+        this.sound = new SimpleSound(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()).getName(), SoundCategory.RECORDS, 1.0F, 1.0F, false, 0, ISound.AttenuationType.NONE, 0.0F, 0.0F, 0.0F, false);
+        Minecraft.getInstance().getSoundHandler().play(this.sound);
     }
 	
 	
@@ -75,7 +75,7 @@ public class MobEventPlayerClient {
 	public void onFinish(PlayerEntity player) {
 		String eventMessage = LanguageManager.translate("event.finished");
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
-		player.sendMessage(new TextComponentString(eventMessage));
+		player.sendMessage(new TranslationTextComponent(eventMessage));
 	}
 
 
@@ -93,7 +93,7 @@ public class MobEventPlayerClient {
     @OnlyIn(Dist.CLIENT)
     public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
-        if(player.capabilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
+        if(player.playerAbilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}
         if(this.world == null || this.world != player.getEntityWorld()) return;

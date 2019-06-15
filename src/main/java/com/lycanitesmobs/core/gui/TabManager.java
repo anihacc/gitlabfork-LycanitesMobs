@@ -2,9 +2,8 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,11 +20,11 @@ public class TabManager {
         return tabList;
     }
     
-    public static void addTabsToInventory (GuiScreen gui) {
-    	if(LycanitesMobs.config.getBool("GUI", "Show Inventory Tabs", true, "Set to false to disable the GUI tabs.") && gui.getClass() == GuiInventory.class) {
+    public static void addTabsToInventory (Screen gui) {
+    	if(LycanitesMobs.config.getBool("GUI", "Show Inventory Tabs", true, "Set to false to disable the GUI tabs.") && gui.getClass() == InventoryScreen.class) {
         	GuiInventorySnooper guiInventorySnooper = new GuiInventorySnooper(mc.player);
         	try {
-            	Field field = GuiScreen.class.getDeclaredField(guiInventorySnooper.getButtonListFieldName());
+            	Field field = Screen.class.getDeclaredField(guiInventorySnooper.getButtonListFieldName());
 	            field.setAccessible(true);
 	            List buttonList = (List)field.get(gui);
 	            addTabsToList(buttonList);
@@ -38,10 +37,10 @@ public class TabManager {
         }
     }
 
-    private static Minecraft mc = FMLClientHandler.instance().getClient();
+    private static Minecraft mc = Minecraft.getInstance();
 
     public static void openInventoryGui () {
-        GuiInventory inventory = new GuiInventory(mc.player);
+		InventoryScreen inventory = new InventoryScreen(mc.player);
         mc.displayGuiScreen(inventory);
         TabManager.addTabsToInventory(inventory);
     }
@@ -52,10 +51,10 @@ public class TabManager {
         	GuiTab t = tabList.get(i);
 
             if(t.shouldAddToList()) {
-                t.id = count;
+                t.buttonId = (byte)count;
                 t.x = cornerX + (count - 2) * 28;
                 t.y = cornerY - 28;
-                t.enabled = !t.getClass().equals(selectedButton);
+                t.active = !t.getClass().equals(selectedButton);
                 count++;
             }
         }

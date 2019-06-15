@@ -113,15 +113,8 @@ public class ProjectileManager extends JSONLoader {
 			if(projectileInfo.modInfo != modInfo) {
 				continue;
 			}
-
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
-			entityTypeBuilder.setTrackingRange(40);
-			entityTypeBuilder.setUpdateInterval(3);
-			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-
-			EntityType entityType = entityTypeBuilder.build(projectileInfo.getEntityId());
-			EntityFactory.getInstance().addEntityType(entityType, projectileInfo.entityClass);
-			event.getRegistry().register(entityType);
+			EntityFactory.getInstance().addEntityType(projectileInfo.getEntityType(), projectileInfo.entityClass);
+			event.getRegistry().register(projectileInfo.getEntityType());
 		}
 
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {

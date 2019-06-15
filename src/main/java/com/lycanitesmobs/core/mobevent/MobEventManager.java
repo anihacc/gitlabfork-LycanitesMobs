@@ -6,10 +6,10 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.config.ConfigSpawning;
+import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
@@ -47,18 +47,12 @@ public class MobEventManager extends JSONLoader {
 
     /** Called during early start up, loads all global event configs into the manager. **/
 	public void loadConfig() {
-		ConfigSpawning config = ConfigSpawning.getConfig(LycanitesMobs.modInfo, "mobevents");
-        config.setCategoryComment("Global", "These are various settings that apply to all events.");
-        //config.setCategoryComment("World", "These are various settings that apply to events on a per world basis. If your required world doesn't have its config values generated yet, you can generate them by entering the world in gae at least once.");
-
-        this.mobEventsEnabled = config.getBool("Global", "Mob Events Enabled", this.mobEventsEnabled, "Set to false to completely disable the entire event system for every world.");
-		this.mobEventsRandom = config.getBool("Global", "Random Mob Events Enabled", this.mobEventsRandom, "Set to false to disable random mob events for every world.");
-		this.defaultMobDuration = config.getInt("Global", "Default Mob Duration", this.defaultMobDuration, "The default temporary time applied to mobs spawned from events, where it will forcefully despawn after the specified time (in ticks). MobSpawns can override this.");
-
-		this.minEventsRandomDay = config.getInt("Global", "Default Random Mob Events Day Minimum", this.minEventsRandomDay, "If random events are enabled, they wont occur until this day is reached. Set to 0 to have random events enabled from the start of a world.");
-
-		this.minTicksUntilEvent = config.getInt("Global", "Default Min Ticks Until Random Event", this.minTicksUntilEvent, "Minimum time in ticks until a random event can occur. 20 Ticks = 1 Second.");
-		this.maxTicksUntilEvent = config.getInt("Global", "Default Max Ticks Until Random Event", this.maxTicksUntilEvent, "Maximum time in ticks until a random event can occur. 20 Ticks = 1 Second.");
+        this.mobEventsEnabled = ConfigMobEvent.INSTANCE.mobEventsEnabled.get();
+		this.mobEventsRandom = ConfigMobEvent.INSTANCE.mobEventsRandom.get();
+		this.defaultMobDuration = ConfigMobEvent.INSTANCE.defaultMobDuration.get();
+		this.minEventsRandomDay = ConfigMobEvent.INSTANCE.minEventsRandomDay.get();
+		this.minTicksUntilEvent = ConfigMobEvent.INSTANCE.minTicksUntilEvent.get();
+		this.maxTicksUntilEvent = ConfigMobEvent.INSTANCE.maxTicksUntilEvent.get();
 	}
 
 
@@ -201,13 +195,13 @@ public class MobEventManager extends JSONLoader {
 		}
 
 		// Only Tick On World Time Ticks:
-		if(worldExt.lastEventUpdateTime == world.getTotalWorldTime()) {
+		if(worldExt.lastEventUpdateTime == world.getGameTime()) {
 			return;
 		}
-		worldExt.lastEventUpdateTime = world.getTotalWorldTime();
+		worldExt.lastEventUpdateTime = world.getGameTime();
 
 		// Only Run If Players Are Present:
-		if(world.playerEntities.size() < 1) {
+		if(world.getPlayers().size() < 1) {
 			return;
 		}
 

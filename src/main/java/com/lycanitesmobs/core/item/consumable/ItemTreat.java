@@ -17,7 +17,6 @@ public class ItemTreat extends ItemBase {
 		this.itemName = creatureType.getTreatName();
 		this.modInfo = creatureType.modInfo;
 		this.creatureType = creatureType;
-		properties.maxStackSize(16);
         this.setup();
     }
 

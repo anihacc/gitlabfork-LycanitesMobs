@@ -5,6 +5,7 @@ import com.lycanitesmobs.*;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.entity.ai.DirectNavigator;
 import com.lycanitesmobs.core.entity.ai.EntityAIMoveRestriction;
 import com.lycanitesmobs.core.entity.ai.EntityAITargetAttack;
@@ -14,7 +15,6 @@ import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -61,13 +61,13 @@ import net.minecraft.world.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 public abstract class EntityCreatureBase extends MobEntity {
-    public static Boolean ENABLE_HITAREAS = false;
-	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setShouldWatch(true);
-	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setShouldWatch(true);
+	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setDescription("Defense").setShouldWatch(true);
+	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setDescription("Ranged Speed").setShouldWatch(true);
 
 
 	// Core:
@@ -1085,6 +1085,7 @@ public abstract class EntityCreatureBase extends MobEntity {
 	 * @return The scaled enity size of this creature.
 	 */
 	@Override
+	@Nonnull
 	public EntitySize getSize(Pose pose) {
     	return super.getSize(pose).scale((float)this.sizeScale);
 	}

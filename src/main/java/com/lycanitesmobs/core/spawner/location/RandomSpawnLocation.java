@@ -5,7 +5,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -151,7 +150,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 		if(this.yMin >= 0) {
 			minY = Math.max(minY, this.yMin);
 		}
-		int maxY = Math.min(originY + rangeMaxY, world.getHeight() - 1); // Search up to this y pos
+		int maxY = Math.min(originY + rangeMaxY, world.getActualHeight() - 1); // Search up to this y pos
 		if(this.yMax >= 0) {
 			maxY = Math.min(maxY, this.yMax);
 		}
@@ -237,14 +236,14 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 			return false;
 		BlockState possibleGroundBlock = world.getBlockState(pos.down());
 		try {
-			if(possibleGroundBlock.isNormalCube())
+			if(possibleGroundBlock.isSolid())
 				return true;
 		} catch(Exception e) {}
 		try {
-			if (possibleGroundBlock.isSideSolid(world, pos.down(), EnumFacing.UP))
+			/*if (possibleGroundBlock.isSideSolid(world, pos.down(), EnumFacing.UP))
 				return true;
 			if (possibleGroundBlock.isSideSolid(world, pos.down(), EnumFacing.DOWN))
-				return true;
+				return true;*/
 		} catch(Exception e) {}
 		return false;
 	}

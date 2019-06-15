@@ -1,40 +1,12 @@
 package com.lycanitesmobs.core.command;
 
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.info.Beastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureKnowledge;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
-import com.lycanitesmobs.core.mobevent.MobEvent;
-import com.lycanitesmobs.core.mobevent.MobEventListener;
-import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
-import com.lycanitesmobs.core.spawner.SpawnerEventListener;
-import com.lycanitesmobs.core.spawner.SpawnerManager;
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-import org.apache.commons.lang3.math.NumberUtils;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class CommandMain implements ICommand {
+public class CommandMain {
 	
 	private List aliases;
 	
-	// ==================================================
+	/*/ ==================================================
 	//                   Constructor
 	// ==================================================
 	public CommandMain() {
@@ -81,8 +53,8 @@ public class CommandMain implements ICommand {
     public int compareTo(ICommand p_compareTo_1_) {
         return this.getName().compareTo(p_compareTo_1_.getName());
     }
-	
-	
+
+
 	// ==================================================
 	//                      Process
 	// ==================================================
@@ -301,7 +273,7 @@ public class CommandMain implements ICommand {
 				return;
 			}
 		}
-		
+
 		// Mob Event:
 		if("mobevent".equalsIgnoreCase(args[0])) {
 			reply = LanguageManager.translate("lyc.command.mobevent.invalid");
@@ -326,7 +298,7 @@ public class CommandMain implements ICommand {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
-			
+
 			// Start:
 			if("start".equalsIgnoreCase(args[1])) {
 				reply = LanguageManager.translate("lyc.command.mobevent.start.invalid");
@@ -334,10 +306,10 @@ public class CommandMain implements ICommand {
 					commandSender.sendMessage(new TextComponentString(reply));
 					return;
 				}
-				
+
 				String mobEventName = args[2].toLowerCase();
 				if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
-					
+
 					// Get World:
 					World world = null;
                     if(args.length >= 4 && NumberUtils.isNumber(args[3])) {
@@ -346,7 +318,7 @@ public class CommandMain implements ICommand {
 					else {
 						world = commandSender.getEntityWorld();
 					}
-					
+
 					// No World:
 					if(world == null) {
 						reply = LanguageManager.translate("lyc.command.mobevent.start.noworld");
@@ -355,7 +327,7 @@ public class CommandMain implements ICommand {
 					}
 
                     ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
-					
+
 					// Force Enabled:
 					if(!MobEventManager.getInstance().mobEventsEnabled) {
 						reply = LanguageManager.translate("lyc.command.mobevent.enable");
@@ -364,7 +336,7 @@ public class CommandMain implements ICommand {
 						ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "mobevents");
 						config.setBool("Global", "Mob Events Enabled", true);
 					}
-					
+
 					reply = LanguageManager.translate("lyc.command.mobevent.start");
 					commandSender.sendMessage(new TextComponentString(reply));
 					PlayerEntity player = null;
@@ -380,7 +352,7 @@ public class CommandMain implements ICommand {
                     worldExt.startMobEvent(mobEventName, player, pos, level);
 					return;
 				}
-				
+
 				reply = LanguageManager.translate("lyc.command.mobevent.start.unknown");
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
@@ -406,7 +378,7 @@ public class CommandMain implements ICommand {
             ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
             LycanitesMobs.printDebug("", "Got Extended World for Dimension: " + worldExt.world.provider.getDimension() + " World: " + worldExt.world);
             if(worldExt == null) return;
-			
+
 			// Random:
 			if("random".equalsIgnoreCase(args[1])) {
 				reply = LanguageManager.translate("lyc.command.mobevent.random");
@@ -415,7 +387,7 @@ public class CommandMain implements ICommand {
 				MobEventListener.getInstance().triggerRandomMobEvent(world, worldExt);
 				return;
 			}
-			
+
 			// Stop:
 			if("stop".equalsIgnoreCase(args[1])) {
 				reply = LanguageManager.translate("lyc.command.mobevent.stop");
@@ -423,7 +395,7 @@ public class CommandMain implements ICommand {
                 worldExt.stopWorldEvent();
 				return;
 			}
-			
+
 			// List:
 			if("list".equalsIgnoreCase(args[1])) {
 				reply = LanguageManager.translate("lyc.command.mobevent.list");
@@ -434,7 +406,7 @@ public class CommandMain implements ICommand {
 				}
 				return;
 			}
-			
+
 			// Enable:
 			if("enable".equalsIgnoreCase(args[1])) {
 				if(args.length >= 3) {
@@ -454,7 +426,7 @@ public class CommandMain implements ICommand {
 				config.setBool("Global", "Mob Events Enabled", true);
 				return;
 			}
-			
+
 			// Disable:
 			if("disable".equalsIgnoreCase(args[1])) {
 				if(args.length >= 3) {
@@ -475,12 +447,12 @@ public class CommandMain implements ICommand {
 				return;
 			}
 		}
-		
+
 		commandSender.sendMessage(new TextComponentString(reply));
 		commandSender.sendMessage(new TextComponentString(this.getUsage(commandSender)));
 	}
-	
-	
+
+
 	// ==================================================
 	//                     Permission
 	// ==================================================
@@ -496,5 +468,5 @@ public class CommandMain implements ICommand {
 				return false;
 		}
 		return true;
-	}
+	}*/
 }

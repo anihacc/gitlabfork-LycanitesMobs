@@ -7,6 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.helpers.JSONHelper;
@@ -19,6 +20,7 @@ import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -261,6 +263,13 @@ public class ProjectileInfo {
 	 * @return Projectiles's entity type.
 	 */
 	public EntityType getEntityType() {
+		if(this.entityType == null) {
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			entityTypeBuilder.setTrackingRange(40);
+			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+			this.entityType = entityTypeBuilder.build(this.getEntityId());
+		}
 		return this.entityType;
 	}
 

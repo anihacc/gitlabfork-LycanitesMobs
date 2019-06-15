@@ -44,7 +44,7 @@ public class BlockSummoningPedestal extends BlockBase {
 		this.setup();
 		
 		// Stats:
-		//this.setHardness(5F);
+		//this.blockHardness(5F);
         //this.setResistance(10F);
 		//this.setHarvestLevel("pickaxe", 2);
 		//this.setSoundType(SoundType.METAL);

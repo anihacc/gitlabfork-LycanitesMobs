@@ -4,14 +4,15 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -33,10 +34,10 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		int height = 40;
 		if(originY < 5)
 			originY = 5;
-		if(world.getHeight() <= height)
+		if(world.getActualHeight() <= height)
 			originY = 5;
-		else if(originY + height >= world.getHeight())
-			originY = Math.max(5, world.getHeight() - height - 1);
+		else if(originY + height >= world.getActualHeight())
+			originY = Math.max(5, world.getActualHeight() - height - 1);
 
 		// Build Floor:
 		if(ticks == 1 * 20) {
@@ -45,7 +46,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 		// Explosions:
 		if(ticks >= 3 * 20 && ticks % 10 == 0) {
-			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, true);
+			world.createExplosion(null, originX - 20 + world.rand.nextInt(40), originY + 25 + world.rand.nextInt(10), originZ - 20 + world.rand.nextInt(40), 2, Explosion.Mode.NONE);
 		}
 
 		// Build Obstacles:
@@ -58,7 +59,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 			for(int i = 0; i < 5; i++) {
 				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
 				entityProjectileBase.projectileLife = 9 * 20;
-				world.spawnEntity(entityProjectileBase);
+				world.func_217376_c(entityProjectileBase);
 			}
 		}
 
@@ -66,7 +67,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		if(ticks == 29 * 20) {
 			EntityCreatureBase entityCreatureBase = new EntityRahovart(world);
 			entityCreatureBase.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.spawnEntity(entityCreatureBase);
+			world.func_217376_c(entityCreatureBase);
 			entityCreatureBase.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
@@ -107,7 +108,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 				world.setBlockState(new BlockPos(x, y - 1, z), buildBlock.getDefaultState(), 2);
 				world.setBlockState(new BlockPos(x, y - 2, z), buildBlock.getDefaultState(), 2);
 				y++;
-				while(y <= originY + height && y < world.getHeight()) {
+				while(y <= originY + height && y < world.getActualHeight()) {
 					world.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), 2);
 					y++;
 				}
