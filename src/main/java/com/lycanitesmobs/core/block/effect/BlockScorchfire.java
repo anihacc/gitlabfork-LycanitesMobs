@@ -4,7 +4,6 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -36,8 +35,8 @@ public class BlockScorchfire extends BlockFireBase {
         this.triggerTNT = false;
         this.agingRate = 6;
         this.spreadChance = 1;
-        this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Scorchfire", true);
-        this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Scorchfire on No Fire Tick", false);
+		this.removeOnTick = false;
+		this.removeOnNoFireTick = false;
 		
 		//this.setLightOpacity(1);
         //this.setLightLevel(0.8F);

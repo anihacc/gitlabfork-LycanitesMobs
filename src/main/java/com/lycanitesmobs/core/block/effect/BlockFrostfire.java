@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -38,8 +37,8 @@ public class BlockFrostfire extends BlockFireBase {
         this.triggerTNT = false;
         this.agingRate = 3;
         this.spreadChance = 1;
-        this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Frostfire", true);
-        this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Frostfire on No Fire Tick", false);
+        this.removeOnTick = false;
+        this.removeOnNoFireTick = false;
 
         //this.setLightOpacity(1);
         //this.setLightLevel(0);

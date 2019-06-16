@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderFactoryCreature<T extends Entity> implements IRenderFactory {
+public class RenderFactoryCreature<T extends EntityCreatureBase> implements IRenderFactory {
     protected CreatureInfo creatureInfo;
 
     public RenderFactoryCreature(CreatureInfo creatureInfo) {
@@ -15,7 +15,7 @@ public class RenderFactoryCreature<T extends Entity> implements IRenderFactory {
     }
 
     @Override
-    public Render createRenderFor(RenderManager manager) {
+    public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
         try {
             return new RenderCreature(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
         }

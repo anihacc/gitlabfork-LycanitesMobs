@@ -3,12 +3,11 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
+import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureScrolling;
-import com.lycanitesmobs.core.renderer.RenderCreature;
-
-import net.minecraft.client.renderer.OpenGlHelper;
+import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -132,7 +131,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		int i = 15728880;
 		int j = i % 65536;
 		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
 	}
 
 	@Override
@@ -143,6 +142,6 @@ public class ModelWraith extends ModelTemplateElemental {
 		int i = entity.getBrightnessForRender();
 		int j = i % 65536;
 		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
 	}
 }

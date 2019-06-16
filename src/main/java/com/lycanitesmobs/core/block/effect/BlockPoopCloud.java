@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockBase;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,7 @@ public class BlockPoopCloud extends BlockBase {
 		this.setup();
 		
 		// Stats:
-		this.tickRate = ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Poop Clouds", true) ? 200 : 1;
+		this.tickRate = 200;
 		this.removeOnTick = true;
 		this.loopTicks = false;
 		this.canBeCrushed = true;

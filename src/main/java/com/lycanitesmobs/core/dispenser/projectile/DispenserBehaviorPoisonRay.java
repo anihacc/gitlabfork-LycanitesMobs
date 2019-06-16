@@ -1,16 +1,15 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
+import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
-import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -22,46 +21,46 @@ public class DispenserBehaviorPoisonRay extends DispenserBehaviorBase {
 	@Override
     public ItemStack dispenseStack(IBlockSource blockSource, ItemStack itemStack) {
         World world = blockSource.getWorld();
-        IPosition iposition = BlockDispenser.getDispensePosition(blockSource);
-        EnumFacing facing = blockSource.getBlockState().getValue(BlockDispenser.FACING);
+        IPosition iposition = DispenserBlock.getDispensePosition(blockSource);
+		Direction facing = blockSource.getBlockState().get(DispenserBlock.FACING);
 
         double targetX = iposition.getX();
         double targetY = iposition.getY();
         double targetZ = iposition.getZ();
 		
-		/*if(facing.equals(EnumFacing.UP))
+		/*if(facing.equals(Direction.UP))
 			targetY += 1;
-		if(facing.equals(EnumFacing.DOWN))
+		if(facing.equals(Direction.DOWN))
 			targetY -= 1;
-		if(facing.equals(EnumFacing.NORTH))
+		if(facing.equals(Direction.NORTH))
 			targetZ += 1;
-		if(facing.equals(EnumFacing.SOUTH))
+		if(facing.equals(Direction.SOUTH))
 			targetZ -= 1;
-		if(facing.equals(EnumFacing.EAST))
+		if(facing.equals(Direction.EAST))
 			targetX += 1;
-		if(facing.equals(EnumFacing.WEST))
+		if(facing.equals(Direction.WEST))
 			targetX -= 1;*/
 		
 		IProjectile projectile = new EntityPoisonRay(world, targetX, targetY, targetZ, 5 * 20, 10);
 		EntityProjectileLaser laser = (EntityProjectileLaser)projectile;
 		
-		if(facing.equals(EnumFacing.DOWN))
+		if(facing.equals(Direction.DOWN))
 			targetY -= laser.laserRange;
-		if(facing.equals(EnumFacing.UP))
+		if(facing.equals(Direction.UP))
 			targetY += laser.laserRange;
-		if(facing.equals(EnumFacing.NORTH))
+		if(facing.equals(Direction.NORTH))
 			targetZ -= laser.laserRange;
-		if(facing.equals(EnumFacing.SOUTH))
+		if(facing.equals(Direction.SOUTH))
 			targetZ += laser.laserRange;
-		if(facing.equals(EnumFacing.EAST))
+		if(facing.equals(Direction.EAST))
 			targetX -= laser.laserRange;
-		if(facing.equals(EnumFacing.WEST))
+		if(facing.equals(Direction.WEST))
 			targetX += laser.laserRange;
 
         laser.setTarget(targetX, targetY, targetZ);
 
-        world.spawnEntity((Entity)laser);
-        itemStack.splitStack(1);
+		world.func_217376_c(laser);
+		itemStack.split(1);
         return itemStack;
     }
     

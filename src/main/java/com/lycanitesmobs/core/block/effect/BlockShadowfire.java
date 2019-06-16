@@ -4,7 +4,6 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -41,9 +40,9 @@ public class BlockShadowfire extends BlockFireBase {
         this.triggerTNT = false;
         this.agingRate = 3;
         this.spreadChance = 0;
-        this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Shadowfire", true);
-        this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Shadowfire on No Fire Tick", false);
-		this.blindness = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Shadowfire Blindness", true);
+        this.removeOnTick = false;
+        this.removeOnNoFireTick = false;
+		this.blindness = true;
 	}
 
 

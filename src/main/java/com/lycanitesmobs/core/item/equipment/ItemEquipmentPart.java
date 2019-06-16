@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -65,8 +66,6 @@ public class ItemEquipmentPart extends ItemBase {
 	public ItemEquipmentPart(Item.Properties properties, ModInfo groupInfo) {
 		super(properties);
 		this.modInfo = groupInfo;
-		properties.maxStackSize(1);
-		properties.group(LycanitesMobs.equipmentPartsTab);
 	}
 
 	/** Loads this feature from a JSON object. **/
@@ -170,7 +169,7 @@ public class ItemEquipmentPart extends ItemBase {
 	@Nullable
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
-		return LycanitesMobs.proxy.getFontRenderer();
+		return ClientManager.getInstance().getFontRenderer();
 	}
 
 

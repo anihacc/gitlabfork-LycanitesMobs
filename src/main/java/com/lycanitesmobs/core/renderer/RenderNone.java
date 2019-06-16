@@ -1,21 +1,19 @@
 package com.lycanitesmobs.core.renderer;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderNone extends Render {
-    private float scale;
-    private int renderTime = 0;
+public class RenderNone extends EntityRenderer<Entity> {
     
     // ==================================================
     //                     Constructor
     // ==================================================
-    public RenderNone(RenderManager renderManager) {
+    public RenderNone(EntityRendererManager renderManager) {
     	super(renderManager);
     }
     

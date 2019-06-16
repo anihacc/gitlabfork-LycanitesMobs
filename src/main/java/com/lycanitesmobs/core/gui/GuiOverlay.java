@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -40,9 +40,9 @@ public class GuiOverlay extends GuiBase {
     // ==================================================
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public void onRenderExperienceBar(RenderGameOverlayEvent event) {
-        if(LycanitesMobs.proxy.getClientPlayer() == null)
+        if(ClientManager.getInstance().getClientPlayer() == null)
             return;
-        PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+        PlayerEntity player = ClientManager.getInstance().getClientPlayer();
 
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
 	      return;

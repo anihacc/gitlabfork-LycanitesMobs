@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.renderer;
 
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderFactoryProjectile<T extends Entity> implements IRenderFactory {
+public class RenderFactoryProjectile<T extends EntityProjectileBase> implements IRenderFactory {
     protected String oldProjectileName;
     protected Class oldProjectileClass;
     protected boolean oldModel;
@@ -22,7 +22,7 @@ public class RenderFactoryProjectile<T extends Entity> implements IRenderFactory
 	}
 
     @Override
-    public Render createRenderFor(RenderManager manager) {
+    public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
 
 		// New JSON Projectiles
 		if(this.oldProjectileClass == null) {
@@ -31,8 +31,12 @@ public class RenderFactoryProjectile<T extends Entity> implements IRenderFactory
 
 		// Old Projectile Obj Models:
         if(this.oldModel) {
-            return new RenderProjectileModel(this.oldProjectileName, manager);
-        }
+			try {
+				return new RenderProjectileModel(this.oldProjectileName, manager);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
         // Old Projectile Item Sprite Models:
         return new RenderProjectile(manager, this.oldProjectileClass);

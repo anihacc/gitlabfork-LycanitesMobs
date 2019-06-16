@@ -3,12 +3,11 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
+import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureScrolling;
-import com.lycanitesmobs.core.renderer.RenderCreature;
-
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;

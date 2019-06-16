@@ -4,7 +4,6 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -39,8 +38,8 @@ public class BlockHellfire extends BlockFireBase {
         this.triggerTNT = false;
         this.agingRate = 1;
         this.spreadChance = 1;
-        this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Hellfire", true);
-        this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Hellfire On No Fire Tick", false);
+        this.removeOnTick = false;
+        this.removeOnNoFireTick = false;
 
         //this.setLightOpacity(1);
         //this.setLightLevel(0.8F);

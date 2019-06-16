@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.mobevent;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -92,7 +93,7 @@ public class MobEventPlayerClient {
     // ==================================================
     @OnlyIn(Dist.CLIENT)
     public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
-    	PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+    	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         if(player.playerAbilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}

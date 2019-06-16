@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.config.ConfigBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particles.ParticleTypes;
@@ -23,8 +22,8 @@ public class BlockIcefire extends BlockFrostfire {
         this.blockName = "icefire";
 
         // Stats:
-        this.removeOnTick = !ConfigBase.getConfig(this.group, "general").getBool("Features", "Enable Icefire", true);
-        this.removeOnNoFireTick = ConfigBase.getConfig(this.group, "general").getBool("Features", "Remove Frostfire on No Fire Tick", false);
+		this.removeOnTick = false;
+		this.removeOnNoFireTick = false;
 	}
 
 

@@ -65,7 +65,7 @@ public class LayerProjectileEffect extends LayerProjectileBase {
     }
 
 	@Override
-	public void onRenderStart(Entity entity, boolean trophy) {
+	public void onRenderStart(Entity entity) {
 		// Glow In Dark:
 		int i = entity.getBrightnessForRender();
 		if(this.glow) {
@@ -86,7 +86,7 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 	}
 
 	@Override
-	public void onRenderFinish(Entity entity, boolean trophy) {
+	public void onRenderFinish(Entity entity) {
     	if(this.glow) {
 			GlStateManager.enableLighting();
 		}
