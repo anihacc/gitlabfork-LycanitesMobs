@@ -6,9 +6,9 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -60,7 +60,7 @@ public class EntityFaeBolt extends EntityProjectileBase {
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		Potion bleed = ObjectManager.getEffect("bleed");
 		if (bleed != null)
-			entityLiving.addPotionEffect(new PotionEffect(bleed, this.getEffectDuration(5), 0));
+			entityLiving.addPotionEffect(new EffectInstance(bleed, this.getEffectDuration(5), 0));
         return true;
     }
     

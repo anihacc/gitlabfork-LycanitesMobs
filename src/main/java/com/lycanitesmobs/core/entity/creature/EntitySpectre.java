@@ -7,14 +7,14 @@ import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntityMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
@@ -36,7 +36,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
         this.setupMob();
@@ -48,21 +48,21 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
+        this.field_70714_bg.addTask(3, this.aiSit);
+        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
     // ========== Set Size ==========
@@ -89,8 +89,8 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
 		// Pull:
 		if(!this.getEntityWorld().isRemote) {

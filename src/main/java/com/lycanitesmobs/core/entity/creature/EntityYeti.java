@@ -10,14 +10,14 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.fleeHealthPercent = 1.0F;
         this.isAggressiveByDefault = false;
@@ -44,19 +44,19 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(3, new EntityAIMate(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItemList("Vegetables"));
-        this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
+        this.field_70714_bg.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(3, new EntityAIMate(this));
+        this.field_70714_bg.addTask(4, new EntityAITempt(this).setItemList("Vegetables"));
+        this.field_70714_bg.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
     }
 	
 	
@@ -65,8 +65,8 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         
         // Trail:
         if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {
@@ -122,7 +122,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     }
 
     @Override
-    public boolean isPotionApplicable(PotionEffect potionEffect) {
+    public boolean isPotionApplicable(EffectInstance potionEffect) {
         if(potionEffect.getPotion() == MobEffects.SLOWNESS) return false;
         if(potionEffect.getPotion() == MobEffects.HUNGER) return false;
         return super.isPotionApplicable(potionEffect);

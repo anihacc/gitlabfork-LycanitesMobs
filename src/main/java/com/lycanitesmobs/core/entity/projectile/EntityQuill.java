@@ -45,9 +45,9 @@ public class EntityQuill extends EntityProjectileBase {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    public void tick() {
+    	super.tick();
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     }
 	

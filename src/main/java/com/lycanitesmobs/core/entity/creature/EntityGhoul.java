@@ -4,10 +4,10 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +22,7 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.spreadFire = true;
 
@@ -40,18 +40,18 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBreakDoor(this));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this));
-        this.tasks.addTask(6, new EntityAIMoveVillage(this));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIBreakDoor(this));
+        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(6, new EntityAIMoveVillage(this));
+        this.field_70714_bg.addTask(7, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setCheckSight(false));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
     }
     
     
@@ -63,10 +63,10 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
     public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
 
-        if(this.getEntityWorld().getDifficulty().getDifficultyId() >= 2 && entityLivingBase instanceof EntityVillager) {
+        if(this.getEntityWorld().getDifficulty().getDifficultyId() >= 2 && entityLivingBase instanceof VillagerEntity) {
             if (this.getEntityWorld().getDifficulty().getDifficultyId() == 2 && this.rand.nextBoolean()) return;
 
-            EntityVillager entityvillager = (EntityVillager)entityLivingBase;
+            VillagerEntity entityvillager = (VillagerEntity)entityLivingBase;
             EntityZombieVillager entityzombievillager = new EntityZombieVillager(this.getEntityWorld());
             entityzombievillager.copyLocationAndAnglesFrom(entityvillager);
             this.getEntityWorld().removeEntity(entityvillager);

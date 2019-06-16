@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +30,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
 
         this.setupMob();
@@ -43,19 +43,19 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
-		this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(600));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+		this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
+		this.field_70714_bg.addTask(3, this.aiSit);
+        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(600));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-		this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupShadow.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+		this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+		this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupShadow.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 
@@ -63,8 +63,8 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     //                      Updates
     // ==================================================
 	@Override
-	public void onUpdate() {
-    	super.onUpdate();
+	public void tick() {
+    	super.tick();
     	if(this.playPartner != null && !this.hasAttackTarget()) {
 			this.faceEntity(this.playPartner, 360, 360);
 		}
@@ -72,8 +72,8 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 
     // ========== Living Update ==========
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
 		if(!this.getEntityWorld().isRemote) {
 

@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -49,7 +49,7 @@ public class EntityBoulderBlast extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(5), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.SLOWNESS, this.getEffectDuration(5), 0));
     	return true;
     }
     

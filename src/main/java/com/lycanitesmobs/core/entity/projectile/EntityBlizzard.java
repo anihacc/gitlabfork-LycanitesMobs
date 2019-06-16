@@ -8,9 +8,9 @@ import com.lycanitesmobs.core.entity.creature.EntitySerpix;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -51,7 +51,7 @@ public class EntityBlizzard extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-        entityLiving.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, this.getEffectDuration(5), 0));
+        entityLiving.addPotionEffect(new EffectInstance(MobEffects.SLOWNESS, this.getEffectDuration(5), 0));
     	return true;
     }
 

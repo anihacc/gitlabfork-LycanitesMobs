@@ -8,10 +8,10 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -34,7 +34,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.spawnsInBlock = false;
         this.hasAttackSound = false;
         this.setupMob();
@@ -46,25 +46,25 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-		this.tasks.addTask(1, new EntityAIFollowFuse(this).setLostDistance(16));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
-        this.tasks.addTask(6, this.aiSit);
-        this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+		this.field_70714_bg.addTask(1, new EntityAIFollowFuse(this).setLostDistance(16));
+        this.field_70714_bg.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
+        this.field_70714_bg.addTask(6, this.aiSit);
+        this.field_70714_bg.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-		this.targetTasks.addTask(7, new EntityAITargetFuse(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+		this.field_70715_bh.addTask(7, new EntityAITargetFuse(this));
     }
     
     
@@ -73,8 +73,8 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
         // Suffocation Transform:
 		if(!this.getEntityWorld().isRemote) {

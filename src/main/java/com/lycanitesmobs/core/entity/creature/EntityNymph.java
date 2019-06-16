@@ -8,10 +8,10 @@ import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -28,7 +28,7 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
 
 		this.fleeHealthPercent = 1.0F;
@@ -43,18 +43,18 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-		this.tasks.addTask(5, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(3, this.aiSit);
+        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+		this.field_70714_bg.addTask(5, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 
@@ -64,8 +64,8 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 	private int farmingTick = 0;
     // ========== Living Update ==========
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
 		if(!this.getEntityWorld().isRemote) {
 			// Healing Aura:
@@ -75,7 +75,7 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
 						if (target != this && !(target instanceof EntityNymph) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
-							target.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 3 * 20, 0));
+							target.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 0));
 						}
 					}
 				}

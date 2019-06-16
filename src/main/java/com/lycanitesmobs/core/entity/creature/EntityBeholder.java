@@ -8,12 +8,12 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class EntityBeholder extends EntityCreatureRideable {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
@@ -48,24 +48,24 @@ public class EntityBeholder extends EntityCreatureRideable {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-		this.tasks.addTask(6, this.aiSit);
-		this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(2, new EntityAIPlayerControl(this));
+        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
+		this.field_70714_bg.addTask(6, this.aiSit);
+		this.field_70714_bg.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-		this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+		this.field_70715_bh.addTask(2, new EntityAITargetOwnerRevenge(this));
+		this.field_70715_bh.addTask(3, new EntityAITargetOwnerAttack(this));
+		this.field_70715_bh.addTask(4, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(5, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 
@@ -75,9 +75,9 @@ public class EntityBeholder extends EntityCreatureRideable {
     @Override
     public void riderEffects(LivingEntity rider) {
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))
-            rider.removePotionEffect(MobEffects.MINING_FATIGUE);
+            rider.removeEffectInstance(MobEffects.MINING_FATIGUE);
         if(rider.isPotionActive(ObjectManager.getEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getEffect("weight"));
+            rider.removeEffectInstance(ObjectManager.getEffect("weight"));
     }
 
     
@@ -96,9 +96,9 @@ public class EntityBeholder extends EntityCreatureRideable {
         	if(damageEntity instanceof LivingEntity) {
         		LivingEntity targetLiving = (LivingEntity)damageEntity;
         		List<Potion> goodEffects = new ArrayList<Potion>();
-        		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
-        			if(potionEffectObj instanceof PotionEffect) {
-        				Potion potion = ((PotionEffect)potionEffectObj).getPotion();
+        		for(Object potionEffectObj : targetLiving.getActiveEffectInstances()) {
+        			if(potionEffectObj instanceof EffectInstance) {
+        				Potion potion = ((EffectInstance)potionEffectObj).getPotion();
                         if(potion != null) {
                             if(ObjectLists.inEffectList("buffs", potion))
                                 goodEffects.add(potion);
@@ -107,9 +107,9 @@ public class EntityBeholder extends EntityCreatureRideable {
         		}
         		if(goodEffects.size() > 0 && this.getRNG().nextBoolean()) {
         			if(goodEffects.size() > 1)
-        				targetLiving.removePotionEffect(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
+        				targetLiving.removeEffectInstance(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
         			else
-        				targetLiving.removePotionEffect(goodEffects.get(0));
+        				targetLiving.removeEffectInstance(goodEffects.get(0));
     		    	float leeching = damage * 1.1F;
     		    	this.heal(leeching);
         		}

@@ -8,12 +8,12 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +33,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spawnsInWater = true;
         this.setupMob();
@@ -45,21 +45,21 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
+        this.field_70714_bg.addTask(3, this.aiSit);
+        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
     // ========== Set Size ==========
@@ -78,8 +78,8 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         
         // Random Target Teleporting:
         if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
@@ -152,9 +152,9 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     	if(this.getSubspeciesIndex() > 2 && target instanceof LivingEntity) {
     		LivingEntity targetLiving = (LivingEntity)target;
     		List<Potion> goodEffects = new ArrayList<>();
-    		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
-    			if(potionEffectObj instanceof PotionEffect) {
-    				Potion potion = ((PotionEffect)potionEffectObj).getPotion();
+    		for(Object potionEffectObj : targetLiving.getActiveEffectInstances()) {
+    			if(potionEffectObj instanceof EffectInstance) {
+    				Potion potion = ((EffectInstance)potionEffectObj).getPotion();
                     if(potion != null) {
                         if(ObjectLists.inEffectList("buffs", potion))
                             goodEffects.add(potion);
@@ -163,9 +163,9 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     		}
     		if(goodEffects.size() > 0) {
     			if(goodEffects.size() > 1)
-    				targetLiving.removePotionEffect(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
+    				targetLiving.removeEffectInstance(goodEffects.get(this.getRNG().nextInt(goodEffects.size())));
     			else
-    				targetLiving.removePotionEffect(goodEffects.get(0));
+    				targetLiving.removeEffectInstance(goodEffects.get(0));
 				float leeching = Math.max(1, this.getAttackDamage(damageScale) / 2);
 		    	this.heal(leeching);
     		}

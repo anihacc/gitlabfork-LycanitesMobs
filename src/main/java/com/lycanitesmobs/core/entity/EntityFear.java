@@ -29,7 +29,7 @@ public class EntityFear extends EntityCreatureBase {
         super(world);
         
         // Setup:
-        //this.attribute = EnumCreatureAttribute.UNDEFINED;
+        //this.attribute = CreatureAttribute.UNDEFINED;
         this.hasStepSound = false;
         this.hasAttackSound = false;
         this.spreadFire = false;
@@ -122,13 +122,13 @@ public class EntityFear extends EntityCreatureBase {
         // Copy Movement Debuffs:
 		if(this.fearedEntity instanceof LivingEntity) {
 			if (fearedEntityLiving.isPotionActive(Effects.field_188424_y)) {
-				EffectInstance activeDebuff = fearedEntityLiving.getActivePotionEffect(Effects.field_188424_y);
+				EffectInstance activeDebuff = fearedEntityLiving.getActiveEffectInstance(Effects.field_188424_y);
 				this.addPotionEffect(new EffectInstance(Effects.field_188424_y, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
 			Effect instability = ObjectManager.getEffect("instability");
 			if (instability != null && fearedEntityLiving.isPotionActive(instability)) {
-				EffectInstance activeDebuff = fearedEntityLiving.getActivePotionEffect(instability);
+				EffectInstance activeDebuff = fearedEntityLiving.getActiveEffectInstance(instability);
 				this.addPotionEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 		}

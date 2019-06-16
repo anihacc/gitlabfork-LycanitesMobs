@@ -66,11 +66,11 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 				this.riderEffects(riderLiving);
 
 				// Protect Rider from Potion Effects:
-				for(Object possibleEffect : riderLiving.getActivePotionEffects().toArray(new Object[0])) {
+				for(Object possibleEffect : riderLiving.getActiveEffectInstances().toArray(new Object[0])) {
 					if(possibleEffect instanceof EffectInstance) {
 						EffectInstance effectInstance = (EffectInstance)possibleEffect;
 						if(!this.isPotionApplicable(effectInstance))
-							riderLiving.removePotionEffect(effectInstance.getPotion());
+							riderLiving.removeEffectInstance(effectInstance.getPotion());
 					}
 				}
 			}
@@ -204,7 +204,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
                 this.setMotion(this.getMotion().add(0, this.getMountJumpHeight() * (double) this.getJumpPower(), 0));
                 if (this.isPotionActive(Effects.field_76430_j)) // Jump Boost
-					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
+					this.setMotion(this.getMotion().add(0, ((float) (this.getActiveEffectInstance(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
                 this.setMountJumping(true);
                 this.isAirBorne = true;
                 if (forward > 0.0F) {

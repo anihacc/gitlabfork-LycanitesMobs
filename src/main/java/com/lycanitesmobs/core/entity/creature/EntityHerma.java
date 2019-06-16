@@ -6,14 +6,14 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -28,7 +28,7 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -42,22 +42,22 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(2.0D));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
+        this.field_70714_bg.addTask(2, this.aiSit);
+        this.field_70714_bg.addTask(3, new EntityAITempt(this).setTemptDistanceMin(2.0D));
+        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this).setLongMemory(true));
+        this.field_70714_bg.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(6, wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(6, wanderAI);
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setRange(6D));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setRange(8D));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setRange(6D));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class).setRange(8D));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
     
     

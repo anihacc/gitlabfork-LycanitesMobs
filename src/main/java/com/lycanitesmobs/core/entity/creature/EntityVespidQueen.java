@@ -13,12 +13,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumDifficulty;
@@ -54,7 +54,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.solidCollision = true;
         this.setupMob();
@@ -73,22 +73,22 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(7, new EntityAIStayByHome(this));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(1200));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
+        this.field_70714_bg.addTask(7, new EntityAIStayByHome(this));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(1200));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(1, new EntityAITargetMasterAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityConba.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVespidQueen.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVespid.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.field_70715_bh.addTask(1, new EntityAITargetMasterAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityConba.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVespidQueen.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVespid.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
     }
 
 	
@@ -108,8 +108,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         
         if(this.vespidHiveBuilding) {
 	        // Hive Cache Times:

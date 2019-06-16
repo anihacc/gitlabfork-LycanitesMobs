@@ -7,11 +7,11 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ public class EntityCrusk extends EntityCreatureTameable implements IGroupPredato
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.babySpawnChance = 0.25D;
         this.growthTime = -120000;
@@ -37,28 +37,28 @@ public class EntityCrusk extends EntityCreatureTameable implements IGroupPredato
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(60));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIAttackMelee(this));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(9, new EntityAIBeg(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(60));
+        this.field_70714_bg.addTask(2, this.aiSit);
+        this.field_70714_bg.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(6, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(7, new EntityAIWander(this));
+        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
+            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
         }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
     
     

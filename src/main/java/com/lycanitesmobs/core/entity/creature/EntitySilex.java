@@ -5,10 +5,10 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -24,7 +24,7 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = false;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -38,18 +38,18 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(3, new EntityAITempt(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
-        this.tasks.addTask(4, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(5, new EntityAIMate(this));
-        this.tasks.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        //this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70714_bg.addTask(1, new EntityAIStayByWater(this));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(false));
+        this.field_70714_bg.addTask(3, new EntityAITempt(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
+        this.field_70714_bg.addTask(4, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(5, new EntityAIMate(this));
+        this.field_70714_bg.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(7, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        //this.field_70715_bh.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
     }
 
 	

@@ -8,8 +8,8 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.Blocks;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.block.Blocks;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -57,7 +57,7 @@ public class EntityDoomfireball extends EntityProjectileBase {
             entityLiving.setFire(this.getEffectDuration(5) / 20);
         }
         if(ObjectManager.getEffect("decay") != null) {
-            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
+            entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
         }
     	return true;
     }

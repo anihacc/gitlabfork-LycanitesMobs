@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +52,7 @@ public class EntityAcidSplash extends EntityProjectileBase {
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		Potion penetration = ObjectManager.getEffect("penetration");
 		if(penetration != null)
-			entityLiving.addPotionEffect(new PotionEffect(penetration, this.getEffectDuration(10), 1));
+			entityLiving.addPotionEffect(new EffectInstance(penetration, this.getEffectDuration(10), 1));
     	return true;
     }
     

@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.gen.Heightmap;
 
 import java.util.Random;
 
@@ -42,7 +43,7 @@ public class RandomPositionGenerator {
 
     // ========== Get Target Block ==========
     private static Vec3d getTargetBlock(EntityCreatureBase entity, int range, int height, Vec3d target, int heightLevel) {
-        PathNavigate pathNavigate = entity.getNavigator();
+        PathNavigator pathNavigate = entity.getNavigator();
         Random random = entity.getRNG();
         boolean validTarget = false;
         int targetX = 0;
@@ -52,7 +53,7 @@ public class RandomPositionGenerator {
         boolean pastHome;
 
         if(entity.hasHome()) {
-            double homeDist = (entity.getHomePosition().getDistance(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ)) + 4.0F);
+            double homeDist = (entity.getHomePosition().distanceSq(entity.getPosition()) + 4.0F);
             double homeDistMax = (double)(entity.getHomeDistanceMax() + (float)range);
             pastHome = homeDist < homeDistMax * homeDistMax;
         }
@@ -66,9 +67,9 @@ public class RandomPositionGenerator {
 
             // Random Height:
             if(entity.isFlying() || (entity.isStrongSwimmer() && entity.isInWater())) {
-	            if(entity.posY > entity.getEntityWorld().getPrecipitationHeight(entity.getPosition()).getY() + heightLevel * 1.25)
+	            if(entity.posY > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR_WG, entity.getPosition()).getY() + (heightLevel * 1.25))
 	        		possibleY = random.nextInt(2 * height) - height * 3 / 2;
-	            else if(entity.posY < entity.getEntityWorld().getPrecipitationHeight(entity.getPosition()).getY() + heightLevel)
+	            else if(entity.posY < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR_WG, entity.getPosition()).getY() + heightLevel)
 	            	possibleY = random.nextInt(2 * height) - height / 2;
             }
 

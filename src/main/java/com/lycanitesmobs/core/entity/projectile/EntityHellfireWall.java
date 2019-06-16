@@ -14,7 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -70,8 +70,8 @@ public class EntityHellfireWall extends EntityProjectileBase {
     //                      Update
     // ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
+    public void tick() {
+    	super.tick();
 
         Vec3d vec3 = new Vec3d(this.posX, this.posY, this.posZ);
         Vec3d vec31 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
@@ -120,9 +120,9 @@ public class EntityHellfireWall extends EntityProjectileBase {
     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
 
         // Remove Good Potion Effects:
-        for(PotionEffect potionEffect : target.getActivePotionEffects().toArray(new PotionEffect[target.getActivePotionEffects().size()])) {
+        for(EffectInstance potionEffect : target.getActiveEffectInstances().toArray(new EffectInstance[target.getActiveEffectInstances().size()])) {
             if(ObjectLists.inEffectList("buffs", potionEffect.getPotion()))
-                target.removePotionEffect(potionEffect.getPotion());
+                target.removeEffectInstance(potionEffect.getPotion());
         }
 
         boolean obliterate = true;

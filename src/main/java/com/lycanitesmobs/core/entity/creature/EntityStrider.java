@@ -9,13 +9,13 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,7 +34,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = true;
@@ -53,26 +53,26 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(2, this.aiSit);
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
+        this.field_70714_bg.addTask(2, this.aiSit);
         this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
-        this.tasks.addTask(3, this.attackAI);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(6, new EntityAIStayByWater(this).setSpeed(1.25D));
+        this.field_70714_bg.addTask(3, this.attackAI);
+        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(6, new EntityAIStayByWater(this).setSpeed(1.25D));
         this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(7, this.wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(7, this.wanderAI);
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(3, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
+        this.field_70715_bh.addTask(3, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
+        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 	
 	
@@ -82,8 +82,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     private int pickupTime = 0;
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if(!this.getEntityWorld().isRemote) {
             // Wander Pause Rates:
             if(this.isInWater())
@@ -105,7 +105,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof LivingEntity) {
                         if(ObjectManager.getEffect("penetration") != null)
-                            this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
+                            this.getPickupEntity().addPotionEffect(new EffectInstance(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
                 }
             }
@@ -156,10 +156,10 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                     }
                 }
                 if(doDamage) {
-                    if (ObjectManager.getPotionEffect("penetration") != null)
-                        possibleTarget.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("penetration"), this.getEffectDuration(5), 1));
+                    if (ObjectManager.getEffectInstance("penetration") != null)
+                        possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("penetration"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(MobEffects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }
@@ -195,8 +195,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            if(ObjectManager.getPotionEffect("fallresist") != null)
-                ((LivingEntity)entity).addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("fallresist"), 3 * 20, 1));
+            if(ObjectManager.getEffectInstance("fallresist") != null)
+                ((LivingEntity)entity).addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("fallresist"), 3 * 20, 1));
         }
     }*/
 

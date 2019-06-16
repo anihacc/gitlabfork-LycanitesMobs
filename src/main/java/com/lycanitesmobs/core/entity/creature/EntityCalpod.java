@@ -9,9 +9,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.BlockLog;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -27,7 +27,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
         
@@ -39,18 +39,18 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAvoid(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupHunter.class));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupAlpha.class));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(2, new EntityAIAvoid(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
+        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setLongMemory(true));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupHunter.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupAlpha.class));
     }
 	
 	
@@ -59,7 +59,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
+    public void livingTick() {
 		if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.updateTick % 40 == 0) {
 			this.allyUpdate();
 		}
@@ -72,7 +72,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
 					this.destroyAreaBlock((int)this.posX, (int)this.posY, (int)this.posZ, BlockLog.class, true, 0);
 			}
         
-        super.onLivingUpdate();
+        super.livingTick();
     }
     
     // ========== Spawn Minions ==========

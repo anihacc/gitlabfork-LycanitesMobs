@@ -8,14 +8,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -28,7 +28,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.attackCooldownMax = 10;
         this.setupMob();
@@ -38,19 +38,19 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIAttackMelee(this));
-        this.tasks.addTask(9, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(6, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(9, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityMaka.class));
-		this.targetTasks.addTask(2, new EntityAITargetDefend(this, EntityVillager.class));
-		this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPredator.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setOnlyNearby(true).setChance(100));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityMaka.class));
+		this.field_70715_bh.addTask(2, new EntityAITargetDefend(this, VillagerEntity.class));
+		this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
+        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
+        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
     }
 	
 	
@@ -58,8 +58,8 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
   	//                      Update
   	// ==================================================
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+	public void livingTick() {
+		super.livingTick();
 		
 		// Alpha Sparring Cooldown:
 		if(this.hasAttackTarget() && this.getAttackTarget() instanceof EntityMakaAlpha) {
@@ -118,9 +118,9 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 * 20, 2, false, false));
+    		this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 20 * 20, 2, false, false));
 			this.getAttackTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 * 20, 2, false, false));
+			this.getAttackTarget().addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 20 * 20, 2, false, false));
     	}
     	super.setAttackTarget(entity);
     }

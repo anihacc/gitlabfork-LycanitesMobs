@@ -13,11 +13,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,7 +35,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
         CONCAPEDE_SIZE_MAX = Math.max(1, ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Concapede Size Limit", CONCAPEDE_SIZE_MAX, "The maximum amount of segments long a Concapede can be, including the head."));
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
 
         this.canGrow = true;
@@ -47,16 +47,16 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(5, new EntityAITempt(this).setItemList("vegetables"));
-        this.tasks.addTask(6, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false));
+        this.field_70714_bg.addTask(5, new EntityAITempt(this).setItemList("vegetables"));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
     }
 	
 	
@@ -88,8 +88,8 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
     }
 	
 	

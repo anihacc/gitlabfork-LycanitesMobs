@@ -17,11 +17,11 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +29,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -73,7 +73,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = CreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
         this.setAttackCooldownMax(40);
         this.solidCollision = true;
@@ -90,15 +90,15 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        //this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
-        //this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        //this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
+        //this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
     }
 
     // ========== Init ==========
@@ -141,8 +141,8 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
         // Look At Target:
         if(this.hasAttackTarget() && !this.getEntityWorld().isRemote) {
@@ -641,7 +641,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     //                     Immunities
     // ==================================================
     @Override
-    public boolean isPotionApplicable(PotionEffect potionEffect) {
+    public boolean isPotionApplicable(EffectInstance potionEffect) {
         if(potionEffect.getPotion() == MobEffects.WITHER)
             return false;
         if(ObjectManager.getEffect("decay") != null)

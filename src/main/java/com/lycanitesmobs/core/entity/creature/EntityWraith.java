@@ -5,9 +5,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -27,7 +27,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = CreatureAttribute.UNDEAD;
         this.hasAttackSound = true;
         this.setupMob();
 
@@ -38,14 +38,14 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setSpeed(2.0D).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(0));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setSpeed(2.0D).setLongMemory(false));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(0));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
     }
     
     
@@ -54,7 +54,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
    	// ==================================================
     // ========== Living ==========
     @Override
-    public void onLivingUpdate() {
+    public void livingTick() {
         
         // Detonate:
         if(!this.getEntityWorld().isRemote) {
@@ -91,7 +91,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 			}
 		}
         
-        super.onLivingUpdate();
+        super.livingTick();
     }
 
 

@@ -65,7 +65,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class EntityCreatureBase extends MobEntity {
+public abstract class EntityCreatureBase extends CreatureEntity {
 	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setDescription("Defense").setShouldWatch(true);
 	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setDescription("Ranged Speed").setShouldWatch(true);
 
@@ -1772,6 +1772,21 @@ public abstract class EntityCreatureBase extends MobEntity {
     // ==================================================
   	//                     Movement
   	// ==================================================
+	/**
+	 * Returns the importance of blocks when searching for random positions, also used when checking if this mob can spawn in locations via vanilla spawners.
+	 * @param x The x position to check.
+	 * @param y The y position to check.
+	 * @param z The z position to check.
+	 * @return The importance where 0.0F is a standard path, anything higher is a preferred path and lower is a detrimental path.
+	 */
+	public float getBlockPathWeight(int x, int y, int z) {
+		if(this.creatureInfo.creatureSpawn.spawnsInDark && !this.creatureInfo.creatureSpawn.spawnsInLight)
+			return 0.5F - this.getEntityWorld().getBrightness(new BlockPos(x, y, z));
+		if(this.creatureInfo.creatureSpawn.spawnsInLight && !this.creatureInfo.creatureSpawn.spawnsInDark)
+			return this.getEntityWorld().getBrightness(new BlockPos(x, y, z)) - 0.5F;
+		return 0.0F;
+	}
+
     /**
      * Returns true if this entity should use a direct navigator with no pathing.
      * Used mainly for flying 'ghost' mobs that should fly through the terrain.

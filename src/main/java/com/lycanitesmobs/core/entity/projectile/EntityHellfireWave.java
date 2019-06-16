@@ -65,7 +65,7 @@ public class EntityHellfireWave extends EntityProjectileBase {
     //                      Update
     // ==================================================
     @Override
-    public void onUpdate() {
+    public void tick() {
         if(this.getEntityWorld().isRemote)
             return;
 

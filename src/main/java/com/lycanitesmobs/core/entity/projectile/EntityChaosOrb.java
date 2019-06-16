@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileModel;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,9 +50,9 @@ public class EntityChaosOrb extends EntityProjectileModel {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
-    	if(this.posY > this.getEntityWorld().getHeight() + 20) {
+    public void tick() {
+    	super.tick();
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20) {
 			this.remove();
 		}
 		if(!this.getEntityWorld().isRemote && this.updateTick % 5 == 0) {
@@ -78,7 +78,7 @@ public class EntityChaosOrb extends EntityProjectileModel {
 	@Override
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		if(ObjectManager.getEffect("instability") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("instability"), this.getEffectDuration(5), 0));
+			entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("instability"), this.getEffectDuration(5), 0));
 		}
 		return true;
 	}

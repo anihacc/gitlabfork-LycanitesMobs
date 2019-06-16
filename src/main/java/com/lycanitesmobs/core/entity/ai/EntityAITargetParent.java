@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 
 public class EntityAITargetParent extends EntityAITarget {
 	// Targets:
@@ -79,7 +79,7 @@ public class EntityAITargetParent extends EntityAITarget {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-        if(target instanceof EntityAnimal && ((EntityAnimal)target).getGrowingAge() < 0)
+        if(target instanceof AnimalEntity && ((AnimalEntity)target).getGrowingAge() < 0)
             return false;
     	if(target instanceof EntityCreatureAgeable && ((EntityCreatureAgeable)target).getGrowingAge() < 0)
             return false;

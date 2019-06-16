@@ -8,10 +8,10 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.babySpawnChance = 0.1D;
         this.canGrow = true;
@@ -37,19 +37,19 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIMate(this));
-        this.tasks.addTask(2, new EntityAITempt(this).setItemList("CactusFood"));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(4, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(5, new EntityAIFollowMaster(this).setSpeed(1.0D).setStrayDistance(8.0F));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityJoustAlpha.class));
-        this.targetTasks.addTask(1, new EntityAITargetMasterAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(2, new EntityAITargetMaster(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIMate(this));
+        this.field_70714_bg.addTask(2, new EntityAITempt(this).setItemList("CactusFood"));
+        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
+        this.field_70714_bg.addTask(4, new EntityAIFollowParent(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(5, new EntityAIFollowMaster(this).setSpeed(1.0D).setStrayDistance(8.0F));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityJoustAlpha.class));
+        this.field_70715_bh.addTask(1, new EntityAITargetMasterAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(2, new EntityAITargetMaster(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
     }
 
 

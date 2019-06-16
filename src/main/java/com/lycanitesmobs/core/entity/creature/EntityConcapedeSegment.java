@@ -14,10 +14,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -41,7 +41,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.hasStepSound = false;
 
@@ -55,10 +55,10 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
-        this.tasks.addTask(6, new EntityAIWander(this).setPauseRate(30));
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityConcapedeHead.class));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(5, new EntityAIFollowParent(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this).setPauseRate(30));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityConcapedeHead.class));
     }
 
     // ==================================================
@@ -104,7 +104,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
+    public void livingTick() {
         // Try to Load Parent from UUID:
         if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null) {
 	        double range = 64D;
@@ -120,7 +120,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
 	        this.parentUUID = null;
         }
         
-        super.onLivingUpdate();
+        super.livingTick();
         
         // Concapede Connections:
         if(!this.getEntityWorld().isRemote) {

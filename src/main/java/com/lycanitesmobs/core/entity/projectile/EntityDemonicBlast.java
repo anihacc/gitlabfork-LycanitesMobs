@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -56,8 +56,8 @@ public class EntityDemonicBlast extends EntityProjectileBase {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
+    public void tick() {
+    	super.tick();
     	if(!this.getEntityWorld().isRemote) {
 	    	if(rapidTicks % 5 == 0 && !isDead) {
                 for(int i = 0; i < 6; i++) {
@@ -69,7 +69,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 	    	rapidTicks++;
     	}
     	
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
@@ -125,9 +125,9 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new PotionEffect(MobEffects.WITHER, this.getEffectDuration(10), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.WITHER, this.getEffectDuration(10), 0));
 		if(ObjectManager.getEffect("decay") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
+			entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     	return true;
     }

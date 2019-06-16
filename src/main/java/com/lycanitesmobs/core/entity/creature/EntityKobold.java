@@ -11,11 +11,11 @@ import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,7 +33,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
         this.torchGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Kobold Torch Griefing", this.torchGreifing, "Set to false to stop Kobolds from stealing torches.");
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.spreadFire = false;
 
@@ -46,30 +46,30 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this));
-        this.tasks.addTask(3, new EntityAIGetItem(this).setDistanceMax(32).setSpeed(1.2D));
-        this.tasks.addTask(4, this.aiSit);
-        this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(6, new EntityAIAvoid(this).setNearSpeed(1.8D).setFarSpeed(1.4D).setNearDistance(3.0D).setFarDistance(16.0D));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(3, new EntityAIGetItem(this).setDistanceMax(32).setSpeed(1.2D));
+        this.field_70714_bg.addTask(4, this.aiSit);
+        this.field_70714_bg.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(6, new EntityAIAvoid(this).setNearSpeed(1.8D).setFarSpeed(1.4D).setNearDistance(3.0D).setFarDistance(16.0D));
         if(this.torchGreifing)
-            this.tasks.addTask(7, new EntityAIGetBlock(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+            this.field_70714_bg.addTask(7, new EntityAIGetBlock(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
+        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupHunter.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupAlpha.class));
-        this.targetTasks.addTask(5, new EntityAITargetAvoid(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAvoid(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupHunter.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupAlpha.class));
+        this.field_70715_bh.addTask(5, new EntityAITargetAvoid(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 	
 	
@@ -90,8 +90,8 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     private int torchLootingTime = 20;
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         
         // Torch Looting:
         if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.torchGreifing) {

@@ -4,14 +4,13 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityAetherwave extends EntityProjectileModel {
 
@@ -50,9 +49,9 @@ public class EntityAetherwave extends EntityProjectileModel {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    public void tick() {
+    	super.tick();
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     }
 	
@@ -74,7 +73,7 @@ public class EntityAetherwave extends EntityProjectileModel {
 	@Override
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
 		if(ObjectManager.getEffect("smited") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("smited"), this.getEffectDuration(60), 0));
+			entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("smited"), this.getEffectDuration(60), 0));
 		}
 		return true;
 	}

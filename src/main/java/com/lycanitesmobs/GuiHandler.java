@@ -61,7 +61,7 @@ public class GuiHandler implements IGuiHandler {
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
 			if(entity instanceof EntityCreatureBase && player instanceof ServerPlayerEntity)
-				return new ContainerCreature(((ServerPlayerEntity)player).getNextWindowId();, (EntityCreatureBase)entity, player.inventory);
+				return new ContainerCreature(0, (EntityCreatureBase)entity, player.inventory);
 		}
 		
 		// ========== Item ==========

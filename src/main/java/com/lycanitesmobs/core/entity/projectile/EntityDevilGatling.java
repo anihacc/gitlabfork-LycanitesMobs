@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -53,10 +53,10 @@ public class EntityDevilGatling extends EntityProjectileBase {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
+    public void tick() {
+    	super.tick();
 
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
@@ -85,9 +85,9 @@ public class EntityDevilGatling extends EntityProjectileBase {
         // Remove Buffs:
         if(this.rand.nextBoolean()) {
             List<Potion> goodEffects = new ArrayList<>();
-            for (Object potionEffectObj : target.getActivePotionEffects()) {
-                if (potionEffectObj instanceof PotionEffect) {
-                    Potion potion = ((PotionEffect) potionEffectObj).getPotion();
+            for (Object potionEffectObj : target.getActiveEffectInstances()) {
+                if (potionEffectObj instanceof EffectInstance) {
+                    Potion potion = ((EffectInstance) potionEffectObj).getPotion();
                     if (potion != null) {
                         if (ObjectLists.inEffectList("buffs", potion))
                             goodEffects.add(potion);
@@ -96,14 +96,14 @@ public class EntityDevilGatling extends EntityProjectileBase {
             }
             if (!goodEffects.isEmpty()) {
                 if (goodEffects.size() > 1)
-                    target.removePotionEffect(goodEffects.get(this.rand.nextInt(goodEffects.size())));
+                    target.removeEffectInstance(goodEffects.get(this.rand.nextInt(goodEffects.size())));
                 else
-                    target.removePotionEffect(goodEffects.get(0));
+                    target.removeEffectInstance(goodEffects.get(0));
             }
         }
 
 		if(ObjectManager.getEffect("decay") != null) {
-			target.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
+			target.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     }
     

@@ -7,9 +7,9 @@ import com.lycanitesmobs.core.entity.creature.EntityWisp;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -54,9 +54,9 @@ public class EntityLightBall extends EntityProjectileModel {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    public void tick() {
+    	super.tick();
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     }
 	
@@ -77,7 +77,7 @@ public class EntityLightBall extends EntityProjectileModel {
 	//========== Entity Living Damage ==========
 	@Override
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new PotionEffect(MobEffects.GLOWING, this.getEffectDuration(20), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.GLOWING, this.getEffectDuration(20), 0));
 		return true;
 	}
 

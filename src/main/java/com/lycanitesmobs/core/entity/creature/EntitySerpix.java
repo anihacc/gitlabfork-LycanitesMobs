@@ -11,13 +11,13 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -35,7 +35,7 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.ARTHROPOD;
+        this.attribute = CreatureAttribute.ARTHROPOD;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
@@ -49,30 +49,30 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(60));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(9, new EntityAIBeg(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
+        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(60));
+        this.field_70714_bg.addTask(2, this.aiSit);
+        this.field_70714_bg.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
+        this.field_70714_bg.addTask(7, new EntityAIWander(this));
+        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
+        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
+        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
+            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
         }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 

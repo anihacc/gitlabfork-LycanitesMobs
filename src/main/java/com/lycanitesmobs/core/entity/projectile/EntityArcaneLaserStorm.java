@@ -60,13 +60,13 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
  	//                   Update
  	// ==================================================
     @Override
-    public void onUpdate() {
-    	super.onUpdate();
+    public void tick() {
+    	super.tick();
     	if(!this.getEntityWorld().isRemote) {
 	    	updateLasers();
     	}
     	
-    	if(this.posY > this.getEntityWorld().getHeight() + 20)
+    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)

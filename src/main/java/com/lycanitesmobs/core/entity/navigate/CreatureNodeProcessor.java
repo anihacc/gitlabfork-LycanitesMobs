@@ -5,18 +5,23 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -27,9 +32,15 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     public EntityCreatureBase entityCreature;
     protected float avoidsWater;
 
+    public static double getGroundY(IBlockReader p_197682_0_, BlockPos pos) {
+        BlockPos blockpos = pos.down();
+        VoxelShape voxelshape = p_197682_0_.getBlockState(blockpos).getCollisionShape(p_197682_0_, blockpos);
+        return (double)blockpos.getY() + (voxelshape.isEmpty() ? 0.0D : voxelshape.getEnd(Direction.Axis.Y));
+    }
+
     // ==================== Setup ====================
     @Override
-    public void init(IBlockAccess sourceIn, EntityLiving mob) {
+    public void init(IWorldReader sourceIn, MobEntity mob) {
         super.init(sourceIn, mob);
         this.avoidsWater = mob.getPathPriority(PathNodeType.WATER);
         if(mob instanceof EntityCreatureBase)
@@ -39,14 +50,14 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     @Override
     public void updateEntitySize(Entity updateEntity) {
         this.entitySizeX = MathHelper.floor(this.getWidth(updateEntity) + 1.0F);
-        this.entitySizeY = MathHelper.floor(updateEntity.height + 1.0F);
+        this.entitySizeY = MathHelper.floor(updateEntity.getSize(Pose.STANDING).height + 1.0F);
         this.entitySizeZ = MathHelper.floor(this.getWidth(updateEntity) + 1.0F);
     }
 
     @Override
     public void postProcess() {
         if(this.entityCreature != null)
-            this.entity.setPathPriority(PathNodeType.WATER, this.avoidsWater);
+            this.field_186326_b.setPathPriority(PathNodeType.WATER, this.avoidsWater);
         super.postProcess();
     }
 
@@ -78,10 +89,10 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     /** Returns a width to path with. **/
     public double getWidth() {
-		return this.getWidth(this.entity);
+		return this.getWidth(this.field_186326_b);
     }
 	public double getWidth(Entity entity) {
-		return Math.min(3, (double)entity.width);
+		return Math.min(3, (double)entity.getSize(Pose.STANDING).width);
 	}
 
 
@@ -101,47 +112,47 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     public PathPoint getStart() {
         // Flying/Strong Swimming:
         if(this.flying() || this.swimming()) {
-            return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
+            return this.openPoint(MathHelper.floor(this.field_186326_b.getBoundingBox().minX), MathHelper.floor(this.field_186326_b.getBoundingBox().minY + 0.5D), MathHelper.floor(this.field_186326_b.getBoundingBox().minZ));
         }
 
         // Wading Through Water:
         int posY;
-        if (this.getCanSwim() && this.entity.isInWater()) {
-            posY = (int)this.entity.getEntityBoundingBox().minY;
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
+        if (this.getCanSwim() && this.field_186326_b.isInWater()) {
+            posY = (int)this.field_186326_b.getBoundingBox().minY;
+            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.field_186326_b.posX), posY, MathHelper.floor(this.field_186326_b.posZ));
 
-            for (Block block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock()) {
+            for (Block block = this.field_176169_a.getBlockState(blockpos$mutableblockpos).getBlock(); block == Blocks.WATER; block = this.field_176169_a.getBlockState(blockpos$mutableblockpos).getBlock()) {
                 ++posY;
-                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
+                blockpos$mutableblockpos.setPos(MathHelper.floor(this.field_186326_b.posX), posY, MathHelper.floor(this.field_186326_b.posZ));
             }
         }
 
         // Walking On ground:
-        else if (this.entity.onGround) {
-            posY = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
+        else if (this.field_186326_b.onGround) {
+            posY = MathHelper.floor(this.field_186326_b.getBoundingBox().minY + 0.5D);
         }
 
         // In Air:
         else {
             BlockPos blockpos;
-            for (blockpos = new BlockPos(this.entity); (this.blockaccess.getBlockState(blockpos).getMaterial() == Material.AIR || this.blockaccess.getBlockState(blockpos).getBlock().isPassable(this.blockaccess, blockpos)) && blockpos.getY() > 0; blockpos = blockpos.down()) {}
+            for (blockpos = new BlockPos(this.field_186326_b); (this.field_176169_a.getBlockState(blockpos).getMaterial() == Material.AIR || !this.field_176169_a.getBlockState(blockpos).isSolid()) && blockpos.getY() > 0; blockpos = blockpos.down()) {} // Was isPassable instead of isSolid
             posY = blockpos.up().getY();
         }
 
         // XZ Offset:
-        BlockPos offsetXZ = new BlockPos(this.entity);
-        PathNodeType targetNodeType = this.getPathNodeType(this.entity, offsetXZ.getX(), posY, offsetXZ.getZ());
+        BlockPos offsetXZ = new BlockPos(this.field_186326_b);
+        PathNodeType targetNodeType = this.getPathNodeType(this.field_176169_a, offsetXZ.getX(), posY, offsetXZ.getZ());
 
-        if (this.entity.getPathPriority(targetNodeType) < 0.0F) {
+        if (this.field_186326_b.getPathPriority(targetNodeType) < 0.0F) {
             Set<BlockPos> set = Sets.newHashSet();
-            set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)posY, this.entity.getEntityBoundingBox().minZ));
-            set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)posY, this.entity.getEntityBoundingBox().maxZ));
-            set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)posY, this.entity.getEntityBoundingBox().minZ));
-            set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)posY, this.entity.getEntityBoundingBox().maxZ));
+            set.add(new BlockPos(this.field_186326_b.getBoundingBox().minX, (double)posY, this.field_186326_b.getBoundingBox().minZ));
+            set.add(new BlockPos(this.field_186326_b.getBoundingBox().minX, (double)posY, this.field_186326_b.getBoundingBox().maxZ));
+            set.add(new BlockPos(this.field_186326_b.getBoundingBox().maxX, (double)posY, this.field_186326_b.getBoundingBox().minZ));
+            set.add(new BlockPos(this.field_186326_b.getBoundingBox().maxX, (double)posY, this.field_186326_b.getBoundingBox().maxZ));
 
             for (BlockPos betterPos : set) {
-                PathNodeType pathnodetype = this.getPathNodeType(this.entity, betterPos);
-                if(this.entity.getPathPriority(pathnodetype) >= 0.0F) {
+                PathNodeType pathnodetype = this.getPathNodeType(this.field_186326_b, betterPos);
+                if(this.field_186326_b.getPathPriority(pathnodetype) >= 0.0F) {
                     return this.openPoint(betterPos.getX(), betterPos.getY(), betterPos.getZ());
                 }
             }
@@ -153,21 +164,19 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     // ==================== Options ====================
     /** Returns options from the current point to the target point. **/
-    public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
+    @Override
+    public int func_222859_a(PathPoint[] pathOptions, PathPoint currentPoint) {
         // Flying/Strong Swimming/Diving:
         if(this.flying() || this.swimming()) {
             int i = 0;
-            for (EnumFacing enumfacing : EnumFacing.values()) {
-                PathPoint pathpoint = null;
-                if(this.flying()) {
-                    pathpoint = this.getFlightNode(currentPoint.x + enumfacing.getFrontOffsetX(), currentPoint.y + enumfacing.getFrontOffsetY(), currentPoint.z + enumfacing.getFrontOffsetZ());
-                }
-                else {
-                    pathpoint = this.getWaterNode(currentPoint.x + enumfacing.getFrontOffsetX(), currentPoint.y + enumfacing.getFrontOffsetY(), currentPoint.z + enumfacing.getFrontOffsetZ());
-                }
-
-                if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
-                    pathOptions[i++] = pathpoint;
+            for (Direction direction : Direction.values()) {
+                PathPoint pathPoint;
+                if(this.flying())
+                    pathPoint = this.getFlightNode(currentPoint.x + direction.getXOffset(), currentPoint.y + direction.getYOffset(), currentPoint.z + direction.getZOffset());
+                else
+                    pathPoint = this.getWaterNode(currentPoint.x + direction.getXOffset(), currentPoint.y + direction.getYOffset(), currentPoint.z + direction.getZOffset());
+                if(pathPoint != null && !pathPoint.visited) {
+                    pathOptions[i++] = pathPoint;
                 }
             }
             return i;
@@ -176,89 +185,73 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         // Walking:
         int i = 0;
         int j = 0;
-        PathNodeType pathnodetype = this.getPathNodeType(this.entity, currentPoint.x, currentPoint.y + 1, currentPoint.z);
-
-        if (this.entity.getPathPriority(pathnodetype) >= 0.0F) {
-            j = MathHelper.floor(Math.max(1.0F, this.entity.stepHeight));
+        PathNodeType pathnodetype = this.getPathNodeType(this.field_186326_b, currentPoint.x, currentPoint.y + 1, currentPoint.z);
+        if (this.field_186326_b.getPathPriority(pathnodetype) >= 0.0F) {
+            j = MathHelper.floor(Math.max(1.0F, this.field_186326_b.stepHeight));
         }
 
-        BlockPos blockpos = (new BlockPos(currentPoint.x, currentPoint.y, currentPoint.z)).down();
-        double d0 = (double)currentPoint.y - (1.0D - this.blockaccess.getBlockState(blockpos).getBoundingBox(this.blockaccess, blockpos).maxY);
-        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
-        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.WEST);
-        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, EnumFacing.EAST);
-        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
-
-        if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
+        double d0 = getGroundY(this.field_176169_a, new BlockPos(currentPoint.x, currentPoint.y, currentPoint.z));
+        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
+        if (pathpoint != null && !pathpoint.visited && pathpoint.costMalus >= 0.0F) {
             pathOptions[i++] = pathpoint;
         }
 
-        if (pathpoint1 != null && !pathpoint1.visited && pathpoint1.distanceTo(targetPoint) < maxDistance) {
+        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, Direction.WEST);
+        if (pathpoint1 != null && !pathpoint1.visited && pathpoint1.costMalus >= 0.0F) {
             pathOptions[i++] = pathpoint1;
         }
 
-        if (pathpoint2 != null && !pathpoint2.visited && pathpoint2.distanceTo(targetPoint) < maxDistance) {
+        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, Direction.EAST);
+        if (pathpoint2 != null && !pathpoint2.visited && pathpoint2.costMalus >= 0.0F) {
             pathOptions[i++] = pathpoint2;
         }
 
-        if (pathpoint3 != null && !pathpoint3.visited && pathpoint3.distanceTo(targetPoint) < maxDistance) {
+        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
+        if (pathpoint3 != null && !pathpoint3.visited && pathpoint3.costMalus >= 0.0F) {
             pathOptions[i++] = pathpoint3;
         }
 
-        boolean flag = pathpoint3 == null || pathpoint3.nodeType == PathNodeType.OPEN || pathpoint3.costMalus != 0.0F;
-        boolean flag1 = pathpoint == null || pathpoint.nodeType == PathNodeType.OPEN || pathpoint.costMalus != 0.0F;
-        boolean flag2 = pathpoint2 == null || pathpoint2.nodeType == PathNodeType.OPEN || pathpoint2.costMalus != 0.0F;
-        boolean flag3 = pathpoint1 == null || pathpoint1.nodeType == PathNodeType.OPEN || pathpoint1.costMalus != 0.0F;
-
-        if (flag && flag3) {
-            PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
-
-            if (pathpoint4 != null && !pathpoint4.visited && pathpoint4.distanceTo(targetPoint) < maxDistance) {
-                pathOptions[i++] = pathpoint4;
-            }
+        PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
+        if (this.func_222860_a(currentPoint, pathpoint1, pathpoint3, pathpoint4)) {
+            pathOptions[i++] = pathpoint4;
         }
 
-        if (flag && flag2) {
-            PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, EnumFacing.NORTH);
-
-            if (pathpoint5 != null && !pathpoint5.visited && pathpoint5.distanceTo(targetPoint) < maxDistance) {
-                pathOptions[i++] = pathpoint5;
-            }
+        PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
+        if (this.func_222860_a(currentPoint, pathpoint2, pathpoint3, pathpoint5)) {
+            pathOptions[i++] = pathpoint5;
         }
 
-        if (flag1 && flag3) {
-            PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
-
-            if (pathpoint6 != null && !pathpoint6.visited && pathpoint6.distanceTo(targetPoint) < maxDistance) {
-                pathOptions[i++] = pathpoint6;
-            }
+        PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
+        if (this.func_222860_a(currentPoint, pathpoint1, pathpoint, pathpoint6)) {
+            pathOptions[i++] = pathpoint6;
         }
 
-        if (flag1 && flag2) {
-            PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, EnumFacing.SOUTH);
-
-            if (pathpoint7 != null && !pathpoint7.visited && pathpoint7.distanceTo(targetPoint) < maxDistance) {
-                pathOptions[i++] = pathpoint7;
-            }
+        PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
+        if (this.func_222860_a(currentPoint, pathpoint2, pathpoint, pathpoint7)) {
+            pathOptions[i++] = pathpoint7;
         }
 
         return i;
     }
 
+    // I think this determines the best path to go with?
+    private boolean func_222860_a(PathPoint p_222860_1_, @Nullable PathPoint p_222860_2_, @Nullable PathPoint p_222860_3_, @Nullable PathPoint p_222860_4_) {
+        return p_222860_4_ != null && !p_222860_4_.visited && p_222860_3_ != null && p_222860_3_.costMalus >= 0.0F && p_222860_3_.y <= p_222860_1_.y && p_222860_2_ != null && p_222860_2_.costMalus >= 0.0F && p_222860_2_.y <= p_222860_1_.y;
+    }
+
     /** Returns a point that the entity can move to safely, only used when walking. **/
     @Nullable
-    private PathPoint getSafePoint(int x, int y, int z, int p_186332_4_, double p_186332_5_, EnumFacing facing) {
+    private PathPoint getSafePoint(int x, int y, int z, int stepHeight, double groundY, Direction facing) {
         PathPoint pathpoint = null;
         BlockPos blockpos = new BlockPos(x, y, z);
-        BlockPos blockpos1 = blockpos.down();
-        double d0 = (double)y - (1.0D - this.blockaccess.getBlockState(blockpos1).getBoundingBox(this.blockaccess, blockpos1).maxY);
+        double d0 = getGroundY(this.field_176169_a, blockpos);
 
-        if (d0 - p_186332_5_ > 1.125D) {
+        if (d0 - groundY > 1.125D) {
             return null;
         }
         else {
-            PathNodeType pathnodetype = this.getPathNodeType(this.entity, x, y, z);
-            float f = this.entity.getPathPriority(pathnodetype);
+            PathNodeType pathnodetype = this.getPathNodeType(this.field_186326_b, x, y, z);
+            float f = this.field_186326_b.getPathPriority(pathnodetype);
             double entityRadius = this.getWidth() / 2;
 
             if (f >= 0.0F) {
@@ -271,31 +264,28 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                 return pathpoint;
             }
             else {
-                if (pathpoint == null && p_186332_4_ > 0 && pathnodetype != PathNodeType.FENCE && pathnodetype != PathNodeType.TRAPDOOR) {
-                    pathpoint = this.getSafePoint(x, y + 1, z, p_186332_4_ - 1, p_186332_5_, facing);
+                if (pathpoint == null && stepHeight > 0 && pathnodetype != PathNodeType.FENCE && pathnodetype != PathNodeType.TRAPDOOR) {
+                    pathpoint = this.getSafePoint(x, y + 1, z, stepHeight - 1, groundY, facing);
 
                     if (pathpoint != null && (pathpoint.nodeType == PathNodeType.OPEN || pathpoint.nodeType == PathNodeType.WALKABLE) && this.getWidth() < 1.0F) {
-                        double d2 = (double)(x - facing.getFrontOffsetX()) + 0.5D;
-                        double d3 = (double)(z - facing.getFrontOffsetZ()) + 0.5D;
-                        AxisAlignedBB axisalignedbb = new AxisAlignedBB(d2 - entityRadius, (double)y + 0.001D, d3 - entityRadius, d2 + entityRadius, (double)((float)y + this.entity.height), d3 + entityRadius);
-                        AxisAlignedBB axisalignedbb1 = this.blockaccess.getBlockState(blockpos).getBoundingBox(this.blockaccess, blockpos);
-                        AxisAlignedBB axisalignedbb2 = axisalignedbb.expand(0.0D, axisalignedbb1.maxY - 0.002D, 0.0D);
-
-                        if (this.entity.world.collidesWithAnyBlock(axisalignedbb2)) {
+                        double d2 = (double)(x - facing.getXOffset()) + 0.5D;
+                        double d3 = (double)(z - facing.getZOffset()) + 0.5D;
+                        AxisAlignedBB axisalignedbb = new AxisAlignedBB(d2 - entityRadius, getGroundY(this.field_176169_a, new BlockPos(d2, (double)(y + 1), d3)) + 0.001D, d3 - entityRadius, d2 + entityRadius, (double)this.field_186326_b.getHeight() + getGroundY(this.field_176169_a, new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z)) - 0.002D, d3 + entityRadius);
+                        if (!this.field_176169_a.isCollisionBoxesEmpty(this.field_186326_b, axisalignedbb)) {
                             pathpoint = null;
                         }
                     }
                 }
 
                 if (pathnodetype == PathNodeType.OPEN) {
-                    AxisAlignedBB axisalignedbb3 = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.entity.height), (double)z + entityRadius + 0.5D);
+                    AxisAlignedBB axisalignedbb3 = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.field_186326_b.getSize(Pose.STANDING).height), (double)z + entityRadius + 0.5D);
 
-                    if (this.entity.world.collidesWithAnyBlock(axisalignedbb3)) {
+                    if (this.field_186326_b.world.areCollisionShapesEmpty(axisalignedbb3)) {
                         return null;
                     }
 
                     if (this.getWidth() >= 1.0F) {
-                        PathNodeType pathnodetype1 = this.getPathNodeType(this.entity, x, y - 1, z);
+                        PathNodeType pathnodetype1 = this.getPathNodeType(this.field_186326_b, x, y - 1, z);
 
                         if (pathnodetype1 == PathNodeType.BLOCKED) {
                             pathpoint = this.openPoint(x, y, z);
@@ -310,12 +300,12 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                     while (y > 0 && pathnodetype == PathNodeType.OPEN) {
                         --y;
 
-                        if (i++ >= this.entity.getMaxFallHeight()) {
+                        if (i++ >= this.field_186326_b.getMaxFallHeight()) {
                             return null;
                         }
 
-                        pathnodetype = this.getPathNodeType(this.entity, x, y, z);
-                        f = this.entity.getPathPriority(pathnodetype);
+                        pathnodetype = this.getPathNodeType(this.field_186326_b, x, y, z);
+                        f = this.field_186326_b.getPathPriority(pathnodetype);
 
                         if (pathnodetype != PathNodeType.OPEN && f >= 0.0F) {
                             pathpoint = this.openPoint(x, y, z);
@@ -338,13 +328,13 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     // ==================== Path Nodes ====================
     @Override
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+    public PathNodeType getPathNodeType(IBlockReader world, int x, int y, int z, MobEntity mobEntity, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
         if(this.swimming())
             return PathNodeType.WATER;
 
         EnumSet<PathNodeType> enumset = EnumSet.noneOf(PathNodeType.class);
         PathNodeType pathnodetype = PathNodeType.BLOCKED;
-        BlockPos blockpos = new BlockPos(entitylivingIn);
+        BlockPos blockpos = new BlockPos(mobEntity);
 
         for (int i = 0; i < xSize; ++i) {
             for (int j = 0; j < ySize; ++j) {
@@ -352,7 +342,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                     int l = i + x;
                     int i1 = j + y;
                     int j1 = k + z;
-                    PathNodeType pathnodetype1 = this.getPathNodeType(blockaccessIn, l, i1, j1);
+                    PathNodeType pathnodetype1 = this.getPathNodeType(world, l, i1, j1);
 
                     if (pathnodetype1 == PathNodeType.DOOR_WOOD_CLOSED && canBreakDoorsIn && canEnterDoorsIn) {
                         pathnodetype1 = PathNodeType.WALKABLE;
@@ -362,7 +352,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                         pathnodetype1 = PathNodeType.BLOCKED;
                     }
 
-                    if (pathnodetype1 == PathNodeType.RAIL && !(blockaccessIn.getBlockState(blockpos).getBlock() instanceof BlockRailBase) && !(blockaccessIn.getBlockState(blockpos.down()).getBlock() instanceof BlockRailBase)) {
+                    if (pathnodetype1 == PathNodeType.RAIL && !(world.getBlockState(blockpos).getBlock() instanceof RailBlock) && !(world.getBlockState(blockpos.down()).getBlock() instanceof RailBlock)) {
                         pathnodetype1 = PathNodeType.FENCE;
                     }
 
@@ -382,16 +372,16 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
             PathNodeType pathnodetype2 = PathNodeType.BLOCKED;
 
             for (PathNodeType pathnodetype3 : enumset) {
-                if (entitylivingIn.getPathPriority(pathnodetype3) < 0.0F) {
+                if (mobEntity.getPathPriority(pathnodetype3) < 0.0F) {
                     return pathnodetype3;
                 }
 
-                if (entitylivingIn.getPathPriority(pathnodetype3) >= entitylivingIn.getPathPriority(pathnodetype2)) {
+                if (mobEntity.getPathPriority(pathnodetype3) >= mobEntity.getPathPriority(pathnodetype2)) {
                     pathnodetype2 = pathnodetype3;
                 }
             }
 
-            if (pathnodetype == PathNodeType.OPEN && entitylivingIn.getPathPriority(pathnodetype2) == 0.0F) {
+            if (pathnodetype == PathNodeType.OPEN && mobEntity.getPathPriority(pathnodetype2) == 0.0F) {
                 return PathNodeType.OPEN;
             }
             else {
@@ -400,74 +390,112 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         }
     }
 
-    public PathNodeType getPathNodeType(EntityLiving entitylivingIn, BlockPos pos) {
+    public PathNodeType getPathNodeType(MobEntity mobEntity, BlockPos pos) {
         if(this.swimming())
             return PathNodeType.WATER;
 
-        return this.getPathNodeType(entitylivingIn, pos.getX(), pos.getY(), pos.getZ());
+        return this.getPathNodeType(mobEntity, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public PathNodeType getPathNodeType(EntityLiving entitylivingIn, int x, int y, int z) {
+    public PathNodeType getPathNodeType(MobEntity mobEntity, int x, int y, int z) {
         if(this.swimming())
             return PathNodeType.WATER;
 
-        return this.getPathNodeType(this.blockaccess, x, y, z, entitylivingIn, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanOpenDoors(), this.getCanEnterDoors());
+        return this.getPathNodeType(this.field_176169_a, x, y, z, mobEntity, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanOpenDoors(), this.getCanEnterDoors());
     }
 
     @Override
-    public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
-        if(this.swimming())
-            return PathNodeType.WATER;
-
+    public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
         PathNodeType pathnodetype = this.getPathNodeTypeRaw(blockaccessIn, x, y, z);
-
         if (pathnodetype == PathNodeType.OPEN && y >= 1) {
             Block block = blockaccessIn.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
             PathNodeType pathnodetype1 = this.getPathNodeTypeRaw(blockaccessIn, x, y - 1, z);
             pathnodetype = pathnodetype1 != PathNodeType.WALKABLE && pathnodetype1 != PathNodeType.OPEN && pathnodetype1 != PathNodeType.WATER && pathnodetype1 != PathNodeType.LAVA ? PathNodeType.WALKABLE : PathNodeType.OPEN;
 
-            if (pathnodetype1 == PathNodeType.DAMAGE_FIRE || block == Blocks.MAGMA) {
+            if (pathnodetype1 == PathNodeType.DAMAGE_FIRE || block == Blocks.MAGMA_BLOCK || block == Blocks.field_222433_lV) {
                 pathnodetype = PathNodeType.DAMAGE_FIRE;
             }
 
             if (pathnodetype1 == PathNodeType.DAMAGE_CACTUS) {
                 pathnodetype = PathNodeType.DAMAGE_CACTUS;
             }
+
+            if (pathnodetype1 == PathNodeType.DAMAGE_OTHER) {
+                pathnodetype = PathNodeType.DAMAGE_OTHER;
+            }
+            if (pathnodetype1 == PathNodeType.DAMAGE_OTHER) pathnodetype = PathNodeType.DAMAGE_OTHER; // Forge: consider modded damage types
         }
 
-        BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+        pathnodetype = this.checkNeighborBlocks(blockaccessIn, x, y, z, pathnodetype);
+        return pathnodetype;
+    }
 
-        if (pathnodetype == PathNodeType.WALKABLE) {
-            for (int j = -1; j <= 1; ++j) {
-                for (int i = -1; i <= 1; ++i) {
-                    if (j != 0 || i != 0) {
-                        Block block1 = blockaccessIn.getBlockState(blockpos$pooledmutableblockpos.setPos(j + x, y, i + z)).getBlock();
-
-                        if (block1 == Blocks.CACTUS) {
-                            pathnodetype = PathNodeType.DANGER_CACTUS;
+    public PathNodeType checkNeighborBlocks(IBlockReader blockaccessIn, int x, int y, int z, PathNodeType nodeType) {
+        if (nodeType == PathNodeType.WALKABLE) {
+            try (BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain()) {
+                for(int i = -1; i <= 1; ++i) {
+                    for(int j = -1; j <= 1; ++j) {
+                        if (i != 0 || j != 0) {
+                            BlockState state = blockaccessIn.getBlockState(blockpos$pooledmutableblockpos.setPos(i + x, y, j + z));
+                            Block block = state.getBlock();
+                            PathNodeType type = block.getAiPathNodeType(state, blockaccessIn, blockpos$pooledmutableblockpos, this.field_186326_b);
+                            if (block == Blocks.CACTUS || type == PathNodeType.DAMAGE_CACTUS) {
+                                nodeType = PathNodeType.DANGER_CACTUS;
+                            } else if (block == Blocks.FIRE || type == PathNodeType.DAMAGE_FIRE) {
+                                nodeType = PathNodeType.DANGER_FIRE;
+                            } else if (block == Blocks.field_222434_lW || type == PathNodeType.DAMAGE_OTHER) {
+                                nodeType = PathNodeType.DANGER_OTHER;
+                            }
                         }
-                        else if (block1 == Blocks.FIRE) {
-                            pathnodetype = PathNodeType.DANGER_FIRE;
-                        }
-                        else if(block1.isBurning(blockaccessIn,blockpos$pooledmutableblockpos.setPos(j +x, y, i + z))) pathnodetype = PathNodeType.DAMAGE_FIRE;
                     }
                 }
             }
         }
 
-        blockpos$pooledmutableblockpos.release();
-        return pathnodetype;
+        return nodeType;
     }
 
-    protected PathNodeType getPathNodeTypeRaw(IBlockAccess blockAccess, int x, int y, int z) {
+    protected PathNodeType getPathNodeTypeRaw(IBlockReader blockaccessIn, int x, int y, int z) {
         BlockPos blockpos = new BlockPos(x, y, z);
-        BlockState iblockstate = blockAccess.getBlockState(blockpos);
-        Block block = iblockstate.getBlock();
-        Material material = iblockstate.getMaterial();
-        PathNodeType type = block.getAiPathNodeType(iblockstate, blockAccess,blockpos);
-        if (type != null)
-            return type;
-        return material == Material.AIR ? PathNodeType.OPEN : (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY ? (block == Blocks.FIRE ? PathNodeType.DAMAGE_FIRE : (block == Blocks.CACTUS ? PathNodeType.DAMAGE_CACTUS : (block instanceof BlockDoor && material == Material.WOOD && !iblockstate.getValue(BlockDoor.OPEN) ? PathNodeType.DOOR_WOOD_CLOSED : (block instanceof BlockDoor && material == Material.IRON && !iblockstate.getValue(BlockDoor.OPEN) ? PathNodeType.DOOR_IRON_CLOSED : (block instanceof BlockDoor && iblockstate.getValue(BlockDoor.OPEN) ? PathNodeType.DOOR_OPEN : (block instanceof BlockRailBase ? PathNodeType.RAIL : (!(block instanceof BlockFence) && !(block instanceof BlockWall) && (!(block instanceof BlockFenceGate) || iblockstate.getValue(BlockFenceGate.OPEN)) ? (material == Material.WATER ? PathNodeType.WATER : (material == Material.LAVA ? PathNodeType.LAVA : (block.isPassable(blockAccess, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED))) : PathNodeType.FENCE))))))) : PathNodeType.TRAPDOOR);
+        BlockState blockstate = blockaccessIn.getBlockState(blockpos);
+        PathNodeType type = blockstate.getAiPathNodeType(blockaccessIn, blockpos, this.field_186326_b);
+        if (type != null) return type;
+        Block block = blockstate.getBlock();
+        Material material = blockstate.getMaterial();
+        if (blockstate.isAir(blockaccessIn, blockpos)) {
+            return PathNodeType.OPEN;
+        } else if (!block.isIn(BlockTags.TRAPDOORS) && block != Blocks.LILY_PAD) {
+            if (block == Blocks.FIRE) {
+                return PathNodeType.DAMAGE_FIRE;
+            } else if (block == Blocks.CACTUS) {
+                return PathNodeType.DAMAGE_CACTUS;
+            } else if (block == Blocks.field_222434_lW) {
+                return PathNodeType.DAMAGE_OTHER;
+            } else if (block instanceof DoorBlock && material == Material.WOOD && !blockstate.get(DoorBlock.OPEN)) {
+                return PathNodeType.DOOR_WOOD_CLOSED;
+            } else if (block instanceof DoorBlock && material == Material.IRON && !blockstate.get(DoorBlock.OPEN)) {
+                return PathNodeType.DOOR_IRON_CLOSED;
+            } else if (block instanceof DoorBlock && blockstate.get(DoorBlock.OPEN)) {
+                return PathNodeType.DOOR_OPEN;
+            } else if (block instanceof AbstractRailBlock) {
+                return PathNodeType.RAIL;
+            } else if (block instanceof LeavesBlock) {
+                return PathNodeType.LEAVES;
+            } else if (!block.isIn(BlockTags.field_219748_G) && !block.isIn(BlockTags.field_219757_z) && (!(block instanceof FenceGateBlock) || blockstate.get(FenceGateBlock.OPEN))) {
+                IFluidState ifluidstate = blockaccessIn.getFluidState(blockpos);
+                if (ifluidstate.isTagged(FluidTags.WATER)) {
+                    return PathNodeType.WATER;
+                } else if (ifluidstate.isTagged(FluidTags.LAVA)) {
+                    return PathNodeType.LAVA;
+                } else {
+                    return blockstate.allowsMovement(blockaccessIn, blockpos, PathType.LAND) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
+                }
+            } else {
+                return PathNodeType.FENCE;
+            }
+        } else {
+            return PathNodeType.TRAPDOOR;
+        }
     }
 
     protected PathPoint getFlightNode(int x, int y, int z) {
@@ -484,7 +512,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         for (int i = x; i < x + this.entitySizeX; ++i) {
             for (int j = y; j < y + this.entitySizeY; ++j) {
                 for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+                    BlockState iblockstate = this.field_176169_a.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
 
                     // Non-Solid:
 					if (!iblockstate.getMaterial().isSolid() && !iblockstate.getMaterial().isLiquid()) {
@@ -525,7 +553,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         for (int i = x; i < x + this.entitySizeX; ++i) {
             for (int j = y; j < y + Math.min(this.entitySizeY, 3); ++j) {
                 for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+                    BlockState iblockstate = this.field_176169_a.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
 
                     if(this.entityCreature == null) {
                         return PathNodeType.BLOCKED;

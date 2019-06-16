@@ -7,14 +7,14 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 
 public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon {
@@ -26,7 +26,7 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
         super(par1World);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = CreatureAttribute.UNDEAD;
         this.hasAttackSound = true;
         this.setupMob();
     }
@@ -35,20 +35,20 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this));
-        this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityChicken.class));
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class).setPackHuntingScale(3, 1));
+            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
+            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
     }
 	
@@ -58,8 +58,8 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
     // ==================================================
 	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
         // Leap:
         if(this.hasAttackTarget() && this.onGround && !this.getEntityWorld().isRemote && this.rand.nextInt(10) == 0)
@@ -91,7 +91,7 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
   	//                     Immunities
   	// ==================================================
     @Override
-    public boolean isPotionApplicable(PotionEffect potionEffect) {
+    public boolean isPotionApplicable(EffectInstance potionEffect) {
 		if(potionEffect.getPotion() == MobEffects.WITHER)
 			return false;
 		if(ObjectManager.getEffect("decay") != null)

@@ -8,10 +8,10 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ public class EntityArisaur extends EntityCreatureAgeable implements IAnimals, IG
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
 
         this.canGrow = true;
@@ -40,19 +40,19 @@ public class EntityArisaur extends EntityCreatureAgeable implements IAnimals, IG
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(3, new EntityAIMate(this).setMateDistance(5.0D));
-        this.tasks.addTask(4, new EntityAITempt(this).setItemList("vegetables"));
-        this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D).setStrayDistance(3.0D));
-        this.tasks.addTask(6, new EntityAIFollowMaster(this).setSpeed(1.0D).setStrayDistance(18.0F));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
+        this.field_70714_bg.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(3, new EntityAIMate(this).setMateDistance(5.0D));
+        this.field_70714_bg.addTask(4, new EntityAITempt(this).setItemList("vegetables"));
+        this.field_70714_bg.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D).setStrayDistance(3.0D));
+        this.field_70714_bg.addTask(6, new EntityAIFollowMaster(this).setSpeed(1.0D).setStrayDistance(18.0F));
+        this.field_70714_bg.addTask(7, new EntityAIWander(this));
+        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70715_bh.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
     }
 	
 	
@@ -61,15 +61,15 @@ public class EntityArisaur extends EntityCreatureAgeable implements IAnimals, IG
    	// ==================================================
 	// ========== Pathing Weight ==========
 	@Override
-	public float getBlockPathWeight(int par1, int par2, int par3) {
-		if(this.getEntityWorld().getBlockState(new BlockPos(par1, par2 - 1, par3)).getBlock() != Blocks.AIR) {
-			BlockState blocState = this.getEntityWorld().getBlockState(new BlockPos(par1, par2 - 1, par3));
+	public float getBlockPathWeight(int x, int y, int z) {
+		if(this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
+			BlockState blocState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
 			if(blocState.getMaterial() == Material.GRASS)
 				return 10F;
 			if(blocState.getMaterial() == Material.GROUND)
 				return 7F;
 		}
-        return super.getBlockPathWeight(par1, par2, par3);
+        return super.getBlockPathWeight(x, y, z);
     }
     
 	// ========== Can leash ==========

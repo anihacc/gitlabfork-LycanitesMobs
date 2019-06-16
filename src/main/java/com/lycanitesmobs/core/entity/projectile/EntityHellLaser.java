@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -70,7 +70,7 @@ public class EntityHellLaser extends EntityProjectileLaser {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
         	if(target instanceof LivingEntity)
-    			((LivingEntity)target).addPotionEffect(new PotionEffect(MobEffects.WITHER, this.getEffectDuration(5), 0));
+    			((LivingEntity)target).addPotionEffect(new EffectInstance(MobEffects.WITHER, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }
