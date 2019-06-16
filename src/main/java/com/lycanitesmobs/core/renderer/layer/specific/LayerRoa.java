@@ -1,8 +1,9 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.core.renderer.layer.specific;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

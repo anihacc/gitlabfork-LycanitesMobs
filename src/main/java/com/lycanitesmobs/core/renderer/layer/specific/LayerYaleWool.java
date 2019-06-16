@@ -1,8 +1,10 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.core.renderer.layer.specific;
 
-import com.lycanitesmobs.core.entity.creature.EntityYale;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.creature.EntityYale;
 import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,7 +44,7 @@ public class LayerYaleWool extends LayerCreatureBase {
 
     @Override
     public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
-        int colorID = entity.getColor();
-        return new Vector4f(RenderCreature.colorTable[colorID][0], RenderCreature.colorTable[colorID][1], RenderCreature.colorTable[colorID][2], 1.0F);
+        DyeColor color = entity.getColor();
+        return new Vector4f(color.getColorComponentValues()[0], color.getColorComponentValues()[1], color.getColorComponentValues()[2], 1.0F);
     }
 }

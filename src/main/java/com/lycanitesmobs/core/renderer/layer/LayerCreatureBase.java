@@ -14,14 +14,14 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBase> {
+public class LayerCreatureBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBase> {
     public RenderCreature renderer;
     public String name;
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerBase(RenderCreature renderer) {
+    public LayerCreatureBase(RenderCreature renderer) {
         super(renderer);
         this.renderer = renderer;
         this.name = "Layer";
@@ -35,18 +35,18 @@ public class LayerBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBa
     public void func_212842_a_(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
-        if(this.renderer.getMainModel() instanceof ModelCreatureBase) {
+        if(this.renderer.getMainModel() != null) {
             ResourceLocation layerTexture = this.getLayerTexture(entity);
             if(layerTexture != null)
                 this.renderer.bindTexture(layerTexture);
-            ((ModelCreatureBase)this.renderer.getMainModel()).render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
+            this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
         }
     }
 
     public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
         if(entity == null)
             return false;
-        if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getMinecraft().player))
+        if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getInstance().player))
             return false;
         return true;
     }
@@ -60,8 +60,8 @@ public class LayerBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBa
     }
 
     public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
-        if(this.renderer.getMainModel() instanceof ModelCreatureBase) {
-            ((ModelCreatureBase)this.renderer.getMainModel()).canBaseRenderPart(partName, entity, trophy);
+        if(this.renderer.getMainModel() != null) {
+            this.renderer.getMainModel().canBaseRenderPart(partName, entity, trophy);
         }
         return true;
     }

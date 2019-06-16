@@ -12,12 +12,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerGlow extends LayerCreatureBase {
+public class LayerCreatureGlow extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerGlow(RenderCreature renderer) {
+    public LayerCreatureGlow(RenderCreature renderer) {
         super(renderer);
     }
 

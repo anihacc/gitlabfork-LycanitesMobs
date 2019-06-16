@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
+import com.mojang.blaze3d.platform.GLX;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,7 +13,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerEffect extends LayerCreatureBase {
+public class LayerCreatureEffect extends LayerCreatureBase {
 
 	public String textureSuffix;
 
@@ -35,13 +35,13 @@ public class LayerEffect extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerEffect(RenderCreature renderer, String textureSuffix) {
+    public LayerCreatureEffect(RenderCreature renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;
         this.textureSuffix = textureSuffix;
     }
 
-	public LayerEffect(RenderCreature renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+	public LayerCreatureEffect(RenderCreature renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
 		super(renderer);
 		this.name = textureSuffix;
 		this.textureSuffix = textureSuffix;
@@ -74,7 +74,7 @@ public class LayerEffect extends LayerCreatureBase {
 		}
 		int j = i % 65536;
 		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
 
 		// Blending:
     	if(this.blending == BLEND.ADD.id) {

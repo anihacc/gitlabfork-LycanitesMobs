@@ -2,17 +2,18 @@ package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerFire extends LayerCreatureBase {
+public class LayerCreatureAttack extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerFire(RenderCreature renderer) {
+    public LayerCreatureAttack(RenderCreature renderer) {
         super(renderer);
     }
 

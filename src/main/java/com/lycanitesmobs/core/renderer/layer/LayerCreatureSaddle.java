@@ -8,12 +8,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerSaddle extends LayerCreatureBase {
+public class LayerCreatureSaddle extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerSaddle(RenderCreature renderer) {
+    public LayerCreatureSaddle(RenderCreature renderer) {
         super(renderer);
     }
 

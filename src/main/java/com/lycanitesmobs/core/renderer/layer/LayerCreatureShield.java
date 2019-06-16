@@ -4,8 +4,6 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,12 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerShield extends LayerCreatureBase {
+public class LayerCreatureShield extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerShield(RenderCreature renderer) {
+    public LayerCreatureShield(RenderCreature renderer) {
         super(renderer);
     }
 
