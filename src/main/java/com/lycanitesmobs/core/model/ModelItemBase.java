@@ -9,11 +9,11 @@ import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerItem;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.Hand;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
@@ -76,10 +76,10 @@ public abstract class ModelItemBase implements IAnimationModel {
 		ResourceLocation animPartsLoc = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animPartsLoc).getInputStream();
+			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animPartsLoc).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonArray jsonArray = JsonUtils.fromJson(gson, reader, JsonArray.class);
+				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class);
 				Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 				while (jsonIterator.hasNext()) {
 					JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -106,10 +106,10 @@ public abstract class ModelItemBase implements IAnimationModel {
 		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animationLocation).getInputStream();
+			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JsonUtils.fromJson(gson, reader, JsonObject.class);
+				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}
@@ -167,7 +167,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	 * @param offsetObjPart A ModelObjPart, if not null this model is offset by it, used by assembled equipment pieces to create a full model.
 	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually, used by Equipment Pieces so that multiple parts can share their animations with each other..
 	 */
-	public void render(ItemStack itemStack, EnumHand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop, boolean animate) {
+	public void render(ItemStack itemStack, Hand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop, boolean animate) {
 		if(itemStack == null) {
 			return;
 		}

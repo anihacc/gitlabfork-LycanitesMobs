@@ -1,9 +1,6 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.block.BlockFluidBase;
 import com.lycanitesmobs.core.gui.GuiOverlay;
-import com.lycanitesmobs.core.gui.GuiTabMain;
-import com.lycanitesmobs.core.gui.TabManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -27,24 +24,17 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAir;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ClientManager extends CommonProxy {
+public class ClientManager {
 	protected static ClientManager INSTANCE;
 
 	public static ClientManager getInstance() {
@@ -77,8 +67,8 @@ public class ClientManager extends CommonProxy {
 	 */
     public FontRenderer getFontRenderer() {
 		if(this.fontRenderer == null) {
-			ResourceLocation font = new ResourceLocation("textures/font/ascii.png");
-			this.fontRenderer = new FontRenderer(Minecraft.getMinecraft().gameSettings, font, Minecraft.getMinecraft().renderEngine, true);
+			ResourceLocation fontResource = new ResourceLocation("textures/font/ascii.png");
+			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));
 		}
 		return this.fontRenderer;
 	}
@@ -87,12 +77,12 @@ public class ClientManager extends CommonProxy {
 	// ========== Register Event Handlers ==========
 	public void registerEvents() {
 		// Event Listeners:
-		FMLCommonHandler.instance().bus().register(new KeyHandler(Minecraft.getMinecraft()));
-		MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
+		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
+		MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
-		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)resourceManager).registerReloadListener(LanguageLoader.getInstance());
+			((IReloadableResourceManager)resourceManager).func_219534_a(LanguageLoader.getInstance());
 		}
 	}
 
@@ -123,7 +113,7 @@ public class ClientManager extends CommonProxy {
 		AssetManager.addTexture("GUIEquipmentForge", group, "textures/guis/equipmentforge.png");
 
 		// ========== Add GUI Tabs ==========
-		TabManager.registerTab(new GuiTabMain(0));
+		//TabManager.registerTab(new GuiTabMain()); TODO Figure out new method.
     }
 	
 	
@@ -168,7 +158,7 @@ public class ClientManager extends CommonProxy {
 
     // ========== Renders ==========
     public void addBlockRender(ModInfo group, Block block) {
-        // Fluids:
+        /*/ Fluids:
         if(block instanceof BlockFluidBase) {
             BlockFluidBase blockFluid = (BlockFluidBase)block;
             Item item = Item.getItemFromBlock(block);
@@ -182,9 +172,9 @@ public class ClientManager extends CommonProxy {
                 }
             });
             return;
-        }
+        }*/
 
-        this.addItemRender(group, Item.getItemFromBlock(block));
+        //this.addItemRender(group, Item.getItemFromBlock(block));
     }
 
     public void addItemRender(Item item) {

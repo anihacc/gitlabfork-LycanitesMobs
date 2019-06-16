@@ -4,6 +4,7 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
@@ -86,7 +87,6 @@ public class Subspecies {
 
 	/**
 	 * Loads global Subspecies config values, etc.
-	 * @param config The config instance to load values from.
 	 */
 	public static void loadGlobalSettings() {
         BASE_WEIGHT = ConfigCreatureSubspecies.INSTANCE.baseWeight.get();
@@ -150,7 +150,7 @@ public class Subspecies {
 		// Model Class:
 		if (json.has("modelClass")) {
 			try {
-				LycanitesMobs.proxy.loadSubspeciesModel(subspecies, json.get("modelClass").getAsString());
+				ClientManager.getInstance().loadSubspeciesModel(subspecies, json.get("modelClass").getAsString());
 			} catch (Exception e) {
 				LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for subspecies: " + subspecies.getTitle() + " entity: " + creatureInfo.getTitle());
 			}

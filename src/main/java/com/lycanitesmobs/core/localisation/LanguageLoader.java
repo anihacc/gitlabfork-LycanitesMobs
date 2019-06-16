@@ -1,16 +1,18 @@
 package com.lycanitesmobs.core.localisation;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.resources.IResourceManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.resource.IResourceType;
+import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 @OnlyIn(Dist.CLIENT)
-public class LanguageLoader implements IResourceManagerReloadListener {
+public class LanguageLoader implements ISelectiveResourceReloadListener {
 	public static LanguageLoader INSTANCE;
 
 	protected Map<String, String> map = new HashMap<>();
@@ -29,7 +31,7 @@ public class LanguageLoader implements IResourceManagerReloadListener {
 	 * @param resourceManager The resource manager instance.
 	 */
 	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-		LanguageManager.getInstance().loadLanguage(Minecraft.getMinecraft().gameSettings.language);
+	public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
+		LanguageManager.getInstance().loadLanguage(Minecraft.getInstance().gameSettings.language);
 	}
 }

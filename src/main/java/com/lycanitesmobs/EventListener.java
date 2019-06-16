@@ -423,13 +423,9 @@ public class EventListener {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
-		if(!LycanitesMobs.config.getBool("Debug", "Overlay", false)) {
-			return;
-		}
-
 		// Entity:
 		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
-		if(mouseOver != null && mouseOver instanceof EntityRayTraceResult) {
+		if(mouseOver instanceof EntityRayTraceResult) {
 			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
 			if(mouseOverEntity instanceof EntityCreatureBase) {
 				EntityCreatureBase mouseOverCreature = (EntityCreatureBase)mouseOverEntity;

@@ -26,6 +26,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 
+import java.util.concurrent.Callable;
+
 public class ItemManager {
 	public static ItemManager INSTANCE;
 
@@ -60,10 +62,14 @@ public class ItemManager {
 		Item.Properties itemProperties = new Item.Properties().group(this.items);
 
 		ObjectManager.addItem("soulgazer", new ItemSoulgazer(new Item.Properties().maxStackSize(1).group(this.items)));
-		ObjectManager.addItem("equipment", new ItemEquipment(new Item.Properties().group(this.equipmentParts)));
 		ObjectManager.addItem("mobtoken", new ItemMobToken(new Item.Properties(), modInfo));
 		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
 
+		// Equipment Pieces:
+		Item.Properties equipmentProperties = new Item.Properties().maxStackSize(1).setNoRepair().setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentRenderer::new);
+		ObjectManager.addItem("equipment", new ItemEquipment(equipmentProperties));
+
+		// Keys:
 		ObjectManager.addItem("soulkey", new ItemSoulkey(itemProperties, "soulkey", 0));
 		ObjectManager.addItem("soulkeydiamond", new ItemSoulkey(itemProperties, "soulkeydiamond", 1));
 		ObjectManager.addItem("soulkeyemerald", new ItemSoulkey(itemProperties, "soulkeyemerald", 2));

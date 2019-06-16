@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
@@ -172,7 +173,7 @@ public class CreatureInfo {
 
 		// Model Class:
 		try {
-			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
+			ClientManager.getInstance().loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
 			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
 		}

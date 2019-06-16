@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.info.ModInfo;
+import net.minecraft.item.Item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +48,8 @@ public class EquipmentPartManager extends JSONLoader {
 
 	@Override
 	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(groupInfo);
+		Item.Properties properties = new Item.Properties().maxStackSize(1).setNoRepair().setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentPartRenderer::new);
+		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(properties, groupInfo);
 		equipmentPart.loadFromJSON(json);
 		if(this.equipmentParts.containsKey(equipmentPart.itemName)) {
 			LycanitesMobs.printWarning("", "[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);

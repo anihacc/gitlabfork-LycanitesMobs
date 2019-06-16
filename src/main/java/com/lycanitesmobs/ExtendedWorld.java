@@ -238,8 +238,8 @@ public class ExtendedWorld extends WorldSavedData {
 				this.clientWorldEventPlayer = mobEvent.getClientEventPlayer(this.world);
 			}
 			this.clientWorldEventPlayer.extended = extended;
-			if(LycanitesMobs.proxy.getClientPlayer() != null) {
-				this.clientWorldEventPlayer.onStart(LycanitesMobs.proxy.getClientPlayer());
+			if(ClientManager.getInstance().getClientPlayer() != null) {
+				this.clientWorldEventPlayer.onStart(ClientManager.getInstance().getClientPlayer());
 			}
         }
     }
@@ -258,8 +258,8 @@ public class ExtendedWorld extends WorldSavedData {
 
         // Client Side:
         if(this.clientWorldEventPlayer != null) {
-            if(LycanitesMobs.proxy.getClientPlayer() != null)
-                this.clientWorldEventPlayer.onFinish(LycanitesMobs.proxy.getClientPlayer());
+            if(ClientManager.getInstance().getClientPlayer() != null)
+                this.clientWorldEventPlayer.onFinish(ClientManager.getInstance().getClientPlayer());
             this.clientWorldEventPlayer = null;
         }
     }
@@ -298,8 +298,8 @@ public class ExtendedWorld extends WorldSavedData {
 				mobEventPlayerClient = mobEvent.getClientEventPlayer(this.world);
 				this.clientMobEventPlayers.put(mobEvent.name, mobEventPlayerClient);
 			}
-			if(LycanitesMobs.proxy.getClientPlayer() != null) {
-				mobEventPlayerClient.onStart(LycanitesMobs.proxy.getClientPlayer());
+			if(ClientManager.getInstance().getClientPlayer() != null) {
+				mobEventPlayerClient.onStart(ClientManager.getInstance().getClientPlayer());
 			}
         }
     }
@@ -341,8 +341,8 @@ public class ExtendedWorld extends WorldSavedData {
         // Client Side:
 		if(this.world.isRemote) {
 			if (this.clientMobEventPlayers.containsKey(mobEventName)) {
-				if(LycanitesMobs.proxy.getClientPlayer() != null) {
-					this.clientMobEventPlayers.get(mobEventName).onFinish(LycanitesMobs.proxy.getClientPlayer());
+				if(ClientManager.getInstance().getClientPlayer() != null) {
+					this.clientMobEventPlayers.get(mobEventName).onFinish(ClientManager.getInstance().getClientPlayer());
 				}
 				this.clientMobEventPlayers.remove(mobEventName);
 			}

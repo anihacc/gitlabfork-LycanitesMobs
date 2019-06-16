@@ -9,14 +9,14 @@ import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import org.lwjgl.glfw.GLFW;
 
@@ -65,11 +65,11 @@ public class KeyHandler {
 		
 		// ========== GUI Keys ==========
 		// Player Inventory: Adds extra buttons to the GUI.
-		if(!this.inventoryOpen && mc.currentScreen != null && mc.currentScreen.getClass() == GuiInventory.class) {
-			TabManager.addTabsToInventory((GuiContainer)mc.currentScreen);
+		if(!this.inventoryOpen && mc.field_71462_r != null && mc.field_71462_r.getClass() == InventoryScreen.class) {
+			TabManager.addTabsToInventory(mc.field_71462_r);
 			this.inventoryOpen = true;
 		}
-		if(this.inventoryOpen && (mc.currentScreen == null || mc.currentScreen.getClass() != GuiInventory.class)) {
+		if(this.inventoryOpen && (mc.field_71462_r == null || mc.field_71462_r.getClass() != InventoryScreen.class)) {
 			this.inventoryOpen = false;
 		}
 		
@@ -100,14 +100,14 @@ public class KeyHandler {
 		
 		// Minion Selection: Closes If Not Holding:
 		try {
-			if ((!Keyboard.isKeyDown(this.minionSelection.getKeyCode()) && !Mouse.isButtonDown(this.minionSelection.getKeyCode())) && this.mc.currentScreen instanceof GuiMinionSelection) {
+			if (!this.minionSelection.isPressed() && this.mc.field_71462_r instanceof GuiMinionSelection) {
 				this.mc.player.closeScreen();
 			}
 		}
 		catch(Exception e) {}
 		
 		
-		if(this.mc.inGameHasFocus) {
+		if(this.mc.isGameFocused()) {
 			// ========== HUD Controls ==========
 			// Minion Selection:
 			if(this.minionSelection.isPressed()) {
@@ -125,7 +125,7 @@ public class KeyHandler {
 				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY.id;
 
             // Attack Key Pressed:
-            if(Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown()) {
+            if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown()) {
                 controlStates += ExtendedPlayer.CONTROL_ID.ATTACK.id;
             }
 		}
@@ -141,11 +141,11 @@ public class KeyHandler {
 
 
     // ==================================================
-    //                   Item Use Events
+    //                    Mouse Events
     // ==================================================
     /** Player 'mouse' events, these are actually events based on attack or item use actions and are still triggered if the key binding is no longer a mouse click. **/
     @SubscribeEvent
-    public void onMouseEvent(MouseEvent event) {
+    public void onMouseEvent(InputEvent.MouseInputEvent event) {
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(this.mc.player);
         if(this.mc.player == null || playerExt == null || this.mc.objectMouseOver == null)
             return;
@@ -153,8 +153,8 @@ public class KeyHandler {
         // Left (Attack):
         if(event.getButton() == 0) {
             // Disable attack for large entity reach override:
-            if(!this.mc.player.isSpectator() && !this.mc.player.isRowingBoat() && this.mc.objectMouseOver.typeOfHit == RayTraceResult.Type.ENTITY) {
-                Entity entityHit = this.mc.objectMouseOver.entityHit;
+            if(!this.mc.player.isSpectator() && !this.mc.player.isRowingBoat() && this.mc.objectMouseOver.getType() == RayTraceResult.Type.ENTITY) {
+                Entity entityHit = ((EntityRayTraceResult)this.mc.objectMouseOver).getEntity();
                 if(playerExt.canMeleeBigEntity(entityHit)) {
                     MessagePlayerAttack message = new MessagePlayerAttack(entityHit);
                     LycanitesMobs.packetHandler.sendToServer(message);

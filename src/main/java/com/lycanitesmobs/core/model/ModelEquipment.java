@@ -1,14 +1,13 @@
 package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.renderer.EquipmentRenderer;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -33,7 +32,7 @@ public class ModelEquipment implements IItemModelRenderer {
 	 * @param hand The hand that the equipment is held in.
 	 * @param renderer The renderer to render with.
 	 */
-	public void render(ItemStack itemStack, EnumHand hand, EquipmentRenderer renderer, float loop) {
+	public void render(ItemStack itemStack, Hand hand, EquipmentRenderer renderer, float loop) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
@@ -106,7 +105,7 @@ public class ModelEquipment implements IItemModelRenderer {
 	 * @param hand The hand that the part is held in.
 	 * @param renderer The renderer to render with.
 	 */
-	public ModelItemBase renderPart(ItemStack partStack, EnumHand hand, EquipmentRenderer renderer, ModelObjPart offsetPart, float loop) {
+	public ModelItemBase renderPart(ItemStack partStack, Hand hand, EquipmentRenderer renderer, ModelObjPart offsetPart, float loop) {
 		if(partStack.isEmpty() || !(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}

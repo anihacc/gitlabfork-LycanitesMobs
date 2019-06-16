@@ -1,8 +1,5 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.ClientProxy;
-import com.lycanitesmobs.core.IProxy;
-import com.lycanitesmobs.core.ServerProxy;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
@@ -25,20 +22,14 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.item.Item;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -71,7 +62,7 @@ public class LycanitesMobs {
     public static final PacketHandler packetHandler = new PacketHandler();
 
     public static ModInfo modInfo;
-    public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+    //public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
     // Capabilities:
     @CapabilityInject(IExtendedEntity.class)
@@ -196,30 +187,6 @@ public class LycanitesMobs {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         // TODO New Commands
-    }
-
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> registryEvent) {
-            // Register Blocks
-        }
-
-        @SubscribeEvent
-        public static void onItemsRegistry(final RegistryEvent.Register<Item> registryEvent) {
-            // Register Items
-        }
-
-        @SubscribeEvent
-        public static void onPotionsRegistry(final RegistryEvent.Register<Potion> registryEvent) {
-            // Register Potions
-        }
-
-        @SubscribeEvent
-        public static void onEntityRegistry(final RegistryEvent.Register<EntityType<?>> registryEvent) {
-            // Register Entities
-        }
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

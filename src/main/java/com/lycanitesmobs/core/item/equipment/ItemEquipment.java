@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
@@ -36,9 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemEquipment extends ItemBase {
-	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
-	public static ItemStack ITEMSTACK_TO_RENDER;
-
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
 	public static int PART_LIMIT = 20;
 
@@ -72,7 +70,6 @@ public class ItemEquipment extends ItemBase {
 
 	@Override
 	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		ITEMSTACK_TO_RENDER = stack; // Render hack to get ItemStack when rendering TEISR. TODO Still needed?
 		return LanguageManager.translate("item.equipment.description");
 	}
 
@@ -102,7 +99,7 @@ public class ItemEquipment extends ItemBase {
 	@Nullable
 	@Override
 	public net.minecraft.client.gui.FontRenderer getFontRenderer(ItemStack stack) {
-		return LycanitesMobs.proxy.getFontRenderer();
+		return ClientManager.getInstance().getFontRenderer();
 	}
 
 
