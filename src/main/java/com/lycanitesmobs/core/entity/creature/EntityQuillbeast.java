@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityQuill;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -93,7 +94,7 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
             EntityQuill projectile = new EntityQuill(this.getEntityWorld(), this);
 
             // Y Offset:
-            projectile.posY -= this.height / 4;
+            projectile.posY -= this.getSize(Pose.STANDING).height / 4;
 
             // Accuracy:
             float accuracy = i * 1.0F * (this.getRNG().nextFloat() - 0.5F);

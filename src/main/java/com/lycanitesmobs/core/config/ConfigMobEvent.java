@@ -12,6 +12,9 @@ public class ConfigMobEvent {
 	public final ForgeConfigSpec.ConfigValue<Integer> minTicksUntilEvent;
 	public final ForgeConfigSpec.ConfigValue<Integer> maxTicksUntilEvent;
 
+	public final ForgeConfigSpec.ConfigValue<Boolean> altarsEnabled;
+	public final ForgeConfigSpec.ConfigValue<Boolean> altarsCheckDimension;
+
 	public ConfigMobEvent(ForgeConfigSpec.Builder builder) {
 		builder.push("Mob Events");
 		builder.comment("These are various settings that apply to all mob events.");
@@ -45,5 +48,15 @@ public class ConfigMobEvent {
 				.comment("Maximum time in ticks until a random event can occur. 20 Ticks = 1 Second.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
 				.define("mobevents.enabled", 120 * 60 * 20);
+
+		this.altarsEnabled = builder
+				.comment("Set to false to disable altars, Soulkeys can still be crafted but wont work on Altars.")
+				.translation(CoreConfig.CONFIG_PREFIX + "altars.enabled")
+				.define("altars.enabled", true);
+
+		this.altarsCheckDimension = builder
+				.comment("If set to true, Altars will only activate in dimensions that the monster spawned or event started is allowed in.")
+				.translation(CoreConfig.CONFIG_PREFIX + "altars.checkDimension")
+				.define("altars.checkDimension", false);
 	}
 }

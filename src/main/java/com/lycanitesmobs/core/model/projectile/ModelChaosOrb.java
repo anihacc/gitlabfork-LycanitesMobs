@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.model.ModelObj;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
-
-import net.minecraft.client.renderer.OpenGlHelper;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.model.ModelProjectileObj;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.renderer.layer.LayerProjectileBase;
+import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelChaosOrb extends ModelObj {
+public class ModelChaosOrb extends ModelProjectileObj {
 
 	// ==================================================
   	//                    Constructors
@@ -33,7 +33,7 @@ public class ModelChaosOrb extends ModelObj {
 	//                 Animate Part
 	// ==================================================
 	@Override
-	public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+	public void animatePart(String partName, EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 		this.rotate(0, 0, loop * 8);
 	}
@@ -43,7 +43,8 @@ public class ModelChaosOrb extends ModelObj {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	@Override
+	public Vector4f getPartColor(String partName, EntityProjectileBase entity, LayerProjectileBase layer, boolean trophy, float loop) {
 		float glowSpeed = 40;
 		float glow = loop * glowSpeed % 360;
 		float color = ((float)Math.cos(Math.toRadians(glow)) * 0.1f) + 0.9f;
@@ -55,20 +56,20 @@ public class ModelChaosOrb extends ModelObj {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
+	public void onRenderStart(LayerProjectileBase layer, EntityProjectileBase entity) {
+		super.onRenderStart(layer, entity);
 		int i = 15728880;
 		int j = i % 65536;
 		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
+	public void onRenderFinish(LayerProjectileBase layer, EntityProjectileBase entity) {
+		super.onRenderFinish(layer, entity);
 		int i = entity.getBrightnessForRender();
 		int j = i % 65536;
 		int k = i / 65536;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
 	}
 }

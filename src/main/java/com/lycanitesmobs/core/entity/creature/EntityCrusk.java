@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -72,13 +73,13 @@ public class EntityCrusk extends EntityCreatureTameable implements IGroupPredato
     		return false;
         BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
-        	if(blockState.getMaterial() == Material.GROUND) return true;
-        	if(blockState.getMaterial() == Material.GRASS) return true;
+        	if(blockState.getMaterial() == Material.EARTH) return true;
+        	if(blockState.getMaterial() == Material.ORGANIC) return true;
         	if(blockState.getMaterial() == Material.LEAVES) return true;
         	if(blockState.getMaterial() == Material.SAND) return true;
         	if(blockState.getMaterial() == Material.CLAY) return true;
         	if(blockState.getMaterial() == Material.SNOW) return true;
-        	if(blockState.getMaterial() == Material.CRAFTED_SNOW) return true;
+        	if(blockState.getMaterial() == Material.SNOW_BLOCK) return true;
         }
         if(blockState.getBlock() == Blocks.NETHERRACK)
             return true;

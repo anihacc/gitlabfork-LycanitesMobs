@@ -17,6 +17,7 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
@@ -39,10 +40,13 @@ public class ProjectileInfo {
 	/** The name of this projectile. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
 	protected String name;
 
+	/** Whether this projectile is enabled or not. **/
+	public boolean enabled = true;
+
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
 	public Class<? extends Entity> entityClass = EntityProjectileCustom.class;
 	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
-	public Class<? extends Model> modelClass;
+	public Class<? extends ModelProjectileBase> modelClass;
 
 	/** The group that this projectile belongs to. **/
 	public ModInfo modInfo;
@@ -137,7 +141,7 @@ public class ProjectileInfo {
 
 		if(json.has("modelClass")) {
 			try {
-				this.modelClass = (Class<? extends Model>) Class.forName(json.get("modelClass").getAsString());
+				this.modelClass = (Class<? extends ModelProjectileBase>) Class.forName(json.get("modelClass").getAsString());
 			} catch (Exception e) {
 				LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 			}

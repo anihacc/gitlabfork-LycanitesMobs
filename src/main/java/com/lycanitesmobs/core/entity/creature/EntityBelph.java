@@ -1,21 +1,22 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityDoomfireball;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -46,8 +47,8 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+        if(this.getNavigator() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
         this.field_70714_bg.addTask(0, new SwimmingGoal(this));
@@ -71,8 +72,8 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HELLFIRE_ENERGY, this.hellfireEnergy);
     }
 
@@ -107,12 +108,12 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
+    public boolean canAttack(LivingEntity target) {
     	if(this.isTamed())
-    		return super.canAttackClass(targetClass);
-    	if(targetClass.isAssignableFrom(EntityBehemoth.class))
+    		return super.canAttack(target);
+    	if(target instanceof EntityBehemoth)
     		return false;
-        return super.canAttackClass(targetClass);
+        return super.canAttack(target);
     }
     
     // ========== Ranged Attack ==========

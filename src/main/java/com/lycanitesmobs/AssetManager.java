@@ -4,9 +4,11 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
+import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 import com.lycanitesmobs.core.model.ModelItemBase;
-import com.lycanitesmobs.core.model.ModelObjOld;
+import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
@@ -23,6 +25,7 @@ public class AssetManager {
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
 	public static Map<String, SoundEvent> sounds = new HashMap<>();
 	public static Map<String, ModelCreatureBase> creatureModels = new HashMap<>();
+	public static Map<String, ModelProjectileBase> projectileModels = new HashMap<>();
 	public static Map<String, IModel> objModels = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
 	
@@ -54,22 +57,22 @@ public class AssetManager {
         GameRegistry.findRegistry(SoundEvent.class).register(soundEvent);
 	}
 	
-	// ========== Model ==========
-	public static void addModel(String name, ModelCreatureBase model) {
-		name = name.toLowerCase();
-		creatureModels.put(name, model);
-	}
-	
 	// ========== Obj Model ==========
 	public static void addObjModel(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(modInfo.filename, "models/" + path + ".obj")));
+		objModels.put(name, ModelCreatureObjOld.loadModel(new ResourceLocation(modInfo.filename, "models/" + path + ".obj")));
 	}
 
 	// ========== Item Model ==========
 	public static void addItemModel(String name, ModelItemBase model) {
 		name = name.toLowerCase();
 		itemModels.put(name, model);
+	}
+
+	// ========== Old Projectile Model ==========
+	public static void addOldProjectileModel(String name, ModelProjectileBase model) {
+		name = name.toLowerCase();
+		projectileModels.put(name, model);
 	}
 	
 	
@@ -101,17 +104,6 @@ public class AssetManager {
 	}
 	
 	// ========== Model ==========
-	public static ModelCreatureBase getCreatureModel(String name) {
-		name = name.toLowerCase();
-		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(name);
-		if(creatureInfo != null) {
-
-		}
-		if(!creatureModels.containsKey(name))
-			return null;
-		return creatureModels.get(name);
-	}
-
 	public static ModelCreatureBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (entityCreature.creatureInfo == null) {
 			return null;
@@ -144,6 +136,27 @@ public class AssetManager {
 		creatureModels.put(creatureInfo.modelClass.toString(), creatureModel);
 		return creatureModel;
 	}
+
+	public static ModelProjectileBase getProjectileModel(ProjectileInfo projectileInfo) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		if (projectileInfo == null || projectileInfo.modelClass == null) {
+			return null;
+		}
+
+		// Main Model:
+		if (projectileModels.containsKey(projectileInfo.modelClass.toString())) {
+			return projectileModels.get(projectileInfo.modelClass.toString());
+		}
+		ModelProjectileBase projectileModel = projectileInfo.modelClass.getConstructor().newInstance();
+		projectileModels.put(projectileInfo.modelClass.toString(), projectileModel);
+		return projectileModel;
+	}
+
+	public static ModelProjectileBase getOldProjectileModel(String projectileName) {
+		if(projectileModels.containsKey(projectileName))
+			return projectileModels.get(projectileName);
+		return null;
+	}
+
 	
 	// ========== Obj Model ==========
 	public static IModel getObjModel(String name) {

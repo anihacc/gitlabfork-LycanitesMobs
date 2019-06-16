@@ -7,14 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerBase implements LayerRenderer<EntityCreatureBase> {
+public class LayerBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBase> {
     public RenderCreature renderer;
     public String name;
 
@@ -22,6 +22,7 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     //                   Constructor
     // ==================================================
     public LayerBase(RenderCreature renderer) {
+        super(renderer);
         this.renderer = renderer;
         this.name = "Layer";
     }
@@ -31,7 +32,7 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     //                  Render Layer
     // ==================================================
     @Override
-    public void doRenderLayer(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_212842_a_(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() instanceof ModelCreatureBase) {

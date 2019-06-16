@@ -1,17 +1,16 @@
 package com.lycanitesmobs.core.model.template;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.model.ModelObj;
-import net.minecraft.entity.EntityLiving;
+import com.lycanitesmobs.core.model.ModelCreatureObj;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTemplateAquatic extends ModelObj {
+public class ModelTemplateAquatic extends ModelCreatureObj {
 
     // ==================================================
     //                 Animate Part
     // ==================================================
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
         float posX = 0F;
         float posY = 0F;

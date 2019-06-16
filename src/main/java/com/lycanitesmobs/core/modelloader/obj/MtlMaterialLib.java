@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.modelloader.obj;
 
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.util.vector.Vector3f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -92,7 +92,7 @@ public class MtlMaterialLib
         {
             string = string.replace("models/", "textures/"); // Search for textures in textures directory instead of models.
             ResourceLocation resourceLocation = new ResourceLocation(string);
-            InputStream inputStream = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation).getInputStream();
+            InputStream inputStream = Minecraft.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
             return loadTexture(ImageIO.read(inputStream));
         }
         catch(IOException e)

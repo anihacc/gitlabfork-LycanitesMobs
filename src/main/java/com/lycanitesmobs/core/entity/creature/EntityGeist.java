@@ -2,28 +2,25 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.Block;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityZombieVillager;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.entity.*;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.ZombieVillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupShadow {
 
-    public boolean geistShadowfireDeath = true;
+    public boolean geistShadowfireDeath = true; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -39,7 +36,6 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
         this.canGrow = false;
         this.babySpawnChance = 0.01D;
 
-        this.geistShadowfireDeath = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Geist Shadowfire Death", this.geistShadowfireDeath, "Set to false to disable Geists from bursting into Shadowfire oh death.");
         this.setupMob();
     }
 
@@ -47,8 +43,8 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+        if(this.getNavigator() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
@@ -74,25 +70,27 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
     public void onKillEntity(LivingEntity entityLivingBase) {
         super.onKillEntity(entityLivingBase);
 
-        if(this.getEntityWorld().getDifficulty().getDifficultyId() >= 2 && entityLivingBase instanceof VillagerEntity) {
-            if (this.getEntityWorld().getDifficulty().getDifficultyId() == 2 && this.rand.nextBoolean()) return;
+        if(this.getEntityWorld().getDifficulty().getId() >= 2 && entityLivingBase instanceof VillagerEntity) {
+            if (this.getEntityWorld().getDifficulty().getId() == 2 && this.rand.nextBoolean()) return;
 
-            VillagerEntity entityvillager = (VillagerEntity)entityLivingBase;
-            EntityZombieVillager entityzombievillager = new EntityZombieVillager(this.getEntityWorld());
-            entityzombievillager.copyLocationAndAnglesFrom(entityvillager);
-            this.getEntityWorld().removeEntity(entityvillager);
-            entityzombievillager.onInitialSpawn(this.getEntityWorld().getDifficultyForLocation(new BlockPos(entityzombievillager)), new EntityCreatureBase.GroupData(false));
-            entityzombievillager.setProfession(entityvillager.getProfession());
-            entityzombievillager.setChild(entityvillager.isChild());
-            entityzombievillager.setNoAI(entityvillager.isAIDisabled());
+            VillagerEntity villagerentity = (VillagerEntity)entityLivingBase;
+            ZombieVillagerEntity zombievillagerentity = EntityType.ZOMBIE_VILLAGER.create(this.world);
+            zombievillagerentity.copyLocationAndAnglesFrom(villagerentity);
+            villagerentity.remove();
+            zombievillagerentity.onInitialSpawn(this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos(zombievillagerentity)), SpawnReason.CONVERSION, null, null);
+            zombievillagerentity.func_213792_a(villagerentity.func_213700_eh());
+            zombievillagerentity.func_213790_g(villagerentity.func_213706_dY().func_222199_a());
+            zombievillagerentity.func_213789_a(villagerentity.func_213708_dV());
+            zombievillagerentity.setChild(villagerentity.isChild());
+            zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
 
-            if (entityvillager.hasCustomName()) {
-                entityzombievillager.setCustomNameTag(entityvillager.getCustomNameTag());
-                entityzombievillager.setAlwaysRenderNameTag(entityvillager.getAlwaysRenderNameTag());
+            if (villagerentity.hasCustomName()) {
+                zombievillagerentity.setCustomName(villagerentity.getCustomName());
+                zombievillagerentity.setCustomNameVisible(villagerentity.isCustomNameVisible());
             }
 
-            this.getEntityWorld().func_217376_c(entityzombievillager);
-            this.getEntityWorld().playEvent(null, 1016, entityzombievillager.getPosition(), 0);
+            this.getEntityWorld().func_217376_c(zombievillagerentity);
+            this.getEntityWorld().playEvent(null, 1016, zombievillagerentity.getPosition(), 0);
         }
     }
 
@@ -104,8 +102,8 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
     public void onDeath(DamageSource damageSource) {
         try {
             if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.geistShadowfireDeath) {
-                int shadowfireWidth = (int)Math.floor(this.width) + 1;
-                int shadowfireHeight = (int)Math.floor(this.height) + 1;
+                int shadowfireWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) + 1;
+                int shadowfireHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) + 1;
                 for(int x = (int)this.posX - shadowfireWidth; x <= (int)this.posX + shadowfireWidth; x++) {
                     for(int y = (int)this.posY - shadowfireHeight; y <= (int)this.posY + shadowfireHeight; y++) {
                         for(int z = (int)this.posZ - shadowfireWidth; z <= (int)this.posZ + shadowfireWidth; z++) {

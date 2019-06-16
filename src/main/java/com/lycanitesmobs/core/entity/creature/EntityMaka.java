@@ -12,16 +12,17 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMaka extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntityMaka extends EntityCreatureAgeable implements IGroupAnimal {
 	
 	// ==================================================
  	//                    Constructor
@@ -76,7 +77,7 @@ public class EntityMaka extends EntityCreatureAgeable implements IAnimals, IGrou
                 EntityMakaAlpha alpha = new EntityMakaAlpha(this.getEntityWorld());
                 alpha.copyLocationAndAnglesFrom(this);
                 this.getEntityWorld().func_217376_c(alpha);
-                this.getEntityWorld().removeEntity(this);
+                this.remove();
             }
         }
         super.onFirstSpawn();
@@ -92,9 +93,9 @@ public class EntityMaka extends EntityCreatureAgeable implements IAnimals, IGrou
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
 		if(block != Blocks.AIR) {
-			if(blockState.getMaterial() == Material.GRASS)
+			if(blockState.getMaterial() == Material.ORGANIC)
 				return 10F;
-			if(blockState.getMaterial() == Material.GROUND)
+			if(blockState.getMaterial() == Material.EARTH)
 				return 7F;
 		}
         return super.getBlockPathWeight(x, y, z);
@@ -111,12 +112,12 @@ public class EntityMaka extends EntityCreatureAgeable implements IAnimals, IGrou
    	//                      Attacks
    	// ==================================================
     // ========== Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass == EntityMaka.class || targetClass == EntityMakaAlpha.class)
-    		return false;
-    	else return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityMaka || target instanceof EntityMakaAlpha)
+			return false;
+		return super.canAttack(target);
+	}
     
     
     // ==================================================
@@ -145,7 +146,7 @@ public class EntityMaka extends EntityCreatureAgeable implements IAnimals, IGrou
                 EntityMakaAlpha alpha = new EntityMakaAlpha(this.getEntityWorld());
                 alpha.copyLocationAndAnglesFrom(this);
                 this.getEntityWorld().func_217376_c(alpha);
-                this.getEntityWorld().removeEntity(this);
+                this.remove();
             }
         }
         super.setGrowingAge(age);

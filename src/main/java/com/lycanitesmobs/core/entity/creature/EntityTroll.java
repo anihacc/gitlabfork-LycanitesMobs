@@ -1,27 +1,27 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
+import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityTroll extends EntityCreatureTameable implements IMob {
 	
-	public boolean trollGreifing = true;
+	public boolean trollGreifing = true; // TODO Creature flags.
 	
 	// ========== Unique Entity Variables ==========
 	public boolean stoneForm = false;
@@ -39,7 +39,6 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
         //this.canGrow = false;
         //this.babySpawnChance = 0.01D;
         
-        this.trollGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Troll Griefing", this.trollGreifing, "Set to false to disable Troll block destruction.");
         this.solidCollision = true;
         this.setupMob();
     }
@@ -48,8 +47,8 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+        if(this.getNavigator() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
         this.field_70714_bg.addTask(0, new SwimmingGoal(this));
@@ -104,7 +103,7 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
  		if(!this.getEntityWorld().isRemote)
  	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.trollGreifing) {
  		    	float distance = this.getAttackTarget().getDistance(this);
- 		    		if(distance <= this.width + 4.0F)
+ 		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
  		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);
  	        }
     }
@@ -139,7 +138,7 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     // ========== Damage Modifier ==========
     /** A multiplier that alters how much damage this mob receives from the given DamageSource, use for resistances and weaknesses. Note: The defense multiplier is handled before this. **/
     public float getDamageModifier(DamageSource damageSrc) {
-        if("Jarno".equals(this.getCustomNameTag()))
+        if("Jarno".equals(this.getCustomName()))
             return 0;
 
     	if(this.stoneForm) {
@@ -147,8 +146,8 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     			Item heldItem = null;
         		if(damageSrc.getTrueSource() instanceof LivingEntity) {
                     LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-    	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-    	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
+    	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+    	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
     	    		}
         		}
         		

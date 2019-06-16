@@ -1,28 +1,29 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityTremor extends EntityCreatureTameable implements IMob, IGroupRock {
 
 	private AttackMeleeGoal meleeAttackAI;
 
-	public int tremorExplosionStrength = 1;
+	public int tremorExplosionStrength = 1; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -34,7 +35,6 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
-		this.tremorExplosionStrength = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Tremor Explosion Strength", this.tremorExplosionStrength, "Controls the strength of a Tremor's explosion when attacking, set to -1 to disable completely.");
 		this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -59,24 +59,6 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
     }
 	
 	
@@ -103,7 +85,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
         // Particles:
         if(this.getEntityWorld().isRemote)
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
     }
 
@@ -119,10 +101,10 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
     	
     	// Explosion:
 		int explosionStrength = Math.max(1, this.tremorExplosionStrength);
-		boolean damageTerrain = this.tremorExplosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing");
+		Explosion.Mode damageTerrain = this.tremorExplosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
-			damageTerrain = false;
+			damageTerrain = Explosion.Mode.NONE;
 		}
 		this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionStrength, damageTerrain);
 
@@ -159,18 +141,18 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
 
 	@Override
 	public boolean isInvulnerableTo(Entity entity) {
-		if(entity instanceof EntityWither) {
+		if(entity instanceof WitherEntity) {
 			return false;
 		}
 		return super.isInvulnerableTo(entity);
 	}
 
 	@Override
-	public boolean isPotionApplicable(EffectInstance potionEffect) {
-    	if(potionEffect != null && potionEffect.getPotion() == Effects.WITHER) {
+	public boolean isPotionApplicable(EffectInstance effectInstance) {
+    	if(effectInstance.getPotion() == Effects.field_82731_v) {
     		return false;
 		}
-		return super.isPotionApplicable(potionEffect);
+		return super.isPotionApplicable(effectInstance);
 	}
     
     @Override
@@ -178,7 +160,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
 
     @Override
 	public boolean canBeTargetedBy(LivingEntity entity) {
-    	if(entity instanceof EntityWither) {
+    	if(entity instanceof WitherEntity) {
     		return false;
 		}
 		return super.canBeTargetedBy(entity);

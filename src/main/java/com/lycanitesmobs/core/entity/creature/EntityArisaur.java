@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupAnimal;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
@@ -9,16 +9,16 @@ import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityArisaur extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupHeavy {
+public class EntityArisaur extends EntityCreatureAgeable implements IGroupAnimal, IGroupHeavy {
 	
 	// ==================================================
  	//                    Constructor
@@ -66,9 +66,9 @@ public class EntityArisaur extends EntityCreatureAgeable implements IAnimals, IG
 	public float getBlockPathWeight(int x, int y, int z) {
 		if(this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
 			BlockState blocState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
-			if(blocState.getMaterial() == Material.GRASS)
+			if(blocState.getMaterial() == Material.ORGANIC)
 				return 10F;
-			if(blocState.getMaterial() == Material.GROUND)
+			if(blocState.getMaterial() == Material.EARTH)
 				return 7F;
 		}
         return super.getBlockPathWeight(x, y, z);

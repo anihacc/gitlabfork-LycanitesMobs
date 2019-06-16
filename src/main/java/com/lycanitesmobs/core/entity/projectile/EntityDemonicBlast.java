@@ -159,7 +159,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 					explosionRadius = 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.DESTROY);
+			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
 		}
     	for(int i = 0; i < 8; ++i) {
 			fireProjectile();

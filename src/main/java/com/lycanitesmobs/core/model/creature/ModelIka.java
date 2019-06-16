@@ -1,15 +1,15 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.model.ModelObjOld;
+import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelIka extends ModelObjOld {
+public class ModelIka extends ModelCreatureObjOld {
 
 	// ==================================================
   	//                    Constructors
@@ -44,7 +44,7 @@ public class ModelIka extends ModelObjOld {
    	// ==================================================
     float maxLeg = 0F;
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
     	float pi = (float)Math.PI;
     	float posX = 0F;

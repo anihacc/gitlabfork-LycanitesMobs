@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.modelloader.obj;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.eventbus.api.Event;
 
 public class TessellatorModelEvent extends Event
 {

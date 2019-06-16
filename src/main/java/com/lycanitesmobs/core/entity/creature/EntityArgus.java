@@ -5,14 +5,14 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityChaosOrb;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -60,24 +60,6 @@ public class EntityArgus extends EntityCreatureTameable implements IMob, IFusabl
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
 		this.field_70715_bh.addTask(7, new FuseTargetingGoal(this));
     }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
-    }
 	
 	
     // ==================================================
@@ -92,7 +74,7 @@ public class EntityArgus extends EntityCreatureTameable implements IMob, IFusabl
 		if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
 			if(this.teleportTime-- <= 0) {
 				this.teleportTime = 20 + this.getRNG().nextInt(20);
-				BlockPos teleportPosition = this.getFacingPosition(this.getAttackTarget(), -this.getAttackTarget().width - 1D, 0);
+				BlockPos teleportPosition = this.getFacingPosition(this.getAttackTarget(), -this.getAttackTarget().getSize(Pose.STANDING).width - 1D, 0);
 				if(this.canTeleportTo(teleportPosition)) {
 					this.playJumpSound();
 					this.setPosition(teleportPosition.getX(), teleportPosition.getY(), teleportPosition.getZ());
@@ -103,23 +85,9 @@ public class EntityArgus extends EntityCreatureTameable implements IMob, IFusabl
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SUSPENDED_DEPTH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
-
-	/**
-	 * Checks if this entity can teleport to the provided block position.
-	 * @param pos The position to teleport to.
-	 * @return True if it's safe to teleport.
-	 */
-	public boolean canTeleportTo(BlockPos pos) {
-		for (int y = 0; y <= 1; y++) {
-			BlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
-			if (blockState.isNormalCube())
-				return false;
-		}
-		return true;
-	}
 
 
 	// ==================================================
@@ -130,11 +98,6 @@ public class EntityArgus extends EntityCreatureTameable implements IMob, IFusabl
 	public void attackRanged(Entity target, float range) {
 		this.fireProjectile(EntityChaosOrb.class, target, range, 0, new Vec3d(0, 0, 0), 0.6f, 1f, 1F);
 		super.attackRanged(target, range);
-	}
-
-	@Override
-	public float getEyeHeight() {
-		return this.height * 0.5F;
 	}
     
     

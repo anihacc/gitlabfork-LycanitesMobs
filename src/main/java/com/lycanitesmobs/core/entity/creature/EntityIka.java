@@ -8,16 +8,16 @@ import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityIka extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
 
 	WanderGoal wanderAI;
 
@@ -104,8 +104,6 @@ public class EntityIka extends EntityCreatureAgeable implements IAnimals, IGroup
         BlockState blockState = this.getEntityWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(blockState.getBlock() == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 

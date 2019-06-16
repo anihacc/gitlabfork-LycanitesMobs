@@ -5,13 +5,15 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
-import net.minecraft.entity.Entity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -64,9 +66,9 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
             if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((EntityCreatureBase)this.getMasterTarget()).getBattlePhase() > 0) {
                 EntityHellShield projectile = new EntityHellShield(this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
-                projectile.posY -= this.height * 0.35D;
+                projectile.posY -= this.getSize(Pose.STANDING).height * 0.35D;
                 double dX = this.getMasterTarget().posX - this.posX;
-                double dY = this.getMasterTarget().posY + (this.getMasterTarget().height * 0.75D) - projectile.posY;
+                double dY = this.getMasterTarget().posY + (this.getMasterTarget().getSize(Pose.STANDING).height * 0.75D) - projectile.posY;
                 double dZ = this.getMasterTarget().posZ - this.posZ;
                 double distance = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.1F;
                 float velocity = 0.8F;
@@ -80,12 +82,11 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 	// ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityTrite.class) || targetClass.isAssignableFrom(EntityCacodemon.class) || targetClass.isAssignableFrom(EntityAsmodeus.class))
-    		return false;
-        return super.canAttackClass(targetClass);
+    public boolean canAttack(LivingEntity target) {
+        if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAsmodeus)
+            return false;
+        return super.canAttack(target);
     }
     
     // ========== Ranged Attack ==========
@@ -102,10 +103,10 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 	@Override
 	public void onDeath(DamageSource par1DamageSource) {
         if(!this.getEntityWorld().isRemote && CreatureManager.getInstance().getCreature("trite").enabled) {
-            int j = 2 + this.rand.nextInt(5) + getEntityWorld().getDifficulty().getDifficultyId() - 1;
+            int j = 2 + this.rand.nextInt(5) + getEntityWorld().getDifficulty().getId() - 1;
             for(int k = 0; k < j; ++k) {
-                float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
-                float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
+                float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
+                float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 EntityTrite trite = new EntityTrite(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);

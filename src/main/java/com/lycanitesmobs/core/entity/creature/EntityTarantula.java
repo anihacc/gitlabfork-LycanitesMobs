@@ -7,12 +7,12 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 public class EntityTarantula extends EntityCreatureTameable implements IMob {
@@ -48,7 +48,7 @@ public class EntityTarantula extends EntityCreatureTameable implements IMob {
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
         }
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }

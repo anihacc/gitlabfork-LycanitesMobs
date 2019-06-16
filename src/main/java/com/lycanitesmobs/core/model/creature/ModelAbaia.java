@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateAquatic;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelAbaia extends ModelTemplateAquatic {
@@ -34,7 +34,7 @@ public class ModelAbaia extends ModelTemplateAquatic {
     //                 Animate Part
     // ==================================================
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
         float posX = 0F;
         float posY = 0F;

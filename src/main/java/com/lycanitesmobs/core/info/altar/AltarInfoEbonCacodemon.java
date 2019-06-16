@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.info.altar;
 
-import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import com.lycanitesmobs.core.info.AltarInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -173,7 +173,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -187,7 +187,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -197,7 +197,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         entityCreature.forceBossHealthBar = true;
         entityCreature.applySubspecies(3);
         entityCreature.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.spawnEntity(entityCreature);
+        world.func_217376_c(entityCreature);
         entityCreature.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

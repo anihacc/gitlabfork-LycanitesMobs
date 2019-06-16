@@ -3,26 +3,26 @@ package com.lycanitesmobs.core.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.core.renderer.layer.LayerEffect;
-import com.lycanitesmobs.core.renderer.layer.LayerScrolling;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelWisp extends ModelTemplateElemental {
-	LayerEffect ballLayer;
-	LayerEffect ballGlowLayer;
-	LayerEffect hairLayer;
+	LayerCreatureEffect ballLayer;
+	LayerCreatureEffect ballGlowLayer;
+	LayerCreatureEffect hairLayer;
 
 	// ==================================================
   	//                    Constructors
@@ -48,11 +48,11 @@ public class ModelWisp extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		this.ballLayer = new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true);
+		this.ballLayer = new LayerCreatureEffect(renderer, "ball", true, LayerCreatureEffect.BLEND.NORMAL.id, true);
 		renderer.addLayer(this.ballLayer);
-		this.ballGlowLayer = new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.ADD.id, true);
+		this.ballGlowLayer = new LayerCreatureEffect(renderer, "ball", true, LayerCreatureEffect.BLEND.ADD.id, true);
 		renderer.addLayer(this.ballGlowLayer);
-		this.hairLayer = new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4));
+		this.hairLayer = new LayerCreatureScrolling(renderer, "hair", true, LayerCreatureEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4));
 		renderer.addLayer(this.hairLayer);
 	}
 
@@ -62,7 +62,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	// ==================================================
 	float maxLeg = 0F;
 	@Override
-	public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+	public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
 		// Hair:
@@ -110,7 +110,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(partName.contains("ball") && entity instanceof EntityCreatureBase && ((EntityCreatureBase) entity).isAttackOnCooldown()) {
 			return false;
 		}
@@ -135,7 +135,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == this.ballLayer || layer ==  this.ballGlowLayer) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;
@@ -151,13 +151,13 @@ public class ModelWisp extends ModelTemplateElemental {
 	//                   On Render
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		GlStateManager.disableLighting();
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		GlStateManager.enableLighting();
 	}

@@ -7,17 +7,16 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import net.minecraft.block.Block;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntitySilex extends EntityCreatureAgeable implements IGroupAnimal {
 
     // ==================================================
  	//                    Constructor
@@ -42,7 +41,7 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
         super.initEntityAI();
         this.field_70714_bg.addTask(1, new StayByWaterGoal(this));
         this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(3, new TemptGoal(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
+        this.field_70714_bg.addTask(3, new TemptGoal(this).setItemStack(new ItemStack(Items.LAPIS_LAZULI, 1)));
         this.field_70714_bg.addTask(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
         this.field_70714_bg.addTask(5, new MateGoal(this));
         this.field_70714_bg.addTask(6, new FollowParentGoal(this).setSpeed(1.0D));
@@ -66,8 +65,6 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-		if(block == Blocks.FLOWING_WATER)
-			return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         
@@ -129,6 +126,6 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
     public boolean isBreedingItem(ItemStack testStack) {
         if(testStack == null || !this.isInWater())
             return false;
-        return testStack.getItem() == Items.DYE && testStack.getItemDamage() == 4;
+        return testStack.getItem() == Items.LAPIS_LAZULI;
     }
 }

@@ -2,20 +2,20 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.model.ModelObjOld;
-import com.lycanitesmobs.core.renderer.layer.LayerFire;
-import com.lycanitesmobs.core.renderer.layer.LayerShield;
+import com.lycanitesmobs.core.model.ModelCreatureObjOld;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureAttack;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureShield;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelAsmodeus extends ModelObjOld {
+public class ModelAsmodeus extends ModelCreatureObjOld {
 
 	// ==================================================
   	//                    Constructors
@@ -62,8 +62,8 @@ public class ModelAsmodeus extends ModelObjOld {
     @Override
     public void addCustomLayers(RenderCreature renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerFire(renderer));
-        renderer.addLayer(new LayerShield(renderer));
+        renderer.addLayer(new LayerCreatureAttack(renderer));
+        renderer.addLayer(new LayerCreatureShield(renderer));
     }
 
 
@@ -81,7 +81,7 @@ public class ModelAsmodeus extends ModelObjOld {
    	// ==================================================
     float maxLeg = 0F;
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
         float pi = (float) Math.PI;
         float posX = 0F;

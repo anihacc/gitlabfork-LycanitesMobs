@@ -1,29 +1,31 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.SnowGolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupFire, IGroupHeavy {
 
-    public boolean khalkLavaDeath = true;
+    public boolean khalkLavaDeath = true; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -41,8 +43,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
         this.canGrow = true;
         this.babySpawnChance = 0.01D;
 
-        this.khalkLavaDeath = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Khalk Lava Death", this.khalkLavaDeath, "Set to false to disable Khalks from turning into a pile of lava on death.");
-		this.solidCollision = true;
+        this.solidCollision = true;
         this.setupMob();
 
         this.setPathPriority(PathNodeType.LAVA, 0F);
@@ -66,7 +67,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
         this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntitySnowman.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
@@ -110,8 +111,6 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
         BlockPos pos = new BlockPos(x, y, z);
         if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
 
         if(this.getAttackTarget() != null)
             return super.getBlockPathWeight(x, y, z);
@@ -134,16 +133,16 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
     @Override
     public void onDeath(DamageSource damageSource) {
 		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.khalkLavaDeath && !this.isTamed()) {
-			int lavaWidth = (int)Math.floor(this.width) - 1;
-			int lavaHeight = (int)Math.floor(this.height) - 1;
+			int lavaWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) - 1;
+			int lavaHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) - 1;
 			for(int x = (int)this.posX - lavaWidth; x <= (int)this.posX + lavaWidth; x++) {
 				for(int y = (int)this.posY; y <= (int)this.posY + lavaHeight; y++) {
 					for(int z = (int)this.posZ - lavaWidth; z <= (int)this.posZ + lavaWidth; z++) {
 						Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 						if(block == Blocks.AIR) {
-							BlockState blockState = Blocks.FLOWING_LAVA.getStateFromMeta(11);
+							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
 							if(x == (int)this.posX && y == (int)this.posY && z == (int)this.posZ)
-								blockState = Blocks.FLOWING_LAVA.getStateFromMeta(12);
+								blockState = blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
 							this.getEntityWorld().setBlockState(new BlockPos(x, y, z), blockState, 3);
 						}
 					}

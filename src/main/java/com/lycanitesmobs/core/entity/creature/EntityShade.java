@@ -11,7 +11,13 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
@@ -64,13 +70,13 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
         this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
         this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityCow.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityPig.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
         this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(EntityPigZombie.class));
+        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
             this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
@@ -116,12 +122,12 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
     // Mounted Y Offset:
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.85D;
+        return (double)this.getSize(Pose.STANDING).height * 0.85D;
     }
 
     @Override
     public double getMountedZOffset() {
-        return (double)this.width * 0.25D;
+        return (double)this.getSize(Pose.STANDING).width * 0.25D;
     }
 	
 	
@@ -153,8 +159,8 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
 					|| possibleTarget == EntityShade.this
 					|| EntityShade.this.isRidingOrBeingRiddenBy(possibleTarget)
 					|| EntityShade.this.isOnSameTeam(possibleTarget)
-					|| !EntityShade.this.canAttackClass(possibleTarget.getClass())
-					|| !EntityShade.this.canAttackEntity(possibleTarget))
+					|| !EntityShade.this.canAttack(possibleTarget.getType())
+					|| !EntityShade.this.canAttack(possibleTarget))
 				return false;
 			return true;
 		});
@@ -170,7 +176,7 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
                     if (ObjectManager.getEffect("fear") != null)
                         possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76437_t, 10 * 20, 0));
                 }
             }
         }

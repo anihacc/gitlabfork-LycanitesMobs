@@ -1,15 +1,9 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class WorldSpawnTrigger extends SpawnTrigger {
 	/** Has a random chance of triggering after so many world ticks. **/
@@ -54,7 +48,7 @@ public class WorldSpawnTrigger extends SpawnTrigger {
 	/** Called every world tick from where players are active. **/
 	public void onTick(World world, BlockPos position, long ticks) {
 		// World Time:
-		if(this.useWorldTime && world.getWorldTime() % 24000 != this.tickRate) {
+		if(this.useWorldTime && world.getDayTime() % 24000 != this.tickRate) {
 			return;
 		}
 

@@ -2,27 +2,28 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -30,7 +31,7 @@ import net.minecraftforge.common.IPlantable;
 public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGroupPlant {
 	
 	AttackRangedGoal rangedAttackAI;
-	public int farmingRate = 20;
+	public int farmingRate = 20; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -45,7 +46,6 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
         this.setupMob();
 
         this.stepHeight = 1.0F;
-        this.farmingRate = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Spriggan Minion Crop Boosting", this.farmingRate, "Sets the rate in ticks (20 ticks = 1 second) that a Spriggan will boost nearby crops. Each boost will usually cause the crop to grow one stage.");
     }
 
     // ========== Init AI ==========
@@ -83,9 +83,9 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 		// Water Healing:
 		if(this.getAir() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
+				this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 3 * 20, 2));
 			else if (this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+				this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 3 * 20, 1));
 		}
 
         // Farming:
@@ -103,19 +103,20 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 	        		for(int z = (int)this.posZ - farmingRange; z <= (int)this.posZ + farmingRange; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
 	        			Block farmingBlock = this.getEntityWorld().getBlockState(pos).getBlock();
-	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS && farmingBlock != Blocks.DOUBLE_PLANT) {
+	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS) {
 	        				
 		        			// Boost Crops Every X Seconds:
 		        			if(!this.getEntityWorld().isRemote && this.farmingTick % (currentFarmingRate) == 0) {
-                                if(farmingBlock.getTickRandomly()) {
+                                /*if(farmingBlock.getTickRandomly()) {
                                     this.getEntityWorld().scheduleBlockUpdate(pos, farmingBlock, currentFarmingRate, 1);
-                                }
-		    	        		/*IGrowable growableBlock = (IGrowable)farmingBlock;
-		    	        		if(growableBlock.func_149851_a(this.getEntityWorld(), x, y, z, this.getEntityWorld().isRemote)) {
-	    	                        if(growableBlock.func_149852_a(this.getEntityWorld(), this.getRNG(), x, y, z)) {
-	    	                        	growableBlock.func_149853_b(this.getEntityWorld(), this.getRNG(), x, y, z);
+                                }*/
+
+		    	        		IGrowable growableBlock = (IGrowable)farmingBlock;
+		    	        		if(growableBlock.canGrow(this.getEntityWorld(), pos, this.getEntityWorld().getBlockState(pos), this.getEntityWorld().isRemote())) {
+	    	                        if(growableBlock.canUseBonemeal(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos))) {
+	    	                        	growableBlock.grow(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
 	    	                        }
-		    	                }*/
+		    	                }
 		        			}
 		        			
 		        			// Crop Growth Effect:
@@ -123,7 +124,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 		        				double d0 = this.getRNG().nextGaussian() * 0.02D;
 		                        double d1 = this.getRNG().nextGaussian() * 0.02D;
 		                        double d2 = this.getRNG().nextGaussian() * 0.02D;
-		        				this.getEntityWorld().addParticle(ParticleTypes.VILLAGER_HAPPY, (double)((float)x + this.getRNG().nextFloat()), (double)y + (double)this.getRNG().nextFloat(), (double)((float)z + this.getRNG().nextFloat()), d0, d1, d2);
+		        				this.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER, (double)((float)x + this.getRNG().nextFloat()), (double)y + (double)this.getRNG().nextFloat(), (double)((float)z + this.getRNG().nextFloat()), d0, d1, d2);
 		        			}
 	        			}
 	    	        }
@@ -134,12 +135,11 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
         // Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
-                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        this.posY + this.rand.nextDouble() * (double) this.height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        0.0D, 0.0D, 0.0D,
-                        Blocks.TALL_GRASS.getStateId(Blocks.TALL_GRASS.getDefaultState()));
+                this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.TALL_GRASS.getDefaultState()),
+                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        0.0D, 0.0D, 0.0D);
             }
     }
 
@@ -184,14 +184,14 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
             Item heldItem = null;
             if(damageSrc.getTrueSource() instanceof PlayerEntity) {
                 PlayerEntity entityPlayer = (PlayerEntity)damageSrc.getTrueSource();
-                if(entityPlayer.getHeldItem(EnumHand.MAIN_HAND) != null) {
-                    heldItem = entityPlayer.getHeldItem(EnumHand.MAIN_HAND).getItem();
+                if(!entityPlayer.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+                    heldItem = entityPlayer.getHeldItem(Hand.MAIN_HAND).getItem();
                 }
             }
-            else if(damageSrc.getTrueSource() instanceof EntityLiving) {
-                LivingEntity entityLiving = (EntityLiving)damageSrc.getTrueSource();
-                if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-                    heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
+            else if(damageSrc.getTrueSource() instanceof LivingEntity) {
+                LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
+                if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+                    heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
                 }
             }
             if(ObjectLists.isAxe(heldItem))

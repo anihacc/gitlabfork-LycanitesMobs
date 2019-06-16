@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -112,8 +113,8 @@ public class EntityFeradon extends EntityCreatureRideable implements IGroupPreda
 						|| possibleTarget == EntityFeradon.this
 						|| EntityFeradon.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityFeradon.this.isOnSameTeam(possibleTarget)
-						|| !EntityFeradon.this.canAttackClass(possibleTarget.getClass())
-						|| !EntityFeradon.this.canAttackEntity(possibleTarget))
+						|| !EntityFeradon.this.canAttack(possibleTarget.getType())
+						|| !EntityFeradon.this.canAttack(possibleTarget))
 					return false;
 
 				return true;
@@ -127,7 +128,7 @@ public class EntityFeradon extends EntityCreatureRideable implements IGroupPreda
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76437_t, 10 * 20, 0));
                     }
                 }
             }
@@ -137,10 +138,10 @@ public class EntityFeradon extends EntityCreatureRideable implements IGroupPreda
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(Effects.field_76437_t))
+            rider.removePotionEffect(Effects.field_76437_t);
+        if(rider.isPotionActive(Effects.field_76419_f))
+            rider.removePotionEffect(Effects.field_76419_f);
     }
 
 	
@@ -158,7 +159,7 @@ public class EntityFeradon extends EntityCreatureRideable implements IGroupPreda
     // ========== Mounted Offset ==========
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
+        return (double)this.getSize(Pose.STANDING).height * 0.9D;
     }
 
     // ========== Leap ==========

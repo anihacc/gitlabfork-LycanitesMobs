@@ -8,20 +8,20 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals, IGroupAlpha {
+public class EntityJoustAlpha extends EntityCreatureAgeable implements IGroupAlpha {
 	
 	// ==================================================
  	//                    Constructor
@@ -83,7 +83,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 10 * 20, 2, false, true));
+    		this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 10 * 20, 2, false, true));
     	}
     	super.setAttackTarget(entity);
     }

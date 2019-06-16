@@ -112,9 +112,9 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	protected int level = 1;
 
 	/** The cooldown between basic attacks in ticks. Set server side based on AI with an initial value. Used client side to perform attack animations and for cooldown states, etc. **/
-	private int attackCooldownMax = 5;
+	protected int attackCooldownMax = 5;
 	/** The current cooldown time remaining until the next basic attack is ready. Used client side for attack animations. **/
-	private int attackCooldown = 0;
+	protected int attackCooldown = 0;
 	/** How many attack phases this mob has, used for varied attack speeds, etc. **/
 	public byte attackPhaseMax = 0;
     /** Which attack phase this mob is on, used for varied attack speeds, etc. **/
@@ -3028,6 +3028,11 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     public boolean isCurrentlyFlying() { return this.isFlying(); }
     /** Can this entity by tempted (usually lured by an item) currently? **/
     public boolean canBeTempted() { return !this.isRareSubspecies(); }
+
+	@Override
+	public boolean canBeRiddenInWater(Entity rider) {
+		return true;
+	}
     
     /** Called when the creature has eaten. Some special AIs use this such as EntityAIEatBlock. **/
     public void onEat() {}

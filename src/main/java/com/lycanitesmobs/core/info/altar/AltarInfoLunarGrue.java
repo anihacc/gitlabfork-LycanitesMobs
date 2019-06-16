@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.info.altar;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.entity.creature.EntityGrue;
+import com.lycanitesmobs.core.info.AltarInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -133,7 +133,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -147,7 +147,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -157,7 +157,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
         entityGrue.forceBossHealthBar = true;
         entityGrue.applySubspecies(3);
         entityGrue.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.spawnEntity(entityGrue);
+        world.func_217376_c(entityGrue);
         entityGrue.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

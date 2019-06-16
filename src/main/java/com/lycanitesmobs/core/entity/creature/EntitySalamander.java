@@ -13,25 +13,26 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+        rider.addPotionEffect(new EffectInstance(Effects.field_76426_n, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
             rider.removePotionEffect(ObjectManager.getEffect("penetration"));
         if(rider.isBurning())
@@ -132,8 +133,6 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
         BlockPos pos = new BlockPos(x, y, z);
         if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
 
         return super.getBlockPathWeight(x, y, z);
     }
@@ -147,7 +146,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     // ========== Mounted Offset ==========
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.85D;
+        return (double)this.getSize(Pose.STANDING).height * 0.85D;
     }
     
     
@@ -165,8 +164,8 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
                         || possibleTarget == EntitySalamander.this
                         || EntitySalamander.this.isRidingOrBeingRiddenBy(possibleTarget)
                         || EntitySalamander.this.isOnSameTeam(possibleTarget)
-                        || !EntitySalamander.this.canAttackClass(possibleTarget.getClass())
-                        || !EntitySalamander.this.canAttackEntity(possibleTarget))
+                        || !EntitySalamander.this.canAttack(possibleTarget.getType())
+                        || !EntitySalamander.this.canAttack(possibleTarget))
                     return false;
                 return true;
             }
@@ -221,17 +220,12 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
         return 1.0F;
     }
 
-    @Override
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
-    }
-
     // Dismount:
     @Override
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 5 * 20, 1));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.field_76426_n, 5 * 20, 1));
         }
     }
 

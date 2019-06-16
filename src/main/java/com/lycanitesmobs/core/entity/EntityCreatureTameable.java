@@ -434,10 +434,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     // ==================================================
     // ========== Can Attack ==========
 	@Override
-	public boolean canAttack(EntityType targetClass) {
+	public boolean canAttack(EntityType targetType) {
 		if(this.isPassive())
 			return false;
-		return super.canAttack(targetClass);
+		return super.canAttack(targetType);
 	}
 	
 	@Override

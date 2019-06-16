@@ -2,14 +2,14 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.core.renderer.layer.LayerEffect;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
@@ -40,7 +40,7 @@ public class ModelJengu extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "", false, LayerEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
 	}
 
 
@@ -48,7 +48,7 @@ public class ModelJengu extends ModelTemplateElemental {
 	//                 Animate Part
 	// ==================================================
 	@Override
-	public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+	public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		float rotX = 0F;
 		float rotY = 0F;
 		float rotZ = 0F;
@@ -82,7 +82,7 @@ public class ModelJengu extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(partName.contains("effect")) {
 			return layer != null;
 		}
@@ -94,7 +94,7 @@ public class ModelJengu extends ModelTemplateElemental {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(partName.contains("effect")) {
 			return new Vector4f(1, 1, 1, 0.5f);
 		}

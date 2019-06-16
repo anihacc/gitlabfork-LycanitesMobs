@@ -6,18 +6,21 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Potion;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -86,7 +89,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
         if(!this.getEntityWorld().isRemote && this.hasAttackTarget()) {
 	        if(this.teleportTime-- <= 0) {
 	        	this.teleportTime = 60 + this.getRNG().nextInt(40);
-        		BlockPos teleportPosition = this.getFacingPosition(this.getAttackTarget(), -this.getAttackTarget().width - 1D, 0);
+        		BlockPos teleportPosition = this.getFacingPosition(this.getAttackTarget(), -this.getAttackTarget().getSize(Pose.STANDING).width - 1D, 0);
         		if(this.canTeleportTo(teleportPosition)) {
 					this.playJumpSound();
 					this.setPosition(teleportPosition.getX(), teleportPosition.getY(), teleportPosition.getZ());
@@ -97,7 +100,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SPELL_WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 
@@ -109,7 +112,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
 	public boolean canTeleportTo(BlockPos pos) {
 		for (int y = 0; y <= 1; y++) {
 			BlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
-			if (blockState.isNormalCube())
+			if (blockState.isSolid())
 				return false;
 		}
         return true;
@@ -129,12 +132,12 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     @Override
     public void startStealth() {
     	if(this.getEntityWorld().isRemote) {
-            ParticleTypes particle = ParticleTypes.SPELL_WITCH;
+            IParticleData particle = ParticleTypes.WITCH;
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-            	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+            	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
         }
     	super.startStealth();
     }
@@ -152,15 +155,10 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     	// Leech:
     	if(this.getSubspeciesIndex() > 2 && target instanceof LivingEntity) {
     		LivingEntity targetLiving = (LivingEntity)target;
-    		List<Potion> goodEffects = new ArrayList<>();
-    		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
-    			if(potionEffectObj instanceof EffectInstance) {
-    				Potion potion = ((EffectInstance)potionEffectObj).getPotion();
-                    if(potion != null) {
-                        if(ObjectLists.inEffectList("buffs", potion))
-                            goodEffects.add(potion);
-                    }
-    			}
+    		List<Effect> goodEffects = new ArrayList<>();
+    		for(EffectInstance effectInstance : targetLiving.getActivePotionEffects()) {
+				if(ObjectLists.inEffectList("buffs", effectInstance.getPotion()))
+					goodEffects.add(effectInstance.getPotion());
     		}
     		if(goodEffects.size() > 0) {
     			if(goodEffects.size() > 1)
@@ -217,7 +215,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     // ==================================================
     @Override
     public ResourceLocation getTexture(String suffix) {
-        if(!"Shadow Clown".equals(this.getCustomNameTag()))
+        if(!"Shadow Clown".equals(this.getCustomName()))
             return super.getTexture(suffix);
 
         String textureName = this.getTextureName() + "_shadowclown";

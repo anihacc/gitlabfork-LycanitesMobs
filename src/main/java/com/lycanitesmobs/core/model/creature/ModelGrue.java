@@ -2,16 +2,16 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.core.renderer.layer.LayerEffect;
-import com.lycanitesmobs.core.renderer.layer.LayerScrolling;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
@@ -42,7 +42,7 @@ public class ModelGrue extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerScrolling(renderer, "cloak", false, LayerEffect.BLEND.SUB.id, true, new Vector2f(0, 1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "cloak", false, LayerCreatureEffect.BLEND.SUB.id, true, new Vector2f(0, 1)));
 	}
     
     
@@ -51,7 +51,7 @@ public class ModelGrue extends ModelTemplateElemental {
    	// ==================================================
     float maxLeg = 0F;
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
     	// Mouth:
@@ -79,7 +79,7 @@ public class ModelGrue extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if("cloak".equals(partName)) {
 			return layer != null && "cloak".equals(layer.name);
 		}
@@ -92,7 +92,7 @@ public class ModelGrue extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		return super.getPartColor(partName, entity, layer, trophy, loop);
 	}
 }

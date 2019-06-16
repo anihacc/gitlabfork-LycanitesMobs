@@ -4,8 +4,8 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.creature.EntityLobber;
 import com.lycanitesmobs.core.info.AltarInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -159,7 +159,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -173,7 +173,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
             for (int zTarget = z - size; zTarget <= z + size; zTarget++) {
                 for (int yTarget = y - size; yTarget <= y + size; yTarget++) {
                     if (y > 0)
-                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget));
+                        world.removeBlock(new BlockPos(xTarget, yTarget, zTarget), true);
                 }
             }
         }
@@ -183,7 +183,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
         entityLobber.forceBossHealthBar = true;
         entityLobber.applySubspecies(3);
         entityLobber.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.spawnEntity(entityLobber);
+        world.func_217376_c(entityLobber);
         entityLobber.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

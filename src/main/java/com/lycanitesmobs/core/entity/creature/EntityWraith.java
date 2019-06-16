@@ -8,14 +8,16 @@ import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,7 +33,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         super(world);
         
         // Setup:
-        this.attribute = CreatureAttribute.UNDEAD;
+		this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
 
@@ -63,7 +65,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         // Detonate:
         if(!this.getEntityWorld().isRemote) {
             if(this.detonateTimer == 0) {
-                this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, 1, true);
+                this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, 1, Explosion.Mode.BREAK);
                 this.remove();
             }
             else if(this.detonateTimer > 0) {
@@ -90,8 +92,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         // Particles:
         if(this.getEntityWorld().isRemote && this.detonateTimer <= 5) {
 			for (int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
 		}
         
@@ -109,10 +111,10 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 
 	// ========== Set Attack Target ==========
 	@Override
-	public boolean canAttackClass(Class targetClass) {
-		if(targetClass.isAssignableFrom(IGroupDemon.class))
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof IGroupDemon)
 			return false;
-		return super.canAttackClass(targetClass);
+		return super.canAttack(target);
 	}
 	
 	
@@ -133,7 +135,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 			if(this.subspecies != null)
 				explosionRadius = 3;
 			explosionRadius = Math.max(1, Math.round((float)explosionRadius * (float)this.sizeScale));
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
+			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
 		}
         super.onDeath(par1DamageSource);
     }
@@ -167,8 +169,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readEntityFromNBT(nbtTagCompound);
+	public void read(CompoundNBT nbtTagCompound) {
+		super.read(nbtTagCompound);
 		if(nbtTagCompound.contains("DetonateTimer")) {
 			this.detonateTimer = nbtTagCompound.getInt("DetonateTimer");
 		}
@@ -176,8 +178,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 
 	// ========== Write ==========
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-		super.writeEntityToNBT(nbtTagCompound);
+	public void writeAdditional(CompoundNBT nbtTagCompound) {
+		super.writeAdditional(nbtTagCompound);
 		if(this.detonateTimer > -1) {
 			nbtTagCompound.putInt("DetonateTimer", this.detonateTimer);
 		}

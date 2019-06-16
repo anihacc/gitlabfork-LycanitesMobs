@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,10 +42,10 @@ public class FishingSpawnTrigger extends SpawnTrigger {
 	}
 
 	@Override
-	public void applyToEntity(EntityLiving entityLiving) {
+	public void applyToEntity(LivingEntity entityLiving) {
 		super.applyToEntity(entityLiving);
 		if(this.hookEntity != null) {
-			entityLiving.setVelocity(this.hookEntity.motionX, this.hookEntity.motionY, this.hookEntity.motionZ);
+			entityLiving.setMotion(this.hookEntity.getMotion());
 		}
 	}
 }

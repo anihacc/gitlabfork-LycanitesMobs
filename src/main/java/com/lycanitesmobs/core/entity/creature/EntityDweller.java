@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
@@ -97,8 +98,6 @@ public class EntityDweller extends EntityCreatureTameable implements IMob {
         BlockState blockState = this.getEntityWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-		if(blockState.getBlock() == Blocks.FLOWING_WATER)
-			return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         

@@ -10,16 +10,16 @@ import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAspid extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntityAspid extends EntityCreatureAgeable implements IGroupAnimal {
 	
 	// ==================================================
  	//                    Constructor
@@ -88,10 +88,10 @@ public class EntityAspid extends EntityCreatureAgeable implements IAnimals, IGro
 	@Override
 	public float getBlockPathWeight(int x, int y, int z) {
         if(this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z)).getBlock() != Blocks.AIR) {
-            BlockState blocStatek = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
-            if(blocStatek.getMaterial() == Material.GRASS)
+            BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
+            if(blockState.getMaterial() == Material.ORGANIC)
                 return 10F;
-            if(blocStatek.getMaterial() == Material.GROUND)
+            if(blockState.getMaterial() == Material.EARTH)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);

@@ -13,7 +13,7 @@ import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import net.minecraft.client.renderer.model.Model;
+import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +40,7 @@ public class CreatureInfo {
 
 	/** The model class used by this creature. **/
 	@OnlyIn(Dist.CLIENT)
-	public Class<? extends Model> modelClass;
+	public Class<? extends ModelCreatureBase> modelClass;
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;

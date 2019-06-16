@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.model.animation;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.model.IAnimationModel;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
@@ -121,7 +121,7 @@ public class ModelPartAnimation {
 	 * @param lookX An x looking rotation used by the head, etc.
 	 * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
 	 */
-	public void animatePart(IAnimationModel model, String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+	public void animatePart(IAnimationModel model, String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		// Check Part Name:
 		boolean matchingPart = false;
 		for (String targetPart : this.targetParts) {

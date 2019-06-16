@@ -11,7 +11,13 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
@@ -22,7 +28,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
+public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
 	
 	PlayerControlGoal playerControlAI;
 	
@@ -49,7 +55,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         this.field_70714_bg.addTask(1, new MateGoal(this));
         this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
+        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
         this.field_70714_bg.addTask(6, new AttackMeleeGoal(this).setSpeed(1.5D));
         this.field_70714_bg.addTask(7, this.aiSit);
         this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
@@ -66,13 +72,13 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
         this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityCow.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityPig.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
         this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityPigZombie.class));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
             this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
@@ -91,13 +97,13 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         super.livingTick();
         
         // Become a farmed animal if removed from the Nether to another dimension, prevents natural despawning.
-        if(this.getEntityWorld().provider.getDimension() != -1)
+        if(this.getEntityWorld().getDimension().getType().getId() != -1)
         	this.setFarmed();
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.WITHER))
-    		rider.removePotionEffect(Effects.WITHER);
+    	if(rider.isPotionActive(Effects.field_82731_v))
+    		rider.removePotionEffect(Effects.field_82731_v);
         if(rider.isBurning())
             rider.setFire(0);
     }
@@ -137,7 +143,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 1.0D;
+        return (double)this.getSize(Pose.STANDING).height * 1.0D;
     }
 	
 	
@@ -151,7 +157,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         	return false;
         
     	// Breed:
-    	if(target instanceof EntityCow || target instanceof EntityPig || target instanceof EntitySheep || target instanceof EntityHorse || target instanceof EntityLlama)
+        if((target instanceof AnimalEntity || target instanceof IGroupAnimal) && target.getSize(Pose.STANDING).height < 1F)
     		this.breed();
     	
         return true;
@@ -168,8 +174,8 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
                         || possibleTarget == EntityPinky.this
                         || EntityPinky.this.isRidingOrBeingRiddenBy(possibleTarget)
                         || EntityPinky.this.isOnSameTeam(possibleTarget)
-                        || !EntityPinky.this.canAttackClass(possibleTarget.getClass())
-                        || !EntityPinky.this.canAttackEntity(possibleTarget))
+                        || !EntityPinky.this.canAttack(possibleTarget.getType())
+                        || !EntityPinky.this.canAttack(possibleTarget))
                     return false;
                 return true;
             }
@@ -183,7 +189,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addPotionEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
+                    possibleTarget.addPotionEffect(new EffectInstance(Effects.field_82731_v, 10 * 20, 0));
                 }
             }
         }

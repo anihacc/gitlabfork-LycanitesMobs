@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.config.ConfigBase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,12 +21,6 @@ public class ElementManager extends JSONLoader {
 			INSTANCE = new ElementManager();
 		}
 		return INSTANCE;
-	}
-
-
-	/** Called during early start up, loads all global configs into this manager. **/
-	public void loadConfig() {
-		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "general");
 	}
 
 

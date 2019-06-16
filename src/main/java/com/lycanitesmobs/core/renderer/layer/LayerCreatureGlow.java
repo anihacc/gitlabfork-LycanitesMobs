@@ -3,21 +3,21 @@ package com.lycanitesmobs.core.renderer.layer;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerDjinn extends LayerBase {
+public class LayerGlow extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerDjinn(RenderCreature renderer) {
+    public LayerGlow(RenderCreature renderer) {
         super(renderer);
     }
 
@@ -26,8 +26,8 @@ public class LayerDjinn extends LayerBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
-        return partName.contains("ribbon");
+    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+        return new Vector4f(1, 1, 1, 1);
     }
 
     @Override
@@ -36,25 +36,25 @@ public class LayerDjinn extends LayerBase {
 		if(entity.getSubspecies() != null) {
 			textureName += "_" + entity.getSubspecies().color;
 		}
-		textureName += "_ribbon";
+		textureName += "_glow";
 		if(AssetManager.getTexture(textureName) == null)
 			AssetManager.addTexture(textureName, entity.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 		return AssetManager.getTexture(textureName);
     }
 
-	@Override
-	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
-		return new Vector2f(-loop * 25, 0);
-	}
+    @Override
+    public void onRenderStart(Entity entity, boolean trophy) {
+		int i = 15728880;
+		int j = i % 65536;
+		int k = i / 65536;
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+    }
 
-	@Override
-	public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
-		return new Vector4f(1, 1, 1, 0.75f);
-	}
-
-	@Override
-	public void onRenderStart(Entity entity, boolean trophy) {}
-
-	@Override
-	public void onRenderFinish(Entity entity, boolean trophy) {}
+    @Override
+    public void onRenderFinish(Entity entity, boolean trophy) {
+		int i = entity.getBrightnessForRender();
+		int j = i % 65536;
+		int k = i / 65536;
+		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+    }
 }

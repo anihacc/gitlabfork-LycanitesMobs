@@ -141,8 +141,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                         || possibleTarget == EntityStrider.this
                         || EntityStrider.this.isRidingOrBeingRiddenBy(possibleTarget)
                         || EntityStrider.this.isOnSameTeam(possibleTarget)
-                        || EntityStrider.this.canAttackClass(possibleTarget.getClass())
-                        || EntityStrider.this.canAttackEntity(possibleTarget))
+                        || EntityStrider.this.canAttack(possibleTarget.getType())
+                        || EntityStrider.this.canAttack(possibleTarget))
                     return false;
 
                 return true;
@@ -160,7 +160,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                     if (ObjectManager.getEffectInstance("penetration") != null)
                         possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("penetration"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76437_t, 10 * 20, 0));
                 }
             }
         }
@@ -188,7 +188,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     // Mounted Y Offset:
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 1.0D * this.sizeScale;
+        return (double)this.getSize(Pose.STANDING).height * 1.0D * this.sizeScale;
     }
 
     // Mount/Dismount:
@@ -229,8 +229,6 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 

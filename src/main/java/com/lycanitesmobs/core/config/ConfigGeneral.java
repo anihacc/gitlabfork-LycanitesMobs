@@ -45,7 +45,7 @@ public class ConfigGeneral {
 
 		// Clear Old Configs:
 		if(oldVersion) {
-			String configDirPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid;
+			String configDirPath = new File(".") + "/config/" + LycanitesMobs.modid;
 			File configDir = new File(configDirPath);
 			configDir.mkdir();
 			LycanitesMobs.printWarning("", "[Config] The current configs are too old, clearing all configs now...");

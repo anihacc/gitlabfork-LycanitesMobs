@@ -1,33 +1,34 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.api.IGroupPredator;
+import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.potion.Effects;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
+import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupIce {
+public class EntityYeti extends EntityCreatureAgeable implements IGroupAnimal, IGroupIce {
 	
 	// ==================================================
  	//                    Constructor
@@ -86,7 +87,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 	
@@ -100,9 +101,9 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GRASS || blockState.getMaterial() == Material.SNOW)
+            if(blockState.getMaterial() == Material.ORGANIC || blockState.getMaterial() == Material.SNOW)
                 return 10F;
-            if(blockState.getMaterial() == Material.GROUND || blockState.getMaterial() == Material.ICE)
+            if(blockState.getMaterial() == Material.EARTH || blockState.getMaterial() == Material.ICE)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -126,8 +127,8 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
 
     @Override
     public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == Effects.SLOWNESS) return false;
-        if(potionEffect.getPotion() == Effects.HUNGER) return false;
+        if(potionEffect.getPotion() == Effects.field_76421_d) return false;
+        if(potionEffect.getPotion() == Effects.field_76438_s) return false;
         return super.isPotionApplicable(potionEffect);
     }
     

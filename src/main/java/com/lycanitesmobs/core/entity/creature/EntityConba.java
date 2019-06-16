@@ -7,18 +7,18 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.Vec3d;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityConba extends EntityCreatureTameable implements IMob {
@@ -83,7 +83,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     public String getSpeciesName() {
 		String infection = "";
 		if(this.vespidInfection) {
-			String entityName = EntityList.getEntityString(this);
+			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null)
 	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.filename + "." + entityName + ".infected") + " ";
 		}
@@ -142,7 +142,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
         	this.vespidInfection = this.extraAnimation01();
         	if(this.vespidInfection) {
     	        for(int i = 0; i < 2; ++i) {
-    	            this.getEntityWorld().addParticle(ParticleTypes.SPELL_WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+    	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
     	        }
         	}
         }
@@ -164,13 +164,12 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Can Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(this.vespidInfection && (targetClass.isAssignableFrom(EntityVespid.class) || targetClass.isAssignableFrom(EntityVespidQueen.class)))
-        	return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityVespid || target instanceof EntityVespidQueen)
+			return false;
+		return super.canAttack(target);
+	}
     
     // ========== Ranged Attack ==========
 	@Override
@@ -178,14 +177,6 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
 		this.fireProjectile(EntityPoop.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
-
-    // ========== Can Attack Entity ==========
-    @Override
-    public boolean canAttackEntity(LivingEntity targetEntity) {
-        if(targetEntity instanceof EntityVespid || targetEntity instanceof EntityVespidQueen)
-            return false;
-        return super.canAttackEntity(targetEntity);
-    }
     
     
     // ==================================================
@@ -199,10 +190,10 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     }
     
     public void spawnVespidSwarm() {
-    	int j = 2 + this.rand.nextInt(5) + getEntityWorld().getDifficulty().getDifficultyId() - 1;
+    	int j = 2 + this.rand.nextInt(5) + getEntityWorld().getDifficulty().getId() - 1;
         for(int k = 0; k < j; ++k) {
-            float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
-            float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
+            float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
+            float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
             EntityVespid vespid = new EntityVespid(this.getEntityWorld());
             vespid.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
             vespid.applySubspecies(this.getSubspeciesIndex());
@@ -249,8 +240,8 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	super.readEntityFromNBT(nbtTagCompound);
+    public void read(CompoundNBT nbtTagCompound) {
+    	super.read(nbtTagCompound);
         
         if(nbtTagCompound.contains("VespidInfection")) {
         	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");
@@ -263,8 +254,8 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeEntityToNBT(nbtTagCompound);
+    public void writeAdditional(CompoundNBT nbtTagCompound) {
+        super.writeAdditional(nbtTagCompound);
     	nbtTagCompound.putBoolean("VespidInfection", this.vespidInfection);
     	if(this.vespidInfection)
         	nbtTagCompound.putInt("VespidInfectionTime", this.vespidInfectionTime);

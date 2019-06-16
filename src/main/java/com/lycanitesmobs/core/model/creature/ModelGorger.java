@@ -2,12 +2,12 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.model.ModelObj;
+import com.lycanitesmobs.core.model.ModelCreatureObj;
 
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelGorger extends ModelObj {
+public class ModelGorger extends ModelCreatureObj {
 
     // ==================================================
     //                    Constructors
@@ -31,7 +31,7 @@ public class ModelGorger extends ModelObj {
     //                 Animate Part
     // ==================================================
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
         float posX = 0F;
         float posY = 0F;

@@ -2,28 +2,29 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.SilverfishEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public class EntityGeonach extends EntityCreatureTameable implements IMob, IGroupRock, IFusable {
 	
-	public int geonachBlockBreakRadius = 0;
+	public int geonachBlockBreakRadius = 0; // TODO Creature flags.
 	public float fireDamageAbsorbed = 0;
     
     // ==================================================
@@ -36,7 +37,6 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.geonachBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Rare Geonach Block Break Radius", this.geonachBlockBreakRadius, "Controls how large the Celestial Geonach's block breaking radius is when it is charging towards its target. Set to -1 to disable. For their block breaking radius on spawn, see the ROCK spawn type features instead. Note that this is only for the extremely rare Geonach.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -60,7 +60,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
         this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
         this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntitySilverfish.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(SilverfishEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
@@ -116,12 +116,11 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
-                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        this.posY + this.rand.nextDouble() * (double) this.height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        0.0D, 0.0D, 0.0D,
-                        Blocks.TALL_GRASS.getStateId(Blocks.STONE.getDefaultState()));
+                this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.STONE.getDefaultState()),
+                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        0.0D, 0.0D, 0.0D);
             }
     }
 
@@ -133,7 +132,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     @Override
     public float getAISpeedModifier() {
         // Silverfish Extermination:
-        if(this.hasAttackTarget() && this.getAttackTarget() instanceof EntitySilverfish)
+        if(this.hasAttackTarget() && this.getAttackTarget() instanceof SilverfishEntity)
             return 4.0F;
         return super.getAISpeedModifier();
     }
@@ -149,7 +148,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     		return false;
 
         // Silverfish Extermination:
-        if(target instanceof EntitySilverfish) {
+        if(target instanceof SilverfishEntity) {
             target.remove();
         }
 
@@ -193,7 +192,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     public float getDamageModifier(DamageSource damageSrc) {
     	if(damageSrc.getTrueSource() != null) {
             // Silverfish Extermination:
-            if(damageSrc.getTrueSource() instanceof EntitySilverfish) {
+            if(damageSrc.getTrueSource() instanceof SilverfishEntity) {
                 return 0F;
             }
 
@@ -201,8 +200,8 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     		Item heldItem = null;
     		if(damageSrc.getTrueSource() instanceof LivingEntity) {
                 LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
+	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
 	    		}
     		}
     		if(ObjectLists.isPickaxe(heldItem))

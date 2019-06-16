@@ -8,11 +8,11 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.SkeletonEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -98,7 +98,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 						}
 						this.applyBuffs(target, 1, 1);
 						this.applyDebuffs(target, 1, 1);
-						if(target instanceof EntityZombie || target instanceof EntitySkeleton) {
+						if(target instanceof ZombieEntity || target instanceof SkeletonEntity) {
 							target.setFire(1);
 						}
 						if(target instanceof EntityCreatureBase) {
@@ -129,7 +129,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 				}
 			}
 			else {
-				if(this.playPartner.isDead || this.getAttackTarget() == this.playPartner || this.getDistance(this.playPartner) >= 100) {
+				if(!this.playPartner.isAlive() || this.getAttackTarget() == this.playPartner || this.getDistance(this.playPartner) >= 100) {
 					this.playPartner = null;
 				}
 				else if(this.hasAttackTarget()) {
@@ -165,19 +165,14 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     }
 
     @Override
-	public boolean canAttackEntity(LivingEntity targetEntity) {
+	public boolean canAttack(LivingEntity targetEntity) {
     	if(targetEntity == this.playPartner) {
     		return false;
 		}
 		if(targetEntity instanceof EntityWisp && this.getPlayerOwner() == ((EntityWisp)targetEntity).getPlayerOwner()) {
     		return false;
 		}
-    	return super.canAttackEntity(targetEntity);
-	}
-
-	@Override
-	public float getEyeHeight() {
-    	return this.height * 0.5F;
+    	return super.canAttack(targetEntity);
 	}
 
 

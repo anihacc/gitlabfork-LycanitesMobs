@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -122,10 +123,10 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.WEAKNESS))
-            rider.removePotionEffect(Effects.WEAKNESS);
-        if(rider.isPotionActive(Effects.MINING_FATIGUE))
-            rider.removePotionEffect(Effects.MINING_FATIGUE);
+        if(rider.isPotionActive(Effects.field_76437_t))
+            rider.removePotionEffect(Effects.field_76437_t);
+        if(rider.isPotionActive(Effects.field_76419_f))
+            rider.removePotionEffect(Effects.field_76419_f);
     }
 
 
@@ -203,7 +204,7 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.8D;
+        return (double)this.getSize(Pose.STANDING).height * 0.8D;
     }
 
 

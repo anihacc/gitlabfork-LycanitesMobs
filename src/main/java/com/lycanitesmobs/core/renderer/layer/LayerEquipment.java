@@ -3,11 +3,11 @@ package com.lycanitesmobs.core.renderer.layer;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerEquipment extends LayerBase {
+public class LayerEquipment extends LayerCreatureBase {
     public String equipmentSlot;
 
     // ==================================================

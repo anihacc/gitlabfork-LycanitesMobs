@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -141,18 +142,15 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         // Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.SMOKE_NORMAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
-                this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+                this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             }
     }
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
-        if(rider.isBurning())
-            rider.extinguish();
+        rider.addPotionEffect(new EffectInstance(Effects.field_76426_n, (5 * 20) + 5, 1));
+        super.riderEffects(rider);
     }
 
 
@@ -252,7 +250,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.posY -= this.height / 4;
+            projectile.posY -= this.getSize(Pose.STANDING).height / 4;
 
             // Accuracy:
             float accuracy = 4.0F * (this.getRNG().nextFloat() - 0.5F);
@@ -318,9 +316,9 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     @Override
     public double getMountedYOffset() {
         if(this.onGround) {
-            return (double)this.height * 0.52D;
+            return (double)this.getSize(Pose.STANDING).height * 0.52D;
         }
-        return (double)this.height * 0.54D;
+        return (double)this.getSize(Pose.STANDING).height * 0.54D;
     }
 
 
@@ -385,7 +383,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
                 projectile.setProjectileScale(1f);
 
                 // Y Offset:
-                projectile.posY -= this.height / 4;
+                projectile.posY -= this.getSize(Pose.STANDING).height / 4;
 
                 // Launch:
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

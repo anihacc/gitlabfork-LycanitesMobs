@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.modelloader.obj;
 
-import org.lwjgl.util.vector.Vector3f;
+import net.minecraft.client.renderer.Vector3f;
 
 public class Material
 {

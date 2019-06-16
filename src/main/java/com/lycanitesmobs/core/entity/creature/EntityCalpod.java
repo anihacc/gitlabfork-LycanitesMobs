@@ -4,23 +4,23 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import net.minecraft.block.BlockLog;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.LogBlock;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey {
-	private int calpodSwarmLimit = 5;
+	private int calpodSwarmLimit = 5; // TODO Creature flags.
 	private boolean calpodGreifing = true;
 
     // ==================================================
@@ -33,9 +33,6 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
         this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
-        
-        this.calpodSwarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Calpod Swarm Limit", this.calpodSwarmLimit, "Limits how many Calpods there can be when swarming.");
-		this.calpodGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Calpod Griefing", this.calpodGreifing, "Set to false to disable Calpod block destruction.");
 	}
 
     // ========== Init AI ==========
@@ -71,8 +68,8 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
 		if(!this.getEntityWorld().isRemote)
 			if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.calpodGreifing) {
 				float distance = this.getAttackTarget().getDistance(this);
-				if(distance <= this.width + 1.0F)
-					this.destroyAreaBlock((int)this.posX, (int)this.posY, (int)this.posZ, BlockLog.class, true, 0);
+				if(distance <= this.getSize(Pose.STANDING).width + 1.0F)
+					this.destroyAreaBlock((int)this.posX, (int)this.posY, (int)this.posZ, LogBlock.class, true, 0);
 			}
         
         super.livingTick();
@@ -92,13 +89,11 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	LivingEntity minion = new EntityCalpod(this.getEntityWorld());
+    	EntityCreatureBase minion = new EntityCalpod(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-    	if(minion instanceof EntityCreatureBase) {
-    		((EntityCreatureBase)minion).setMinion(true);
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
-    	}
-    	this.getEntityWorld().func_217376_c(minion);
+		minion.setMinion(true);
+		minion.applySubspecies(this.getSubspeciesIndex());
+		this.getEntityWorld().func_217376_c(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
     }
@@ -107,15 +102,12 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
     // ==================================================
     //                      Attacks
     // ==================================================
-	// ========== Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(IGroupAlpha.class))
-        	return false;
-        if(targetClass.isAssignableFrom(IGroupPredator.class))
-            return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof IGroupAlpha || target instanceof IGroupPredator)
+			return false;
+		return super.canAttack(target);
+	}
     
     
     // ==================================================

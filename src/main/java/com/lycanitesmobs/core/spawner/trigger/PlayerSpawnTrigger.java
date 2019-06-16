@@ -65,7 +65,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 		}
 
 		// World Time:
-		if(this.useWorldTime && player.getEntityWorld().getWorldTime() % 24000 != this.tickRate) {
+		if(this.useWorldTime && player.getEntityWorld().getDayTime() % 24000 != this.tickRate) {
 			return;
 		}
 

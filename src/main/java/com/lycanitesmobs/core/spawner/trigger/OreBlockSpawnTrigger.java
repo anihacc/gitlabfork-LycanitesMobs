@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SilverfishBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 
 public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
@@ -41,7 +41,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
 		Block block = blockState.getBlock();
 
-		if(block == Blocks.MONSTER_EGG) {
+		if(block instanceof SilverfishBlock) {
 			return this.ores;
 		}
 		if(block == Blocks.COAL_ORE) {
@@ -51,7 +51,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 		if(block.getRegistryName() == null) {
 			return false;
 		}
-		String blockName = block.getRegistryName().getResourcePath();
+		String blockName = block.getRegistryName().getPath();
 		String[] blockNameParts = blockName.split("\\.");
 		for(String blockNamePart : blockNameParts) {
 			int blockNamePartLength = blockNamePart.length();
@@ -66,12 +66,16 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 					if(this.ores && this.gems) {
 						return true;
 					}
-					Item dropItem = block.getItemDropped(blockState, world.rand, fortune);
-					if(dropItem instanceof ItemBlock && ((ItemBlock)dropItem).getBlock() == block) {
-						return this.ores;
-					}
-					else {
-						return this.gems;
+
+					if(world instanceof ServerWorld) {
+						for(ItemStack dropStack : block.getDrops(blockState, (ServerWorld)world, blockPos, null)) {
+							if(dropStack.getItem() == block.getPickBlock(blockState, null, world, blockPos, null).getItem()) {
+								return this.ores;
+							}
+							else {
+								return this.gems;
+							}
+						}
 					}
 				}
 			}

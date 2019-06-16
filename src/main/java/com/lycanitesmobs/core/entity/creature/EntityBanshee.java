@@ -4,13 +4,13 @@ import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityBanshee extends EntityCreatureTameable implements IMob, IGroupShadow {
@@ -52,24 +52,6 @@ public class EntityBanshee extends EntityCreatureTameable implements IMob, IGrou
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
-    }
 	
 	
     // ==================================================
@@ -91,22 +73,8 @@ public class EntityBanshee extends EntityCreatureTameable implements IMob, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SPELL_WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
-    }
-
-	/**
-	 * Checks if this entity can teleport to the provided block position.
-	 * @param pos The position to teleport to.
-	 * @return True if it's safe to teleport.
-	 */
-	public boolean canTeleportTo(BlockPos pos) {
-		for (int y = 0; y <= 1; y++) {
-			BlockState blockState = this.getEntityWorld().getBlockState(pos.add(0, y, 0));
-			if (blockState.isNormalCube())
-				return false;
-		}
-        return true;
     }
     
     

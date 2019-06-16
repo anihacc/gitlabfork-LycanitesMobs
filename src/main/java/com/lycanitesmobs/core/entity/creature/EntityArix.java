@@ -1,23 +1,25 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.api.IGroupFire;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.MagmaCubeEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -60,8 +62,8 @@ public class EntityArix extends EntityCreatureTameable implements IMob, IGroupIc
         this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
         this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityBlaze.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityMagmaCube.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
@@ -102,7 +104,7 @@ public class EntityArix extends EntityCreatureTameable implements IMob, IGroupIc
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 
@@ -136,8 +138,8 @@ public class EntityArix extends EntityCreatureTameable implements IMob, IGroupIc
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-        return super.canAttackClass(targetClass);
+    public boolean canAttack(EntityType targetType) {
+        return super.canAttack(targetType);
     }
     
     // ========== Ranged Attack ==========

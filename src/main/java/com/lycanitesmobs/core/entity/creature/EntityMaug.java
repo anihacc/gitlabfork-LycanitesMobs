@@ -14,6 +14,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -116,8 +117,8 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
                             || possibleTarget == EntityMaug.this
                             || EntityMaug.this.isRidingOrBeingRiddenBy(possibleTarget)
                             || EntityMaug.this.isOnSameTeam(possibleTarget)
-                            || !EntityMaug.this.canAttackClass(possibleTarget.getClass())
-                            || !EntityMaug.this.canAttackEntity(possibleTarget))
+                            || !EntityMaug.this.canAttack(possibleTarget.getType())
+                            || !EntityMaug.this.canAttack(possibleTarget))
                         return false;
 
                     return true;
@@ -132,7 +133,7 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
                         }
                     }
                     if(doDamage) {
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76421_d, 10 * 20, 0));
                     }
                 }
             }
@@ -141,10 +142,10 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.SLOWNESS))
-    		rider.removePotionEffect(Effects.SLOWNESS);
-        if(rider.isPotionActive(Effects.HUNGER))
-            rider.removePotionEffect(Effects.HUNGER);
+    	if(rider.isPotionActive(Effects.field_76421_d))
+    		rider.removePotionEffect(Effects.field_76421_d);
+        if(rider.isPotionActive(Effects.field_76438_s))
+            rider.removePotionEffect(Effects.field_76438_s);
     }
 
 	
@@ -162,7 +163,7 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
     // ========== Mounted Offset ==========
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.95D;
+        return (double)this.getSize(Pose.STANDING).height * 0.95D;
     }
 
     // ========== Leap ==========

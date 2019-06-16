@@ -19,7 +19,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -79,22 +79,21 @@ public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlan
         // Water Healing:
 		if(this.getAir() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
+				this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 3 * 20, 2));
 			else if (this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
-				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+				this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 3 * 20, 1));
 		}
     }
     
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityEnt.class))
-    		return false;
-        return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityEnt)
+			return false;
+		return super.canAttack(target);
+	}
     
     // ========== Melee Attack ==========
     @Override
@@ -121,14 +120,14 @@ public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlan
     		Item heldItem = null;
     		if(damageSrc.getTrueSource() instanceof PlayerEntity) {
     			PlayerEntity entityPlayer = (PlayerEntity)damageSrc.getTrueSource();
-	    		if(entityPlayer.getHeldItem(EnumHand.MAIN_HAND) != null) {
-	    			heldItem = entityPlayer.getHeldItem(EnumHand.MAIN_HAND).getItem();
+	    		if(!entityPlayer.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+	    			heldItem = entityPlayer.getHeldItem(Hand.MAIN_HAND).getItem();
 	    		}
     		}
-    		else if(damageSrc.getTrueSource() instanceof EntityLiving) {
-	    		LivingEntity entityLiving = (EntityLiving)damageSrc.getTrueSource();
-	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
+    		else if(damageSrc.getTrueSource() instanceof LivingEntity) {
+	    		LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
+	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
 	    		}
     		}
     		if(ObjectLists.isAxe(heldItem))
@@ -158,14 +157,14 @@ public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlan
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture() {
-		if("Wicked Treant".equals(this.getCustomNameTag())) {
+		if("Wicked Treant".equals(this.getCustomName())) {
 			String textureName = this.getTextureName() + "_wicked";
 			if (AssetManager.getTexture(textureName) == null)
 				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
 			return AssetManager.getTexture(textureName);
 		}
 
-		if("Salty Tree".equals(this.getCustomNameTag())) {
+		if("Salty Tree".equals(this.getCustomName())) {
 			String textureName = this.getTextureName() + "_saltytree";
 			if (AssetManager.getTexture(textureName) == null)
 				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");

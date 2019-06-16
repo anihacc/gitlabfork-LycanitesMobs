@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
@@ -10,16 +9,16 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupPrey {
-	private int gorgomiteSwarmLimit = 10;
+	private int gorgomiteSwarmLimit = 10; // TODO Creature flags.
     
     // ==================================================
  	//                    Constructor
@@ -31,9 +30,7 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
         this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
-        
-        this.gorgomiteSwarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Gorgomite Swarm Limit", this.gorgomiteSwarmLimit, "Limits how many Gorgomites there can be when swarming.");
-    }
+     }
 
     // ========== Init AI ==========
     @Override
@@ -97,15 +94,12 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
     // ==================================================
     //                      Attacks
     // ==================================================
-	// ========== Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(IGroupAlpha.class))
-        	return false;
-        if(targetClass.isAssignableFrom(IGroupPredator.class))
-            return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof IGroupAlpha || target instanceof IGroupPredator)
+			return false;
+		return super.canAttack(target);
+	}
     
     
     // ==================================================

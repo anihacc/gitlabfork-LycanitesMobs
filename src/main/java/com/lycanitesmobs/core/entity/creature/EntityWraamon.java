@@ -10,14 +10,14 @@ import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -56,7 +56,7 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
             this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
             this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
@@ -86,8 +86,8 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
         // Disable Knockback:
         double targetKnockbackResistance = 0;
         if(target instanceof LivingEntity) {
-            targetKnockbackResistance = ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+            targetKnockbackResistance = ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         }
 
         // Melee Attack:
@@ -96,7 +96,7 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
 
         // Restore Knockback:
         if(target instanceof LivingEntity)
-            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
         
         return true;
     }

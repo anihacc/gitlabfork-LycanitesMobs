@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
@@ -12,29 +11,28 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupAlpha {
+public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroupAnimal, IGroupAlpha {
 	
-	public static int CONCAPEDE_SIZE_MAX = 10;
+	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
     public EntityConcapedeHead(World world) {
         super(world);
-        
-        CONCAPEDE_SIZE_MAX = Math.max(1, ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Concapede Size Limit", CONCAPEDE_SIZE_MAX, "The maximum amount of segments long a Concapede can be, including the head."));
-        
+
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
@@ -132,9 +130,9 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GRASS)
+            if(blockState.getMaterial() == Material.ORGANIC)
                 return 10F;
-            if(blockState.getMaterial() == Material.GROUND)
+            if(blockState.getMaterial() == Material.EARTH)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -150,13 +148,12 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
 	// ==================================================
    	//                      Attacks
    	// ==================================================
-    // ========== Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityConcapedeSegment.class))
-        	return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityConcapedeSegment)
+			return false;
+		return super.canAttack(target);
+	}
     
     
     // ==================================================

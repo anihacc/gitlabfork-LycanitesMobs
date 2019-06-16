@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.config.ConfigClient;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -9,7 +9,6 @@ import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -34,14 +33,13 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 		ModelCreatureBase modelCreatureBase = this.field_77045_g;
 		modelCreatureBase.addCustomLayers(this);
 
-        this.multipass = LycanitesMobs.config.getBool("Client", "Model Multipass", this.multipass, "Set to false to disable multipass rendering. This renders model layers twice so that they can show each over through alpha textures, disable for performance on low end systems.");
+        this.multipass = ConfigClient.INSTANCE.modelMultipass.get();
     }
 
 
 	// ==================================================
 	//                     Render
 	// ==================================================
-
 	/**
 	 * Returns if this renderer should render multiple passes.
 	 * @return True for multi pass rendering.
@@ -82,6 +80,10 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 	protected void renderLayers(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderLayers(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
+
+	public ModelCreatureBase getMainModel() {
+		return this.field_77045_g;
+	}
     
     
     // ==================================================
@@ -99,19 +101,17 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
     
     @Override
     protected ResourceLocation getEntityTexture(EntityCreatureBase entity) {
-    	if(entity instanceof EntityCreatureBase)
-    		return entity.getTexture();
-        return null;
-    }
+		return entity.getTexture();
+	}
     
     // ========== Equipment ==========
-    protected void bindEquipmentTexture(Entity entity, String equipmentName) {
+    protected void bindEquipmentTexture(EntityCreatureBase entity, String equipmentName) {
         this.bindTexture(this.getEquipmentTexture(entity, equipmentName));
     }
     
-    protected ResourceLocation getEquipmentTexture(Entity entity, String equipmentName) {
-    	if(entity instanceof EntityCreatureBase)
-    		return ((EntityCreatureBase)entity).getEquipmentTexture(equipmentName);
+    protected ResourceLocation getEquipmentTexture(EntityCreatureBase entity, String equipmentName) {
+    	if(entity != null)
+    		return entity.getEquipmentTexture(equipmentName);
         return null;
     }
     

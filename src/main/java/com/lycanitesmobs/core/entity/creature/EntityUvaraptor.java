@@ -10,13 +10,12 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -96,13 +95,6 @@ public class EntityUvaraptor extends EntityCreatureRideable implements IGroupPre
     		}
         }
     }
-    
-    public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.POISON))
-    		rider.removePotionEffect(Effects.POISON);
-    	if(rider.isPotionActive(Effects.SLOWNESS))
-    		rider.removePotionEffect(Effects.SLOWNESS);
-    }
 
 	
     // ==================================================
@@ -124,7 +116,7 @@ public class EntityUvaraptor extends EntityCreatureRideable implements IGroupPre
     
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
+        return (double)this.getSize(Pose.STANDING).height * 0.9D;
     }
     
     

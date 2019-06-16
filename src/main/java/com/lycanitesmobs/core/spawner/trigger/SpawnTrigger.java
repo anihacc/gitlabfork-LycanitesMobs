@@ -7,7 +7,7 @@ import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -171,7 +171,7 @@ public abstract class SpawnTrigger {
 	}
 
 	/** Used to apply effects, etc any mobs that have spawned because of this trigger. **/
-	public void applyToEntity(EntityLiving entityLiving) {
+	public void applyToEntity(LivingEntity entityLiving) {
 		return;
 	}
 }

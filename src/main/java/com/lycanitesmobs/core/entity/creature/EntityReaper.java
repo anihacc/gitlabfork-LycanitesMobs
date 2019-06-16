@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,7 +68,7 @@ public class EntityReaper extends EntityCreatureTameable implements IMob, IGroup
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SPELL_WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
     
@@ -123,7 +124,7 @@ public class EntityReaper extends EntityCreatureTameable implements IMob, IGroup
     protected SoundEvent getAmbientSound() {
     	if(this.hasAttackTarget()) {
     		if(this.getAttackTarget() instanceof PlayerEntity)
-    			if("jbams".equalsIgnoreCase((this.getAttackTarget()).getName())) // JonBams special sound!
+    			if("jbams".equalsIgnoreCase((this.getAttackTarget()).getName().toString())) // JonBams special sound!
     				return AssetManager.getSound(this.creatureInfo.getName() + "_say_jon");
     	}
         if(this.isTamed() && this.getOwner() != null) {
@@ -139,7 +140,7 @@ public class EntityReaper extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!"Satan Claws".equals(this.getCustomNameTag()))
+        if(!"Satan Claws".equals(this.getCustomName()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_satanclaws";

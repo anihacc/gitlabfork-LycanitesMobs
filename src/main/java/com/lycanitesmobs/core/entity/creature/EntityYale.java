@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.google.common.collect.Maps;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
@@ -12,45 +12,67 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
-public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IShearable {
-	
-	public ItemDrop woolDrop;
-	
-	/**
-	 * Simulates a crafting instance between two dyes and uses the result dye as a mixed color, used for babies with different colored parents.
-	 */
-	private final InventoryCrafting colorMixer = new InventoryCrafting(new Container() {
-        private static final String __OBFID = "CL_00001649";
-        public boolean canInteractWith(PlayerEntity par1PlayerEntity) {
-            return false;
-        }
-    }, 2, 1);
+public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, IShearable {
+
+	private static final DataParameter<Byte> DYE_COLOR = EntityDataManager.createKey(SheepEntity.class, DataSerializers.field_187191_a);
+	private static final Map<DyeColor, IItemProvider> WOOL_BY_COLOR = Util.make(Maps.newEnumMap(DyeColor.class), (itemProviderMap) -> {
+		itemProviderMap.put(DyeColor.WHITE, Blocks.WHITE_WOOL);
+		itemProviderMap.put(DyeColor.ORANGE, Blocks.ORANGE_WOOL);
+		itemProviderMap.put(DyeColor.MAGENTA, Blocks.MAGENTA_WOOL);
+		itemProviderMap.put(DyeColor.LIGHT_BLUE, Blocks.LIGHT_BLUE_WOOL);
+		itemProviderMap.put(DyeColor.YELLOW, Blocks.YELLOW_WOOL);
+		itemProviderMap.put(DyeColor.LIME, Blocks.LIME_WOOL);
+		itemProviderMap.put(DyeColor.PINK, Blocks.PINK_WOOL);
+		itemProviderMap.put(DyeColor.GRAY, Blocks.GRAY_WOOL);
+		itemProviderMap.put(DyeColor.LIGHT_GRAY, Blocks.LIGHT_GRAY_WOOL);
+		itemProviderMap.put(DyeColor.CYAN, Blocks.CYAN_WOOL);
+		itemProviderMap.put(DyeColor.PURPLE, Blocks.PURPLE_WOOL);
+		itemProviderMap.put(DyeColor.BLUE, Blocks.BLUE_WOOL);
+		itemProviderMap.put(DyeColor.BROWN, Blocks.BROWN_WOOL);
+		itemProviderMap.put(DyeColor.GREEN, Blocks.GREEN_WOOL);
+		itemProviderMap.put(DyeColor.RED, Blocks.RED_WOOL);
+		itemProviderMap.put(DyeColor.BLACK, Blocks.BLACK_WOOL);
+	});
+	private static final Map<DyeColor, float[]> DYE_TO_RGB = Maps.newEnumMap(Arrays.stream(DyeColor.values()).collect(Collectors.toMap((DyeColor p_200204_0_) -> {
+		return p_200204_0_;
+	}, EntityYale::createSheepColor)));
 
     protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+    protected ItemDrop woolDrop;
     
     // ==================================================
  	//                    Constructor
@@ -67,14 +89,9 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         this.fleeHealthPercent = 1.0F;
         this.isAggressiveByDefault = false;
         this.setupMob();
-        
-        // Add Dyes to the Color Mixer:
-        this.colorMixer.setInventorySlotContents(0, new ItemStack(Items.DYE, 1, 0));
-        this.colorMixer.setInventorySlotContents(1, new ItemStack(Items.DYE, 1, 0));
 
         // Load Shear Drop From Config:
-		this.woolDrop = new ItemDrop(Blocks.WOOL.getRegistryName().toString(), 0, 1).setMinAmount(1).setMaxAmount(3);
-		this.woolDrop = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getItemDrop("Features", "Yale Shear Drop", this.woolDrop, "The item dropped by Yales when sheared. Format is: itemid,metadata,quantitymin,quantitymax,chance");
+		this.woolDrop = new ItemDrop(Blocks.WHITE_WOOL.getRegistryName().toString(), 1).setMinAmount(1).setMaxAmount(3);
     }
 
     // ========== Init AI ==========
@@ -99,8 +116,8 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	
 	// ========== Init ==========
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(FUR, (byte) 1);
     }
 	
@@ -122,12 +139,12 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
     // ==================================================
 	// ========== IShearable ==========
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+	public boolean isShearable(@Nonnull ItemStack item, IWorldReader world, BlockPos pos) {
 		return this.hasFur() && !this.isChild();
 	}
 	
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+	public ArrayList<ItemStack> onSheared(@Nonnull ItemStack item, IWorld world, BlockPos pos, int fortune) {
 		ArrayList<ItemStack> dropStacks = new ArrayList<>();
 		if(this.woolDrop == null) {
 			return dropStacks;
@@ -167,36 +184,64 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	}
 	
 	@Override
-	public void setColor(int color) {
+	public void setColor(DyeColor color) {
+		Item woolItem = WOOL_BY_COLOR.get(this.getColor()).asItem();
         if(this.woolDrop == null) {
-			this.woolDrop = new ItemDrop(Blocks.WOOL.getRegistryName().toString(), 0, 1).setMinAmount(1).setMaxAmount(3);
+			this.woolDrop = new ItemDrop(woolItem.getRegistryName().toString(), 1).setMinAmount(1).setMaxAmount(3);
 		}
-		else if(this.woolDrop.getItemStack().getItem() == Item.getItemFromBlock(Blocks.WOOL)) {
-			this.woolDrop.setDrop(new ItemStack(Blocks.WOOL, 1, color));
+		else if(this.woolDrop.getItemStack().getItem() != woolItem) {
+			this.woolDrop.setDrop(new ItemStack(woolItem, 1));
 		}
 		super.setColor(color);
 	}
+
+	public DyeColor getRandomFurColor(Random random) {
+		int i = random.nextInt(100);
+		if (i < 5) {
+			return DyeColor.BLACK;
+		} else if (i < 10) {
+			return DyeColor.GREEN;
+		} else if (i < 15) {
+			return DyeColor.RED;
+		} else if (i < 18) {
+			return DyeColor.BROWN;
+		} else {
+			return random.nextInt(500) == 0 ? DyeColor.PINK : DyeColor.WHITE;
+		}
+	}
 	
-	public int getRandomFurColor(Random random) {
-        int i = random.nextInt(100);
-        return i < 5 ? 15 : (i < 10 ? 7 : (i < 15 ? 8 : (i < 18 ? 12 : (random.nextInt(500) == 0 ? 6 : 0))));
-    }
-	
-	public int getMixedFurColor(EntityCreatureBase entityA, EntityCreatureBase entityB) {
-		int i = 15 - entityA.getColor();
-        int j = 15 - entityB.getColor();
-        if(i == j)
-            return 15 - i;
-        this.colorMixer.getStackInSlot(0).setItemDamage(i);
-        this.colorMixer.getStackInSlot(1).setItemDamage(j);
-        ItemStack itemstack = CraftingManager.findMatchingResult(this.colorMixer, entityA.world);
-        int k;
-        if(itemstack != null && itemstack.getItem() == Items.DYE)
-            k = itemstack.getItemDamage();
-        else
-            k = this.getEntityWorld().rand.nextBoolean() ? i : j;
-        return 15 - k;
-    }
+	/**
+	 * Attempts to mix both parent sheep to come up with a mixed dye color.
+	 */
+	private DyeColor getMixedFurColor(EntityCreatureBase father, EntityCreatureBase mother) {
+		DyeColor dyeA = father.getColor();
+		DyeColor dyeB = mother.getColor();
+		CraftingInventory craftinginventory = mixColors(dyeA, dyeB);
+		return this.world.getRecipeManager().func_215371_a(IRecipeType.field_222149_a, craftinginventory, this.world).map((p_213614_1_) ->
+				p_213614_1_.getCraftingResult(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
+				this.world.rand.nextBoolean() ? dyeA : dyeB);
+	}
+
+	private static CraftingInventory mixColors(DyeColor dyeA, DyeColor dyeB) {
+		CraftingInventory craftinginventory = new CraftingInventory(new Container(null, -1) {
+			public boolean canInteractWith(PlayerEntity playerIn) {
+				return false;
+			}
+		}, 2, 1);
+		craftinginventory.setInventorySlotContents(0, new ItemStack(DyeItem.getItem(dyeA)));
+		craftinginventory.setInventorySlotContents(1, new ItemStack(DyeItem.getItem(dyeB)));
+		return craftinginventory;
+	}
+
+	private static float[] createSheepColor(DyeColor p_192020_0_) {
+		if (p_192020_0_ == DyeColor.WHITE) {
+			return new float[]{0.9019608F, 0.9019608F, 0.9019608F};
+		} else {
+			float[] afloat = p_192020_0_.getColorComponentValues();
+			float f = 0.75F;
+			return new float[]{afloat[0] * 0.75F, afloat[1] * 0.75F, afloat[2] * 0.75F};
+		}
+	}
 	
 	
 	// ==================================================
@@ -208,9 +253,9 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GRASS)
+            if(blockState.getMaterial() == Material.ORGANIC)
                 return 10F;
-            if(blockState.getMaterial() == Material.GROUND)
+            if(blockState.getMaterial() == Material.EARTH)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -238,10 +283,10 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
     // ========== Drop Items ==========
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
-    protected void dropFewItems(boolean playerKill, int lootLevel) {
+    protected void func_213345_d(DamageSource damageSource) {
     	if(!this.hasFur())
     		this.woolDrop.setMinAmount(0).setMaxAmount(0);
-    	super.dropFewItems(playerKill, lootLevel);
+    	super.func_213345_d(damageSource);
     }
     
     
@@ -252,7 +297,7 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
 	@Override
 	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
 		EntityCreatureAgeable baby = new EntityYale(this.getEntityWorld());
-		int color = this.getMixedFurColor(this, partner);
+		DyeColor color = this.getMixedFurColor(this, partner);
         baby.setColor(color);
 		return baby;
 	}
@@ -270,8 +315,8 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	super.readEntityFromNBT(nbtTagCompound);
+    public void read(CompoundNBT nbtTagCompound) {
+    	super.read(nbtTagCompound);
     	if(nbtTagCompound.contains("HasFur")) {
     		this.setFur(nbtTagCompound.getBoolean("HasFur"));
     	}
@@ -280,8 +325,8 @@ public class EntityYale extends EntityCreatureAgeable implements IAnimals, IGrou
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-    	super.writeEntityToNBT(nbtTagCompound);
+    public void writeAdditional(CompoundNBT nbtTagCompound) {
+    	super.writeAdditional(nbtTagCompound);
     	nbtTagCompound.putBoolean("HasFur", this.hasFur());
     }
 }

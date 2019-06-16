@@ -2,25 +2,25 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
+import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -28,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGroupAnimal {
     
 	// Parent UUID:
 	/** Used to identify the parent segment when loading this saved entity, set to null when found or lost for good. **/
@@ -186,7 +186,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
 			this.getEntityWorld().func_217376_c(concapedeHead);
 			if(this.hasMaster() && this.getMasterTarget() instanceof EntityConcapedeSegment)
 				((EntityConcapedeSegment)this.getMasterTarget()).setParentTarget(concapedeHead);
-			this.getEntityWorld().removeEntity(this);
+			this.remove();
 		}
     }
 
@@ -200,9 +200,9 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GRASS)
+            if(blockState.getMaterial() == Material.ORGANIC)
                 return 10F;
-            if(blockState.getMaterial() == Material.GROUND)
+            if(blockState.getMaterial() == Material.EARTH)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -304,21 +304,21 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+    public void read(CompoundNBT nbtTagCompound) {
     	if(nbtTagCompound.contains("ParentUUIDMost") && nbtTagCompound.contains("ParentUUIDLeast")) {
             this.parentUUID = new UUID(nbtTagCompound.getLong("ParentUUIDMost"), nbtTagCompound.getLong("ParentUUIDLeast"));
         }
-        super.readEntityFromNBT(nbtTagCompound);
+        super.read(nbtTagCompound);
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
+    public void writeAdditional(CompoundNBT nbtTagCompound) {
     	if(this.getParentTarget() != null) {
     		nbtTagCompound.putLong("ParentUUIDMost", this.getParentTarget().getUniqueID().getMostSignificantBits());
     		nbtTagCompound.putLong("ParentUUIDLeast", this.getParentTarget().getUniqueID().getLeastSignificantBits());
     	}
-        super.writeEntityToNBT(nbtTagCompound);
+        super.writeAdditional(nbtTagCompound);
     }
 }

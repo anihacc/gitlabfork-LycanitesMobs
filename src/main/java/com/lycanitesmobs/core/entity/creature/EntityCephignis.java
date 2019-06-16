@@ -11,10 +11,9 @@ import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -23,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupFire {
+public class EntityCephignis extends EntityCreatureAgeable implements IGroupAnimal, IGroupFire {
 
 	WanderGoal wanderAI;
 
@@ -99,8 +98,6 @@ public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, 
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 2);
         if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
 
         if(this.getAttackTarget() != null)
             return super.getBlockPathWeight(x, y, z);

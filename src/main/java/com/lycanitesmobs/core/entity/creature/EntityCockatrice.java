@@ -7,16 +7,17 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -181,8 +182,8 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 						|| possibleTarget == EntityCockatrice.this
 						|| EntityCockatrice.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityCockatrice.this.isOnSameTeam(possibleTarget)
-						|| !EntityCockatrice.this.canAttackClass(possibleTarget.getClass())
-						|| !EntityCockatrice.this.canAttackEntity(possibleTarget))
+						|| !EntityCockatrice.this.canAttack(possibleTarget.getType())
+						|| !EntityCockatrice.this.canAttack(possibleTarget))
 					return false;
 			return true;
 		});
@@ -201,7 +202,7 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
 					if (ObjectManager.getEffect("aphagia") != null)
 						possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("aphagia"), this.getEffectDuration(5), 1));
 					else
-						possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
+						possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76437_t, 10 * 20, 0));
 				}
 			}
 		}
@@ -258,12 +259,12 @@ public class EntityCockatrice extends EntityCreatureRideable implements IMob, IG
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.7D;
+        return (double)this.getSize(Pose.STANDING).height * 0.7D;
     }
 
 	@Override
 	public double getMountedZOffset() {
-		return -(double)this.width * 0.01D;
+		return -(double)this.getSize(Pose.STANDING).width * 0.01D;
 	}
 
 

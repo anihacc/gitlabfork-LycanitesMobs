@@ -1,26 +1,27 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupShadow {
     
-	public boolean epionGreifing = true;
+	public boolean epionGreifing = true; // TODO Creature flags.
 	
     // ==================================================
  	//                    Constructor
@@ -33,7 +34,6 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
         
-        this.epionGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Epion Griefing", this.epionGreifing, "Set to false to disable Epions falling and exploding in sunlight.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -77,7 +77,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
                 if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing)
-	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
+	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
 	        	this.remove();
         	}
         }
@@ -85,7 +85,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SPELL_WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
     
@@ -138,7 +138,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture() {
-		if(!"Vampire Bat".equals(this.getCustomNameTag()))
+		if(!"Vampire Bat".equals(this.getCustomName()))
 			return super.getTexture();
 
 		String textureName = this.getTextureName() + "_vampirebat";

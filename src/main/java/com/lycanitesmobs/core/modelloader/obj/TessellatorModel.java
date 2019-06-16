@@ -1,18 +1,17 @@
 package com.lycanitesmobs.core.modelloader.obj;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -26,15 +25,15 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 public class TessellatorModel extends ObjModel
 {
 
-    public static final EventBus MODEL_RENDERING_BUS = new EventBus();
+    //public static final EventBus MODEL_RENDERING_BUS = new EventBus();
 
     public TessellatorModel(ResourceLocation resourceLocation)
     {
-        super(resourceLocation.getResourcePath());
+        super(resourceLocation.getPath());
         String path = resourceLocation.toString();
         try
         {
-            InputStream inputStream = Minecraft.getMinecraft().getResourceManager().getResource(resourceLocation).getInputStream();
+            InputStream inputStream = Minecraft.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
             String content = new String(read(inputStream), "UTF-8");
             String startPath = path.substring(0, path.lastIndexOf('/') + 1);
             HashMap<ObjObject, IndexedModel> map = new OBJLoader().loadModel(startPath, content);
@@ -61,7 +60,7 @@ public class TessellatorModel extends ObjModel
     public void renderImpl()
     {
         Collections.sort(objObjects, (a, b) -> {
-			Vec3d v = Minecraft.getMinecraft().getRenderViewEntity().getPositionVector();
+			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
 			double aDist = v.distanceTo(new Vec3d(a.center.x, a.center.y, a.center.z));
 			double bDist = v.distanceTo(new Vec3d(b.center.x, b.center.y, b.center.z));
 			return Double.compare(aDist, bDist);
@@ -109,7 +108,7 @@ public class TessellatorModel extends ObjModel
 
 		// Get/Create Normals:
 		if(obj.mesh.normals == null) {
-			obj.mesh.normals = new javax.vecmath.Vector3f[indices.length];
+			obj.mesh.normals = new Vector3f[indices.length];
 		}
 
 		// Build Buffer:
@@ -117,7 +116,7 @@ public class TessellatorModel extends ObjModel
         for(int i = 0; i < indices.length; i += 3) {
 
         	// Normal:
-			javax.vecmath.Vector3f normal = obj.mesh.normals[i];
+			Vector3f normal = obj.mesh.normals[i];
 			if(normal == null) {
 				normal = this.getNormal(vertices[indices[i]].getPos(), vertices[indices[i + 1]].getPos(), vertices[indices[i + 2]].getPos());
 				obj.mesh.normals[i] = normal;
@@ -140,7 +139,7 @@ public class TessellatorModel extends ObjModel
 		bufferBuilder.finishDrawing();
 		if (bufferBuilder.getVertexCount() > 0) {
 			VertexFormat vertexformat = bufferBuilder.getVertexFormat();
-			int i = vertexformat.getNextOffset();
+			int i = vertexformat.getSize() + 1;
 			ByteBuffer bytebuffer = bufferBuilder.getByteBuffer();
 			List<VertexFormatElement> list = vertexformat.getElements();
 
@@ -150,7 +149,7 @@ public class TessellatorModel extends ObjModel
 				vertexformatelement.getUsage().preDraw(vertexformat, j, i, bytebuffer);
 			}
 
-			GlStateManager.glDrawArrays(bufferBuilder.getDrawMode(), 0, bufferBuilder.getVertexCount());
+			GlStateManager.drawArrays(bufferBuilder.getDrawMode(), 0, bufferBuilder.getVertexCount());
 			int i1 = 0;
 
 			for (int j1 = list.size(); i1 < j1; ++i1) {
@@ -163,9 +162,8 @@ public class TessellatorModel extends ObjModel
 
 
     @Override
-    public boolean fireEvent(ObjEvent event)
-    {
-        Event evt = null;
+    public boolean fireEvent(ObjEvent event) {
+        /*Event evt = null;
         if(event.type == ObjEvent.EventType.PRE_RENDER_GROUP)
         {
             evt = new TessellatorModelEvent.RenderGroupEvent.Pre(((ObjObject) event.data[1]).getName(), this);
@@ -183,16 +181,16 @@ public class TessellatorModel extends ObjModel
             evt = new TessellatorModelEvent.RenderPost(this);
         }
         if(evt != null)
-            return !MODEL_RENDERING_BUS.post(evt);
+            return !MODEL_RENDERING_BUS.post(evt);*/
         return true;
     }
 
-	public javax.vecmath.Vector3f getNormal(javax.vecmath.Vector3f p1, javax.vecmath.Vector3f p2, javax.vecmath.Vector3f p3) {
-		javax.vecmath.Vector3f output = new javax.vecmath.Vector3f();
+	public Vector3f getNormal(Vector3f p1, Vector3f p2, Vector3f p3) {
+		Vector3f output = new Vector3f();
 
 		// Calculate Edges:
-		javax.vecmath.Vector3f calU = new javax.vecmath.Vector3f(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
-		javax.vecmath.Vector3f calV = new javax.vecmath.Vector3f(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
+		Vector3f calU = new Vector3f(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+		Vector3f calV = new Vector3f(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
 
 		// Cross Edges
 		output.x = calU.y * calV.z - calU.z * calV.y;

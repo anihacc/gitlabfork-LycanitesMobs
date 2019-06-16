@@ -8,14 +8,14 @@ import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
@@ -162,14 +162,6 @@ public class EntityQuetzodracl extends EntityCreatureRideable implements IMob, I
         }
     }
 
-    @Override
-    public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.BLINDNESS))
-            rider.removePotionEffect(Effects.BLINDNESS);
-        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getEffect("weight"));
-    }
-
 
     // ==================================================
     //                      Movement
@@ -291,7 +283,7 @@ public class EntityQuetzodracl extends EntityCreatureRideable implements IMob, I
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.8D;
+        return (double)this.getSize(Pose.STANDING).height * 0.8D;
     }
 
 

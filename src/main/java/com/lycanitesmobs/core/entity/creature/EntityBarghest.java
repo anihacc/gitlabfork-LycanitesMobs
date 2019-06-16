@@ -14,6 +14,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -113,8 +114,8 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
 						|| possibleTarget == EntityBarghest.this
 						|| EntityBarghest.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityBarghest.this.isOnSameTeam(possibleTarget)
-						|| !EntityBarghest.this.canAttackClass(possibleTarget.getClass())
-						|| !EntityBarghest.this.canAttackEntity(possibleTarget))
+						|| !EntityBarghest.this.canAttack(possibleTarget.getType())
+						|| !EntityBarghest.this.canAttack(possibleTarget))
 					return false;
 
 				return true;
@@ -131,7 +132,7 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
                         if (ObjectManager.getEffect("weight") != null)
                             possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("weight"), this.getEffectDuration(5), 1));
                         else
-                            possibleTarget.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10 * 20, 0));
+                            possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76421_d, 10 * 20, 0));
                     }
                 }
             }
@@ -140,8 +141,8 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.SLOWNESS))
-    		rider.removePotionEffect(Effects.SLOWNESS);
+    	if(rider.isPotionActive(Effects.field_76421_d))
+    		rider.removePotionEffect(Effects.field_76421_d);
     	if(rider.isPotionActive(ObjectManager.getEffect("weight")))
     		rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
@@ -161,7 +162,7 @@ public class EntityBarghest extends EntityCreatureRideable implements IGroupPred
     // ========== Mounted Offset ==========
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.8D;
+        return (double)this.getSize(Pose.STANDING).height * 0.8D;
     }
 
     // ========== Leap ==========

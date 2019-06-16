@@ -14,24 +14,25 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
+import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -127,8 +128,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the data manager. **/
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(ANIMATION_STATES, (byte) 0);
     }
 
@@ -201,7 +202,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
             // Flying Player Wraith Attack:
             for(PlayerEntity target : this.playerTargets) {
-                if(target.capabilities.isCreativeMode || target.isSpectator())
+                if(target.playerAbilities.disableDamage || target.isSpectator())
                     continue;
                 if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
                     for(int i = 0; i < 3; i++) {
@@ -247,7 +248,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         if(this.getEntityWorld().isRemote && (this.dataManager.get(ANIMATION_STATES) & ANIMATION_STATES_ID.COOLDOWN.id) > 0) {
             BlockPos particlePos = this.getFacingPosition(this, 13, this.getRotationYawHead() - this.rotationYaw);
             for(int i = 0; i < 4; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.SMOKE_LARGE, particlePos.getX() + (this.rand.nextDouble() - 0.5D) * 2, particlePos.getY() + (this.height * 0.2D) + this.rand.nextDouble() * 2, particlePos.getZ() + (this.rand.nextDouble() - 0.5D) * 2, 0.0D, 0.0D, 0.0D);
+                this.getEntityWorld().addParticle(ParticleTypes.LARGE_SMOKE, particlePos.getX() + (this.rand.nextDouble() - 0.5D) * 2, particlePos.getY() + (this.getSize(Pose.STANDING).height * 0.2D) + this.rand.nextDouble() * 2, particlePos.getZ() + (this.rand.nextDouble() - 0.5D) * 2, 0.0D, 0.0D, 0.0D);
             }
         }
     }
@@ -309,7 +310,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
                 this.leap(200, dropForce, this.currentArenaNode.pos); // Leap for XZ movement and negative height for increased weight on update.
             }
             if(this.arenaJumpingTime == 0)
-                this.playStepSound(this.currentArenaNode.pos.down(), this.getEntityWorld().getBlockState(this.currentArenaNode.pos.down()).getBlock());
+                this.playStepSound(this.currentArenaNode.pos.down(), this.getEntityWorld().getBlockState(this.currentArenaNode.pos.down()));
             return;
         }
 
@@ -435,10 +436,10 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityTrite.class) || targetClass.isAssignableFrom(EntityCacodemon.class) ||  targetClass.isAssignableFrom(EntityAstaroth.class))
+    public boolean canAttack(LivingEntity target) {
+    	if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAstaroth)
     		return false;
-        return super.canAttackClass(targetClass);
+        return super.canAttack(target);
     }
     
     // ========== Ranged Attack ==========
@@ -457,7 +458,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         // Y Offset:
         BlockPos offset = this.getFacingPosition(this, 8, angle);
         projectile.posX = offset.getX();
-        projectile.posY = offset.getY() + (this.height * 0.5D);
+        projectile.posY = offset.getY() + (this.getSize(Pose.STANDING).height * 0.5D);
         projectile.posZ = offset.getZ();
 
         // Set Velocities:
@@ -482,10 +483,10 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
 	@Override
 	public void onDeath(DamageSource damageSource) {
         if(!this.getEntityWorld().isRemote && CreatureManager.getInstance().getCreature("trite").enabled) {
-            int j = 6 + this.rand.nextInt(20) + (getEntityWorld().getDifficulty().getDifficultyId() * 4);
+            int j = 6 + this.rand.nextInt(20) + (getEntityWorld().getDifficulty().getId() * 4);
             for(int k = 0; k < j; ++k) {
-                float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
-                float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
+                float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
+                float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 EntityTrite trite = new EntityTrite(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
@@ -518,10 +519,10 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Damage ==========
     @Override
-    public boolean isEntityInvulnerable(DamageSource source) {
+    public boolean isInvulnerableTo(DamageSource source) {
         if(this.isBlocking())
             return true;
-        return super.isEntityInvulnerable(source);
+        return super.isInvulnerableTo(source);
     }
     
     @Override
@@ -541,17 +542,17 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
 
     @Override
     public boolean isInvulnerableTo(Entity entity) {
-        if(entity instanceof EntityPigZombie) {
+        if(entity instanceof ZombiePigmanEntity) {
             entity.remove();
             return false;
         }
-        if(entity instanceof EntityIronGolem) {
+        if(entity instanceof IronGolemEntity) {
             entity.remove();
             return false;
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.capabilities.isCreativeMode && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.playerAbilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }
@@ -579,8 +580,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readEntityFromNBT(nbtTagCompound);
+    public void read(CompoundNBT nbtTagCompound) {
+        super.read(nbtTagCompound);
         if(nbtTagCompound.contains("DevilstarStreamCharge")) {
             this.devilstarStreamCharge = nbtTagCompound.getInt("DevilstarStreamCharge");
         }
@@ -588,11 +589,11 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             this.devilstarStreamTime = nbtTagCompound.getInt("DevilstarStreamTime");
         }
         if(nbtTagCompound.contains("AstarothIDs")) {
-            NBTTagList astarothIDs = nbtTagCompound.getTagList("AstarothIDs", 10);
-            for(int i = 0; i < astarothIDs.tagCount(); i++) {
-                NBTTagCompound astarothID = astarothIDs.getCompoundTagAt(i);
-                if(astarothID.hasKey("ID")) {
-                    Entity entity = this.getEntityWorld().getEntityByID(astarothID.getInteger("ID"));
+            ListNBT astarothIDs = nbtTagCompound.getList("AstarothIDs", 10);
+            for(int i = 0; i < astarothIDs.size(); i++) {
+                CompoundNBT astarothID = astarothIDs.getCompound(i);
+                if(astarothID.contains("ID")) {
+                    Entity entity = this.getEntityWorld().getEntityByID(astarothID.getInt("ID"));
                     if(entity != null && entity instanceof EntityAstaroth)
                         this.astarothMinions.add((EntityAstaroth)entity);
                 }
@@ -603,18 +604,18 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-        super.writeEntityToNBT(nbtTagCompound);
+    public void writeAdditional(CompoundNBT nbtTagCompound) {
+        super.writeAdditional(nbtTagCompound);
         nbtTagCompound.putInt("DevilstarStreamCharge", this.devilstarStreamCharge);
         nbtTagCompound.putInt("DevilstarStreamTime", this.devilstarStreamTime);
         if(this.getBattlePhase() > 0) {
-            NBTTagList astarothIDs = new NBTTagList();
+            ListNBT astarothIDs = new ListNBT();
             for(EntityAstaroth entityAstaroth : this.astarothMinions) {
-                NBTTagCompound astarothID = new NBTTagCompound();
-                astarothID.setInteger("ID", entityAstaroth.getEntityId());
-                astarothIDs.appendTag(astarothID);
+                CompoundNBT astarothID = new CompoundNBT();
+                astarothID.putInt("ID", entityAstaroth.getEntityId());
+                astarothIDs.add(astarothID);
             }
-            nbtTagCompound.setTag("AstarothIDs", astarothIDs);
+            nbtTagCompound.put("AstarothIDs", astarothIDs);
         }
     }
 

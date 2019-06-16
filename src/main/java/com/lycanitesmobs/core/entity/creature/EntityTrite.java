@@ -10,13 +10,14 @@ import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
 public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon {
@@ -48,7 +49,7 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
         this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
             this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
             this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
@@ -72,12 +73,11 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
     // ==================================================
    	//                      Attacks
    	// ==================================================
-    // ========== Can Attack Class ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityCacodemon.class) || targetClass.isAssignableFrom(EntityAstaroth.class) || targetClass.isAssignableFrom(EntityAsmodeus.class))
-    		return false;
-        return super.canAttackClass(targetClass);
+    public boolean canAttack(LivingEntity target) {
+        if(target instanceof EntityAstaroth ||  target instanceof EntityAsmodeus)
+            return false;
+        return super.canAttack(target);
     }
     
     
@@ -94,7 +94,7 @@ public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon
   	// ==================================================
     @Override
     public boolean isPotionApplicable(EffectInstance potionEffect) {
-		if(potionEffect.getPotion() == Effects.WITHER)
+		if(potionEffect.getPotion() == Effects.field_82731_v)
 			return false;
 		if(ObjectManager.getEffect("decay") != null)
 			if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;

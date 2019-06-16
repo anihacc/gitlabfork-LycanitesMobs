@@ -7,7 +7,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityItemCustom extends ItemEntity {
-	
+	protected boolean canBurn = true;
+
 	// ==================================================
    	//                     Constructor
    	// ==================================================
@@ -28,13 +29,17 @@ public class EntityItemCustom extends ItemEntity {
    	//                   Taking Damage
    	// ==================================================
     public boolean attackEntityFrom(DamageSource damageSource, float damageAmount) {
-    	if(this.isImmuneToFire()) {
+    	if(this.isImmuneToFire() || !this.canBurn) {
     		if(damageSource.isFireDamage() || "inFire".equalsIgnoreCase(damageSource.damageType)) {
     			return false;
     		}
     	}
         return super.attackEntityFrom(damageSource, damageAmount);
     }
+
+    public void setCanBurn(boolean canBurn) {
+		this.canBurn = canBurn;
+	}
     
 
 	// ==================================================

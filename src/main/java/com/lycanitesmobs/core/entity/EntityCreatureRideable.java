@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
@@ -84,6 +85,11 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     public void riderEffects(LivingEntity rider) {
         if(!rider.canBreatheUnderwater() && this.canBreatheUnderwater() && rider.isInWater())
             rider.setAir(300);
+        for(EffectInstance effectInstance : rider.getActivePotionEffects()) {
+        	if(!this.isPotionApplicable(effectInstance) && ObjectLists.inEffectList("debuffs", effectInstance.getPotion())) {
+        		rider.removePotionEffect(effectInstance.getPotion());
+			}
+		}
     }
 
     
@@ -204,7 +210,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
                 this.setMotion(this.getMotion().add(0, this.getMountJumpHeight() * (double) this.getJumpPower(), 0));
                 if (this.isPotionActive(Effects.field_76430_j)) // Jump Boost
-					this.setMotion(this.getMotion().add(0, ((float) (this.getActiveEffectInstance(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
+					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
                 this.setMountJumping(true);
                 this.isAirBorne = true;
                 if (forward > 0.0F) {

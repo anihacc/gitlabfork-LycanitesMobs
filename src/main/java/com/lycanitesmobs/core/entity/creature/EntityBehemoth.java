@@ -10,12 +10,13 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -68,8 +69,8 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(HELLFIRE_ENERGY, this.hellfireEnergy);
     }
 	
@@ -125,10 +126,10 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityBelph.class))
-    		return false;
-        return super.canAttackClass(targetClass);
+    public boolean canAttack(LivingEntity target) {
+        if(target instanceof EntityBelph)
+            return false;
+        return super.canAttack(target);
     }
     
     // ========== Ranged Attack ==========
@@ -157,7 +158,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!"Krampus".equals(this.getCustomNameTag()))
+        if(!"Krampus".equals(this.getCustomName()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_krampus";

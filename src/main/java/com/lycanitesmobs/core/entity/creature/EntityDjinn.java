@@ -76,19 +76,13 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
         
         // Particles:
         //if(this.getEntityWorld().isRemote)
-            //this.getEntityWorld().addParticle(ParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+            //this.getEntityWorld().addParticle(ParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
     }
     
     
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {

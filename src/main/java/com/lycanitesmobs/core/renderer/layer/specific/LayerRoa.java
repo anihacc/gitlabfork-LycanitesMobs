@@ -5,13 +5,13 @@ import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerRoa extends LayerBase {
+public class LayerRoa extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor

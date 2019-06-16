@@ -4,19 +4,18 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityKobold extends EntityCreatureTameable implements IMob, IGroupPrey {
-    public boolean torchGreifing = true;
-	
+    public boolean torchGreifing = true; // TODO Creature flags.
+    public boolean theivery = true;
+
     // ==================================================
  	//                    Constructor
  	// ==================================================
     public EntityKobold(World world) {
         super(world);
-        this.torchGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Kobold Torch Griefing", this.torchGreifing, "Set to false to stop Kobolds from stealing torches.");
-        
+
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
@@ -125,10 +124,10 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     //                     Attacks
     // ==================================================
     @Override
-	public boolean canAttackEntity(LivingEntity targetEntity) {
+	public boolean canAttack(LivingEntity targetEntity) {
     	if((targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
 			return false;
-		return super.canAttackEntity(targetEntity);
+		return super.canAttack(targetEntity);
 	}
     
     
@@ -140,7 +139,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     
     @Override
     public boolean canPickupItems() {
-    	return ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Kobold Thievery", true, "Set to false to prevent Kobold from collecting items.");
+    	return this.theivery;
     }
 	
 	

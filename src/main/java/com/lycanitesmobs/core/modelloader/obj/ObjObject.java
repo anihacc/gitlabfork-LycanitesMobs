@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.modelloader.obj;
 
-import org.lwjgl.util.vector.Vector3f;
+import javax.vecmath.Vector3f;
 
 
 public class ObjObject {

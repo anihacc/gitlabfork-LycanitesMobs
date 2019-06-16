@@ -4,9 +4,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.ModelBipedCustom;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelPinky extends ModelBipedCustom {
@@ -250,7 +250,7 @@ public class ModelPinky extends ModelBipedCustom {
    	//                   Set Angles
    	// ==================================================
     @Override
-    public void setAngles(EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void setAngles(LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.setAngles(entity, time, distance, loop, lookY, lookX, scale);
     }
     
@@ -259,7 +259,7 @@ public class ModelPinky extends ModelBipedCustom {
    	//                 Animate Model
    	// ==================================================
     @Override
-    public void animate(EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animate(LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animate(entity, time, distance, loop, lookY, lookX, scale);
     	float pi = (float)Math.PI;
 

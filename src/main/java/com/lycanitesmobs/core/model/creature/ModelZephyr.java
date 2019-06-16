@@ -2,14 +2,14 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.core.renderer.layer.LayerBase;
-import com.lycanitesmobs.core.renderer.layer.LayerEffect;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector4f;
 
@@ -39,10 +39,10 @@ public class ModelZephyr extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "glow", true, LayerEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "pulse01", true, LayerEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "pulse02", true, LayerEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "pulse03", true, LayerEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", true, LayerCreatureEffect.BLEND.ADD.id, true));
 	}
     
     
@@ -50,7 +50,7 @@ public class ModelZephyr extends ModelTemplateElemental {
    	//                 Animate Part
    	// ==================================================
     @Override
-    public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		if("effectouter".equals(partName) || "effectinner".equals(partName)) {
 			this.rotate(-15, 0, 0);
 		}
@@ -73,7 +73,7 @@ public class ModelZephyr extends ModelTemplateElemental {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null) {
 			return super.getPartColor(partName, entity, layer, trophy, loop);
 		}

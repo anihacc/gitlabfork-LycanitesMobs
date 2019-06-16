@@ -1,25 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.SilverfishEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 
 	private AttackMeleeGoal meleeAttackAI;
 
-	public int volcanMeltRadius = 2;
+	public int volcanMeltRadius = 2; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -40,7 +41,6 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = CreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.volcanMeltRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Volcan Block Melting Radius", this.volcanMeltRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -64,30 +64,12 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
         this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
 		this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
 		this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-		this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntitySnowman.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntitySilverfish.class));
+		this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(SilverfishEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
 		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
     }
 	
 	
@@ -104,7 +86,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 			List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
 			for(Object entityObj : aoeTargets) {
 				LivingEntity target = (LivingEntity)entityObj;
-				if(target != this && !(target instanceof IGroupFire) && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
+				if(target != this && !(target instanceof IGroupFire) && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
 					target.setFire(2);
 				}
 			}
@@ -113,12 +95,12 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 		// Melt Blocks:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.volcanMeltRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
 			int range = this.volcanMeltRadius;
-			for (int w = -((int) Math.ceil(this.width) + range); w <= (Math.ceil(this.width) + range); w++) {
-				for (int d = -((int) Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++) {
-					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {
+			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
+				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
+					for (int h = -((int) Math.ceil(this.getSize(Pose.STANDING).height) + range); h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
 						Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
 						if (block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
-							BlockState blockState = Blocks.FLOWING_LAVA.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
+							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
 							if (block == Blocks.OBSIDIAN)
 								blockState = Blocks.LAVA.getDefaultState();
 							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
@@ -134,12 +116,12 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 		// Particles:
 		if(this.getEntityWorld().isRemote) {
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.DRIP_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_LAVA, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
 			if(this.ticksExisted % 10 == 0)
 				for(int i = 0; i < 2; ++i) {
-					this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+					this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 				}
 		}
     }
@@ -155,7 +137,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
     		return false;
 
         // Silverfish Extermination:
-        if(target instanceof EntitySilverfish) {
+        if(target instanceof SilverfishEntity) {
             target.remove();
         }
         

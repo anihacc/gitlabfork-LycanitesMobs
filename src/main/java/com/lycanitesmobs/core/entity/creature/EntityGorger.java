@@ -6,17 +6,19 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.entity.projectile.EntityMagma;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.SnowGolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +62,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
         this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
         this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
         this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntitySnowman.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
@@ -102,7 +104,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
         projectile.setProjectileScale(2f);
 
         // Y Offset:
-        projectile.posY -= this.height / 4;
+        projectile.posY -= this.getSize(Pose.STANDING).height / 4;
 
         // Accuracy:
         float accuracy = 1.0F * (this.getRNG().nextFloat() - 0.5F);
@@ -141,13 +143,13 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
             return false;
         BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GROUND) return true;
-            if(blockState.getMaterial() == Material.GRASS) return true;
+            if(blockState.getMaterial() == Material.EARTH) return true;
+            if(blockState.getMaterial() == Material.ORGANIC) return true;
             if(blockState.getMaterial() == Material.LEAVES) return true;
             if(blockState.getMaterial() == Material.SAND) return true;
             if(blockState.getMaterial() == Material.CLAY) return true;
             if(blockState.getMaterial() == Material.SNOW) return true;
-            if(blockState.getMaterial() == Material.CRAFTED_SNOW) return true;
+            if(blockState.getMaterial() == Material.SNOW_BLOCK) return true;
         }
         if(blockState.getBlock() == Blocks.NETHERRACK)
             return true;

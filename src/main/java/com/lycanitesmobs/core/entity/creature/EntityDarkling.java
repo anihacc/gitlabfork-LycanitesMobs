@@ -194,10 +194,10 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
    	// ==================================================
     // ========== Can Attack Class ==========
     @Override
-    public boolean canAttack(EntityType target) {
+    public boolean canAttack(EntityType targetType) {
         if(this.hasLatchTarget())
             return false;
-        return super.canAttack(target);
+        return super.canAttack(targetType);
     }
 
     // ========== Melee Attack ==========

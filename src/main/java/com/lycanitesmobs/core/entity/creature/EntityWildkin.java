@@ -10,7 +10,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -35,8 +35,8 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+        if(this.getNavigator() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
         this.field_70714_bg.addTask(0, new SwimmingGoal(this));
@@ -107,7 +107,7 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!"Gooderness".equals(this.getCustomNameTag()))
+        if(!"Gooderness".equals(this.getCustomName()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_gooderness";

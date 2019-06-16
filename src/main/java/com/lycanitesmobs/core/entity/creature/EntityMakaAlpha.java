@@ -8,21 +8,21 @@ import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefenseTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, IGroupAlpha {
+public class EntityMakaAlpha extends EntityCreatureAgeable implements IGroupAlpha {
 	
 	// ==================================================
  	//                    Constructor
@@ -82,9 +82,9 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y - 1, z));
         Block block = blockState.getBlock();
         if(block != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GRASS)
+            if(blockState.getMaterial() == Material.ORGANIC)
                 return 10F;
-            if(blockState.getMaterial() == Material.GROUND)
+            if(blockState.getMaterial() == Material.EARTH)
                 return 7F;
         }
         return super.getBlockPathWeight(x, y, z);
@@ -100,20 +100,13 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
 	// ==================================================
    	//                      Attacks
    	// ==================================================
-    // ========== Attack Class ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass == EntityMaka.class)
+    public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityMaka)
+			return false;
+    	if(target instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || target.getHealth() / target.getMaxHealth() <= 0.25F))
     		return false;
-    	else return super.canAttackClass(targetClass);
-    }
-    
-    // ========== Attack Entity ==========
-    @Override
-    public boolean canAttackEntity(LivingEntity entity) {
-    	if(entity instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || entity.getHealth() / entity.getMaxHealth() <= 0.25F))
-    		return false;
-    	else return super.canAttackEntity(entity);
+    	else return super.canAttack(target);
     }
     
     // ========== Set Attack Target ==========
@@ -121,9 +114,9 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+    		this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 20 * 20, 2, false, false));
 			this.getAttackTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
+			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.field_76428_l, 20 * 20, 2, false, false));
     	}
     	super.setAttackTarget(entity);
     }

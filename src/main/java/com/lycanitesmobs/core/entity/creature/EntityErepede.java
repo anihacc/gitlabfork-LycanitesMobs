@@ -6,16 +6,16 @@ import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
@@ -83,13 +83,6 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     public void livingTick() {
         super.livingTick();
     }
-    
-    public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.WEAKNESS))
-    		rider.removePotionEffect(Effects.WEAKNESS);
-    	if(rider.isPotionActive(Effects.HUNGER))
-    		rider.removePotionEffect(Effects.HUNGER);
-    }
 
 	
     // ==================================================
@@ -100,8 +93,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     public float getAISpeedModifier() {
     	if(this.hasRiderTarget()) {
             BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
-            if (blockState.getMaterial() == Material.SAND
-                    || (blockState == Material.AIR && this.getEntityWorld().getBlockState(this.getPosition().add(0, -2, 0)).getMaterial() == Material.SAND))
+            if (blockState.getMaterial() == Material.SAND || (blockState.getMaterial() == Material.AIR && this.getEntityWorld().getBlockState(this.getPosition().add(0, -2, 0)).getMaterial() == Material.SAND))
                 return 1.8F;
         }
     	return 1.0F;
@@ -109,7 +101,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
+        return (double)this.getSize(Pose.STANDING).height * 0.9D;
     }
 
     

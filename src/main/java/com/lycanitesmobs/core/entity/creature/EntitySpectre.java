@@ -7,15 +7,16 @@ import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerEntityMP;
-import net.minecraft.network.play.server.SPacketEntityVelocity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -63,24 +64,6 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
         this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
-    }
 	
 	
     // ==================================================
@@ -103,12 +86,12 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
 			this.pullEnergy = Math.min(this.pullEnergy, this.pullEnergyMax);
 			if(this.canPull()) {
 				for (LivingEntity entity : this.getNearbyEntities(LivingEntity.class, null, this.pullRange)) {
-					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entity))
+					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttack(entity))
 						continue;
-					PlayerEntityMP player = null;
-					if (entity instanceof PlayerEntityMP) {
-						player = (PlayerEntityMP) entity;
-						if (player.capabilities.isCreativeMode)
+					ServerPlayerEntity player = null;
+					if (entity instanceof ServerPlayerEntity) {
+						player = (ServerPlayerEntity) entity;
+						if (player.playerAbilities.isCreativeMode)
 							continue;
 					}
 					double xDist = this.posX - entity.posX;
@@ -116,15 +99,15 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
 					double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 					double factor = 0.1D;
 					double motionCap = 10;
-					if(entity.motionX < motionCap && entity.motionX > -motionCap && entity.motionZ < motionCap && entity.motionZ > -motionCap) {
+					if(entity.getMotion().getX() < motionCap && entity.getMotion().getX() > -motionCap && entity.getMotion().getZ() < motionCap && entity.getMotion().getZ() > -motionCap) {
 						entity.addVelocity(
-								xDist / xzDist * factor + entity.motionX * factor,
+								xDist / xzDist * factor + entity.getMotion().getX() * factor,
 								0,
-								zDist / xzDist * factor + entity.motionZ * factor
+								zDist / xzDist * factor + entity.getMotion().getZ() * factor
 						);
 					}
 					if (player != null)
-						player.connection.sendPacket(new SPacketEntityVelocity(entity));
+						player.connection.sendPacket(new SEntityVelocityPacket(entity));
 				}
 				if(--this.pullEnergy <= 0) {
 					this.pullRecharging = true;
@@ -136,7 +119,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.SUSPENDED_DEPTH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 

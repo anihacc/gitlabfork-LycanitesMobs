@@ -3,24 +3,25 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
 	
 	// ==================================================
  	//                    Constructor
@@ -71,7 +72,7 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
                 EntityJoustAlpha alpha = new EntityJoustAlpha(this.getEntityWorld());
                 alpha.copyLocationAndAnglesFrom(this);
                 this.getEntityWorld().func_217376_c(alpha);
-                this.getEntityWorld().removeEntity(this);
+                this.remove();
             }
         }
         super.onFirstSpawn();
@@ -108,13 +109,12 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
 	// ==================================================
    	//                      Attacks
    	// ==================================================
-    // ========== Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityJoustAlpha.class))
-        	return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttack(LivingEntity target) {
+		if(target instanceof EntityJoustAlpha)
+			return false;
+		return super.canAttack(target);
+	}
     
     
     // ==================================================
@@ -153,7 +153,7 @@ public class EntityJoust extends EntityCreatureAgeable implements IAnimals, IGro
 				EntityJoustAlpha alphaJoust = new EntityJoustAlpha(this.getEntityWorld());
 				alphaJoust.copyLocationAndAnglesFrom(this);
 				this.getEntityWorld().func_217376_c(alphaJoust);
-				this.getEntityWorld().removeEntity(this);
+				this.remove();
 			}
         super.setGrowingAge(age);
     }

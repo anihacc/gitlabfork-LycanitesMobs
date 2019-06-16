@@ -5,8 +5,6 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageLoader;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
@@ -15,12 +13,7 @@ import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
 import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
 import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
 import com.lycanitesmobs.core.model.projectile.ModelLightBall;
-import com.lycanitesmobs.core.renderer.EquipmentPartRenderer;
-import com.lycanitesmobs.core.renderer.EquipmentRenderer;
 import com.lycanitesmobs.core.renderer.RenderRegister;
-import com.lycanitesmobs.core.tileentity.TileEntityEquipment;
-import com.lycanitesmobs.core.tileentity.TileEntityEquipmentPart;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
@@ -32,7 +25,6 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ClientManager {
 	protected static ClientManager INSTANCE;
@@ -120,15 +112,15 @@ public class ClientManager {
 	// ========== Register Renders ==========
     public void registerRenders(ModInfo modInfo) {
 		// Projectile Models:
-		AssetManager.addModel("lightball", new ModelLightBall());
-		AssetManager.addModel("crystalshard", new ModelCrystalShard());
-		AssetManager.addModel("aetherwave", new ModelAetherwave());
-		AssetManager.addModel("chaosorb", new ModelChaosOrb());
+		AssetManager.addOldProjectileModel("lightball", new ModelLightBall());
+		AssetManager.addOldProjectileModel("crystalshard", new ModelCrystalShard());
+		AssetManager.addOldProjectileModel("aetherwave", new ModelAetherwave());
+		AssetManager.addOldProjectileModel("chaosorb", new ModelChaosOrb());
 
         // Equipment Parts:
 		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipmentPart.class, new EquipmentPartRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipment.class, new EquipmentRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySummoningPedestal.class, new RenderTileEntityBase());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipmentForge.class, new RenderTileEntityBase());
 
         RenderRegister renderRegister = new RenderRegister(modInfo);
         renderRegister.registerRenderFactories();
@@ -154,36 +146,4 @@ public class ClientManager {
     public ClientPlayerEntity getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
-
-
-    // ========== Renders ==========
-    public void addBlockRender(ModInfo group, Block block) {
-        /*/ Fluids:
-        if(block instanceof BlockFluidBase) {
-            BlockFluidBase blockFluid = (BlockFluidBase)block;
-            Item item = Item.getItemFromBlock(block);
-            ModelBakery.registerItemVariants(item);
-            ModelResourceLocation fluidLocation = new ModelResourceLocation(blockFluid.group.filename + ":fluid", blockFluid.getFluid().getName());
-            ModelLoader.setCustomMeshDefinition(item, itemStack -> fluidLocation);
-            ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
-                @Override
-                protected ModelResourceLocation getModelResourceLocation(BlockState state) {
-                    return fluidLocation;
-                }
-            });
-            return;
-        }*/
-
-        //this.addItemRender(group, Item.getItemFromBlock(block));
-    }
-
-    public void addItemRender(Item item) {
-        if(item instanceof ItemEquipmentPart) {
-			//ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipmentPart.class); // Deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
-		}
-
-		if(item instanceof ItemEquipment) {
-			//ForgeHooksClient.registerTESRItemStack(item, 0, TileEntityEquipment.class); // Deprecated yet the only way to render dynamic OBJ models that can be animated, rendered in stages, layers and mixed with other models.
-		}
-    }
 }

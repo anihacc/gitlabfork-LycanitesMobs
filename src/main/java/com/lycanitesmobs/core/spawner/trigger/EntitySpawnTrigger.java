@@ -3,12 +3,9 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -17,8 +14,8 @@ import java.util.List;
 
 public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
-	/** A list of entity types that match this trigger. **/
-	public List<EnumCreatureAttribute> entityTypes = new ArrayList<>();
+	/** A list of creature attributes that match this trigger. **/
+	public List<CreatureAttribute> creatureAttributes = new ArrayList<>();
 
 	/** Determines if the entity types list is a blacklist or whitelist. **/
 	public String entityTypesListType = "whitelist";
@@ -42,9 +39,25 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 			JsonArray jsonArray = json.get("entityTypes").getAsJsonArray();
 			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 			while (jsonIterator.hasNext()) {
-				EnumCreatureAttribute entityType = EnumCreatureAttribute.valueOf(jsonIterator.next().getAsString().toUpperCase());
-				if(entityType != null) {
-					entityTypes.add(entityType);
+				CreatureAttribute creatureAttribute = null;
+				String creatureAttributeName = jsonIterator.next().getAsString();
+				if("undead".equals(creatureAttributeName)) {
+					creatureAttribute = CreatureAttribute.UNDEAD;
+				}
+				else if("arthropod".equals(creatureAttributeName)) {
+					creatureAttribute = CreatureAttribute.ARTHROPOD;
+				}
+				else if("water".equals(creatureAttributeName)) {
+					creatureAttribute = CreatureAttribute.WATER;
+				}
+				else if("illager".equals(creatureAttributeName)) {
+					creatureAttribute = CreatureAttribute.ILLAGER;
+				}
+				else if("undefined".equals(creatureAttributeName)) {
+					creatureAttribute = CreatureAttribute.UNDEFINED;
+				}
+				if(creatureAttribute != null) {
+					this.creatureAttributes.add(creatureAttribute);
 				}
 			}
 		}
@@ -74,8 +87,8 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 	public boolean isMatchingEntity(LivingEntity killedEntity) {
 
 		// Check Entity Type:
-		if(!this.entityTypes.isEmpty()) {
-			if (this.entityTypes.contains(killedEntity.getCreatureAttribute())) {
+		if(!this.creatureAttributes.isEmpty()) {
+			if (this.creatureAttributes.contains(killedEntity.getCreatureAttribute())) {
 				if ("blacklist".equalsIgnoreCase(this.entityTypesListType)) {
 					return false;
 				}
@@ -89,26 +102,19 @@ public abstract class EntitySpawnTrigger extends SpawnTrigger {
 
 		// Check Entity Id:
 		if(!this.entityIds.isEmpty()) {
-			ResourceLocation entityResourceLocation = EntityList.getKey(killedEntity);
+			ResourceLocation entityResourceLocation = killedEntity.getType().getRegistryName();
 			if(entityResourceLocation == null) {
 				return false;
 			}
 			String entityId = entityResourceLocation.toString();
-			if (entityId == null) {
-				if ("whitelist".equalsIgnoreCase(this.entityIdsListType)) {
+			if (this.entityIds.contains(entityId)) {
+				if ("blacklist".equalsIgnoreCase(this.entityIdsListType)) {
 					return false;
 				}
 			}
 			else {
-				if (this.entityIds.contains(entityId)) {
-					if ("blacklist".equalsIgnoreCase(this.entityIdsListType)) {
-						return false;
-					}
-				}
-				else {
-					if ("whitelist".equalsIgnoreCase(this.entityIdsListType)) {
-						return false;
-					}
+				if ("whitelist".equalsIgnoreCase(this.entityIdsListType)) {
+					return false;
 				}
 			}
 		}

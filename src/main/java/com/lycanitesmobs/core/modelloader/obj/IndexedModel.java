@@ -4,7 +4,6 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 
-
 public class IndexedModel {
 
 	private ArrayList<Vector3f> vertices;
@@ -49,7 +48,7 @@ public class IndexedModel {
 		for(int i = 0; i < n; i++ ) {
 			Vertex vertex = new Vertex(
                     vertices.get(i),
-			        texCoords.get(i), 
+			        texCoords.get(i),
 			        normals.get(i),
                     new Vector3f());
 			verticesList.add(vertex);
@@ -164,7 +163,7 @@ public class IndexedModel {
         return objindices;
     }
 
-    public org.lwjgl.util.vector.Vector3f computeCenter() {
+    public Vector3f computeCenter() {
         float x = 0;
         float y = 0;
         float z = 0;
@@ -177,6 +176,6 @@ public class IndexedModel {
         x /= vertices.size();
         y /= vertices.size();
         z /= vertices.size();
-        return new org.lwjgl.util.vector.Vector3f(x, y, z);
+        return new Vector3f(x, y, z);
     }
 }

@@ -1,26 +1,28 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.monster.MagmaCubeEntity;
+import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -67,8 +69,8 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
         this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityBlaze.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityMagmaCube.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
             this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
@@ -136,7 +138,7 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.posY -= this.height / 4;
+            projectile.posY -= this.getSize(Pose.STANDING).height / 4;
 
             // Accuracy:
             float accuracy = 1.0F * (this.getRNG().nextFloat() - 0.5F);
@@ -168,13 +170,13 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
             return false;
         BlockState blockState = this.getEntityWorld().getBlockState(this.getPosition().add(0, -1, 0));
         if(blockState.getBlock() != Blocks.AIR) {
-            if(blockState.getMaterial() == Material.GROUND) return true;
-            if(blockState.getMaterial() == Material.GRASS) return true;
+            if(blockState.getMaterial() == Material.EARTH) return true;
+            if(blockState.getMaterial() == Material.ORGANIC) return true;
             if(blockState.getMaterial() == Material.LEAVES) return true;
             if(blockState.getMaterial() == Material.SAND) return true;
             if(blockState.getMaterial() == Material.CLAY) return true;
             if(blockState.getMaterial() == Material.SNOW) return true;
-            if(blockState.getMaterial() == Material.CRAFTED_SNOW) return true;
+            if(blockState.getMaterial() == Material.SNOW_BLOCK) return true;
         }
         if(blockState.getBlock() == Blocks.NETHERRACK)
             return true;

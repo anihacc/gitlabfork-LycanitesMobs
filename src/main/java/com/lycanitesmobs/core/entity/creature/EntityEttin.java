@@ -1,20 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.world.World;
 
 public class EntityEttin extends EntityCreatureAgeable implements IMob {
-	public boolean ettinGreifing = true;
+	public boolean ettinGreifing = true; // TODO Creature flags.
     
     // ==================================================
  	//                    Constructor
@@ -29,7 +29,6 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
         this.canGrow = true;
         this.babySpawnChance = 0.1D;
         
-        this.ettinGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Ettin Griefing", this.ettinGreifing, "Set to false to disable Ettin block destruction.");
         this.solidCollision = true;
         this.setupMob();
         
@@ -41,8 +40,8 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+        if(this.getNavigator() instanceof GroundPathNavigator) {
+            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
         this.field_70714_bg.addTask(0, new SwimmingGoal(this));
@@ -68,7 +67,7 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
 		if(!this.getEntityWorld().isRemote)
 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.ettinGreifing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
-		    		if(distance <= this.width + 4.0F)
+		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);
 	        }
         

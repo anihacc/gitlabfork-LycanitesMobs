@@ -1,28 +1,23 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
-import net.minecraft.block.*;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.PillagerEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.village.Village;
 import net.minecraft.world.World;
 
 public class EntityAegis extends EntityCreatureTameable implements IGroupRock, IFusable {
-
-	protected Village village;
-	public boolean chestProtection = true;
+	protected BlockPos villagePos;
+	public boolean chestProtection = true; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -37,8 +32,6 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
         this.setupMob();
 		this.isAggressiveByDefault = false;
         this.stepHeight = 1.0F;
-
-		this.chestProtection = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Aegis Chest Protection", this.chestProtection, "Set to false to stop Aegis from protecting village chests.");
 	}
 
     // ========== Init AI ==========
@@ -61,26 +54,9 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 		this.field_70715_bh.addTask(4, new DefenseTargetingGoal(this, VillagerEntity.class));
         //this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
 		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityArgus.class));
+		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PillagerEntity.class));
         this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
 		this.field_70715_bh.addTask(7, new FuseTargetingGoal(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
     }
 	
 	
@@ -93,42 +69,36 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
         super.livingTick();
 
         if(!this.getEntityWorld().isRemote) {
-			if (!this.hasAttackTarget() && !this.isPetType("familiar") && this.updateTick % 40 == 0){
+			/*if (!this.hasAttackTarget() && !this.isPetType("familiar") && this.updateTick % 40 == 0){
 				BlockPos protectLocation = null;
-				int reputation = 0;
 				if(this.hasHome()) {
 					protectLocation = this.getHomePosition();
 				}
-				else if(this.village == null || this.updateTick % 400 == 0) {
-					this.village = this.getEntityWorld().getVillageCollection().getNearestVillage(new BlockPos(this), 32);
-					if(this.village != null) {
-						protectLocation = this.village.getCenter();
-					}
+				else if(this.villagePos == null || this.updateTick % 400 == 0) {
+					this.villagePos = this.getEntityWorld().findNearestStructure("Village", this.getPosition(), 128, false);
 				}
+				protectLocation = this.villagePos;
 
-				// Monitor Nearest Player:
+				// Monitor Nearest Player: TODO Global village reputation is no longer a thing, disabled for now, should be moved to AI Goal.
 				if(protectLocation != null) {
 					PlayerEntity player = this.getEntityWorld().getNearestAttackablePlayer(this, 64, 32);
 					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
 					if (player != null) {
-						if(this.village != null) {
-							reputation = this.village.getPlayerReputation(player.getUniqueID());
-						}
-						if (this.chestProtection && reputation <= 0 && Math.sqrt(player.getDistanceSq(protectLocation)) <= 60)
-							if (player.openContainer != null && (player.openContainer instanceof ContainerChest)) {
+						if (this.chestProtection && Math.sqrt(player.getDistanceSq(new Vec3d(protectLocation))) <= 60)
+							if ((player.openContainer instanceof ChestContainer)) {
 								this.setAttackTarget(player);
 								this.setFixateTarget(player);
 							}
 							else if (extendedPlayer != null && extendedPlayer.justBrokenBlock != null) {
 								Block brokenBlock = extendedPlayer.justBrokenBlock.getBlock();
-								if (brokenBlock instanceof BlockChest || brokenBlock instanceof BlockDoor || brokenBlock instanceof BlockGlowstone) {
+								if (brokenBlock instanceof ChestBlock || brokenBlock instanceof DoorBlock || brokenBlock == Blocks.GLOWSTONE) {
 									this.setAttackTarget(player);
 									this.setFixateTarget(player);
 								}
 							}
 					}
 				}
-			}
+			}*/
 
 			if(!this.hasAttackTarget()) {
 				this.setBlocking();
@@ -138,7 +108,7 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 
 	@Override
 	public boolean canBeTargetedBy(LivingEntity entity) {
-		if(entity instanceof EntityIronGolem || entity instanceof VillagerEntity) {
+		if(entity instanceof IronGolemEntity || entity instanceof VillagerEntity) {
 			return false;
 		}
 		return super.canBeTargetedBy(entity);

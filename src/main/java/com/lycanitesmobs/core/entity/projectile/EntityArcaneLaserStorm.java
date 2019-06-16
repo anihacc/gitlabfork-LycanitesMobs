@@ -166,7 +166,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 					explosionRadius += 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.DESTROY);
+			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
 		}
     	super.onImpactComplete(this.getPosition());
     }

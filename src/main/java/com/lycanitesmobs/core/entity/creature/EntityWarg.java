@@ -11,11 +11,12 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -111,8 +112,8 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
 						|| possibleTarget == EntityWarg.this
 						|| EntityWarg.this.isRidingOrBeingRiddenBy(possibleTarget)
 						|| EntityWarg.this.isOnSameTeam(possibleTarget)
-						|| !EntityWarg.this.canAttackClass(possibleTarget.getClass())
-						|| !EntityWarg.this.canAttackEntity(possibleTarget))
+						|| !EntityWarg.this.canAttack(possibleTarget.getType())
+						|| !EntityWarg.this.canAttack(possibleTarget))
 					return false;
 
 				return true;
@@ -151,7 +152,7 @@ public class EntityWarg extends EntityCreatureRideable implements IGroupPredator
     // ========== Mounted Offset ==========
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.85D;
+        return (double)this.getSize(Pose.STANDING).height * 0.85D;
     }
 
     // ========== Leap ==========

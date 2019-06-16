@@ -1,20 +1,22 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.creature.EntityYale;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.lycanitesmobs.core.entity.creature.EntityThresher;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerYaleWool extends LayerBase {
+public class LayerThresher extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerYaleWool(RenderCreature renderer) {
+    public LayerThresher(RenderCreature renderer) {
         super(renderer);
     }
 
@@ -24,11 +26,11 @@ public class LayerYaleWool extends LayerBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
-        if(!super.canRenderLayer(entity, scale))
-            return false;
-        if(!(entity instanceof EntityYale))
-            return false;
-        return ((EntityYale)entity).hasFur();
+        if(entity instanceof EntityThresher) {
+            EntityThresher entityThresher = (EntityThresher)entity;
+            return entityThresher.canWhirlpool();
+        }
+        return false;
     }
 
 
@@ -37,12 +39,22 @@ public class LayerYaleWool extends LayerBase {
     // ==================================================
     @Override
     public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
-        return "fur".equals(partName);
+        return "effect".equals(partName);
     }
 
     @Override
     public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
-        int colorID = entity.getColor();
-        return new Vector4f(RenderCreature.colorTable[colorID][0], RenderCreature.colorTable[colorID][1], RenderCreature.colorTable[colorID][2], 1.0F);
+        return new Vector4f(1, 1, 1, 0.5f);
     }
+
+    @Override
+    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+        return entity.getSubTexture("effect");
+    }
+
+    @Override
+    public void onRenderStart(Entity entity, boolean trophy) {}
+
+    @Override
+    public void onRenderFinish(Entity entity, boolean trophy) {}
 }

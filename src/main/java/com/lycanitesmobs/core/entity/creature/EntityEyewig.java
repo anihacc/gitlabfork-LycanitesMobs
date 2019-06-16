@@ -4,16 +4,15 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -60,20 +59,8 @@ public class EntityEyewig extends EntityCreatureRideable {
         this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
         }
-    }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Rider Effects ==========
-	public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.POISON))
-    		rider.removePotionEffect(Effects.POISON);
-    	if(rider.isPotionActive(Effects.BLINDNESS))
-    		rider.removePotionEffect(Effects.BLINDNESS);
     }
 
 	
@@ -125,9 +112,6 @@ public class EntityEyewig extends EntityCreatureRideable {
     	
     	this.applyStaminaCost();
     }
-
-    @Override
-    public boolean shouldDismountInWater(Entity rider) { return false; }
     
     
     // ==================================================

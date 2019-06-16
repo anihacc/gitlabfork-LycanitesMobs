@@ -144,7 +144,6 @@ public class LycanitesMobs {
         this.effects = new Effects();
 
         // Elements:
-        ElementManager.getInstance().loadConfig();
         ElementManager.getInstance().loadAllFromJSON(modInfo);
 
         // Creatures:

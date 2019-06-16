@@ -5,8 +5,9 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.core.model.animation.TextureLayerAnimation;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.RenderProjectileModel;
+import com.lycanitesmobs.core.renderer.layer.LayerItem;
 
 import java.util.*;
 
@@ -55,6 +56,17 @@ public class ModelAnimation {
 	public void addCreatureLayers(RenderCreature renderer) {
 		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
 			renderer.addLayer(textureLayer.createCreatureLayer(renderer));
+		}
+	}
+
+
+	/**
+	 * Adds projectile layers from this Animation to the provided renderer.
+	 * @param renderer The renderer to add the layers to.
+	 */
+	public void addProjectileLayers(RenderProjectileModel renderer) {
+		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
+			renderer.addLayer(textureLayer.createProjectileLayer(renderer));
 		}
 	}
 
