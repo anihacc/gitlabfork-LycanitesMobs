@@ -1,16 +1,16 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 
-public class EntityAITargetingParent extends TargetingGoal {
+public class ParentTargetingGoal extends TargetingGoal {
 	// Targets:
 	private EntityCreatureAgeable host;
-    private Class targetClass = LivingEntity.class;
+    private Class targetClass;
     
     // Properties:
     private boolean tameTargeting = true;
@@ -20,9 +20,8 @@ public class EntityAITargetingParent extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetingParent(EntityCreatureAgeable setHost) {
+    public ParentTargetingGoal(EntityCreatureAgeable setHost) {
         super(setHost);
-        this.setMutexBits(2);
         this.host = setHost;
         this.targetClass = this.host.getClass();
     }
@@ -31,31 +30,31 @@ public class EntityAITargetingParent extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetingParent setChance(int setChance) {
+    public ParentTargetingGoal setChance(int setChance) {
     	this.targetChance = setChance;
     	return this;
     }
-    public EntityAITargetingParent setTargetClass(Class setTargetClass) {
+    public ParentTargetingGoal setTargetClass(Class setTargetClass) {
     	this.targetClass = setTargetClass;
     	return this;
     }
-    public EntityAITargetingParent setSightCheck(boolean setSightCheck) {
+    public ParentTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public EntityAITargetingParent setOnlyNearby(boolean setNearby) {
+    public ParentTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public EntityAITargetingParent setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public ParentTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
-    public EntityAITargetingParent setDistance(double setDist) {
+    public ParentTargetingGoal setDistance(double setDist) {
     	this.targetDistance = setDist;
     	return this;
     }
-    public EntityAITargetingParent setTameTargetting(boolean setTargetting) {
+    public ParentTargetingGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
@@ -85,7 +84,7 @@ public class EntityAITargetingParent extends TargetingGoal {
             return false;
         
         // Tamed Checks:
-        if(!this.tameTargeting && this.host instanceof EntityCreatureTameable && ((EntityCreatureTameable)this.host).isTamed())
+        if(!this.tameTargeting && this.host instanceof EntityCreatureTameable && this.host.isTamed())
         	return false;
     	return true;
     }
@@ -98,8 +97,8 @@ public class EntityAITargetingParent extends TargetingGoal {
     protected double getTargetDistance() {
     	if(this.targetDistance > -1)
     		return this.targetDistance;
-        IAttributeInstance attributeinstance = this.host.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-        return attributeinstance == null ? 16.0D : attributeinstance.getAttributeValue();
+        IAttributeInstance attributeinstance = this.host.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        return attributeinstance.getValue();
     }
     
     

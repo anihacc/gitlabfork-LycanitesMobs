@@ -3,7 +3,9 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.LivingEntity;
 
-public class EntityAITargetingOwnerRevenge extends AttackTargetingGoal {
+import java.util.EnumSet;
+
+public class OwnerRevengeTargetingGoal extends AttackTargetingGoal {
 	
 	// Targets:
 	private EntityCreatureTameable host;
@@ -14,30 +16,29 @@ public class EntityAITargetingOwnerRevenge extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITargetingOwnerRevenge(EntityCreatureTameable setHost) {
+    public OwnerRevengeTargetingGoal(EntityCreatureTameable setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;
-        this.setMutexBits(1);
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetingOwnerRevenge setHelpCall(boolean setHelp) {
+    public OwnerRevengeTargetingGoal setHelpCall(boolean setHelp) {
     	this.callForHelp = setHelp;
     	return this;
     }
-    public EntityAITargetingOwnerRevenge setSightCheck(boolean setSightCheck) {
+    public OwnerRevengeTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public EntityAITargetingOwnerRevenge setOnlyNearby(boolean setNearby) {
+    public OwnerRevengeTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public EntityAITargetingOwnerRevenge setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public OwnerRevengeTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }

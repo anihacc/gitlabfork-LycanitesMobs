@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.LivingEntity;
 
-public class EntityAITargetingOwnerAttack extends TargetingGoal {
+public class OwnerAttackTargetingGoal extends TargetingGoal {
 	// Targets:
 	private EntityCreatureTameable host;
 	
@@ -13,11 +13,10 @@ public class EntityAITargetingOwnerAttack extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetingOwnerAttack(EntityCreatureTameable setHost) {
+    public OwnerAttackTargetingGoal(EntityCreatureTameable setHost) {
     	super(setHost);
         this.host = setHost;
         this.checkSight = false;
-        this.setMutexBits(1);
     }
 
     
@@ -81,9 +80,9 @@ public class EntityAITargetingOwnerAttack extends TargetingGoal {
             return false;
 		if(target == this.host)
             return false;
-		if(!this.host.canAttackClass(target.getClass()))
+		if(!this.host.canAttack(target.getType()))
             return false;
-		if(!this.host.canAttackEntity(target))
+		if(!this.host.canAttack(target))
             return false;
     	return true;
     }

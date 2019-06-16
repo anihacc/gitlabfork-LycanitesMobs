@@ -1,46 +1,41 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.SectionPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.village.Village;
-import net.minecraft.village.VillageDoorInfo;
+import net.minecraft.world.ServerWorld;
+import net.minecraft.world.gen.Heightmap;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Random;
 
 public class MoveVillageGoal extends Goal {
 	// Targets:
     private EntityCreatureBase host;
     
     // Properties:
-    private double speed;
+    private int frequency = 200;
     private boolean isNocturnal = true;
-    private Path entityPathNavigate;
-    private VillageDoorInfo doorInfo;
-    private List doorList = new ArrayList();
+    private BlockPos blockPos;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
     public MoveVillageGoal(EntityCreatureBase setHost) {
         this.host = setHost;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public MoveVillageGoal setSpeed(double setSpeed) {
-    	this.speed = setSpeed;
+    public MoveVillageGoal setFrequency(int frequency) {
+    	this.frequency = frequency;
     	return this;
     }
     public MoveVillageGoal setNocturnal(boolean flag) {
@@ -53,116 +48,62 @@ public class MoveVillageGoal extends Goal {
  	//                  Should Execute
  	// ==================================================
     public boolean shouldExecute() {
-        this.shuffleDoorList();
-        
-        if(this.isNocturnal && this.host.getEntityWorld().isDaytime())
+        if (this.host.isBeingRidden()) {
             return false;
-        
-        Village village = this.host.getEntityWorld().getVillageCollection().getNearestVillage(new BlockPos(MathHelper.floor(this.host.posX), MathHelper.floor(this.host.posY), MathHelper.floor(this.host.posZ)), 0);
-        if(village == null)
+        } else if (this.isNocturnal && this.host.world.isDaytime()) {
             return false;
-        
-        this.doorInfo = this.getDoorInfo(village);
-        if(this.doorInfo == null)
+        } else if (this.host.getRNG().nextInt(this.frequency) != 0) {
             return false;
-
-        if(!(this.host.getNavigator() instanceof CreaturePathNavigator))
-            return false;
-        CreaturePathNavigator pathNavigate = (CreaturePathNavigator)this.host.getNavigator();
-        boolean flag = pathNavigate.getEnterDoors();
-        pathNavigate.setCanOpenDoors(false);
-        this.entityPathNavigate = this.host.getNavigator().getPathToXYZ((double)this.doorInfo.getInsideOffsetX(), (double)this.doorInfo.getInsideBlockPos().getY(), (double)this.doorInfo.getInsideOffsetZ());
-        pathNavigate.setCanOpenDoors(flag);
-
-        if(this.entityPathNavigate != null)
-            return true;
-        
-        Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 10, 7, new Vec3d((double)this.doorInfo.getInsideOffsetX(), (double)this.doorInfo.getInsideBlockPos().getY(), (double)this.doorInfo.getInsideOffsetZ()));
-        if(vec3 == null)
-            return false;
-        pathNavigate.setCanOpenDoors(false);
-        this.entityPathNavigate = this.host.getNavigator().getPathToXYZ(vec3.x, vec3.y, vec3.z);
-        pathNavigate.setCanOpenDoors(flag);
-        return this.entityPathNavigate != null;
+        } else {
+            ServerWorld serverWorld = (ServerWorld)this.host.world;
+            BlockPos blockPos = new BlockPos(this.host);
+            if (!serverWorld.func_217471_a(blockPos, 6)) {
+                return false;
+            } else {
+                Vec3d lvt_3_1_ = RandomPositionGenerator.func_221024_a(this.host, 15, 7, (p_220755_1_) -> {
+                    return (double)(-serverWorld.func_217486_a(SectionPos.from(p_220755_1_)));
+                });
+                this.blockPos = lvt_3_1_ == null ? null : new BlockPos(lvt_3_1_);
+                return this.blockPos != null;
+            }
+        }
     }
 	
     
 	// ==================================================
  	//                Continue Executing
  	// ==================================================
-    public boolean shouldContinueExecuting()
-    {
-        if (this.host.getNavigator().noPath())
-        {
-            return false;
-        }
-        else
-        {
-            float f = this.host.width + 4.0F;
-            return this.host.getDistanceSq((double)this.doorInfo.getInsideOffsetX(), (double)this.doorInfo.getInsideBlockPos().getY(), (double)this.doorInfo.getInsideOffsetZ()) > (double)(f * f);
-        }
+    public boolean shouldContinueExecuting() {
+        return this.blockPos != null && !this.host.getNavigator().noPath() && this.host.getNavigator().getTargetPos().equals(this.blockPos);
     }
-	
-    
-	// ==================================================
- 	//                       Start
- 	// ==================================================
-    public void startExecuting()
-    {
-        this.host.getNavigator().setPath(this.entityPathNavigate, this.speed);
-    }
-	
-    
-	// ==================================================
- 	//                       Reset
- 	// ==================================================
-    public void resetTask()
-    {
-        if (this.host.getNavigator().noPath() || this.host.getDistanceSq((double)this.doorInfo.getInsideOffsetX(), (double)this.doorInfo.getInsideBlockPos().getY(), (double)this.doorInfo.getInsideOffsetZ()) < 16.0D)
-        {
-            this.doorList.add(this.doorInfo);
-        }
-    }
-	
-    
-	// ==================================================
- 	//                  Get Door Info
- 	// ==================================================
-    private VillageDoorInfo getDoorInfo(Village par1Village) {
-        VillageDoorInfo villagedoorinfo = null;
-        int i = Integer.MAX_VALUE;
-        List list = par1Village.getVillageDoorInfoList();
-        Iterator iterator = list.iterator();
 
-        while(iterator.hasNext()) {
-            VillageDoorInfo villagedoorinfo1 = (VillageDoorInfo)iterator.next();
-            int j = villagedoorinfo1.getDistanceSquared(MathHelper.floor(this.host.posX), MathHelper.floor(this.host.posY), MathHelper.floor(this.host.posZ));
-
-            if(j < i && !this.func_75413_a(villagedoorinfo1)) {
-                villagedoorinfo = villagedoorinfo1;
-                i = j;
+    
+    // ==================================================
+    //                     Update
+    // ==================================================
+    @Override
+    public void tick() {
+        if (this.blockPos != null) {
+            PathNavigator lvt_1_1_ = this.host.getNavigator();
+            if (lvt_1_1_.noPath() && !this.blockPos.func_218137_a(this.host.getPositionVec(), 10.0D)) {
+                Vec3d lvt_2_1_ = new Vec3d(this.blockPos);
+                Vec3d lvt_3_1_ = new Vec3d(this.host.posX, this.host.posY, this.host.posZ);
+                Vec3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);
+                lvt_2_1_ = lvt_4_1_.scale(0.4D).add(lvt_2_1_);
+                Vec3d lvt_5_1_ = lvt_2_1_.subtract(lvt_3_1_).normalize().scale(10.0D).add(lvt_3_1_);
+                BlockPos lvt_6_1_ = new BlockPos(lvt_5_1_);
+                lvt_6_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, lvt_6_1_);
+                if (!lvt_1_1_.tryMoveToXYZ((double) lvt_6_1_.getX(), (double) lvt_6_1_.getY(), (double) lvt_6_1_.getZ(), 1.0D)) {
+                    this.func_220754_g();
+                }
             }
-        }
 
-        return villagedoorinfo;
+        }
     }
 
-    private boolean func_75413_a(VillageDoorInfo par1VillageDoorInfo) {
-        Iterator iterator = this.doorList.iterator();
-        VillageDoorInfo villagedoorinfo1;
-
-        do {
-            if(!iterator.hasNext())
-                return false;
-            villagedoorinfo1 = (VillageDoorInfo)iterator.next();
-        }
-        while(par1VillageDoorInfo.getInsideOffsetX() != villagedoorinfo1.getInsideOffsetX() || par1VillageDoorInfo.getInsideBlockPos().getY() != villagedoorinfo1.getInsideBlockPos().getY() || par1VillageDoorInfo.getInsideOffsetZ() != villagedoorinfo1.getInsideOffsetZ());
-
-        return true;
-    }
-
-    private void shuffleDoorList() {
-        if(this.doorList.size() > 15)
-            this.doorList.remove(0);
+    private void func_220754_g() {
+        Random lvt_1_1_ = this.host.getRNG();
+        BlockPos lvt_2_1_ = this.host.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (new BlockPos(this.host)).add(-8 + lvt_1_1_.nextInt(16), 0, -8 + lvt_1_1_.nextInt(16)));
+        this.host.getNavigator().tryMoveToXYZ((double)lvt_2_1_.getX(), (double)lvt_2_1_.getY(), (double)lvt_2_1_.getZ(), 1.0D);
     }
 }

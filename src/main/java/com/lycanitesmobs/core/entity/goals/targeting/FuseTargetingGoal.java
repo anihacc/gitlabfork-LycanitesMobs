@@ -6,7 +6,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.LivingEntity;
 
-public class EntityAITargetingFuse extends TargetingGoal {
+import java.util.EnumSet;
+
+public class FuseTargetingGoal extends TargetingGoal {
 	// Targets:
     private Class<IFusable> targetClass = IFusable.class;
 
@@ -17,46 +19,46 @@ public class EntityAITargetingFuse extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetingFuse(EntityCreatureBase setHost) {
+    public FuseTargetingGoal(EntityCreatureBase setHost) {
         super(setHost);
-        this.setMutexBits(8);
+		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetingFuse setChance(int setChance) {
+    public FuseTargetingGoal setChance(int setChance) {
     	this.targetChance = setChance;
     	return this;
     }
 
-    public EntityAITargetingFuse setTargetClass(Class<IFusable> setTargetClass) {
+    public FuseTargetingGoal setTargetClass(Class<IFusable> setTargetClass) {
     	this.targetClass = setTargetClass;
     	return this;
     }
 
-    public EntityAITargetingFuse setSightCheck(boolean setSightCheck) {
+    public FuseTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
 
-    public EntityAITargetingFuse setOnlyNearby(boolean setNearby) {
+    public FuseTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
 
-    public EntityAITargetingFuse setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public FuseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
 
-    public EntityAITargetingFuse setTameTargetting(boolean setTargetting) {
+    public FuseTargetingGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
 
-    public EntityAITargetingFuse setHelpCall(boolean setHelp) {
+    public FuseTargetingGoal setHelpCall(boolean setHelp) {
         this.callForHelp = setHelp;
         return this;
     }

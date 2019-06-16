@@ -4,40 +4,40 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.passive.TameableEntity;
 
-public class EntityAITargetingOwnerThreats extends TargetingGoal {
+import java.util.EnumSet;
+
+public class OwnerDefenseTargetingGoal extends TargetingGoal {
 	// Properties:
 	private EntityCreatureTameable tamedHost;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetingOwnerThreats(EntityCreatureTameable setHost) {
+    public OwnerDefenseTargetingGoal(EntityCreatureTameable setHost) {
         super(setHost);
     	this.tamedHost = setHost;
-        this.setMutexBits(1);
+		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetingOwnerThreats setSightCheck(boolean setSightCheck) {
+    public OwnerDefenseTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
     
-    public EntityAITargetingOwnerThreats setOnlyNearby(boolean setNearby) {
+    public OwnerDefenseTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
     
-    public EntityAITargetingOwnerThreats setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public OwnerDefenseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
@@ -76,9 +76,9 @@ public class EntityAITargetingOwnerThreats extends TargetingGoal {
         }
 
         // LivingEntity Check:
-		if(target instanceof EntityLiving) {
-			LivingEntity targetLiving = (EntityLiving)target;
-			if(!targetLiving.canAttackClass(PlayerEntity.class)) {
+		if(target instanceof MobEntity) {
+			MobEntity mobEntity = (MobEntity)target;
+			if(!mobEntity.canAttack(EntityType.PLAYER)) {
 				return false;
 			}
 		}
@@ -89,13 +89,13 @@ public class EntityAITargetingOwnerThreats extends TargetingGoal {
 		}
 
         // Threat Check:
-        if(target instanceof IMob && !(target instanceof IEntityOwnable) && !(target instanceof EntityCreatureBase)) {
+        if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof EntityCreatureBase)) {
             return true;
         }
         else if(target instanceof EntityCreatureBase && ((EntityCreatureBase)target).isHostile() && !(target instanceof IGroupAnimal)) {
             return true;
         }
-        else if(target instanceof LivingEntity && ((EntityLiving)target).getAttackTarget() == this.getOwner()) {
+        else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {
             return true;
         }
         else if(target.getRevengeTarget() == this.getOwner()) {
@@ -125,10 +125,10 @@ public class EntityAITargetingOwnerThreats extends TargetingGoal {
     	if(!this.host.isAggressive())
             return false;
         
-        double distance = this.getTargetDistance() - this.host.width;
-        double heightDistance = 4.0D - this.host.height;
+        double distance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).width;
+        double heightDistance = 4.0D - this.host.getSize(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
-            heightDistance = this.getTargetDistance() - this.host.height;
+            heightDistance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);

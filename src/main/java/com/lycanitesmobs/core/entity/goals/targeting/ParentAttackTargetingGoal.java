@@ -4,7 +4,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
-public class EntityAITargetParentAttack extends Goal {
+import java.util.EnumSet;
+
+public class ParentAttackTargetingGoal extends Goal {
 	// Targets:
 	private EntityCreatureBase host;
 	
@@ -14,16 +16,16 @@ public class EntityAITargetParentAttack extends Goal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetParentAttack(EntityCreatureBase setHost) {
+    public ParentAttackTargetingGoal(EntityCreatureBase setHost) {
         host = setHost;
-        this.setMutexBits(1);
+		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetParentAttack setTameTargetting(boolean setTargetting) {
+    public ParentAttackTargetingGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
@@ -48,7 +50,7 @@ public class EntityAITargetParentAttack extends Goal {
   	//                       Update
   	// ==================================================
     @Override
-    public void updateTask() {
+    public void tick() {
     	if(this.host.getAttackTarget() == null) {
     		LivingEntity target = this.host.getParentAttackTarget();
     		if(this.isTargetValid(target))
@@ -67,8 +69,10 @@ public class EntityAITargetParentAttack extends Goal {
             return false;
 		if(target == this.host)
             return false;
-		if(!this.host.canAttackClass(target.getClass()))
+		if(!this.host.canAttack(target.getType()))
             return false;
+		if(!this.host.canAttack(target))
+			return false;
     	return true;
     }
     

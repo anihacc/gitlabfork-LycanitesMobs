@@ -10,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import java.util.Iterator;
 import java.util.List;
 
-public class EntityAITargetingRiderRevenge extends AttackTargetingGoal {
+public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
 	
 	// Targets:
 	private EntityCreatureTameable host;
@@ -22,30 +22,29 @@ public class EntityAITargetingRiderRevenge extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITargetingRiderRevenge(EntityCreatureTameable setHost) {
+    public RiderRevengeTargetingGoal(EntityCreatureTameable setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;
-        this.setMutexBits(1);
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAITargetingRiderRevenge setHelpCall(boolean setHelp) {
+    public RiderRevengeTargetingGoal setHelpCall(boolean setHelp) {
     	this.callForHelp = setHelp;
     	return this;
     }
-    public EntityAITargetingRiderRevenge setSightCheck(boolean setSightCheck) {
+    public RiderRevengeTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public EntityAITargetingRiderRevenge setOnlyNearby(boolean setNearby) {
+    public RiderRevengeTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public EntityAITargetingRiderRevenge setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public RiderRevengeTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
@@ -78,12 +77,7 @@ public class EntityAITargetingRiderRevenge extends AttackTargetingGoal {
         try {
             if (this.callForHelp) {
                 double d0 = this.getTargetDistance();
-                List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), new Predicate<Entity>() {
-                    @Override
-                    public boolean apply(Entity input) {
-                        return input instanceof LivingEntity;
-                    }
-                });
+                List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), (Predicate<Entity>) input -> input instanceof LivingEntity);
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {

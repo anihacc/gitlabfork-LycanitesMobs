@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -19,7 +19,6 @@ public class RevengeTargetingGoal extends AttackTargetingGoal {
  	// ==================================================
     public RevengeTargetingGoal(EntityCreatureBase setHost) {
         super(setHost);
-        this.setMutexBits(1);
     }
     
     

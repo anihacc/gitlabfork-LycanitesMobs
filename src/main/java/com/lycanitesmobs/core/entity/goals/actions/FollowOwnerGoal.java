@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -91,10 +91,10 @@ public class FollowOwnerGoal extends FollowGoal {
                 return;
             }
 	
-	        for(int l = 0; l <= 4; ++l) {
-	            for(int i1 = 0; i1 <= 4; ++i1) {
-	                if((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.host.getEntityWorld().isSideSolid(new BlockPos(i + l, j - 1, k + i1), EnumFacing.UP) && !this.host.getEntityWorld().isBlockNormalCube(new BlockPos(i + l, j, k + i1), true) && !this.host.getEntityWorld().isBlockNormalCube(new BlockPos(i + l, j + 1, k + i1), true)) {
-                        this.host.setLocationAndAngles((double)((float)(i + l) + 0.5F), (double)j, (double)((float)(k + i1) + 0.5F), this.host.rotationYaw, this.host.rotationPitch);
+	        for(int x = 0; x <= 4; ++x) {
+	            for(int z = 0; z <= 4; ++z) {
+	                if(this.canTeleportTo(new BlockPos(x, this.getTarget().getPosition().getY(), z))) {
+                        this.host.setLocationAndAngles((double)((float)(i + x) + 0.5F), (double)j, (double)((float)(k + z) + 0.5F), this.host.rotationYaw, this.host.rotationPitch);
 	                    this.host.clearMovement();
 	                    return;
 	                }
@@ -102,6 +102,11 @@ public class FollowOwnerGoal extends FollowGoal {
 	        }
     	}
     }
+
+	protected boolean canTeleportTo(BlockPos p_220707_1_) {
+		BlockState lvt_2_1_ = this.host.getEntityWorld().getBlockState(p_220707_1_);
+		return lvt_2_1_.canEntitySpawn(this.host.getEntityWorld(), p_220707_1_, this.host.getType()) && this.host.getEntityWorld().isAirBlock(p_220707_1_.up()) && this.host.getEntityWorld().isAirBlock(p_220707_1_.up(2));
+	}
     
     //TODO Wait on the ChunkUnload Chunk event, if this mob is not sitting and the unloading chunk is what it's in, then teleport this mob to it's owner away from the unloaded chunk, unless it's player has disconnected.
 }

@@ -1,20 +1,22 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.entity.EntityCreature;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 
-public class DefenceTargetingGoal extends TargetingGoal {
+public class DefenseTargetingGoal extends TargetingGoal {
 	/** The entity class to defend. **/
 	protected Class<? extends LivingEntity> defendClass;
 
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public DefenceTargetingGoal(EntityCreatureBase setHost, Class<? extends LivingEntity> defendClass) {
+    public DefenseTargetingGoal(EntityCreatureBase setHost, Class<? extends LivingEntity> defendClass) {
         super(setHost);
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
         this.defendClass = defendClass;
@@ -24,17 +26,17 @@ public class DefenceTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public DefenceTargetingGoal setSightCheck(boolean setSightCheck) {
+    public DefenseTargetingGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
     
-    public DefenceTargetingGoal setOnlyNearby(boolean setNearby) {
+    public DefenseTargetingGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
     
-    public DefenceTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public DefenseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
@@ -67,11 +69,8 @@ public class DefenceTargetingGoal extends TargetingGoal {
 
 		// Has Target Check:
 		LivingEntity targetTarget = target.getRevengeTarget();
-		if(target instanceof EntityCreature) {
-			targetTarget = ((EntityCreature)target).getAttackTarget();
-		}
-		else if(target instanceof EntityCreatureBase) {
-			targetTarget = ((EntityCreatureBase)target).getAttackTarget();
+		if(target instanceof CreatureEntity) {
+			targetTarget = ((CreatureEntity)target).getAttackTarget();
 		}
 		if(targetTarget == null) {
 			return false;
@@ -79,7 +78,10 @@ public class DefenceTargetingGoal extends TargetingGoal {
 
 		// Ownable Checks:
 		if(this.host.getOwner() != null) {
-			if(target instanceof IEntityOwnable && this.host.getOwner() == ((IEntityOwnable)target).getOwner()) {
+			if(target instanceof TameableEntity && this.host.getOwner() == ((TameableEntity)target).getOwner()) {
+				return false;
+			}
+			if(target instanceof EntityCreatureTameable && this.host.getOwner() == ((EntityCreatureTameable)target).getOwner()) {
 				return false;
 			}
 			if(target == this.host.getOwner()) {
@@ -107,10 +109,10 @@ public class DefenceTargetingGoal extends TargetingGoal {
     	if(this.host.getOwner() != null)
     		return false;
         
-        double distance = this.getTargetDistance() - this.host.width;
-        double heightDistance = 4.0D - this.host.height;
+        double distance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).width;
+        double heightDistance = 4.0D - this.host.getSize(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
-            heightDistance = this.getTargetDistance() - this.host.height;
+            heightDistance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);
