@@ -5,7 +5,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.block.Block;
@@ -49,19 +50,19 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBelph.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpClasses(EntityBelph.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
     // ========== Init ==========
@@ -104,7 +105,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
                 trailWidth = 3;
             for(int y = 0; y < trailHeight; y++) {
                 Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
-                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire") || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
+                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALL_GRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire") || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
                     if(trailWidth == 1)
                         this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("hellfire").getDefaultState());
                     else

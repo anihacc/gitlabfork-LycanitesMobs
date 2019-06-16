@@ -2,7 +2,10 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupIce;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
@@ -15,11 +18,11 @@ import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
@@ -44,19 +47,19 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.field_70714_bg.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(3, new EntityAIMate(this));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setItemList("Vegetables"));
-        this.field_70714_bg.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new AttackMeleeGoal(this).setLongMemory(false));
+        this.field_70714_bg.addTask(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(3, new MateGoal(this));
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setItemList("Vegetables"));
+        this.field_70714_bg.addTask(5, new FollowParentGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(6, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
     }
 	
 	
@@ -83,7 +86,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 	
@@ -123,8 +126,8 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
 
     @Override
     public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == MobEffects.SLOWNESS) return false;
-        if(potionEffect.getPotion() == MobEffects.HUNGER) return false;
+        if(potionEffect.getPotion() == Effects.SLOWNESS) return false;
+        if(potionEffect.getPotion() == Effects.HUNGER) return false;
         return super.isPotionApplicable(potionEffect);
     }
     

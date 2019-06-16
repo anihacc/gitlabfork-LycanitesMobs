@@ -7,7 +7,9 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
@@ -73,22 +75,22 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.field_70714_bg.addTask(7, new EntityAIStayByHome(this));
-        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(1200));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
+        this.field_70714_bg.addTask(7, new StayByHomeGoal(this));
+        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(1200));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new EntityAITargetMasterAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityConba.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVespidQueen.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVespid.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(1, new MasterAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntityConba.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityVespidQueen.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityVespid.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IAnimals.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 	
@@ -164,7 +166,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
     	}
-    	this.getEntityWorld().spawnEntity(minion);
+    	this.getEntityWorld().func_217376_c(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
         return minion;

@@ -5,7 +5,10 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -20,7 +23,7 @@ import net.minecraft.world.World;
 
 public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPredator {
 	
-	EntityAIWander wanderAI;
+	WanderGoal wanderAI;
     int swarmLimit = 5; // TODO Creature Flags
     
     // ==================================================
@@ -44,23 +47,23 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(1, new EntityAIStayByWater(this));
+        this.field_70714_bg.addTask(1, new StayByWaterGoal(this));
         this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.wanderAI = new EntityAIWander(this);
+        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(false));
+        this.wanderAI = new WanderGoal(this);
         this.field_70714_bg.addTask(6, wanderAI.setPauseRate(0));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
+            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
     
     

@@ -4,7 +4,8 @@ import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
@@ -12,7 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
 	
-	EntityAIPlayerControl playerControlAI;
+	PlayerControlGoal playerControlAI;
 	
 	// ==================================================
  	//                    Constructor
@@ -45,39 +46,39 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIMate(this));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
-        this.field_70714_bg.addTask(6, new EntityAIAttackMelee(this).setSpeed(1.5D));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new MateGoal(this));
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
+        this.field_70714_bg.addTask(6, new AttackMeleeGoal(this).setSpeed(1.5D));
         this.field_70714_bg.addTask(7, this.aiSit);
-        this.field_70714_bg.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.playerControlAI = new EntityAIPlayerControl(this);
+        this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.playerControlAI = new PlayerControlGoal(this);
         this.field_70714_bg.addTask(9, playerControlAI);
-        this.field_70714_bg.addTask(10, new EntityAIWander(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(11, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(12, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(10, new WanderGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(12, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.field_70715_bh.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
+        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
+        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityCow.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPig.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityCow.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityPig.class).setTameTargetting(true));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
         }
-        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPigZombie.class));
+        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(EntityPigZombie.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
     }
 	
 	
@@ -95,8 +96,8 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(MobEffects.WITHER))
-    		rider.removeEffectInstance(MobEffects.WITHER);
+    	if(rider.isPotionActive(Effects.WITHER))
+    		rider.removePotionEffect(Effects.WITHER);
         if(rider.isBurning())
             rider.setFire(0);
     }
@@ -160,7 +161,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     public void specialAttack() {
         // Withering Roar:
         double distance = 5.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
             @Override
             public boolean apply(LivingEntity possibleTarget) {
                 if(!possibleTarget.isAlive()
@@ -182,7 +183,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addPotionEffect(new EffectInstance(MobEffects.WITHER, 10 * 20, 0));
+                    possibleTarget.addPotionEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
                 }
             }
         }

@@ -5,24 +5,27 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -56,33 +59,35 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityChicken.class));
-            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
-            this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
+            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
+            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(RabbitEntity.class));
+            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(ParrotEntity.class));
+            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
+            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
     }
 
     // ========== Init ==========
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         this.dataManager.register(LATCH_TARGET, 0);
         this.dataManager.register(LATCH_HEIGHT, (float)this.latchHeight);
         this.dataManager.register(LATCH_ANGLE, (float)this.latchAngle);
@@ -106,7 +111,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
             this.noClip = true;
 
             // Movement:
-            Vec3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().posX, this.getLatchTarget().posY + (this.getLatchTarget().height * this.latchHeight), this.getLatchTarget().posZ, this.getLatchTarget().width * 0.5D, this.latchAngle);
+            Vec3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().posX, this.getLatchTarget().posY + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().posZ, this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
             this.setPosition(latchPos.x, latchPos.y, latchPos.z);
             double distanceX = this.getLatchTarget().posX - this.posX;
             double distanceZ = this.getLatchTarget().posZ - this.posZ;
@@ -131,7 +136,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
             // Client:
             else {
                 for(int i = 0; i < 2; ++i) {
-                    this.getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+                    this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -189,10 +194,10 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
    	// ==================================================
     // ========== Can Attack Class ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
+    public boolean canAttack(EntityType target) {
         if(this.hasLatchTarget())
             return false;
-        return super.canAttackClass(targetClass);
+        return super.canAttack(target);
     }
 
     // ========== Melee Attack ==========
@@ -201,8 +206,8 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
         // Disable Knockback:
         double targetKnockbackResistance = 0;
         if(target instanceof LivingEntity) {
-            targetKnockbackResistance = ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+            targetKnockbackResistance = ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         }
 
         // Melee Attack:
@@ -211,7 +216,7 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
 
         // Restore Knockback:
         if(target instanceof LivingEntity)
-            ((LivingEntity)target).getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+            ((LivingEntity)target).getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
     	
     	// Latch:
         if(!this.hasLatchTarget() && target instanceof LivingEntity && !this.isInWater()) {
@@ -249,12 +254,12 @@ public class EntityDarkling extends EntityCreatureTameable implements IMob, IGro
     @Override
     public void startStealth() {
         if(this.getEntityWorld().isRemote) {
-            EnumParticleTypes particle = EnumParticleTypes.SPELL_WITCH;
+            IParticleData particle = ParticleTypes.WITCH;
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-                this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+                this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
         }
         super.startStealth();
     }

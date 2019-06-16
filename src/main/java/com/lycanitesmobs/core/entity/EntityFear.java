@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
-import com.lycanitesmobs.core.entity.ai.EntityAIWander;
+import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
@@ -38,8 +38,8 @@ public class EntityFear extends EntityCreatureBase {
         this.setupMob();
         
         // AI Tasks:
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIWander(this).setPauseRate(0));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new WanderGoal(this).setPauseRate(0));
     }
 
     public EntityFear(World world, Entity feared) {
@@ -93,7 +93,7 @@ public class EntityFear extends EntityCreatureBase {
         	return;
         }
 
-        LivingEntity fearedEntityLiving = (LivingEntity)this.fearedEntity;
+        LivingEntity fearedLivingEntity = (LivingEntity)this.fearedEntity;
         
         // Pickup Entity For Fear Movement Override:
         if(this.canPickupEntity(fearedEntityLiving)) {
@@ -146,7 +146,7 @@ public class EntityFear extends EntityCreatureBase {
 		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
 		
         if(feared instanceof LivingEntity && !(feared instanceof PlayerEntity)) {
-	        LivingEntity fearedEntityLiving = (LivingEntity)feared;
+	        LivingEntity fearedLivingEntity = (LivingEntity)feared;
 	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
         }
     }

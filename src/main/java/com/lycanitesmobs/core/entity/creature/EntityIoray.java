@@ -6,7 +6,8 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
@@ -20,7 +21,7 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
@@ -28,8 +29,8 @@ import net.minecraft.world.World;
 
 public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupPredator {
 
-	EntityAIWander wanderAI;
-    EntityAIAttackRanged rangedAttackAI;
+	WanderGoal wanderAI;
+    AttackRangedGoal rangedAttackAI;
 
     // ==================================================
  	//                    Constructor
@@ -52,35 +53,35 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(1, new EntityAIStayByWater(this));
-        this.field_70714_bg.addTask(2, new EntityAIPlayerControl(this));
-        this.field_70714_bg.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(4.0F));
-        this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
+        this.field_70714_bg.addTask(1, new StayByWaterGoal(this));
+        this.field_70714_bg.addTask(2, new PlayerControlGoal(this));
+        this.field_70714_bg.addTask(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
+        this.rangedAttackAI = new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
         this.field_70714_bg.addTask(5, rangedAttackAI);
         this.field_70714_bg.addTask(6, this.aiSit);
-        this.field_70714_bg.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
+        this.field_70714_bg.addTask(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.wanderAI = new WanderGoal(this);
         this.field_70714_bg.addTask(8, wanderAI.setPauseRate(60));
-        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(9, new BegGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.field_70715_bh.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(7, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
+        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
-            this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntitySquid.class));
+            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(EntitySquid.class));
         }
-        this.field_70715_bh.addTask(9, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(9, new OwnerDefenseTargetingGoal(this));
     }
     
     
@@ -90,11 +91,11 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
 	// ========== Living Update ==========
 	@Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
+        rider.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
-            rider.removeEffectInstance(ObjectManager.getEffect("paralysis"));
+            rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
         if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
-            rider.removeEffectInstance(ObjectManager.getEffect("penetration"));
+            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
     }
 
 	
@@ -186,7 +187,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
 
             // Launch:
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().spawnEntity(projectile);
+            this.getEntityWorld().func_217376_c(projectile);
         }
 
         super.attackRanged(target, range);
@@ -226,7 +227,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
 
             // Launch:
             this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().spawnEntity(abilityProjectile);
+            this.getEntityWorld().func_217376_c(abilityProjectile);
         }
 
         this.applyStaminaCost();
@@ -240,7 +241,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(MobEffects.WATER_BREATHING, 5 * 20, 1));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 

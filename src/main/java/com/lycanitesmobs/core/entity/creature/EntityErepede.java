@@ -4,7 +4,8 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
@@ -14,7 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
@@ -44,33 +45,33 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIPlayerControl(this));
-        this.field_70714_bg.addTask(2, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(3, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new PlayerControlGoal(this));
+        this.field_70714_bg.addTask(2, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(3, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
 		this.field_70714_bg.addTask(4, this.aiSit);
-		this.field_70714_bg.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(7, new EntityAIWander(this));
-        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+		this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(6, new FollowParentGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(7, new WanderGoal(this));
+        this.field_70714_bg.addTask(9, new BegGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-		this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-		this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.field_70715_bh.addTask(2, new EntityAITargetOwnerThreats(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+		this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+		this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+		this.field_70715_bh.addTask(2, new OwnerDefenseTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             if(CreatureManager.getInstance().getCreature("Joust") != null)
-                this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
+                this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
             if(CreatureManager.getInstance().getCreature("JoustAlpha") != null)
-                this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
+                this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
         }
 
-        this.field_70715_bh.addTask(0, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(0, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
     }
 	
 	
@@ -84,10 +85,10 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(MobEffects.WEAKNESS))
-    		rider.removeEffectInstance(MobEffects.WEAKNESS);
-    	if(rider.isPotionActive(MobEffects.HUNGER))
-    		rider.removeEffectInstance(MobEffects.HUNGER);
+    	if(rider.isPotionActive(Effects.WEAKNESS))
+    		rider.removePotionEffect(Effects.WEAKNESS);
+    	if(rider.isPotionActive(Effects.HUNGER))
+    		rider.removePotionEffect(Effects.HUNGER);
     }
 
 	
@@ -127,7 +128,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     	if(rider instanceof PlayerEntity) {
     		PlayerEntity player = (PlayerEntity)rider;
 	    	EntityMudshot projectile = new EntityMudshot(this.getEntityWorld(), player);
-	    	this.getEntityWorld().spawnEntity(projectile);
+	    	this.getEntityWorld().func_217376_c(projectile);
 	    	this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 	    	this.triggerAttackCooldown();
     	}

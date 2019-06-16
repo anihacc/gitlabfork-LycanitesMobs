@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -22,8 +23,8 @@ import net.minecraft.world.World;
 
 public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy {
 
-    protected EntityAIWander wanderAI;
-    protected EntityAIAttackMelee attackAI;
+    protected WanderGoal wanderAI;
+    protected AttackMeleeGoal attackAI;
 
     protected int pickupCooldown = 100;
 
@@ -53,26 +54,26 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
         this.field_70714_bg.addTask(2, this.aiSit);
-        this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
+        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
         this.field_70714_bg.addTask(3, this.attackAI);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(6, new EntityAIStayByWater(this).setSpeed(1.25D));
-        this.wanderAI = new EntityAIWander(this);
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(5, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(6, new StayByWaterGoal(this).setSpeed(1.25D));
+        this.wanderAI = new WanderGoal(this);
         this.field_70714_bg.addTask(7, this.wanderAI);
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
+        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -133,7 +134,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
 
         // Penetrating Screech:
         double distance = 10.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
             @Override
             public boolean apply(LivingEntity possibleTarget) {
                 if(!possibleTarget.isAlive()
@@ -159,7 +160,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                     if (ObjectManager.getEffectInstance("penetration") != null)
                         possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("penetration"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(MobEffects.WEAKNESS, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }

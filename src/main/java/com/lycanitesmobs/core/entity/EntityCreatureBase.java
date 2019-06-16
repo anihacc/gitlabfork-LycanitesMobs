@@ -6,12 +6,12 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.container.ContainerCreature;
-import com.lycanitesmobs.core.entity.ai.DirectNavigator;
-import com.lycanitesmobs.core.entity.ai.EntityAIMoveRestriction;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetAttack;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetRevenge;
+import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
+import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
-import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
+import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -204,7 +204,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Whether the mob should use it's leash AI or not. **/
     private boolean leashAIActive = false;
     /** Movement AI for mobs that are leashed. **/
-    private Goal leashMoveTowardsRestrictionAI = new EntityAIMoveRestriction(this);
+    private Goal leashMoveTowardsRestrictionAI = new MoveRestrictionGoal(this);
     /** The flight navigator class, a makeshift class that handles flight and free swimming movement, replaces the pathfinder. **/
     public DirectNavigator directNavigator;
 
@@ -341,8 +341,8 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 
     // Override AI:
-    public EntityAITargetAttack aiTargetPlayer = new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class);
-    public EntityAITargetRevenge aiDefendAnimals = new EntityAITargetRevenge(this).setHelpClasses(AnimalEntity.class);
+    public AttackTargetingGoal aiTargetPlayer = new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class);
+    public RevengeTargetingGoal aiDefendAnimals = new RevengeTargetingGoal(this).setHelpClasses(AnimalEntity.class);
 
 
     // ==================================================
@@ -1909,7 +1909,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Called when this entity is constructed for initial navigator. **/
     @Override
     protected PathNavigator createNavigator(World world) {
-        return new CreaturePathNavigate(this, world);
+        return new CreaturePathNavigator(this, world);
     }
 
     // ========== Get New Move Helper ==========
@@ -2553,7 +2553,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
 		projectile.shoot(distanceX, distanceY + distanceXZ, distanceZ, velocity, inaccuracy);
-		//this.getEntityWorld().spawnEntity(projectile);
+		//this.getEntityWorld().func_217376_c(projectile);
 
 		if(projectile.getLaunchSound() != null) {
 			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

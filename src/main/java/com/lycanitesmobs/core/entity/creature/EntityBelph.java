@@ -2,8 +2,9 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityDoomfireball;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import net.minecraft.entity.Entity;
@@ -49,22 +50,22 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
             PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIBreakDoor(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new BreakDoorGoal(this));
+        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(5, new EntityAIMoveRestriction(this));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(5, new MoveRestrictionGoal(this));
+        this.field_70714_bg.addTask(6, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBehemoth.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpClasses(EntityBehemoth.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
     // ========== Init ==========

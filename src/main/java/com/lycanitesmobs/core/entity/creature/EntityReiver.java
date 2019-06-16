@@ -3,7 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityFrostbolt;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
@@ -13,7 +14,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -37,23 +38,23 @@ public class EntityReiver extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntityBlaze.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntityMagmaCube.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -68,7 +69,7 @@ public class EntityReiver extends EntityCreatureTameable implements IMob, IGroup
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }
     }
     

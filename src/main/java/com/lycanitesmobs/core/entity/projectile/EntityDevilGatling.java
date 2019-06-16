@@ -5,16 +5,15 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.ObjectLists;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Potion;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,21 +83,21 @@ public class EntityDevilGatling extends EntityProjectileBase {
 
         // Remove Buffs:
         if(this.rand.nextBoolean()) {
-            List<Potion> goodEffects = new ArrayList<>();
-            for (Object potionEffectObj : target.getActiveEffectInstances()) {
+            List<Effect> goodEffects = new ArrayList<>();
+            for (Object potionEffectObj : target.getActivePotionEffects()) {
                 if (potionEffectObj instanceof EffectInstance) {
-                    Potion potion = ((EffectInstance) potionEffectObj).getPotion();
-                    if (potion != null) {
-                        if (ObjectLists.inEffectList("buffs", potion))
-                            goodEffects.add(potion);
+                    Effect effect = ((EffectInstance) potionEffectObj).getPotion();
+                    if (effect != null) {
+                        if (ObjectLists.inEffectList("buffs", effect))
+                            goodEffects.add(effect);
                     }
                 }
             }
             if (!goodEffects.isEmpty()) {
                 if (goodEffects.size() > 1)
-                    target.removeEffectInstance(goodEffects.get(this.rand.nextInt(goodEffects.size())));
+                    target.removePotionEffect(goodEffects.get(this.rand.nextInt(goodEffects.size())));
                 else
-                    target.removeEffectInstance(goodEffects.get(0));
+                    target.removePotionEffect(goodEffects.get(0));
             }
         }
 
@@ -111,7 +110,7 @@ public class EntityDevilGatling extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.EXPLOSION, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     }
     
     

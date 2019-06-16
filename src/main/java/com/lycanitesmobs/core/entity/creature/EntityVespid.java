@@ -3,10 +3,14 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
@@ -23,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupPredator {
-    public EntityAIPlaceBlock aiPlaceBlock;
+    public PlaceBlockGoal aiPlaceBlock;
 	private boolean vespidHiveBuilding = true;
 	
     // ==================================================
@@ -50,23 +54,23 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.aiPlaceBlock = new EntityAIPlaceBlock(this).setMaxDistance(128D).setSpeed(3D);
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
+        this.aiPlaceBlock = new PlaceBlockGoal(this).setMaxDistance(128D).setSpeed(3D);
         this.field_70714_bg.addTask(4, this.aiPlaceBlock);
-        this.field_70714_bg.addTask(5, new EntityAIFollowMaster(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new EntityAIWander(this).setPauseRate(20));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(5, new FollowMasterGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(20));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new EntityAITargetMasterAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetMaster(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(1, new MasterAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
+        this.field_70715_bh.addTask(3, new MasterTargetingGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IAnimals.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 	
 	// ==================================================
@@ -100,7 +104,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
         }
         
         // Building AI:
-        if(!this.getEntityWorld().isRemote && this.vespidHiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.block == null) {
+        if(!this.getEntityWorld().isRemote && this.vespidHiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
         	EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
         	
         	// Build Hive Foundations:

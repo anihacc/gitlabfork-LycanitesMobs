@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -44,24 +44,24 @@ public class EntityShambler extends EntityCreatureTameable implements IMob, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this));
         this.field_70714_bg.addTask(5, this.aiSit);
-        this.field_70714_bg.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(7, new EntityAITempt(this).setTemptDistanceMin(2.0D));
-        this.field_70714_bg.addTask(8, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIBeg(this));
-        this.field_70714_bg.addTask(11, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(12, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(7, new TemptGoal(this).setTemptDistanceMin(2.0D));
+        this.field_70714_bg.addTask(8, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new BegGoal(this));
+        this.field_70714_bg.addTask(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(12, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityTreant.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpClasses(EntityTreant.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -76,9 +76,9 @@ public class EntityShambler extends EntityCreatureTameable implements IMob, IGro
         // Water Healing:
         if(this.getAir() >= 0) {
             if (this.isInWater())
-                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 2));
+                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
             else if (this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
-                this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 1));
+                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
         }
     }
 
@@ -116,7 +116,7 @@ public class EntityShambler extends EntityCreatureTameable implements IMob, IGro
                 }
             }
             else if(damageSrc.getTrueSource() instanceof EntityLiving) {
-                EntityLiving entityLiving = (EntityLiving)damageSrc.getTrueSource();
+                LivingEntity entityLiving = (EntityLiving)damageSrc.getTrueSource();
                 if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
                     heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
                 }

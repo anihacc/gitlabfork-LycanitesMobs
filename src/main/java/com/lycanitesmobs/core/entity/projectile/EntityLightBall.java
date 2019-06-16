@@ -8,13 +8,15 @@ import com.lycanitesmobs.core.entity.creature.EntityWisp;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.Pose;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityLightBall extends EntityProjectileModel {
 
@@ -77,7 +79,7 @@ public class EntityLightBall extends EntityProjectileModel {
 	//========== Entity Living Damage ==========
 	@Override
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.GLOWING, this.getEffectDuration(20), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_188423_x, this.getEffectDuration(20), 0));
 		return true;
 	}
 
@@ -94,12 +96,11 @@ public class EntityLightBall extends EntityProjectileModel {
     public void onImpactVisuals() {
 		if(this.getEntityWorld().isRemote) {
 			for (int i = 0; i < 8; ++i) {
-				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-						this.posY + this.rand.nextDouble() * (double) this.height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-						0.0D, 0.0D, 0.0D,
-						Blocks.TALLGRASS.getStateId(Blocks.GLOWSTONE.getDefaultState()));
+				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.GLOWSTONE.getDefaultState()),
+						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						0.0D, 0.0D, 0.0D);
 			}
 		}
     }

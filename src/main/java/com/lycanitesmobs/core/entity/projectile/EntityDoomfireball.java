@@ -4,18 +4,17 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.block.Blocks;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityDoomfireball extends EntityProjectileBase {
 	
@@ -66,13 +65,13 @@ public class EntityDoomfireball extends EntityProjectileBase {
     @Override
     public boolean canDestroyBlock(BlockPos pos) {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
-        if(block == Blocks.SNOW_LAYER)
+        if(block == Blocks.SNOW)
             return true;
-        if(block == Blocks.TALLGRASS)
+        if(block == Blocks.TALL_GRASS)
             return true;
         if(block == Blocks.FIRE)
             return true;
-        if(block == Blocks.WEB)
+        if(block == Blocks.COBWEB)
             return true;
         if(ObjectManager.getBlock("PoisonCloud") != null && block == ObjectManager.getBlock("PoisonCloud"))
             return true;
@@ -108,7 +107,7 @@ public class EntityDoomfireball extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     }
     
     

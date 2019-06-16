@@ -4,16 +4,17 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
-
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.block.Blocks;
+import net.minecraft.entity.Pose;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityCrystalShard extends EntityProjectileModel {
 
@@ -86,12 +87,11 @@ public class EntityCrystalShard extends EntityProjectileModel {
     public void onImpactVisuals() {
 		if(this.getEntityWorld().isRemote) {
 			for (int i = 0; i < 8; ++i) {
-				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-						this.posY + this.rand.nextDouble() * (double) this.height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-						0.0D, 0.0D, 0.0D,
-						Blocks.TALLGRASS.getStateId(Blocks.DIAMOND_BLOCK.getDefaultState()));
+				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIAMOND_BLOCK.getDefaultState()),
+						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						0.0D, 0.0D, 0.0D);
 			}
 		}
     }

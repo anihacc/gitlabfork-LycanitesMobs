@@ -2,7 +2,9 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
@@ -38,14 +40,14 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityTrite.class));
-        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
+        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityTrite.class));
+        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 
@@ -69,7 +71,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
                 double distance = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.1F;
                 float velocity = 0.8F;
                 projectile.shoot(dX, dY + distance, dZ, velocity, 0.0F);
-                this.getEntityWorld().spawnEntity(projectile);
+                this.getEntityWorld().func_217376_c(projectile);
             }
         }
     }
@@ -108,7 +110,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());
-                this.getEntityWorld().spawnEntity(trite);
+                this.getEntityWorld().func_217376_c(trite);
                 if(this.getAttackTarget() != null)
                 	trite.setRevengeTarget(this.getAttackTarget());
             }

@@ -4,7 +4,8 @@ import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
@@ -45,30 +46,30 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(60));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
+        this.field_70714_bg.addTask(1, new StealthGoal(this).setStealthTime(60));
         this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.field_70714_bg.addTask(7, new EntityAIWander(this));
-        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
+        this.field_70714_bg.addTask(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
+        this.field_70714_bg.addTask(7, new WanderGoal(this));
+        this.field_70714_bg.addTask(9, new BegGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntitySnowman.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -116,7 +117,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
 
         // Launch:
         this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        this.getEntityWorld().spawnEntity(projectile);
+        this.getEntityWorld().func_217376_c(projectile);
 
         // Random Projectiles:
         for(int i = 0; i < 10; i++) {
@@ -124,7 +125,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
             projectile.setProjectileScale(2f);
             projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 0.5F, 3.0F);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().spawnEntity(projectile);
+            this.getEntityWorld().func_217376_c(projectile);
         }
 
         super.attackRanged(target, range);

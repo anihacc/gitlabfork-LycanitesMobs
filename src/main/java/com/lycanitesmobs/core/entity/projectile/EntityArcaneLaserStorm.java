@@ -1,20 +1,20 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.creature.EntityBeholder;
-
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,6 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 
 	// Properties:
 	public Entity shootingEntity;
-	private float projectileWidth = 1f;
-	private float projectileHeight = 1f;
 	public int expireTime = 15;
     public int laserMax = 7;
 
@@ -33,17 +31,14 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
  	// ==================================================
     public EntityArcaneLaserStorm(World world) {
         super(world);
-        this.setSize(projectileWidth, projectileHeight);
     }
 
     public EntityArcaneLaserStorm(World world, LivingEntity entityLiving) {
         super(world, entityLiving);
-        this.setSize(projectileWidth, projectileHeight);
     }
 
     public EntityArcaneLaserStorm(World world, double par2, double par4, double par6) {
         super(world, par2, par4, par6);
-        this.setSize(projectileWidth, projectileHeight);
     }
     
     // ========== Setup Projectile ==========
@@ -94,7 +89,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
                 laser = new EntityArcaneLaser(world, this.posX, this.posY, this.posZ, 20, 10, this);
             laser.useEntityAttackTarget = false;
             this.lasers.add(laser);
-            world.spawnEntity(laser);
+            world.func_217376_c(laser);
         }
 
         int laserCount = 0;
@@ -171,7 +166,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 					explosionRadius += 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
+			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.DESTROY);
 		}
     	super.onImpactComplete(this.getPosition());
     }
@@ -180,7 +175,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     }
     
     

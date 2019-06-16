@@ -5,9 +5,9 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
 public class EntityWhirlwind extends EntityProjectileBase {
@@ -57,7 +57,7 @@ public class EntityWhirlwind extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-		entityLiving.addPotionEffect(new EffectInstance(MobEffects.LEVITATION, this.getEffectDuration(4), 2));
+		entityLiving.addPotionEffect(new EffectInstance(Effects.field_188424_y, this.getEffectDuration(4), 2));
         return true;
     }
     
@@ -65,8 +65,8 @@ public class EntityWhirlwind extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i) {
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     	}
     }
 

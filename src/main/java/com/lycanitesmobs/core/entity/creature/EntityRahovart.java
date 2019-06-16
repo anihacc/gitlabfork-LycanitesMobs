@@ -8,7 +8,11 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
+import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
@@ -23,7 +27,7 @@ import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
@@ -35,8 +39,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,15 +94,15 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         //this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
         //this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
     // ========== Init ==========
@@ -113,7 +117,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     /** Returns a larger bounding box for rendering this large entity. **/
     @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
-        return this.getEntityBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
+        return this.getBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
 
     // ========== First Spawn ==========
@@ -194,7 +198,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 projectile.setProjectileScale(8f);
                 projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().spawnEntity(projectile);
+                this.getEntityWorld().func_217376_c(projectile);
             }
 
             // Flying Player Wraith Attack:
@@ -465,7 +469,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
             EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(entity.getEntityWorld(), entity);
             hellfireOrb.clientOnly = true;
             hellfireOrbs.add(hellfireOrb);
-            entity.getEntityWorld().spawnEntity(hellfireOrb);
+            entity.getEntityWorld().func_217376_c(hellfireOrb);
             hellfireOrb.setProjectileScale(orbSize);
         }
 
@@ -525,7 +529,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         EntityHellfireWave hellfireWave = new EntityHellfireWave(this.getEntityWorld(), this);
         hellfireWave.posY = this.posY;
         hellfireWave.rotation = angle;
-        this.getEntityWorld().spawnEntity(hellfireWave);
+        this.getEntityWorld().func_217376_c(hellfireWave);
     }
 
     // ========== Hellfire Wall ==========
@@ -549,7 +553,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         if(this.hellfireWallLeft == null) {
             this.hellfireWallLeft = new EntityHellfireBarrier(this.getEntityWorld(), this);
             this.hellfireWallLeft.wall = true;
-            this.getEntityWorld().spawnEntity(this.hellfireWallLeft);
+            this.getEntityWorld().func_217376_c(this.hellfireWallLeft);
         }
         this.hellfireWallLeft.time = 0;
         this.hellfireWallLeft.posX = this.posX;
@@ -561,7 +565,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         if(this.hellfireWallRight == null) {
             this.hellfireWallRight = new EntityHellfireBarrier(this.getEntityWorld(), this);
             this.hellfireWallRight.wall = true;
-            this.getEntityWorld().spawnEntity(this.hellfireWallRight);
+            this.getEntityWorld().func_217376_c(this.hellfireWallRight);
         }
         this.hellfireWallRight.time = 0;
         this.hellfireWallRight.posX = this.posX;
@@ -590,7 +594,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         this.playAttackSound();
 
         EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(this.getEntityWorld(), this);
-        this.getEntityWorld().spawnEntity(hellfireBarrier);
+        this.getEntityWorld().func_217376_c(hellfireBarrier);
         hellfireBarrier.time = 0;
         hellfireBarrier.posX = this.posX;
         hellfireBarrier.posY = this.posY;
@@ -642,7 +646,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     @Override
     public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == MobEffects.WITHER)
+        if(potionEffect.getPotion() == Effects.WITHER)
             return false;
         if(ObjectManager.getEffect("decay") != null)
             if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;

@@ -5,7 +5,9 @@ import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
@@ -50,17 +52,17 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(1, new EntityAIBreakDoor(this));
-        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this));
-        this.field_70714_bg.addTask(6, new EntityAIMoveVillage(this));
-        this.field_70714_bg.addTask(7, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(1, new BreakDoorGoal(this));
+        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this));
+        this.field_70714_bg.addTask(6, new MoveVillageGoal(this));
+        this.field_70714_bg.addTask(7, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
     }
     
     
@@ -89,7 +91,7 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
                 entityzombievillager.setAlwaysRenderNameTag(entityvillager.getAlwaysRenderNameTag());
             }
 
-            this.getEntityWorld().spawnEntity(entityzombievillager);
+            this.getEntityWorld().func_217376_c(entityzombievillager);
             this.getEntityWorld().playEvent(null, 1016, entityzombievillager.getPosition(), 0);
         }
     }

@@ -6,7 +6,10 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.IAnimals;
@@ -17,12 +20,12 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupFire {
 
-	EntityAIWander wanderAI;
+	WanderGoal wanderAI;
 
     // ==================================================
  	//                    Constructor
@@ -50,19 +53,19 @@ public class EntityCephignis extends EntityCreatureAgeable implements IAnimals, 
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.field_70714_bg.addTask(2, new EntityAITempt(this).setItemList("Fuel"));
-        this.field_70714_bg.addTask(3, new EntityAIStayByWater(this));
-        this.field_70714_bg.addTask(4, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(5, new EntityAIMate(this));
-        this.field_70714_bg.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.wanderAI = new EntityAIWander(this);
+        this.field_70714_bg.addTask(1, new AttackMeleeGoal(this).setLongMemory(false));
+        this.field_70714_bg.addTask(2, new TemptGoal(this).setItemList("Fuel"));
+        this.field_70714_bg.addTask(3, new StayByWaterGoal(this));
+        this.field_70714_bg.addTask(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(5, new MateGoal(this));
+        this.field_70714_bg.addTask(6, new FollowParentGoal(this).setSpeed(1.0D));
+        this.wanderAI = new WanderGoal(this);
         this.field_70714_bg.addTask(7, this.wanderAI);
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.field_70715_bh.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
     }
     
     

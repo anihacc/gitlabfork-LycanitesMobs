@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
-import com.lycanitesmobs.core.entity.ai.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.material.Material;
@@ -49,30 +50,30 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.field_70714_bg.addTask(1, new EntityAIStealth(this).setStealthTime(60));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
+        this.field_70714_bg.addTask(1, new StealthGoal(this).setStealthTime(60));
         this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
-        this.field_70714_bg.addTask(7, new EntityAIWander(this));
-        this.field_70714_bg.addTask(9, new EntityAIBeg(this));
+        this.field_70714_bg.addTask(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
+        this.field_70714_bg.addTask(7, new WanderGoal(this));
+        this.field_70714_bg.addTask(9, new BegGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityBlaze.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityMagmaCube.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -151,7 +152,7 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
             // Launch:
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             projectile.setPosition(launchPos.getX(), launchPos.getY(), launchPos.getZ());
-            this.getEntityWorld().spawnEntity(projectile);
+            this.getEntityWorld().func_217376_c(projectile);
         }
 
         super.attackRanged(target, range);

@@ -3,14 +3,13 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -62,13 +61,13 @@ public class EntityIcefireball extends EntityProjectileBase {
 
     public boolean canDestroyBlockSub(BlockPos pos) {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
-        if(block == Blocks.SNOW_LAYER)
+        if(block == Blocks.SNOW)
             return true;
-        if(block == Blocks.TALLGRASS)
+        if(block == Blocks.TALL_GRASS)
             return true;
         if(block == Blocks.FIRE)
             return true;
-        if(block == Blocks.WEB)
+        if(block == Blocks.COBWEB)
             return true;
         if(ObjectManager.getBlock("PoisonCloud") != null && block == ObjectManager.getBlock("PoisonCloud"))
             return true;
@@ -114,7 +113,7 @@ public class EntityIcefireball extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     }
     
     

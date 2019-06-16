@@ -428,7 +428,7 @@ public class EntityProjectileBase extends ThrowableEntity {
      //========== On Impact Particles/Sounds Client Side ==========
      public void onImpactVisuals() {
     	 //for(int i = 0; i < 8; ++i)
-    		 //this.getEntityWorld().spawnParticle("particlename", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		 //this.getEntityWorld().addParticle("particlename", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
      }
      
      

@@ -3,13 +3,13 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetRevenge;
-import com.lycanitesmobs.core.entity.ai.EntityAIWander;
+import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.ai.EntityAIFollowParent;
+import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
@@ -55,10 +55,10 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(5, new EntityAIFollowParent(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this).setPauseRate(30));
-        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityConcapedeHead.class));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(5, new FollowParentGoal(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
+        this.field_70714_bg.addTask(6, new WanderGoal(this).setPauseRate(30));
+        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityConcapedeHead.class));
     }
 
     // ==================================================
@@ -108,7 +108,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
         // Try to Load Parent from UUID:
         if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null) {
 	        double range = 64D;
-	        List connections = this.getEntityWorld().getEntitiesWithinAABB(EntityCreatureAgeable.class, this.getEntityBoundingBox().grow(range, range, range));
+	        List connections = this.getEntityWorld().getEntitiesWithinAABB(EntityCreatureAgeable.class, this.getBoundingBox().grow(range, range, range));
 	        Iterator possibleConnections = connections.iterator();
 	        while(possibleConnections.hasNext()) {
 	        	EntityCreatureAgeable possibleConnection = (EntityCreatureAgeable)possibleConnections.next();
@@ -183,7 +183,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IAn
 			concapedeHead.copyLocationAndAnglesFrom(this);
 			concapedeHead.firstSpawn = false;
 			concapedeHead.setGrowingAge(-this.growthTime / 4);
-			this.getEntityWorld().spawnEntity(concapedeHead);
+			this.getEntityWorld().func_217376_c(concapedeHead);
 			if(this.hasMaster() && this.getMasterTarget() instanceof EntityConcapedeSegment)
 				((EntityConcapedeSegment)this.getMasterTarget()).setParentTarget(concapedeHead);
 			this.getEntityWorld().removeEntity(this);

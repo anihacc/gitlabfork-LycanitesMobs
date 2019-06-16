@@ -10,13 +10,15 @@ import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.MobEffects;
+import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityDemonicBlast extends EntityProjectileBase {
 	
@@ -59,7 +61,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     public void tick() {
     	super.tick();
     	if(!this.getEntityWorld().isRemote) {
-	    	if(rapidTicks % 5 == 0 && !isDead) {
+	    	if(rapidTicks % 5 == 0 && this.isAlive()) {
                 for(int i = 0; i < 6; i++) {
                     fireProjectile();
                 }
@@ -83,29 +85,29 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     public void fireProjectile() {
     	World world = this.getEntityWorld();
     	
-		IProjectile projectile;
+		EntityProjectileBase projectile;
 		if(this.getThrower() != null) {
-			projectile = (IProjectile) new EntityDemonicSpark(world, this.getThrower());
+			projectile = new EntityDemonicSpark(world, this.getThrower());
 			if(projectile instanceof Entity) {
-				((Entity)projectile).posX = this.posX;
-				((Entity)projectile).posY = this.posY;
-				((Entity)projectile).posZ = this.posZ;
+				projectile.posX = this.posX;
+				projectile.posY = this.posY;
+				projectile.posZ = this.posZ;
 			}
 		}
-		else
-			projectile = (IProjectile) new EntityDemonicSpark(world, this.posX, this.posY, this.posZ);
+		else {
+			projectile = new EntityDemonicSpark(world, this.posX, this.posY, this.posZ);
+		}
+
 		float velocity = 1.2F;
-		double motionT = this.motionX + this.motionY + this.motionZ;
-		if(this.motionX < 0) motionT -= this.motionX * 2;
-		if(this.motionY < 0) motionT -= this.motionY * 2;
-		if(this.motionZ < 0) motionT -= this.motionZ * 2;
-        projectile.shoot(this.motionX / motionT + (rand.nextGaussian() - 0.5D), this.motionY / motionT + (rand.nextGaussian() - 0.5D), this.motionZ / motionT + (rand.nextGaussian() - 0.5D), velocity, 0);
-        
-        if(projectile instanceof EntityProjectileBase) {
-            this.playSound(((EntityProjectileBase) projectile).getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
-        }
-        
-        world.spawnEntity((Entity) projectile);
+		double motionT = this.getMotion().getX() + this.getMotion().getY() + this.getMotion().getZ();
+		if(this.getMotion().getX() < 0) motionT -= this.getMotion().getX() * 2;
+		if(this.getMotion().getY() < 0) motionT -= this.getMotion().getY() * 2;
+		if(this.getMotion().getZ() < 0) motionT -= this.getMotion().getZ() * 2;
+        projectile.shoot(this.getMotion().getX() / motionT + (rand.nextGaussian() - 0.5D), this.getMotion().getY() / motionT + (rand.nextGaussian() - 0.5D), this.getMotion().getZ() / motionT + (rand.nextGaussian() - 0.5D), velocity, 0);
+
+		this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
+
+		world.func_217376_c(projectile);
     }
 	
     
@@ -125,7 +127,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.WITHER, this.getEffectDuration(10), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_82731_v, this.getEffectDuration(10), 0));
 		if(ObjectManager.getEffect("decay") != null) {
 			entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
@@ -157,7 +159,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 					explosionRadius = 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
+			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.DESTROY);
 		}
     	for(int i = 0; i < 8; ++i) {
 			fireProjectile();
@@ -168,7 +170,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     }
     
     

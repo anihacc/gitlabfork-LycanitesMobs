@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.ai.EntityAISit;
+import com.lycanitesmobs.core.entity.goals.actions.SitGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -47,7 +47,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
 	public UUID ownerUUID;
 
 	// AI:
-	public EntityAISit aiSit;
+	public SitGoal aiSit;
 
     // Datawatcher:
     protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
@@ -85,7 +85,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.aiSit = new EntityAISit(this);
+        this.aiSit = new SitGoal(this);
     }
     
     // ========== Name ==========

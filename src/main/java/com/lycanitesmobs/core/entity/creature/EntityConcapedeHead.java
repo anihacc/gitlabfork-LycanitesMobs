@@ -6,7 +6,9 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -19,7 +21,6 @@ import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupAlpha {
@@ -47,16 +48,16 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.field_70714_bg.addTask(5, new EntityAITempt(this).setItemList("vegetables"));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this).setLongMemory(false));
+        this.field_70714_bg.addTask(5, new TemptGoal(this).setItemList("vegetables"));
+        this.field_70714_bg.addTask(6, new WanderGoal(this).setPauseRate(30));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
     }
 	
 	
@@ -75,7 +76,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
         		EntityConcapedeSegment segmentEntity = new EntityConcapedeSegment(parentSegment.getEntityWorld());
         		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
-        		parentSegment.getEntityWorld().spawnEntity(segmentEntity);
+        		parentSegment.getEntityWorld().func_217376_c(segmentEntity);
 				parentSegment = segmentEntity;
         	}
         }
@@ -114,7 +115,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IAnima
 			if(size < CONCAPEDE_SIZE_MAX) {
 				EntityConcapedeSegment segmentEntity = new EntityConcapedeSegment(this.getEntityWorld());
 	    		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
-	    		parentSegment.getEntityWorld().spawnEntity(segmentEntity);
+	    		parentSegment.getEntityWorld().func_217376_c(segmentEntity);
 				segmentEntity.setParentTarget(parentSegment);
 			}
 		}

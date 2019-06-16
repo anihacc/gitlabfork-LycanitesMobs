@@ -4,7 +4,10 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +16,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -37,19 +40,19 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
-        this.field_70714_bg.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.field_70714_bg.addTask(4, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(6, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
-        this.field_70715_bh.addTask(0, new EntityAITargetRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetAttack(this).setTargetClass(EntityJoustAlpha.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPredator.class));
-        this.field_70715_bh.addTask(4, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
+        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(false));
+        this.field_70714_bg.addTask(4, new FollowParentGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(6, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.field_70715_bh.addTask(4, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
     }
 	
 	
@@ -80,7 +83,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IAnimals,
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityJoustAlpha && this.getHealth() < this.getMaxHealth()) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 10 * 20, 2, false, true));
+    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 10 * 20, 2, false, true));
     	}
     	super.setAttackTarget(entity);
     }

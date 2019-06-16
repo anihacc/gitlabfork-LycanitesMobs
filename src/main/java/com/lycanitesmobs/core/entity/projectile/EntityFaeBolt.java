@@ -3,13 +3,14 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Potion;
+import net.minecraft.entity.Pose;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 public class EntityFaeBolt extends EntityProjectileBase {
@@ -58,7 +59,7 @@ public class EntityFaeBolt extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-		Potion bleed = ObjectManager.getEffect("bleed");
+		Effect bleed = ObjectManager.getEffect("bleed");
 		if (bleed != null)
 			entityLiving.addPotionEffect(new EffectInstance(bleed, this.getEffectDuration(5), 0));
         return true;
@@ -68,18 +69,16 @@ public class EntityFaeBolt extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i) {
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					this.posY + this.rand.nextDouble() * (double) this.height,
-					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					0.0D, 0.0D, 0.0D,
-					Blocks.TALLGRASS.getStateId(Blocks.YELLOW_FLOWER.getDefaultState()));
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					this.posY + this.rand.nextDouble() * (double) this.height,
-					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					0.0D, 0.0D, 0.0D,
-					Blocks.TALLGRASS.getStateId(Blocks.RED_FLOWER.getDefaultState()));
+			this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.SUNFLOWER.getDefaultState()),
+					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+					this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+					0.0D, 0.0D, 0.0D);
+			this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.ROSE_BUSH.getDefaultState()),
+					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+					this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+					0.0D, 0.0D, 0.0D);
     	}
     }
 

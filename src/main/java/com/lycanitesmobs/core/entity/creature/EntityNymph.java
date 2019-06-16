@@ -3,14 +3,18 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -43,18 +47,18 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-		this.field_70714_bg.addTask(5, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(8, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+		this.field_70714_bg.addTask(5, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.field_70714_bg.addTask(8, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -75,7 +79,7 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
 						if (target != this && !(target instanceof EntityNymph) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
-							target.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 0));
+							target.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
 						}
 					}
 				}
@@ -97,13 +101,13 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
         /*/ Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 1; ++i) {
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+                this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
                         this.posY + this.rand.nextDouble() * (double) this.height,
                         this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
                         0.0D, 0.0D, 0.0D,
                         Blocks.RED_FLOWER.getStateId(Blocks.RED_FLOWER.getStateFromMeta(2)));
-				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+				this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
 						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
 						this.posY + this.rand.nextDouble() * (double) this.height,
 						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,

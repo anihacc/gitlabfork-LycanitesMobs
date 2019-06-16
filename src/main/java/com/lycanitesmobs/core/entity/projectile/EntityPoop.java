@@ -9,9 +9,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -51,8 +52,8 @@ public class EntityPoop extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.SLOWNESS, this.getEffectDuration(3), 0));
-    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.NAUSEA, this.getEffectDuration(5), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_76421_d, this.getEffectDuration(3), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_76431_k, this.getEffectDuration(5), 0));
     	return true;
     }
 
@@ -79,11 +80,9 @@ public class EntityPoop extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-            this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+            this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.PODZOL.getDefaultState()),
                     this.posX, this.posY, this.posZ,
-                    0.0D, 0.0D, 0.0D,
-                    Blocks.TALLGRASS.getStateId(Blocks.DIRT.getDefaultState())
-            );
+                    0.0D, 0.0D, 0.0D);
     }
     
     

@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
@@ -13,13 +13,13 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityEyewig extends EntityCreatureRideable {
 
-	EntityAIAttackRanged rangedAttackAI;
+	AttackRangedGoal rangedAttackAI;
     
     // ==================================================
  	//                    Constructor
@@ -38,29 +38,29 @@ public class EntityEyewig extends EntityCreatureRideable {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         //this.field_70714_bg.addTask(2, new EntityAIPlayerControl(this));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(4.0F));
-        this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
+        this.rangedAttackAI = new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
         this.field_70714_bg.addTask(6, rangedAttackAI);
 		this.field_70714_bg.addTask(7, this.aiSit);
-		this.field_70714_bg.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(9, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+		this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(9, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
-		this.field_70715_bh.addTask(2, new EntityAITargetOwnerRevenge(this));
-		this.field_70715_bh.addTask(3, new EntityAITargetOwnerAttack(this));
-		this.field_70715_bh.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.field_70715_bh.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
+		this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
+		this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
+		this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
+        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityChicken.class));
+            this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(EntityChicken.class));
         }
     }
 	
@@ -70,10 +70,10 @@ public class EntityEyewig extends EntityCreatureRideable {
     // ==================================================
 	// ========== Rider Effects ==========
 	public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(MobEffects.POISON))
-    		rider.removeEffectInstance(MobEffects.POISON);
-    	if(rider.isPotionActive(MobEffects.BLINDNESS))
-    		rider.removeEffectInstance(MobEffects.BLINDNESS);
+    	if(rider.isPotionActive(Effects.POISON))
+    		rider.removePotionEffect(Effects.POISON);
+    	if(rider.isPotionActive(Effects.BLINDNESS))
+    		rider.removePotionEffect(Effects.BLINDNESS);
     }
 
 	
@@ -120,7 +120,7 @@ public class EntityEyewig extends EntityCreatureRideable {
 	    	
 	    	// Launch:
 	        this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().spawnEntity(abilityProjectile);
+	        this.getEntityWorld().func_217376_c(abilityProjectile);
     	}
     	
     	this.applyStaminaCost();
@@ -152,7 +152,7 @@ public class EntityEyewig extends EntityCreatureRideable {
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().spawnEntity(projectile);
+	        this.getEntityWorld().func_217376_c(projectile);
     	}
 
     	super.attackRanged(target, range);

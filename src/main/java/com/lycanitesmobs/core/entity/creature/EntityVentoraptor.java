@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
@@ -16,7 +16,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -47,32 +47,32 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         //this.field_70714_bg.addTask(2, new EntityAIPlayerControl(this));
-        this.field_70714_bg.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new EntityAIAttackMelee(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(6, new EntityAIAttackMelee(this));
+        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.field_70714_bg.addTask(6, new AttackMeleeGoal(this));
 		this.field_70714_bg.addTask(7, this.aiSit);
-		this.field_70714_bg.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(9, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new EntityAIWander(this));
-        this.field_70714_bg.addTask(11, new EntityAIBeg(this));
-        this.field_70714_bg.addTask(12, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(13, new EntityAILookIdle(this));
+		this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.field_70714_bg.addTask(9, new FollowParentGoal(this).setSpeed(1.0D));
+        this.field_70714_bg.addTask(10, new WanderGoal(this));
+        this.field_70714_bg.addTask(11, new BegGoal(this));
+        this.field_70714_bg.addTask(12, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(13, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetRiderAttack(this));
-		this.field_70715_bh.addTask(2, new EntityAITargetOwnerRevenge(this));
-		this.field_70715_bh.addTask(3, new EntityAITargetOwnerAttack(this));
-		this.field_70715_bh.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.field_70715_bh.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
+        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
+		this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
+		this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
+		this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
+        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
-            this.field_70715_bh.addTask(8, new EntityAITargetAttack(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
+            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
+            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
         }
     }
 	
@@ -100,10 +100,10 @@ public class EntityVentoraptor extends EntityCreatureRideable implements IGroupP
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(MobEffects.WEAKNESS))
-            rider.removeEffectInstance(MobEffects.WEAKNESS);
-        if(rider.isPotionActive(MobEffects.SLOWNESS))
-            rider.removeEffectInstance(MobEffects.SLOWNESS);
+        if(rider.isPotionActive(Effects.WEAKNESS))
+            rider.removePotionEffect(Effects.WEAKNESS);
+        if(rider.isPotionActive(Effects.SLOWNESS))
+            rider.removePotionEffect(Effects.SLOWNESS);
     }
 
 	

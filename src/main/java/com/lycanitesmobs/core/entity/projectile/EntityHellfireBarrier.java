@@ -3,15 +3,14 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
-
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityHellfireBarrier extends EntityProjectileBase {
 
@@ -42,12 +41,11 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
     }
     
     // ========== Setup Projectile ==========
-    public void setup() {
+    public void setup() { // Size 2F
     	this.entityName = "hellfirebarrier";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(0);
     	this.setProjectileScale(0F);
-        this.setSize(2F, 2F);
         this.movement = false;
         this.ripper = true;
         this.pierceBlocks = true;
@@ -102,7 +100,7 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
                     hellfireWalls[row][col].posZ = this.posZ + z;
                     hellfireWalls[row][col].projectileLife = 2 * 20;
 
-                    this.getEntityWorld().spawnEntity(hellfireWalls[row][col]);
+                    this.getEntityWorld().func_217376_c(hellfireWalls[row][col]);
                     hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2.5F);
                 }
             }
@@ -120,7 +118,7 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
                 hellfireWalls[row][col].posZ = this.posZ + z;
                 hellfireWalls[row][col].projectileLife = 2 * 20;
 
-                if(this.isDead)
+                if(!this.isAlive())
                     hellfireWalls[row][col].remove();
             }
         }

@@ -1,0 +1,94 @@
+package com.lycanitesmobs.core.entity.goals.actions;
+
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+
+import java.util.EnumSet;
+
+public class BegGoal extends Goal {
+	// Targets:
+    private EntityCreatureTameable host;
+    private PlayerEntity player;
+    
+    // Properties:
+    private float range = 8.0F * 8.0F;
+    private int begTime;
+	
+	// ==================================================
+ 	//                    Constructor
+ 	// ==================================================
+    public BegGoal(EntityCreatureTameable setHost) {
+        this.host = setHost;
+		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+    }
+    
+    
+    // ==================================================
+  	//                  Set Properties
+  	// ==================================================
+    public BegGoal setRange(float setRange) {
+    	this.range = setRange * setRange;
+    	return this;
+    }
+	
+    
+	// ==================================================
+ 	//                   Should Execute
+ 	// ==================================================
+    public boolean shouldExecute() {
+        this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), (double) this.range, entity -> true);
+        return this.player != null && this.gotBegItem(this.player);
+    }
+	
+    
+	// ==================================================
+ 	//                 Continue Executing
+ 	// ==================================================
+    public boolean shouldContinueExecuting() {
+        return this.player.isAlive() && (!(this.host.getDistance(this.player) > (double) (this.range * this.range)) && (this.begTime > 0 && this.gotBegItem(this.player)));
+    }
+	
+    
+	// ==================================================
+ 	//                      Start
+ 	// ==================================================
+    public void startExecuting() {
+        this.host.setSitting(true);
+        this.begTime = 40 + this.host.getRNG().nextInt(40);
+    }
+	
+    
+	// ==================================================
+ 	//                       Reset
+ 	// ==================================================
+    public void resetTask() {
+        this.host.setSitting(false);
+        this.player = null;
+    }
+	
+    
+	// ==================================================
+ 	//                      Update
+ 	// ==================================================
+    public void updateTask() {
+        this.host.getLookHelper().setLookPosition(this.player.posX, this.player.posY + (double)this.player.getEyeHeight(), this.player.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        --this.begTime;
+    }
+	
+    
+	// ==================================================
+ 	//                    Got Beg Item
+ 	// ==================================================
+    private boolean gotBegItem(PlayerEntity player) {
+        ItemStack itemstack = player.inventory.getCurrentItem();
+        if(itemstack.isEmpty())
+        	return false;
+        
+        if(!this.host.isTamed())
+        	return this.host.isTamingItem(itemstack);
+        
+        return this.host.isBreedingItem(itemstack);
+    }
+}

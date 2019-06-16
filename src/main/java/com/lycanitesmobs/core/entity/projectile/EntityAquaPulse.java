@@ -3,16 +3,15 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -53,7 +52,7 @@ public class EntityAquaPulse extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(MobEffects.MINING_FATIGUE, this.getEffectDuration(8), 2));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_76419_f, this.getEffectDuration(8), 2));
         return true;
     }
     
@@ -65,13 +64,13 @@ public class EntityAquaPulse extends EntityProjectileBase {
 
     public boolean canDestroyBlockSub(BlockPos pos) {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
-    	if(block == Blocks.SNOW_LAYER)
+    	if(block == Blocks.SNOW)
     		return true;
-    	if(block == Blocks.TALLGRASS)
+    	if(block == Blocks.TALL_GRASS)
     		return true;
     	if(block == Blocks.FIRE)
     		return true;
-    	if(block == Blocks.WEB)
+    	if(block == Blocks.COBWEB)
     		return true;
     	if(ObjectManager.getBlock("PoisonCloud") != null && block == ObjectManager.getBlock("PoisonCloud"))
     		return true;
@@ -97,8 +96,8 @@ public class EntityAquaPulse extends EntityProjectileBase {
     //========== Place Block ==========
     @Override
     public void placeBlock(World world, BlockPos pos) {
-        BlockState placedBlockBig = Blocks.FLOWING_WATER.getDefaultState().withProperty(BlockLiquid.LEVEL, 4);
-        BlockState placedBlock = Blocks.FLOWING_WATER.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
+        BlockState placedBlockBig = Blocks.WATER.getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
+        BlockState placedBlock = Blocks.WATER.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
         if(this.canDestroyBlockSub(pos))
             world.setBlockState(pos, placedBlockBig, 3);
         if(this.canDestroyBlockSub(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))
@@ -115,8 +114,8 @@ public class EntityAquaPulse extends EntityProjectileBase {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i) {
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-    		this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_WATER, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_WATER, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     	}
     }
 

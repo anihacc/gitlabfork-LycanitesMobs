@@ -4,31 +4,32 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGroupPlant {
 	
-	EntityAIAttackRanged rangedAttackAI;
+	AttackRangedGoal rangedAttackAI;
 	public int farmingRate = 20;
 
     // ==================================================
@@ -51,22 +52,22 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.field_70714_bg.addTask(0, new EntityAISwimming(this));
+        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
         this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F);
+        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.rangedAttackAI = new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F);
         this.field_70714_bg.addTask(5, rangedAttackAI);
-        this.field_70714_bg.addTask(8, new EntityAIWander(this));
-        this.field_70714_bg.addTask(10, new EntityAIWatchClosest(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new EntityAILookIdle(this));
+        this.field_70714_bg.addTask(8, new WanderGoal(this));
+        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.field_70715_bh.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.field_70715_bh.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new EntityAITargetAttack(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
+        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
+        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -82,9 +83,9 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 		// Water Healing:
 		if(this.getAir() >= 0) {
 			if (this.isInWater())
-				this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 2));
+				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
 			else if (this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
-				this.addPotionEffect(new EffectInstance(MobEffects.REGENERATION, 3 * 20, 1));
+				this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
 		}
 
         // Farming:
@@ -102,7 +103,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 	        		for(int z = (int)this.posZ - farmingRange; z <= (int)this.posZ + farmingRange; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
 	        			Block farmingBlock = this.getEntityWorld().getBlockState(pos).getBlock();
-	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALLGRASS && farmingBlock != Blocks.DOUBLE_PLANT) {
+	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS && farmingBlock != Blocks.DOUBLE_PLANT) {
 	        				
 		        			// Boost Crops Every X Seconds:
 		        			if(!this.getEntityWorld().isRemote && this.farmingTick % (currentFarmingRate) == 0) {
@@ -122,7 +123,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 		        				double d0 = this.getRNG().nextGaussian() * 0.02D;
 		                        double d1 = this.getRNG().nextGaussian() * 0.02D;
 		                        double d2 = this.getRNG().nextGaussian() * 0.02D;
-		        				this.getEntityWorld().spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, (double)((float)x + this.getRNG().nextFloat()), (double)y + (double)this.getRNG().nextFloat(), (double)((float)z + this.getRNG().nextFloat()), d0, d1, d2);
+		        				this.getEntityWorld().addParticle(ParticleTypes.VILLAGER_HAPPY, (double)((float)x + this.getRNG().nextFloat()), (double)y + (double)this.getRNG().nextFloat(), (double)((float)z + this.getRNG().nextFloat()), d0, d1, d2);
 		        			}
 	        			}
 	    	        }
@@ -133,12 +134,12 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
         // Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+                this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
                         this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
                         this.posY + this.rand.nextDouble() * (double) this.height,
                         this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
                         0.0D, 0.0D, 0.0D,
-                        Blocks.TALLGRASS.getStateId(Blocks.TALLGRASS.getDefaultState()));
+                        Blocks.TALL_GRASS.getStateId(Blocks.TALL_GRASS.getDefaultState()));
             }
     }
 
@@ -165,7 +166,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().spawnEntity(projectile);
+	        this.getEntityWorld().func_217376_c(projectile);
     	}
 
     	super.attackRanged(target, range);
@@ -188,7 +189,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
                 }
             }
             else if(damageSrc.getTrueSource() instanceof EntityLiving) {
-                EntityLiving entityLiving = (EntityLiving)damageSrc.getTrueSource();
+                LivingEntity entityLiving = (EntityLiving)damageSrc.getTrueSource();
                 if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
                     heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
                 }
