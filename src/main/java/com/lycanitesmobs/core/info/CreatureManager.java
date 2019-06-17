@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigCreatures;
@@ -111,7 +112,7 @@ public class CreatureManager extends JSONLoader {
 	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
 	public void loadCreatureTypesFromJSON(ModInfo groupInfo) {
 		try {
-			this.loadAllJson(groupInfo, "Creature Type", "creaturetypes", "name", true);
+			this.loadAllJson(groupInfo, "Creature Type", "creaturetypes", "name", true, FileLoader.PathType.COMMON);
 			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
 		}
 		catch(Exception e) {
@@ -126,7 +127,7 @@ public class CreatureManager extends JSONLoader {
 			if(!this.loadedMods.contains(groupInfo)) {
 				this.loadedMods.add(groupInfo);
 			}
-			this.loadAllJson(groupInfo, "Creature", "creatures", "name", false);
+			this.loadAllJson(groupInfo, "Creature", "creatures", "name", true, FileLoader.PathType.COMMON);
 			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
 		}
 		catch(Exception e) {

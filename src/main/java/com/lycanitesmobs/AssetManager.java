@@ -5,11 +5,9 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
-import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 import com.lycanitesmobs.core.model.ModelItemBase;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ public class AssetManager {
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
 	public static Map<String, ModelCreatureBase> creatureModels = new HashMap<>();
 	public static Map<String, ModelProjectileBase> projectileModels = new HashMap<>();
-	public static Map<String, IModel> objModels = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
 
 
@@ -42,12 +39,6 @@ public class AssetManager {
 		for(int i = 0; i < paths.length; i++)
             textureGroup[i] = new ResourceLocation(modInfo.modid, paths[i]);
         textureGroups.put(name, textureGroup);
-	}
-	
-	// ========== Obj Model ==========
-	public static void addObjModel(String name, ModInfo modInfo, String path) {
-		name = name.toLowerCase();
-		objModels.put(name, ModelCreatureObjOld.loadModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj")));
 	}
 
 	// ========== Item Model ==========
@@ -134,21 +125,6 @@ public class AssetManager {
 		if(projectileModels.containsKey(projectileName))
 			return projectileModels.get(projectileName);
 		return null;
-	}
-
-	
-	// ========== Obj Model ==========
-	public static IModel getObjModel(String name) {
-		name = name.toLowerCase();
-		if(!objModels.containsKey(name))
-			return null;
-		return objModels.get(name);
-	}
-	public static IModel getObjModel(String name, ModInfo modInfo, String path) {
-		name = name.toLowerCase();
-		if(!objModels.containsKey(name))
-			addObjModel(name, modInfo, path);
-		return objModels.get(name);
 	}
 
 	// ========== Item Model ==========

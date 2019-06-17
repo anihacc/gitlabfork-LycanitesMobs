@@ -68,13 +68,11 @@ public class InventoryCreature implements IInventory {
             return EntityCreatureBase.EQUIPMENT_FEET;
         if(type.equals("saddle"))
             return EntityCreatureBase.EQUIPMENT_SADDLE;
-        if(type.equals("bag"))
-            return EntityCreatureBase.EQUIPMENT_BAG;
-        return null;
+        return EntityCreatureBase.EQUIPMENT_BAG;
     }
 
     /** Registers parameters to the provided datamanager. **/
-    public static void registerDataParameters(EntityDataManager dataManager) {
+    public static void registerData(EntityDataManager dataManager) {
         for(String equipmentType : equipmentTypes)
             dataManager.register(getEquipmentDataParameter(equipmentType), ItemStack.EMPTY);
     }

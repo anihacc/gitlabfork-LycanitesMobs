@@ -1,7 +1,7 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.capabilities.IExtendedEntity;
-import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
+import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
+import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -13,10 +13,8 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.Direction;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -28,9 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
@@ -109,51 +104,11 @@ public class EventListener {
     @SubscribeEvent
     public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof LivingEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedEntity"), new ICapabilitySerializable<CompoundNBT>() {
-				LazyOptional<IExtendedEntity> instance;
-
-                @Override
-                public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-                	if(this.instance == null) {
-                		this.instance = LazyOptional.of(LycanitesMobs.EXTENDED_ENTITY::getDefaultInstance);
-					}
-                	return this.instance.cast();
-                }
-
-                @Override
-                public CompoundNBT serializeNBT() {
-                    return (CompoundNBT) LycanitesMobs.EXTENDED_ENTITY.getStorage().writeNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance.orElse(null), null);
-                }
-
-                @Override
-                public void deserializeNBT(CompoundNBT nbt) {
-                    LycanitesMobs.EXTENDED_ENTITY.getStorage().readNBT(LycanitesMobs.EXTENDED_ENTITY, this.instance.orElse(null), null, nbt);
-                }
-            });
+            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "entity"), new CapabilityProviderEntity());
         }
 
         if(event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "IExtendedPlayer"), new ICapabilitySerializable<CompoundNBT>() {
-				LazyOptional<IExtendedPlayer> instance;
-
-				@Override
-				public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-					if(this.instance == null) {
-						this.instance = LazyOptional.of(LycanitesMobs.EXTENDED_PLAYER::getDefaultInstance);
-					}
-					return this.instance.cast();
-				}
-
-                @Override
-                public CompoundNBT serializeNBT() {
-                    return (CompoundNBT) LycanitesMobs.EXTENDED_PLAYER.getStorage().writeNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance.orElse(null), null);
-                }
-
-                @Override
-                public void deserializeNBT(CompoundNBT nbt) {
-                    LycanitesMobs.EXTENDED_PLAYER.getStorage().readNBT(LycanitesMobs.EXTENDED_PLAYER, this.instance.orElse(null), null, nbt);
-                }
-            });
+            event.addCapability(new ResourceLocation(LycanitesMobs.modid, "player"), new CapabilityProviderPlayer());
         }
     }
 
@@ -179,7 +134,7 @@ public class EventListener {
 
         // ========== Force Remove Entity ==========
         if(!(event.getEntity() instanceof LivingEntity)) {
-            if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
+            if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.size() > 0) {
                 LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
                     if(forceRemoveID.equalsIgnoreCase(event.getEntity().getType().getRegistryName().toString())) {

@@ -304,12 +304,12 @@ public class ObjectManager {
     @OnlyIn(Dist.CLIENT)
     public static void RegisterModels() {
 		for(Item item : items.values()) {
-			if(item instanceof ItemBase) {
+			/*if(item instanceof ItemBase) {
 				ItemBase itemBase = (ItemBase) item;
 				if (itemBase.useItemColors()) {
 					Minecraft.getInstance().getItemColors().register(ClientManager.itemColor, item);
 				}
-			}
+			}*/
             if(item instanceof ItemEquipmentPart) {
 				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
             	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));

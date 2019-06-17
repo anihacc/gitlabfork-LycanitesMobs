@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.util.JSONUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -33,14 +33,15 @@ public abstract class JSONLoader {
 	 * @param dataPath The path to load json files from relative to the group data folder and the config folder.
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
+	 * @param pathType Whether to load from assets (resource packs, client side), data (data packs, server side) or common (both but not accessible to packs).
 	 */
-	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom) {
+	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom, FileLoader.PathType pathType) {
 		LycanitesMobs.printDebug(name, "Loading JSON " + name + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
 
 		// Load Default:
-		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, dataPath);
+		Path path = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, dataPath, pathType);
 		Map<String, JsonObject> defaultJsons = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJsons, mapKey, null);
 

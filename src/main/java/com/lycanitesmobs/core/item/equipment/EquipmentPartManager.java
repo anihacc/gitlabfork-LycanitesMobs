@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
@@ -38,7 +39,7 @@ public class EquipmentPartManager extends JSONLoader {
 			this.loadedGroups.add(groupInfo);
 		}
 		try {
-			this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false);
+			this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false, FileLoader.PathType.COMMON);
 			LycanitesMobs.printDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
 		}
 		catch(Exception e) {

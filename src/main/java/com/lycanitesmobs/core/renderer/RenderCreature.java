@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.config.ConfigClient;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -28,9 +27,11 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 		
     	this.defaultModel = this.field_77045_g;
 		ModelCreatureBase modelCreatureBase = this.field_77045_g;
+		if(modelCreatureBase == null)
+			return;
 		modelCreatureBase.addCustomLayers(this);
 
-        this.multipass = ConfigClient.INSTANCE.modelMultipass.get();
+        //this.multipass = ConfigClient.INSTANCE.modelMultipass.get();
     }
 
 

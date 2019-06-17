@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigGeneral {
-	public static ConfigGeneral INSTANCE = new ConfigGeneral(CoreConfig.BUILDER);
+	public static ConfigGeneral INSTANCE;
 
 	public final ForgeConfigSpec.ConfigValue<String> configVersion;
 
@@ -20,6 +20,8 @@ public class ConfigGeneral {
 				.comment("The last version of Lycanites Mobs that this config ran with, if this is behind the Minimum Config Version then all configs (including jsons) will be reset, only manually update this if you have manually adapted your configs to the latest version of Lycanites Mobs.")
 				.translation(CoreConfig.CONFIG_PREFIX + "version")
 				.define("version", LycanitesMobs.versionNumber);
+
+		builder.pop();
 	}
 
 	public void clearOldConfigs(String minVersion, String currentVersion) {

@@ -8,6 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -31,7 +32,7 @@ import net.minecraft.world.spawner.AbstractSpawner;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCustomSpawnEgg extends ItemBase {
+public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 	public CreatureInfo creatureInfo;
     
 	// ==================================================
@@ -189,7 +190,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 
     // ========== Get Color from ItemStack ==========
     @Override
-    public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
+    public int getColor(ItemStack itemStack, int tintIndex) {
 		return this.creatureInfo != null ? (tintIndex == 0 ? this.creatureInfo.eggBackColor : this.creatureInfo.eggForeColor) : 16777215;
     }
 

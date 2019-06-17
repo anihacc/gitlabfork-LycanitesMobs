@@ -122,7 +122,7 @@ public class DonationFamiliars {
     public List<String> getFamiliarBlacklist() {
     	if(this.familiarBlacklist == null) {
 			this.familiarBlacklist = new ArrayList<>();
-			this.familiarBlacklist.addAll(Arrays.asList(ConfigExtra.INSTANCE.familiarBlacklist.get()));
+			this.familiarBlacklist.addAll(ConfigExtra.INSTANCE.familiarBlacklist.get());
 		}
     	return this.familiarBlacklist;
 	}

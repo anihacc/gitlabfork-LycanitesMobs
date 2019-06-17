@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.localisation;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import net.minecraft.client.resources.I18n;
@@ -41,10 +42,11 @@ public class LanguageManager {
 	 * @return
 	 */
 	public static String translate(String key) {
-		if(!getInstance().map.containsKey(key)) {
+		return key;
+		/*if(!getInstance().map.containsKey(key)) {
 			return I18n.format(key);
 		}
-		return getInstance().map.get(key).replace("\\n", "\n");
+		return getInstance().map.get(key).replace("\\n", "\n");*/
 	}
 
 
@@ -93,7 +95,7 @@ public class LanguageManager {
 		int laodedLangFiles = 0;
 		for (String language : languageList) {
 			String languageDir = String.format("lang/%s/", language);
-			Path languageDirPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.modid, languageDir);
+			Path languageDirPath = FileLoader.getPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.modid, languageDir, FileLoader.PathType.CLIENT);
 			try {
 				// Iterate Language Directories:
 				Iterator<Path> languageDirIter = Files.walk(languageDirPath).iterator();

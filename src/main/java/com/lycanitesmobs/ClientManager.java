@@ -38,10 +38,10 @@ public class ClientManager {
 
 	public static IItemColor itemColor = (stack, tintIndex) -> {
 		Item item = stack.getItem();
-		if(item == null || !(item instanceof ItemBase))
+		if(!(item instanceof ItemBase))
 			return 16777215;
 		ItemBase itemBase = (ItemBase)item;
-		return itemBase.getColorFromItemstack(stack, tintIndex);
+		return itemBase.getColor(stack, tintIndex);
 	};
 
 	protected FontRenderer fontRenderer;

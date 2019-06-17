@@ -89,7 +89,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 
         // Client Side:
-        if(player.getEntityWorld() != null && player.getEntityWorld().isRemote) {
+		if(player.getEntityWorld().isRemote) {
             if(clientExtendedPlayers.containsKey(player)) {
                 ExtendedPlayer extendedPlayer = clientExtendedPlayers.get(player);
                 extendedPlayer.setPlayer(player);
@@ -98,11 +98,12 @@ public class ExtendedPlayer implements IExtendedPlayer {
             ExtendedPlayer extendedPlayer = new ExtendedPlayer();
             extendedPlayer.setPlayer(player);
             clientExtendedPlayers.put(player, extendedPlayer);
+			return extendedPlayer;
         }
 
         // Server Side:
         IExtendedPlayer iExtendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null).orElse(null);
-        if(!(iExtendedPlayer instanceof ExtendedPlayer))
+		if(!(iExtendedPlayer instanceof ExtendedPlayer))
             return null;
         ExtendedPlayer extendedPlayer = (ExtendedPlayer)iExtendedPlayer;
         if(extendedPlayer.getPlayer() != player)

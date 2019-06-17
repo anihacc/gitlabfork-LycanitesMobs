@@ -14,8 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.obj.OBJModel;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -73,14 +71,6 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     
     public ModelCreatureObjOld(float shadowSize) {
     	// Here a model should get its model, collect its parts into a list and then set the centers for each part.
-    }
-
-
-    // ==================================================
-    //                    Load Model
-    // ==================================================
-    public static IModel loadModel(ResourceLocation resourceLocation) {
-        return new OBJModel(new OBJModel.MaterialLibrary(), resourceLocation);
     }
 
 

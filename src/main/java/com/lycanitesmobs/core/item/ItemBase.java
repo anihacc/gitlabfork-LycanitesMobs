@@ -174,7 +174,7 @@ public class ItemBase extends Item {
     }
 
     // ========== Get Color from ItemStack ==========
-    public int getColorFromItemstack(ItemStack itemStack, int tintIndex) {
+    public int getColor(ItemStack itemStack, int tintIndex) {
         return 16777215;
     }
 }

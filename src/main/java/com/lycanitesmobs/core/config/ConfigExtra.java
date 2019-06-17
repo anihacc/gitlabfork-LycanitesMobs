@@ -1,13 +1,16 @@
 package com.lycanitesmobs.core.config;
 
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.List;
+
 public class ConfigExtra {
-	public static ConfigExtra INSTANCE = new ConfigExtra(CoreConfig.BUILDER);
+	public static ConfigExtra INSTANCE;
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> versionCheckerEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> disableNausea;
-	public final ForgeConfigSpec.ConfigValue<String[]> familiarBlacklist;
+	public final ForgeConfigSpec.ConfigValue<List<? extends String>> familiarBlacklist;
 
 	public ConfigExtra(ForgeConfigSpec.Builder builder) {
 		builder.push("Extra");
@@ -26,6 +29,8 @@ public class ConfigExtra {
 		this.familiarBlacklist = builder
 				.comment("Donation Familiars help support the development of this mod but can be turned of for individual players be adding their username to this list.")
 				.translation(CoreConfig.CONFIG_PREFIX + "familiars.blacklist")
-				.define("familiars.blacklist", new String[] {"Jbams"});
+				.defineList("familiars.blacklist", Lists.newArrayList("Jbams"), o -> o instanceof String);
+
+		builder.pop();
 	}
 }

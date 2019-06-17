@@ -38,12 +38,6 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 		super(world);
 		this.hasJumpSound = true;
 	}
-	
-	// ========== Init ==========
-    @Override
-    protected void registerData() {
-        super.registerData();
-    }
     
     
     // ==================================================

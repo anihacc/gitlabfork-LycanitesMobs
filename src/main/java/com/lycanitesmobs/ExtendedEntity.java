@@ -14,11 +14,12 @@ import net.minecraft.potion.Effect;
 
 import javax.vecmath.Vector3d;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ExtendedEntity implements IExtendedEntity {
     public static Map<Entity, ExtendedEntity> clientExtendedEntities = new HashMap<>();
-    public static String[] FORCE_REMOVE_ENTITY_IDS;
+    public static List<? extends String> FORCE_REMOVE_ENTITY_IDS;
     public static int FORCE_REMOVE_ENTITY_TICKS = 40;
 
     // Entity Instance:
@@ -55,7 +56,7 @@ public class ExtendedEntity implements IExtendedEntity {
 		}
 
         // Client Side:
-        if(entity.getEntityWorld() != null && entity.getEntityWorld().isRemote) {
+		if(entity.getEntityWorld().isRemote) {
             if(clientExtendedEntities.containsKey(entity)) {
                 ExtendedEntity extendedEntity = clientExtendedEntities.get(entity);
                 extendedEntity.setEntity(entity);
@@ -64,17 +65,13 @@ public class ExtendedEntity implements IExtendedEntity {
             ExtendedEntity extendedEntity = new ExtendedEntity();
             extendedEntity.setEntity(entity);
             clientExtendedEntities.put(entity, extendedEntity);
+            return extendedEntity;
         }
 
         // Server Side:
-        IExtendedEntity iExtendedEntity = null;
-        try {
-            iExtendedEntity = entity.getCapability(LycanitesMobs.EXTENDED_ENTITY, null).orElse(null);
-        }
-        catch(Exception e) {}
-        if(!(iExtendedEntity instanceof ExtendedEntity)) {
+        IExtendedEntity iExtendedEntity = entity.getCapability(LycanitesMobs.EXTENDED_ENTITY, null).orElse(null);
+        if(!(iExtendedEntity instanceof ExtendedEntity))
 			return null;
-		}
         ExtendedEntity extendedEntity = (ExtendedEntity)iExtendedEntity;
         if(extendedEntity.getEntity() != entity)
             extendedEntity.setEntity(entity);
@@ -117,7 +114,7 @@ public class ExtendedEntity implements IExtendedEntity {
         // Force Remove Entity:
 		ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
 		ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
-        if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.length > 0 && !this.forceRemoveChecked) {
+        if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.size() > 0 && !this.forceRemoveChecked) {
             LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + this.entity.getName());
             for (String forceRemoveID : FORCE_REMOVE_ENTITY_IDS) {
                 if (forceRemoveID.equalsIgnoreCase(this.entity.getType().getRegistryName().toString())) {

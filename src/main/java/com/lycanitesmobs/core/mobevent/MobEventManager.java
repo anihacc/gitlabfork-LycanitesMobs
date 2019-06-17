@@ -44,6 +44,7 @@ public class MobEventManager extends JSONLoader {
 
     /** Called during early start up, loads all global event configs into the manager. **/
 	public void loadConfig() {
+		LycanitesMobs.printDebug("", "Config Test: " + ConfigMobEvent.INSTANCE.mobEventsEnabled.get());
         this.mobEventsEnabled = ConfigMobEvent.INSTANCE.mobEventsEnabled.get();
 		this.mobEventsRandom = ConfigMobEvent.INSTANCE.mobEventsRandom.get();
 		this.defaultMobDuration = ConfigMobEvent.INSTANCE.defaultMobDuration.get();
@@ -60,7 +61,7 @@ public class MobEventManager extends JSONLoader {
 		Map<String, JsonObject> mobEventJSONs = new HashMap<>();
 
 		// Load Default Mob Events:
-		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, "mobevents");
+		Path path = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, "mobevents", FileLoader.PathType.COMMON);
 		Map<String, JsonObject> defaultMobEventJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultMobEventJSONs, "name", "event");
 
@@ -101,7 +102,7 @@ public class MobEventManager extends JSONLoader {
 
 		// Load Scheduled Events:
 		this.mobEventSchedules.clear();
-		Path defaultSchedulePath = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, "mobeventschedule.json");
+		Path defaultSchedulePath = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, "mobeventschedule.json", FileLoader.PathType.SERVER);
 		JsonObject defaultScheduleJson = this.loadJsonObject(gson, defaultSchedulePath);
 
 		File customScheduleFile = new File(configPath + "mobeventschedule.json");

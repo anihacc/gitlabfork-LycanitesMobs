@@ -33,7 +33,7 @@ public class TessellatorModel extends ObjModel
         String path = resourceLocation.toString();
         try
         {
-            InputStream inputStream = Minecraft.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
+			InputStream inputStream = Minecraft.getInstance().getResourceManager().getResource(resourceLocation).getInputStream();
             String content = new String(read(inputStream), "UTF-8");
             String startPath = path.substring(0, path.lastIndexOf('/') + 1);
             HashMap<ObjObject, IndexedModel> map = new OBJLoader().loadModel(startPath, content);

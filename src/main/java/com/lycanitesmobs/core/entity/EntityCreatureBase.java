@@ -487,7 +487,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         this.dataManager.register(SUBSPECIES, (byte) 0);
 
         this.dataManager.register(ARENA, Optional.empty());
-        InventoryCreature.registerDataParameters(this.dataManager);
+        InventoryCreature.registerData(this.dataManager);
         this.initialized = true;
     }
     

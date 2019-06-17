@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
 
@@ -27,7 +28,7 @@ public class ElementManager extends JSONLoader {
 	/** Loads all JSON Elements. Should only be done on pre-init and before Creature Info is loaded. **/
 	public void loadAllFromJSON(ModInfo groupInfo) {
 		this.elements.clear();
-		this.loadAllJson(groupInfo, "Element", "elements", "name", false);
+		this.loadAllJson(groupInfo, "Element", "elements", "name", false, FileLoader.PathType.COMMON);
 		for(ElementInfo elementInfo : this.elements.values()) {
 			elementInfo.init();
 		}

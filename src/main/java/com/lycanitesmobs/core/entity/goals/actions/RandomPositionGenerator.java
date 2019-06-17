@@ -67,9 +67,9 @@ public class RandomPositionGenerator {
 
             // Random Height:
             if(entity.isFlying() || (entity.isStrongSwimmer() && entity.isInWater())) {
-	            if(entity.posY > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR_WG, entity.getPosition()).getY() + (heightLevel * 1.25))
+	            if(entity.posY > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + (heightLevel * 1.25))
 	        		possibleY = random.nextInt(2 * height) - height * 3 / 2;
-	            else if(entity.posY < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR_WG, entity.getPosition()).getY() + heightLevel)
+	            else if(entity.posY < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + heightLevel)
 	            	possibleY = random.nextInt(2 * height) - height / 2;
             }
 

@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.google.gson.*;
+import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
@@ -36,12 +36,12 @@ public class SpawnerManager extends JSONLoader {
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
 		// Load Default Spawners:
-		Path path = Utilities.getDataPath(this.getClass(), LycanitesMobs.modInfo.modid, "spawners");
+		Path path = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "spawners", FileLoader.PathType.SERVER);
 		Map<String, JsonObject> defaultSpawnerJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultSpawnerJSONs, "name", "spawner");
 
 		// Load Default Mob Event Spawners:
-		path = Utilities.getDataPath(this.getClass(), LycanitesMobs.modInfo.modid, "mobevents");
+		path = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "mobevents", FileLoader.PathType.SERVER);
 		Map<String, JsonObject> defaultMobEventsJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultMobEventsJSONs, "name", "spawner");
 
@@ -90,8 +90,11 @@ public class SpawnerManager extends JSONLoader {
 
 		// Load Global Spawn Conditions:
 		this.globalSpawnConditions.clear();
-		Path defaultGlobalPath = Utilities.getDataPath(this.getClass(), LycanitesMobs.modInfo.modid, "globalspawner.json");
+		Path defaultGlobalPath = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "globalspawner.json", FileLoader.PathType.SERVER);
 		JsonObject defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
+		if(defaultGlobalJson == null) {
+			LycanitesMobs.printWarning("", "Could not find Global Spawning JSON file at path: " + defaultGlobalPath);
+		}
 
 		File customGlobalFile = new File(configPath + "globalspawner.json");
 		JsonObject customGlobalJson = null;

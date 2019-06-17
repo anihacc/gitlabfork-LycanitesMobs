@@ -1,9 +1,12 @@
 package com.lycanitesmobs.core.config;
 
+import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.List;
+
 public class ConfigDebug {
-	public static ConfigDebug INSTANCE = new ConfigDebug(CoreConfig.BUILDER);
+	public static ConfigDebug INSTANCE;
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> elements;
 	public final ForgeConfigSpec.ConfigValue<Boolean> creatures;
@@ -14,7 +17,7 @@ public class ConfigDebug {
 	public final ForgeConfigSpec.ConfigValue<Boolean> dungeons;
 	public final ForgeConfigSpec.ConfigValue<Boolean> mobevents;
 
-	public final ForgeConfigSpec.ConfigValue<String[]> enabled;
+	public final ForgeConfigSpec.ConfigValue<List<? extends String>> enabled;
 
 	public ConfigDebug(ForgeConfigSpec.Builder builder) {
 		builder.push("Debug");
@@ -63,11 +66,13 @@ public class ConfigDebug {
 		this.enabled = builder
 				.comment("Shows debugging info for Mob Events.")
 				.translation(CoreConfig.CONFIG_PREFIX + "debug.enabled")
-				.define("debug.enabled", new String[] {});
+				.define("enabled", Lists.newArrayList(), o -> o instanceof String);
+
+		builder.pop();
 	}
 
 	public boolean isEnabled(String debugKey) {
-		if(this.enabled.get().length == 0)
+		if(this.enabled.get().size() == 0)
 			return false;
 
 		for(String enabledDebugKey : this.enabled.get()) {

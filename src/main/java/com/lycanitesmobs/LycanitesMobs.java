@@ -58,7 +58,6 @@ public class LycanitesMobs {
     public static final String acceptedMinecraftVersions = "[1.12,1.13)";
 
     public static final PacketHandler packetHandler = new PacketHandler();
-    public static boolean configReady;
 
     public static ModInfo modInfo;
     //public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
@@ -66,6 +65,7 @@ public class LycanitesMobs {
     // Capabilities:
     @CapabilityInject(IExtendedEntity.class)
     public static final Capability<IExtendedEntity> EXTENDED_ENTITY = null;
+
     @CapabilityInject(IExtendedPlayer.class)
     public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 
@@ -84,19 +84,24 @@ public class LycanitesMobs {
      * Constructor
      */
     public LycanitesMobs() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        modInfo = new ModInfo(this, name, 1000);
+
+        // Config:
+        CoreConfig.buildSpec();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
+
+        // Event Listeners:
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        modInfo = new ModInfo(this, name, 1000);
+    private void commonSetup(final FMLCommonSetupEvent event) {
         ObjectManager.setCurrentModInfo(modInfo);
-
-        // Config:
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.spec);
+        this.loadConfigs();
 
         // Event Listeners:
         MinecraftForge.EVENT_BUS.register(new EventListener());
@@ -165,22 +170,16 @@ public class LycanitesMobs {
     }
 
     @SubscribeEvent
-    public void onConfigLoaded(ModConfig.ModConfigEvent event) {
-        if(event.getConfig().getModId() != modid)
-            return;
+    public void serverStarting(FMLServerStartingEvent event) {
+        // TODO New Commands
+    }
 
-        LycanitesMobs.printDebug("", "Config Loading!");
-
+    public void loadConfigs() {
         ConfigGeneral.INSTANCE.clearOldConfigs("2.1.0.0", version);
         ItemManager.getInstance().loadConfig();
         CreatureManager.getInstance().loadConfig();
         MobEventManager.getInstance().loadConfig();
         AltarInfo.loadGlobalSettings();
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
-        // TODO New Commands
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
@@ -200,7 +199,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printInfo(String key, String message) {
-        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.info("[LycanitesMobs] [Info] [" + key + "] " + message);
         }
     }
@@ -212,7 +211,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printDebug(String key, String message) {
-        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.debug("[LycanitesMobs] [Debug] [" + key + "] " + message);
         }
     }
@@ -224,7 +223,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printWarning(String key, String message) {
-        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
         }
     }

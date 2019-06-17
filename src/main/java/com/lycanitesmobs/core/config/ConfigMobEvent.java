@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ConfigMobEvent {
-	public static ConfigMobEvent INSTANCE = new ConfigMobEvent(CoreConfig.BUILDER);
+	public static ConfigMobEvent INSTANCE;
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> mobEventsEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> mobEventsRandom;
@@ -22,32 +22,32 @@ public class ConfigMobEvent {
 		this.mobEventsEnabled = builder
 				.comment("Set to false to completely disable the entire event.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", true);
+				.define("enabled", true);
 
 		this.mobEventsRandom = builder
 				.comment("Set to false to disable random mob events for every world.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", false);
+				.define("random.enabled", false);
 
 		this.defaultMobDuration = builder
 				.comment("The default temporary time applied to mobs spawned from events, where it will forcefully despawn after the specified time (in ticks). MobSpawns can override this.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", 12000);
+				.define("duration", 12000);
 
 		this.minEventsRandomDay = builder
 				.comment("If random events are enabled, they wont occur until this day is reached. Set to 0 to have random events enabled from the start of a world.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", 0);
+				.define("random.day.min", 0);
 
 		this.minTicksUntilEvent = builder
 				.comment("Minimum time in ticks until a random event can occur. 20 Ticks = 1 Second.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", 60 * 60 * 20);
+				.define("random.ticks.min", 60 * 60 * 20);
 
 		this.maxTicksUntilEvent = builder
 				.comment("Maximum time in ticks until a random event can occur. 20 Ticks = 1 Second.")
 				.translation(CoreConfig.CONFIG_PREFIX + "mobevents.enabled")
-				.define("mobevents.enabled", 120 * 60 * 20);
+				.define("random.ticks.max", 120 * 60 * 20);
 
 		this.altarsEnabled = builder
 				.comment("Set to false to disable altars, Soulkeys can still be crafted but wont work on Altars.")
@@ -58,5 +58,7 @@ public class ConfigMobEvent {
 				.comment("If set to true, Altars will only activate in dimensions that the monster spawned or event started is allowed in.")
 				.translation(CoreConfig.CONFIG_PREFIX + "altars.checkDimension")
 				.define("altars.checkDimension", false);
+
+		builder.pop();
 	}
 }
