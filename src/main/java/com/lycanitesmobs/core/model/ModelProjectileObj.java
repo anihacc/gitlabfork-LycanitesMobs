@@ -116,7 +116,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         }
         catch (Exception e) {
             LycanitesMobs.printWarning("", "There was a problem loading animation parts for " + name + ":");
-            e.printStackTrace();
+            e.toString();
         }
 
         // Assign Model Part Children:

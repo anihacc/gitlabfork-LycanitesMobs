@@ -47,7 +47,7 @@ import java.util.List;
 public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
-    protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.<Byte>createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+    protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.createKey(EntityAsmodeus.class, DataSerializers.field_187191_a);
     public enum ANIMATION_STATES_ID {
         SNAP_TO_ARENA((byte)1), COOLDOWN((byte)2);
         public final byte id;

@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.modelloader.obj;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -51,7 +52,8 @@ public class TessellatorModel extends ObjModel
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+			LycanitesMobs.printWarning("", "Unable to load model: " + resourceLocation);
+            e.toString();
         }
     }
 

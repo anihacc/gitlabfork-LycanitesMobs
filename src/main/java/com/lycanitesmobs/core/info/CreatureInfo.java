@@ -14,6 +14,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.function.BiFunction;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -304,7 +306,6 @@ public class CreatureInfo {
 		if(this.dummy) {
 			return;
 		}
-		LycanitesMobs.printDebug("", "Loading: " + this.getName());
 
 		// Spawn Egg:
 		if(this.creatureType != null) {
@@ -390,13 +391,15 @@ public class CreatureInfo {
 	 */
 	public EntityType getEntityType() {
 		if(this.entityType == null) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
+			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
 			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
 			entityTypeBuilder.setUpdateInterval(10);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
-			this.entityType = entityTypeBuilder.build(this.getEntityId());
+			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
+			EntityFactory.getInstance().addEntityType(this.entityType, this.entityClass);
 		}
 		return this.entityType;
 	}

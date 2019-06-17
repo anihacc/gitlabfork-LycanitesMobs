@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
@@ -33,9 +32,9 @@ import net.minecraft.world.World;
 public class EntityDarkling extends EntityCreatureTameable implements IMob, IGroupShadow {
 
     // Data Manager:
-    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
-    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
-    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.<Float>createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.field_187192_b);
+    protected static final DataParameter<Float> LATCH_HEIGHT = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Float> LATCH_ANGLE = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.field_187193_c);
 
     // Latching
     LivingEntity latchEntity = null;

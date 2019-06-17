@@ -384,10 +384,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
     @Override
 	public EntityType getType() {
-    	if(this.creatureInfo != null) {
-    		return this.creatureInfo.getEntityType();
-		}
-    	return super.getType();
+    	return this.creatureInfo.getEntityType();
 	}
 
 	// ========== Attributes and Stats ==========

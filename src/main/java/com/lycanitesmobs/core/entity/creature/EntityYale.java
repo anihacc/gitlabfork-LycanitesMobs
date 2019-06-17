@@ -48,7 +48,8 @@ import java.util.stream.Collectors;
 
 public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, IShearable {
 
-	private static final DataParameter<Byte> DYE_COLOR = EntityDataManager.createKey(SheepEntity.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.field_187191_a);
+
 	private static final Map<DyeColor, IItemProvider> WOOL_BY_COLOR = Util.make(Maps.newEnumMap(DyeColor.class), (itemProviderMap) -> {
 		itemProviderMap.put(DyeColor.WHITE, Blocks.WHITE_WOOL);
 		itemProviderMap.put(DyeColor.ORANGE, Blocks.ORANGE_WOOL);
@@ -71,7 +72,6 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
 		return p_200204_0_;
 	}, EntityYale::createSheepColor)));
 
-    protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
     protected ItemDrop woolDrop;
     
     // ==================================================

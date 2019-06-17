@@ -20,6 +20,7 @@ public class AssetManager {
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
 	public static Map<String, ModelCreatureBase> creatureModels = new HashMap<>();
 	public static Map<String, ModelProjectileBase> projectileModels = new HashMap<>();
+	public static Map<String, Class<? extends ModelProjectileBase>> oldProjectileModelClasses = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
 
 
@@ -45,12 +46,6 @@ public class AssetManager {
 	public static void addItemModel(String name, ModelItemBase model) {
 		name = name.toLowerCase();
 		itemModels.put(name, model);
-	}
-
-	// ========== Old Projectile Model ==========
-	public static void addOldProjectileModel(String name, ModelProjectileBase model) {
-		name = name.toLowerCase();
-		projectileModels.put(name, model);
 	}
 	
 	
@@ -121,10 +116,21 @@ public class AssetManager {
 		return projectileModel;
 	}
 
+	// ========== Old Projectile Model ==========
+	public static void registerOldProjectileModel(String name, Class<? extends ModelProjectileBase> model) {
+		name = name.toLowerCase();
+		oldProjectileModelClasses.put(name, model);
+	}
+
 	public static ModelProjectileBase getOldProjectileModel(String projectileName) {
-		if(projectileModels.containsKey(projectileName))
-			return projectileModels.get(projectileName);
-		return null;
+		if(!projectileModels.containsKey(projectileName)) {
+			try {
+				projectileModels.put("lightball", oldProjectileModelClasses.get(projectileName).getConstructor().newInstance());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return projectileModels.get(projectileName);
 	}
 
 	// ========== Item Model ==========

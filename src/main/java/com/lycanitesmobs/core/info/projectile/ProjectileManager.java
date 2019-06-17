@@ -113,33 +113,34 @@ public class ProjectileManager extends JSONLoader {
 			if(projectileInfo.modInfo != modInfo) {
 				continue;
 			}
-			//EntityFactory.getInstance().addEntityType(projectileInfo.getEntityType(), projectileInfo.entityClass);
 			event.getRegistry().register(projectileInfo.getEntityType());
 		}
 
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
 			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(40);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
-			EntityType entityType = entityTypeBuilder.build(registryName);
-			//EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
+			EntityType entityType = entityTypeBuilder.build(entityName);
+			entityType.setRegistryName(modInfo.modid, entityName);
+			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
 			event.getRegistry().register(entityType);
 		}
 
 		for(String entityName : this.oldModelProjectiles.keySet()) {
 			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
+			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(40);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
-			EntityType entityType = entityTypeBuilder.build(registryName);
-			//EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName));
+			EntityType entityType = entityTypeBuilder.build(entityName);
+			entityType.setRegistryName(modInfo.modid, entityName);
+			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
 			event.getRegistry().register(entityType);
 		}
 	}

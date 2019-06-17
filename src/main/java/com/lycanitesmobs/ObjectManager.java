@@ -138,7 +138,6 @@ public class ObjectManager {
     public static Class addTileEntity(String name, Class tileEntityClass) {
         name = name.toLowerCase();
         tileEntities.put(name, tileEntityClass);
-        //GameRegistry.registerTileEntity(tileEntityClass, LycanitesMobs.modid + "." + name);
         return tileEntityClass;
     }
 
@@ -177,7 +176,6 @@ public class ObjectManager {
         name = name.toLowerCase();
         if(stats.containsKey(name))
             return;
-        //stat.registerStat();
         stats.put(name, stat);
     }
 	
@@ -246,8 +244,6 @@ public class ObjectManager {
             if(block.getRegistryName() == null) {
                 LycanitesMobs.printWarning("", "Block: " + block + " has no Registry Name!");
             }
-            //event.getRegistry().register(block); Registered with ItemBlock
-			//LycanitesMobs.proxy.addBlockRender(currentModInfo, block);
         }
     }
 
@@ -258,7 +254,6 @@ public class ObjectManager {
 	            LycanitesMobs.printWarning("", "Item: " + item + " has no Registry Name!");
             }
             event.getRegistry().register(item);
-            //LycanitesMobs.proxy.addItemRender(itemGroups.get(item), item);
         }
     }
 
@@ -279,10 +274,11 @@ public class ObjectManager {
 			entityTypeBuilder.setTrackingRange(10);
 			entityTypeBuilder.setUpdateInterval(10);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
+			entityTypeBuilder.disableSummoning();
 
-			EntityType entityType = entityTypeBuilder.build(registryName);
+			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(LycanitesMobs.modid, entityName);
-			//EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
+			EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
 			event.getRegistry().register(entityType);
 		}
 	}
@@ -296,24 +292,4 @@ public class ObjectManager {
 			event.getRegistry().register(soundEvent);
 		}
 	}
-
-
-    // ==================================================
-    //           Register Block and Item Models
-    // ==================================================
-    @OnlyIn(Dist.CLIENT)
-    public static void RegisterModels() {
-		for(Item item : items.values()) {
-			/*if(item instanceof ItemBase) {
-				ItemBase itemBase = (ItemBase) item;
-				if (itemBase.useItemColors()) {
-					Minecraft.getInstance().getItemColors().register(ClientManager.itemColor, item);
-				}
-			}*/
-            if(item instanceof ItemEquipmentPart) {
-				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
-            	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));
-			}
-        }
-    }
 }

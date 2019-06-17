@@ -1,14 +1,16 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
-public class EntityFactory implements EntityType.IFactory {
+public class EntityFactory implements EntityType.IFactory<Entity> {
 	public static EntityFactory INSTANCE;
-
 	/** Returns the main Entity Factory instance or creates it and returns it. **/
 	public static EntityFactory getInstance() {
 		if(INSTANCE == null) {
@@ -17,7 +19,7 @@ public class EntityFactory implements EntityType.IFactory {
 		return INSTANCE;
 	}
 
-	public Map<EntityType, Class<? extends Entity>> entityTypeClassMap;
+	public Map<EntityType, Class<? extends Entity>> entityTypeClassMap = new HashMap<>();
 
 	/**
 	 * Adds a new Entity Type and Entity Class mapping for this Factory to create.
@@ -46,6 +48,18 @@ public class EntityFactory implements EntityType.IFactory {
 			e.printStackTrace();
 		}
 
+		return null;
+	}
+
+
+	public BiFunction<net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity, World, Entity> createOnClientFunction = this::createOnClient;
+	/**
+	 * Spawns an entity on the client side from a server packet.
+	 * @param spawnPacket The entity spawn packet.
+	 * @param world The world to spawn in.
+	 */
+	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, World world) {
+		LycanitesMobs.printWarning("", "Trying to spawn a damn entity on the client but pigs are everywhere?!");
 		return null;
 	}
 }

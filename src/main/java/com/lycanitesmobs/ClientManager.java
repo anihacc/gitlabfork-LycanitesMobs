@@ -28,7 +28,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class ClientManager {
 	protected static ClientManager INSTANCE;
-
 	public static ClientManager getInstance() {
 		if(INSTANCE == null) {
 			INSTANCE = new ClientManager();
@@ -36,22 +35,7 @@ public class ClientManager {
 		return INSTANCE;
 	}
 
-	public static IItemColor itemColor = (stack, tintIndex) -> {
-		Item item = stack.getItem();
-		if(!(item instanceof ItemBase))
-			return 16777215;
-		ItemBase itemBase = (ItemBase)item;
-		return itemBase.getColor(stack, tintIndex);
-	};
-
 	protected FontRenderer fontRenderer;
-
-	/**
-	 * Sets up the Language Manager used for additional lang files.
-	 */
-	public void initLanguageManager() {
-		LanguageManager.getInstance();
-	}
 
 	/**
 	 * Returns the Font Renderer used by Lycanites Mobs.
@@ -65,8 +49,9 @@ public class ClientManager {
 		return this.fontRenderer;
 	}
 
-
-	// ========== Register Event Handlers ==========
+	/**
+	 * Registers all client side events listeners.
+	 */
 	public void registerEvents() {
 		// Event Listeners:
 		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
@@ -78,9 +63,17 @@ public class ClientManager {
 		}
 	}
 
-	// ========== Register Assets ==========
+	/**
+	 * Sets up the Language Manager used for additional language files.
+	 */
+	public void initLanguageManager() {
+		LanguageManager.getInstance();
+	}
+
+	/**
+	 * Registers GUI and misc textures.
+	 */
     public void registerTextures() {
-		// ========== Add GUI Textures ==========
 		ModInfo group = LycanitesMobs.modInfo;
 		AssetManager.addTexture("GUIInventoryCreature", group, "textures/guis/inventory_creature.png");
 
@@ -103,46 +96,42 @@ public class ClientManager {
         AssetManager.addTexture("GUIMinion", group, "textures/guis/minion.png");
         AssetManager.addTexture("GUIMinionLg", group, "textures/guis/minion_lg.png");
 		AssetManager.addTexture("GUIEquipmentForge", group, "textures/guis/equipmentforge.png");
-
-		// ========== Add GUI Tabs ==========
-		//TabManager.registerTab(new GuiTabMain()); TODO Figure out new method.
     }
-	
-	
-	// ========== Register Renders ==========
-    public void registerRenders(ModInfo modInfo) {
-		// Projectile Models:
-		AssetManager.addOldProjectileModel("lightball", new ModelLightBall());
-		AssetManager.addOldProjectileModel("crystalshard", new ModelCrystalShard());
-		AssetManager.addOldProjectileModel("aetherwave", new ModelAetherwave());
-		AssetManager.addOldProjectileModel("chaosorb", new ModelChaosOrb());
 
-        // Equipment Parts:
-		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader());
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySummoningPedestal.class, new RenderTileEntityBase());
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEquipmentForge.class, new RenderTileEntityBase());
-
-        RenderRegister renderRegister = new RenderRegister(modInfo);
+	/**
+	 * Initialises the Render Register which loads and registers models and sets up render factories, etc.
+	 */
+    public void initRenderRegister() {
+        RenderRegister renderRegister = new RenderRegister();
+		renderRegister.registerModels();
+        renderRegister.registerModelLoaders();
         renderRegister.registerRenderFactories();
     }
 
-	// ========== Register Models ==========
-	public void registerItemModels() {
-		ObjectManager.RegisterModels();
-	}
-
-
-	// ========== Creatures ==========
+	/**
+	 * Loads a Creature Model
+	 * @param creature The creature info to load the model from.
+	 * @param modelClassName The Model java class name to instantiate.
+	 * @throws ClassNotFoundException
+	 */
 	public void loadCreatureModel(CreatureInfo creature, String modelClassName) throws ClassNotFoundException {
 		creature.modelClass = (Class<? extends ModelCreatureBase>) Class.forName(modelClassName);
 	}
 
+	/**
+	 * Loads a Creature Subspecies Model
+	 * @param creature The subspecies to load the model from.
+	 * @param modelClassName The Model java class name to instantiate.
+	 * @throws ClassNotFoundException
+	 */
 	public void loadSubspeciesModel(Subspecies subspecies, String modelClassName) throws ClassNotFoundException {
 		subspecies.modelClass = (Class<? extends ModelCreatureBase>) Class.forName(modelClassName);
 	}
 
-	
-	// ========== Get Client Player Entity ==========
+	/**
+	 * Returns the client player entity.
+	 * @return Client player entity.
+	 */
     public ClientPlayerEntity getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
