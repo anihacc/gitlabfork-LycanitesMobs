@@ -1,6 +1,7 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.core.block;
 
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
