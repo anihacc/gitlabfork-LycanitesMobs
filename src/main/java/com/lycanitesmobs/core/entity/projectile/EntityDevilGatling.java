@@ -119,7 +119,7 @@ public class EntityDevilGatling extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("devilgatling");
+    	return ObjectManager.getSound("devilgatling");
     }
     
     

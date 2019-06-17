@@ -52,6 +52,7 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
@@ -68,6 +69,7 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                 Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	return this.shouldExecute();
     }
@@ -76,6 +78,7 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
 
     }
@@ -84,6 +87,7 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                      Reset
  	// ==================================================
+	@Override
     public void resetTask() {
     	
     }
@@ -92,7 +96,8 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                      Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
 
     }
 }

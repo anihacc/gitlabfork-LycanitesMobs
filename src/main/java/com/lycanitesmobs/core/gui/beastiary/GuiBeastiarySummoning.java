@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.gui.beastiary;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.gui.ButtonBase;
 import com.lycanitesmobs.core.gui.GuiButtonCreature;
@@ -347,6 +348,6 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, AssetManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
 	}
 }

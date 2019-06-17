@@ -80,6 +80,7 @@ public class GetBlockGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!this.host.canPickupItems() || !this.host.getEntityWorld().getGameRules().getBoolean("mobGriefing"))
     		return false;
@@ -138,6 +139,7 @@ public class GetBlockGoal extends Goal {
     // ==================================================
  	//                  Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	if(this.target == null)
             return false;
@@ -162,7 +164,7 @@ public class GetBlockGoal extends Goal {
     // ==================================================
  	//                      Reset
  	// ==================================================
-    @Override
+	@Override
     public void resetTask() {
         this.target = null;
         this.host.clearMovement();
@@ -172,6 +174,7 @@ public class GetBlockGoal extends Goal {
     // ==================================================
   	//                       Start
   	// ==================================================
+	@Override
     public void startExecuting() {
         this.updateRate = 0;
     }
@@ -180,7 +183,8 @@ public class GetBlockGoal extends Goal {
     // ==================================================
   	//                      Update
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         if(this.updateRate-- <= 0) {
             this.updateRate = 10;
         	if(!this.host.useDirectNavigator())

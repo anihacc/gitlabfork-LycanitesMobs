@@ -33,8 +33,7 @@ public class ItemBucketOoze extends BucketItem {
         super(fluid, properties);
         this.group = LycanitesMobs.modInfo;
         this.itemName = "bucketooze";
-        this.setRegistryName(this.group.filename, this.itemName);
-        properties.group(LycanitesMobs.itemsTab);
+        this.setRegistryName(this.group.modid, this.itemName);
         ObjectManager.addBucket(this, ObjectManager.getBlock("ooze"), fluid);
     }
     

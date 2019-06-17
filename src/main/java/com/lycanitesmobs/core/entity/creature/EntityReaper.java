@@ -1,19 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -125,11 +126,11 @@ public class EntityReaper extends EntityCreatureTameable implements IMob, IGroup
     	if(this.hasAttackTarget()) {
     		if(this.getAttackTarget() instanceof PlayerEntity)
     			if("jbams".equalsIgnoreCase((this.getAttackTarget()).getName().toString())) // JonBams special sound!
-    				return AssetManager.getSound(this.creatureInfo.getName() + "_say_jon");
+    				return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
     	}
         if(this.isTamed() && this.getOwner() != null) {
             if("jbams".equalsIgnoreCase(this.getOwnerName()))
-                return AssetManager.getSound(this.creatureInfo.getName() + "_say_jon");
+                return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
         }
     	return super.getAmbientSound();
     }

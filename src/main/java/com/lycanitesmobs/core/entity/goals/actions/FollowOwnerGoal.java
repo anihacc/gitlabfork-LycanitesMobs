@@ -60,14 +60,14 @@ public class FollowOwnerGoal extends FollowGoal {
 	// ==================================================
  	//                      Update
  	// ==================================================
-    @Override
-    public void updateTask() {
+	@Override
+    public void tick() {
     	if(!this.host.isSitting()) {
     		if(this.host.getDistance(this.getTarget()) >= this.lostDistance) {
 				this.teleportToOwner();
 			}
     	}
-    	super.updateTask();
+    	super.tick();
     }
     
     // ========== Teleport to Owner ==========

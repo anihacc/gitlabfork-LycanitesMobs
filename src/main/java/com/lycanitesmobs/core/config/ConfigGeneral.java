@@ -22,7 +22,7 @@ public class ConfigGeneral {
 				.define("version", LycanitesMobs.versionNumber);
 	}
 
-	public void versionCheck(String minVersion, String currentVersion) {
+	public void clearOldConfigs(String minVersion, String currentVersion) {
 		// Get Config Version:
 		String configVersion = this.configVersion.get();
 

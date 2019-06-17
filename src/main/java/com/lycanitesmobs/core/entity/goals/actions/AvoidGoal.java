@@ -59,6 +59,7 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
         this.avoidTarget = this.host.getAvoidTarget();
         if(this.avoidTarget == null) {
@@ -95,6 +96,7 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                 Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         if(!this.host.useDirectNavigator() && this.host.getNavigator().noPath())
         	return false;
@@ -110,6 +112,7 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
     	if(!this.host.useDirectNavigator())
     		this.host.getNavigator().setPath(this.pathEntity, this.farSpeed);
@@ -121,6 +124,7 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                      Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.avoidTarget = null;
     }
@@ -129,7 +133,8 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                      Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         if(this.host.getDistance(this.avoidTarget) < this.nearDistance)
         	if(!this.host.useDirectNavigator())
         		this.host.getNavigator().setSpeed(this.nearSpeed);

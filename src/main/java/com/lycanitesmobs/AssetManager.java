@@ -2,7 +2,6 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
@@ -10,9 +9,7 @@ import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 import com.lycanitesmobs.core.model.ModelItemBase;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -23,19 +20,19 @@ public class AssetManager {
 	// Maps:
 	public static Map<String, ResourceLocation> textures = new HashMap<>();
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
-	public static Map<String, SoundEvent> sounds = new HashMap<>();
 	public static Map<String, ModelCreatureBase> creatureModels = new HashMap<>();
 	public static Map<String, ModelProjectileBase> projectileModels = new HashMap<>();
 	public static Map<String, IModel> objModels = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
-	
+
+
     // ==================================================
     //                        Add
     // ==================================================
 	// ========== Texture ==========
 	public static void addTexture(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		textures.put(name, new ResourceLocation(modInfo.filename, path));
+		textures.put(name, new ResourceLocation(modInfo.modid, path));
 	}
 	
 	// ========== Texture Group ==========
@@ -43,24 +40,14 @@ public class AssetManager {
 		name = name.toLowerCase();
         ResourceLocation[] textureGroup = new ResourceLocation[paths.length];
 		for(int i = 0; i < paths.length; i++)
-            textureGroup[i] = new ResourceLocation(modInfo.filename, paths[i]);
+            textureGroup[i] = new ResourceLocation(modInfo.modid, paths[i]);
         textureGroups.put(name, textureGroup);
-	}
-	
-	// ========== Sound ==========
-	public static void addSound(String name, ModInfo modInfo, String path) {
-		name = name.toLowerCase();
-        ResourceLocation resourceLocation = new ResourceLocation(modInfo.filename, path);
-        SoundEvent soundEvent = new SoundEvent(resourceLocation);
-        soundEvent.setRegistryName(resourceLocation);
-		sounds.put(name, soundEvent);
-        GameRegistry.findRegistry(SoundEvent.class).register(soundEvent);
 	}
 	
 	// ========== Obj Model ==========
 	public static void addObjModel(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		objModels.put(name, ModelCreatureObjOld.loadModel(new ResourceLocation(modInfo.filename, "models/" + path + ".obj")));
+		objModels.put(name, ModelCreatureObjOld.loadModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj")));
 	}
 
 	// ========== Item Model ==========
@@ -93,14 +80,6 @@ public class AssetManager {
 		if(!textureGroups.containsKey(name))
 			return null;
 		return textureGroups.get(name);
-	}
-	
-	// ========== Sound ==========
-	public static SoundEvent getSound(String name) {
-		name = name.toLowerCase();
-		if(!sounds.containsKey(name))
-			return null;
-		return sounds.get(name);
 	}
 	
 	// ========== Model ==========

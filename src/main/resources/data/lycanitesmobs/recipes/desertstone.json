@@ -33,5 +33,5 @@
       "item": "minecraft:cobblestone"
     }
   ],
-  "type": "forge:ore_shapeless"
+  "type": "minecraft:crafting_shapeless"
 }

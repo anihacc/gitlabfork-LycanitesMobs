@@ -6,8 +6,6 @@ import com.google.common.collect.Lists;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -95,7 +93,7 @@ public class LanguageManager {
 		int laodedLangFiles = 0;
 		for (String language : languageList) {
 			String languageDir = String.format("lang/%s/", language);
-			Path languageDirPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.filename, languageDir);
+			Path languageDirPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.modid, languageDir);
 			try {
 				// Iterate Language Directories:
 				Iterator<Path> languageDirIter = Files.walk(languageDirPath).iterator();

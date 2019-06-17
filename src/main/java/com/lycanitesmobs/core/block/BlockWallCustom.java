@@ -23,7 +23,7 @@ public class BlockWallCustom extends WallBlock {
 	// ==================================================
 	public BlockWallCustom(Block.Properties properties, BlockBase block) {
 		super(properties);
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_wall"));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_wall"));
 	}
 
     /*@OnlyIn(Dist.CLIENT)

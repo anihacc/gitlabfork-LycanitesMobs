@@ -37,6 +37,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                   Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
         this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), (double) this.range, entity -> true);
         return this.player != null && this.gotBegItem(this.player);
@@ -46,6 +47,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                 Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         return this.player.isAlive() && (!(this.host.getDistance(this.player) > (double) (this.range * this.range)) && (this.begTime > 0 && this.gotBegItem(this.player)));
     }
@@ -54,6 +56,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
         this.host.setSitting(true);
         this.begTime = 40 + this.host.getRNG().nextInt(40);
@@ -63,6 +66,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.host.setSitting(false);
         this.player = null;
@@ -72,7 +76,8 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                      Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         this.host.getLookHelper().setLookPosition(this.player.posX, this.player.posY + (double)this.player.getEyeHeight(), this.player.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
         --this.begTime;
     }

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.goals.actions.SitGoal;
@@ -1079,16 +1078,16 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     	String sound = "_say";
     	if(this.isTamed() && this.getHealth() < this.getMaxHealth())
     		sound = "_beg";
-    	return AssetManager.getSound(this.getSoundName() + sound);
+    	return ObjectManager.getSound(this.getSoundName() + sound);
     }
     
     // ========== Tame ==========
     public void playTameSound() {
-    	this.playSound(AssetManager.getSound(this.getSoundName() + "_tame"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_tame"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Eat ==========
     public void playEatSound() {
-    	this.playSound(AssetManager.getSound(this.getSoundName() + "_eat"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_eat"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 }

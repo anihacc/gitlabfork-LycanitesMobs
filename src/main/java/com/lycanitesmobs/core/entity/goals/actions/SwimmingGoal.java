@@ -38,6 +38,7 @@ public class SwimmingGoal extends Goal {
     // ==================================================
    	//                  Should Execute
    	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeSteered())
             return false;
@@ -48,7 +49,8 @@ public class SwimmingGoal extends Goal {
     // ==================================================
    	//                      Update
    	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
     	if(this.sink) {
 	    	double targetY = this.host.posY;
 	    	if(!this.host.useDirectNavigator()) {

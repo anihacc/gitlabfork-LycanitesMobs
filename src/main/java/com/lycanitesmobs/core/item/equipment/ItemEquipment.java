@@ -48,7 +48,7 @@ public class ItemEquipment extends ItemBase {
 		super(properties);
 		this.itemName = "equipment";
 		this.modInfo = LycanitesMobs.modInfo;
-		this.setRegistryName(this.modInfo.filename, this.itemName);
+		this.setRegistryName(this.modInfo.modid, this.itemName);
 		properties.maxStackSize(1);
 	}
 

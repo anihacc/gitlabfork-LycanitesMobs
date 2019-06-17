@@ -94,7 +94,7 @@ public class EntityDevilstar extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("devilstar");
+    	return ObjectManager.getSound("devilstar");
     }
     
     

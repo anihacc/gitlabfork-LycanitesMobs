@@ -122,6 +122,6 @@ public class EntityIcefireball extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("icefireball");
+    	return ObjectManager.getSound("icefireball");
     }
 }

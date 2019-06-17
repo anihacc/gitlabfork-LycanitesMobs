@@ -9,5 +9,5 @@
       "item": "minecraft:ghast_tear"
     }
   ],
-  "type": "forge:ore_shapeless"
+  "type": "minecraft:crafting_shapeless"
 }

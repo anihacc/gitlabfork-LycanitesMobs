@@ -2,6 +2,7 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
+import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.info.Beastiary;
@@ -248,6 +249,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			// Mod Version Check:
 			if (this.player.getEntityWorld().isRemote) {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
+				VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
 				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
 					this.player.sendMessage(new TranslationTextComponent(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
 				}

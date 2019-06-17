@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -58,6 +58,6 @@ public class EntityLifeDrainEnd extends EntityProjectileLaserEnd {
  	// ==================================================
 	@Override
 	public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound(entityName);
+    	return ObjectManager.getSound(entityName);
 	}
 }

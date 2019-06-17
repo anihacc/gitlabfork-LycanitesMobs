@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import net.minecraft.dispenser.IPosition;
@@ -25,6 +25,6 @@ public class DispenserBehaviorDemonicLightning extends DispenserBehaviorBase {
     // ==================================================
     @Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("demonicblast");
+        return ObjectManager.getSound("demonicblast");
     }
 }

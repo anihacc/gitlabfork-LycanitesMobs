@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.core.entity.projectile.EntityTundra;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
+import com.lycanitesmobs.core.entity.projectile.EntityTundra;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
@@ -25,6 +25,6 @@ public class DispenserBehaviorTundra extends DispenserBehaviorBase {
 	// ==================================================
 	@Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("tundra");
+        return ObjectManager.getSound("tundra");
     }
 }

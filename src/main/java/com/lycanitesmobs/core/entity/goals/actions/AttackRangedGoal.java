@@ -109,6 +109,7 @@ public class AttackRangedGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	// Attack Stamina/Cooldown Recovery:
         if(this.attackStaminaMax > 0) {
@@ -140,6 +141,7 @@ public class AttackRangedGoal extends Goal {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	if(!this.longMemory)
 	    	if(!this.host.useDirectNavigator() && !this.host.getNavigator().noPath())
@@ -163,6 +165,7 @@ public class AttackRangedGoal extends Goal {
     // ==================================================
   	//                      Reset
   	// ==================================================
+	@Override
     public void resetTask() {
         this.attackTarget = null;
         this.chaseTime = 0;
@@ -173,7 +176,8 @@ public class AttackRangedGoal extends Goal {
     // ==================================================
   	//                   Update Task
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
     	boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.attackTarget;
         double distance = this.host.getDistance(this.attackTarget);
         boolean hasSight = fixated || this.host.getEntitySenses().canSee(this.attackTarget);

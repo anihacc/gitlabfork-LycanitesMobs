@@ -38,7 +38,7 @@ public class MoveRestrictionGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
-    @Override
+	@Override
     public boolean shouldExecute() {
         if(this.host.hasHome())
             return false;
@@ -57,7 +57,7 @@ public class MoveRestrictionGoal extends Goal {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
-    @Override
+	@Override
     public boolean shouldContinueExecuting() {
         return !this.host.getNavigator().noPath();
     }
@@ -66,7 +66,7 @@ public class MoveRestrictionGoal extends Goal {
     // ==================================================
   	//                     Start
   	// ==================================================
-    @Override
+	@Override
     public void startExecuting() {
         this.host.getNavigator().tryMoveToXYZ(this.movePosX, this.movePosY, this.movePosZ, this.speed);
     }

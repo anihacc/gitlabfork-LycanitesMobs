@@ -17,26 +17,20 @@ public class BlockVeswax extends BlockBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockVeswax(Block.Properties properties) {
+	public BlockVeswax(Block.Properties properties, String name) {
 		super(properties);
-        //this.setCreativeTab(LycanitesMobs.blocksTab);
-		
-		// Properties:
+
 		this.group = LycanitesMobs.modInfo;
-		this.blockName = "veswax";
-		this.setup();
+		this.blockName = name;
 		
 		// Stats:
 		this.tickRate = 100;
 		this.removeOnTick = true;
 
-		this.setDefaultState(this.stateContainer.getBaseState().with(AGE, 0));
+		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
+		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
 	}
 
-
-	// ==================================================
-	//                   Block States
-	// ==================================================
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AGE);

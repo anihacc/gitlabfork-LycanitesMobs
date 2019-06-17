@@ -47,6 +47,7 @@ public class MoveVillageGoal extends Goal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if (this.host.isBeingRidden()) {
             return false;
@@ -73,6 +74,7 @@ public class MoveVillageGoal extends Goal {
 	// ==================================================
  	//                Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         return this.blockPos != null && !this.host.getNavigator().noPath() && this.host.getNavigator().getTargetPos().equals(this.blockPos);
     }

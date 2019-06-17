@@ -42,7 +42,7 @@ public class ItemBase extends Item {
     }
 
     public void setup() {
-        this.setRegistryName(this.modInfo.filename, this.itemName);
+        this.setRegistryName(this.modInfo.modid, this.itemName);
         //this.setCreativeTab(LycanitesMobs.itemsTab);
     }
     

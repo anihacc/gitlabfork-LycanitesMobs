@@ -27,7 +27,6 @@ public class ItemCharge extends ItemBase {
         super(properties);
         this.projectileInfo = projectileInfo;
         this.modInfo = LycanitesMobs.modInfo;
-        properties.group(LycanitesMobs.itemsTab);
         if(this.projectileInfo != null) {
             this.itemName = projectileInfo.chargeItemName;
             LycanitesMobs.printDebug("Projectile", "Created Charge Item: " + projectileInfo.chargeItemName);
@@ -43,7 +42,6 @@ public class ItemCharge extends ItemBase {
         this.oldProjectileClass = projectileClass;
         this.modInfo = LycanitesMobs.modInfo;
         this.itemName = itemName;
-        properties.group(LycanitesMobs.itemsTab);
         this.setup();
     }
 

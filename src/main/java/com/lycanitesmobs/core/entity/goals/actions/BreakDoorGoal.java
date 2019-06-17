@@ -22,6 +22,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!super.shouldExecute())
     		return false;
@@ -34,6 +35,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
         super.startExecuting();
         this.breakingTime = 0;
@@ -43,6 +45,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
 		return this.breakingTime <= 240 && !this.canDestroy() && this.doorPosition.func_218137_a(this.host.getPositionVec(), 2.0D);
     }
@@ -65,6 +68,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                      Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         super.resetTask();
         this.host.getEntityWorld().sendBlockBreakProgress(this.host.getEntityId(), new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ), -1);
@@ -74,8 +78,9 @@ public class BreakDoorGoal extends DoorInteractGoal {
 	// ==================================================
  	//                     Update
  	// ==================================================
-    public void updateTask() {
-        super.updateTask();
+	@Override
+    public void tick() {
+        super.tick();
 
         if(this.host.getRNG().nextInt(20) == 0)
             this.host.getEntityWorld().playEvent(1010, new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ), 0);

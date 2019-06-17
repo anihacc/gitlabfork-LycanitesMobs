@@ -41,6 +41,7 @@ public class LookIdleGoal extends Goal {
     // ==================================================
    	//                  Should Execute
    	// ==================================================
+	@Override
     public boolean shouldExecute() {
         return this.host.getRNG().nextFloat() < 0.02F;
     }
@@ -49,6 +50,7 @@ public class LookIdleGoal extends Goal {
     // ==================================================
    	//                Continue Executing
    	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         return this.idleTime >= 0;
     }
@@ -57,6 +59,7 @@ public class LookIdleGoal extends Goal {
     // ==================================================
    	//                     Start
    	// ==================================================
+	@Override
     public void startExecuting() {
         double d0 = (Math.PI * 2D) * this.host.getRNG().nextDouble();
         this.lookX = Math.cos(d0);
@@ -68,7 +71,8 @@ public class LookIdleGoal extends Goal {
     // ==================================================
    	//                     Update
    	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         this.idleTime--;
         this.host.getLookHelper().setLookPosition(
         		this.host.posX + this.lookX,

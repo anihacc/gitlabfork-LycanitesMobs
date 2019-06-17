@@ -87,13 +87,16 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return;
 		}
 
-		EntityType entityType;
+		EntityType entityType = null;
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
 		if(creatureInfo != null) {
 			entityType = creatureInfo.getEntityType();
 		}
 		else {
-			entityType = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(this.summonMobId));
+			Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(this.summonMobId));
+			if(entityTypeObj instanceof EntityType) {
+				entityType = (EntityType)entityTypeObj;
+			}
 		}
 		if(entityType == null) {
 			return;

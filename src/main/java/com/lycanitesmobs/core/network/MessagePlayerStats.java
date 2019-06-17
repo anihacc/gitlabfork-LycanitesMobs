@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,7 +27,7 @@ public class MessagePlayerStats {
 		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
 			return;
 
-		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return;

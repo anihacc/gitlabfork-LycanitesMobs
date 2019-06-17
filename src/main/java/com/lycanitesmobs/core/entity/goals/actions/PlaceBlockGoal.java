@@ -72,7 +72,7 @@ public class PlaceBlockGoal extends Goal {
     // ==================================================
    	//                  Should Execute
    	// ==================================================
-    @Override
+	@Override
     public boolean shouldExecute() {
         if(this.blockState == null)
             return false;
@@ -89,7 +89,7 @@ public class PlaceBlockGoal extends Goal {
     // ==================================================
    	//                     Start
    	// ==================================================
-    @Override
+	@Override
     public void startExecuting() {
     	if(!host.useDirectNavigator())
     		this.host.getNavigator().tryMoveToXYZ(this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.speed);
@@ -101,6 +101,7 @@ public class PlaceBlockGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.host.getNavigator().clearPath();
         this.host.directNavigator.clearTargetPosition(1.0D);
@@ -111,7 +112,8 @@ public class PlaceBlockGoal extends Goal {
 	// ==================================================
  	//                       Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
     	if(this.repathTime-- <= 0) {
     		this.repathTime = 20;
     		if(!host.useDirectNavigator())

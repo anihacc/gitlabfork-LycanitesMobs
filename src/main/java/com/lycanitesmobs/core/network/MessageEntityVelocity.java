@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,7 +57,7 @@ public class MessageEntityVelocity {
 		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
 			return;
 
-		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
 		World world = player.getEntityWorld();
 		Entity entity = world.getEntityByID(message.entityID);
 		entity.setMotion(entity.getMotion().add((double)message.motionX / 8000.0D, (double)message.motionY / 8000.0D, (double)message.motionZ / 8000.0D));

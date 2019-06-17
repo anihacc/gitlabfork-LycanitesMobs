@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
@@ -70,6 +70,6 @@ public class DispenserBehaviorWaterJet extends DispenserBehaviorBase {
 	// ==================================================
     @Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("waterjet");
+        return ObjectManager.getSound("waterjet");
     }
 }

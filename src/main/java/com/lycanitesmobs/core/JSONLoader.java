@@ -40,7 +40,7 @@ public abstract class JSONLoader {
 		Map<String, JsonObject> jsons = new HashMap<>();
 
 		// Load Default:
-		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.filename, dataPath);
+		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, dataPath);
 		Map<String, JsonObject> defaultJsons = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJsons, mapKey, null);
 

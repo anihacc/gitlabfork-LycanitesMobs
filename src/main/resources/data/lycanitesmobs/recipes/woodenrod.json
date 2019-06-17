@@ -12,5 +12,5 @@
       "item": "minecraft:stick"
     }
   },
-  "type": "forge:ore_shaped"
+  "type": "minecraft:crafting_shaped"
 }

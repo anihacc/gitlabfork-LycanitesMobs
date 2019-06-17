@@ -91,6 +91,6 @@ public class EntityPoop extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("poop");
+    	return ObjectManager.getSound("poop");
     }
 }

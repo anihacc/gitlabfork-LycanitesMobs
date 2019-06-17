@@ -37,9 +37,6 @@ public class BlockDoomfire extends BlockFireBase {
         this.spreadChance = 3;
         this.removeOnTick = false;
         this.removeOnNoFireTick = false;
-
-        //this.setLightOpacity(1);
-        //this.setLightLevel(0.8F);
 	}
 
 
@@ -91,7 +88,7 @@ public class BlockDoomfire extends BlockFireBase {
         double y = pos.getY();
         double z = pos.getZ();
         if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("doomfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("doomfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();

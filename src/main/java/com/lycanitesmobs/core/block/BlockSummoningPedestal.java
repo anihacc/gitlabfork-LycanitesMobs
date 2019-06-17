@@ -4,8 +4,8 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.state.IntegerProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +27,7 @@ public class BlockSummoningPedestal extends BlockBase {
             return this.ownerId;
         }
     }
+
     public static final IntegerProperty PROPERTY_OWNER = BlockStateProperties.AGE_0_2;
 
 
@@ -35,23 +36,17 @@ public class BlockSummoningPedestal extends BlockBase {
 	// ==================================================
 	public BlockSummoningPedestal(Block.Properties properties, ModInfo group) {
 		super(properties);
-        //this.setCreativeTab(LycanitesMobs.blocksTab);
-        this.setDefaultState(this.getDefaultState().with(PROPERTY_OWNER, 0));
-		
-		// Properties:
-		this.group = group;
-		this.blockName = "summoningpedestal";
-		this.setup();
-		
-		// Stats:
-		//this.blockHardness(5F);
-        //this.setResistance(10F);
-		//this.setHarvestLevel("pickaxe", 2);
-		//this.setSoundType(SoundType.METAL);
 
-        // Tile Entity:
-        //this.hasTileEntity = true;
-	}
+        this.group = group;
+        this.blockName = "summoningpedestal";
+        this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
+        this.setDefaultState(this.getStateContainer().getBaseState().with(PROPERTY_OWNER, EnumSummoningPedestal.NONE.ownerId));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(PROPERTY_OWNER);
+    }
 
 
     // ==================================================

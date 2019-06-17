@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
@@ -459,6 +459,6 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
    	// ==================================================
     // ========== Mount ==========
     public void playMountSound() {
-    	this.playSound(AssetManager.getSound(this.creatureInfo.getName() + "_mount"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.creatureInfo.getName() + "_mount"), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 }

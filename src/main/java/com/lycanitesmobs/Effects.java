@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -71,9 +70,7 @@ public class Effects {
 		MinecraftForge.EVENT_BUS.register(this);
 
 		// Effect Sounds:
-		AssetManager.addSound("effect_fear", LycanitesMobs.modInfo, "effect.fear");
-		
-		this.disableNausea = ConfigExtra.INSTANCE.disableNausea.get();
+		ObjectManager.addSound("effect_fear", LycanitesMobs.modInfo, "effect.fear");
 	}
 
 
@@ -102,6 +99,7 @@ public class Effects {
 
 
 		// Disable Nausea:
+		this.disableNausea = ConfigExtra.INSTANCE.disableNausea.get();
 		if(this.disableNausea && event.getEntityLiving() instanceof PlayerEntity) {
 			if(entity.isPotionActive(net.minecraft.potion.Effects.field_76431_k)) {
 				entity.removePotionEffect(net.minecraft.potion.Effects.field_76431_k);

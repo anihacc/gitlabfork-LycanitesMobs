@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
@@ -184,7 +184,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound(this.entityName);
+    	return ObjectManager.getSound(this.entityName);
     }
     
     

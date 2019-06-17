@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.item.Item;
 
@@ -48,7 +49,7 @@ public class EquipmentPartManager extends JSONLoader {
 
 	@Override
 	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-		Item.Properties properties = new Item.Properties().maxStackSize(1).setNoRepair().setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentPartRenderer::new);
+		Item.Properties properties = new Item.Properties().maxStackSize(1).setNoRepair().group(ItemManager.getInstance().equipmentParts).setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentPartRenderer::new);
 		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(properties, groupInfo);
 		equipmentPart.loadFromJSON(json);
 		if(this.equipmentParts.containsKey(equipmentPart.itemName)) {

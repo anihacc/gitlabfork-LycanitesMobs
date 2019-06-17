@@ -346,23 +346,23 @@ public class CreatureInfo {
 	 * Adds sounds that this creature uses.
 	 */
 	public void addSounds(String suffix) {
-		AssetManager.addSound(this.name + suffix + "_say", modInfo, "entity." + this.name + suffix + ".say");
-		AssetManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + this.name + suffix + ".hurt");
-		AssetManager.addSound(this.name + suffix + "_death", modInfo, "entity." + this.name + suffix + ".death");
-		AssetManager.addSound(this.name + suffix + "_step", modInfo, "entity." + this.name + suffix + ".step");
-		AssetManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
-		AssetManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
-		AssetManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
+		ObjectManager.addSound(this.name + suffix + "_say", modInfo, "entity." + this.name + suffix + ".say");
+		ObjectManager.addSound(this.name + suffix + "_hurt", modInfo, "entity." + this.name + suffix + ".hurt");
+		ObjectManager.addSound(this.name + suffix + "_death", modInfo, "entity." + this.name + suffix + ".death");
+		ObjectManager.addSound(this.name + suffix + "_step", modInfo, "entity." + this.name + suffix + ".step");
+		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
+		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
+		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
 		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
-			AssetManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
-			AssetManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
+			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
+			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
 		}
 		if(this.isTameable())
-			AssetManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + this.name + suffix + ".eat");
+			ObjectManager.addSound(this.name + suffix + "_eat", modInfo, "entity." + this.name + suffix + ".eat");
 		if(this.isMountable())
-			AssetManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + this.name + suffix + ".mount");
+			ObjectManager.addSound(this.name + suffix + "_mount", modInfo, "entity." + this.name + suffix + ".mount");
 		if(this.isBoss())
-			AssetManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + this.name + suffix + ".phase");
+			ObjectManager.addSound(this.name + suffix + "_phase", modInfo, "entity." + this.name + suffix + ".phase");
 	}
 
 
@@ -380,7 +380,7 @@ public class CreatureInfo {
 	 * @return Creature registry entity id.
 	 */
 	public String getEntityId() {
-		return this.modInfo.filename + ":" + this.getName();
+		return this.modInfo.modid + ":" + this.getName();
 	}
 
 
@@ -391,11 +391,12 @@ public class CreatureInfo {
 	public EntityType getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
-			entityTypeBuilder.setTrackingRange(this.isBoss() ? 160 : 80);
-			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
+			entityTypeBuilder.setUpdateInterval(10);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
 			this.entityType = entityTypeBuilder.build(this.getEntityId());
+			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 		}
 		return this.entityType;
 	}
@@ -406,7 +407,7 @@ public class CreatureInfo {
 	 * @return Creature resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.modInfo.filename, this.getName());
+		return new ResourceLocation(this.modInfo.modid, this.getName());
 	}
 
 
@@ -415,7 +416,7 @@ public class CreatureInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.modInfo.filename + "." + this.getName();
+		return this.modInfo.modid + "." + this.getName();
 	}
 
 

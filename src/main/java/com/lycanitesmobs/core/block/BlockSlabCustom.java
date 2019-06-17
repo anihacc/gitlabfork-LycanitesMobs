@@ -31,8 +31,7 @@ public class BlockSlabCustom extends SlabBlock {
 		super(properties);
         this.doubleBlock = doubleBlock;
         String slabName = "_slab";
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + slabName));
-        block.copyAttributesTo(this);
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + slabName));
 	}
 
     @Override

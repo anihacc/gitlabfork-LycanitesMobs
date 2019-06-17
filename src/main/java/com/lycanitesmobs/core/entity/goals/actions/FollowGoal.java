@@ -65,6 +65,7 @@ public abstract class FollowGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	Entity target = this.getTarget();
 	    if(target == null)
@@ -85,6 +86,7 @@ public abstract class FollowGoal extends Goal {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	Entity target = this.getTarget();
     	if(target == null)
@@ -107,6 +109,7 @@ public abstract class FollowGoal extends Goal {
     // ==================================================
   	//                       Start
   	// ==================================================
+	@Override
     public void startExecuting() {
         this.updateRate = 0;
     }
@@ -115,7 +118,8 @@ public abstract class FollowGoal extends Goal {
     // ==================================================
   	//                      Update
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         if(this.updateRate-- <= 0) {
             this.updateRate = 10;
             Entity target = this.getTarget();
@@ -143,6 +147,7 @@ public abstract class FollowGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.host.clearMovement();
     }

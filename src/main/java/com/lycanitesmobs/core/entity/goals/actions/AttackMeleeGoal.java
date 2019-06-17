@@ -86,6 +86,7 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                   Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
@@ -125,6 +126,7 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                  Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	if(!this.enabled)
     		return false;
@@ -147,6 +149,7 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                   Start Executing
  	// ==================================================
+	@Override
     public void startExecuting() {
     	if(!this.host.useDirectNavigator()) {
 			this.host.getNavigator().setPath(this.pathToTarget, this.speed);
@@ -161,6 +164,7 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.host.getNavigator().clearPath();
         this.host.directNavigator.clearTargetPosition(1.0D);
@@ -171,7 +175,8 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                       Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         LivingEntity attackTarget = this.host.getAttackTarget();
         this.host.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 

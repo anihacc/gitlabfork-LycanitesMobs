@@ -58,7 +58,8 @@ public class EatBlockGoal extends Goal {
  	// ==================================================
   	//                   Should Execute
   	// ==================================================
-     public boolean shouldExecute() {
+ 	@Override
+    public boolean shouldExecute() {
     	 if(this.host.getRNG().nextInt(this.host.isChild() ? 50 : 1000) != 0)
              return false;
     	 
@@ -93,7 +94,8 @@ public class EatBlockGoal extends Goal {
  	// ==================================================
   	//                      Start
   	// ==================================================
-     public void startExecuting() {
+ 	@Override
+    public void startExecuting() {
     	 this.eatTime = 40;
          this.host.clearMovement();
      }
@@ -102,7 +104,8 @@ public class EatBlockGoal extends Goal {
  	// ==================================================
   	//                       Reset
   	// ==================================================
-     public void resetTask() {
+ 	@Override
+    public void resetTask() {
     	 this.eatTime = 40;
      }
   	
@@ -110,7 +113,8 @@ public class EatBlockGoal extends Goal {
   	// ==================================================
    	//                      Continue
    	// ==================================================
-      public boolean shouldContinueExecuting() {
+  	@Override
+    public boolean shouldContinueExecuting() {
     	  return this.eatTime > 0;
       }
  	
@@ -118,7 +122,8 @@ public class EatBlockGoal extends Goal {
  	// ==================================================
   	//                      Update
   	// ==================================================
-     public void updateTask() {
+ 	@Override
+    public void tick() {
          if(--this.eatTime != 0) return;
          
          int i = MathHelper.floor(this.host.posX);

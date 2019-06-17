@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.config.ConfigExtra;
 import net.minecraft.entity.player.PlayerEntity;
 import org.apache.commons.io.IOUtils;
 
@@ -18,7 +19,7 @@ public class DonationFamiliars {
     public static DonationFamiliars instance = new DonationFamiliars();
     public Map<String, Map<String, PetEntry>> playerFamiliars = new HashMap<>();
     public long jsonLoadedTime = -1;
-    public List<String> familiarBlacklist = new ArrayList<>();
+    protected List<String> familiarBlacklist = null;
 
     // ==================================================
     //                  Read From JSON
@@ -75,7 +76,7 @@ public class DonationFamiliars {
                 JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
                 String minecraft_uuid = familiarJson.get("minecraft_uuid").getAsString();
                 String minecraft_username = familiarJson.get("minecraft_username").getAsString();
-                if(this.familiarBlacklist.contains(minecraft_username)) {
+                if(this.getFamiliarBlacklist().contains(minecraft_username)) {
                 	continue;
 				}
                 String familiar_species = familiarJson.get("familiar_species").getAsString();
@@ -117,6 +118,14 @@ public class DonationFamiliars {
         }
         return true;
     }
+
+    public List<String> getFamiliarBlacklist() {
+    	if(this.familiarBlacklist == null) {
+			this.familiarBlacklist = new ArrayList<>();
+			this.familiarBlacklist.addAll(Arrays.asList(ConfigExtra.INSTANCE.familiarBlacklist.get()));
+		}
+    	return this.familiarBlacklist;
+	}
 
 
     // ==================================================

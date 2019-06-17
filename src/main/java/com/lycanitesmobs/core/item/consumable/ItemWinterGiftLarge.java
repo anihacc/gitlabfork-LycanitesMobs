@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -27,7 +27,7 @@ public class ItemWinterGiftLarge extends ItemBase {
         this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "wintergiftlarge";
         this.setup();
-        AssetManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
+        ObjectManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
     }
     
     
@@ -55,7 +55,7 @@ public class ItemWinterGiftLarge extends ItemBase {
     public void open(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TranslationTextComponent(message));
-        this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Lots of Random Tricks:
 		Class[] entityClasses = ObjectLists.getEntites("winter_tricks");

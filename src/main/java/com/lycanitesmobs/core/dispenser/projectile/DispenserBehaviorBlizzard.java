@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
@@ -26,6 +26,6 @@ public class DispenserBehaviorBlizzard extends DispenserBehaviorBase {
 	// ==================================================
 	@Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("blizzard");
+        return ObjectManager.getSound("blizzard");
     }
 }

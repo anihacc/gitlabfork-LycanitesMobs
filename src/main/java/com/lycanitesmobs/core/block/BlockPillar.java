@@ -2,11 +2,14 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 
 public class BlockPillar extends BlockBase {
-    public static EnumProperty<Direction.Axis> AXIS;
+    public static EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 
 	// ==================================================
 	//                   Constructor
@@ -14,6 +17,11 @@ public class BlockPillar extends BlockBase {
 	public BlockPillar(Block.Properties properties, ModInfo group, String name) {
 		super(properties, group, name);
         this.setDefaultState(this.getDefaultState().with(AXIS, Direction.Axis.Y));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(AXIS);
 	}
 
 

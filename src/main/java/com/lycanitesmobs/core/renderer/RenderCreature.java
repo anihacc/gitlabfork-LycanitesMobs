@@ -19,9 +19,6 @@ import java.lang.reflect.InvocationTargetException;
 public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCreatureBase> {
 	public boolean multipass = true;
 	protected ModelCreatureBase defaultModel;
-	
-	/** A color table for mobs that can be dyed or pet collars. Follows the same pattern as the vanilla sheep. */
-	public static final float[][] colorTable = new float[][] {{1.0F, 1.0F, 1.0F}, {0.85F, 0.5F, 0.2F}, {0.7F, 0.3F, 0.85F}, {0.4F, 0.6F, 0.85F}, {0.9F, 0.9F, 0.2F}, {0.5F, 0.8F, 0.1F}, {0.95F, 0.5F, 0.65F}, {0.3F, 0.3F, 0.3F}, {0.6F, 0.6F, 0.6F}, {0.3F, 0.5F, 0.6F}, {0.5F, 0.25F, 0.7F}, {0.2F, 0.3F, 0.7F}, {0.4F, 0.3F, 0.2F}, {0.4F, 0.5F, 0.2F}, {0.6F, 0.2F, 0.2F}, {0.1F, 0.1F, 0.1F}};
 
     // ==================================================
   	//                    Constructor

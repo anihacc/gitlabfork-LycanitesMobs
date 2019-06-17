@@ -66,7 +66,7 @@ public class FollowParentGoal extends FollowGoal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
-    @Override
+	@Override
     public boolean shouldExecute() {
     	if(!this.followAsAdult && !this.host.isChild())
     		return false;
@@ -77,7 +77,7 @@ public class FollowParentGoal extends FollowGoal {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
-    @Override
+	@Override
     public boolean shouldContinueExecuting() {
     	if(!this.followAsAdult && !this.host.isChild())
     		return false;

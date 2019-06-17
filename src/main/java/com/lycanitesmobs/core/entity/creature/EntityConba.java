@@ -85,7 +85,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
 		if(this.vespidInfection) {
 			String entityName = this.creatureInfo.getName();
 	    	if(entityName != null)
-	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.filename + "." + entityName + ".infected") + " ";
+	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected") + " ";
 		}
     	return infection + super.getSpeciesName();
     }

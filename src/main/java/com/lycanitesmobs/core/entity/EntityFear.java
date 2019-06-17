@@ -5,7 +5,6 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,7 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityFear extends EntityCreatureBase {
-    public Entity fearedEntity;
+    public LivingEntity fearedEntity;
 	
     // ==================================================
  	//                    Constructor
@@ -42,7 +41,7 @@ public class EntityFear extends EntityCreatureBase {
         this.field_70714_bg.addTask(1, new WanderGoal(this).setPauseRate(0));
     }
 
-    public EntityFear(World world, Entity feared) {
+    public EntityFear(World world, LivingEntity feared) {
         this(world);
         this.setFearedEntity(feared);
     }
@@ -96,8 +95,8 @@ public class EntityFear extends EntityCreatureBase {
         LivingEntity fearedLivingEntity = (LivingEntity)this.fearedEntity;
         
         // Pickup Entity For Fear Movement Override:
-        if(this.canPickupEntity(fearedEntityLiving)) {
-        	this.pickupEntity(fearedEntityLiving);
+        if(this.canPickupEntity(this.fearedEntity)) {
+        	this.pickupEntity(this.fearedEntity);
         }
         
         // Set Rotation:
@@ -114,21 +113,21 @@ public class EntityFear extends EntityCreatureBase {
         }
 
         // Remove When Fear is Over:
-        if(ObjectManager.getEffect("fear") == null || !fearedEntityLiving.isPotionActive(ObjectManager.getEffect("fear"))) {
+        if(ObjectManager.getEffect("fear") == null || !fearedEntity.isPotionActive(ObjectManager.getEffect("fear"))) {
             this.remove();
             return;
         }
 
         // Copy Movement Debuffs:
-		if(this.fearedEntity instanceof LivingEntity) {
-			if (fearedEntityLiving.isPotionActive(Effects.field_188424_y)) {
-				EffectInstance activeDebuff = fearedEntityLiving.getActiveEffectInstance(Effects.field_188424_y);
+		if(this.fearedEntity != null) {
+			if (fearedEntity.isPotionActive(Effects.field_188424_y)) {
+				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(Effects.field_188424_y);
 				this.addPotionEffect(new EffectInstance(Effects.field_188424_y, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
 			Effect instability = ObjectManager.getEffect("instability");
-			if (instability != null && fearedEntityLiving.isPotionActive(instability)) {
-				EffectInstance activeDebuff = fearedEntityLiving.getActiveEffectInstance(instability);
+			if (instability != null && fearedEntity.isPotionActive(instability)) {
+				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(instability);
 				this.addPotionEffect(new EffectInstance(instability, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 		}
@@ -138,16 +137,15 @@ public class EntityFear extends EntityCreatureBase {
     // ==================================================
   	//                        Fear
   	// ==================================================
-    public void setFearedEntity(Entity feared) {
+    public void setFearedEntity(LivingEntity feared) {
     	this.fearedEntity = feared;
         //this.setSize(feared.width, feared.height); TODO Entity Type Size
         this.noClip = feared.noClip;
         this.stepHeight = feared.stepHeight;
 		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
 		
-        if(feared instanceof LivingEntity && !(feared instanceof PlayerEntity)) {
-	        LivingEntity fearedLivingEntity = (LivingEntity)feared;
-	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(fearedEntityLiving.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
+        if(!(feared instanceof PlayerEntity)) {
+	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());
         }
     }
 	
@@ -205,17 +203,17 @@ public class EntityFear extends EntityCreatureBase {
     // ========== Idle ==========
     /** Returns the sound to play when this creature is making a random ambient roar, grunt, etc. **/
     @Override
-    protected SoundEvent getAmbientSound() { return AssetManager.getSound("effect_fear"); }
+    protected SoundEvent getAmbientSound() { return ObjectManager.getSound("effect_fear"); }
 
     // ========== Hurt ==========
     /** Returns the sound to play when this creature is damaged. **/
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) { return AssetManager.getSound("effect_fear"); }
+    protected SoundEvent getHurtSound(DamageSource damageSource) { return ObjectManager.getSound("effect_fear"); }
 
     // ========== Death ==========
     /** Returns the sound to play when this creature dies. **/
     @Override
-    protected SoundEvent getDeathSound() { return AssetManager.getSound("effect_fear"); }
+    protected SoundEvent getDeathSound() { return ObjectManager.getSound("effect_fear"); }
      
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/

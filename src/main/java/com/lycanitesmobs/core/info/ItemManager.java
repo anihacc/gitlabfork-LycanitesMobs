@@ -1,13 +1,11 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.BlockMaker;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.BlockBase;
 import com.lycanitesmobs.core.block.BlockEquipmentForge;
-import com.lycanitesmobs.core.block.BlockSoulcube;
+import com.lycanitesmobs.core.block.BlockMaker;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
-import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
@@ -25,8 +23,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
-
-import java.util.concurrent.Callable;
 
 public class ItemManager {
 	public static ItemManager INSTANCE;
@@ -145,32 +141,32 @@ public class ItemManager {
 		BlockMaker.addStoneBlocks(modInfo, "desert", Blocks.SANDSTONE);
 		BlockMaker.addStoneBlocks(modInfo, "shadow", Blocks.OBSIDIAN);
 		BlockMaker.addStoneBlocks(modInfo, "demon", Items.NETHER_WART);
-		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(Block.Properties.create(Material.ROCK).sound(SoundType.STONE), "soulcubedemonic"));
-		ObjectManager.addBlock("propolis", new BlockPropolis(Block.Properties.create(Material.CLAY).sound(SoundType.WET_GRASS).hardnessAndResistance(0.6F).tickRandomly()));
-		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(0.6F).tickRandomly()));
+		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE), modInfo, "soulcubedemonic"));
+		ObjectManager.addBlock("propolis", new BlockVeswax(Block.Properties.create(Material.CLAY).sound(SoundType.WET_GRASS).hardnessAndResistance(0.6F).tickRandomly(), "propolis"));
+		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(0.6F).tickRandomly(), "veswax"));
 
 
 		// Effect Blocks:
 		Block.Properties fireProperties = Block.Properties.create(Material.FIRE).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
-		AssetManager.addSound("frostfire", modInfo, "block.frostfire");
+		ObjectManager.addSound("frostfire", modInfo, "block.frostfire");
 		ObjectManager.addBlock("frostfire", new BlockFrostfire(fireProperties));
-		AssetManager.addSound("icefire", modInfo, "block.icefire");
+		ObjectManager.addSound("icefire", modInfo, "block.icefire");
 		ObjectManager.addBlock("icefire", new BlockIcefire(fireProperties));
-		AssetManager.addSound("hellfire", modInfo, "block.hellfire");
+		ObjectManager.addSound("hellfire", modInfo, "block.hellfire");
 		ObjectManager.addBlock("hellfire", new BlockHellfire(fireProperties));
-		AssetManager.addSound("doomfire", modInfo, "block.doomfire");
+		ObjectManager.addSound("doomfire", modInfo, "block.doomfire");
 		ObjectManager.addBlock("doomfire", new BlockDoomfire(fireProperties));
-		AssetManager.addSound("scorchfire", modInfo, "block.scorchfire");
+		ObjectManager.addSound("scorchfire", modInfo, "block.scorchfire");
 		ObjectManager.addBlock("scorchfire", new BlockScorchfire(fireProperties));
-		AssetManager.addSound("shadowfire", modInfo, "block.shadowfire");
+		ObjectManager.addSound("shadowfire", modInfo, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
 
 		Block.Properties cloudProperties = Block.Properties.create(Material.MISCELLANEOUS).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
-		AssetManager.addSound("frostcloud", modInfo, "block.frostcloud");
+		ObjectManager.addSound("frostcloud", modInfo, "block.frostcloud");
 		ObjectManager.addBlock("frostcloud", new BlockFrostCloud(cloudProperties));
-		AssetManager.addSound("poisoncloud", modInfo, "block.poisoncloud");
+		ObjectManager.addSound("poisoncloud", modInfo, "block.poisoncloud");
 		ObjectManager.addBlock("poisoncloud", new BlockPoisonCloud(cloudProperties));
-		AssetManager.addSound("poopcloud", modInfo, "block.poopcloud");
+		ObjectManager.addSound("poopcloud", modInfo, "block.poopcloud");
 		ObjectManager.addBlock("poopcloud", new BlockPoopCloud(cloudProperties));
 
 		Block.Properties webProperties = Block.Properties.create(Material.WEB).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);

@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedEntity;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.Entity;
@@ -29,7 +30,7 @@ public class MessageEntityPickedUp {
 		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
 			return;
 
-		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
 		World world = player.getEntityWorld();
 		Entity pickedUpEntity = world.getEntityByID(message.pickedUpEntityID);
 		Entity pickedUpByEntity = message.pickedUpByEntityID != 0 ? world.getEntityByID(message.pickedUpByEntityID) : null;

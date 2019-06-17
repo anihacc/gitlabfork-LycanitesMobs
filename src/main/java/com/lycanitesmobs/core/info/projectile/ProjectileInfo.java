@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.info.projectile;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
@@ -19,7 +18,6 @@ import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -238,9 +236,9 @@ public class ProjectileInfo {
 		DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
 
 		// Sounds:
-		AssetManager.addSound(name, modInfo, "projectile." + name);
+		ObjectManager.addSound(name, modInfo, "projectile." + name);
 		if(this.impactSound) {
-			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
+			ObjectManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
 		}
 	}
 
@@ -258,7 +256,7 @@ public class ProjectileInfo {
 	 * @return Projectile registry entity id.
 	 */
 	public String getEntityId() {
-		return this.modInfo.filename + ":" + this.getName();
+		return this.modInfo.modid + ":" + this.getName();
 	}
 
 
@@ -269,10 +267,11 @@ public class ProjectileInfo {
 	public EntityType getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
-			entityTypeBuilder.setTrackingRange(40);
-			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setTrackingRange(5);
+			entityTypeBuilder.setUpdateInterval(20);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 			this.entityType = entityTypeBuilder.build(this.getEntityId());
+			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 		}
 		return this.entityType;
 	}
@@ -282,7 +281,7 @@ public class ProjectileInfo {
 	 * @return Projectile resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.modInfo.filename, this.getName());
+		return new ResourceLocation(this.modInfo.modid, this.getName());
 	}
 
 	/**
@@ -290,7 +289,7 @@ public class ProjectileInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.modInfo.filename + "." + this.getName();
+		return this.modInfo.modid + "." + this.getName();
 	}
 
 	/**
@@ -322,10 +321,10 @@ public class ProjectileInfo {
 	}
 
 	public SoundEvent getLaunchSound() {
-		return AssetManager.getSound(this.name);
+		return ObjectManager.getSound(this.name);
 	}
 
 	public SoundEvent getImpactSound() {
-		return AssetManager.getSound(this.name + "_impact");
+		return ObjectManager.getSound(this.name + "_impact");
 	}
 }

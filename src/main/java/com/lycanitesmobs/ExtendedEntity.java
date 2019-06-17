@@ -1,6 +1,7 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
+import com.lycanitesmobs.core.config.ConfigAdmin;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -114,6 +115,8 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.equipmentProjectileCooldown--;
 
         // Force Remove Entity:
+		ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
+		ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
         if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.length > 0 && !this.forceRemoveChecked) {
             LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + this.entity.getName());
             for (String forceRemoveID : FORCE_REMOVE_ENTITY_IDS) {

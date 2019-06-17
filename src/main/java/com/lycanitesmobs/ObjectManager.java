@@ -14,10 +14,11 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
@@ -35,6 +36,7 @@ public class ObjectManager {
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
 	public static Map<String, EffectBase> effects = new HashMap<>();
+	public static Map<String, SoundEvent> sounds = new HashMap<>();
 
 	// Entity Maps:
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
@@ -129,9 +131,6 @@ public class ObjectManager {
 	}
 
 	public static Item addItem(String name, Item item, int weight, int minAmount, int maxAmount) {
-		Utilities.addDungeonLoot(new ItemStack(item), minAmount, maxAmount, weight);
-		Utilities.addStrongholdLoot(new ItemStack(item), minAmount, maxAmount, (weight * 2));
-		Utilities.addVillageLoot(new ItemStack(item), minAmount, maxAmount, (weight));
 		return addItem(name, item);
 	}
 
@@ -158,13 +157,20 @@ public class ObjectManager {
 
 	}
 
-
     // ========== Damage Source ==========
     public static void addDamageSource(String name, DamageSource damageSource) {
         name = name.toLowerCase();
         damageSources.put(name, damageSource);
     }
 
+	// ========== Sound ==========
+	public static void addSound(String name, ModInfo modInfo, String path) {
+		name = name.toLowerCase();
+		ResourceLocation resourceLocation = new ResourceLocation(modInfo.modid, path);
+		SoundEvent soundEvent = new SoundEvent(resourceLocation);
+		soundEvent.setRegistryName(resourceLocation);
+		sounds.put(name, soundEvent);
+	}
 
     // ========== Stat ==========
     public static void addStat(String name, Stat stat) {
@@ -214,6 +220,14 @@ public class ObjectManager {
         return damageSources.get(name);
     }
 
+	// ========== Sound ==========
+	public static SoundEvent getSound(String name) {
+		name = name.toLowerCase();
+		if(!sounds.containsKey(name))
+			return null;
+		return sounds.get(name);
+	}
+
     // ========== Stat ==========
     public static Stat getStat(String name) {
         name = name.toLowerCase();
@@ -259,16 +273,27 @@ public class ObjectManager {
 	public static void registerSpecialEntities(RegistryEvent.Register<EntityType<?>> event) {
 		// Special Entities:
 		for(String entityName : specialEntities.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
-			entityTypeBuilder.setTrackingRange(80);
-			entityTypeBuilder.setUpdateInterval(3);
+			entityTypeBuilder.setTrackingRange(10);
+			entityTypeBuilder.setUpdateInterval(10);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 
 			EntityType entityType = entityTypeBuilder.build(registryName);
-			EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
+			entityType.setRegistryName(LycanitesMobs.modid, entityName);
+			//EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
 			event.getRegistry().register(entityType);
+		}
+	}
+
+	// ========== Sounds ==========
+	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+		for(SoundEvent soundEvent : sounds.values()) {
+			if(soundEvent.getRegistryName() == null) {
+				LycanitesMobs.printWarning("", "Sound: " + soundEvent + " has no Registry Name!");
+			}
+			event.getRegistry().register(soundEvent);
 		}
 	}
 

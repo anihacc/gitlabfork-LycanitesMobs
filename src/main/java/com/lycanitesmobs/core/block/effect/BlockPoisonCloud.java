@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -27,25 +28,26 @@ public class BlockPoisonCloud extends BlockBase {
 	// ==================================================
 	public BlockPoisonCloud(Block.Properties properties) {
 		super(properties);
-		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
 
-        // Properties:
 		this.group = LycanitesMobs.modInfo;
 		this.blockName = "poisoncloud";
-		this.setup();
 		
 		// Stats:
 		this.tickRate = 200;
 		this.removeOnTick = true;
 		this.loopTicks = true;
 		this.canBeCrushed = true;
-		
-		//this.noEntityCollision = true;
+
 		this.noBreakCollision = true;
 		this.isOpaque = false;
-		
-		//this.setBlockUnbreakable();
-		//this.setLightOpacity(1);
+
+		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
+		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(AGE);
 	}
 
 
@@ -105,7 +107,7 @@ public class BlockPoisonCloud extends BlockBase {
 		double y = pos.getY();
 		double z = pos.getZ();
 		if(random.nextInt(24) == 0)
-			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("poisoncloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("poisoncloud"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
 		if (random.nextInt(100) == 0) {
 			x += random.nextFloat();

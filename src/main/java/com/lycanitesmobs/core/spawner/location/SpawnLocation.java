@@ -50,9 +50,6 @@ public class SpawnLocation {
 		else if("material".equalsIgnoreCase(type)) {
 			spawnLocation = new MaterialSpawnLocation();
 		}
-		else if("village".equalsIgnoreCase(type)) {
-			spawnLocation = new VillageSpawnLocation();
-		}
 		else if("structure".equalsIgnoreCase(type)) {
 			spawnLocation = new StructureSpawnLocation();
 		}

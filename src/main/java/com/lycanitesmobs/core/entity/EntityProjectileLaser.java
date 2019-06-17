@@ -280,7 +280,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 				excludedEntities.add(this.shootingEntity);
 			if(this.followEntity != null)
 				excludedEntities.add(this.followEntity);
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ, this.laserWidth, excludedEntities);
+			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
 			
 			// Update Laser End Position:
 			double newTargetX = this.targetX;

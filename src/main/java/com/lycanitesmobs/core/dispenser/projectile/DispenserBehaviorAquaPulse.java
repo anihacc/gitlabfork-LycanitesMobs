@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityAquaPulse;
 import net.minecraft.dispenser.IPosition;
@@ -25,6 +26,6 @@ public class DispenserBehaviorAquaPulse extends DispenserBehaviorBase {
 	// ==================================================
 	@Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("aquapulse");
+        return ObjectManager.getSound("aquapulse");
     }
 }

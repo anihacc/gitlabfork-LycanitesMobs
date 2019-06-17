@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.gui;
 
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ClientManager;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
@@ -28,7 +28,7 @@ public abstract class GuiBaseScreen extends Screen implements Button.IPressable 
 	 * @return The font renderer to use.
 	 */
 	public FontRenderer getFontRenderer() {
-		return LycanitesMobs.proxy.getFontRenderer();
+		return ClientManager.getInstance().getFontRenderer();
 	}
 
 

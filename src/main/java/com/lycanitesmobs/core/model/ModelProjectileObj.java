@@ -86,7 +86,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 		}
 
         // Load Obj Model:
-        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
+        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
             LycanitesMobs.printWarning("", "Unable to load any parts for the " + name + " model!");
@@ -95,7 +95,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 		this.animator = new Animator();
 
         // Load Model Parts:
-        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
+        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
             InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
@@ -125,7 +125,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         }
 
 		// Load Animations:
-		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
+		ResourceLocation animationLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();

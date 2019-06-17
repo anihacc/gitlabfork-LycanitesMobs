@@ -47,6 +47,7 @@ public class SitGoal extends Goal {
     // ==================================================
   	//                   Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
@@ -72,6 +73,7 @@ public class SitGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
         this.host.clearMovement();
         if(this.host.hasHome() && this.host.getDistanceFromHome() > 1.0F) {

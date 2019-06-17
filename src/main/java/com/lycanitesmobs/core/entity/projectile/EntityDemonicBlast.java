@@ -179,7 +179,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("DemonicBlast");
+    	return ObjectManager.getSound("DemonicBlast");
     }
     
     

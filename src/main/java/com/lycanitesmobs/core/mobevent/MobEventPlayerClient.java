@@ -3,10 +3,11 @@ package com.lycanitesmobs.core.mobevent;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.MobEventSound;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -61,11 +62,11 @@ public class MobEventPlayerClient {
 	}
 
     public void playSound() {
-        if(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()) == null) {
+        if(ObjectManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()) == null) {
             LycanitesMobs.printWarning("MobEvent", "Sound missing for: " + this.mobEvent.getTitle());
             return;
         }
-        this.sound = new SimpleSound(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()).getName(), SoundCategory.RECORDS, 1.0F, 1.0F, false, 0, ISound.AttenuationType.NONE, 0.0F, 0.0F, 0.0F, false);
+        this.sound = new MobEventSound(ObjectManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()), SoundCategory.RECORDS, ClientManager.getInstance().getClientPlayer(), 1.0F, 1.0F);
         Minecraft.getInstance().getSoundHandler().play(this.sound);
     }
 	

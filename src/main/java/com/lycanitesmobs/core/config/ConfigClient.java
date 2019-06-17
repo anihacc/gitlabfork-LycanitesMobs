@@ -6,6 +6,7 @@ public class ConfigClient {
 	public static ConfigClient INSTANCE = new ConfigClient(CoreConfig.BUILDER);
 
 	public final ForgeConfigSpec.ConfigValue<Boolean> modelMultipass;
+	public final ForgeConfigSpec.ConfigValue<Boolean> inventoryTab;
 
 	public ConfigClient(ForgeConfigSpec.Builder builder) {
 		builder.push("Extra");
@@ -15,5 +16,10 @@ public class ConfigClient {
 				.comment("Set to false to disable multipass rendering. This renders model layers twice so that they can show each over through alpha textures, disable for performance on low end systems.")
 				.translation(CoreConfig.CONFIG_PREFIX + "client.modelMultipass")
 				.define("client.modelMultipass", true);
+
+		this.inventoryTab = builder
+				.comment("Set to false to disable the inventory tabs added by this mod.")
+				.translation(CoreConfig.CONFIG_PREFIX + "client.inventoryTab")
+				.define("client.inventoryTab", true);
 	}
 }

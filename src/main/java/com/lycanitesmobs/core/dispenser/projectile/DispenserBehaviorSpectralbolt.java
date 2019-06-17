@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import net.minecraft.dispenser.IPosition;
@@ -25,6 +25,6 @@ public class DispenserBehaviorSpectralbolt extends DispenserBehaviorBase {
 	// ==================================================
     @Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("spectralbolt");
+        return ObjectManager.getSound("spectralbolt");
     }
 }

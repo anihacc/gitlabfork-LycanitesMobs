@@ -1,11 +1,12 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
-import com.lycanitesmobs.core.config.*;
+import com.lycanitesmobs.core.config.ConfigDebug;
+import com.lycanitesmobs.core.config.ConfigGeneral;
+import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
@@ -17,7 +18,6 @@ import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mods.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
-import com.lycanitesmobs.core.pets.DonationFamiliars;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
@@ -42,8 +42,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("lycanitesmobs")
 public class LycanitesMobs {
@@ -60,6 +58,7 @@ public class LycanitesMobs {
     public static final String acceptedMinecraftVersions = "[1.12,1.13)";
 
     public static final PacketHandler packetHandler = new PacketHandler();
+    public static boolean configReady;
 
     public static ModInfo modInfo;
     //public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
@@ -98,18 +97,11 @@ public class LycanitesMobs {
 
         // Config:
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.spec);
-        ConfigGeneral.INSTANCE.versionCheck("2.1.0.0", version);
 
         // Event Listeners:
         MinecraftForge.EVENT_BUS.register(new EventListener());
         MinecraftForge.EVENT_BUS.register(CreatureManager.getInstance());
         MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
-
-        // Familiars:
-        DonationFamiliars.instance.familiarBlacklist.addAll(Arrays.asList(ConfigExtra.INSTANCE.familiarBlacklist.get()));
-
-        // Version Checker:
-        VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
 
         // Network:
         packetHandler.register();
@@ -118,17 +110,7 @@ public class LycanitesMobs {
         // Change Health Limit:
         LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
-        // Admin Entity Removal Tool:
-        ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
-        if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
-            printInfo("", "Lycanites Mobs will forcefully remove the following entities based on their registered IDs:");
-            for (String removeEntityID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS)
-                printInfo("", removeEntityID);
-        }
-        ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
-
         // Blocks and Items:
-        ItemManager.getInstance().loadConfig();
         ItemManager.getInstance().loadItems();
         EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
         ObjectLists.createCustomItems();
@@ -159,13 +141,11 @@ public class LycanitesMobs {
         SpawnerManager.getInstance().loadAllFromJSON();
 
         // Altars:
-        AltarInfo.loadGlobalSettings();
         AltarInfo.createAltars();
 
         // Mob Events:
         MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
         MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
-        MobEventManager.getInstance().loadConfig();
         MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
         // Dungeons:
@@ -175,12 +155,27 @@ public class LycanitesMobs {
         DLDungeons.init();
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
+    @SubscribeEvent
+    public void clientSetup(final FMLClientSetupEvent event) {
         ClientManager.getInstance().initLanguageManager();
         ClientManager.getInstance().registerEvents();
         ClientManager.getInstance().registerRenders(modInfo);
         ClientManager.getInstance().registerTextures();
         ClientManager.getInstance().registerItemModels();
+    }
+
+    @SubscribeEvent
+    public void onConfigLoaded(ModConfig.ModConfigEvent event) {
+        if(event.getConfig().getModId() != modid)
+            return;
+
+        LycanitesMobs.printDebug("", "Config Loading!");
+
+        ConfigGeneral.INSTANCE.clearOldConfigs("2.1.0.0", version);
+        ItemManager.getInstance().loadConfig();
+        CreatureManager.getInstance().loadConfig();
+        MobEventManager.getInstance().loadConfig();
+        AltarInfo.loadGlobalSettings();
     }
 
     @SubscribeEvent
@@ -205,7 +200,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printInfo(String key, String message) {
-        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.info("[LycanitesMobs] [Info] [" + key + "] " + message);
         }
     }
@@ -217,7 +212,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printDebug(String key, String message) {
-        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.debug("[LycanitesMobs] [Debug] [" + key + "] " + message);
         }
     }
@@ -229,7 +224,7 @@ public class LycanitesMobs {
      * @param message The message to print.
      */
     public static void printWarning(String key, String message) {
-        if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+        if("".equals(key) || !configReady || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
             LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
         }
     }

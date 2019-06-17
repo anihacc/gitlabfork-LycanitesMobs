@@ -21,7 +21,6 @@ public class ItemBlockPlacer extends ItemBase {
 		this.modInfo = LycanitesMobs.modInfo;
 		this.itemName = itemName;
 		this.placedBlockName = placedBlockName;
-		properties.group(LycanitesMobs.itemsTab);
 		this.setup();
 	}
 
@@ -41,7 +40,7 @@ public class ItemBlockPlacer extends ItemBase {
 				try {
 					BlockState blockState = world.getBlockState(pos);
 					if(blockState.isAir(world, pos)) {
-						world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, AssetManager.getSound(this.placedBlockName), SoundCategory.PLAYERS, 1.0F, player.getRNG().nextFloat() * 0.4F + 0.8F, false);
+						world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ObjectManager.getSound(this.placedBlockName), SoundCategory.PLAYERS, 1.0F, player.getRNG().nextFloat() * 0.4F + 0.8F, false);
 						world.setBlockState(pos, ObjectManager.getBlock(this.placedBlockName).getDefaultState());
 					}
 					if(!player.playerAbilities.isCreativeMode)

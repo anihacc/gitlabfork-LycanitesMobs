@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.config.ConfigClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
@@ -21,7 +22,7 @@ public class TabManager {
     }
     
     public static void addTabsToInventory (Screen gui) {
-    	if(LycanitesMobs.config.getBool("GUI", "Show Inventory Tabs", true, "Set to false to disable the GUI tabs.") && gui.getClass() == InventoryScreen.class) {
+    	if(ConfigClient.INSTANCE.inventoryTab.get()) {
         	GuiInventorySnooper guiInventorySnooper = new GuiInventorySnooper(mc.player);
         	try {
             	Field field = Screen.class.getDeclaredField(guiInventorySnooper.getButtonListFieldName());

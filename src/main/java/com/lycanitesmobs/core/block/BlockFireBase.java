@@ -43,7 +43,6 @@ public class BlockFireBase extends BlockBase {
     public BlockFireBase(Block.Properties properties, ModInfo group, String name) {
         super(properties, group, name);
 
-        this.setDefaultState(this.stateContainer.getBaseState().with(AGE, 0).with(NORTH, false).with(EAST, false).with(SOUTH, false).with(WEST, false).with(UP, false));
         this.removeOnTick = false;
         this.removeOnNoFireTick = false;
         this.loopTicks = true;
@@ -53,8 +52,13 @@ public class BlockFireBase extends BlockBase {
         this.isOpaque = false;
 
         this.tickRate = 30; // Default tick rate, configs can set this to 1 to remove this fire block from worlds.
-        //this.setLightOpacity(1);
-        //this.disableStats();
+
+        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0).with(NORTH, false).with(EAST, false).with(SOUTH, false).with(WEST, false).with(UP, false));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(AGE, NORTH, EAST, SOUTH, WEST, UP);
     }
 
 
@@ -83,11 +87,6 @@ public class BlockFireBase extends BlockBase {
         } else {
             return this.getDefaultState();
         }
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(AGE, NORTH, EAST, SOUTH, WEST, UP);
     }
 
 

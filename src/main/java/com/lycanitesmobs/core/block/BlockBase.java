@@ -64,23 +64,12 @@ public class BlockBase extends Block {
         super(properties);
         this.group = group;
         this.blockName = name;
-        this.setup();
+		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
     }
 
 	public BlockBase(Block.Properties properties) {
 		super(properties);
 	}
-	
-	/** Should be called by a child class once the blockName and other important variables are set, kind of a late construct. **/
-	public void setup() {
-        this.setRegistryName(this.group.filename, this.blockName.toLowerCase());
-	}
-
-    /** Copies various basic attributes from this block to the provided block, such as hardness. **/
-    public void copyAttributesTo(Block block) {
-        //block.setHardness(this.blockHardness);
-        //block.setResistance(this.blockResistance);
-    }
 
 
     // ==================================================

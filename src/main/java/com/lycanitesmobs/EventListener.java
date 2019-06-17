@@ -19,6 +19,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.Direction;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -70,7 +71,7 @@ public class EventListener {
         ObjectManager.registerItems(event);
     }
 
-    // ========== Potions ==========
+    // ========== Effects ==========
     @SubscribeEvent
     public void registerEffects(RegistryEvent.Register<Effect> event) {
         ObjectManager.registerEffects(event);
@@ -80,6 +81,12 @@ public class EventListener {
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		ObjectManager.registerSpecialEntities(event);
+	}
+
+	// ========== Sound Events ==========
+	@SubscribeEvent
+	public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+		ObjectManager.registerSounds(event);
 	}
 
 

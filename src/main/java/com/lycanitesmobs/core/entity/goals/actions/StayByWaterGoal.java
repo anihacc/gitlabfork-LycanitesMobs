@@ -50,6 +50,7 @@ public class StayByWaterGoal extends Goal {
     // ==================================================
    	//                  Should Execute
    	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	// Set home when in water or lava (for lava creatures).
     	if(this.host.isInWater()) {
@@ -155,6 +156,7 @@ public class StayByWaterGoal extends Goal {
     // ==================================================
    	//                     Start
    	// ==================================================
+	@Override
     public void startExecuting() {
         this.updateRate = 0;
     }
@@ -163,7 +165,8 @@ public class StayByWaterGoal extends Goal {
     // ==================================================
   	//                      Update
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         if(this.updateRate-- <= 0) {
             this.updateRate = 20;
 	    	if(!host.useDirectNavigator()) {
@@ -178,6 +181,7 @@ public class StayByWaterGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.host.clearMovement();
     }

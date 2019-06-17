@@ -8,14 +8,13 @@
     "BBM",
     " MM"
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "key": {
     "B": {
       "item": "minecraft:bone"
     },
     "M": {
-      "type": "forge:ore_dict",
-      "ore": "listAllRotten"
+      "item": "minecraft:rotten_flesh"
     }
   }
 }

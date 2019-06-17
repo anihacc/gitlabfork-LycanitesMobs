@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +31,7 @@ public class MessageWorldEvent {
 		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
 			return;
 
-		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
 		World world = player.getEntityWorld();
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		

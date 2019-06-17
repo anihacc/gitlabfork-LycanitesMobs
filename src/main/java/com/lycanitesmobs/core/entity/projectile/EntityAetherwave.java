@@ -90,7 +90,7 @@ public class EntityAetherwave extends EntityProjectileModel {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("aetherwave");
+    	return ObjectManager.getSound("aetherwave");
     }
     
     

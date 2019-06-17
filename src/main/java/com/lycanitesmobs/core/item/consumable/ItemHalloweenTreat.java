@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
@@ -31,8 +30,8 @@ public class ItemHalloweenTreat extends ItemBase {
         this.modInfo = LycanitesMobs.modInfo;
         this.itemName = "halloweentreat";
         this.setup();
-		AssetManager.addSound(this.itemName + "_good", this.modInfo, "item." + this.itemName + ".good");
-        AssetManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
+		ObjectManager.addSound(this.itemName + "_good", this.modInfo, "item." + this.itemName + ".good");
+		ObjectManager.addSound(this.itemName + "_bad", this.modInfo, "item." + this.itemName + ".bad");
     }
     
     
@@ -63,7 +62,7 @@ public class ItemHalloweenTreat extends ItemBase {
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".good");
 		player.sendMessage(new TranslationTextComponent(message));
-        this.playSound(world, player.posX, player.posY, player.posZ, AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
 		for(int i = 0; i < 3; i++) {
@@ -86,7 +85,7 @@ public class ItemHalloweenTreat extends ItemBase {
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
     	String message = LanguageManager.translate("item." + this.itemName + ".bad");
 		player.sendMessage(new TranslationTextComponent(message));
-        this.playSound(world, player.posX, player.posY, player.posZ, AssetManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
 		Class[] entityClasses = ObjectLists.getEntites("halloween_tricks");

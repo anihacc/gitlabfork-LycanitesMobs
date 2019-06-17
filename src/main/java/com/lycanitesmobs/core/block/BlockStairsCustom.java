@@ -23,7 +23,7 @@ public class BlockStairsCustom extends StairsBlock {
 	// ==================================================
 	public BlockStairsCustom(Block.Properties properties, BlockBase block) {
 		super(block.getDefaultState(), properties);
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_stairs"));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_stairs"));
 	}
 
 

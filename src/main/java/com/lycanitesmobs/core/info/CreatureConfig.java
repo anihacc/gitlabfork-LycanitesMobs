@@ -118,7 +118,6 @@ public class CreatureConfig {
 
 	/**
 	 * Loads settings from the config.
-	 * @param config The config to load from.
 	 */
 	public void loadConfig() {
 		// Client:

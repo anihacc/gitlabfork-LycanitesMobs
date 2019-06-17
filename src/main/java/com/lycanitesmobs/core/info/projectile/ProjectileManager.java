@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.info.projectile;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
@@ -113,12 +112,12 @@ public class ProjectileManager extends JSONLoader {
 			if(projectileInfo.modInfo != modInfo) {
 				continue;
 			}
-			EntityFactory.getInstance().addEntityType(projectileInfo.getEntityType(), projectileInfo.entityClass);
+			//EntityFactory.getInstance().addEntityType(projectileInfo.getEntityType(), projectileInfo.entityClass);
 			event.getRegistry().register(projectileInfo.getEntityType());
 		}
 
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
 			entityTypeBuilder.setTrackingRange(40);
@@ -126,12 +125,12 @@ public class ProjectileManager extends JSONLoader {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
 			EntityType entityType = entityTypeBuilder.build(registryName);
-			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
+			//EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
 			event.getRegistry().register(entityType);
 		}
 
 		for(String entityName : this.oldModelProjectiles.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.CREATURE);
 			entityTypeBuilder.setTrackingRange(40);
@@ -139,7 +138,7 @@ public class ProjectileManager extends JSONLoader {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
 			EntityType entityType = entityTypeBuilder.build(registryName);
-			EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName));
+			//EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName));
 			event.getRegistry().register(entityType);
 		}
 	}
@@ -219,9 +218,9 @@ public class ProjectileManager extends JSONLoader {
 	public void addOldProjectile(String name, Class<? extends Entity> entityClass, boolean impactSound) {
 		name = name.toLowerCase();
 		ModInfo modInfo = LycanitesMobs.modInfo;
-		AssetManager.addSound(name, modInfo, "projectile." + name);
+		ObjectManager.addSound(name, modInfo, "projectile." + name);
 		if(impactSound) {
-			AssetManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
+			ObjectManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
 		}
 		this.addOldProjectile(name, entityClass);
 	}

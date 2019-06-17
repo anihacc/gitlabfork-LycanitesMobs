@@ -77,7 +77,6 @@ public class CreatureManager extends JSONLoader {
 	 * @param modInfo The mod loading this manager.
 	 */
 	public void startup(ModInfo modInfo) {
-		this.loadConfig();
 		this.loadCreatureTypesFromJSON(modInfo);
 		this.loadCreaturesFromJSON(modInfo);
 		for(CreatureType creatureType : this.creatureTypes.values()) {
@@ -95,16 +94,16 @@ public class CreatureManager extends JSONLoader {
 		this.spawnConfig.loadConfig();
 
 		// Difficulty:
-		difficultyMultipliers = new HashMap<>();
+		this.difficultyMultipliers = new HashMap<>();
 		for(String difficultyName : DIFFICULTY_NAMES) {
 			for(String statName : CreatureStats.STAT_NAMES) {
-				difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(), ConfigCreatures.INSTANCE.difficultyMultipliers.get(difficultyName).get(statName).get());
+				this.difficultyMultipliers.put((difficultyName + "-" + statName).toUpperCase(), ConfigCreatures.INSTANCE.difficultyMultipliers.get(difficultyName).get(statName).get());
 			}
 		}
 
 		// Level:
 		for(String statName : CreatureStats.STAT_NAMES) {
-			levelMultipliers.put(statName.toUpperCase(), ConfigCreatures.INSTANCE.levelMultipliers.get(statName).get());
+			this.levelMultipliers.put(statName.toUpperCase(), ConfigCreatures.INSTANCE.levelMultipliers.get(statName).get());
 		}
 	}
 
@@ -200,7 +199,7 @@ public class CreatureManager extends JSONLoader {
 				continue;
 			}
 
-			EntityFactory.getInstance().addEntityType(creatureInfo.getEntityType(), creatureInfo.entityClass);
+			//EntityFactory.getInstance().addEntityType(creatureInfo.getEntityType(), creatureInfo.entityClass);
 			event.getRegistry().register(creatureInfo.getEntityType());
 		}
 	}

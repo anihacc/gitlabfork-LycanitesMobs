@@ -6,12 +6,12 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.container.ContainerCreature;
-import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
+import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -4261,21 +4261,21 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Returns the sound to play when this creature is making a random ambient roar, grunt, etc. **/
     @Override
     protected SoundEvent getAmbientSound() {
-    	return AssetManager.getSound(this.getSoundName() + "_say");
+    	return ObjectManager.getSound(this.getSoundName() + "_say");
     }
 
     // ========== Hurt ==========
     /** Returns the sound to play when this creature is damaged. **/
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-    	return AssetManager.getSound(this.getSoundName() + "_hurt");
+    	return ObjectManager.getSound(this.getSoundName() + "_hurt");
     }
 
     // ========== Death ==========
     /** Returns the sound to play when this creature dies. **/
     @Override
-    protected SoundEvent getDeathSound() { return AssetManager.getSound(
-			this.getSoundName() + "_death");
+    protected SoundEvent getDeathSound() {
+    	return ObjectManager.getSound(this.getSoundName() + "_death");
     }
      
     // ========== Step ==========
@@ -4288,7 +4288,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
             super.playStepSound(pos, block);
             return;
         }
-        this.playSound(AssetManager.getSound(this.getSoundName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(ObjectManager.getSound(this.getSoundName() + "_step"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Fall ==========
@@ -4315,29 +4315,29 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Plays the jump sound when this creature jumps. **/
     public void playJumpSound() {
     	if(!this.hasJumpSound) return;
-    	this.playSound(AssetManager.getSound(this.getSoundName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+    	this.playSound(ObjectManager.getSound(this.getSoundName() + "_jump"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
      
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/
     public void playFlySound() {
     	if(!this.isFlying()) return;
-      	this.playSound(AssetManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+      	this.playSound(ObjectManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Attack ==========
     /** Plays an attack sound, called once this creature has attacked. note that ranged attacks normally rely on the projectiles playing their launched sound instead. **/
     public void playAttackSound() {
      	if(!this.hasAttackSound) return;
-     	this.playSound(AssetManager.getSound(this.getSoundName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+     	this.playSound(ObjectManager.getSound(this.getSoundName() + "_attack"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 
     // ========== Phase ==========
     /** Plays a sound for when this mob changes battle phase, normally used by bosses. **/
     public void playPhaseSound() {
-        if(AssetManager.getSound(this.creatureInfo.getName() + "_phase") == null)
+        if(ObjectManager.getSound(this.creatureInfo.getName() + "_phase") == null)
             return;
-        this.playSound(AssetManager.getSound(this.getSoundName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.playSound(ObjectManager.getSound(this.getSoundName() + "_phase"), this.getSoundVolume() * 2, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
     
     // ========== Play Sound ==========

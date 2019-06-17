@@ -1,10 +1,7 @@
 package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.*;
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.Utilities;
+import com.lycanitesmobs.*;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -63,12 +60,12 @@ public class MobEventManager extends JSONLoader {
 		Map<String, JsonObject> mobEventJSONs = new HashMap<>();
 
 		// Load Default Mob Events:
-		Path path = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.filename, "mobevents");
+		Path path = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, "mobevents");
 		Map<String, JsonObject> defaultMobEventJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultMobEventJSONs, "name", "event");
 
 		// Load Mob Events:
-		String configPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = new File(".") + "/config/" + LycanitesMobs.modid + "/";
 		File customDir = new File(configPath + "mobevents");
 		customDir.mkdirs();
 		path = customDir.toPath();
@@ -104,7 +101,7 @@ public class MobEventManager extends JSONLoader {
 
 		// Load Scheduled Events:
 		this.mobEventSchedules.clear();
-		Path defaultSchedulePath = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.filename, "mobeventschedule.json");
+		Path defaultSchedulePath = Utilities.getDataPath(groupInfo.getClass(), groupInfo.modid, "mobeventschedule.json");
 		JsonObject defaultScheduleJson = this.loadJsonObject(gson, defaultSchedulePath);
 
 		File customScheduleFile = new File(configPath + "mobeventschedule.json");
@@ -155,7 +152,7 @@ public class MobEventManager extends JSONLoader {
             return;
         this.mobEvents.put(mobEvent.name, mobEvent);
         try {
-			AssetManager.addSound("mobevent_" + mobEvent.title.toLowerCase(), LycanitesMobs.modInfo, "mobevent." + mobEvent.title.toLowerCase());
+			ObjectManager.addSound("mobevent_" + mobEvent.title.toLowerCase(), LycanitesMobs.modInfo, "mobevent." + mobEvent.title.toLowerCase());
 		}
 		catch(Exception e) {}
     }
@@ -222,10 +219,10 @@ public class MobEventManager extends JSONLoader {
 	/** Updates the client side mob event players if active in the player's current world. **/
 	@SubscribeEvent
 	public void onClientUpdate(ClientTickEvent event) {
-		if(LycanitesMobs.proxy.getClientPlayer() == null)
+		if(ClientManager.getInstance().getClientPlayer() == null)
 			return;
 
-        World world = LycanitesMobs.proxy.getClientPlayer().getEntityWorld();
+        World world = ClientManager.getInstance().getClientPlayer().getEntityWorld();
 		if(!world.isRemote)
 			return;
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);

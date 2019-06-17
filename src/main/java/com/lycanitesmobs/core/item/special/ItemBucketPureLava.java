@@ -33,8 +33,7 @@ public class ItemBucketPureLava extends BucketItem {
         super(fluid, properties);
         this.group = LycanitesMobs.modInfo;
         this.itemName = "bucketpurelava";
-        this.setRegistryName(this.group.filename, this.itemName);
-        properties.group(LycanitesMobs.itemsTab);
+        this.setRegistryName(this.group.modid, this.itemName);
         ObjectManager.addBucket(this, ObjectManager.getBlock("purelava"), fluid);
     }
 

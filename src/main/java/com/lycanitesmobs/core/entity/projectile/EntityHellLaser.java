@@ -2,12 +2,12 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -92,11 +92,11 @@ public class EntityHellLaser extends EntityProjectileLaser {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound(entityName);
+    	return ObjectManager.getSound(entityName);
     }
 	
 	@Override
 	public SoundEvent getBeamSound() {
-    	return AssetManager.getSound(entityName);
+    	return ObjectManager.getSound(entityName);
 	}
 }

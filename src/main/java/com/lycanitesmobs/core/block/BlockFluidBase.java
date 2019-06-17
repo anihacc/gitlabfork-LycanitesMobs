@@ -27,7 +27,7 @@ public class BlockFluidBase extends FlowingFluidBlock {
         super(fluid, properties);
         this.blockName = blockName;
         this.group = group;
-        this.setRegistryName(this.group.filename, this.blockName);
+        this.setRegistryName(this.group.modid, this.blockName);
 
         //this.setRenderLayer(BlockRenderLayer.TRANSLUCENT);
     }

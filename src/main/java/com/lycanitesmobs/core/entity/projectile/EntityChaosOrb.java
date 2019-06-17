@@ -95,7 +95,7 @@ public class EntityChaosOrb extends EntityProjectileModel {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("chaosorb");
+    	return ObjectManager.getSound("chaosorb");
     }
     
     

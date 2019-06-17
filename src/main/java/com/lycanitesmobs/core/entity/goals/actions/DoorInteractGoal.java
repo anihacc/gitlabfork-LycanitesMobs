@@ -41,6 +41,7 @@ public abstract class DoorInteractGoal extends Goal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(!this.host.collidedHorizontally)
             return false;
@@ -83,6 +84,7 @@ public abstract class DoorInteractGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
         this.hasStoppedDoorInteraction = false;
         this.entityPositionX = (float)((double)((float)this.entityPosX + 0.5F) - this.host.posX);
@@ -93,6 +95,7 @@ public abstract class DoorInteractGoal extends Goal {
 	// ==================================================
  	//                Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         return !this.hasStoppedDoorInteraction;
     }
@@ -101,7 +104,8 @@ public abstract class DoorInteractGoal extends Goal {
 	// ==================================================
  	//                     Update
  	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         float f = (float)((double)((float)this.entityPosX + 0.5F) - this.host.posX);
         float f1 = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.posZ);
         float f2 = this.entityPositionX * f + this.entityPositionZ * f1;

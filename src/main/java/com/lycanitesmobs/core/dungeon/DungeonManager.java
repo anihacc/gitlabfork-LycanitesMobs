@@ -146,12 +146,12 @@ public class DungeonManager extends JSONLoader {
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
 		// Load Defaults:
-		Path path = Utilities.getAssetPath(this.getClass(), LycanitesMobs.modInfo.filename, "dungeons/" + type);
+		Path path = Utilities.getDataPath(this.getClass(), LycanitesMobs.modInfo.modid, "dungeons/" + type);
 		Map<String, JsonObject> defaultJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJSONs, "name", null);
 
 		// Load Custom:
-		String configPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = new File(".") + "/config/" + LycanitesMobs.modid + "/";
 		File customDir = new File(configPath + "dungeons/" + type);
 		customDir.mkdirs();
 		path = customDir.toPath();

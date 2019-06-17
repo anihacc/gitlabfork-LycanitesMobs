@@ -116,7 +116,7 @@ public class EntityDoomfireball extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("doomfireball");
+    	return ObjectManager.getSound("doomfireball");
     }
     
     

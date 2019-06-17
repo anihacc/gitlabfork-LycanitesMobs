@@ -102,7 +102,7 @@ public class EntityCrystalShard extends EntityProjectileModel {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("crystalshard");
+    	return ObjectManager.getSound("crystalshard");
     }
     
     

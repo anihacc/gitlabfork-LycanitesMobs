@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -41,7 +42,7 @@ public class MessageSummonSet {
         }
 
         // Client Side:
-        PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+        PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
         if(playerExt == null)
         	return;

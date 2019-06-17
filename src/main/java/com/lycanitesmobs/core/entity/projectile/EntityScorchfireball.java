@@ -128,7 +128,7 @@ public class EntityScorchfireball extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("scorchfireball");
+    	return ObjectManager.getSound("scorchfireball");
     }
     
     

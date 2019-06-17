@@ -42,7 +42,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 
         this.itemName = name;
         this.creatureInfo = creatureInfo;
-        this.setRegistryName(this.modInfo.filename, this.itemName);
+        this.setRegistryName(this.modInfo.modid, this.itemName);
 
         DispenserBlock.registerDispenseBehavior(this, new DispenserBehaviorMobEggCustom());
 

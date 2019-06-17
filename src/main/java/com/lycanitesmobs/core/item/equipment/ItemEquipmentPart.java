@@ -103,7 +103,7 @@ public class ItemEquipmentPart extends ItemBase {
 		}
 		this.sortFeatures();
 
-		this.setRegistryName(this.modInfo.filename, this.itemName);
+		this.setRegistryName(this.modInfo.modid, this.itemName);
 
 		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}

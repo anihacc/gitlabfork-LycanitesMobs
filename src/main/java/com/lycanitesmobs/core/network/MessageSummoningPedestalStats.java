@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.network;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +39,7 @@ public class MessageSummoningPedestalStats {
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
 			return;
 
-		PlayerEntity player = LycanitesMobs.proxy.getClientPlayer();
+		PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         TileEntity tileEntity = player.getEntityWorld().getTileEntity(new BlockPos(message.x, message.y, message.z));
         TileEntitySummoningPedestal summoningPedestal = null;
         if(tileEntity instanceof TileEntitySummoningPedestal)

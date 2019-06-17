@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,7 +29,11 @@ public class BlockFrostfire extends BlockFireBase {
     //                   Constructor
     // ==================================================
     public BlockFrostfire(Block.Properties properties) {
-        super(properties, LycanitesMobs.modInfo, "frostfire");
+        this(properties, "frostfire");
+    }
+
+    public BlockFrostfire(Block.Properties properties, String name) {
+        super(properties, LycanitesMobs.modInfo, name);
 
         // Stats:
         this.tickRate = 30;
@@ -39,9 +43,6 @@ public class BlockFrostfire extends BlockFireBase {
         this.spreadChance = 1;
         this.removeOnTick = false;
         this.removeOnNoFireTick = false;
-
-        //this.setLightOpacity(1);
-        //this.setLightLevel(0);
     }
 
 
@@ -137,7 +138,7 @@ public class BlockFrostfire extends BlockFireBase {
         double y = pos.getY();
         double z = pos.getZ();
         if(random.nextInt(24) == 0)
-            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("frostfire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
         if (random.nextInt(100) == 0) {
             x = pos.getX() + random.nextFloat();

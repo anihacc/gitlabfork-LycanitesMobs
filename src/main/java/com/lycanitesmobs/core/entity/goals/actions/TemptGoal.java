@@ -98,6 +98,7 @@ public class TemptGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(this.retemptTime > 0) {
             --this.retemptTime;
@@ -156,6 +157,7 @@ public class TemptGoal extends Goal {
     // ==================================================
   	//                 Continue Executing
   	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         if(this.scaredByPlayerMovement) {
             if(this.host.getDistance(this.player) < 36.0D) {
@@ -181,6 +183,7 @@ public class TemptGoal extends Goal {
     // ==================================================
   	//                      Start
   	// ==================================================
+	@Override
     public void startExecuting() {
         this.targetX = this.player.posX;
         this.targetY = this.player.posY;
@@ -199,6 +202,7 @@ public class TemptGoal extends Goal {
     // ==================================================
   	//                      Reset
   	// ==================================================
+	@Override
     public void resetTask() {
         this.player = null;
         this.host.getNavigator().clearPath();
@@ -219,7 +223,8 @@ public class TemptGoal extends Goal {
     // ==================================================
   	//                      Update
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         if(this.stopAttack)
         	this.host.setAttackTarget(null);
         this.host.getLookHelper().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());

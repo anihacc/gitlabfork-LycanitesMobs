@@ -55,6 +55,7 @@ public class MateGoal extends Goal {
     // ==================================================
   	//                  Should Execute
   	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(!this.host.isInLove())
             return false;
@@ -66,6 +67,7 @@ public class MateGoal extends Goal {
     // ==================================================
   	//                Continue Executing
   	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
         return this.partner != null && this.partner.isAlive() && this.partner.isInLove() && this.mateTime < mateTimeMax;
     }
@@ -74,6 +76,7 @@ public class MateGoal extends Goal {
     // ==================================================
   	//                      Reset
   	// ==================================================
+	@Override
     public void resetTask() {
         this.partner = null;
         this.mateTime = 0;
@@ -83,7 +86,8 @@ public class MateGoal extends Goal {
     // ==================================================
   	//                      Update
   	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         this.host.getLookHelper().setLookPositionWithEntity(this.partner, 10.0F, (float)this.host.getVerticalFaceSpeed());
         if(!this.host.useDirectNavigator())
         	this.host.getNavigator().tryMoveToEntityLiving(this.partner, this.speed);

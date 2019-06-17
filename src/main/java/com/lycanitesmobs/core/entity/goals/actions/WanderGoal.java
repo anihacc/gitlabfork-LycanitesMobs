@@ -44,6 +44,7 @@ public class WanderGoal extends Goal {
     // ==================================================
    	//                  Should Execute
    	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(this.host.getAge() >= 100)
             return false;
@@ -69,6 +70,7 @@ public class WanderGoal extends Goal {
     // ==================================================
    	//                Continue Executing
    	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	if(!this.host.useDirectNavigator()) {
     	    if(this.host.getNavigator().noPath()) {
@@ -92,6 +94,7 @@ public class WanderGoal extends Goal {
     // ==================================================
    	//                     Start
    	// ==================================================
+	@Override
     public void startExecuting() {
     	if(!host.useDirectNavigator()) {
             this.host.getNavigator().tryMoveToXYZ(this.xPosition, this.yPosition, this.zPosition, this.speed);

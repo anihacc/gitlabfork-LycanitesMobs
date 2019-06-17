@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.particles.ParticleTypes;
@@ -18,22 +18,8 @@ public class BlockIcefire extends BlockFrostfire {
 	//                   Constructor
 	// ==================================================
 	public BlockIcefire(Block.Properties properties) {
-        super(properties);
-        this.blockName = "icefire";
-
-        // Stats:
-		this.removeOnTick = false;
-		this.removeOnNoFireTick = false;
+        super(properties, "icefire");
 	}
-
-
-    // ==================================================
-    //                       Break
-    // ==================================================
-   /*@Override
-    public Item getItemDropped(BlockState state, Random random, int zero) {
-        return ObjectManager.getItem("icefirecharge");
-    }*/
 
 
 	// ==================================================
@@ -46,7 +32,7 @@ public class BlockIcefire extends BlockFrostfire {
 		double y = pos.getY();
 		double z = pos.getZ();
 		if(random.nextInt(24) == 0)
-			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), AssetManager.getSound("icefire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
+			world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), ObjectManager.getSound("icefire"), SoundCategory.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 
 		if (random.nextInt(100) == 0) {
 			x = pos.getX() + random.nextFloat();

@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.block.BlockBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -17,27 +18,26 @@ public class BlockQuickWeb extends BlockBase {
 	// ==================================================
 	public BlockQuickWeb(Block.Properties properties) {
 		super(properties);
-		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
-        //this.setCreativeTab(LycanitesMobs.blocksTab);
-		
-		// Properties:
+
 		this.group = LycanitesMobs.modInfo;
 		this.blockName = "quickweb";
-		this.setup();
 		
 		// Stats:
 		this.tickRate = 200;
 		this.removeOnTick = true;
 		this.loopTicks = false;
 		this.canBeCrushed = false;
-		
-		//this.noEntityCollision = true;
+
 		this.noBreakCollision = false;
 		this.isOpaque = false;
-		
-		//this.setHardness(0.1F);
-		//this.setHarvestLevel("sword", 0);
-		//this.setLightOpacity(1);
+
+		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
+		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(AGE);
 	}
 	
 	

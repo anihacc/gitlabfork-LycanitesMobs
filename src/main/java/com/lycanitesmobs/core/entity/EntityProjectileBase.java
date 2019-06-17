@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockState;
@@ -580,10 +581,10 @@ public class EntityProjectileBase extends ThrowableEntity {
      //                      Sounds
      // ==================================================
      public SoundEvent getLaunchSound() {
-     	return AssetManager.getSound(this.entityName);
+     	return ObjectManager.getSound(this.entityName);
      }
 
 	public SoundEvent getImpactSound() {
-		return AssetManager.getSound(this.entityName + "_impact");
+		return ObjectManager.getSound(this.entityName + "_impact");
 	}
 }

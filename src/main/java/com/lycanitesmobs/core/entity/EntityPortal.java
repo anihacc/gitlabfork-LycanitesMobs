@@ -271,7 +271,7 @@ public class EntityPortal extends EntityProjectileBase {
 			this.targetZ = this.shootingEntity.posZ + (lookDirection.z * this.portalRange);
 	        
 			// Apply Raytrace to Look Target:
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.posX, this.shootingEntity.posY, this.shootingEntity.posZ, this.targetX, this.targetY, this.targetZ, 1.0F, null);
+			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.posX, this.shootingEntity.posY, this.shootingEntity.posZ, this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
 	        if(target != null) {
 				this.targetX = target.getHitVec().x;
 				this.targetY = target.getHitVec().y;
@@ -321,7 +321,7 @@ public class EntityPortal extends EntityProjectileBase {
             AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
 
         if(this.ownerName != null) {
-            //if(this.ownerName.equalsIgnoreCase(LycanitesMobs.proxy.getClientPlayer().getName())) TODO Check if owned by client player on client side. Maybe make a new proxy?
+            //if(this.ownerName.equalsIgnoreCase(ClientManager.getInstance().getClientPlayer().getName())) TODO Check if owned by client player on client side. Maybe make a new proxy?
                 //return AssetManager.getTexture(this.entityName + "_client");
             if(!this.ownerName.equalsIgnoreCase(""))
                 return AssetManager.getTexture(this.entityName + "_player");

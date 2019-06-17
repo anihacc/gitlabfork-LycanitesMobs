@@ -61,7 +61,7 @@ public class ItemInfo {
 	 * @return Item registry entity id.
 	 */
 	public String getEntityId() {
-		return this.group.filename + ":" + this.getName();
+		return this.group.modid + ":" + this.getName();
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ItemInfo {
 	 * @return Item resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.group.filename, this.getName());
+		return new ResourceLocation(this.group.modid, this.getName());
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class ItemInfo {
 	 * @return Item language key.
 	 */
 	public String getLocalisationKey() {
-		return this.group.filename + "." + this.getName();
+		return this.group.modid + "." + this.getName();
 	}
 
 	/**

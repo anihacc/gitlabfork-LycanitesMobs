@@ -70,6 +70,6 @@ public class EntitySpectralbolt extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("Spectralbolt");
+    	return ObjectManager.getSound("Spectralbolt");
     }
 }

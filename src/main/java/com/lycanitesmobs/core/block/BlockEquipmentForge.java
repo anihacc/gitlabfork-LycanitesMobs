@@ -1,24 +1,15 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class BlockEquipmentForge extends BlockBase {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -29,9 +20,6 @@ public class BlockEquipmentForge extends BlockBase {
 	// ==================================================
 	public BlockEquipmentForge(Block.Properties properties, ModInfo group, int level) {
 		super(properties);
-		// TODO Get material from level.
-        //this.setCreativeTab(LycanitesMobs.blocksTab);
-        //this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		
 		// Properties:
 		this.group = group;
@@ -45,13 +33,14 @@ public class BlockEquipmentForge extends BlockBase {
 		else {
 			this.blockName = "equipmentforge_master";
 		}
-		this.setup();
-		
-		// Stats:
-		//this.setHardness(5F);
 
-        // Tile Entity:
-        //this.hasTileEntity = true;
+		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
+		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+		builder.add(FACING);
 	}
 
     /*@Override

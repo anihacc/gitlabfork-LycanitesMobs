@@ -52,6 +52,7 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                   Should Execute
    	// ==================================================
+	@Override
     public boolean shouldExecute() {
         if(this.host.getRNG().nextFloat() >= this.lookChance)
             return false;
@@ -71,6 +72,7 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                 Continue Executing
    	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
     	if(!this.closestEntity.isAlive())
     		return false;
@@ -83,6 +85,7 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                  Start Executing
    	// ==================================================
+	@Override
     public void startExecuting() {
         this.lookTime = lookTimeMin + this.host.getRNG().nextInt(lookTimeRange);
     }
@@ -91,6 +94,7 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                      Reset
    	// ==================================================
+	@Override
     public void resetTask() {
         this.closestEntity = null;
     }
@@ -99,7 +103,8 @@ public class WatchClosestGoal extends Goal {
     // ==================================================
    	//                      Update
    	// ==================================================
-    public void updateTask() {
+	@Override
+    public void tick() {
         this.host.getLookHelper().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + (double)this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
         this.lookTime--;
     }

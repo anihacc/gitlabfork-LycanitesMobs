@@ -133,7 +133,7 @@ public class EntityHellfireball extends EntityProjectileBase {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound("hellfireball");
+    	return ObjectManager.getSound("hellfireball");
     }
     
     

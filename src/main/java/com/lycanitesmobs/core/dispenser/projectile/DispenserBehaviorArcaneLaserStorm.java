@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import net.minecraft.dispenser.IPosition;
@@ -25,6 +25,6 @@ public class DispenserBehaviorArcaneLaserStorm extends DispenserBehaviorBase {
 	// ==================================================
 	@Override
     protected SoundEvent getDispenseSound() {
-        return AssetManager.getSound("arcanelaserstorm");
+        return ObjectManager.getSound("arcanelaserstorm");
     }
 }

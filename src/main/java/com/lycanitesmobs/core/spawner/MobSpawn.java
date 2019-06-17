@@ -109,8 +109,11 @@ public class MobSpawn {
 				mobSpawn.loadFromJSON(json);
 			}
 			else {
-				EntityType entityType = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(mobId));
-				mobSpawn = new MobSpawn(entityType);
+				Object entityTypeObj = GameRegistry.findRegistry(EntityType.class).getValue(new ResourceLocation(mobId));
+				if(entityTypeObj instanceof EntityType) {
+					EntityType entityType = (EntityType) entityTypeObj;
+					mobSpawn = new MobSpawn(entityType);
+				}
 			}
 			if(mobSpawn != null) {
 				mobSpawn.loadFromJSON(json);

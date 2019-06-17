@@ -44,6 +44,7 @@ public class ChaseGoal extends Goal {
 	// ==================================================
  	//                   Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
         this.target = this.host.getAttackTarget();
         if(this.target == null) {
@@ -64,6 +65,7 @@ public class ChaseGoal extends Goal {
 	// ==================================================
  	//                 Continue Executing
  	// ==================================================
+	@Override
     public boolean shouldContinueExecuting() {
 		if (!this.host.isAlive()) {
 			return false;
@@ -82,6 +84,7 @@ public class ChaseGoal extends Goal {
 	// ==================================================
  	//                      Start
  	// ==================================================
+	@Override
     public void startExecuting() {
     	if(!this.host.useDirectNavigator())
     		this.host.getNavigator().tryMoveToXYZ(this.movePos.getX(), this.movePos.getY(), this.movePos.getZ(), this.speed);
@@ -93,6 +96,7 @@ public class ChaseGoal extends Goal {
 	// ==================================================
  	//                       Reset
  	// ==================================================
+	@Override
     public void resetTask() {
         this.target = null;
         this.host.directNavigator.clearTargetPosition(1.0D);

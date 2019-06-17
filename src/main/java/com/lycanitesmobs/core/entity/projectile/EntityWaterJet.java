@@ -92,11 +92,11 @@ public class EntityWaterJet extends EntityProjectileLaser {
  	// ==================================================
     @Override
     public SoundEvent getLaunchSound() {
-    	return AssetManager.getSound(entityName);
+    	return ObjectManager.getSound(entityName);
     }
 	
 	@Override
 	public SoundEvent getBeamSound() {
-    	return AssetManager.getSound(entityName);
+    	return ObjectManager.getSound(entityName);
 	}
 }
