@@ -44,7 +44,7 @@ public class DispenserBehaviorBase extends ProjectileDispenseBehavior {
         	return stack;
         
         iprojectile.shoot((double)facing.getXOffset(), (double)facing.getYOffset(), (double)facing.getZOffset(), this.getProjectileVelocity(), this.getProjectileInaccuracy());
-        world.func_217376_c((Entity)iprojectile);
+        world.addEntity((Entity)iprojectile);
         stack.split(1);
         
         return stack;

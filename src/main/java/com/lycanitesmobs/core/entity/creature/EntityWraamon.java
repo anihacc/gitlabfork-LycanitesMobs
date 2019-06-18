@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -27,8 +28,8 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWraamon(World world) {
-        super(world);
+    public EntityWraamon(EntityType<? extends EntityWraamon> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -38,27 +39,27 @@ public class EntityWraamon extends EntityCreatureTameable implements IMob, IGrou
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
     }
 	

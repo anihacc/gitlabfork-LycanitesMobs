@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.altar;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import com.lycanitesmobs.core.info.AltarInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -163,7 +164,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityCreature = new EntityCacodemon(world);
+        EntityCreatureBase entityCreature = (EntityCreatureBase) CreatureManager.getInstance().getCreature("cacodemon").createEntity(world);
         if(checkDimensions && !entityCreature.isNativeDimension(world))
             return false;
 
@@ -197,7 +198,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         entityCreature.forceBossHealthBar = true;
         entityCreature.applySubspecies(3);
         entityCreature.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.func_217376_c(entityCreature);
+        world.addEntity(entityCreature);
         entityCreature.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

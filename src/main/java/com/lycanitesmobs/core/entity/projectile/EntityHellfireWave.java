@@ -82,7 +82,7 @@ public class EntityHellfireWave extends EntityProjectileBase {
                     else
                         hellfireWalls[row][col] = new EntityHellfireWavePart(this.getEntityWorld(), this.posX, this.posY + 5 + (this.hellfireSize * row), this.posZ);
                     hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
-                    this.getEntityWorld().func_217376_c(hellfireWalls[row][col]);
+                    this.getEntityWorld().addEntity(hellfireWalls[row][col]);
                     hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);
                 }
             }

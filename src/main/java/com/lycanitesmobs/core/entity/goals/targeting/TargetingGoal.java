@@ -221,7 +221,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
         
         // Sight Check:
-        if(this.checkSight && !checkTarget.isPotionActive(Effects.field_188423_x) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
+        if(this.checkSight && !checkTarget.isPotionActive(Effects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:

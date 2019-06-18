@@ -101,7 +101,7 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
                     hellfireWalls[row][col].posZ = this.posZ + z;
                     hellfireWalls[row][col].projectileLife = 2 * 20;
 
-                    this.getEntityWorld().func_217376_c(hellfireWalls[row][col]);
+                    this.getEntityWorld().addEntity(hellfireWalls[row][col]);
                     hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2.5F);
                 }
             }

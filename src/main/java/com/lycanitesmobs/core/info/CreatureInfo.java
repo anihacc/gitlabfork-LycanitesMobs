@@ -668,7 +668,7 @@ public class CreatureInfo {
 		try {
 			if(this.entityClass == null)
 				return null;
-			return this.entityClass.getConstructor(World.class).newInstance(world);
+			return this.entityClass.getConstructor(EntityType.class, World.class).newInstance(this.getEntityType(), world);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

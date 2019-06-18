@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -24,8 +25,8 @@ public class EntityZoataur extends EntityCreatureTameable implements IGroupPreda
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityZoataur(World world) {
-        super(world);
+    public EntityZoataur(EntityType<? extends EntityZoataur> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -43,28 +44,28 @@ public class EntityZoataur extends EntityCreatureTameable implements IGroupPreda
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(4, this.aiSit);
-        this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this));
-        this.field_70714_bg.addTask(9, new BegGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(4, this.aiSit);
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this));
+        this.goalSelector.addGoal(9, new BegGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
         }
     }
 

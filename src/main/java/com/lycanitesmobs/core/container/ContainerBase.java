@@ -24,7 +24,7 @@ public class ContainerBase extends Container {
   	//                    Constructor
   	// ==================================================
 	public ContainerBase(int windowId) {
-		super(ContainerType.field_221509_c, windowId);
+		super(ContainerType.GENERIC_9X3, windowId);
 	}
 
 	public ContainerType<?> getType() {

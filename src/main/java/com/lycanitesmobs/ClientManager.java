@@ -59,7 +59,7 @@ public class ClientManager {
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
 		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
-			((IReloadableResourceManager)resourceManager).func_219534_a(LanguageLoader.getInstance());
+			((IReloadableResourceManager)resourceManager).addReloadListener(LanguageLoader.getInstance());
 		}
 	}
 
@@ -120,7 +120,7 @@ public class ClientManager {
 
 	/**
 	 * Loads a Creature Subspecies Model
-	 * @param creature The subspecies to load the model from.
+	 * @param subspecies The subspecies to load the model from.
 	 * @param modelClassName The Model java class name to instantiate.
 	 * @throws ClassNotFoundException
 	 */

@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
@@ -34,8 +35,8 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityShade(World world) {
-        super(world);
+    public EntityShade(EntityType<? extends EntityShade> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -50,39 +51,39 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        //this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(6, new AttackMeleeGoal(this).setSpeed(1.5D));
-        this.field_70714_bg.addTask(7, this.aiSit);
-        this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(9, new WanderGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new BegGoal(this));
-        this.field_70714_bg.addTask(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(12, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        //this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(6, new AttackMeleeGoal(this).setSpeed(1.5D));
+        this.goalSelector.addGoal(7, this.aiSit);
+        this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(9, new WanderGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(10, new BegGoal(this));
+        this.goalSelector.addGoal(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(12, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
-        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
+        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(9, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(10, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(9, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(10, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -176,7 +177,7 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
                     if (ObjectManager.getEffect("fear") != null)
                         possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffect("fear"), this.getEffectDuration(5), 1));
                     else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.field_76437_t, 10 * 20, 0));
+                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
                 }
             }
         }
@@ -224,12 +225,6 @@ public class EntityShade extends EntityCreatureRideable implements IGroupPredato
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityShade(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {

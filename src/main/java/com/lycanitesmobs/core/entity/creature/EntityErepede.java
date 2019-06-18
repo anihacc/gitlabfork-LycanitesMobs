@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -28,8 +29,8 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityErepede(World world) {
-        super(world);
+    public EntityErepede(EntityType<? extends EntityErepede> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -43,35 +44,35 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new PlayerControlGoal(this));
-        this.field_70714_bg.addTask(2, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(3, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
-		this.field_70714_bg.addTask(4, this.aiSit);
-		this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new FollowParentGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(7, new WanderGoal(this));
-        this.field_70714_bg.addTask(9, new BegGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new PlayerControlGoal(this));
+        this.goalSelector.addGoal(2, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(3, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
+		this.goalSelector.addGoal(4, this.aiSit);
+		this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(6, new FollowParentGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(7, new WanderGoal(this));
+        this.goalSelector.addGoal(9, new BegGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-		this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-		this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(2, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+		this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+		this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+		this.targetSelector.addGoal(2, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(3, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             if(CreatureManager.getInstance().getCreature("Joust") != null)
-                this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
+                this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
             if(CreatureManager.getInstance().getCreature("JoustAlpha") != null)
-                this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
+                this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
         }
 
-        this.field_70715_bh.addTask(0, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(0, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
     }
 	
 	
@@ -120,7 +121,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     	if(rider instanceof PlayerEntity) {
     		PlayerEntity player = (PlayerEntity)rider;
 	    	EntityMudshot projectile = new EntityMudshot(this.getEntityWorld(), player);
-	    	this.getEntityWorld().func_217376_c(projectile);
+	    	this.getEntityWorld().addEntity(projectile);
 	    	this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 	    	this.triggerAttackCooldown();
     	}
@@ -182,12 +183,6 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityErepede(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack par1ItemStack) {

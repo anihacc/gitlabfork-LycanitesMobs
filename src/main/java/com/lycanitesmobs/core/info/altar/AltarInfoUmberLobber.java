@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.altar;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.creature.EntityLobber;
 import com.lycanitesmobs.core.info.AltarInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -149,7 +150,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityLobber = new EntityLobber(world);
+        EntityCreatureBase entityLobber = (EntityCreatureBase) CreatureManager.getInstance().getCreature("lobber").createEntity(world);
         if(checkDimensions && !entityLobber.isNativeDimension(world))
             return false;
 
@@ -183,7 +184,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
         entityLobber.forceBossHealthBar = true;
         entityLobber.applySubspecies(3);
         entityLobber.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.func_217376_c(entityLobber);
+        world.addEntity(entityLobber);
         entityLobber.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

@@ -31,7 +31,7 @@ public class ItemImmunizer extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
-			if(!player.playerAbilities.isCreativeMode) {
+			if(!player.abilities.isCreativeMode) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 

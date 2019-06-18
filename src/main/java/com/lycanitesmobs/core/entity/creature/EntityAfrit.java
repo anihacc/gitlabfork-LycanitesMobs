@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -35,8 +36,8 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAfrit(World world) {
-        super(world);
+    public EntityAfrit(EntityType<? extends EntityAfrit> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -55,26 +56,26 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(5.0F).setCheckSight(false));
-        this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(5, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(8, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(2, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(5.0F).setCheckSight(false));
+        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(5, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(8, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	

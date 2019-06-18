@@ -67,7 +67,7 @@ public class ItemSoulkey extends ItemBase {
 
                 // Valid Altar:
                 if(!player.getEntityWorld().isRemote) {
-                    if (!player.playerAbilities.isCreativeMode)
+                    if (!player.abilities.isCreativeMode)
                         itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
                     if (itemStack.getCount() <= 0)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);

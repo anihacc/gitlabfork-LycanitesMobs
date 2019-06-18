@@ -20,6 +20,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -54,7 +55,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityRahovart.class, DataSerializers.field_187192_b);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityRahovart.class, DataSerializers.VARINT);
 
     // First Phase:
     public List<EntityBelph> hellfireBelphMinions = new ArrayList<EntityBelph>();
@@ -75,8 +76,8 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityRahovart(World world) {
-        super(world);
+    public EntityRahovart(EntityType<? extends EntityRahovart> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
@@ -94,17 +95,17 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        //this.field_70714_bg.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
-        //this.field_70714_bg.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        //this.goalSelector.addGoal(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
+        //this.goalSelector.addGoal(6, new EntityAIWander(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
     // ========== Init ==========
@@ -152,7 +153,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
         // Look At Target:
         if(this.hasAttackTarget() && !this.getEntityWorld().isRemote) {
-            this.getLookHelper().setLookPositionWithEntity(this.getAttackTarget(), 30.0F, 30.0F);
+            this.getLookController().setLookPositionWithEntity(this.getAttackTarget(), 30.0F, 30.0F);
         }
 
         // Arena Snapping:
@@ -200,17 +201,17 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 projectile.setProjectileScale(8f);
                 projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().func_217376_c(projectile);
+                this.getEntityWorld().addEntity(projectile);
             }
 
             // Flying Player Wraith Attack:
             for(PlayerEntity target : this.playerTargets) {
-                if(target.playerAbilities.disableDamage || target.isSpectator())
+                if(target.abilities.disableDamage || target.isSpectator())
                     continue;
                 this.attackRanged(target, 1F);
                 if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
                     for(int i = 0; i < 3; i++) {
-                        EntityWraith minion = new EntityWraith(this.getEntityWorld());
+                        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                         minion.setAttackTarget(target);
                         minion.setMasterTarget(null); // Clear master target so that these minions don't break phase 3 barriers.
@@ -277,7 +278,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBelph minion = new EntityBelph(this.getEntityWorld());
+                        EntityBelph minion = (EntityBelph)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                         this.hellfireBelphMinions.add(minion);
                     }
@@ -332,7 +333,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemoth minion = new EntityBehemoth(this.getEntityWorld());
+                        EntityBehemoth minion = (EntityBehemoth)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                         this.hellfireBehemothMinions.add(minion);
                     }
@@ -342,7 +343,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
             if(this.updateTick % 200 == 0) {
                 int summonAmount = this.getRNG().nextInt(4) - 1; // 0-2 Belphs with 50% fail chance.
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelph minion = new EntityBelph(this.getEntityWorld());
+                    EntityBelph minion = (EntityBelph)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                 }
             }
@@ -387,7 +388,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                     for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                        EntityBehemoth minion = new EntityBehemoth(this.getEntityWorld());
+                        EntityBehemoth minion = (EntityBehemoth)CreatureManager.getInstance().getCreature("behemoth").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                         this.hellfireBehemothMinions.add(minion);
                     }
@@ -399,14 +400,14 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityBelph minion = new EntityBelph(this.getEntityWorld());
+                    EntityBelph minion = (EntityBelph)CreatureManager.getInstance().getCreature("belph").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                 }
                 summonAmount = this.getRNG().nextInt(3); // 0-2 Wraiths
                 summonAmount *= this.playerTargets.size();
                 if(summonAmount > 0)
                 for(int summonCount = 0; summonCount <= summonAmount; summonCount++) {
-                    EntityWraith minion = new EntityWraith(this.getEntityWorld());
+                    EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                 }
             }
@@ -471,7 +472,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
             EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(entity.getEntityWorld(), entity);
             hellfireOrb.clientOnly = true;
             hellfireOrbs.add(hellfireOrb);
-            entity.getEntityWorld().func_217376_c(hellfireOrb);
+            entity.getEntityWorld().addEntity(hellfireOrb);
             hellfireOrb.setProjectileScale(orbSize);
         }
 
@@ -523,7 +524,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         EntityHellfireWave hellfireWave = new EntityHellfireWave(this.getEntityWorld(), this);
         hellfireWave.posY = this.posY;
         hellfireWave.rotation = angle;
-        this.getEntityWorld().func_217376_c(hellfireWave);
+        this.getEntityWorld().addEntity(hellfireWave);
     }
 
     // ========== Hellfire Wall ==========
@@ -547,7 +548,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         if(this.hellfireWallLeft == null) {
             this.hellfireWallLeft = new EntityHellfireBarrier(this.getEntityWorld(), this);
             this.hellfireWallLeft.wall = true;
-            this.getEntityWorld().func_217376_c(this.hellfireWallLeft);
+            this.getEntityWorld().addEntity(this.hellfireWallLeft);
         }
         this.hellfireWallLeft.time = 0;
         this.hellfireWallLeft.posX = this.posX;
@@ -559,7 +560,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         if(this.hellfireWallRight == null) {
             this.hellfireWallRight = new EntityHellfireBarrier(this.getEntityWorld(), this);
             this.hellfireWallRight.wall = true;
-            this.getEntityWorld().func_217376_c(this.hellfireWallRight);
+            this.getEntityWorld().addEntity(this.hellfireWallRight);
         }
         this.hellfireWallRight.time = 0;
         this.hellfireWallRight.posX = this.posX;
@@ -588,7 +589,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         this.playAttackSound();
 
         EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(this.getEntityWorld(), this);
-        this.getEntityWorld().func_217376_c(hellfireBarrier);
+        this.getEntityWorld().addEntity(hellfireBarrier);
         hellfireBarrier.time = 0;
         hellfireBarrier.posX = this.posX;
         hellfireBarrier.posY = this.posY;
@@ -640,7 +641,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     @Override
     public boolean isPotionApplicable(EffectInstance potionEffect) {
-        if(potionEffect.getPotion() == Effects.field_82731_v)
+        if(potionEffect.getPotion() == Effects.WITHER)
             return false;
         if(ObjectManager.getEffect("decay") != null)
             if(potionEffect.getPotion() == ObjectManager.getEffect("decay")) return false;
@@ -663,7 +664,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.playerAbilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }

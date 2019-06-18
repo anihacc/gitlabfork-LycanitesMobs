@@ -35,7 +35,7 @@ public class EntityPortal extends EntityProjectileBase {
     public TileEntitySummoningPedestal summoningPedestal;
 
     // Datawatcher:
-    protected static final DataParameter<String> OWNER_NAME = EntityDataManager.createKey(EntityPortal.class, DataSerializers.field_187194_d);
+    protected static final DataParameter<String> OWNER_NAME = EntityDataManager.createKey(EntityPortal.class, DataSerializers.STRING);
 	
     // ==================================================
  	//                   Constructors
@@ -147,7 +147,7 @@ public class EntityPortal extends EntityProjectileBase {
             if(playerExt != null && this.portalItem != null) {
                 if(++this.summonTick >= this.portalItem.getRapidTime(null)) {
                     this.summonDuration = this.portalItem.getSummonDuration();
-                    if(this.shootingEntity.playerAbilities.isCreativeMode)
+                    if(this.shootingEntity.abilities.isCreativeMode)
                         this.summonAmount += this.portalItem.getSummonAmount();
                     else {
                         float summonMultiplier = (float) (CreatureManager.getInstance().getCreature(this.summonClass).summonCost + this.portalItem.getSummonCostBoost()) * this.portalItem.getSummonCostMod();
@@ -244,7 +244,7 @@ public class EntityPortal extends EntityProjectileBase {
                 if (this.shootingEntity != null)
                     this.shootingEntity.addStat(ObjectManager.getStat(entityCreature.creatureInfo.getName() + ".summon"), 1);
             }
-	    	this.getEntityWorld().func_217376_c(entity);
+	    	this.getEntityWorld().addEntity(entity);
     	}
         int amount = this.summonAmount;
     	this.summonAmount = 0;

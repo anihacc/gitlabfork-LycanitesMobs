@@ -309,7 +309,7 @@ public class SpawnerEventListener {
 			return;
 		}
 		World world = (World)event.getWorld();
-		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) { // No Spawning for Creative Players
 			return;
 		}
 		
@@ -337,7 +337,7 @@ public class SpawnerEventListener {
     }
 
 	public void onBlockBreak(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) {
 			return;
 		}
 
@@ -364,7 +364,7 @@ public class SpawnerEventListener {
 	}
 
 	public void onBlockPlace(World world, BlockPos blockPos, BlockState blockState, PlayerEntity player, int chain) {
-		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) {
+		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) {
 			return;
 		}
 
@@ -416,7 +416,7 @@ public class SpawnerEventListener {
 		PlayerEntity player = event.getEntityPlayer();
 		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
-		if(!testOnCreative && player.playerAbilities.isCreativeMode) { // No Spawning for Creative Players
+		if(!testOnCreative && player.abilities.isCreativeMode) { // No Spawning for Creative Players
 			return;
 		}
 
@@ -445,7 +445,7 @@ public class SpawnerEventListener {
 			player = (PlayerEntity)explosion.getExplosivePlacedBy();
 		}
 
-		if(player != null && (!testOnCreative && player.playerAbilities.isCreativeMode)) { // No Spawning for Creative Players
+		if(player != null && (!testOnCreative && player.abilities.isCreativeMode)) { // No Spawning for Creative Players
 			return;
 		}
 

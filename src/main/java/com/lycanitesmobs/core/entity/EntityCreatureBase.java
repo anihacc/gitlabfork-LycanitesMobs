@@ -249,45 +249,45 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	public boolean initialized = false;
 
 	/** Used to sync what targets this creature has. **/
-    protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+    protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
     /** Used to sync which attack phase this creature is in. **/
-	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> ATTACK_PHASE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
 	/** Used to sync what animation states this creature is in. **/
-	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> ANIMATION_STATE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
 	/** Used to sync the current attack cooldown animation, useful for when creature attack cooldowns change dynamically. **/
-	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
+	protected static final DataParameter<Integer> ANIMATION_ATTACK_COOLDOWN_MAX = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
 
 	/** Used to sync if this creature is climbing or not. TODO Perhaps move this into ANIMATION_STATE_BITS. **/
-	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
 	/** Used to sync the stealth percentage of this creature. Where 0.0 is unstealthed and 1.0 is fully stealthed, see burrowing Crusks for an example. **/
-	protected static final DataParameter<Float> STEALTH = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
+	protected static final DataParameter<Float> STEALTH = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
 
 	/** Used to sync the baby status of this creature. **/
-	protected static final DataParameter<Boolean> BABY = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187198_h);
+	protected static final DataParameter<Boolean> BABY = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BOOLEAN);
 	/** Used to sync the dyed coloring of this creature. This will go towards colorable pet collars or saddles, etc in the future. **/
-	protected static final DataParameter<Byte> COLOR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> COLOR = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
 	/** Used to sync the size scale of this creature. **/
-	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187193_c);
+	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
 	/** Used to sync the stat level of this creature. **/
-	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187192_b);
+	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.VARINT);
 	/** Used to sync the subspecies ID used by this creature. **/
-	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
 
 	/** Used to sync the central arena position that this creature is using if any. See Asmodeus jumping for an example. **/
-	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187201_k);
+	protected static final DataParameter<Optional<BlockPos>> ARENA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.OPTIONAL_BLOCK_POS);
 
 	/** Used to sync the Head Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_HEAD = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 	/** Used to sync the Chest Equipment slot of this creature. Used by Pet (Horse) Armor. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_CHEST = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 	/** Used to sync the Legs Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_LEGS = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 	/** Used to sync the Feet Equipment slot of this creature. Currently unused. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_FEET = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 	/** Used to sync the Bag Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_BAG = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 	/** Used to sync the Saddle Equipment slot of this creature. **/
-	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.field_187196_f);
+	public static final DataParameter<ItemStack> EQUIPMENT_SADDLE = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.ITEMSTACK);
 
     /** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum TARGET_BITS {
@@ -348,11 +348,11 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityCreatureBase(World world) {
-        super(EntityType.ZOMBIE, world);
+    public EntityCreatureBase(EntityType<? extends EntityCreatureBase> entityType, World world) {
+        super(entityType, world);
 
         // Movement:
-        this.field_70765_h = this.createMoveHelper();
+        this.moveController = this.createMoveController();
 
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
@@ -382,10 +382,10 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         }
     }
 
-    @Override
+    /*@Override
 	public EntityType getType() {
     	return this.creatureInfo.getEntityType();
-	}
+	}*/
 
 	// ========== Attributes and Stats ==========
 	/** Creates and sets all the entity attributes with default values. **/
@@ -397,10 +397,10 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 		this.directNavigator = new DirectNavigator(this);
 
 		super.registerAttributes();
-		this.getAttributeMap().registerAttribute(DEFENSE);
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
-		this.getAttributeMap().registerAttribute(RANGED_SPEED);
+		this.getAttributes().registerAttribute(DEFENSE);
+		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+		this.getAttributes().registerAttribute(RANGED_SPEED);
 
 		this.applyStats();
 	}
@@ -959,7 +959,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         double y = this.posY + 1;
         double z = this.posZ + ((this.getSize(Pose.STANDING).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-		this.getEntityWorld().func_217376_c(minion);
+		this.getEntityWorld().addEntity(minion);
         if(minion instanceof EntityCreatureBase) {
             ((EntityCreatureBase)minion).setMinion(true);
             ((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
@@ -1093,8 +1093,9 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	}
 
 	/** Returns the model scale for rendering. **/
-	public double getRenderScale() {
-		return this.sizeScale;
+	@Override
+	public float getRenderScale() {
+		return (float)this.sizeScale;
 	}
 
 	/** Returns the level of this mob, higher levels have higher stats. **/
@@ -1386,7 +1387,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 		// Transformed Entity:
 		transformedEntity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-		this.getEntityWorld().func_217376_c(transformedEntity);
+		this.getEntityWorld().addEntity(transformedEntity);
 
 		// Remove Parts:
 		this.remove();
@@ -1538,7 +1539,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         if(this.hasAttackTarget()) {
             if(this.getAttackTarget() instanceof PlayerEntity) {
                 PlayerEntity targetPlayer = (PlayerEntity)this.getAttackTarget();
-                if(targetPlayer.playerAbilities.disableDamage)
+                if(targetPlayer.abilities.disableDamage)
                     this.setAttackTarget(null);
             }
         }
@@ -1612,7 +1613,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     	if(!this.getEntityWorld().isRemote) {
 	        if(this.isStealthed() && !this.isInvisible())
 	        	this.setInvisible(true);
-	        else if(!this.isStealthed() && this.isInvisible() && !this.isPotionActive(Effects.field_76441_p))
+	        else if(!this.isStealthed() && this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY))
                 this.setInvisible(false);
     	}
         if(this.isStealthed()) {
@@ -1620,7 +1621,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
                 this.startStealth();
             this.onStealth();
         }
-        else if(this.isInvisible() && !this.isPotionActive(Effects.field_76441_p) && !this.getEntityWorld().isRemote) {
+        else if(this.isInvisible() && !this.isPotionActive(Effects.INVISIBILITY) && !this.getEntityWorld().isRemote) {
             this.setInvisible(false);
         }
         this.stealthPrev = this.isStealthed();
@@ -1911,7 +1912,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
     // ========== Get New Move Helper ==========
     /** Called when this entity is constructed for initial move helper. **/
-    protected MovementController createMoveHelper() {
+    protected MovementController createMoveController() {
         return new CreatureMoveHelper(this);
     }
 
@@ -1948,7 +1949,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
             this.testLeash(distance);
             
             if(!this.leashAIActive) {
-                this.field_70714_bg.addTask(2, this.leashMoveTowardsRestrictionAI); // Main Goals
+                this.goalSelector.addGoal(2, this.leashMoveTowardsRestrictionAI); // Main Goals
                 if (!this.isStrongSwimmer())
                     this.setPathPriority(PathNodeType.WATER, 0.0F);
                 this.leashAIActive = true;
@@ -1969,7 +1970,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         }
         else if(!this.getLeashed() && this.leashAIActive) {
             this.leashAIActive = false;
-            this.field_70714_bg.removeTask(this.leashMoveTowardsRestrictionAI); // Main Goals
+            this.goalSelector.removeGoal(this.leashMoveTowardsRestrictionAI); // Main Goals
             if (!this.isStrongSwimmer())
                 this.setPathPriority(PathNodeType.WATER, PathNodeType.WATER.getPriority());
             this.detachHome();
@@ -2315,7 +2316,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 		// Players:
         if(targetEntity instanceof PlayerEntity) {
             PlayerEntity targetPlayer = (PlayerEntity)targetEntity;
-            if(targetPlayer.playerAbilities.disableDamage) {
+            if(targetPlayer.abilities.disableDamage) {
 				return false;
 			}
         }
@@ -2550,7 +2551,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
 		projectile.shoot(distanceX, distanceY + distanceXZ, distanceZ, velocity, inaccuracy);
-		//this.getEntityWorld().func_217376_c(projectile);
+		//this.getEntityWorld().addEntity(projectile);
 
 		if(projectile.getLaunchSound() != null) {
 			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -3269,7 +3270,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
    	// ==================================================
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
-    protected void func_213345_d(DamageSource damageSource) { // spawnDrops
+    protected void spawnDrops(DamageSource damageSource) {
     	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet()) return;
     	int subspeciesScale = 1;
     	if(this.getSubspeciesIndex() > 2)
@@ -3311,7 +3312,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
             entityItem.setPickupDelay(10);
             this.applyDropEffects(entityItem);
 
-            this.getEntityWorld().func_217376_c(entityItem);
+            this.getEntityWorld().addEntity(entityItem);
             return entityItem;
         }
         else {
@@ -3480,7 +3481,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     }
     /** Consumes the specified amount from the item stack currently held by the specified player. **/
     public void consumePlayersItem(PlayerEntity player, ItemStack itemStack, int amount) {
-    	if(!player.playerAbilities.disableDamage)
+    	if(!player.abilities.disableDamage)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
         if(itemStack.getCount() <= 0)
         	player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
@@ -3493,7 +3494,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     }
     /** Replaces the specified itemstack and amount with a new itemstack. **/
     public void replacePlayersItem(PlayerEntity player, ItemStack itemStack, int amount, ItemStack newStack) {
-    	if(!player.playerAbilities.disableDamage)
+    	if(!player.abilities.disableDamage)
             itemStack.setCount(Math.max(0, itemStack.getCount() - amount));
     	
         if(itemStack.getCount() <= 0)

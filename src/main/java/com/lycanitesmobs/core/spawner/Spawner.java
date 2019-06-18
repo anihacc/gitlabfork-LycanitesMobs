@@ -720,7 +720,7 @@ public class Spawner {
 		}
 
 		// Spawn:
-		world.func_217376_c(entityLiving);
+		world.addEntity(entityLiving);
 
 		// After Spawn:
 		mobSpawn.onSpawned(entityLiving, player);

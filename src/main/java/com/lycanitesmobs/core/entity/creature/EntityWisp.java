@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SkeletonEntity;
@@ -27,8 +28,8 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWisp(World par1World) {
-        super(par1World);
+    public EntityWisp(EntityType<? extends EntityWisp> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -42,21 +43,21 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-		this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
-		this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(600));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+		this.goalSelector.addGoal(2, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
+		this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(600));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupShadow.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+		this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupShadow.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 
 

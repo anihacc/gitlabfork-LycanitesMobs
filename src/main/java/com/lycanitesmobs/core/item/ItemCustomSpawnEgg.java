@@ -110,7 +110,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
             mobspawnerbaselogic.setEntityType(this.creatureInfo.getEntityType());
             tileEntity.markDirty();
             world.notifyBlockUpdate(pos, blockState, blockState, 3);
-            if (!player.playerAbilities.isCreativeMode) {
+            if (!player.abilities.isCreativeMode) {
                 itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
             }
 
@@ -129,7 +129,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 			if(itemStack.hasDisplayName()) {
 				entity.setCustomName(itemStack.getDisplayName());
 			}
-			if(!player.playerAbilities.isCreativeMode) {
+			if(!player.abilities.isCreativeMode) {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 		}
@@ -147,7 +147,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
         if(world.isRemote)
             return new ActionResult(ActionResultType.PASS, itemStack);
         else {
-            RayTraceResult rayTraceResult = this.func_219968_a(world, player, RayTraceContext.FluidMode.ANY);
+            RayTraceResult rayTraceResult = this.rayTrace(world, player, RayTraceContext.FluidMode.ANY);
 
             if(rayTraceResult.getType() != RayTraceResult.Type.BLOCK)
                 return new ActionResult(ActionResultType.PASS, itemStack);
@@ -169,7 +169,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 					if (itemStack.hasDisplayName()) {
 						entity.setCustomName(itemStack.getDisplayName());
 					}
-				if (!player.playerAbilities.isCreativeMode) {
+				if (!player.abilities.isCreativeMode) {
 					itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 				}
 			}
@@ -224,7 +224,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 				mobEntity.playAmbientSound();
 			}
 
-			world.func_217376_c(entity);
+			world.addEntity(entity);
 		}
 		return entity;
 	}

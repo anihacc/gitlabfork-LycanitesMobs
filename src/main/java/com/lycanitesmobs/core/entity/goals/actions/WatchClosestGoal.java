@@ -13,7 +13,7 @@ public class WatchClosestGoal extends Goal {
     // Targets:
     private MobEntity host;
     protected Entity closestEntity;
-    private final EntityPredicate searchPredicate = (new EntityPredicate()).func_221013_a(64.0D);
+    private final EntityPredicate searchPredicate = (new EntityPredicate()).setDistance(64.0D);
 
     // Properties
     private Class watchedClass = LivingEntity.class;
@@ -105,7 +105,7 @@ public class WatchClosestGoal extends Goal {
    	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookHelper().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + (double)this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookController().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + (double)this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
         this.lookTime--;
     }
 }

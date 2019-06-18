@@ -113,7 +113,7 @@ public class BlockFrostfire extends BlockFireBase {
         super.onEntityCollision(blockState, world, pos, entity);
 
         if(entity instanceof LivingEntity) {
-            EffectInstance effect = new EffectInstance(Effects.field_76421_d, 3 * 20, 0);
+            EffectInstance effect = new EffectInstance(Effects.SLOWNESS, 3 * 20, 0);
             LivingEntity entityLiving = (LivingEntity)entity;
             if(entityLiving.isPotionApplicable(effect))
                 entityLiving.addPotionEffect(effect);

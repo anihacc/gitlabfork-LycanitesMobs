@@ -79,7 +79,7 @@ public class BlockPoisonCloud extends BlockBase {
 
 		if(entity instanceof LivingEntity) {
 			LivingEntity entityLiving = (LivingEntity)entity;
-			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76436_u, 3 * 20, 0)); // Poison
+			entityLiving.addPotionEffect(new EffectInstance(Effects.POISON, 3 * 20, 0)); // Poison
 		}
 	}
 

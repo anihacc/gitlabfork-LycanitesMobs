@@ -17,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -41,8 +42,8 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityLobber(World par1World) {
-        super(par1World);
+    public EntityLobber(EntityType<? extends EntityLobber> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -58,23 +59,23 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
-        this.field_70714_bg.addTask(1, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.field_70714_bg.addTask(2, new StayByWaterGoal(this).setSpeed(1.25D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(1, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
+        this.goalSelector.addGoal(2, new StayByWaterGoal(this).setSpeed(1.25D));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(6, wanderAI);
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(6, wanderAI);
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-		this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
-		this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
+		this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
     }
 
 	// ========== Set Size ==========
@@ -148,7 +149,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
                 projectile.setProjectileScale(2f);
                 projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().func_217376_c(projectile);
+                this.getEntityWorld().addEntity(projectile);
             }
         }
         

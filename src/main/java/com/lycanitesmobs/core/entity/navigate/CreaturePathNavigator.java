@@ -39,7 +39,7 @@ public class CreaturePathNavigator extends PathNavigator {
             return true;
         if(this.entityCreature.isInWater())
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
-        return this.field_75515_a.onGround || this.field_75515_a.getRidingEntity() != null;
+        return this.entity.onGround || this.entity.getRidingEntity() != null;
     }
 
     /** Sets if the creature should navigate as though it can break doors. **/
@@ -109,7 +109,7 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Return the position to path from. **/
     @Override
     protected Vec3d getEntityPosition() {
-        return new Vec3d(this.field_75515_a.posX, (double)this.getPathablePosY(), this.field_75515_a.posZ);
+        return new Vec3d(this.entity.posX, (double)this.getPathablePosY(), this.entity.posZ);
     }
 
     /** Return the Y position to path from. **/
@@ -119,16 +119,16 @@ public class CreaturePathNavigator extends PathNavigator {
 
             // Slow swimmers (water bobbing):
             if(this.entityCreature.canFloat() && !this.entityCreature.canDive()) {
-                int posY = (int)this.field_75515_a.getBoundingBox().minY;
-                Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.field_75515_a.posX), posY, MathHelper.floor(this.field_75515_a.posZ))).getBlock();
+                int posY = (int)this.entity.getBoundingBox().minY;
+                Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ))).getBlock();
                 int searchCount = 0;
 
                 while (this.isSwimmableBlock(block)) { // Search up for surface.
                     ++posY;
-                    block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.field_75515_a.posX), posY, MathHelper.floor(this.field_75515_a.posZ))).getBlock();
+                    block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ))).getBlock();
                     ++searchCount;
                     if (searchCount > 16) {
-                        return (int)this.field_75515_a.getBoundingBox().minY;
+                        return (int)this.entity.getBoundingBox().minY;
                     }
                 }
 
@@ -138,7 +138,7 @@ public class CreaturePathNavigator extends PathNavigator {
         }
 
         // Path From Current Y Pos:
-        return (int)(this.field_75515_a.getBoundingBox().minY + 0.5D);
+        return (int)(this.entity.getBoundingBox().minY + 0.5D);
     }
 
     /** Starts pathing to target entity. **/
@@ -240,8 +240,8 @@ public class CreaturePathNavigator extends PathNavigator {
     protected boolean isDirectPathBetweenPoints(Vec3d startVec, Vec3d endVec, int sizeX, int sizeY, int sizeZ) {
         // Flight/Swimming:
         if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) { // TODO Check Water RayTrace Fluid Mode
-            double endHeight = endVec.y + (double)this.field_75515_a.getSize(Pose.STANDING).height * 0.5D;
-            RayTraceResult raytraceresult = this.world.func_217299_a(new RayTraceContext(startVec, new Vec3d(endVec.x, endHeight, endVec.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.field_75515_a));
+            double endHeight = endVec.y + (double)this.entity.getSize(Pose.STANDING).height * 0.5D;
+            RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(startVec, new Vec3d(endVec.x, endHeight, endVec.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity));
             return raytraceresult.getType() == RayTraceResult.Type.MISS || raytraceresult.getType() == RayTraceResult.Type.ENTITY;
         }
 
@@ -331,7 +331,7 @@ public class CreaturePathNavigator extends PathNavigator {
                     double d1 = (double)l + 0.5D - startVec.z;
 
                     if(d0 * distanceX + d1 * distanceZ >= 0.0D) {
-                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.field_75515_a, sizeX, sizeY, sizeZ, true, true);
+                        PathNodeType pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y - 1, l, this.entity, sizeX, sizeY, sizeZ, true, true);
 
                         if(pathnodetype == PathNodeType.WATER) {
                             return false;
@@ -345,8 +345,8 @@ public class CreaturePathNavigator extends PathNavigator {
                             return false;
                         }
 
-                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.field_75515_a, sizeX, sizeY, sizeZ, true, true);
-                        float f = this.field_75515_a.getPathPriority(pathnodetype);
+                        pathnodetype = this.nodeProcessor.getPathNodeType(this.world, k, y, l, this.entity, sizeX, sizeY, sizeZ, true, true);
+                        float f = this.entity.getPathPriority(pathnodetype);
 
                         if(f < 0.0F || f >= 8.0F) {
                             return false;
@@ -405,7 +405,7 @@ public class CreaturePathNavigator extends PathNavigator {
         }
 
         if(this.entityCreature.daylightBurns()) {
-            if (this.world.canBlockSeeSky(new BlockPos(MathHelper.floor(this.field_75515_a.posX), (int)(this.field_75515_a.getBoundingBox().minY + 0.5D), MathHelper.floor(this.field_75515_a.posZ)))) {
+            if (this.world.canBlockSeeSky(new BlockPos(MathHelper.floor(this.entity.posX), (int)(this.entity.getBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.posZ)))) {
                 return;
             }
 
@@ -428,15 +428,15 @@ public class CreaturePathNavigator extends PathNavigator {
         // Flight:
         if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) {
             Vec3d entityVector = this.getEntityPosition();
-            float entitySize = this.field_75515_a.getSize(Pose.STANDING).width * this.field_75515_a.getSize(Pose.STANDING).width;
+            float entitySize = this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width;
 
-            if (entityVector.squareDistanceTo(this.currentPath.getVectorFromIndex(this.field_75515_a, this.currentPath.getCurrentPathIndex())) < (double) entitySize) {
+            if (entityVector.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < (double) entitySize) {
                 this.currentPath.incrementPathIndex();
             }
 
             int pathIndexRange = 6;
             for (int pathIndex = Math.min(this.currentPath.getCurrentPathIndex() + pathIndexRange, this.currentPath.getCurrentPathLength() - 1); pathIndex > this.currentPath.getCurrentPathIndex(); --pathIndex) {
-                Vec3d pathVector = this.currentPath.getVectorFromIndex(this.field_75515_a, pathIndex);
+                Vec3d pathVector = this.currentPath.getVectorFromIndex(this.entity, pathIndex);
 
                 if (pathVector.squareDistanceTo(entityVector) <= 36.0D && this.isDirectPathBetweenPoints(entityVector, pathVector, 0, 0, 0)) {
                     this.currentPath.setCurrentPathIndex(pathIndex);
@@ -460,10 +460,10 @@ public class CreaturePathNavigator extends PathNavigator {
         }
         else {
             if (this.targetPosition != null) {
-                double d0 = (double)(this.field_75515_a.getSize(Pose.STANDING).width * this.field_75515_a.getSize(Pose.STANDING).width);
+                double d0 = (double)(this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width);
 
-                if (this.field_75515_a.getDistanceSq(new Vec3d(this.targetPosition)) >= d0 && (this.field_75515_a.posY <= (double)this.targetPosition.getY() || this.field_75515_a.getDistanceSq(new Vec3d(this.targetPosition.getX(), MathHelper.floor(this.field_75515_a.posY), this.targetPosition.getZ())) >= d0)) {
-                    this.field_75515_a.getMoveHelper().setMoveTo((double)this.targetPosition.getX(), (double)this.targetPosition.getY(), (double)this.targetPosition.getZ(), this.speed);
+                if (this.entity.getDistanceSq(new Vec3d(this.targetPosition)) >= d0 && (this.entity.posY <= (double)this.targetPosition.getY() || this.entity.getDistanceSq(new Vec3d(this.targetPosition.getX(), MathHelper.floor(this.entity.posY), this.targetPosition.getZ())) >= d0)) {
+                    this.entity.getMoveHelper().setMoveTo((double)this.targetPosition.getX(), (double)this.targetPosition.getY(), (double)this.targetPosition.getZ(), this.speed);
                 }
                 else {
                     this.targetPosition = null;

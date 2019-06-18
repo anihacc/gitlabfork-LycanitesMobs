@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityQuill;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -26,8 +27,8 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityQuillbeast(World world) {
-        super(world);
+    public EntityQuillbeast(EntityType<? extends EntityQuillbeast> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -37,33 +38,33 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new TemptGoal(this).setTemptDistanceMin(4.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
-        this.field_70714_bg.addTask(2, this.aiAttackMelee);
+        this.goalSelector.addGoal(2, this.aiAttackMelee);
         this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
-        this.field_70714_bg.addTask(2, this.aiAttackRanged);
-        this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(2, this.aiAttackRanged);
+        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
-        this.field_70714_bg.addTask(5, this.aiAvoid);
-        this.field_70714_bg.addTask(6, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(5, this.aiAvoid);
+        this.goalSelector.addGoal(6, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-        this.field_70715_bh.addTask(5, new AvoidTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(5, new AvoidTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -110,7 +111,7 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
             // Launch:
             if(i == 0)
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().func_217376_c(projectile);
+            this.getEntityWorld().addEntity(projectile);
         }
 
         super.attackRanged(target, range);

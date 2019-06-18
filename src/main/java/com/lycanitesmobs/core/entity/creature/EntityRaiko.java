@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -32,8 +33,8 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityRaiko(World world) {
-        super(world);
+    public EntityRaiko(EntityType<? extends EntityRaiko> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -46,29 +47,29 @@ public class EntityRaiko extends EntityCreatureRideable implements IMob, IGroupH
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new PlayerControlGoal(this));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
-        this.field_70714_bg.addTask(5, this.attackAI);
-        this.field_70714_bg.addTask(6, this.aiSit);
-        this.field_70714_bg.addTask(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(5, this.attackAI);
+        this.goalSelector.addGoal(6, this.aiSit);
+        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new WanderGoal(this).setPauseRate(0);
-        this.field_70714_bg.addTask(8, this.wanderAI);
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(8, this.wanderAI);
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
     }
 	
 	

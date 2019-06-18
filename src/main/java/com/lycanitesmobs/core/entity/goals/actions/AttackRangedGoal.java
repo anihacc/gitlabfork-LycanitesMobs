@@ -209,7 +209,7 @@ public class AttackRangedGoal extends Goal {
                 this.host.directNavigator.setTargetPosition(targetPosition, this.speed);
         }
 
-        this.host.getLookHelper().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
+        this.host.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
         float rangeFactor;
         
         // Attack Stamina/Cooldown:

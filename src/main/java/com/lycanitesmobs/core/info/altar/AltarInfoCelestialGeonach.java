@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.altar;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.creature.EntityGeonach;
 import com.lycanitesmobs.core.info.AltarInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -151,7 +152,7 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityGeonach = new EntityGeonach(world);
+        EntityCreatureBase entityGeonach = (EntityCreatureBase)CreatureManager.getInstance().getCreature("geonach").createEntity(world);
         if(checkDimensions && !entityGeonach.isNativeDimension(world))
             return false;
 
@@ -185,7 +186,7 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
         entityGeonach.forceBossHealthBar = true;
         entityGeonach.applySubspecies(3);
         entityGeonach.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.func_217376_c(entityGeonach);
+        world.addEntity(entityGeonach);
         entityGeonach.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

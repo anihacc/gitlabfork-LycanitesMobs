@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityTundra;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -32,8 +33,8 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWendigo(World world) {
-        super(world);
+    public EntityWendigo(EntityType<? extends EntityWendigo> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -45,21 +46,21 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
-        this.field_70714_bg.addTask(3, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(3, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(6, wanderAI);
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(6, wanderAI);
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
     
     

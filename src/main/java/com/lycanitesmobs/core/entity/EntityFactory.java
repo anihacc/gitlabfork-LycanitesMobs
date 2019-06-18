@@ -20,6 +20,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	}
 
 	public Map<EntityType, Class<? extends Entity>> entityTypeClassMap = new HashMap<>();
+	public Map<Class<? extends Entity>, EntityType> entityClassTypeMap = new HashMap<>();
 
 	/**
 	 * Adds a new Entity Type and Entity Class mapping for this Factory to create.
@@ -28,6 +29,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	public void addEntityType(EntityType entityType, Class<? extends Entity> entityClass) {
 		this.entityTypeClassMap.put(entityType, entityClass);
+		this.entityClassTypeMap.put(entityClass, entityType);
 	}
 
 	/**
@@ -41,8 +43,8 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 		Class<? extends Entity> entityClass = this.entityTypeClassMap.get(entityType);
 
 		try {
-			Entity entity = entityClass.getConstructor(World.class).newInstance(world);
-			world.func_217376_c(entity);
+			Entity entity = entityClass.getConstructor(EntityType.class, World.class).newInstance(entityType, world);
+			world.addEntity(entity);
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();

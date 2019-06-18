@@ -59,7 +59,7 @@ public class CreatureMoveHelper extends MovementController {
     // ==================== Movements ====================
     /** Used by strong swimmers for fast, smooth movement. **/
     public void onUpdateSwimming() {
-        if (this.field_188491_h == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
+        if (this.action == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
             double x = this.posX - this.entityCreature.posX;
             double y = this.posY - this.entityCreature.posY;
             double z = this.posZ - this.entityCreature.posZ;
@@ -82,7 +82,7 @@ public class CreatureMoveHelper extends MovementController {
             motionY += (double)this.entityCreature.getAIMoveSpeed() * y * 0.1D;
             this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
 
-            LookController lookController = this.entityCreature.getLookHelper();
+            LookController lookController = this.entityCreature.getLookController();
             double d7 = this.entityCreature.posX + x / distance * 2.0D;
             double d8 = (double)this.entityCreature.getEyeHeight() + this.entityCreature.posY + y / distance;
             double d9 = this.entityCreature.posZ + z / distance * 2.0D;
@@ -96,7 +96,7 @@ public class CreatureMoveHelper extends MovementController {
                 d12 = d9;
             }
 
-            this.entityCreature.getLookHelper().setLookPosition(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
+            this.entityCreature.getLookController().setLookPosition(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
         }
         else {
             this.entityCreature.setAIMoveSpeed(0.0F);
@@ -105,7 +105,7 @@ public class CreatureMoveHelper extends MovementController {
 
     /** Used by flyers for swift, fast air movement. **/
     public void onUpdateFlying() {
-        if (this.field_188491_h == MovementController.Action.MOVE_TO) {
+        if (this.action == MovementController.Action.MOVE_TO) {
             double xDistance = this.posX - this.entityCreature.posX;
             double yDistance = this.posY - this.entityCreature.posY;
             double zDistance = this.posZ - this.entityCreature.posZ;
@@ -123,7 +123,7 @@ public class CreatureMoveHelper extends MovementController {
                     this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
                 }
                 else {
-                    this.field_188491_h = MovementController.Action.WAIT;
+                    this.action = MovementController.Action.WAIT;
                 }
             }
         }
@@ -135,7 +135,7 @@ public class CreatureMoveHelper extends MovementController {
             double distanceZ = entitylivingbase.posZ - this.entityCreature.posZ;
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
         }
-        else if(this.field_188491_h == MovementController.Action.MOVE_TO) {
+        else if(this.action == MovementController.Action.MOVE_TO) {
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(this.entityCreature.getMotion().getX(), this.entityCreature.getMotion().getZ())) * (180F / (float)Math.PI);
         }
     }

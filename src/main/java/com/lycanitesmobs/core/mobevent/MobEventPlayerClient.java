@@ -54,7 +54,7 @@ public class MobEventPlayerClient {
 		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
 		player.sendMessage(new TranslationTextComponent(eventMessage));
 
-		if(player.playerAbilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
+		if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}
 
@@ -95,7 +95,7 @@ public class MobEventPlayerClient {
     @OnlyIn(Dist.CLIENT)
     public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
-        if(player.playerAbilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
+        if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
 		}
         if(this.world == null || this.world != player.getEntityWorld()) return;

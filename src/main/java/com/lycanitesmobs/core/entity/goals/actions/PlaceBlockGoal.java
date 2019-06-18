@@ -122,7 +122,7 @@ public class PlaceBlockGoal extends Goal {
         		host.directNavigator.setTargetPosition(this.pos, this.speed);
     	}
     	
-        this.host.getLookHelper().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
+        this.host.getLookController().setLookPosition(this.pos.getX(), this.pos.getY(), this.pos.getZ(), 30.0F, 30.0F);
         
         // Place Block:
         if(this.host.getDistanceSq(new Vec3d(this.pos)) <= this.range * this.range) {

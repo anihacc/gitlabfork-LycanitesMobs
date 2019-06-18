@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -30,8 +31,8 @@ public class EntityBeholder extends EntityCreatureRideable {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityBeholder(World world) {
-        super(world);
+    public EntityBeholder(EntityType<? extends EntityBeholder> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -46,26 +47,26 @@ public class EntityBeholder extends EntityCreatureRideable {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(2, new PlayerControlGoal(this));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-		this.field_70714_bg.addTask(6, this.aiSit);
-		this.field_70714_bg.addTask(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
+		this.goalSelector.addGoal(6, this.aiSit);
+		this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-		this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+		this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+		this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+		this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -74,8 +75,8 @@ public class EntityBeholder extends EntityCreatureRideable {
     // ==================================================
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.field_76419_f))
-            rider.removePotionEffect(Effects.field_76419_f);
+        if(rider.isPotionActive(Effects.MINING_FATIGUE))
+            rider.removePotionEffect(Effects.MINING_FATIGUE);
         if(rider.isPotionActive(ObjectManager.getEffect("weight")))
             rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
@@ -194,7 +195,7 @@ public class EntityBeholder extends EntityCreatureRideable {
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
             EntityArcaneLaserStorm projectile = new EntityArcaneLaserStorm(this.getEntityWorld(), player);
-            this.getEntityWorld().func_217376_c(projectile);
+            this.getEntityWorld().addEntity(projectile);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.triggerAttackCooldown();
         }

@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class EntityProjectileCustom extends EntityProjectileBase {
 
 	/** Used to sync the Projectile Info's name to use. **/
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(EntityProjectileCustom.class, DataSerializers.field_187194_d);
+	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(EntityProjectileCustom.class, DataSerializers.STRING);
 
 	/** The Projectile Info to base this projectile from. **/
 	public ProjectileInfo projectileInfo;

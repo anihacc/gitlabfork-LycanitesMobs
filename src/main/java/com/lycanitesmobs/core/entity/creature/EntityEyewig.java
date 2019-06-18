@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -23,8 +24,8 @@ public class EntityEyewig extends EntityCreatureRideable {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityEyewig(World world) {
-        super(world);
+    public EntityEyewig(EntityType<? extends EntityEyewig> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -35,31 +36,31 @@ public class EntityEyewig extends EntityCreatureRideable {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        //this.field_70714_bg.addTask(2, new EntityAIPlayerControl(this));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        //this.goalSelector.addGoal(2, new EntityAIPlayerControl(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
         this.rangedAttackAI = new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
-        this.field_70714_bg.addTask(6, rangedAttackAI);
-		this.field_70714_bg.addTask(7, this.aiSit);
-		this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(9, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(6, rangedAttackAI);
+		this.goalSelector.addGoal(7, this.aiSit);
+		this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(9, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-		this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-		this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
+		this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+		this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+		this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
+            this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
         }
     }
 
@@ -107,7 +108,7 @@ public class EntityEyewig extends EntityCreatureRideable {
 	    	
 	    	// Launch:
 	        this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().func_217376_c(abilityProjectile);
+	        this.getEntityWorld().addEntity(abilityProjectile);
     	}
     	
     	this.applyStaminaCost();
@@ -136,7 +137,7 @@ public class EntityEyewig extends EntityCreatureRideable {
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().func_217376_c(projectile);
+	        this.getEntityWorld().addEntity(projectile);
     	}
 
     	super.attackRanged(target, range);

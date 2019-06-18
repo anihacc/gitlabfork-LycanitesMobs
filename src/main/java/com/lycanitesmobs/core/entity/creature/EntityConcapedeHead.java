@@ -15,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -30,8 +31,8 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityConcapedeHead(World world) {
-        super(world);
+    public EntityConcapedeHead(EntityType<? extends EntityConcapedeHead> entityType, World world) {
+        super(entityType, world);
 
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -44,18 +45,18 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(5, new TemptGoal(this).setItemList("vegetables"));
-        this.field_70714_bg.addTask(6, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(4, new AttackMeleeGoal(this).setLongMemory(false));
+        this.goalSelector.addGoal(5, new TemptGoal(this).setItemList("vegetables"));
+        this.goalSelector.addGoal(6, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
     }
 	
 	
@@ -71,10 +72,10 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
         	int segmentCount = this.getRNG().nextInt(CONCAPEDE_SIZE_MAX);
     		EntityCreatureAgeable parentSegment = this;
         	for(int segment = 0; segment < segmentCount; segment++) {
-        		EntityConcapedeSegment segmentEntity = new EntityConcapedeSegment(parentSegment.getEntityWorld());
+        		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
         		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
-        		parentSegment.getEntityWorld().func_217376_c(segmentEntity);
+        		parentSegment.getEntityWorld().addEntity(segmentEntity);
 				parentSegment = segmentEntity;
         	}
         }
@@ -111,9 +112,9 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
 					lastSegment = true;
 			}
 			if(size < CONCAPEDE_SIZE_MAX) {
-				EntityConcapedeSegment segmentEntity = new EntityConcapedeSegment(this.getEntityWorld());
+				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
 	    		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
-	    		parentSegment.getEntityWorld().func_217376_c(segmentEntity);
+	    		parentSegment.getEntityWorld().addEntity(segmentEntity);
 				segmentEntity.setParentTarget(parentSegment);
 			}
 		}
@@ -163,7 +164,8 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
     public boolean isAggressive() {
     	if(this.isInLove())
     		return false;
-    	if(this.getEntityWorld() != null && this.getEntityWorld().isDaytime())
+		this.getEntityWorld();
+		if(this.getEntityWorld().isDaytime())
     		return this.testLightLevel() < 2;
     	else
     		return super.isAggressive();
@@ -199,7 +201,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
     // ==================================================
     // ========== Create Child ==========
     @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partener) {
+	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
 		return null;
 	}
     

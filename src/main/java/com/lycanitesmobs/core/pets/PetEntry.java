@@ -424,7 +424,7 @@ public class PetEntry {
         }
 
         this.onSpawnEntity(this.entity);
-        this.host.getEntityWorld().func_217376_c(this.entity);
+        this.host.getEntityWorld().addEntity(this.entity);
     }
 
     /** Called when the entity for this entry is spawned just before it is added to the world. **/

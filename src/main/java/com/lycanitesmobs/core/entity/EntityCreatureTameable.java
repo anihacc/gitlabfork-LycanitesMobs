@@ -49,10 +49,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
 	public SitGoal aiSit;
 
     // Datawatcher:
-    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.field_187191_a);
-    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.field_187203_m);
-    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.field_187193_c);
-    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.BYTE);
+    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.FLOAT);
 
     /** Used for the TAMED WATCHER_ID, this holds a series of booleans that describe the tamed status as well as instructed behaviour. **/
 	public static enum TAMED_ID {
@@ -66,8 +66,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureTameable(World world) {
-		super(world);
+	public EntityCreatureTameable(EntityType<? extends EntityCreatureTameable> entityType, World world) {
+		super(entityType, world);
 	}
 	
 	// ========== Init ==========
@@ -82,8 +82,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
+    protected void registerGoals() {
+        super.registerGoals();
         this.aiSit = new SitGoal(this);
     }
     
@@ -252,8 +252,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     	// Feed:
     	if(command.equals("Feed")) {
     		int healAmount = 4;
-    		if(itemStack.getItem().func_219971_r()) { // If item has food data
-    			healAmount = itemStack.getItem().func_219967_s().func_221466_a(); // Get food data of item and get food heal amount.
+    		if(itemStack.getItem().isFood()) {
+    			healAmount = itemStack.getItem().getFood().getHealing();
     		}
     		this.heal((float)healAmount);
             this.playEatSound();
@@ -282,7 +282,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     	// Sit:
     	if(command.equals("Sit")) {
     		this.playTameSound();
-            this.setAttackTarget((LivingEntity)null);
+            this.setAttackTarget(null);
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
@@ -296,8 +296,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     public boolean canNameTag(PlayerEntity player) {
     	if(!this.isTamed())
     		return super.canNameTag(player);
-    	else if(this.isTamed() && player == this.getPlayerOwner())
-    		return super.canNameTag(player);
+    	else if(player == this.getPlayerOwner())
+				return super.canNameTag(player);
     	return false;
     }
     
@@ -914,8 +914,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     // ==================================================
     // ========== Create Child ==========
     @Override
- 	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-    	EntityCreatureAgeable spawnedBaby = super.createChild(baby);
+ 	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
+    	EntityCreatureAgeable spawnedBaby = super.createChild(partner);
     	UUID ownerId = this.getOwnerId();
     	if(ownerId != null && spawnedBaby != null && spawnedBaby instanceof EntityCreatureTameable) {
     		EntityCreatureTameable tamedBaby = (EntityCreatureTameable)spawnedBaby;

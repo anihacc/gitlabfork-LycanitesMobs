@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
@@ -33,8 +34,8 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityVespid(World world) {
-        super(world);
+    public EntityVespid(EntityType<? extends EntityVespid> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -50,25 +51,25 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
         this.aiPlaceBlock = new PlaceBlockGoal(this).setMaxDistance(128D).setSpeed(3D);
-        this.field_70714_bg.addTask(4, this.aiPlaceBlock);
-        this.field_70714_bg.addTask(5, new FollowMasterGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(20));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(4, this.aiPlaceBlock);
+        this.goalSelector.addGoal(5, new FollowMasterGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(20));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new MasterAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
-        this.field_70715_bh.addTask(3, new MasterTargetingGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
+        this.targetSelector.addGoal(3, new MasterTargetingGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 	
 	// ==================================================

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -38,14 +39,14 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     public boolean hasBeenFarmed = false;
 
     // Datawatcher:
-    protected static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityCreatureAgeable.class, DataSerializers.field_187192_b);
-    protected static final DataParameter<Integer> LOVE = EntityDataManager.createKey(EntityCreatureAgeable.class, DataSerializers.field_187192_b);
+    protected static final DataParameter<Integer> AGE = EntityDataManager.createKey(EntityCreatureAgeable.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LOVE = EntityDataManager.createKey(EntityCreatureAgeable.class, DataSerializers.VARINT);
     
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureAgeable(World world) {
-		super(world);
+	public EntityCreatureAgeable(EntityType<? extends EntityCreatureAgeable> entityType, World world) {
+		super(entityType, world);
 	}
     
     // ========== Setup ==========
@@ -192,7 +193,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 						baby.setGrowingAge(baby.growthTime);
 						baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
 						baby.setFarmed();
-						this.getEntityWorld().func_217376_c(baby);
+						this.getEntityWorld().addEntity(baby);
 						if (itemStack.hasDisplayName()) {
 							baby.setCustomName(itemStack.getDisplayName());
 						}
@@ -257,8 +258,10 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 	public void setBreedingTarget(EntityCreatureAgeable target) { this.breedingTarget = target; }
 	
     // ========== Create Child ==========
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partener) {
-		return null;
+	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
+    	if(!this.creatureInfo.getClass().isAssignableFrom(EntityCreatureAgeable.class))
+			return null;
+    	return (EntityCreatureAgeable)this.creatureInfo.createEntity(this.getEntityWorld());
 	}
 	
 	// ========== Breeding Item ==========
@@ -311,7 +314,7 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
 
             this.onCreateBaby(partner, baby);
 
-            this.getEntityWorld().func_217376_c(baby);
+            this.getEntityWorld().addEntity(baby);
         }
     }
 

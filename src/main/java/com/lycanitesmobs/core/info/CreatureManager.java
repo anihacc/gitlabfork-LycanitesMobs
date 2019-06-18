@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -191,16 +192,10 @@ public class CreatureManager extends JSONLoader {
 	 * Registers all creatures added to this creature manager, called from the registry event.
 	 * @param event The entity register event.
 	 */
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
-		ModInfo modInfo = LycanitesMobs.modInfo;
-		LycanitesMobs.printDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures from the mod: " + modInfo.name + "...");
+		LycanitesMobs.printDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
-			if(creatureInfo.modInfo != modInfo) {
-				continue;
-			}
-
-			//EntityFactory.getInstance().addEntityType(creatureInfo.getEntityType(), creatureInfo.entityClass);
 			event.getRegistry().register(creatureInfo.getEntityType());
 		}
 	}

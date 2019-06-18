@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,8 +28,8 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityNymph(World par1World) {
-        super(par1World);
+    public EntityNymph(EntityType<? extends EntityNymph> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -43,20 +44,20 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-		this.field_70714_bg.addTask(5, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(8, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+		this.goalSelector.addGoal(5, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.goalSelector.addGoal(8, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -77,7 +78,7 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
 						if (target != this && !(target instanceof EntityNymph) && target != this.getAttackTarget() && target != this.getAvoidTarget()) {
-							target.addPotionEffect(new EffectInstance(Effects.field_76428_l, 3 * 20, 0));
+							target.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
 						}
 					}
 				}

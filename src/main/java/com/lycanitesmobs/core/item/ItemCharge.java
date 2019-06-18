@@ -48,7 +48,7 @@ public class ItemCharge extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(!player.playerAbilities.isCreativeMode) {
+        if(!player.abilities.isCreativeMode) {
             itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
         }
 
@@ -56,7 +56,7 @@ public class ItemCharge extends ItemBase {
             EntityProjectileBase projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null)
                 return new ActionResult<>(ActionResultType.FAIL, itemStack);
-            world.func_217376_c(projectile);
+            world.addEntity(projectile);
             this.playSound(world, player.getPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRNG().nextFloat() * 0.4F + 0.8F));
         }
 

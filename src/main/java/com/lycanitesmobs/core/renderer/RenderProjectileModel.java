@@ -97,7 +97,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
 	}
 
 	@Override
-	public ModelProjectileBase func_217764_d() {
+	public ModelProjectileBase getEntityModel() {
     	return this.getMainModel();
 	}
 

@@ -70,7 +70,7 @@ public class EntityHellLaser extends EntityProjectileLaser {
     	boolean damageDealt = super.updateDamage(target);
         if(this.getThrower() != null && damageDealt) {
         	if(target instanceof LivingEntity)
-    			((LivingEntity)target).addPotionEffect(new EffectInstance(Effects.field_82731_v, this.getEffectDuration(5), 0));
+    			((LivingEntity)target).addPotionEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(5), 0));
         }
         return damageDealt;
     }

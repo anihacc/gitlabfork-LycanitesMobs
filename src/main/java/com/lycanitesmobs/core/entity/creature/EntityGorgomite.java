@@ -9,7 +9,9 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
@@ -23,8 +25,8 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityGorgomite(World world) {
-        super(world);
+    public EntityGorgomite(EntityType<? extends EntityGorgomite> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -34,21 +36,21 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AvoidGoal(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(true));
-        this.field_70714_bg.addTask(6, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(true));
+        this.goalSelector.addGoal(6, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
-        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
+        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
     }
 	
 	
@@ -79,13 +81,13 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	LivingEntity minion = new EntityGorgomite(this.getEntityWorld());
+    	LivingEntity minion = CreatureManager.getInstance().getCreature("gorgomite").createEntity(getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).setMinion(true);
     		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
     	}
-    	this.getEntityWorld().func_217376_c(minion);
+    	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
     }

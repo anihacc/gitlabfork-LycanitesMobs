@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import net.minecraft.block.Block;
@@ -59,15 +60,15 @@ public class RahovartStructureBuilder extends StructureBuilder {
 			for(int i = 0; i < 5; i++) {
 				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
 				entityProjectileBase.projectileLife = 9 * 20;
-				world.func_217376_c(entityProjectileBase);
+				world.addEntity(entityProjectileBase);
 			}
 		}
 
 		// Spawn Boss:
 		if(ticks == 29 * 20) {
-			EntityCreatureBase entityCreatureBase = new EntityRahovart(world);
+			EntityCreatureBase entityCreatureBase = (EntityCreatureBase) CreatureManager.getInstance().getCreature("rahovart").createEntity(world);
 			entityCreatureBase.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.func_217376_c(entityCreatureBase);
+			world.addEntity(entityCreatureBase);
 			entityCreatureBase.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {

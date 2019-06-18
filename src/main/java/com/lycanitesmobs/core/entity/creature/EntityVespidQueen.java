@@ -10,11 +10,13 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -53,8 +55,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityVespidQueen(World world) {
-        super(world);
+    public EntityVespidQueen(EntityType<? extends EntityVespidQueen> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -71,24 +73,24 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
-        this.field_70714_bg.addTask(7, new StayByHomeGoal(this));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(1200));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
+        this.goalSelector.addGoal(7, new StayByHomeGoal(this));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(1200));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new MasterAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(EntityConba.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(EntityVespidQueen.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityVespid.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(EntityConba.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(EntityVespidQueen.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityVespid.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 	
@@ -159,12 +161,12 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 	}
 	
     public LivingEntity spawnAlly(double x, double y, double z) {
-    	LivingEntity minion = new EntityVespid(this.getEntityWorld());
+		LivingEntity minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
     	if(minion instanceof EntityCreatureBase) {
     		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
     	}
-    	this.getEntityWorld().func_217376_c(minion);
+    	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
         return minion;

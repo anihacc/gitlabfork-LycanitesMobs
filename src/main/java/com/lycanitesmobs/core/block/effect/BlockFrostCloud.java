@@ -79,8 +79,8 @@ public class BlockFrostCloud extends BlockBase {
 
 		if(entity instanceof LivingEntity) {
 			LivingEntity entityLiving = (LivingEntity)entity;
-			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76421_d, 3 * 20, 0)); // Slowness
-			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76438_s, 3 * 20, 0)); // Hunger
+			entityLiving.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 3 * 20, 0)); // Slowness
+			entityLiving.addPotionEffect(new EffectInstance(Effects.HUNGER, 3 * 20, 0)); // Hunger
 		}
 	}
     

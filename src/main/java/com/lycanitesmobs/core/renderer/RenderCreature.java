@@ -127,18 +127,17 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
     @Override
     protected boolean canRenderName(EntityCreatureBase entity) {
         if(!Minecraft.isGuiEnabled()) return false;
-    	//if(entity == this.field_76990_c.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
+    	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
     	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;
     	if(entity.getControllingPassenger() != null) return false;
     	
     	if(entity.getAlwaysRenderNameTagForRender()) {
-    		if(entity instanceof EntityCreatureTameable)
-    			if(((EntityCreatureTameable)entity).isTamed())
-    				return entity == this.field_76990_c.pointedEntity;
+			if(entity.isTamed())
+				return entity == this.renderManager.pointedEntity;
     		return true;
     	}
     	
-    	return entity.hasCustomName() && entity == this.field_76990_c.pointedEntity;
+    	return entity.hasCustomName() && entity == this.renderManager.pointedEntity;
     }
     
     

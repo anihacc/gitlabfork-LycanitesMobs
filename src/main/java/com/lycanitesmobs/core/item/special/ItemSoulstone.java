@@ -64,7 +64,7 @@ public class ItemSoulstone extends ItemBase {
 
 		if(entity != null) {
 			entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-			world.func_217376_c(entity);
+			world.addEntity(entity);
 			if (!player.getEntityWorld().isRemote && entity instanceof EntityCreatureTameable) {
 				((EntityCreatureTameable) entity).setPlayerOwner(player);
 			}
@@ -78,7 +78,7 @@ public class ItemSoulstone extends ItemBase {
 	public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
     	if(this.creatureType == null && this.applySoulstoneToEntity(player, entity)) {
 			// Consume Soulstone:
-			if (!player.playerAbilities.isCreativeMode)
+			if (!player.abilities.isCreativeMode)
 				stack.setCount(Math.max(0, stack.getCount() - 1));
 			if (stack.getCount() <= 0)
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);

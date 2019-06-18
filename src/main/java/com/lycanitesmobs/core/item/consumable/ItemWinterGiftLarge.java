@@ -37,7 +37,7 @@ public class ItemWinterGiftLarge extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-         if(!player.playerAbilities.isCreativeMode) {
+         if(!player.abilities.isCreativeMode) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
@@ -91,7 +91,7 @@ public class ItemWinterGiftLarge extends ItemBase {
                             entityCreature.setCustomName(new TranslationTextComponent("Krampus"));
                     }
 
-                    world.func_217376_c(entity);
+                    world.addEntity(entity);
                 }
             }
         }

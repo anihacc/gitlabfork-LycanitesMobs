@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -27,8 +28,8 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCacodemon(World par1World) {
-        super(par1World);
+    public EntityCacodemon(EntityType<? extends EntityCacodemon> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
@@ -43,29 +44,29 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(1, new MateGoal(this));
-        this.field_70714_bg.addTask(2, new PlayerControlGoal(this));
-        this.field_70714_bg.addTask(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(4, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-        this.field_70714_bg.addTask(5, this.aiSit);
-        this.field_70714_bg.addTask(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(7, new FollowParentGoal(this));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(9, new BegGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MateGoal(this));
+        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
+        this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(4, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
+        this.goalSelector.addGoal(5, this.aiSit);
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(7, new FollowParentGoal(this));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(9, new BegGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(GhastEntity.class));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(4, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(GhastEntity.class));
     }
 
     // ========== Set Size ==========
@@ -94,8 +95,8 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        if(rider.isPotionActive(Effects.field_82731_v))
-            rider.removePotionEffect(Effects.field_82731_v);
+        if(rider.isPotionActive(Effects.WITHER))
+            rider.removePotionEffect(Effects.WITHER);
         if(rider.isBurning())
             rider.extinguish();
     }
@@ -117,11 +118,11 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     }
 
     public void spawnAlly(double x, double y, double z) {
-        EntityWraith minion = new EntityWraith(this.getEntityWorld());
+        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
         minion.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
 		minion.setMinion(true);
 		minion.setMasterTarget(this);
-        this.getEntityWorld().func_217376_c(minion);
+        this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null) {
             minion.setRevengeTarget(this.getAttackTarget());
         }
@@ -223,7 +224,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
             EntityDemonicBlast projectile = new EntityDemonicBlast(this.getEntityWorld(), player);
-            this.getEntityWorld().func_217376_c(projectile);
+            this.getEntityWorld().addEntity(projectile);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.triggerAttackCooldown();
         }

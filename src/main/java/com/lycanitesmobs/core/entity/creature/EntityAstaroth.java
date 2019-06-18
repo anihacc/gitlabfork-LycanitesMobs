@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -25,8 +26,8 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAstaroth(World par1World) {
-        super(par1World);
+    public EntityAstaroth(EntityType<? extends EntityAstaroth> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
@@ -40,16 +41,16 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AttackRangedGoal(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
-        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityTrite.class));
-        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AttackRangedGoal(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
+        this.goalSelector.addGoal(6, new WanderGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityTrite.class));
+        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 
@@ -73,7 +74,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
                 double distance = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.1F;
                 float velocity = 0.8F;
                 projectile.shoot(dX, dY + distance, dZ, velocity, 0.0F);
-                this.getEntityWorld().func_217376_c(projectile);
+                this.getEntityWorld().addEntity(projectile);
             }
         }
     }
@@ -107,11 +108,11 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
             for(int k = 0; k < j; ++k) {
                 float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
-                EntityTrite trite = new EntityTrite(this.getEntityWorld());
+                EntityTrite trite =(EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());
-                this.getEntityWorld().func_217376_c(trite);
+                this.getEntityWorld().addEntity(trite);
                 if(this.getAttackTarget() != null)
                 	trite.setRevengeTarget(this.getAttackTarget());
             }

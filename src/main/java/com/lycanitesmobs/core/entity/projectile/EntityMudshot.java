@@ -68,7 +68,7 @@ public class EntityMudshot extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_76437_t, this.getEffectDuration(10), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.WEAKNESS, this.getEffectDuration(10), 0));
     	return true;
     }
     

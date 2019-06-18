@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,8 +22,8 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityHerma(World world) {
-        super(world);
+    public EntityHerma(EntityType<? extends EntityHerma> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -37,24 +38,24 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
-        this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new TemptGoal(this).setTemptDistanceMin(2.0D));
-        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this).setLongMemory(true));
-        this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(2.0D));
+        this.goalSelector.addGoal(4, new AttackMeleeGoal(this).setLongMemory(true));
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(6, wanderAI);
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(6, wanderAI);
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setRange(6D));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setRange(8D));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setRange(6D));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setRange(8D));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
     
     

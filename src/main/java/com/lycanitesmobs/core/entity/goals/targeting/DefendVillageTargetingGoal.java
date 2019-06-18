@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class DefendVillageTargetingGoal extends AttackTargetingGoal {
-	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).func_221013_a(64.0D);
+	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).setDistance(64.0D);
 
 	public DefendVillageTargetingGoal(EntityCreatureBase setHost) {
 		super(setHost);

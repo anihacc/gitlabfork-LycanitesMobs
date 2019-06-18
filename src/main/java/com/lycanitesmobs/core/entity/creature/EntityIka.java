@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -24,8 +25,8 @@ public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityIka(World world) {
-        super(world);
+    public EntityIka(EntityType<? extends EntityIka> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -42,22 +43,22 @@ public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
-        this.field_70714_bg.addTask(1, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(2, new TemptGoal(this).setItemList("Vegetables"));
-        this.field_70714_bg.addTask(3, new StayByWaterGoal(this));
-        this.field_70714_bg.addTask(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(5, new MateGoal(this));
-        this.field_70714_bg.addTask(6, new FollowParentGoal(this).setSpeed(1.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
+        this.goalSelector.addGoal(2, new TemptGoal(this).setItemList("Vegetables"));
+        this.goalSelector.addGoal(3, new StayByWaterGoal(this));
+        this.goalSelector.addGoal(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.goalSelector.addGoal(5, new MateGoal(this));
+        this.goalSelector.addGoal(6, new FollowParentGoal(this).setSpeed(1.0D));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(7, this.wanderAI);
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
-        this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.goalSelector.addGoal(7, this.wanderAI);
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
     }
     
     
@@ -169,12 +170,6 @@ public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityIka(this.getEntityWorld());
-    }
-
     // ========== Breeding Item ==========
     @Override
     public boolean isBreedingItem(ItemStack testStack) {

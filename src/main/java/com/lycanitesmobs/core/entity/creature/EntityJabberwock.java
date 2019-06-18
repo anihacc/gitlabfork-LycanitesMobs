@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,8 +19,8 @@ public class EntityJabberwock extends EntityCreatureTameable implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityJabberwock(World world) {
-        super(world);
+    public EntityJabberwock(EntityType<? extends EntityJabberwock> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -32,27 +33,27 @@ public class EntityJabberwock extends EntityCreatureTameable implements IMob {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
+    protected void registerGoals() {
+        super.registerGoals();
         if(this.getNavigator() instanceof GroundPathNavigator) {
             GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new BreakDoorGoal(this));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(4, this.aiSit);
-        this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new MoveVillageGoal(this));
-        this.field_70714_bg.addTask(7, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new BreakDoorGoal(this));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(4, this.aiSit);
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(6, new MoveVillageGoal(this));
+        this.goalSelector.addGoal(7, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -82,17 +83,7 @@ public class EntityJabberwock extends EntityCreatureTameable implements IMob {
     	return 50;
     }
 	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityJabberwock(this.getEntityWorld());
-	}
-    
-    
+
     // ==================================================
     //                     Pet Control
     // ==================================================

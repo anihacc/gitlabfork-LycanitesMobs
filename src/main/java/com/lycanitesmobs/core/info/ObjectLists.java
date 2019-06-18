@@ -186,7 +186,7 @@ public class ObjectLists {
 		ObjectLists.addItem("cookedfish", Items.COOKED_SALMON);
 
 		// Cactus Food: (Jousts love these!)
-		ObjectLists.addItem("cactusfood", Items.field_222079_lj); // Green Dye
+		ObjectLists.addItem("cactusfood", Items.GREEN_DYE);
 		
 		// Mushrooms: (Fungi treats!)
         ObjectLists.addItem("mushrooms", Items.MUSHROOM_STEW);

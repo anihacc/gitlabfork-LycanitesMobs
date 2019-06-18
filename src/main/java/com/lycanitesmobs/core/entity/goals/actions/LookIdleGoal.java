@@ -74,7 +74,7 @@ public class LookIdleGoal extends Goal {
 	@Override
     public void tick() {
         this.idleTime--;
-        this.host.getLookHelper().setLookPosition(
+        this.host.getLookController().setLookPosition(
         		this.host.posX + this.lookX,
         		this.host.posY + (double)this.host.getEyeHeight(),
         		this.host.posZ + this.lookZ, 10.0F,

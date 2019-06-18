@@ -13,6 +13,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -34,8 +35,8 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySerpix(World world) {
-        super(world);
+    public EntitySerpix(EntityType<? extends EntitySerpix> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -50,32 +51,32 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this).setSink(true));
-        this.field_70714_bg.addTask(1, new StealthGoal(this).setStealthTime(60));
-        this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
-        this.field_70714_bg.addTask(7, new WanderGoal(this));
-        this.field_70714_bg.addTask(9, new BegGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(60));
+        this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
+        this.goalSelector.addGoal(7, new WanderGoal(this));
+        this.goalSelector.addGoal(9, new BegGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 
 
@@ -154,7 +155,7 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
             // Launch:
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             projectile.setPosition(launchPos.getX(), launchPos.getY(), launchPos.getZ());
-            this.getEntityWorld().func_217376_c(projectile);
+            this.getEntityWorld().addEntity(projectile);
         }
 
         super.attackRanged(target, range);
@@ -225,12 +226,6 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
 	// ==================================================
   	//                      Breeding
   	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntitySerpix(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack par1ItemStack) {

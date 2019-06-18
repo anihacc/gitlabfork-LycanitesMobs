@@ -78,7 +78,7 @@ public class BegGoal extends Goal {
  	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookHelper().setLookPosition(this.player.posX, this.player.posY + (double)this.player.getEyeHeight(), this.player.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookController().setLookPosition(this.player.posX, this.player.posY + (double)this.player.getEyeHeight(), this.player.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
         --this.begTime;
     }
 	

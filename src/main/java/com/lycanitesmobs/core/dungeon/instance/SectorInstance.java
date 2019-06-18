@@ -884,7 +884,7 @@ public class SectorInstance {
 		}
 
 		mobSpawn.onSpawned(entityLiving, null);
-		world.func_217376_c(entityLiving);
+		world.addEntity(entityLiving);
 	}
 
 

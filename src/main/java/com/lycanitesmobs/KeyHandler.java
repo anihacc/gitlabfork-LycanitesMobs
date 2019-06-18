@@ -65,11 +65,11 @@ public class KeyHandler {
 		
 		// ========== GUI Keys ==========
 		// Player Inventory: Adds extra buttons to the GUI.
-		if(!this.inventoryOpen && mc.field_71462_r != null && mc.field_71462_r.getClass() == InventoryScreen.class) {
-			TabManager.addTabsToInventory(mc.field_71462_r);
+		if(!this.inventoryOpen && mc.currentScreen != null && mc.currentScreen.getClass() == InventoryScreen.class) {
+			TabManager.addTabsToInventory(mc.currentScreen);
 			this.inventoryOpen = true;
 		}
-		if(this.inventoryOpen && (mc.field_71462_r == null || mc.field_71462_r.getClass() != InventoryScreen.class)) {
+		if(this.inventoryOpen && (mc.currentScreen == null || mc.currentScreen.getClass() != InventoryScreen.class)) {
 			this.inventoryOpen = false;
 		}
 		
@@ -100,7 +100,7 @@ public class KeyHandler {
 		
 		// Minion Selection: Closes If Not Holding:
 		try {
-			if (!this.minionSelection.isPressed() && this.mc.field_71462_r instanceof GuiMinionSelection) {
+			if (!this.minionSelection.isPressed() && this.mc.currentScreen instanceof GuiMinionSelection) {
 				this.mc.player.closeScreen();
 			}
 		}

@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -24,8 +25,8 @@ public class EntitySutiramu extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySutiramu(World world) {
-        super(world);
+    public EntitySutiramu(EntityType<? extends EntitySutiramu> entityType, World world) {
+        super(entityType, world);
 
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -38,27 +39,27 @@ public class EntitySutiramu extends EntityCreatureTameable implements IMob, IGro
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(5, this.aiSit);
-        this.field_70714_bg.addTask(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(7, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(5, this.aiSit);
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(7, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(2, 1));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(2, 1));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(2, 1));
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(2, 1));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(2, 1));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(2, 1));
         }
     }
     
@@ -69,16 +70,6 @@ public class EntitySutiramu extends EntityCreatureTameable implements IMob, IGro
     @Override
     public boolean canBurn() { return false; }
 	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntitySutiramu(this.getEntityWorld());
-	}
-
 
     // ==================================================
     //                     Pet Control

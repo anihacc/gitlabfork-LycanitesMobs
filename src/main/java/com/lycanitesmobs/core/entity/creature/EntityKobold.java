@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
@@ -29,8 +30,8 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityKobold(World world) {
-        super(world);
+    public EntityKobold(EntityType<? extends EntityKobold> entityType, World world) {
+        super(entityType, world);
 
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -44,32 +45,32 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(3, new GetItemGoal(this).setDistanceMax(32).setSpeed(1.2D));
-        this.field_70714_bg.addTask(4, this.aiSit);
-        this.field_70714_bg.addTask(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(6, new AvoidGoal(this).setNearSpeed(1.8D).setFarSpeed(1.4D).setNearDistance(3.0D).setFarDistance(16.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(3, new GetItemGoal(this).setDistanceMax(32).setSpeed(1.2D));
+        this.goalSelector.addGoal(4, this.aiSit);
+        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(6, new AvoidGoal(this).setNearSpeed(1.8D).setFarSpeed(1.4D).setNearDistance(3.0D).setFarDistance(16.0D));
         if(this.torchGreifing)
-            this.field_70714_bg.addTask(7, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
-        this.field_70714_bg.addTask(8, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+            this.goalSelector.addGoal(7, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
+        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.field_70715_bh.addTask(4, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-        this.field_70715_bh.addTask(5, new AvoidTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(4, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(5, new AvoidTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
 	
 	
@@ -142,17 +143,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
     	return this.theivery;
     }
 	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityKobold(this.getEntityWorld());
-	}
-    
-    
+
     // ==================================================
     //                     Pet Control
     // ==================================================

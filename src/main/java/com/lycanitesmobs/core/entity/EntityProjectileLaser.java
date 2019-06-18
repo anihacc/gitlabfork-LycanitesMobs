@@ -57,12 +57,12 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 	public int offsetIDStart = 14;
 
     // Datawatcher:
-    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.field_187192_b);
-    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.field_187192_b);
-    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.field_187192_b);
-    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.field_187193_c);
-    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.field_187193_c);
-    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.field_187193_c);
+    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
@@ -349,7 +349,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 			if(this.getLaunchSound() != null)
 				this.playSound(this.getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
 	        
-	        world.func_217376_c(laserEnd);
+	        world.addEntity(laserEnd);
 		}
 		catch (Exception e) {
 			System.out.println("[WARNING] [LycanitesMobs] EntityLaser was unable to instantiate the EntityLaserEnd.");

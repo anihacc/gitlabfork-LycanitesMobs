@@ -178,7 +178,7 @@ public class AttackMeleeGoal extends Goal {
 	@Override
     public void tick() {
         LivingEntity attackTarget = this.host.getAttackTarget();
-        this.host.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+        this.host.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 
 		// Path To Target:
 		if((this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) && --this.repathTime <= 0) {

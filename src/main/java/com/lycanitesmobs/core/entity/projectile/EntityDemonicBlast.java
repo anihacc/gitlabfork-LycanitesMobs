@@ -107,7 +107,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 
 		this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 0.8F));
 
-		world.func_217376_c(projectile);
+		world.addEntity(projectile);
     }
 	
     
@@ -127,7 +127,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_82731_v, this.getEffectDuration(10), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.WITHER, this.getEffectDuration(10), 0));
 		if(ObjectManager.getEffect("decay") != null) {
 			entityLiving.addPotionEffect(new EffectInstance(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}

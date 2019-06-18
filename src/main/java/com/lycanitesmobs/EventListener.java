@@ -225,7 +225,7 @@ public class EventListener {
 		}
 
 		// Better Invisibility:
-		if(!event.getEntityLiving().isPotionActive(Effects.field_76439_r)) {
+		if(!event.getEntityLiving().isPotionActive(Effects.INVISIBILITY)) {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -333,7 +333,7 @@ public class EventListener {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
                 EntityItemCustom entityItem = new EntityItemCustom(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
                 entityItem.setPickupDelay(10);
-                world.func_217376_c(entityItem);
+                world.addEntity(entityItem);
             }
         }
 	}

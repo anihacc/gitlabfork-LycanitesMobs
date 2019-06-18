@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -23,8 +24,8 @@ public class EntityCryptkeeper extends EntityCreatureAgeable implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCryptkeeper(World world) {
-        super(world);
+    public EntityCryptkeeper(EntityType<? extends EntityCryptkeeper> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
@@ -37,26 +38,26 @@ public class EntityCryptkeeper extends EntityCreatureAgeable implements IMob {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
+    protected void registerGoals() {
+        super.registerGoals();
         if(this.getNavigator() instanceof GroundPathNavigator) {
             GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new BreakDoorGoal(this));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(6, new MoveVillageGoal(this));
-        this.field_70714_bg.addTask(7, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new BreakDoorGoal(this));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(4, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(6, new MoveVillageGoal(this));
+        this.goalSelector.addGoal(7, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(HuskEntity.class));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(HuskEntity.class));
     }
     
     
@@ -76,9 +77,9 @@ public class EntityCryptkeeper extends EntityCreatureAgeable implements IMob {
             zombievillagerentity.copyLocationAndAnglesFrom(villagerentity);
             villagerentity.remove();
             zombievillagerentity.onInitialSpawn(this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos(zombievillagerentity)),SpawnReason.CONVERSION, null, null);
-            zombievillagerentity.func_213792_a(villagerentity.func_213700_eh());
-            zombievillagerentity.func_213790_g(villagerentity.func_213706_dY().func_222199_a());
-            zombievillagerentity.func_213789_a(villagerentity.func_213708_dV());
+            zombievillagerentity.func_213792_a(villagerentity.getVillagerData());
+            zombievillagerentity.func_213790_g(villagerentity.getOffers().func_222199_a());
+            zombievillagerentity.func_213789_a(villagerentity.getXp());
             zombievillagerentity.setChild(villagerentity.isChild());
             zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
 
@@ -87,18 +88,8 @@ public class EntityCryptkeeper extends EntityCreatureAgeable implements IMob {
                 zombievillagerentity.setCustomNameVisible(villagerentity.isCustomNameVisible());
             }
 
-            this.getEntityWorld().func_217376_c(zombievillagerentity);
+            this.getEntityWorld().addEntity(zombievillagerentity);
             this.getEntityWorld().playEvent(null, 1016, zombievillagerentity.getPosition(), 0);
         }
     }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityCryptkeeper(this.getEntityWorld());
-	}
 }

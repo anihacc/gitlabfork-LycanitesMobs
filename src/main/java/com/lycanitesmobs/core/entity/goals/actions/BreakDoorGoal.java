@@ -47,7 +47,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
  	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
-		return this.breakingTime <= 240 && !this.canDestroy() && this.doorPosition.func_218137_a(this.host.getPositionVec(), 2.0D);
+		return this.breakingTime <= 240 && !this.canDestroy() && this.doorPosition.withinDistance(this.host.getPositionVec(), 2.0D);
     }
 
 	protected boolean canDestroy() {

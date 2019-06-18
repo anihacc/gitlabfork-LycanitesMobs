@@ -189,7 +189,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void onUpdate() {
 		this.timePlayed++;
         this.hasAttacked = false;
-		boolean creative = this.player.playerAbilities.isCreativeMode;
+		boolean creative = this.player.abilities.isCreativeMode;
 
 		// Stats:
 		boolean sync = false;

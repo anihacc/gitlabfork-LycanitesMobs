@@ -93,10 +93,10 @@ public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase>
             }
         }
 
-        //GlStateManager.rotatef(180.0F - this.field_76990_c.playerViewY, 0.0F, 1.0F, 0.0F);
-        //GlStateManager.rotatef(-this.field_76990_c.playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(-this.field_76990_c.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotatef((float) (this.field_76990_c.options.thirdPersonView == 2 ? -1 : 1) * this.field_76990_c.playerViewX, 1.0F, 0.0F, 0.0F);
+        //GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        //GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotatef((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
         //GlStateManager.translatef(-scale / 2, -scale / 2, -scale / 2);
 

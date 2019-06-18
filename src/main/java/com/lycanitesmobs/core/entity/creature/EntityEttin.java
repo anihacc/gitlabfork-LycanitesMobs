@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -19,8 +20,8 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityEttin(World world) {
-        super(world);
+    public EntityEttin(EntityType<? extends EntityEttin> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -38,22 +39,22 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
+    protected void registerGoals() {
+        super.registerGoals();
         if(this.getNavigator() instanceof GroundPathNavigator) {
             GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new BreakDoorGoal(this));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(6, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new BreakDoorGoal(this));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
+        this.goalSelector.addGoal(6, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
 	
 	
@@ -86,14 +87,4 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     		this.nextAttackPhase();
     	return success;
     }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityEttin(this.getEntityWorld());
-	}
 }

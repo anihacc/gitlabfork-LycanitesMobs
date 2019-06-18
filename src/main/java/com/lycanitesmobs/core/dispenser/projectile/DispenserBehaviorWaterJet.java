@@ -59,7 +59,7 @@ public class DispenserBehaviorWaterJet extends DispenserBehaviorBase {
 
         laser.setTarget(targetX, targetY, targetZ);
 
-        world.func_217376_c(laser);
+        world.addEntity(laser);
         itemStack.split(1);
         return itemStack;
     }

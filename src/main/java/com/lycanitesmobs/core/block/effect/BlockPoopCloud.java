@@ -79,8 +79,8 @@ public class BlockPoopCloud extends BlockBase {
 
 		if(entity instanceof LivingEntity) {
 			LivingEntity entityLiving = (LivingEntity)entity;
-			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76421_d, 3 * 20, 0)); // Slowness
-			entityLiving.addPotionEffect(new EffectInstance(Effects.field_76431_k, 3 * 20, 0)); // Nausea
+			entityLiving.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 3 * 20, 0)); // Slowness
+			entityLiving.addPotionEffect(new EffectInstance(Effects.NAUSEA, 3 * 20, 0)); // Nausea
 		}
 	}
     

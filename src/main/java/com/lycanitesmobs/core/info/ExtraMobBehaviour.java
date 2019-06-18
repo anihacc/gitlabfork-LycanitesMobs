@@ -141,16 +141,16 @@ public class ExtraMobBehaviour {
     	// AI:
     	if(nbtTagCompound.contains("AIAttackPlayers")) {
     		this.aiAttackPlayers = nbtTagCompound.getBoolean("AIAttackPlayers");
-    		this.host.field_70715_bh.removeTask(this.host.aiTargetPlayer);
+    		this.host.targetSelector.removeGoal(this.host.aiTargetPlayer);
     		if(this.aiAttackPlayers) {
-    			this.host.field_70715_bh.addTask(9, this.host.aiTargetPlayer);
+    			this.host.targetSelector.addGoal(9, this.host.aiTargetPlayer);
     		}
     	}
     	if(nbtTagCompound.contains("AIDefendAnimals")) {
     		this.aiDefendAnimals = nbtTagCompound.getBoolean("AIDefendAnimals");
-    		this.host.field_70715_bh.removeTask(this.host.aiDefendAnimals);
+    		this.host.targetSelector.removeGoal(this.host.aiDefendAnimals);
     		if(this.aiDefendAnimals) {
-    			this.host.field_70715_bh.addTask(10, this.host.aiDefendAnimals);
+    			this.host.targetSelector.addGoal(10, this.host.aiDefendAnimals);
     		}
     	}
     }

@@ -97,7 +97,7 @@ public class BlockShadowfire extends BlockFireBase {
 				if(livingEntity.isPotionApplicable(effect))
 					livingEntity.addPotionEffect(effect);
 			}
-			EffectInstance blindness = new EffectInstance(Effects.field_76440_q, 5 * 20, 0);
+			EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
 			if(this.blindness && livingEntity.isPotionApplicable(blindness)) {
 				livingEntity.addPotionEffect(blindness);
 			}

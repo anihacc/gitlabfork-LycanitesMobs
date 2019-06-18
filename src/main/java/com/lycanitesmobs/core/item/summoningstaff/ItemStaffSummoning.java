@@ -80,7 +80,7 @@ public class ItemStaffSummoning extends ItemBase {
 				if(!player.getEntityWorld().isRemote) {
 					playerExt.staffPortal = new EntityPortal(world, player, summonSet.getCreatureClass(), this);
 					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
-					world.func_217376_c(playerExt.staffPortal);
+					world.addEntity(playerExt.staffPortal);
 				}
 			}
 			// Open Minion GUI If None Selected:

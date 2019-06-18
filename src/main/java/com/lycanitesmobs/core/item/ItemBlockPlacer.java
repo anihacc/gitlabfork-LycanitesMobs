@@ -43,7 +43,7 @@ public class ItemBlockPlacer extends ItemBase {
 						world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, ObjectManager.getSound(this.placedBlockName), SoundCategory.PLAYERS, 1.0F, player.getRNG().nextFloat() * 0.4F + 0.8F, false);
 						world.setBlockState(pos, ObjectManager.getBlock(this.placedBlockName).getDefaultState());
 					}
-					if(!player.playerAbilities.isCreativeMode)
+					if(!player.abilities.isCreativeMode)
 						itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 					return ActionResultType.SUCCESS;
 				}

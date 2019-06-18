@@ -88,7 +88,7 @@ public class MateGoal extends Goal {
   	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookHelper().setLookPositionWithEntity(this.partner, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookController().setLookPositionWithEntity(this.partner, 10.0F, (float)this.host.getVerticalFaceSpeed());
         if(!this.host.useDirectNavigator())
         	this.host.getNavigator().tryMoveToEntityLiving(this.partner, this.speed);
         else

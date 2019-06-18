@@ -41,7 +41,7 @@ public class ItemHalloweenTreat extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-         if(!player.playerAbilities.isCreativeMode) {
+         if(!player.abilities.isCreativeMode) {
              itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
          }
          
@@ -73,7 +73,7 @@ public class ItemHalloweenTreat extends ItemBase {
                 dropStack.setCount(1 + player.getRNG().nextInt(4));
 				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
 				entityItem.setPickupDelay(10);
-				world.func_217376_c(entityItem);
+				world.addEntity(entityItem);
 			}
 		}
     }
@@ -114,7 +114,7 @@ public class ItemHalloweenTreat extends ItemBase {
 						entityCreature.setCustomName(new TranslationTextComponent("Shadow Clown"));
                 }
 
-	            world.func_217376_c(entity);
+	            world.addEntity(entity);
             }
 		}
     }

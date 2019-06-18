@@ -13,6 +13,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -29,8 +30,8 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAbtu(World world) {
-        super(world);
+    public EntityAbtu(EntityType<? extends EntityAbtu> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -45,25 +46,25 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(1, new StayByWaterGoal(this));
-        this.field_70714_bg.addTask(2, this.aiSit);
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(false));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
+        this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(6, wanderAI.setPauseRate(0));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(6, wanderAI.setPauseRate(0));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
     
     
@@ -104,12 +105,12 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityCreatureAgeable minion = new EntityAbtu(this.getEntityWorld());
+    	EntityCreatureAgeable minion = new EntityAbtu((EntityType<? extends EntityAbtu>) this.getType(), this.getEntityWorld());
     	minion.setGrowingAge(minion.growthTime);
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
 		minion.applySubspecies(this.getSubspeciesIndex());
-    	this.getEntityWorld().func_217376_c(minion);
+    	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
     }

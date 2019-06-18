@@ -3,6 +3,7 @@ package com.lycanitesmobs;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.config.ConfigExtra;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
@@ -93,16 +94,16 @@ public class Effects {
 		}
 		
 		// Night Vision Stops Blindness:
-		if(entity.isPotionActive(net.minecraft.potion.Effects.field_76440_q) && entity.isPotionActive(net.minecraft.potion.Effects.field_76440_q)) {
-			entity.removePotionEffect(net.minecraft.potion.Effects.field_76440_q);
+		if(entity.isPotionActive(net.minecraft.potion.Effects.BLINDNESS) && entity.isPotionActive(net.minecraft.potion.Effects.NIGHT_VISION)) {
+			entity.removePotionEffect(net.minecraft.potion.Effects.BLINDNESS);
 		}
 
 
 		// Disable Nausea:
 		this.disableNausea = ConfigExtra.INSTANCE.disableNausea.get();
 		if(this.disableNausea && event.getEntityLiving() instanceof PlayerEntity) {
-			if(entity.isPotionActive(net.minecraft.potion.Effects.field_76431_k)) {
-				entity.removePotionEffect(net.minecraft.potion.Effects.field_76431_k);
+			if(entity.isPotionActive(net.minecraft.potion.Effects.NAUSEA)) {
+				entity.removePotionEffect(net.minecraft.potion.Effects.NAUSEA);
 			}
 		}
 
@@ -127,7 +128,7 @@ public class Effects {
 		// Weight
 		EffectBase weight = ObjectManager.getEffect("weight");
 		if(weight != null) {
-			if(!invulnerable && entity.isPotionActive(weight) && !entity.isPotionActive(net.minecraft.potion.Effects.field_76420_g)) {
+			if(!invulnerable && entity.isPotionActive(weight) && !entity.isPotionActive(net.minecraft.potion.Effects.STRENGTH)) {
 				if(entity.getMotion().getY() > -0.2D)
 					entity.setMotion(entity.getMotion().add(0, -0.2D, 0));
 			}
@@ -140,8 +141,8 @@ public class Effects {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
-						EntityFear fearEntity = new EntityFear(entity.getEntityWorld(), entity);
-						entity.getEntityWorld().func_217376_c(fearEntity);
+						EntityFear fearEntity = new EntityFear(EntityFactory.getInstance().entityClassTypeMap.get(EntityFear.class), entity.getEntityWorld(), entity);
+						entity.getEntityWorld().addEntity(fearEntity);
 						extendedEntity.fearEntity = fearEntity;
 					}
 				}
@@ -187,11 +188,11 @@ public class Effects {
 				// Poison:
 				int poisonAmplifier = entity.getActivePotionEffect(plague).getAmplifier();
 				int poisonDuration = entity.getActivePotionEffect(plague).getDuration();
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_76436_u)) {
-					poisonAmplifier = Math.max(poisonAmplifier, entity.getActivePotionEffect(net.minecraft.potion.Effects.field_76436_u).getAmplifier());
-					poisonDuration = Math.max(poisonDuration, entity.getActivePotionEffect(net.minecraft.potion.Effects.field_76436_u).getDuration());
+				if(entity.isPotionActive(net.minecraft.potion.Effects.POISON)) {
+					poisonAmplifier = Math.max(poisonAmplifier, entity.getActivePotionEffect(net.minecraft.potion.Effects.POISON).getAmplifier());
+					poisonDuration = Math.max(poisonDuration, entity.getActivePotionEffect(net.minecraft.potion.Effects.POISON).getDuration());
 				}
-				entity.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.field_76436_u, poisonDuration, poisonAmplifier));
+				entity.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, poisonDuration, poisonAmplifier));
 
 				// Spread:
 				if(entity.getEntityWorld().getGameTime() % 20 == 0) {
@@ -205,7 +206,7 @@ public class Effects {
 								target.addPotionEffect(new EffectInstance(plague, duration, amplifier - 1));
 							}
 							else {
-								target.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.field_76436_u, duration, amplifier));
+								target.addPotionEffect(new EffectInstance(net.minecraft.potion.Effects.POISON, duration, amplifier));
 							}
 						}
 					}
@@ -267,17 +268,17 @@ public class Effects {
 		EffectBase immunization = ObjectManager.getEffect("immunization");
 		if(immunization != null && !entity.getEntityWorld().isRemote) {
 			if(entity.isPotionActive(ObjectManager.getEffect("immunization"))) {
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_76436_u)) { // Poison
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_76436_u);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.POISON)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.POISON);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_76438_s)) { // Hunger
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_76438_s);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.HUNGER)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.HUNGER);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_76437_t)) { // Weakness
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_76437_t);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.WEAKNESS)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.WEAKNESS);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_76431_k)) { // Nausea
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_76431_k);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.NAUSEA)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.NAUSEA);
 				}
 				if(ObjectManager.getEffect("paralysis") != null) {
 					if(entity.isPotionActive(ObjectManager.getEffect("paralysis"))) {
@@ -291,11 +292,11 @@ public class Effects {
 		EffectBase cleansed = ObjectManager.getEffect("cleansed");
 		if(ObjectManager.getEffect("cleansed") != null && !entity.getEntityWorld().isRemote) {
 			if(entity.isPotionActive(ObjectManager.getEffect("cleansed"))) {
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_82731_v)) { // Wither
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_82731_v);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.WITHER)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.WITHER);
 				}
-				if(entity.isPotionActive(net.minecraft.potion.Effects.field_189112_A)) { // Unluck
-					entity.removePotionEffect(net.minecraft.potion.Effects.field_189112_A);
+				if(entity.isPotionActive(net.minecraft.potion.Effects.UNLUCK)) {
+					entity.removePotionEffect(net.minecraft.potion.Effects.UNLUCK);
 				}
 				if(ObjectManager.getEffect("fear") != null) {
 					if(entity.isPotionActive(ObjectManager.getEffect("fear"))) {
@@ -324,7 +325,7 @@ public class Effects {
 		boolean invulnerable = false;
 		if(entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)entity;
-			invulnerable = player.playerAbilities.disableDamage;
+			invulnerable = player.abilities.disableDamage;
 		}
 		if(invulnerable) {
 			return;

@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -40,8 +41,8 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityThresher(World world) {
-        super(world);
+    public EntityThresher(EntityType<? extends EntityThresher> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -61,35 +62,35 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(1, new StayByWaterGoal(this));
-        this.field_70714_bg.addTask(2, new PlayerControlGoal(this));
-        this.field_70714_bg.addTask(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(4, new AttackMeleeGoal(this).setLongMemory(false).setRange(2));
-        this.field_70714_bg.addTask(5, this.aiSit);
-        this.field_70714_bg.addTask(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
+        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
+        this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(4, new AttackMeleeGoal(this).setLongMemory(false).setRange(2));
+        this.goalSelector.addGoal(5, this.aiSit);
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new WanderGoal(this);
-        this.field_70714_bg.addTask(7, wanderAI.setPauseRate(60));
-        this.field_70714_bg.addTask(8, new BegGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(7, wanderAI.setPauseRate(60));
+        this.goalSelector.addGoal(8, new BegGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
-            this.field_70715_bh.addTask(8, new AttackTargetingGoal(this).setTargetClass(SquidEntity.class));
+            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(SquidEntity.class));
         }
-        this.field_70715_bh.addTask(9, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(9, new OwnerDefenseTargetingGoal(this));
     }
     
     
@@ -120,7 +121,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
                     ServerPlayerEntity player = null;
                     if (entity instanceof ServerPlayerEntity) {
                         player = (ServerPlayerEntity) entity;
-                        if (player.playerAbilities.isCreativeMode)
+                        if (player.abilities.isCreativeMode)
                             continue;
                     }
                     double xDist = this.posX - entity.posX;
@@ -146,7 +147,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
 
     @Override
     public void riderEffects(LivingEntity rider) {
-        rider.addPotionEffect(new EffectInstance(Effects.field_76427_o, (5 * 20) + 5, 1));
+        rider.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, (5 * 20) + 5, 1));
         if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
             rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
         if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
@@ -274,7 +275,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     public void onDismounted(Entity entity) {
         super.onDismounted(entity);
         if(entity != null && entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.field_76427_o, 5 * 20, 1));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 5 * 20, 1));
         }
     }
 
@@ -286,16 +287,6 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return 10; }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityThresher(this.getEntityWorld());
-    }
 
 
     // ==================================================

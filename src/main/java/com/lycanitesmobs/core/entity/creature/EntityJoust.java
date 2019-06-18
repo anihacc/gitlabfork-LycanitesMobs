@@ -14,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -26,8 +27,8 @@ public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityJoust(World world) {
-        super(world);
+    public EntityJoust(EntityType<? extends EntityJoust> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -40,21 +41,21 @@ public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new MateGoal(this));
-        this.field_70714_bg.addTask(2, new TemptGoal(this).setItemList("CactusFood"));
-        this.field_70714_bg.addTask(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(4, new FollowParentGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(5, new FollowMasterGoal(this).setSpeed(1.0D).setStrayDistance(8.0F));
-        this.field_70714_bg.addTask(6, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityJoustAlpha.class));
-        this.field_70715_bh.addTask(1, new MasterAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.field_70715_bh.addTask(2, new MasterTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new MateGoal(this));
+        this.goalSelector.addGoal(2, new TemptGoal(this).setItemList("CactusFood"));
+        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
+        this.goalSelector.addGoal(4, new FollowParentGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(5, new FollowMasterGoal(this).setSpeed(1.0D).setStrayDistance(8.0F));
+        this.goalSelector.addGoal(6, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityJoustAlpha.class));
+        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(2, new MasterTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
     }
 
 
@@ -69,9 +70,9 @@ public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
         if(alphaInfo != null) {
             float alphaChance = (float)alphaInfo.creatureSpawn.spawnWeight / Math.max(this.creatureInfo.creatureSpawn.spawnWeight, 1);
             if (this.getRNG().nextFloat() <= alphaChance) {
-                EntityJoustAlpha alpha = new EntityJoustAlpha(this.getEntityWorld());
+                EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getEntityWorld());
                 alpha.copyLocationAndAnglesFrom(this);
-                this.getEntityWorld().func_217376_c(alpha);
+                this.getEntityWorld().addEntity(alpha);
                 this.remove();
             }
         }
@@ -130,12 +131,6 @@ public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partener) {
-		return new EntityJoust(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack testStack) {
@@ -150,9 +145,9 @@ public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
 	public void setGrowingAge(int age) {
 		if(age == 0 && this.getAge() < 0)
 			if(this.getRNG().nextFloat() >= 0.9F) {
-				EntityJoustAlpha alphaJoust = new EntityJoustAlpha(this.getEntityWorld());
-				alphaJoust.copyLocationAndAnglesFrom(this);
-				this.getEntityWorld().func_217376_c(alphaJoust);
+				EntityJoustAlpha alpha = (EntityJoustAlpha)CreatureManager.getInstance().getCreature("joustalpha").createEntity(this.getEntityWorld());
+				alpha.copyLocationAndAnglesFrom(this);
+				this.getEntityWorld().addEntity(alpha);
 				this.remove();
 			}
         super.setGrowingAge(age);

@@ -15,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -37,8 +38,8 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityConcapedeSegment(World world) {
-        super(world);
+    public EntityConcapedeSegment(EntityType<? extends EntityConcapedeSegment> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.ARTHROPOD;
@@ -53,12 +54,12 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(5, new FollowParentGoal(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
-        this.field_70714_bg.addTask(6, new WanderGoal(this).setPauseRate(30));
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityConcapedeHead.class));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
+        this.goalSelector.addGoal(6, new WanderGoal(this).setPauseRate(30));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityConcapedeHead.class));
     }
 
     // ==================================================
@@ -179,11 +180,11 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
 			age = -this.growthTime;
         super.setGrowingAge(age);
 		if(age == 0 && !this.getEntityWorld().isRemote) {
-			EntityConcapedeHead concapedeHead = new EntityConcapedeHead(this.getEntityWorld());
+			EntityConcapedeHead concapedeHead = (EntityConcapedeHead)CreatureManager.getInstance().getCreature("concapede").createEntity(this.getEntityWorld());
 			concapedeHead.copyLocationAndAnglesFrom(this);
 			concapedeHead.firstSpawn = false;
 			concapedeHead.setGrowingAge(-this.growthTime / 4);
-			this.getEntityWorld().func_217376_c(concapedeHead);
+			this.getEntityWorld().addEntity(concapedeHead);
 			if(this.hasMaster() && this.getMasterTarget() instanceof EntityConcapedeSegment)
 				((EntityConcapedeSegment)this.getMasterTarget()).setParentTarget(concapedeHead);
 			this.remove();
@@ -274,7 +275,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
   	// ==================================================
     // ========== Create Child ==========
     @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partener) {
+	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
 		return null;
 	}
     

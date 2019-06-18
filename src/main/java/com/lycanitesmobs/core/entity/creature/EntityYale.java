@@ -16,6 +16,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 
 public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, IShearable {
 
-	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.field_187191_a);
+	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.BYTE);
 
 	private static final Map<DyeColor, IItemProvider> WOOL_BY_COLOR = Util.make(Maps.newEnumMap(DyeColor.class), (itemProviderMap) -> {
 		itemProviderMap.put(DyeColor.WHITE, Blocks.WHITE_WOOL);
@@ -77,8 +78,8 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityYale(World world) {
-        super(world);
+    public EntityYale(EntityType<? extends EntityYale> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -96,22 +97,22 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new AttackMeleeGoal(this).setLongMemory(false));
-        this.field_70714_bg.addTask(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.field_70714_bg.addTask(3, new MateGoal(this));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setItemList("vegetables"));
-        this.field_70714_bg.addTask(5, new FollowParentGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(6, new EatBlockGoal(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
-        this.field_70714_bg.addTask(7, new WanderGoal(this).setPauseRate(30));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
+        this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+        this.goalSelector.addGoal(3, new MateGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setItemList("vegetables"));
+        this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(6, new EatBlockGoal(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
+        this.goalSelector.addGoal(7, new WanderGoal(this).setPauseRate(30));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(1, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.field_70715_bh.addTask(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.field_70715_bh.addTask(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
     }
 	
 	// ========== Init ==========
@@ -217,7 +218,7 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
 		DyeColor dyeA = father.getColor();
 		DyeColor dyeB = mother.getColor();
 		CraftingInventory craftinginventory = mixColors(dyeA, dyeB);
-		return this.world.getRecipeManager().func_215371_a(IRecipeType.field_222149_a, craftinginventory, this.world).map((p_213614_1_) ->
+		return this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftinginventory, this.world).map((p_213614_1_) ->
 				p_213614_1_.getCraftingResult(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
 				this.world.rand.nextBoolean() ? dyeA : dyeB);
 	}
@@ -283,10 +284,10 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
     // ========== Drop Items ==========
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
-    protected void func_213345_d(DamageSource damageSource) {
+    protected void spawnDrops(DamageSource damageSource) {
     	if(!this.hasFur())
     		this.woolDrop.setMinAmount(0).setMaxAmount(0);
-    	super.func_213345_d(damageSource);
+    	super.spawnDrops(damageSource);
     }
     
     
@@ -296,7 +297,7 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
     // ========== Create Child ==========
 	@Override
 	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
-		EntityCreatureAgeable baby = new EntityYale(this.getEntityWorld());
+		EntityCreatureAgeable baby = super.createChild(partner);
 		DyeColor color = this.getMixedFurColor(this, partner);
         baby.setColor(color);
 		return baby;

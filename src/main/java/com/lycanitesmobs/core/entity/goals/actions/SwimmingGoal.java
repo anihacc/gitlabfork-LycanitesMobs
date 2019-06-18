@@ -72,7 +72,7 @@ public class SwimmingGoal extends Goal {
 
 			if(!this.host.isStrongSwimmer()) {
 				if (this.host.posY < targetY) {
-					this.host.getJumpHelper().setJumping();
+					this.host.getJumpController().setJumping();
 				}
 				else {
 					this.host.addVelocity(0, -(0.01F + this.host.getAIMoveSpeed() * 0.25F), 0);
@@ -80,7 +80,7 @@ public class SwimmingGoal extends Goal {
 			}
     	}
     	else if(this.host.getRNG().nextFloat() < 0.8F && !this.host.isStrongSwimmer()) {
-			this.host.getJumpHelper().setJumping();
+			this.host.getJumpController().setJumping();
 		}
     }
 }

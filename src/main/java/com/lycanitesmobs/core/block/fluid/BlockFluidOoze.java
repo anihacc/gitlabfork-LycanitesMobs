@@ -89,7 +89,7 @@ public class BlockFluidOoze extends BlockFluidBase {
 
         // Effects:
         if(entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.field_76421_d, 5 * 20, 0));
+            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 5 * 20, 0));
         }
         super.onEntityCollision(blockState, world, pos, entity);
     }

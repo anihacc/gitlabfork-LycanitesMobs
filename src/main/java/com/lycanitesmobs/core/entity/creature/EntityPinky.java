@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
@@ -35,8 +36,8 @@ public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal,
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityPinky(World world) {
-        super(world);
+    public EntityPinky(EntityType<? extends EntityPinky> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
@@ -50,41 +51,41 @@ public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal,
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new MateGoal(this));
-        this.field_70714_bg.addTask(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
-        this.field_70714_bg.addTask(6, new AttackMeleeGoal(this).setSpeed(1.5D));
-        this.field_70714_bg.addTask(7, this.aiSit);
-        this.field_70714_bg.addTask(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new MateGoal(this));
+        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
+        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
+        this.goalSelector.addGoal(6, new AttackMeleeGoal(this).setSpeed(1.5D));
+        this.goalSelector.addGoal(7, this.aiSit);
+        this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.playerControlAI = new PlayerControlGoal(this);
-        this.field_70714_bg.addTask(9, playerControlAI);
-        this.field_70714_bg.addTask(10, new WanderGoal(this).setSpeed(1.0D));
-        this.field_70714_bg.addTask(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(12, new LookIdleGoal(this));
+        this.goalSelector.addGoal(9, playerControlAI);
+        this.goalSelector.addGoal(10, new WanderGoal(this).setSpeed(1.0D));
+        this.goalSelector.addGoal(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(12, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RiderRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new RiderAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(3, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(4, new OwnerDefenseTargetingGoal(this));
-        this.field_70715_bh.addTask(5, new RevengeTargetingGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this).setHelpCall(true));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.field_70715_bh.addTask(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
     }
 	
 	
@@ -102,8 +103,8 @@ public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal,
     }
     
     public void riderEffects(LivingEntity rider) {
-    	if(rider.isPotionActive(Effects.field_82731_v))
-    		rider.removePotionEffect(Effects.field_82731_v);
+    	if(rider.isPotionActive(Effects.WITHER))
+    		rider.removePotionEffect(Effects.WITHER);
         if(rider.isBurning())
             rider.setFire(0);
     }
@@ -189,7 +190,7 @@ public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal,
                     }
                 }
                 if(doDamage) {
-                    possibleTarget.addPotionEffect(new EffectInstance(Effects.field_82731_v, 10 * 20, 0));
+                    possibleTarget.addPotionEffect(new EffectInstance(Effects.WITHER, 10 * 20, 0));
                 }
             }
         }
@@ -236,12 +237,6 @@ public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal,
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityPinky(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {

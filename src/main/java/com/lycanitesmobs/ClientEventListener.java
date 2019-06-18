@@ -18,7 +18,7 @@ public class ClientEventListener {
     public void onFogDensity(EntityViewRenderEvent.FogDensity event) {
         /*FogRenderer fogRenderer = event.getFogRenderer();
         LivingEntity entityLiving = Minecraft.getInstance().player;
-        if(event.getState().getMaterial() == Material.LAVA && (!event.getEntity().isBurning() || entityLiving.isPotionActive(Effects.field_76426_n))) {
+        if(event.getState().getMaterial() == Material.LAVA && (!event.getEntity().isBurning() || entityLiving.isPotionActive(Effects.FIRE_RESISTANCE))) {
             event.setDensity(0.5F);
             event.setCanceled(true);
         }*/
@@ -31,7 +31,7 @@ public class ClientEventListener {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onBlockOverlay(RenderBlockOverlayEvent event) {
-        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isBurning() || event.getPlayer().isPotionActive(Effects.field_76426_n))) {
+        if(event.getBlockForOverlay().getMaterial() == Material.FIRE && (!event.getPlayer().isBurning() || event.getPlayer().isPotionActive(Effects.FIRE_RESISTANCE))) {
             event.setCanceled(true);
         }
     }

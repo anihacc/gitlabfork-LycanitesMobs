@@ -183,7 +183,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-				world.func_217376_c(projectile);
+				world.addEntity(projectile);
 				mainProjectile = projectile;
 			}
 		}
@@ -194,7 +194,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
-				world.func_217376_c(projectile);
+				world.addEntity(projectile);
 				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				mainProjectile = projectile;
 			}
@@ -204,7 +204,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
 			mainProjectile.setPosition(firePos.x, firePos.y, firePos.z);
 			mainProjectile.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
-			world.func_217376_c(mainProjectile);
+			world.addEntity(mainProjectile);
 		}
 
 		if(shooter instanceof PlayerEntity && mainProjectile != null) {

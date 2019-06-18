@@ -7,11 +7,13 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefenseTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,8 +29,8 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IGroupAlph
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityMakaAlpha(World world) {
-        super(world);
+    public EntityMakaAlpha(EntityType<? extends EntityMakaAlpha> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -39,21 +41,21 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IGroupAlph
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.field_70714_bg.addTask(6, new AttackMeleeGoal(this));
-        this.field_70714_bg.addTask(9, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(6, new AttackMeleeGoal(this));
+        this.goalSelector.addGoal(9, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this).setHelpClasses(EntityMaka.class));
-		this.field_70715_bh.addTask(2, new DefenseTargetingGoal(this, VillagerEntity.class));
-		this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
-        this.field_70715_bh.addTask(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
-        this.field_70715_bh.addTask(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityMaka.class));
+		this.targetSelector.addGoal(2, new DefenseTargetingGoal(this, VillagerEntity.class));
+		this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
+        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
+        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
     }
 	
 	
@@ -114,9 +116,9 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IGroupAlph
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
     		this.heal((this.getMaxHealth() - this.getHealth()) / 2);
-    		this.addPotionEffect(new EffectInstance(Effects.field_76428_l, 20 * 20, 2, false, false));
+    		this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
 			this.getAttackTarget().heal((this.getMaxHealth() - this.getHealth()) / 2);
-			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.field_76428_l, 20 * 20, 2, false, false));
+			this.getAttackTarget().addPotionEffect(new EffectInstance(Effects.REGENERATION, 20 * 20, 2, false, false));
     	}
     	super.setAttackTarget(entity);
     }
@@ -139,8 +141,8 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IGroupAlph
     // ==================================================
     // ========== Create Child ==========
 	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityMaka(this.getEntityWorld());
+	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
+		return (EntityCreatureAgeable) CreatureManager.getInstance().getCreature("maka").createEntity(this.getEntityWorld());
 	}
 	
 	// ========== Breeding Item ==========

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.altar;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.creature.EntityGrue;
 import com.lycanitesmobs.core.info.AltarInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -123,7 +124,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityGrue = new EntityGrue(world);
+        EntityCreatureBase entityGrue = (EntityCreatureBase) CreatureManager.getInstance().getCreature("grue").createEntity(world);
         if (checkDimensions && !entityGrue.isNativeDimension(world))
             return false;
 
@@ -157,7 +158,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
         entityGrue.forceBossHealthBar = true;
         entityGrue.applySubspecies(3);
         entityGrue.setLocationAndAngles(x, y - 2, z, 0, 0);
-        world.func_217376_c(entityGrue);
+        world.addEntity(entityGrue);
         entityGrue.destroyArea(x, y, z, 10000, false, 2);
 
         return true;

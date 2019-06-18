@@ -25,7 +25,7 @@ public class Utilities {
 		float maxZ = (float)(z > tz ? z : tz);
 
 		// Get Block Collision:
-        RayTraceResult collision = world.func_217299_a(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
+        RayTraceResult collision = world.rayTraceBlocks(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
 		startVec = new Vec3d(x, y, z);
 		endVec = new Vec3d(tx, ty, tz);
 		float distance = (float)endVec.distanceTo(startVec);
@@ -44,7 +44,7 @@ public class Utilities {
 					float entBorder = ent.getCollisionBorderSize();
 					entityBb = ent.getBoundingBox();
 					entityBb = entityBb.expand(entBorder, entBorder, entBorder);
-					intercept = ProjectileHelper.func_221271_a(entity.getEntityWorld(), entity, startVec, endVec, entity.getBoundingBox().func_216361_a(entity.getMotion()).grow(1.0D), (hitEntity) -> hitEntity != entity);
+					intercept = ProjectileHelper.func_221271_a(entity.getEntityWorld(), entity, startVec, endVec, entity.getBoundingBox().expand(entity.getMotion()).grow(1.0D), (hitEntity) -> hitEntity != entity);
 					if(intercept != null) {
 						currentHit = (float) intercept.getHitVec().distanceTo(startVec);
 						if(currentHit < closestHit || currentHit == 0) {

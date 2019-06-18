@@ -227,7 +227,7 @@ public class TemptGoal extends Goal {
     public void tick() {
         if(this.stopAttack)
         	this.host.setAttackTarget(null);
-        this.host.getLookHelper().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookController().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
         if(this.host.getDistance(this.player) < this.temptDistanceMin)
             this.host.clearMovement();
         else {

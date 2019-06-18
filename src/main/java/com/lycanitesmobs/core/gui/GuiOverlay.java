@@ -73,7 +73,7 @@ public class GuiOverlay extends GuiBase {
 		
 		// ========== Summoning Focus Bar ==========
         ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-		if(playerExt != null && !this.mc.player.playerAbilities.isCreativeMode && (
+		if(playerExt != null && !this.mc.player.abilities.isCreativeMode && (
                 (this.mc.player.getHeldItem(Hand.MAIN_HAND).getItem() instanceof ItemStaffSummoning)
                 || (this.mc.player.getHeldItem(Hand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
                 )) {

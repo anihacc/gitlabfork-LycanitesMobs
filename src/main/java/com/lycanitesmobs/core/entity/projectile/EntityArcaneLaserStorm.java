@@ -89,7 +89,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
                 laser = new EntityArcaneLaser(world, this.posX, this.posY, this.posZ, 20, 10, this);
             laser.useEntityAttackTarget = false;
             this.lasers.add(laser);
-            world.func_217376_c(laser);
+            world.addEntity(laser);
         }
 
         int laserCount = 0;

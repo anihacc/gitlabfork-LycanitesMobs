@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.PillagerEntity;
@@ -22,8 +23,8 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAegis(World world) {
-        super(world);
+    public EntityAegis(EntityType<? extends EntityAegis> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -36,27 +37,27 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-		this.field_70714_bg.addTask(1, new FollowFuseGoal(this).setLostDistance(16));
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
-        this.field_70714_bg.addTask(3, this.aiSit);
-        this.field_70714_bg.addTask(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+		this.goalSelector.addGoal(1, new FollowFuseGoal(this).setLostDistance(16));
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
+        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this).setHelpCall(true));
-		this.field_70715_bh.addTask(3, new DefendVillageTargetingGoal(this));
-		this.field_70715_bh.addTask(4, new DefenseTargetingGoal(this, VillagerEntity.class));
-        //this.field_70715_bh.addTask(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(EntityArgus.class));
-		this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(PillagerEntity.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
-		this.field_70715_bh.addTask(7, new FuseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(3, new DefendVillageTargetingGoal(this));
+		this.targetSelector.addGoal(4, new DefenseTargetingGoal(this, VillagerEntity.class));
+        //this.targetSelector.addGoal(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
+		this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityArgus.class));
+		this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PillagerEntity.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
+		this.targetSelector.addGoal(7, new FuseTargetingGoal(this));
     }
 	
 	

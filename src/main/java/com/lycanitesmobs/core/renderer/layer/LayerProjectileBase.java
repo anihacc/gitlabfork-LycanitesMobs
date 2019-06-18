@@ -32,7 +32,7 @@ public class LayerProjectileBase extends LayerRenderer<EntityProjectileBase, Mod
     //                  Render Layer
     // ==================================================
     @Override
-    public void func_212842_a_(EntityProjectileBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(EntityProjectileBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {

@@ -73,7 +73,7 @@ public class BlockFireBase extends BlockBase {
     public BlockState getStateForPlacement(IBlockReader world, BlockPos blockPos) {
         BlockPos blockpos = blockPos.down();
         BlockState blockstate = world.getBlockState(blockpos);
-        if (!this.canCatchFire(world, blockPos, Direction.UP) && !Block.func_220056_d(blockstate, world, blockpos, Direction.UP)) {
+        if (!this.canCatchFire(world, blockPos, Direction.UP) && !Block.hasSolidSide(blockstate, world, blockpos, Direction.UP)) {
             BlockState blockstate1 = this.getDefaultState();
 
             for(Direction direction : Direction.values()) {
@@ -97,7 +97,7 @@ public class BlockFireBase extends BlockBase {
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        return Block.func_220056_d(worldIn.getBlockState(blockpos), worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
+        return Block.hasSolidSide(worldIn.getBlockState(blockpos), worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
     }
 
     protected boolean areNeighborsFlammable(IBlockReader worldIn, BlockPos pos) {
@@ -168,7 +168,7 @@ public class BlockFireBase extends BlockBase {
 
             // Can't spread, old or on none solid surface:
             if (!this.canNeighborCatchFire(world, pos)) {
-                if (!Block.func_220056_d(world.getBlockState(pos), world, pos.down(), Direction.UP) || age > 3) {
+                if (!Block.hasSolidSide(world.getBlockState(pos), world, pos.down(), Direction.UP) || age > 3) {
                     world.removeBlock(pos, false);
                 }
                 return;

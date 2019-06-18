@@ -42,11 +42,11 @@ public class ItemCustomFood extends ItemBase {
 
 		// Food: TODO Better Food Management in ItemManager
 		Food.Builder foodBuilder = new Food.Builder();
-		foodBuilder.func_221456_a(feed);
-		foodBuilder.func_221454_a(saturation);
-		foodBuilder.func_221451_a(); // Set Always Edible
-		foodBuilder.func_221452_a(new EffectInstance(Effects.field_76432_h, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
-		//properties.func_221540_a(foodBuilder.func_221453_d()); // properties.food(foodBuilder.createFood());
+		foodBuilder.hunger(feed);
+		foodBuilder.saturation(saturation);
+		foodBuilder.setAlwaysEdible();
+		foodBuilder.effect(new EffectInstance(Effects.INSTANT_HEALTH, 1 * 20, 0, false, false), 1.0F); // Additive Effects, float is chance.
+		properties.food(foodBuilder.build());
 	}
 
 	public ItemCustomFood(Item.Properties properties, String setItemName, ModInfo group, int feed, float saturation, FOOD_CLASS foodClass) {

@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -24,11 +24,10 @@ public class EntityFear extends EntityCreatureBase {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityFear(World world) {
-        super(world);
+    public EntityFear(EntityType<? extends EntityFear> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
-        //this.attribute = CreatureAttribute.UNDEFINED;
         this.hasStepSound = false;
         this.hasAttackSound = false;
         this.spreadFire = false;
@@ -37,12 +36,12 @@ public class EntityFear extends EntityCreatureBase {
         this.setupMob();
         
         // AI Tasks:
-        this.field_70714_bg.addTask(0, new SwimmingGoal(this));
-        this.field_70714_bg.addTask(1, new WanderGoal(this).setPauseRate(0));
+        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(1, new WanderGoal(this).setPauseRate(0));
     }
 
-    public EntityFear(World world, LivingEntity feared) {
-        this(world);
+    public EntityFear(EntityType<? extends EntityFear> entityType, World world, LivingEntity feared) {
+        this(entityType, world);
         this.setFearedEntity(feared);
     }
 
@@ -120,9 +119,9 @@ public class EntityFear extends EntityCreatureBase {
 
         // Copy Movement Debuffs:
 		if(this.fearedEntity != null) {
-			if (fearedEntity.isPotionActive(Effects.field_188424_y)) {
-				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(Effects.field_188424_y);
-				this.addPotionEffect(new EffectInstance(Effects.field_188424_y, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
+			if (fearedEntity.isPotionActive(Effects.LEVITATION)) {
+				EffectInstance activeDebuff = fearedEntity.getActivePotionEffect(Effects.LEVITATION);
+				this.addPotionEffect(new EffectInstance(Effects.LEVITATION, activeDebuff.getDuration(), activeDebuff.getAmplifier()));
 			}
 
 			Effect instability = ObjectManager.getEffect("instability");
@@ -175,7 +174,7 @@ public class EntityFear extends EntityCreatureBase {
     		if(this.pickupEntity instanceof FlyingEntity)
     			return true;
     		if(this.pickupEntity instanceof PlayerEntity)
-    			return ((PlayerEntity)this.pickupEntity).playerAbilities.isFlying;
+    			return ((PlayerEntity)this.pickupEntity).abilities.isFlying;
     	}
     	return false;
     }

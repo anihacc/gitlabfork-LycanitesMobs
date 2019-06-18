@@ -78,7 +78,7 @@ public class EntityLightBall extends EntityProjectileModel {
 	//========== Entity Living Damage ==========
 	@Override
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
-    	entityLiving.addPotionEffect(new EffectInstance(Effects.field_188423_x, this.getEffectDuration(20), 0));
+    	entityLiving.addPotionEffect(new EffectInstance(Effects.GLOWING, this.getEffectDuration(20), 0));
 		return true;
 	}
 

@@ -4,10 +4,7 @@ import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -34,8 +31,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureRideable(World world) {
-		super(world);
+	public EntityCreatureRideable(EntityType<? extends EntityCreatureRideable> entityType, World world) {
+		super(entityType, world);
 		this.hasJumpSound = true;
 	}
     
@@ -203,8 +200,8 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             // Jumping Behaviour:
             if (this.getJumpPower() > 0.0F && !this.isMountJumping() && this.canPassengerSteer()) {
                 this.setMotion(this.getMotion().add(0, this.getMountJumpHeight() * (double) this.getJumpPower(), 0));
-                if (this.isPotionActive(Effects.field_76430_j)) // Jump Boost
-					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.field_76430_j).getAmplifier() + 1) * 0.1F), 0));
+                if (this.isPotionActive(Effects.JUMP_BOOST))
+					this.setMotion(this.getMotion().add(0, ((float) (this.getActivePotionEffect(Effects.JUMP_BOOST).getAmplifier() + 1) * 0.1F), 0));
                 this.setMountJumping(true);
                 this.isAirBorne = true;
                 if (forward > 0.0F) {

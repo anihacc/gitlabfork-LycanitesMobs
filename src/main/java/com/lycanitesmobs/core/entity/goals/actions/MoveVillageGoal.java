@@ -87,7 +87,7 @@ public class MoveVillageGoal extends Goal {
     public void tick() {
         if (this.blockPos != null) {
             PathNavigator lvt_1_1_ = this.host.getNavigator();
-            if (lvt_1_1_.noPath() && !this.blockPos.func_218137_a(this.host.getPositionVec(), 10.0D)) {
+            if (lvt_1_1_.noPath() && !this.blockPos.withinDistance(this.host.getPositionVec(), 10.0D)) {
                 Vec3d lvt_2_1_ = new Vec3d(this.blockPos);
                 Vec3d lvt_3_1_ = new Vec3d(this.host.posX, this.host.posY, this.host.posZ);
                 Vec3d lvt_4_1_ = lvt_3_1_.subtract(lvt_2_1_);

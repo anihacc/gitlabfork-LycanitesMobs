@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -33,8 +34,8 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCinder(World world) {
-        super(world);
+    public EntityCinder(EntityType<? extends EntityCinder> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEFINED;
@@ -47,27 +48,27 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-		this.field_70714_bg.addTask(1, new FollowFuseGoal(this).setLostDistance(16));
-        this.field_70714_bg.addTask(5, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
-        this.field_70714_bg.addTask(6, this.aiSit);
-        this.field_70714_bg.addTask(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.field_70714_bg.addTask(8, new WanderGoal(this));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+		this.goalSelector.addGoal(1, new FollowFuseGoal(this).setLostDistance(16));
+        this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
+        this.goalSelector.addGoal(6, this.aiSit);
+        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+        this.goalSelector.addGoal(8, new WanderGoal(this));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new OwnerRevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new OwnerAttackTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.field_70715_bh.addTask(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
-        this.field_70715_bh.addTask(6, new OwnerDefenseTargetingGoal(this));
-		this.field_70715_bh.addTask(7, new FuseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
+        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
+        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
+		this.targetSelector.addGoal(7, new FuseTargetingGoal(this));
     }
     
     
@@ -159,7 +160,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
 	        
 	        // Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().func_217376_c(projectile);
+	        this.getEntityWorld().addEntity(projectile);
     	}
     	
         super.attackRanged(target, range);

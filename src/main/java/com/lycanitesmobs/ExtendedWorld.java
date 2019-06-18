@@ -67,7 +67,7 @@ public class ExtendedWorld extends WorldSavedData {
 		if(world instanceof ServerWorld) {
 			ServerWorld serverWorld = (ServerWorld) world;
 			world.increaseMaxEntityRadius(50);
-			ExtendedWorld worldSavedData = serverWorld.func_217481_x().func_215753_b(ExtendedWorld::new, EXT_PROP_NAME);
+			ExtendedWorld worldSavedData = serverWorld.getSavedData().get(ExtendedWorld::new, EXT_PROP_NAME);
 			if (worldSavedData != null) {
 				worldExt = worldSavedData;
 				worldExt.world = world;
@@ -75,7 +75,7 @@ public class ExtendedWorld extends WorldSavedData {
 			}
 			else {
 				worldExt = new ExtendedWorld(world);
-				serverWorld.func_217481_x().func_215757_a(worldExt);
+				serverWorld.getSavedData().set(worldExt);
 			}
 		}
 

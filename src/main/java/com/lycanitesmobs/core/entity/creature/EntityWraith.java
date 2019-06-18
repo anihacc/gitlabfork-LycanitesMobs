@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -29,8 +30,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWraith(World world) {
-        super(world);
+    public EntityWraith(EntityType<? extends EntityWraith> entityType, World world) {
+        super(entityType, world);
         
         // Setup:
 		this.attribute = CreatureAttribute.UNDEFINED;
@@ -42,16 +43,16 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 
     // ========== Init AI ==========
     @Override
-    protected void initEntityAI() {
-        super.initEntityAI();
-        this.field_70714_bg.addTask(2, new AttackMeleeGoal(this).setSpeed(2.0D).setLongMemory(false));
-        this.field_70714_bg.addTask(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(0));
-        this.field_70714_bg.addTask(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70714_bg.addTask(11, new LookIdleGoal(this));
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setSpeed(2.0D).setLongMemory(false));
+        this.goalSelector.addGoal(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(0));
+        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+        this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.field_70715_bh.addTask(0, new RevengeTargetingGoal(this));
-        this.field_70715_bh.addTask(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.field_70715_bh.addTask(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
     }
     
     
