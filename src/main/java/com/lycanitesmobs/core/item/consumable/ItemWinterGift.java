@@ -65,16 +65,14 @@ public class ItemWinterGift extends ItemBase {
         this.playSound(world, player.getPosition(), AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Gifts:
-		for(int i = 0; i < 3; i++) {
-			ItemStack[] dropStacks = ObjectLists.getItems("winter_gifts");
-			if(dropStacks == null || dropStacks.length <= 0) return;
-			ItemStack dropStack = dropStacks[player.getRNG().nextInt(dropStacks.length)];
-			if(dropStack != null && dropStack.getItem() != null) {
-				dropStack.setCount(1 + player.getRNG().nextInt(4));
-				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
-				entityItem.setPickupDelay(10);
-				world.spawnEntity(entityItem);
-			}
+		ItemStack[] dropStacks = ObjectLists.getItems("winter_gifts");
+		if(dropStacks.length <= 0) return;
+		ItemStack dropStack = dropStacks[player.getRNG().nextInt(dropStacks.length)];
+		if(dropStack != null) {
+			dropStack.setCount(1 + player.getRNG().nextInt(4));
+			EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
+			entityItem.setPickupDelay(10);
+			world.spawnEntity(entityItem);
 		}
     }
     
@@ -89,8 +87,7 @@ public class ItemWinterGift extends ItemBase {
 
         // One Random Trick:
 		Class[] entityClasses = ObjectLists.getEntites("winter_tricks");
-        if(entityClasses == null) return;
-        if(entityClasses.length <= 0) return;
+		if(entityClasses.length <= 0) return;
 		Class entityClass = entityClasses[player.getRNG().nextInt(entityClasses.length)];
 		if(entityClass != null) {
 			Entity entity = null;

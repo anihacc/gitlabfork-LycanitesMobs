@@ -153,6 +153,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     // ==================== Options ====================
     /** Returns options from the current point to the target point. **/
+    @Override
     public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
         // Flying/Strong Swimming/Diving:
         if(this.flying() || this.swimming()) {

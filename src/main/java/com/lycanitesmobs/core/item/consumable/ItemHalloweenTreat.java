@@ -65,16 +65,15 @@ public class ItemHalloweenTreat extends ItemBase {
         this.playSound(world, player.posX, player.posY, player.posZ, AssetManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
-		for(int i = 0; i < 3; i++) {
-			ItemStack[] dropStacks = ObjectLists.getItems("halloween_treats");
-			if(dropStacks == null || dropStacks.length <= 0) return;
-			ItemStack dropStack = dropStacks[player.getRNG().nextInt(dropStacks.length)];
-			if(dropStack != null && dropStack.getItem() != null) {
-                dropStack.setCount(1 + player.getRNG().nextInt(4));
-				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
-				entityItem.setPickupDelay(10);
-				world.spawnEntity(entityItem);
-			}
+		ItemStack[] dropStacks = ObjectLists.getItems("halloween_treats");
+		if(dropStacks.length <= 0)
+			return;
+		ItemStack dropStack = dropStacks[player.getRNG().nextInt(dropStacks.length)];
+		if(dropStack != null) {
+			dropStack.setCount(1 + player.getRNG().nextInt(4));
+			EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
+			entityItem.setPickupDelay(10);
+			world.spawnEntity(entityItem);
 		}
     }
     

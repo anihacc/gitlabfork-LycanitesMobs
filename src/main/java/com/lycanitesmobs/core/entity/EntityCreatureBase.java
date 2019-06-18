@@ -1861,7 +1861,6 @@ public abstract class EntityCreatureBase extends EntityLiving {
 	    Returns a float where 0.0F is a standard path, anything higher is a preferred path.
 	    For example, animals that spawn on grass return 10.0F for path blocks that are Grass.
 	    Mobs that prefer the darkness will return a higher value for darker blocks.
-        TODO: Deprecated and now only used when spawning.
     **/
     // ========== Get Block Path Weight ==========
     public float getBlockPathWeight(int par1, int par2, int par3) {

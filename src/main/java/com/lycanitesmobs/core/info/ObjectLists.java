@@ -33,7 +33,7 @@ public class ObjectLists {
     //                        Add
     // ==================================================
 	public static void addItem(String list, Object object) {
-		if(object == null || !(object instanceof Item || object instanceof Block || object instanceof ItemStack || object instanceof String))
+		if(!(object instanceof Item || object instanceof Block || object instanceof ItemStack || object instanceof String))
 			return;
 		list = list.toLowerCase();
 		if(!itemLists.containsKey(list))
@@ -115,8 +115,12 @@ public class ObjectLists {
     // ==================================================
 	public static boolean inItemList(String list, ItemStack testStack) {
 		list = list.toLowerCase();
-        if(testStack == null || testStack.getItem() == null)
-            return false;
+        if(testStack == null) {
+			return false;
+		}
+		else {
+			testStack.getItem();
+		}
 		if(!itemLists.containsKey(list))
 			return false;
 		for(ItemStack listStack : itemLists.get(list))
