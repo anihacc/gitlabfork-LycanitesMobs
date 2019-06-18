@@ -4,6 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
 import net.minecraftforge.common.ToolType;
@@ -20,7 +21,7 @@ public class ObjectLists {
 	
 	// Maps:
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
-	public static Map<String, List<Class>> entityLists = new HashMap<>();
+	public static Map<String, List<EntityType>> entityLists = new HashMap<>();
 	public static Map<String, List<Effect>> effectLists = new HashMap<>();
 	
 	
@@ -28,7 +29,7 @@ public class ObjectLists {
     //                        Add
     // ==================================================
 	public static void addItem(String list, Object object) {
-		if(object == null || !(object instanceof Item || object instanceof Block || object instanceof ItemStack || object instanceof String))
+		if(!(object instanceof Item || object instanceof Block || object instanceof ItemStack || object instanceof String))
 			return;
 		list = list.toLowerCase();
 		if(!itemLists.containsKey(list))
@@ -41,11 +42,12 @@ public class ObjectLists {
 			itemStack = new ItemStack((Block)object);
 		else if(object instanceof ItemStack)
 			itemStack = (ItemStack)object;
-		else if(object instanceof String)
-			if(ObjectManager.getItem((String)object) != null)
-				itemStack = new ItemStack(ObjectManager.getItem((String)object));
-			else if(ObjectManager.getBlock((String)object) != null)
-				itemStack = new ItemStack(ObjectManager.getBlock((String)object));
+		else {
+			if (ObjectManager.getItem((String) object) != null)
+				itemStack = new ItemStack(ObjectManager.getItem((String) object));
+			else if (ObjectManager.getBlock((String) object) != null)
+				itemStack = new ItemStack(ObjectManager.getBlock((String) object));
+		}
 		
 		if(itemStack != null)
 			itemLists.get(list).add(itemStack);
@@ -58,15 +60,15 @@ public class ObjectLists {
 		if(!entityLists.containsKey(list))
 			entityLists.put(list, new ArrayList<>());
 
-		Class entity = null;
+		EntityType entityType = null;
 		if(object instanceof String) {
 			CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature((String) object);
 			if(creatureInfo != null) {
-				entity = creatureInfo.entityClass;
+				entityType = creatureInfo.getEntityType();
 			}
 		}
-		if(entity != null) {
-			entityLists.get(list).add(entity);
+		if(entityType != null) {
+			entityLists.get(list).add(entityType);
 		}
 	}
 
@@ -83,25 +85,25 @@ public class ObjectLists {
     // ==================================================
     //                        Get
     // ==================================================
-	public static ItemStack[] getItems(String list) {
+	public static List<ItemStack> getItems(String list) {
 		list = list.toLowerCase();
 		if(!itemLists.containsKey(list))
-			return new ItemStack[0];
-		return itemLists.get(list).toArray(new ItemStack[itemLists.get(list).size()]);
+			return new ArrayList<>();
+		return itemLists.get(list);
 	}
 
-	public static Class[] getEntites(String list) {
+	public static List<EntityType> getEntites(String list) {
 		list = list.toLowerCase();
 		if(!entityLists.containsKey(list))
-			return new Class[0];
-		return entityLists.get(list).toArray(new Class[entityLists.get(list).size()]);
+			return new ArrayList<>();
+		return entityLists.get(list);
 	}
 
-	public static Effect[] getEffects(String list) {
+	public static List<Effect> getEffects(String list) {
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
-			return new Effect[] {};
-		return effectLists.get(list).toArray(new Effect[effectLists.get(list).size()]);
+			return new ArrayList<>();
+		return effectLists.get(list);
 	}
 	
 
@@ -110,7 +112,7 @@ public class ObjectLists {
     // ==================================================
 	public static boolean inItemList(String list, ItemStack testStack) {
 		list = list.toLowerCase();
-        if(testStack == null || testStack.getItem() == null)
+        if(testStack == null || testStack.isEmpty())
             return false;
 		if(!itemLists.containsKey(list))
 			return false;

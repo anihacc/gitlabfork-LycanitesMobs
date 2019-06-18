@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemHalloweenTreat extends ItemBase {
 	
@@ -65,17 +68,14 @@ public class ItemHalloweenTreat extends ItemBase {
         this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
-		for(int i = 0; i < 3; i++) {
-			ItemStack[] dropStacks = ObjectLists.getItems("halloween_treats");
-			if(dropStacks == null || dropStacks.length <= 0) return;
-			ItemStack dropStack = dropStacks[player.getRNG().nextInt(dropStacks.length)];
-			if(dropStack != null && dropStack.getItem() != null) {
-                dropStack.setCount(1 + player.getRNG().nextInt(4));
-				EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
-				entityItem.setPickupDelay(10);
-				world.addEntity(entityItem);
-			}
-		}
+		List<ItemStack> dropStacks = ObjectLists.getItems("halloween_treats");
+		if(dropStacks == null || dropStacks.isEmpty())
+			return;
+		ItemStack dropStack = dropStacks.get(player.getRNG().nextInt(dropStacks.size()));
+		dropStack.setCount(1 + player.getRNG().nextInt(4));
+		EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
+		entityItem.setPickupDelay(10);
+		world.addEntity(entityItem);
     }
     
     
@@ -88,15 +88,12 @@ public class ItemHalloweenTreat extends ItemBase {
         this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
-		Class[] entityClasses = ObjectLists.getEntites("halloween_tricks");
-        if(entityClasses == null) return;
-        if(entityClasses.length <= 0) return;
-		Class entityClass = entityClasses[player.getRNG().nextInt(entityClasses.length)];
-		if(entityClass != null) {
-			Entity entity = null;
-            try {
-                entity = (Entity)entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {world});
-            } catch (Exception e) { e.printStackTrace(); }
+		List<EntityType> entityTypes = ObjectLists.getEntites("halloween_tricks");
+		if(entityTypes.isEmpty())
+			return;
+		EntityType entityType = entityTypes.get(player.getRNG().nextInt(entityTypes.size()));
+		if(entityType != null) {
+			Entity entity = entityType.create(world);
             if(entity != null) {
 	            entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 

@@ -120,8 +120,6 @@ public class LycanitesMobs {
 		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 		ObjectLists.createCustomItems();
 		ObjectLists.createLists();
-		ItemHalloweenTreat.createObjectLists();
-		ItemWinterGift.createObjectLists();
 
 		// Tile Entities:
 		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
@@ -155,6 +153,10 @@ public class LycanitesMobs {
 
 		// Dungeons:
 		DungeonManager.getInstance().loadAllFromJSON();
+
+		// Treat Lists:
+		ItemHalloweenTreat.createObjectLists();
+		ItemWinterGift.createObjectLists();
 
 		// Mod Support:
 		DLDungeons.init();
