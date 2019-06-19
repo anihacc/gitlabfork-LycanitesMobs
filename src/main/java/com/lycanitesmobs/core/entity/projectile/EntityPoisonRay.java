@@ -3,8 +3,10 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -17,24 +19,24 @@ public class EntityPoisonRay extends EntityProjectileLaser {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityPoisonRay(World par1World) {
-		super(par1World);
+	public EntityPoisonRay(EntityType<? extends EntityProjectileBase> entityType, World world) {
+		super(entityType, world);
 	}
 
-	public EntityPoisonRay(World par1World, double par2, double par4, double par6, int setTime, int setDelay) {
-		super(par1World, par2, par4, par6, setTime, setDelay);
+	public EntityPoisonRay(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+		super(entityType, world, par2, par4, par6, setTime, setDelay);
 	}
 
-	public EntityPoisonRay(World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
-		super(world, par2, par4, par6, setTime, setDelay, followEntity);
+	public EntityPoisonRay(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+		super(entityType, world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityPoisonRay(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay) {
-		super(par1World, par2LivingEntity, setTime, setDelay);
+	public EntityPoisonRay(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+		super(entityType, world, par2LivingEntity, setTime, setDelay);
 	}
 
-	public EntityPoisonRay(World par1World, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
-		super(par1World, par2LivingEntity, setTime, setDelay, followEntity);
+	public EntityPoisonRay(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
+		super(entityType, world, par2LivingEntity, setTime, setDelay, followEntity);
 	}
     
     // ========== Setup Projectile ==========

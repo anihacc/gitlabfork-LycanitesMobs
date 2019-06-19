@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -24,16 +25,16 @@ public class EntityScorchfireball extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityScorchfireball(World world) {
-        super(world);
+    public EntityScorchfireball(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityScorchfireball(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityScorchfireball(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityScorchfireball(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityScorchfireball(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

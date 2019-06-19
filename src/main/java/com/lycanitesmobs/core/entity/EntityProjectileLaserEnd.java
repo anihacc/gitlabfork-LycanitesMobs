@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,26 +24,26 @@ public class EntityProjectileLaserEnd extends EntityProjectileBase {
 	private double projectileSpeed;
 
     // Datawatcher:
-    protected static final DataParameter<Float> POS_X = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Y = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> POS_Z = EntityDataManager.<Float>createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_X = EntityDataManager.createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_Y = EntityDataManager.createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> POS_Z = EntityDataManager.createKey(EntityProjectileLaserEnd.class, DataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityProjectileLaserEnd(World world) {
-        super(world);
+    public EntityProjectileLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
         this.setStats();
     }
 
-    public EntityProjectileLaserEnd(World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
-        super(world, par2, par4, par6);
+    public EntityProjectileLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
+        super(entityType, world, par2, par4, par6);
         this.laserEntity = laser;
         this.setStats();
     }
     
-    public EntityProjectileLaserEnd(World world, LivingEntity shooter, EntityProjectileLaser laser) {
-        super(world, shooter);
+    public EntityProjectileLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooter, EntityProjectileLaser laser) {
+        super(entityType, world, shooter);
         this.shootingEntity = shooter;
         this.laserEntity = laser;
         this.setStats();

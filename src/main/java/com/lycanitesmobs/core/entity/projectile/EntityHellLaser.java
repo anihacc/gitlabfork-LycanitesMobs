@@ -3,8 +3,10 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -17,24 +19,24 @@ public class EntityHellLaser extends EntityProjectileLaser {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityHellLaser(World world) {
-		super(world);
+	public EntityHellLaser(EntityType<? extends EntityProjectileBase> entityType, World world) {
+		super(entityType, world);
 	}
 
-	public EntityHellLaser(World world, double par2, double par4, double par6, int setTime, int setDelay) {
-		super(world, par2, par4, par6, setTime, setDelay);
+	public EntityHellLaser(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+		super(entityType, world, par2, par4, par6, setTime, setDelay);
 	}
 
-	public EntityHellLaser(World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
-		super(world, par2, par4, par6, setTime, setDelay, followEntity);
+	public EntityHellLaser(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+		super(entityType, world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityHellLaser(World world, LivingEntity entityShooter, int setTime, int setDelay) {
-		super(world, entityShooter, setTime, setDelay);
+	public EntityHellLaser(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay) {
+		super(entityType, world, entityShooter, setTime, setDelay);
 	}
 
-	public EntityHellLaser(World world, LivingEntity entityShooter, int setTime, int setDelay, Entity followEntity) {
-		super(world, entityShooter, setTime, setDelay, followEntity);
+	public EntityHellLaser(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay, Entity followEntity) {
+		super(entityType, world, entityShooter, setTime, setDelay, followEntity);
 	}
     
     // ========== Setup Projectile ==========

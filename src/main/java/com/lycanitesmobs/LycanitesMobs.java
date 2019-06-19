@@ -42,12 +42,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod(value = LycanitesMobs.modid)
+@Mod(value = LycanitesMobs.MODID)
 public class LycanitesMobs {
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public static final String modid = "lycanitesmobs";
+	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
 	public static final String versionNumber = "2.1.0.0";
 	public static final String versionMC = "1.14.2";
@@ -92,20 +91,25 @@ public class LycanitesMobs {
 		CoreConfig.buildSpec();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
 
-		// Event Listeners:
+		// Setup Event Listeners:
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+		FMLJavaModLoadingContext.get().getModEventBus().register(ObjectManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 
+		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new EventListener());
-		MinecraftForge.EVENT_BUS.register(CreatureManager.getInstance());
-		MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
+		MinecraftForge.EVENT_BUS.register(new GameEventListener());
 		MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
 		MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
+
+		// Network:
+		packetHandler.register();
 
 		// Blocks and Items:
 		ItemManager.getInstance().loadItems();
@@ -155,8 +159,7 @@ public class LycanitesMobs {
 		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
 		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 
-		// Network:
-		packetHandler.register();
+		// GUI:
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
 		// Change Health Limit:

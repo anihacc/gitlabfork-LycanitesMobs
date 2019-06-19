@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,16 +30,16 @@ public class EntityHellfireWall extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWall(World par1World) {
-        super(par1World);
+    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityHellfireWall(World par1World, LivingEntity par2LivingEntity) {
-        super(par1World, par2LivingEntity);
+    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+        super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireWall(World par1World, double par2, double par4, double par6) {
-        super(par1World, par2, par4, par6);
+    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+        super(entityType, world, par2, par4, par6);
     }
     
     // ========== Setup Projectile ==========

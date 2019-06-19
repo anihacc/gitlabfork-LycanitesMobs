@@ -2,10 +2,12 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.particles.BlockParticleData;
@@ -25,17 +27,17 @@ public class EntityLightBall extends EntityProjectileModel {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityLightBall(World world) {
-        super(world);
+    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityLightBall(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
         this.shootingEntity = entityLivingBase;
     }
 
-    public EntityLightBall(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

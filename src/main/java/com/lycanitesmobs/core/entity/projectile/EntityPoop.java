@@ -7,6 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.particles.BlockParticleData;
@@ -25,16 +26,16 @@ public class EntityPoop extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityPoop(World world) {
-        super(world);
+    public EntityPoop(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityPoop(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityPoop(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityPoop(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityPoop(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

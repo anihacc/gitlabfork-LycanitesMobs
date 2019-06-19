@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -23,16 +24,16 @@ public class EntityAquaPulse extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityAquaPulse(World world) {
-        super(world);
+    public EntityAquaPulse(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityAquaPulse(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityAquaPulse(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityAquaPulse(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityAquaPulse(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

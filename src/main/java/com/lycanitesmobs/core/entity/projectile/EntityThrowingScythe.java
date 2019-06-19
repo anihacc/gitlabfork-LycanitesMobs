@@ -4,6 +4,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
@@ -16,16 +17,16 @@ public class EntityThrowingScythe extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityThrowingScythe(World world) {
-        super(world);
+    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityThrowingScythe(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityThrowingScythe(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

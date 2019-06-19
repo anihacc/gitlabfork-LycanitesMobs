@@ -1,10 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -67,30 +64,30 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityProjectileLaser(World world) {
-        super(world);
+    public EntityProjectileLaser(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
         this.setStats();
         this.setTime(0);
     }
 
-    public EntityProjectileLaser(World world, double par2, double par4, double par6, int setTime, int setDelay) {
-        super(world, par2, par4, par6);
+    public EntityProjectileLaser(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+        super(entityType, world, par2, par4, par6);
         this.laserTime = setTime;
         this.laserDelay = setDelay;
         this.setStats();
     }
 
-    public EntityProjectileLaser(World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
-        this(world, par2, par4, par6, setTime, setDelay);
+    public EntityProjectileLaser(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+        this(entityType, world, par2, par4, par6, setTime, setDelay);
         this.followEntity = followEntity;
     }
 
-    public EntityProjectileLaser(World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
-        this(world, par2LivingEntity, setTime, setDelay, null);
+    public EntityProjectileLaser(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+        this(entityType, world, par2LivingEntity, setTime, setDelay, null);
     }
 
-    public EntityProjectileLaser(World world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
-        super(world, entityLiving);
+    public EntityProjectileLaser(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving, int setTime, int setDelay, Entity followEntity) {
+        super(entityType, world, entityLiving);
         this.shootingEntity = entityLiving;
         this.laserTime = setTime;
         this.laserDelay = setDelay;
@@ -567,7 +564,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
+    public void readAdditional(CompoundNBT nbtTagCompound) {
     	if(nbtTagCompound.contains("LaserTime"))
     		this.setTime(nbtTagCompound.getInt("LaserTime"));
     	if(nbtTagCompound.contains("OffsetX"))
@@ -576,7 +573,7 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     		this.offsetY = nbtTagCompound.getDouble("OffsetY");
     	if(nbtTagCompound.contains("OffsetZ"))
     		this.offsetZ = nbtTagCompound.getDouble("OffsetZ");
-        super.read(nbtTagCompound);
+        super.readAdditional(nbtTagCompound);
     }
     
     // ========== Write ==========

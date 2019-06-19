@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
@@ -17,8 +18,6 @@ import javax.vecmath.Vector4f;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.*;
-
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 /**
  * @author jglrxavpok
@@ -114,7 +113,7 @@ public class TessellatorModel extends ObjModel
 		}
 
 		// Build Buffer:
-        bufferBuilder.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+        bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         for(int i = 0; i < indices.length; i += 3) {
 
         	// Normal:
@@ -126,7 +125,7 @@ public class TessellatorModel extends ObjModel
 
             for(int iv = 0; iv < 3; iv++) {
                 Vertex v = obj.mesh.vertices[indices[i + iv]];
-                bufferBuilder
+				bufferBuilder
                         .pos(v.getPos().x, v.getPos().y, v.getPos().z)
                         .tex(v.getTexCoords().x + (textureOffset.getX() * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.getY() * 0.01f)))
                         .color(color.x, color.y, color.z, color.w)
@@ -136,9 +135,11 @@ public class TessellatorModel extends ObjModel
             }
         }
 
+
+
         // Draw Buffer:
-        //tess.draw();
-		bufferBuilder.finishDrawing();
+		tess.draw();
+		/*bufferBuilder.finishDrawing();
 		if (bufferBuilder.getVertexCount() > 0) {
 			VertexFormat vertexformat = bufferBuilder.getVertexFormat();
 			int i = vertexformat.getSize() + 1;
@@ -159,7 +160,7 @@ public class TessellatorModel extends ObjModel
 				vertexformatelement1.getUsage().postDraw(vertexformat, i1, i, bytebuffer);
 			}
 		}
-		bufferBuilder.reset();
+		bufferBuilder.reset();*/
     }
 
 

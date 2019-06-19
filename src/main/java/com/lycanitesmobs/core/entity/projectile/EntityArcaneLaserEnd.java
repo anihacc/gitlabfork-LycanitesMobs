@@ -2,9 +2,10 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
-
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -15,16 +16,16 @@ public class EntityArcaneLaserEnd extends EntityProjectileLaserEnd {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityArcaneLaserEnd(World world) {
-        super(world);
+	public EntityArcaneLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityArcaneLaserEnd(World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
-        super(world, par2, par4, par6, laser);
+    public EntityArcaneLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
+        super(entityType, world, par2, par4, par6, laser);
     }
     
-    public EntityArcaneLaserEnd(World world, LivingEntity shooter, EntityProjectileLaser laser) {
-        super(world, shooter, laser);
+    public EntityArcaneLaserEnd(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooter, EntityProjectileLaser laser) {
+        super(entityType, world, shooter, laser);
     }
     
     // ========== Setup Projectile ==========

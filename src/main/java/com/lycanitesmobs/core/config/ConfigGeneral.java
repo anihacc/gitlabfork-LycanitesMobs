@@ -47,7 +47,7 @@ public class ConfigGeneral {
 
 		// Clear Old Configs:
 		if(oldVersion) {
-			String configDirPath = new File(".") + "/config/" + LycanitesMobs.modid;
+			String configDirPath = new File(".") + "/config/" + LycanitesMobs.MODID;
 			File configDir = new File(configDirPath);
 			configDir.mkdir();
 			LycanitesMobs.logWarning("", "[Config] The current configs are too old, clearing all configs now...");

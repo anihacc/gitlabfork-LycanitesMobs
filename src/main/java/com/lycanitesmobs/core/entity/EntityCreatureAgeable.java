@@ -334,8 +334,8 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
   	// ==================================================
 	// ========== Read ==========
     @Override
-	public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+	public void readAdditional(CompoundNBT nbtTagCompound) {
+        super.readAdditional(nbtTagCompound);
         if(nbtTagCompound.contains("Age")) {
         	this.setGrowingAge(nbtTagCompound.getInt("Age"));
         }

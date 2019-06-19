@@ -6,6 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.potion.EffectInstance;
@@ -23,16 +24,16 @@ public class EntityDevilstar extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDevilstar(World world) {
-        super(world);
+    public EntityDevilstar(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityDevilstar(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityDevilstar(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityDevilstar(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityDevilstar(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

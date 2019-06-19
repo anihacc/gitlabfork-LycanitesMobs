@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -24,16 +25,16 @@ public class EntityDoomfireball extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDoomfireball(World world) {
-        super(world);
+    public EntityDoomfireball(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityDoomfireball(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityDoomfireball(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityDoomfireball(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityDoomfireball(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

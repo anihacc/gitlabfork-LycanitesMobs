@@ -151,7 +151,7 @@ public class DungeonManager extends JSONLoader {
 		this.loadJsonObjects(gson, path, defaultJSONs, "name", null);
 
 		// Load Custom:
-		String configPath = new File(".") + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 		File customDir = new File(configPath + "dungeons/" + type);
 		customDir.mkdirs();
 		path = customDir.toPath();

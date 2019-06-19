@@ -17,11 +17,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ObjectManager {
+	public static ObjectManager INSTANCE;
+	public static ObjectManager getInstance() {
+		if(INSTANCE == null)
+			INSTANCE = new ObjectManager();
+		return INSTANCE;
+	}
 	
 	// Maps:
 	public static Map<String, Block> blocks = new HashMap<>();
@@ -35,6 +42,7 @@ public class ObjectManager {
 
 	// Entity Maps:
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
+	public static Map<Class, EntityType<? extends Entity>> specialEntityTypes = new HashMap<>();
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
@@ -233,6 +241,7 @@ public class ObjectManager {
     //                  Registry Events
     // ==================================================
     // ========== Blocks ==========
+	@SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(blocks.values().toArray(new Block[blocks.size()]));
         for(Block block : blocks.values()) {
@@ -243,6 +252,7 @@ public class ObjectManager {
     }
 
     // ========== Items ==========
+	@SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
 	    for(Item item : items.values()) {
 	        if(item.getRegistryName() == null) {
@@ -253,6 +263,7 @@ public class ObjectManager {
     }
 
     // ========== Potions ==========
+	@SubscribeEvent
     public static void registerEffects(RegistryEvent.Register<Effect> event) {
         for(EffectBase effect : effects.values()) {
         	event.getRegistry().register(effect);
@@ -260,6 +271,7 @@ public class ObjectManager {
     }
 
 	// ========== Entities ==========
+	@SubscribeEvent
 	public static void registerSpecialEntities(RegistryEvent.Register<EntityType<?>> event) {
 		// Special Entities:
 		for(String entityName : specialEntities.keySet()) {
@@ -272,18 +284,20 @@ public class ObjectManager {
 			entityTypeBuilder.disableSummoning();
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(LycanitesMobs.modid, entityName);
+			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 			try {
 				EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName).getConstructor(EntityType.class, World.class));
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+			specialEntityTypes.put(specialEntities.get(entityName), entityType);
 			event.getRegistry().register(entityType);
 		}
 	}
 
 	// ========== Sounds ==========
+	@SubscribeEvent
 	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
 		for(SoundEvent soundEvent : sounds.values()) {
 			if(soundEvent.getRegistryName() == null) {

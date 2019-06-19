@@ -305,11 +305,11 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
+    public void readAdditional(CompoundNBT nbtTagCompound) {
     	if(nbtTagCompound.contains("ParentUUIDMost") && nbtTagCompound.contains("ParentUUIDLeast")) {
             this.parentUUID = new UUID(nbtTagCompound.getLong("ParentUUIDMost"), nbtTagCompound.getLong("ParentUUIDLeast"));
         }
-        super.read(nbtTagCompound);
+        super.readAdditional(nbtTagCompound);
     }
     
     // ========== Write ==========

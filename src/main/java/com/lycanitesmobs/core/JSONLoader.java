@@ -46,7 +46,7 @@ public abstract class JSONLoader {
 		this.loadJsonObjects(gson, path, defaultJsons, mapKey, null);
 
 		// Load Custom:
-		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.MODID + "/";
 		File customDir = new File(configPath + dataPath);
 		customDir.mkdirs();
 		path = customDir.toPath();
@@ -270,7 +270,7 @@ public abstract class JSONLoader {
 
 	/** Saves a JSON object into the config folder. **/
 	public void saveJsonObject(Gson gson, JsonObject jsonObject, String name, String dataPath) {
-		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.MODID + "/";
 		try {
 			File jsonFile = new File(configPath + (!"".equals(dataPath) ? dataPath + "/" : "") + name + ".json");
 			jsonFile.getParentFile().mkdirs();

@@ -382,10 +382,10 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         }
     }
 
-    /*@Override
+    @Override
 	public EntityType getType() {
     	return this.creatureInfo.getEntityType();
-	}*/
+	}
 
 	// ========== Attributes and Stats ==========
 	/** Creates and sets all the entity attributes with default values. **/
@@ -2505,14 +2505,8 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public EntityProjectileBase fireProjectile(Class projectileClass, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
-		EntityProjectileBase projectile = null;
-		try {
-			projectile = (EntityProjectileBase) projectileClass.getConstructor(World.class, LivingEntity.class).newInstance(this.getEntityWorld(), this);
-		}
-		catch (Exception e) {
-			LycanitesMobs.logWarning("", "Unable to create a projectile from the class: " + projectileClass);
-		}
+	public EntityProjectileBase fireProjectile(Class<? extends EntityProjectileBase> projectileClass, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+		EntityProjectileBase projectile = ProjectileManager.getInstance().createOldProjectile(projectileClass, this.getEntityWorld(), this);
 		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
 	}
 
@@ -2764,7 +2758,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
                 if(damageSource.getTrueSource() instanceof PlayerEntity) {
                     try {
                         PlayerEntity player = (PlayerEntity) damageSource.getTrueSource();
-                        player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1);
+                        //player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".kill"), 1); TODO Player Stats
                         if (this.isBoss() || this.getRNG().nextDouble() <= CreatureManager.getInstance().config.beastiaryAddOnDeathChance) {
                             ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
                             playerExt.getBeastiary().discoverCreature(this, 2, false);
@@ -3926,7 +3920,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
+    public void readAdditional(CompoundNBT nbtTagCompound) {
     	if(nbtTagCompound.contains("FirstSpawn")) {
             this.firstSpawn = nbtTagCompound.getBoolean("FirstSpawn");
     	}
@@ -3998,7 +3992,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 			this.spawnedAsBoss = nbtTagCompound.getBoolean("SpawnedAsBoss");
 		}
     	
-        super.read(nbtTagCompound);
+        super.readAdditional(nbtTagCompound);
         this.inventory.read(nbtTagCompound);
 
         if(nbtTagCompound.contains("Drops")) {
@@ -4031,6 +4025,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Used when saving this mob to a chunk. **/
     @Override
     public void writeAdditional(CompoundNBT nbtTagCompound) {
+    	LycanitesMobs.logDebug("", "SAVING! " + this.getName());
     	nbtTagCompound.putBoolean("FirstSpawn", this.firstSpawn);
     	nbtTagCompound.putString("SpawnEventType", this.spawnEventType);
     	nbtTagCompound.putInt("SpawnEventCount", this.spawnEventCount);

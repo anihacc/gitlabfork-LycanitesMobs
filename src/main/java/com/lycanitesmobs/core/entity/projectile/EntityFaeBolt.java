@@ -5,6 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.particles.BlockParticleData;
@@ -21,16 +22,16 @@ public class EntityFaeBolt extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityFaeBolt(World world) {
-        super(world);
+    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityFaeBolt(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityFaeBolt(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

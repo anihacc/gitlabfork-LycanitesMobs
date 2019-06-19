@@ -19,6 +19,9 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -321,17 +324,9 @@ public class CreatureInfo {
 			ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
 		}
 
-		/*/ Add Stats: TODO Creature Progression Stats
-		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
-		achievementStack.setTagInfo("Mob", new StringNBT(this.getName()));
-		ObjectManager.addStat(this.getName() + ".kill", new Stat(this.getName() + ".kill", new TranslationTextComponent(this.getName() + ".kill")));
-		ObjectManager.addStat(this.getName() + ".learn", new Stat(this.getName() + ".learn", new TranslationTextComponent(this.getName() + ".learn")));
-		if(this.isSummonable()) {
-			ObjectManager.addStat(this.getName() + ".summon", new Stat(this.getName() + ".summon", new TranslationTextComponent(this.getName() + ".summon")));
-		}
-		if(this.isTameable()) {
-			ObjectManager.addStat(this.getName() + ".tame", new Stat(this.getName() + ".tame", new TranslationTextComponent(this.getName() + ".tame")));
-		}*/
+		/*/ Add Trophy: TODO Creature Trophies
+		ItemStack advancementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
+		achievementStack.setTagInfo("Mob", new StringNBT(this.getName()));*/
 
 		// Add Sounds:
 		this.addSounds("");
@@ -402,7 +397,6 @@ public class CreatureInfo {
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
-			entityTypeBuilder.disableSerialization();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor);

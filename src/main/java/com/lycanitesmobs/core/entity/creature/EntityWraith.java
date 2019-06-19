@@ -170,8 +170,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void read(CompoundNBT nbtTagCompound) {
-		super.read(nbtTagCompound);
+	public void readAdditional(CompoundNBT nbtTagCompound) {
+		super.readAdditional(nbtTagCompound);
 		if(nbtTagCompound.contains("DetonateTimer")) {
 			this.detonateTimer = nbtTagCompound.getInt("DetonateTimer");
 		}

@@ -46,7 +46,7 @@ public class SpawnerManager extends JSONLoader {
 		this.loadJsonObjects(gson, path, defaultMobEventsJSONs, "name", "spawner");
 
 		// Custom:
-		String configPath = new File(".") + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 
 		// Load Custom Spawners:
 		File customSpawnersDir = new File(configPath + "spawners");

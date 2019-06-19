@@ -7,9 +7,10 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -103,7 +104,7 @@ public class EntityEyewig extends EntityCreatureRideable {
     		if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
     			return;
     		
-    		this.abilityProjectile = new EntityPoisonRay(this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
+    		this.abilityProjectile = new EntityPoisonRay(ProjectileManager.getInstance().oldProjectileTypes.get(EntityPoisonRay.class), this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
     		this.abilityProjectile.setOffset(0, 0.5F, 0);
 	    	
 	    	// Launch:
@@ -133,7 +134,7 @@ public class EntityEyewig extends EntityCreatureRideable {
     	// Create New Laser:
     	if(this.projectile == null) {
 	    	// Type:
-	    	this.projectile = new EntityPoisonRay(this.getEntityWorld(), this, 20, 10);
+	    	this.projectile = new EntityPoisonRay(ProjectileManager.getInstance().oldProjectileTypes.get(EntityPoisonRay.class), this.getEntityWorld(), this, 20, 10);
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

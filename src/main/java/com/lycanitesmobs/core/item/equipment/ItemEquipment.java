@@ -444,7 +444,7 @@ public class ItemEquipment extends ItemBase {
 	// ==================================================
 	@Override
 	public ModelResourceLocation getModelResourceLocation() {
-		return new ModelResourceLocation(new ResourceLocation(LycanitesMobs.modid, "equipmentpart"), "inventory");
+		return new ModelResourceLocation(new ResourceLocation(LycanitesMobs.MODID, "equipmentpart"), "inventory");
 	}
 
 	/** Returns the texture to use for the provided ItemStack. **/

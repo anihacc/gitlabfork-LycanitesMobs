@@ -1,11 +1,12 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.particles.BlockParticleData;
@@ -24,16 +25,16 @@ public class EntityCrystalShard extends EntityProjectileModel {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityCrystalShard(World world) {
-        super(world);
+    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityCrystalShard(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityCrystalShard(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

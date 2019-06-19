@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.entity.projectile.EntityQuill;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -92,7 +93,7 @@ public class EntityQuillbeast extends EntityCreatureTameable implements IMob {
     public void attackRanged(Entity target, float range) {
         for(int i = -2; i < 12; i++) {
             // Type:
-            EntityQuill projectile = new EntityQuill(this.getEntityWorld(), this);
+            EntityQuill projectile = new EntityQuill(ProjectileManager.getInstance().oldProjectileTypes.get(EntityQuill.class), this.getEntityWorld(), this);
 
             // Y Offset:
             projectile.posY -= this.getSize(Pose.STANDING).height / 4;

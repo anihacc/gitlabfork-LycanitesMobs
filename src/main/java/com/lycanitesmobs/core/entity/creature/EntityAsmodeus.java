@@ -1,10 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
@@ -17,6 +19,7 @@ import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -453,7 +456,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ========== Devilstars ==========
     public void attackDevilstar(float angle) {
         // Type:
-        EntityProjectileBase projectile = new EntityDevilstar(this.getEntityWorld(), this);
+        EntityProjectileBase projectile = new EntityDevilstar(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDevilstar.class), this.getEntityWorld(), this);
         projectile.setProjectileScale(4f);
 
         // Y Offset:
@@ -581,8 +584,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+    public void readAdditional(CompoundNBT nbtTagCompound) {
+        super.readAdditional(nbtTagCompound);
         if(nbtTagCompound.contains("DevilstarStreamCharge")) {
             this.devilstarStreamCharge = nbtTagCompound.getInt("DevilstarStreamCharge");
         }

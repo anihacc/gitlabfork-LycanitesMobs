@@ -5,6 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -16,16 +17,16 @@ public class EntityHellfireOrb extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireOrb(World par1World) {
-        super(par1World);
+    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityHellfireOrb(World par1World, LivingEntity par2LivingEntity) {
-        super(par1World, par2LivingEntity);
+    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+        super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireOrb(World par1World, double par2, double par4, double par6) {
-        super(par1World, par2, par4, par6);
+    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+        super(entityType, world, par2, par4, par6);
     }
     
     // ========== Setup Projectile ==========

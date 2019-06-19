@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -31,8 +32,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityProjectileRapidFire(Class entityClass, World world, int setTime, int setDelay) {
-        super(world);
+    public EntityProjectileRapidFire(EntityType<? extends EntityProjectileBase> entityType, Class entityClass, World world, int setTime, int setDelay) {
+        super(entityType, world);
         //this.setSize(projectileWidth, projectileHeight);
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
@@ -40,8 +41,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
         this.noClip = true;
     }
 
-    public EntityProjectileRapidFire(Class entityClass, World world, double par2, double par4, double par6, int setTime, int setDelay) {
-        super(world, par2, par4, par6);
+    public EntityProjectileRapidFire(EntityType<? extends EntityProjectileBase> entityType, Class entityClass, World world, double x, double y, double z, int setTime, int setDelay) {
+        super(entityType, world, x, y, z);
         //this.setSize(projectileWidth, projectileHeight);
 		this.projectileClass = entityClass;
         this.rapidTime = setTime;
@@ -49,8 +50,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
         this.noClip = true;
     }
 
-    public EntityProjectileRapidFire(Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
-        super(world, entityLivingBase);
+    public EntityProjectileRapidFire(EntityType<? extends EntityProjectileBase> entityType, Class entityClass, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
+        super(entityType, world, entityLivingBase);
         //this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
         this.shootingEntity = entityLivingBase;
@@ -62,8 +63,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
         this.noClip = true;
     }
 
-	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
-		super(world, par2, par4, par6);
+	public EntityProjectileRapidFire(EntityType<? extends EntityProjectileBase> entityType, ProjectileInfo projectileInfo, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+		super(entityType, world, par2, par4, par6);
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.rapidTime = setTime;
@@ -71,8 +72,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
 		this.noClip = true;
 	}
 
-	public EntityProjectileRapidFire(ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
-		super(world, entityLivingBase);
+	public EntityProjectileRapidFire(EntityType<? extends EntityProjectileBase> entityType, ProjectileInfo projectileInfo, World world, LivingEntity entityLivingBase, int setTime, int setDelay) {
+		super(entityType, world, entityLivingBase);
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.shootingEntity = entityLivingBase;

@@ -242,8 +242,8 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-    	super.read(nbtTagCompound);
+    public void readAdditional(CompoundNBT nbtTagCompound) {
+    	super.readAdditional(nbtTagCompound);
         
         if(nbtTagCompound.contains("VespidInfection")) {
         	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");

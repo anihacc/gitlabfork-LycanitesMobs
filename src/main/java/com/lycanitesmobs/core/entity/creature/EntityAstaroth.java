@@ -1,13 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -65,7 +69,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
         // Asmodeus Master:
         if(this.updateTick % 20 == 0) {
             if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((EntityCreatureBase)this.getMasterTarget()).getBattlePhase() > 0) {
-                EntityHellShield projectile = new EntityHellShield(this.getEntityWorld(), this);
+                EntityHellShield projectile = new EntityHellShield(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellShield.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
                 projectile.posY -= this.getSize(Pose.STANDING).height * 0.35D;
                 double dX = this.getMasterTarget().posX - this.posX;

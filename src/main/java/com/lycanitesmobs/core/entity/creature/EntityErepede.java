@@ -1,14 +1,19 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
@@ -120,7 +125,7 @@ public class EntityErepede extends EntityCreatureRideable implements IGroupPreda
     	
     	if(rider instanceof PlayerEntity) {
     		PlayerEntity player = (PlayerEntity)rider;
-	    	EntityMudshot projectile = new EntityMudshot(this.getEntityWorld(), player);
+	    	EntityMudshot projectile = new EntityMudshot(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMudshot.class), this.getEntityWorld(), player);
 	    	this.getEntityWorld().addEntity(projectile);
 	    	this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 	    	this.triggerAttackCooldown();

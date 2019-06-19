@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -101,7 +102,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        EntityProjectileBase projectile = new EntityMagma(this.getEntityWorld(), this);
+        EntityProjectileBase projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
         projectile.setProjectileScale(2f);
 
         // Y Offset:
@@ -124,7 +125,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
 
         // Random Projectiles:
         for(int i = 0; i < 10; i++) {
-            projectile = new EntityMagma(this.getEntityWorld(), this);
+            projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
             projectile.setProjectileScale(2f);
             projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 0.5F, 3.0F);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

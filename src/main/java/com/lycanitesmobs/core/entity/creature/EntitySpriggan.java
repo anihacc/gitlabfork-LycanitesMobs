@@ -7,14 +7,11 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.IGrowable;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -163,7 +160,7 @@ public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGro
     	// Create New Laser:
     	if(this.projectile == null) {
 	    	// Type:
-	    	this.projectile = new EntityLifeDrain(this.getEntityWorld(), this, 25, 20);
+	    	this.projectile = new EntityLifeDrain(ProjectileManager.getInstance().oldProjectileTypes.get(EntityLifeDrain.class), this.getEntityWorld(), this, 25, 20);
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import net.minecraft.block.BlockState;
@@ -61,7 +62,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		// Hellfire Pillar Effect:
 		if(ticks == 25 * 20) {
 			for(int i = 0; i < 5; i++) {
-				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
+				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
 				entityProjectileBase.projectileLife = 9 * 20;
 				world.addEntity(entityProjectileBase);
 			}

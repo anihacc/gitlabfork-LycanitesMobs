@@ -6,6 +6,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -28,16 +30,16 @@ public class EntityHellfireWave extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWave(World world) {
-        super(world);
+    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityHellfireWave(World world, LivingEntity shooterEntity) {
-        super(world, shooterEntity);
+    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooterEntity) {
+        super(entityType, world, shooterEntity);
     }
 
-    public EntityHellfireWave(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========
@@ -78,9 +80,9 @@ public class EntityHellfireWave extends EntityProjectileBase {
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
                     if(this.getThrower() != null)
-                        hellfireWalls[row][col] = new EntityHellfireWavePart(this.getEntityWorld(), this.getThrower());
+                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getThrower());
                     else
-                        hellfireWalls[row][col] = new EntityHellfireWavePart(this.getEntityWorld(), this.posX, this.posY + 5 + (this.hellfireSize * row), this.posZ);
+                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.posX, this.posY + 5 + (this.hellfireSize * row), this.posZ);
                     hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
                     this.getEntityWorld().addEntity(hellfireWalls[row][col]);
                     hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);

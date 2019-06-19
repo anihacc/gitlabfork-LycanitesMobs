@@ -1,19 +1,17 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
-
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -32,16 +30,16 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDemonicBlast(World world) {
-        super(world);
+    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityDemonicBlast(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityDemonicBlast(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========
@@ -87,7 +85,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     	
 		EntityProjectileBase projectile;
 		if(this.getThrower() != null) {
-			projectile = new EntityDemonicSpark(world, this.getThrower());
+			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getThrower());
 			if(projectile instanceof Entity) {
 				projectile.posX = this.posX;
 				projectile.posY = this.posY;
@@ -95,7 +93,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 			}
 		}
 		else {
-			projectile = new EntityDemonicSpark(world, this.posX, this.posY, this.posZ);
+			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.posX, this.posY, this.posZ);
 		}
 
 		float velocity = 1.2F;

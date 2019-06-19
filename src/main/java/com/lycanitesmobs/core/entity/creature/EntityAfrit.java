@@ -12,7 +12,6 @@ import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;

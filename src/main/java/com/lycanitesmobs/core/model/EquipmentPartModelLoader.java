@@ -19,7 +19,7 @@ public class EquipmentPartModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		if(LycanitesMobs.modid.equals(modelLocation.getNamespace()) && "equipmentpart".equals(modelLocation.getPath())) {
+		if(LycanitesMobs.MODID.equals(modelLocation.getNamespace()) && "equipmentpart".equals(modelLocation.getPath())) {
 			return true;
 		}
 		return false;

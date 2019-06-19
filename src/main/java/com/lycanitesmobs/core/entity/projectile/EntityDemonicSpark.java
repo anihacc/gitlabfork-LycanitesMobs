@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.SoundEvent;
@@ -19,16 +20,16 @@ public class EntityDemonicSpark extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDemonicSpark(World world) {
-        super(world);
+    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityDemonicSpark(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityDemonicSpark(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

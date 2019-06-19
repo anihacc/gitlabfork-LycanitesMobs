@@ -6,6 +6,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -29,16 +31,16 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireBarrier(World par1World) {
-        super(par1World);
+    public EntityHellfireBarrier(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityHellfireBarrier(World par1World, LivingEntity par2LivingEntity) {
-        super(par1World, par2LivingEntity);
+    public EntityHellfireBarrier(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+        super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireBarrier(World par1World, double par2, double par4, double par6) {
-        super(par1World, par2, par4, par6);
+    public EntityHellfireBarrier(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+        super(entityType, world, par2, par4, par6);
     }
     
     // ========== Setup Projectile ==========
@@ -78,18 +80,18 @@ public class EntityHellfireBarrier extends EntityProjectileBase {
                 for(int col = 0; col < this.hellfireWidth; col++) {
                     if(this.getThrower() != null) {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(this.getEntityWorld(), this.getThrower());
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.getThrower());
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(this.getEntityWorld(), this.getThrower());
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.getThrower());
                         }
                     }
                     else {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
                         }
                     }
 

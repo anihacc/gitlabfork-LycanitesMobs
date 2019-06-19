@@ -6,6 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.particles.ParticleTypes;
@@ -20,16 +21,16 @@ public class EntitySpectralbolt extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntitySpectralbolt(World world) {
-        super(world);
+    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntitySpectralbolt(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntitySpectralbolt(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

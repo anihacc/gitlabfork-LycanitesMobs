@@ -7,10 +7,12 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -129,7 +131,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
 			// Summoning Portal:
 			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
-				this.summoningPortal = new EntityPortal(this.getWorld(), this);
+				this.summoningPortal = new EntityPortal((EntityType<? extends EntityPortal>) ProjectileManager.getInstance().oldProjectileTypes.get(EntityPortal.class), this.getWorld(), this);
 				this.summoningPortal.setProjectileScale(8);
 				this.getWorld().addEntity(this.summoningPortal);
 			}

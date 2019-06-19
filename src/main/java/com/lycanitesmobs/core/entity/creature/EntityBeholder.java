@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -194,7 +195,7 @@ public class EntityBeholder extends EntityCreatureRideable {
 
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
-            EntityArcaneLaserStorm projectile = new EntityArcaneLaserStorm(this.getEntityWorld(), player);
+            EntityArcaneLaserStorm projectile = new EntityArcaneLaserStorm(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaserStorm.class), this.getEntityWorld(), player);
             this.getEntityWorld().addEntity(projectile);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.triggerAttackCooldown();

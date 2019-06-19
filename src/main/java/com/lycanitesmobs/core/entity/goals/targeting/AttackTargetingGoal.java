@@ -8,13 +8,13 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
+
 public class AttackTargetingGoal extends TargetingGoal {
 	// Targets:
     public Class targetClass = LivingEntity.class;
@@ -25,6 +25,9 @@ public class AttackTargetingGoal extends TargetingGoal {
     protected boolean tameTargeting = false;
     private int allySize = 0;
     private int enemySize = 0;
+
+    // Temp Groups:
+	private static List<Class> VILLAGER_CLASSES = Arrays.asList(VillagerEntity.class, PillagerEntity.class);
     
     // ==================================================
   	//                    Constructor
@@ -50,6 +53,9 @@ public class AttackTargetingGoal extends TargetingGoal {
     
     public AttackTargetingGoal setTargetClass(Class setTargetClass) {
     	this.targetClass = setTargetClass;
+    	if(setTargetClass == VillagerEntity.class) {
+    		this.setTargetClasses(VILLAGER_CLASSES);
+		}
     	return this;
     }
     

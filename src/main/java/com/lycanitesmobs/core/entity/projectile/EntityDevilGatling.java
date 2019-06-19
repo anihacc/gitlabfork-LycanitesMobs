@@ -6,6 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Effect;
@@ -27,16 +28,16 @@ public class EntityDevilGatling extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDevilGatling(World world) {
-        super(world);
+    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityDevilGatling(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityDevilGatling(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

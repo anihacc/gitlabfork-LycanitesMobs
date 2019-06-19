@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.creature.EntitySerpix;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -22,16 +23,16 @@ public class EntityBlizzard extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityBlizzard(World world) {
-        super(world);
+    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityBlizzard(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityBlizzard(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

@@ -645,7 +645,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
 				tameMessage = tameMessage.replace("%creature%", this.getSpeciesName());
 				player.sendMessage(new TranslationTextComponent(tameMessage));
 				this.playTameEffect(this.isTamed());
-				player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1);
+				//player.addStat(ObjectManager.getStat(this.creatureInfo.getName() + ".tame"), 1); TODO Player Stats
 				if (this.timeUntilPortal > this.getPortalCooldown()) {
 					this.timeUntilPortal = this.getPortalCooldown();
 				}
@@ -987,8 +987,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable {
     // ==================================================
    	// ========== Read ===========
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+    public void readAdditional(CompoundNBT nbtTagCompound) {
+        super.readAdditional(nbtTagCompound);
 
 		// UUID NBT:
         if(nbtTagCompound.hasUniqueId("OwnerId")) {

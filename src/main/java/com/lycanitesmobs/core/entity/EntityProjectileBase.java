@@ -65,24 +65,22 @@ public class EntityProjectileBase extends ThrowableEntity {
 	// ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityProjectileBase(World world) {
-        super(EntityType.SNOWBALL, world);
+    public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
         this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
         this.setup();
     }
 
-    public EntityProjectileBase(World world, LivingEntity entityLiving) {
-        this(world);
+    public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving) {
+        this(entityType, world);
         this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
-        this.dataManager.register(SCALE, this.projectileScale);
         this.setProjectileScale(this.projectileScale);
         this.setup();
     }
 
-    public EntityProjectileBase(World world, double x, double y, double z) {
-        this(world);
-        this.dataManager.register(SCALE, this.projectileScale);
+    public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        this(entityType, world);
         this.setProjectileScale(this.projectileScale);
         this.setup();
     }
@@ -551,8 +549,8 @@ public class EntityProjectileBase extends ThrowableEntity {
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void readAdditional(CompoundNBT compound) {
+		super.readAdditional(compound);
 
 		if(compound.contains("ProjectileScale")) {
 			this.setProjectileScale(compound.getFloat("ProjectileScale"));

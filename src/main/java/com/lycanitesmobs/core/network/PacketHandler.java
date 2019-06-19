@@ -13,7 +13,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class PacketHandler {
 	private static final String PROTOCOL_VERSION = "1";
 	private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
-			.named(new ResourceLocation(LycanitesMobs.modid, "main_channel"))
+			.named(new ResourceLocation(LycanitesMobs.MODID, "main_channel"))
 			.clientAcceptedVersions(PROTOCOL_VERSION::equals).serverAcceptedVersions(PROTOCOL_VERSION::equals)
 			.networkProtocolVersion(() -> PROTOCOL_VERSION)
 			.simpleChannel();

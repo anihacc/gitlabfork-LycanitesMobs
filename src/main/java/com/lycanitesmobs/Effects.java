@@ -141,7 +141,7 @@ public class Effects {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
-						EntityFear fearEntity = new EntityFear(EntityFactory.getInstance().entityClassTypeMap.get(EntityFear.class), entity.getEntityWorld(), entity);
+						EntityFear fearEntity = new EntityFear(EntityFactory.getInstance().entityConstructorTypeMap.get(EntityFear.class), entity.getEntityWorld(), entity);
 						entity.getEntityWorld().addEntity(fearEntity);
 						extendedEntity.fearEntity = fearEntity;
 					}

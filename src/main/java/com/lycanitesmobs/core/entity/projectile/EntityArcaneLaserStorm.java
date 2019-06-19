@@ -6,7 +6,9 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.creature.EntityBeholder;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -29,16 +31,16 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityArcaneLaserStorm(World world) {
-        super(world);
+    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityArcaneLaserStorm(World world, LivingEntity entityLiving) {
-        super(world, entityLiving);
+    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving) {
+        super(entityType, world, entityLiving);
     }
 
-    public EntityArcaneLaserStorm(World world, double par2, double par4, double par6) {
-        super(world, par2, par4, par6);
+    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+        super(entityType, world, par2, par4, par6);
     }
     
     // ========== Setup Projectile ==========
@@ -80,13 +82,13 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
         while(this.lasers.size() < this.laserMax) {
             EntityProjectileLaser laser;
             if(this.getThrower() != null) {
-                laser = new EntityArcaneLaser(world, this.getThrower(), 20, 10, this);
+                laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getThrower(), 20, 10, this);
                 laser.posX = this.posX;
                 laser.posY = this.posY;
                 laser.posZ = this.posZ;
             }
             else
-                laser = new EntityArcaneLaser(world, this.posX, this.posY, this.posZ, 20, 10, this);
+                laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.posX, this.posY, this.posZ, 20, 10, this);
             laser.useEntityAttackTarget = false;
             this.lasers.add(laser);
             world.addEntity(laser);

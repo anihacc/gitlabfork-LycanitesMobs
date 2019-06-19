@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -40,21 +41,21 @@ public class EntityPortal extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityPortal(World world) {
-        super(world);
+    public EntityPortal(EntityType<? extends EntityPortal> entityType, World world) {
+        super(entityType, world);
         this.setStats();
     }
 
-    public EntityPortal(World world, PlayerEntity shooter, Class summonClass, ItemStaffSummoning portalItem) {
-        super(world, shooter);
+    public EntityPortal(EntityType<? extends EntityPortal> entityType, World world, PlayerEntity shooter, Class summonClass, ItemStaffSummoning portalItem) {
+        super(entityType, world, shooter);
         this.shootingEntity = shooter;
         this.summonClass = summonClass;
         this.portalItem = portalItem;
         this.setStats();
     }
 
-    public EntityPortal(World world, TileEntitySummoningPedestal summoningPedestal) {
-        super(world);
+    public EntityPortal(EntityType<? extends EntityPortal> entityType, World world, TileEntitySummoningPedestal summoningPedestal) {
+        super(entityType, world);
         this.summoningPedestal = summoningPedestal;
         this.setStats();
         this.posX = summoningPedestal.getPos().getX() + 0.5D;
@@ -241,8 +242,9 @@ public class EntityPortal extends EntityProjectileBase {
                 if (this.summonDuration > 0)
                     entityCreature.setTemporary(this.summonDuration);
 
-                if (this.shootingEntity != null)
-                    this.shootingEntity.addStat(ObjectManager.getStat(entityCreature.creatureInfo.getName() + ".summon"), 1);
+                if (this.shootingEntity != null) {
+					//this.shootingEntity.addStat(ObjectManager.getStat(entityCreature.creatureInfo.getName() + ".summon"), 1); TODO Player Stats
+				}
             }
 	    	this.getEntityWorld().addEntity(entity);
     	}

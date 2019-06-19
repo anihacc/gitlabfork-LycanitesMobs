@@ -6,6 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.potion.Effects;
@@ -21,16 +22,16 @@ public class EntityFrostweb extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityFrostweb(World world) {
-        super(world);
+    public EntityFrostweb(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityFrostweb(World world, LivingEntity entityLivingBase) {
-        super(world, entityLivingBase);
+    public EntityFrostweb(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+        super(entityType, world, entityLivingBase);
     }
 
-    public EntityFrostweb(World world, double x, double y, double z) {
-        super(world, x, y, z);
+    public EntityFrostweb(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+        super(entityType, world, x, y, z);
     }
     
     // ========== Setup Projectile ==========

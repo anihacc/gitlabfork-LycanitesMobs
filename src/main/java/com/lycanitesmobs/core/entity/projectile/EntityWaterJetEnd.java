@@ -3,8 +3,10 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -15,16 +17,16 @@ public class EntityWaterJetEnd extends EntityProjectileLaserEnd {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityWaterJetEnd(World world) {
-        super(world);
+	public EntityWaterJetEnd(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityWaterJetEnd(World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
-        super(world, par2, par4, par6, laser);
+    public EntityWaterJetEnd(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
+        super(entityType, world, par2, par4, par6, laser);
     }
 
-    public EntityWaterJetEnd(World world, LivingEntity shooter, EntityProjectileLaser laser) {
-        super(world, shooter, laser);
+    public EntityWaterJetEnd(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooter, EntityProjectileLaser laser) {
+        super(entityType, world, shooter, laser);
     }
     
     // ========== Setup Projectile ==========

@@ -8,9 +8,13 @@ import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.CreatureStats;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,6 +202,30 @@ public class CreatureManager extends JSONLoader {
 			event.getRegistry().register(creatureInfo.getEntityType());
 		}
 	}
+
+
+	/**
+	 * Registers all stats for creatures added to this creature manager, called from the registry event.
+	 * @param event The entity register event.
+	 */
+	/*@SubscribeEvent
+	public void registerStats(RegistryEvent.Register<StatType<?>> event) {
+		LycanitesMobs.logDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
+		for(CreatureInfo creatureInfo : this.creatures.values()) {
+			event.getRegistry().register(creatureInfo.getStatTypeKill());
+			event.getRegistry().register(creatureInfo.getStatTypeKilledBy());
+		}
+
+
+		ObjectManager.addStat(this.getName() + ".kill", new Stat(this.getName() + ".kill", new TranslationTextComponent(this.getName() + ".kill")));
+		ObjectManager.addStat(this.getName() + ".learn", new Stat(this.getName() + ".learn", new TranslationTextComponent(this.getName() + ".learn")));
+		if(this.isSummonable()) {
+			ObjectManager.addStat(this.getName() + ".summon", new Stat(this.getName() + ".summon", new TranslationTextComponent(this.getName() + ".summon")));
+		}
+		if(this.isTameable()) {
+			ObjectManager.addStat(this.getName() + ".tame", new Stat(this.getName() + ".tame", new TranslationTextComponent(this.getName() + ".tame")));
+		}
+	}*/
 
 
 	/**

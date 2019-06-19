@@ -31,10 +31,10 @@ public class ItemManager {
 	public ItemConfig config;
 
 	// Creative Tabs:
-	public final ItemGroup items = new LMItemsGroup(0, LycanitesMobs.modid + ".items");
-	public final ItemGroup blocks = new LMBlocksGroup(1, LycanitesMobs.modid + ".blocks");
-	public final ItemGroup creatures = new LMCreaturesGroup(2, LycanitesMobs.modid + ".creatures");
-	public final ItemGroup equipmentParts = new LMEquipmentPartsGroup(3, LycanitesMobs.modid + ".equipmentparts");
+	public final ItemGroup items = new LMItemsGroup(0, LycanitesMobs.MODID + ".items");
+	public final ItemGroup blocks = new LMBlocksGroup(1, LycanitesMobs.MODID + ".blocks");
+	public final ItemGroup creatures = new LMCreaturesGroup(2, LycanitesMobs.MODID + ".creatures");
+	public final ItemGroup equipmentParts = new LMEquipmentPartsGroup(3, LycanitesMobs.MODID + ".equipmentparts");
 
 
 	/** Returns the main Item Manager instance or creates it and returns it. **/

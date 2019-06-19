@@ -5,9 +5,11 @@ import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -78,7 +80,7 @@ public class ItemStaffSummoning extends ItemBase {
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
 				if(!player.getEntityWorld().isRemote) {
-					playerExt.staffPortal = new EntityPortal(world, player, summonSet.getCreatureClass(), this);
+					playerExt.staffPortal = new EntityPortal((EntityType<? extends EntityPortal>)ProjectileManager.getInstance().oldProjectileTypes.get(EntityPortal.class), world, player, summonSet.getCreatureClass(), this);
 					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 					world.addEntity(playerExt.staffPortal);
 				}

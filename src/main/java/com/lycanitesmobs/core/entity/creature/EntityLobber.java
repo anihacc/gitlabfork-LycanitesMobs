@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -145,7 +146,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
 
             // Random Projectiles:
             if(this.ticksExisted % 40 == 0) {
-                EntityProjectileBase projectile = new EntityMagma(this.getEntityWorld(), this);
+                EntityProjectileBase projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(2f);
                 projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

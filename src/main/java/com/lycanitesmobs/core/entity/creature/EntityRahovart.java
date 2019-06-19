@@ -18,6 +18,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -197,7 +198,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
             // Random Projectiles:
             for(int i = 0; i < 3; i++) {
-                EntityProjectileBase projectile = new EntityHellfireball(this.getEntityWorld(), this);
+                EntityProjectileBase projectile = new EntityHellfireball(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireball.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(8f);
                 projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -469,7 +470,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
         // Add Required Orbs:
         while(hellfireOrbs.size() < hellfireChargeCount) {
-            EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(entity.getEntityWorld(), entity);
+            EntityHellfireOrb hellfireOrb = new EntityHellfireOrb(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireOrb.class), entity.getEntityWorld(), entity);
             hellfireOrb.clientOnly = true;
             hellfireOrbs.add(hellfireOrb);
             entity.getEntityWorld().addEntity(hellfireOrb);
@@ -521,7 +522,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     public void hellfireWaveAttack(double angle) {
         this.triggerAttackCooldown();
         this.playAttackSound();
-        EntityHellfireWave hellfireWave = new EntityHellfireWave(this.getEntityWorld(), this);
+        EntityHellfireWave hellfireWave = new EntityHellfireWave(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWave.class), this.getEntityWorld(), this);
         hellfireWave.posY = this.posY;
         hellfireWave.rotation = angle;
         this.getEntityWorld().addEntity(hellfireWave);
@@ -546,7 +547,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
         // Left (Positive) Wall:
         if(this.hellfireWallLeft == null) {
-            this.hellfireWallLeft = new EntityHellfireBarrier(this.getEntityWorld(), this);
+            this.hellfireWallLeft = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
             this.hellfireWallLeft.wall = true;
             this.getEntityWorld().addEntity(this.hellfireWallLeft);
         }
@@ -558,7 +559,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
         // Right (Negative) Wall:
         if(this.hellfireWallRight == null) {
-            this.hellfireWallRight = new EntityHellfireBarrier(this.getEntityWorld(), this);
+            this.hellfireWallRight = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
             this.hellfireWallRight.wall = true;
             this.getEntityWorld().addEntity(this.hellfireWallRight);
         }
@@ -588,7 +589,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
         this.triggerAttackCooldown();
         this.playAttackSound();
 
-        EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(this.getEntityWorld(), this);
+        EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
         this.getEntityWorld().addEntity(hellfireBarrier);
         hellfireBarrier.time = 0;
         hellfireBarrier.posX = this.posX;
@@ -692,8 +693,8 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-        super.read(nbtTagCompound);
+    public void readAdditional(CompoundNBT nbtTagCompound) {
+        super.readAdditional(nbtTagCompound);
         if(nbtTagCompound.contains("HellfireEnergy")) {
             this.hellfireEnergy = nbtTagCompound.getInt("HellfireEnergy");
         }

@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -28,21 +29,21 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	// ==================================================
 	//                   Constructors
 	// ==================================================
-	public EntityProjectileCustom(World world) {
-		super(world);
+	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world) {
+		super(entityType, world);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 	}
 
-	public EntityProjectileCustom(World world, ProjectileInfo projectileInfo) {
-		super(world);
+	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world, ProjectileInfo projectileInfo) {
+		super(entityType, world);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public EntityProjectileCustom(World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
-		super(world, entityLiving);
+	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving, ProjectileInfo projectileInfo) {
+		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
 			this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F);
 		this.dataManager.register(PROJECTILE_NAME, "");
@@ -50,8 +51,8 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public EntityProjectileCustom(World world, double x, double y, double z, ProjectileInfo projectileInfo) {
-		super(world, x, y, z);
+	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z, ProjectileInfo projectileInfo) {
+		super(entityType, world, x, y, z);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
@@ -160,8 +161,8 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void readAdditional(CompoundNBT compound) {
+		super.readAdditional(compound);
 
 		if(compound.contains("ProjectileName")) {
 			this.loadProjectileInfo(compound.getString("ProjectileName"));

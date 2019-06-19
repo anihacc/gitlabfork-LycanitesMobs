@@ -86,7 +86,7 @@ public class EntityParticle extends ThrowableEntity {
 	public void writeAdditional(CompoundNBT par1NBTTagCompound) {}
 
 	@Override
-    public void read(CompoundNBT par1NBTTagCompound) {}
+    public void readAdditional(CompoundNBT par1NBTTagCompound) {}
 	
 	
     // ==================================================

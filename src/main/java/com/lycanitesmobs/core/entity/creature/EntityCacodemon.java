@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -223,7 +224,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
 
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
-            EntityDemonicBlast projectile = new EntityDemonicBlast(this.getEntityWorld(), player);
+            EntityDemonicBlast projectile = new EntityDemonicBlast(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicBlast.class), this.getEntityWorld(), player);
             this.getEntityWorld().addEntity(projectile);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
             this.triggerAttackCooldown();

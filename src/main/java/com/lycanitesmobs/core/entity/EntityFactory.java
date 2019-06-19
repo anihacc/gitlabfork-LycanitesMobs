@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.world.World;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -21,8 +20,8 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 		return INSTANCE;
 	}
 
-	public Map<EntityType, Constructor<? extends Entity>> entityTypeClassMap = new HashMap<>();
-	public Map<Constructor<? extends Entity>, EntityType> entityClassTypeMap = new HashMap<>();
+	public Map<EntityType, Constructor<? extends Entity>> entityTypeConstrcutorMap = new HashMap<>();
+	public Map<Constructor<? extends Entity>, EntityType> entityConstructorTypeMap = new HashMap<>();
 
 	/**
 	 * Adds a new Entity Type and Entity Class mapping for this Factory to create.
@@ -30,9 +29,9 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @param entityClass The Entity Class to instantiate for the type.
 	 */
 	public void addEntityType(EntityType entityType, Constructor<? extends Entity> entityClass) {
-		LycanitesMobs.logDebug("", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
-		this.entityTypeClassMap.put(entityType, entityClass);
-		this.entityClassTypeMap.put(entityClass, entityType);
+		LycanitesMobs.logDebug("Creature", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification());
+		this.entityTypeConstrcutorMap.put(entityType, entityClass);
+		this.entityConstructorTypeMap.put(entityClass, entityType);
 	}
 
 	/**
@@ -43,8 +42,8 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	@Override
 	public Entity create(EntityType entityType, World world) {
-		LycanitesMobs.logDebug("", "Spawning entity: " + this.entityTypeClassMap.get(entityType).toString() + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
-		Constructor<? extends Entity> constructor = this.entityTypeClassMap.get(entityType);
+		LycanitesMobs.logDebug("Creature", "Spawning entity: " + this.entityTypeConstrcutorMap.get(entityType).toString() + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification());
+		Constructor<? extends Entity> constructor = this.entityTypeConstrcutorMap.get(entityType);
 
 		try {
 			return constructor.newInstance(entityType, world);
@@ -62,7 +61,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @param world The world to spawn in.
 	 */
 	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, World world) {
-		LycanitesMobs.logDebug("", "Client factory called!"); // This is never called.
+		LycanitesMobs.logDebug("", "Client factory called!");
 		return null;
 	}
 }

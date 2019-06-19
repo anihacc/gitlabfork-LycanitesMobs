@@ -316,8 +316,8 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void read(CompoundNBT nbtTagCompound) {
-    	super.read(nbtTagCompound);
+    public void readAdditional(CompoundNBT nbtTagCompound) {
+    	super.readAdditional(nbtTagCompound);
     	if(nbtTagCompound.contains("HasFur")) {
     		this.setFur(nbtTagCompound.getBoolean("HasFur"));
     	}

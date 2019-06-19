@@ -1,5 +1,7 @@
 package com.lycanitesmobs.core.entity.projectile;
 
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 
@@ -8,16 +10,16 @@ public class EntityHellfireWavePart extends EntityHellfireWall {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWavePart(World par1World) {
-        super(par1World);
+    public EntityHellfireWavePart(EntityType<? extends EntityProjectileBase> entityType, World world) {
+        super(entityType, world);
     }
 
-    public EntityHellfireWavePart(World par1World, LivingEntity par2LivingEntity) {
-        super(par1World, par2LivingEntity);
+    public EntityHellfireWavePart(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+        super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireWavePart(World par1World, double par2, double par4, double par6) {
-        super(par1World, par2, par4, par6);
+    public EntityHellfireWavePart(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+        super(entityType, world, par2, par4, par6);
     }
 
     // ========== Setup Projectile ==========

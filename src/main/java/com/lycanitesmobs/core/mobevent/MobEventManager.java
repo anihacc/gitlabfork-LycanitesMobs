@@ -66,7 +66,7 @@ public class MobEventManager extends JSONLoader {
 		this.loadJsonObjects(gson, path, defaultMobEventJSONs, "name", "event");
 
 		// Load Mob Events:
-		String configPath = new File(".") + "/config/" + LycanitesMobs.modid + "/";
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 		File customDir = new File(configPath + "mobevents");
 		customDir.mkdirs();
 		path = customDir.toPath();

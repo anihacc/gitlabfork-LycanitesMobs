@@ -1,7 +1,9 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
@@ -207,37 +209,37 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        List<EntityProjectileRapidFire> projectiles = new ArrayList<EntityProjectileRapidFire>();
+        List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
 
-        EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>) ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
-        EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
         projectileEntry2.setProjectileScale(0.25f);
         projectiles.add(projectileEntry2);
 
-        EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
         projectileEntry3.setProjectileScale(0.25f);
         projectiles.add(projectileEntry3);
 
-        EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
         projectileEntry4.setProjectileScale(0.25f);
         projectiles.add(projectileEntry4);
 
-        EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
         projectileEntry5.setProjectileScale(0.25f);
         projectiles.add(projectileEntry5);
 
-        EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
         projectileEntry6.setProjectileScale(0.25f);
         projectiles.add(projectileEntry6);
 
-        EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 1.0D;
         projectileEntry7.setProjectileScale(0.25f);
         projectiles.add(projectileEntry7);
@@ -340,37 +342,37 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         if(rider instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)rider;
             // Type:
-            List<EntityProjectileRapidFire> projectiles = new ArrayList<EntityProjectileRapidFire>();
+            List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
 
-            EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), player, 15, 3);
+            EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), player, 15, 3);
             projectiles.add(projectileEntry);
 
-			EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry2.offsetX += 1.0D;
 			projectileEntry2.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry2);
 
-			EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry3.offsetX -= 1.0D;
 			projectileEntry3.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry3);
 
-			EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry4.offsetZ += 1.0D;
 			projectileEntry4.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry4);
 
-			EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry5.offsetZ -= 1.0D;
 			projectileEntry5.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry5);
 
-			EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry6.offsetY += 1.0D;
 			projectileEntry6.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry6);
 
-			EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
 			projectileEntry7.offsetY -= 10D;
 			projectileEntry7.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry7);

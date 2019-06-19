@@ -3,20 +3,16 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -173,7 +169,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
         // Create New Laser:
         if(this.projectile == null) {
             // Type:
-            this.projectile = new EntityWaterJet(this.getEntityWorld(), this, 20, 10);
+            this.projectile = new EntityWaterJet(ProjectileManager.getInstance().oldProjectileTypes.get(EntityWaterJet.class), this.getEntityWorld(), this, 20, 10);
             this.projectile.setOffset(0, 0, 1);
 
             // Launch:
@@ -213,7 +209,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
             if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
                 return;
 
-            this.abilityProjectile = new EntityWaterJet(this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
+            this.abilityProjectile = new EntityWaterJet(ProjectileManager.getInstance().oldProjectileTypes.get(EntityWaterJet.class), this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
             this.abilityProjectile.setOffset(0, 1, 1);
 
             // Launch:

@@ -5,26 +5,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.dispenser.DispenserBehaviorProjectile;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -64,7 +62,7 @@ public class ProjectileInfo {
 	/** The name of the charge item for this projectile. Can be automatically generated using the name of this projectile or overridden. **/
 	public String chargeItemName;
 	/** The dispenser behaviour used by this projectile. If null, this item cannot be fired from a dispenser. **/
-	public DispenserBehaviorBase dispenserBehaviour;
+	public DispenserBehaviorProjectile dispenserBehaviour;
 
 	// Stats:
 	/** The width of the projectile. **/
@@ -234,13 +232,13 @@ public class ProjectileInfo {
 		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
 		if(this.chargeItem == null) {
 			Item.Properties properties = new Item.Properties();
-			properties.group(ItemGroup.MISC); // TODO Item Group Creative Tabs?
+			properties.group(ItemManager.getInstance().items);
 			this.chargeItem = new ItemCharge(properties, this);
 			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
 		}
 
 		// Dispenser:
-		this.dispenserBehaviour = new DispenserBehaviorBase();
+		this.dispenserBehaviour = new DispenserBehaviorProjectile(this);
 		DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
 
 		// Sounds:
@@ -316,7 +314,7 @@ public class ProjectileInfo {
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
 	public EntityProjectileBase createProjectile(World world, LivingEntity entityLivingBase) {
-		return new EntityProjectileCustom(world, entityLivingBase, this);
+		return new EntityProjectileCustom(this.getEntityType(), world, entityLivingBase, this);
 	}
 
 	/**
@@ -327,7 +325,7 @@ public class ProjectileInfo {
 	 * @param z The z position of the projectile.
 	 */
 	public EntityProjectileBase createProjectile(World world, double x, double y, double z) {
-		return new EntityProjectileCustom(world, x, y, z, this);
+		return new EntityProjectileCustom(this.getEntityType(), world, x, y, z, this);
 	}
 
 	public SoundEvent getLaunchSound() {
