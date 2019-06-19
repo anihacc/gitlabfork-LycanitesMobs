@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.Utilities;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -333,14 +334,12 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     	
 		try {
 			if(this.shootingEntity == null) {
-		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, double.class, double.class, double.class, EntityProjectileLaser.class });
-		    	constructor.setAccessible(true);
-		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.posX, this.posY, this.posZ, this });
-		    }
+				laserEnd = (EntityProjectileLaserEnd)this.getLaserEndClass().getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class, EntityProjectileLaser.class)
+						.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.posX, this.posY, this.posZ, this);
+			}
 	        else {
-		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, LivingEntity.class, EntityProjectileLaser.class });
-		    	constructor.setAccessible(true);
-		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.shootingEntity, this });
+				laserEnd = (EntityProjectileLaserEnd)this.getLaserEndClass().getConstructor(EntityType.class, World.class, LivingEntity.class, EntityProjectileLaser.class)
+						.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.shootingEntity, this);
 	        }
 	        
 			if(this.getLaunchSound() != null)

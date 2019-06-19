@@ -18,7 +18,7 @@ import java.util.*;
 public class AttackTargetingGoal extends TargetingGoal {
 	// Targets:
     public Class targetClass = LivingEntity.class;
-    private List<Class> targetClasses = null;
+    private List<Class> targetClasses = new ArrayList<>();
     
     // Properties:
     private int targetChance = 0;
@@ -116,8 +116,21 @@ public class AttackTargetingGoal extends TargetingGoal {
  	// ==================================================
     @Override
     protected boolean isValidTarget(LivingEntity target) {
+    	// Target Class List:
+		if(!this.targetClasses.isEmpty()) {
+			boolean foundTarget = false;
+			for(Class targetClass : this.targetClasses) {
+				if(targetClass.isAssignableFrom(target.getClass())) {
+					foundTarget = true;
+					break;
+				}
+			}
+			if(!foundTarget)
+				return false;
+		}
+
         // Target Class Check:
-        if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
+        else if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
     	// Own Class Check:

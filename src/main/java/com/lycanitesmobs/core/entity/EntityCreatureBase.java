@@ -4025,7 +4025,6 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Used when saving this mob to a chunk. **/
     @Override
     public void writeAdditional(CompoundNBT nbtTagCompound) {
-    	LycanitesMobs.logDebug("", "SAVING! " + this.getName());
     	nbtTagCompound.putBoolean("FirstSpawn", this.firstSpawn);
     	nbtTagCompound.putString("SpawnEventType", this.spawnEventType);
     	nbtTagCompound.putInt("SpawnEventCount", this.spawnEventCount);

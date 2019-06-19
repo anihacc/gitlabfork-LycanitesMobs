@@ -62,7 +62,7 @@ public class EquipmentPartManager extends JSONLoader {
 			return;
 		}
 		this.equipmentParts.put(equipmentPart.itemName, equipmentPart);
-		ObjectManager.addItem(equipmentPart.itemName, equipmentPart);
+		//ObjectManager.addItem(equipmentPart.itemName, equipmentPart);
 	}
 
 

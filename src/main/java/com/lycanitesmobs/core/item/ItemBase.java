@@ -24,6 +24,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -38,13 +39,17 @@ public class ItemBase extends Item {
 	// ==================================================
     public ItemBase(Properties properties) {
     	super(properties);
-        //this.setMaxStackSize(64);
     }
 
     public void setup() {
         this.setRegistryName(this.modInfo.modid, this.itemName);
-        //this.setCreativeTab(LycanitesMobs.itemsTab);
     }
+
+    @Override
+	@Nonnull
+	public String getTranslationKey() {
+    	return this.itemName;
+	}
     
     
 	// ==================================================

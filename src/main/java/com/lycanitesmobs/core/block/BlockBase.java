@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -69,6 +70,12 @@ public class BlockBase extends Block {
 
 	public BlockBase(Block.Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	@Nonnull
+	public String getTranslationKey() {
+		return this.blockName;
 	}
 
 

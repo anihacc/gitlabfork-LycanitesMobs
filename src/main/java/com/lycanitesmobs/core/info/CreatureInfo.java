@@ -317,9 +317,10 @@ public class CreatureInfo {
 
 		// Spawn Egg:
 		if(this.creatureType != null) {
-			String spawnEggName = this.creatureType.getSpawnEggName();
+			String spawnEggName = this.creatureType.getSpawnEggName() + "_" + this.getName();
 			Item.Properties spawnEggProperties = new Item.Properties();
 			spawnEggProperties.group(ItemManager.getInstance().creatures);
+
 			this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
 			ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
 		}

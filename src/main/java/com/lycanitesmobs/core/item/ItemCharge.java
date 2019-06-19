@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.item;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -54,8 +55,10 @@ public class ItemCharge extends ItemBase {
 
         if(!world.isRemote) {
             EntityProjectileBase projectile = this.createProjectile(itemStack, world, player);
-            if(projectile == null)
+            if(projectile == null) {
+                LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);
                 return new ActionResult<>(ActionResultType.FAIL, itemStack);
+            }
             world.addEntity(projectile);
             this.playSound(world, player.getPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRNG().nextFloat() * 0.4F + 0.8F));
         }
@@ -75,11 +78,7 @@ public class ItemCharge extends ItemBase {
             return this.projectileInfo.createProjectile(world, entityPlayer);
         }
         if(this.oldProjectileClass != null) {
-            try {
-                return this.oldProjectileClass.getConstructor(World.class, PlayerEntity.class).newInstance(world, entityPlayer);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            return ProjectileManager.getInstance().createOldProjectile(this.oldProjectileClass, world, entityPlayer);
         }
         return null;
     }

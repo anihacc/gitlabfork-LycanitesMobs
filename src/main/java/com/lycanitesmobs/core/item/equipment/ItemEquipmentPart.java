@@ -70,7 +70,7 @@ public class ItemEquipmentPart extends ItemBase {
 
 	/** Loads this feature from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
-		this.itemName = json.get("itemName").getAsString();
+		this.itemName = "equipmentpart_" + json.get("itemName").getAsString();
 
 		this.slotType = json.get("slotType").getAsString();
 

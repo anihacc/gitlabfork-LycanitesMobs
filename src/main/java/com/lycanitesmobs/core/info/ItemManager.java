@@ -95,38 +95,6 @@ public class ItemManager {
 		ObjectManager.addItem("geistliver", new ItemBlockPlacer(itemProperties, "geistliver", "shadowfire"));
 
 
-		// Old Projectile Charges and Scepters:
-		ObjectManager.addItem("frostwebcharge", new ItemCharge(itemProperties, "frostwebcharge", EntityFrostweb.class));
-		ObjectManager.addItem("tundracharge", new ItemCharge(itemProperties, "tundracharge", EntityFrostweb.class));
-		ObjectManager.addItem("icefirecharge", new ItemCharge(itemProperties, "icefirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("blizzardcharge", new ItemCharge(itemProperties, "blizzardcharge", EntityFrostweb.class));
-		ObjectManager.addItem("doomfirecharge", new ItemCharge(itemProperties, "doomfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("hellfirecharge", new ItemCharge(itemProperties, "hellfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("devilstarcharge", new ItemCharge(itemProperties, "devilstarcharge", EntityFrostweb.class));
-		ObjectManager.addItem("demoniclightningcharge", new ItemCharge(itemProperties, "demoniclightningcharge", EntityFrostweb.class));
-		ObjectManager.addItem("throwingscythe", new ItemCharge(itemProperties, "throwingscythe", EntityFrostweb.class));
-		ObjectManager.addItem("mudshotcharge", new ItemCharge(itemProperties, "mudshotcharge", EntityFrostweb.class));
-		ObjectManager.addItem("aquapulsecharge", new ItemCharge(itemProperties, "aquapulsecharge", EntityFrostweb.class));
-		ObjectManager.addItem("whirlwindcharge", new ItemCharge(itemProperties, "whirlwindcharge", EntityFrostweb.class));
-		ObjectManager.addItem("chaosorbcharge", new ItemCharge(itemProperties, "chaosorbcharge", EntityFrostweb.class));
-		ObjectManager.addItem("acidsplashcharge", new ItemCharge(itemProperties, "acidsplashcharge", EntityFrostweb.class));
-		ObjectManager.addItem("lightball", new ItemCharge(itemProperties, "lightball", EntityFrostweb.class));
-		ObjectManager.addItem("lifedraincharge", new ItemCharge(itemProperties, "lifedraincharge", EntityFrostweb.class));
-		ObjectManager.addItem("crystalshard", new ItemCharge(itemProperties, "crystalshard", EntityFrostweb.class));
-		ObjectManager.addItem("frostboltcharge", new ItemCharge(itemProperties, "frostboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("faeboltcharge", new ItemCharge(itemProperties, "faeboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("aetherwavecharge", new ItemCharge(itemProperties, "aetherwavecharge", EntityFrostweb.class));
-		ObjectManager.addItem("waterjetcharge", new ItemCharge(itemProperties, "waterjetcharge", EntityFrostweb.class));
-		ObjectManager.addItem("magmacharge", new ItemCharge(itemProperties, "magmacharge", EntityFrostweb.class));
-		ObjectManager.addItem("scorchfirecharge", new ItemCharge(itemProperties, "scorchfirecharge", EntityFrostweb.class));
-		ObjectManager.addItem("poopcharge", new ItemCharge(itemProperties, "poopcharge", EntityFrostweb.class));
-		ObjectManager.addItem("boulderblastcharge", new ItemCharge(itemProperties, "boulderblastcharge", EntityFrostweb.class));
-		ObjectManager.addItem("arcanelaserstormcharge", new ItemCharge(itemProperties, "arcanelaserstormcharge", EntityFrostweb.class));
-		ObjectManager.addItem("quill", new ItemCharge(itemProperties, "quill", EntityFrostweb.class));
-		ObjectManager.addItem("spectralboltcharge", new ItemCharge(itemProperties, "spectralboltcharge", EntityFrostweb.class));
-		ObjectManager.addItem("bloodleechcharge", new ItemCharge(itemProperties, "bloodleechcharge", EntityFrostweb.class));
-
-
 		// Summoning Staves:
 		Item.Properties summoningStaffProperties = new Item.Properties().group(this.items).maxStackSize(1).maxDamage(500);
 		ObjectManager.addItem("summoningstaff", new ItemStaffSummoning(summoningStaffProperties, "summoningstaff", "summoningstaff"));

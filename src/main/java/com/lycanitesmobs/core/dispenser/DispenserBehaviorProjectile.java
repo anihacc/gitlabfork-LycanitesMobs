@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.dispenser;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
