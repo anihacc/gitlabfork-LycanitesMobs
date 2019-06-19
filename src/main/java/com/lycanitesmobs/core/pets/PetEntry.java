@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -293,7 +292,7 @@ public class PetEntry {
                     }
                 }
                 catch(Exception e) {
-                    LycanitesMobs.printDebug("Pet", "Unable to teleport a pet.");
+                    LycanitesMobs.logDebug("Pet", "Unable to teleport a pet.");
                 }
 
                 if(entity instanceof LivingEntity) {
@@ -360,7 +359,7 @@ public class PetEntry {
             this.entity = (Entity)this.summonSet.getCreatureClass().getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.host.getEntityWorld()});
         }
         catch (Exception e) {
-            LycanitesMobs.printWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureClass() + " Name: " + this.name);
+            LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureClass() + " Name: " + this.name);
             //e.printStackTrace();
         }
 

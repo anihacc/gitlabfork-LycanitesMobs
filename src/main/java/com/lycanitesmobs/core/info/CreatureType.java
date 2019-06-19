@@ -55,7 +55,7 @@ public class CreatureType {
 	public void load() {
 		this.createItems();
 
-		LycanitesMobs.printDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
+		LycanitesMobs.logDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
 	}
 
 

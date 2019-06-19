@@ -13,7 +13,7 @@ version="${file.jarVersion}" #mandatory
  # A display name for the mod
 displayName="Lycanites Mobs" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
-updateJSONURL="http://api.lycanitesmobs.com" #optional
+#updateJSONURL="http://api.lycanitesmobs.com/checkUpdate" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="http://lycanitesmobs.com" #optional
 # A file name (in the root of the mod JAR) containing a logo for display

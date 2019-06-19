@@ -80,9 +80,9 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
     	if(this.subspecies == null && !this.hasParent()) {
     		this.subspecies = this.creatureInfo.getRandomSubspecies(this);
     		if(this.subspecies != null)
-    			LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + this.subspecies.getTitle());
+    			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + this.subspecies.getTitle());
     		else
-    			LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
+    			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
     	}
     	
     	if(this.hasParent() && this.getParentTarget() instanceof EntityCreatureBase) {

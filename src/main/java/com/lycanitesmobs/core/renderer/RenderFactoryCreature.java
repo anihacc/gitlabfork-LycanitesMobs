@@ -20,7 +20,7 @@ public class RenderFactoryCreature<T extends EntityCreatureBase> implements IRen
             return new RenderCreature(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
         }
         catch (Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred rendering a creature model:");
+            LycanitesMobs.logWarning("", "An exception occurred rendering a creature model:");
             e.printStackTrace();
         }
         return null;

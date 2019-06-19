@@ -84,7 +84,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
 	public static ExtendedPlayer getForPlayer(PlayerEntity player) {
 		if(player == null) {
-			//LycanitesMobs.printWarning("", "Tried to access an ExtendedPlayer from a null PlayerEntity.");
+			//LycanitesMobs.logWarning("", "Tried to access an ExtendedPlayer from a null PlayerEntity.");
 			return null;
 		}
 
@@ -289,11 +289,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
 	public SummonSet getSummonSet(int setID) {
 		if(setID <= 0) {
-			LycanitesMobs.printWarning("", "Attempted to access set " + setID + " but the minimum ID is 1. Player: " + this.player);
+			LycanitesMobs.logWarning("", "Attempted to access set " + setID + " but the minimum ID is 1. Player: " + this.player);
 			return this.getSummonSet(1);
 		}
 		else if(setID > this.summonSetMax) {
-			LycanitesMobs.printWarning("", "Attempted to access set " + setID + " but the maximum set ID is " + this.summonSetMax + ". Player: " + this.player);
+			LycanitesMobs.logWarning("", "Attempted to access set " + setID + " but the maximum set ID is " + this.summonSetMax + ". Player: " + this.player);
 			return this.getSummonSet(this.summonSetMax);
 		}
 		if(!this.summonSets.containsKey(setID)) {

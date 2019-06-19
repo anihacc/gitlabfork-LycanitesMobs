@@ -62,7 +62,7 @@ public class MessageBeastiary {
 		MessageBeastiary message = new MessageBeastiary();
 		message.entryAmount = Math.min(200, packet.readInt());
         if(message.entryAmount == 200) {
-        	LycanitesMobs.printWarning("", "Received 200 or more creature entries, something went wrong with the Beastiary packet! Addition entries will be skipped to prevent OOM!");
+        	LycanitesMobs.logWarning("", "Received 200 or more creature entries, something went wrong with the Beastiary packet! Addition entries will be skipped to prevent OOM!");
 		}
         if(message.entryAmount > 0) {
 			message.creatureNames = new String[message.entryAmount];

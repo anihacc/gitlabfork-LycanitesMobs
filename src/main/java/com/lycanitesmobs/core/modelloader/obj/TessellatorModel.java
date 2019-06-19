@@ -52,7 +52,7 @@ public class TessellatorModel extends ObjModel
         }
         catch(Exception e)
         {
-			LycanitesMobs.printWarning("", "Unable to load model: " + resourceLocation);
+			LycanitesMobs.logWarning("", "Unable to load model: " + resourceLocation);
             e.toString();
         }
     }

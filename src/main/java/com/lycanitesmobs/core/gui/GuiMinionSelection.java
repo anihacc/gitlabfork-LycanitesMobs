@@ -124,7 +124,7 @@ public class GuiMinionSelection extends GuiBaseScreen {
         /*for(int setID = 1; setID <= 5; setID++) {
         	float offset = ((float)setID / 6) - 0.5F;
         	offset = (float)Math.sin(offset);
-        	LycanitesMobs.printDebug("", "" + offset);
+        	LycanitesMobs.logDebug("", "" + offset);
         	int posX = this.centerX + Math.round(this.windowWidth * offset) - Math.round(buttonWidth / 2);
         	int posY = this.centerY + Math.round(this.windowHeight * offset) - Math.round(buttonHeight / 2);
         	GuiButton button = new GuiButton(setID, posX, posY, buttonWidth, buttonHeight, "" + setID);

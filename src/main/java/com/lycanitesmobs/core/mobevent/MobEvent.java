@@ -162,7 +162,7 @@ public class MobEvent {
 		}
 
 		if(!this.enabled || !MobEventManager.getInstance().mobEventsEnabled) {
-			LycanitesMobs.printDebug("MobEvents", "Mob Events System Disabled");
+			LycanitesMobs.logDebug("MobEvents", "Mob Events System Disabled");
 			return false;
 		}
 
@@ -176,11 +176,11 @@ public class MobEvent {
 		}
 
 		if(this.conditions.isEmpty()) {
-			LycanitesMobs.printDebug("MobEvents", "No Conditions");
+			LycanitesMobs.logDebug("MobEvents", "No Conditions");
 			return true;
 		}
 
-		LycanitesMobs.printDebug("MobEvents", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
+		LycanitesMobs.logDebug("MobEvents", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
 		int conditionsMet = 0;
 		int conditionsRequired = this.conditionsRequired > 0 ? this.conditionsRequired : this.conditions.size();
 		for(SpawnCondition condition : this.conditions) {
@@ -189,16 +189,16 @@ public class MobEvent {
 				position = player.getPosition();
 			}
 			boolean met = condition.isMet(world, player, position);
-			LycanitesMobs.printDebug("MobEvents", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
+			LycanitesMobs.logDebug("MobEvents", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
 			if(met) {
 				if(++conditionsMet >= conditionsRequired) {
-					LycanitesMobs.printDebug("MobEvents", "Sufficient Conditions Met");
+					LycanitesMobs.logDebug("MobEvents", "Sufficient Conditions Met");
 					return true;
 				}
 			}
 		}
 
-		LycanitesMobs.printDebug("MobEvents", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
+		LycanitesMobs.logDebug("MobEvents", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
 		return false;
 	}
 
@@ -211,7 +211,7 @@ public class MobEvent {
 	 * @return
 	 */
 	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level) {
-		LycanitesMobs.printDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
+		LycanitesMobs.logDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
 			return false;

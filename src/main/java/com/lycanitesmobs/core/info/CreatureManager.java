@@ -6,7 +6,6 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.CreatureStats;
-import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -114,10 +113,10 @@ public class CreatureManager extends JSONLoader {
 	public void loadCreatureTypesFromJSON(ModInfo groupInfo) {
 		try {
 			this.loadAllJson(groupInfo, "Creature Type", "creaturetypes", "name", true, FileLoader.PathType.COMMON);
-			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
+			LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Creature Types loaded for: " + groupInfo.name);
+			LycanitesMobs.logWarning("", "No Creature Types loaded for: " + groupInfo.name);
 		}
 	}
 
@@ -129,10 +128,10 @@ public class CreatureManager extends JSONLoader {
 				this.loadedMods.add(groupInfo);
 			}
 			this.loadAllJson(groupInfo, "Creature", "creatures", "name", true, FileLoader.PathType.COMMON);
-			LycanitesMobs.printDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
+			LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Info Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Creatures loaded for: " + groupInfo.name);
+			LycanitesMobs.logWarning("", "No Creatures loaded for: " + groupInfo.name);
 		}
 	}
 
@@ -144,7 +143,7 @@ public class CreatureManager extends JSONLoader {
 			CreatureType creatureType = new CreatureType(groupInfo);
 			creatureType.loadFromJSON(json);
 			if (creatureType.name == null) {
-				LycanitesMobs.printWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				LycanitesMobs.logWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
 				return;
 			}
 
@@ -163,7 +162,7 @@ public class CreatureManager extends JSONLoader {
 			CreatureInfo creatureInfo = new CreatureInfo(groupInfo);
 			creatureInfo.loadFromJSON(json);
 			if (creatureInfo.name == null) {
-				LycanitesMobs.printWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				LycanitesMobs.logWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
 				return;
 			}
 
@@ -192,9 +191,9 @@ public class CreatureManager extends JSONLoader {
 	 * Registers all creatures added to this creature manager, called from the registry event.
 	 * @param event The entity register event.
 	 */
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
-		LycanitesMobs.printDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
+		LycanitesMobs.logDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {
 			event.getRegistry().register(creatureInfo.getEntityType());
 		}

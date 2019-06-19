@@ -49,7 +49,7 @@ public class ItemSoulkey extends ItemBase {
         // Get Possible Altars:
         List<AltarInfo> possibleAltars = new ArrayList<>();
         if(AltarInfo.altars.isEmpty())
-            LycanitesMobs.printWarning("", "No altars have been registered, Soulkeys will not work at all.");
+            LycanitesMobs.logWarning("", "No altars have been registered, Soulkeys will not work at all.");
         for(AltarInfo altarInfo : AltarInfo.altars.values()) {
             if(altarInfo.checkBlockEvent(player, world, pos) && altarInfo.quickCheck(player, world, pos)) {
                 possibleAltars.add(altarInfo);

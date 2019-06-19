@@ -28,6 +28,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @param entityClass The Entity Class to instantiate for the type.
 	 */
 	public void addEntityType(EntityType entityType, Class<? extends Entity> entityClass) {
+		LycanitesMobs.logDebug("", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
 		this.entityTypeClassMap.put(entityType, entityClass);
 		this.entityClassTypeMap.put(entityClass, entityType);
 	}
@@ -40,6 +41,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	@Override
 	public Entity create(EntityType entityType, World world) {
+		LycanitesMobs.logDebug("", "Spawning entity: " + this.entityTypeClassMap.get(entityType).toString() + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
 		Class<? extends Entity> entityClass = this.entityTypeClassMap.get(entityType);
 
 		try {
@@ -61,7 +63,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @param world The world to spawn in.
 	 */
 	public Entity createOnClient(net.minecraftforge.fml.network.FMLPlayMessages.SpawnEntity spawnPacket, World world) {
-		LycanitesMobs.printWarning("", "Trying to spawn a damn entity on the client but pigs are everywhere?!");
+		LycanitesMobs.logDebug("", "Client factory called!"); // This is never called.
 		return null;
 	}
 }

@@ -331,7 +331,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 			oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, uri);
 		}
 		catch (Throwable throwable) {
-			LycanitesMobs.printWarning("", "Unable to open link: " + uri.toString());
+			LycanitesMobs.logWarning("", "Unable to open link: " + uri.toString());
 		}
 	}
 
@@ -434,7 +434,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "An exception occurred when trying to preview a creature in the Beastiary.");
+			LycanitesMobs.logWarning("", "An exception occurred when trying to preview a creature in the Beastiary.");
 			e.printStackTrace();
 		}
 	}

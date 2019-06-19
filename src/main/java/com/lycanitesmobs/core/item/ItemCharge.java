@@ -29,7 +29,7 @@ public class ItemCharge extends ItemBase {
         this.modInfo = LycanitesMobs.modInfo;
         if(this.projectileInfo != null) {
             this.itemName = projectileInfo.chargeItemName;
-            LycanitesMobs.printDebug("Projectile", "Created Charge Item: " + projectileInfo.chargeItemName);
+            LycanitesMobs.logDebug("Projectile", "Created Charge Item: " + projectileInfo.chargeItemName);
             this.setup();
         }
     }

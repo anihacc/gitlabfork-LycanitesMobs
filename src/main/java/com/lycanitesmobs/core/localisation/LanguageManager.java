@@ -5,8 +5,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.Utilities;
-import net.minecraft.client.resources.I18n;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -83,7 +81,7 @@ public class LanguageManager {
 	 * @param mainLanguage The language to load, default is en_us.
 	 */
 	public void loadLanguage(String mainLanguage) {
-		LycanitesMobs.printDebug("Localisation", "Loading additional lang files...");
+		LycanitesMobs.logDebug("Localisation", "Loading additional lang files...");
 
 		// Get Languages To Load:
 		List<String> languageList = Lists.newArrayList(mainLanguage);
@@ -104,7 +102,7 @@ public class LanguageManager {
 
 					// Read Root Lang File:
 					if(!Files.isDirectory(subdirPath)) {
-						LycanitesMobs.printDebug("Localisation", "Reading translations from lang: " + subdirPath.toAbsolutePath());
+						LycanitesMobs.logDebug("Localisation", "Reading translations from lang: " + subdirPath.toAbsolutePath());
 						LanguageManager.getInstance().loadLocaleData(Files.newInputStream(subdirPath));
 						laodedLangFiles++;
 					}
@@ -114,6 +112,6 @@ public class LanguageManager {
 			catch (Exception var9) {}
 		}
 
-		LycanitesMobs.printDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));
+		LycanitesMobs.logDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));
 	}
 }

@@ -47,7 +47,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 
         DispenserBlock.registerDispenseBehavior(this, new DispenserBehaviorMobEggCustom());
 
-		LycanitesMobs.printDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
+		LycanitesMobs.logDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
     
 	// ==================================================

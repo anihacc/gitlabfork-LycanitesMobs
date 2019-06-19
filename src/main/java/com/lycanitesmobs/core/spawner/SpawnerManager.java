@@ -31,7 +31,7 @@ public class SpawnerManager extends JSONLoader {
 
 	/** Loads all JSON Spawners. **/
 	public void loadAllFromJSON() {
-		LycanitesMobs.printDebug("JSONSpawner", "Loading JSON Spawners!");
+		LycanitesMobs.logDebug("JSONSpawner", "Loading JSON Spawners!");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
@@ -67,25 +67,25 @@ public class SpawnerManager extends JSONLoader {
 
 
 		// Create Spawners:
-		LycanitesMobs.printDebug("", "Loading " + spawnerJSONs.size() + " JSON Spawners...");
+		LycanitesMobs.logDebug("", "Loading " + spawnerJSONs.size() + " JSON Spawners...");
 		for(String spawnerJSONName : spawnerJSONs.keySet()) {
 			try {
 				JsonObject spawnerJSON = spawnerJSONs.get(spawnerJSONName);
-				LycanitesMobs.printDebug("JSONSpawner", "Loading Spawner JSON: " + spawnerJSON);
+				LycanitesMobs.logDebug("JSONSpawner", "Loading Spawner JSON: " + spawnerJSON);
 				Spawner spawner = new Spawner();
 				spawner.loadFromJSON(spawnerJSON);
 				this.addSpawner(spawner);
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.printWarning("", "Parsing error loading JSON Spawner: " + spawnerJSONName);
+				LycanitesMobs.logWarning("", "Parsing error loading JSON Spawner: " + spawnerJSONName);
 				e.printStackTrace();
 			}
 			catch(Exception e) {
-				LycanitesMobs.printWarning("", "There was a problem loading JSON Spawner: " + spawnerJSONName);
+				LycanitesMobs.logWarning("", "There was a problem loading JSON Spawner: " + spawnerJSONName);
 				e.printStackTrace();
 			}
 		}
-		LycanitesMobs.printDebug("", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
+		LycanitesMobs.logDebug("", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
 
 
 		// Load Global Spawn Conditions:
@@ -93,7 +93,7 @@ public class SpawnerManager extends JSONLoader {
 		Path defaultGlobalPath = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "globalspawner.json", FileLoader.PathType.SERVER);
 		JsonObject defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
 		if(defaultGlobalJson == null) {
-			LycanitesMobs.printWarning("", "Could not find Global Spawning JSON file at path: " + defaultGlobalPath);
+			LycanitesMobs.logWarning("", "Could not find Global Spawning JSON file at path: " + defaultGlobalPath);
 		}
 
 		File customGlobalFile = new File(configPath + "globalspawner.json");
@@ -113,7 +113,7 @@ public class SpawnerManager extends JSONLoader {
 			}
 		}
 		if(this.globalSpawnConditions.size() > 0) {
-			LycanitesMobs.printDebug("JSONSpawner", "Loaded " + this.globalSpawnConditions.size() + " Global Spawn Conditions.");
+			LycanitesMobs.logDebug("JSONSpawner", "Loaded " + this.globalSpawnConditions.size() + " Global Spawn Conditions.");
 		}
 	}
 
@@ -126,7 +126,7 @@ public class SpawnerManager extends JSONLoader {
 
 	/** Reloads all JSON Spawners. **/
 	public void reload() {
-		LycanitesMobs.printDebug("JSONSpawner", "Destroying JSON Spawners!");
+		LycanitesMobs.logDebug("JSONSpawner", "Destroying JSON Spawners!");
 		for(Spawner spawner : this.spawners.values().toArray(new Spawner[this.spawners.size()])) {
 			spawner.destroy();
 		}
@@ -138,11 +138,11 @@ public class SpawnerManager extends JSONLoader {
 	/** Adds a new Spawner to this Manager. **/
 	public void addSpawner(Spawner spawner) {
 		if(this.spawners.containsKey(spawner.name)) {
-			LycanitesMobs.printWarning("", "[Spawner Manager] Tried to add a Spawner with a name that is already in use: " + spawner.name);
+			LycanitesMobs.logWarning("", "[Spawner Manager] Tried to add a Spawner with a name that is already in use: " + spawner.name);
 			return;
 		}
 		if(this.spawners.values().contains(spawner)) {
-			LycanitesMobs.printWarning("", "[Spawner Manager] Tried to add a Spawner that is already added: " + spawner.name);
+			LycanitesMobs.logWarning("", "[Spawner Manager] Tried to add a Spawner that is already added: " + spawner.name);
 			return;
 		}
 		this.spawners.put(spawner.name, spawner);
@@ -152,7 +152,7 @@ public class SpawnerManager extends JSONLoader {
 	/** Removes a Spawner from this Manager. **/
 	public void removeSpawner(Spawner spawner) {
 		if(!this.spawners.containsKey(spawner.name)) {
-			LycanitesMobs.printWarning("", "[Spawner Manager] Tried to remove a Spawner that hasn't been added: " + spawner.name);
+			LycanitesMobs.logWarning("", "[Spawner Manager] Tried to remove a Spawner that hasn't been added: " + spawner.name);
 			return;
 		}
 		this.spawners.remove(spawner.name);

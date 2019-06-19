@@ -133,7 +133,7 @@ public class ProjectileInfo {
 			try {
 				this.entityClass = (Class<? extends Entity>) Class.forName(json.get("entityClass").getAsString());
 			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 			}
 		}
 
@@ -141,7 +141,7 @@ public class ProjectileInfo {
 			try {
 				this.modelClass = (Class<? extends ModelProjectileBase>) Class.forName(json.get("modelClass").getAsString());
 			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 			}
 		}
 
@@ -196,7 +196,7 @@ public class ProjectileInfo {
 					this.behaviours.add(projectileBehaviour);
 				}
 				else {
-					LycanitesMobs.printWarning("", "Unable to load Projectile Behaviour: " + behaviorJson.get("type").getAsString());
+					LycanitesMobs.logWarning("", "Unable to load Projectile Behaviour: " + behaviorJson.get("type").getAsString());
 				}
 			}
 		}

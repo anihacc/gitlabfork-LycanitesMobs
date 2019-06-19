@@ -146,7 +146,7 @@ public abstract class SpawnTrigger {
 		}
 
 		if("".equals(this.spawner.eventName)) {
-			LycanitesMobs.printDebug("JSONSpawner", "Trigger Fired: " + this + " for: " + this.spawner.name);
+			LycanitesMobs.logDebug("JSONSpawner", "Trigger Fired: " + this + " for: " + this.spawner.name);
 		}
 		return this.spawner.trigger(world, player, this, triggerPos, level, this.count, chain);
 	}

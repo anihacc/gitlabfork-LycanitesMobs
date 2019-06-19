@@ -27,7 +27,7 @@ public class ThemeBlock {
 			this.blockId = json.get("blockId").getAsString().toLowerCase();
 		}
 		else {
-			LycanitesMobs.printWarning("", "Error adding Dungeon Theme Block: JSON value 'blockId' has not been set.");
+			LycanitesMobs.logWarning("", "Error adding Dungeon Theme Block: JSON value 'blockId' has not been set.");
 		}
 
 		if(json.has("weight"))

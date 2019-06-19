@@ -37,13 +37,13 @@ public class ItemInfo {
 			this.itemClass = (Class<? extends Item>) Class.forName(json.get("itemClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
 		}
 		try {
 			this.modelClass = (Class<? extends ModelItemBase>) Class.forName(json.get("modelClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 		}
 	}
 

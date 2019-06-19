@@ -101,7 +101,7 @@ public class SectorInstance {
 	 */
 	public void init(Random random) {
 		if(this.parentConnector == null) {
-			LycanitesMobs.printWarning("Dungeon", "Tried to initialise a Sector Instance with a null Parent Connector: " + this);
+			LycanitesMobs.logWarning("Dungeon", "Tried to initialise a Sector Instance with a null Parent Connector: " + this);
 			return;
 		}
 
@@ -189,7 +189,7 @@ public class SectorInstance {
 			}
 		}
 
-		//LycanitesMobs.printDebug("Dungeon", "Initialised Sector Instance - Bounds: " + this.getOccupiedBoundsMin() + " to " + this.getOccupiedBoundsMax());
+		//LycanitesMobs.logDebug("Dungeon", "Initialised Sector Instance - Bounds: " + this.getOccupiedBoundsMin() + " to " + this.getOccupiedBoundsMax());
 	}
 
 
@@ -874,7 +874,7 @@ public class SectorInstance {
 		}
 
 		// Spawn Mob:
-		LycanitesMobs.printDebug("Dungeon", "Spawning mob " + mobSpawn + " at: " + blockPos + " level: " + this.parentConnector.level);
+		LycanitesMobs.logDebug("Dungeon", "Spawning mob " + mobSpawn + " at: " + blockPos + " level: " + this.parentConnector.level);
 		LivingEntity entityLiving = mobSpawn.createEntity(world);
 		entityLiving.setPosition(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 

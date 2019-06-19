@@ -23,13 +23,13 @@ public class SpawnerMobRegistry {
 	 * @return A collection of MobSpawns, returns null if no global MobSpawns exists for the Spawner.
 	 **/
 	public static Collection<MobSpawn> getMobSpawns(String spawnerName) {
-		LycanitesMobs.printDebug("JSONSpawner", "Getting Global Mobs For Spawner: " + spawnerName);
+		LycanitesMobs.logDebug("JSONSpawner", "Getting Global Mobs For Spawner: " + spawnerName);
 		if(SPAWNER_MOB_REGISTRIES.containsKey(spawnerName.toLowerCase())) {
 			Collection<MobSpawn> mobs = SPAWNER_MOB_REGISTRIES.get(spawnerName.toLowerCase()).mobSpawns.values();
-			LycanitesMobs.printDebug("JSONSpawner", "Found " + mobs.size() + " Global Mobs For Spawner: " + spawnerName);
+			LycanitesMobs.logDebug("JSONSpawner", "Found " + mobs.size() + " Global Mobs For Spawner: " + spawnerName);
 			return mobs;
 		}
-		LycanitesMobs.printDebug("JSONSpawner", "No Global Mobs Found For Spawner: " + spawnerName);
+		LycanitesMobs.logDebug("JSONSpawner", "No Global Mobs Found For Spawner: " + spawnerName);
 		return null;
 	}
 
@@ -41,10 +41,10 @@ public class SpawnerMobRegistry {
 	 **/
 	public static void createSpawn(CreatureInfo creatureInfo, String spawnerName) {
 		if(creatureInfo == null) {
-			LycanitesMobs.printWarning("", "Tried to create a global Mob Spawn to " + spawnerName + " from a null Creature Info!");
+			LycanitesMobs.logWarning("", "Tried to create a global Mob Spawn to " + spawnerName + " from a null Creature Info!");
 		}
 		if(spawnerName == null) {
-			LycanitesMobs.printWarning("", "Tried to create a global Mob Spawn for " + creatureInfo.getName() + " with a null Spawner Name!");
+			LycanitesMobs.logWarning("", "Tried to create a global Mob Spawn for " + creatureInfo.getName() + " with a null Spawner Name!");
 		}
 
 		MobSpawn mobSpawn = new MobSpawn(creatureInfo);
@@ -53,10 +53,10 @@ public class SpawnerMobRegistry {
 			SPAWNER_MOB_REGISTRIES.put(spawnerName, new SpawnerMobRegistry());
 		}
 		if(!SPAWNER_MOB_REGISTRIES.get(spawnerName).addMobSpawn(mobSpawn)) {
-			LycanitesMobs.printWarning("", "Tried to create a duplicate global MobSpawn for " + creatureInfo.getName() + " in Spawner: " + spawnerName + "!");
+			LycanitesMobs.logWarning("", "Tried to create a duplicate global MobSpawn for " + creatureInfo.getName() + " in Spawner: " + spawnerName + "!");
 		}
 
-		LycanitesMobs.printDebug("JSONSpawner", "Added " + creatureInfo.getName() + " to " + spawnerName + " global spawn list.");
+		LycanitesMobs.logDebug("JSONSpawner", "Added " + creatureInfo.getName() + " to " + spawnerName + " global spawn list.");
 	}
 
 

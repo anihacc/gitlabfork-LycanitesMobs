@@ -8,7 +8,6 @@ import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.ConfigGeneral;
 import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
-import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
@@ -22,8 +21,6 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -43,19 +40,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("lycanitesmobs")
+@Mod(value = LycanitesMobs.modid)
 public class LycanitesMobs {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
 	public static final String versionNumber = "2.1.0.0";
-	public static final String versionMC = "1.12.2";
+	public static final String versionMC = "1.14.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
 	public static final String websiteAPI = "http://api.lycanitesmobs.com";
 	public static final String websitePatreon = "https://www.patreon.com/lycanite";
-	public static final String acceptedMinecraftVersions = "[1.12,1.13)";
 
 	public static final PacketHandler packetHandler = new PacketHandler();
 
@@ -113,7 +109,7 @@ public class LycanitesMobs {
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
 		// Change Health Limit:
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
+		//LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
 		// Blocks and Items:
 		ItemManager.getInstance().loadItems();
@@ -199,7 +195,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-	public static void printInfo(String key, String message) {
+	public static void logInfo(String key, String message) {
 		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.info("[LycanitesMobs] [Info] [" + key + "] " + message);
 		}
@@ -211,7 +207,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-	public static void printDebug(String key, String message) {
+	public static void logDebug(String key, String message) {
 		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.debug("[LycanitesMobs] [Debug] [" + key + "] " + message);
 		}
@@ -223,7 +219,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-	public static void printWarning(String key, String message) {
+	public static void logWarning(String key, String message) {
 		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
 		}

@@ -152,7 +152,7 @@ public class Subspecies {
 			try {
 				ClientManager.getInstance().loadSubspeciesModel(subspecies, json.get("modelClass").getAsString());
 			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for subspecies: " + subspecies.getTitle() + " entity: " + creatureInfo.getTitle());
+				LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for subspecies: " + subspecies.getTitle() + " entity: " + creatureInfo.getTitle());
 			}
 		}
 

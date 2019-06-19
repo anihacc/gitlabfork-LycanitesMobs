@@ -4,11 +4,7 @@ import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.core.model.ModelEquipmentPart;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -19,8 +15,6 @@ import net.minecraft.stats.Stat;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 
 import java.util.HashMap;
@@ -96,7 +90,7 @@ public class ObjectManager {
         //Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
 		//fluids.put(fluidName, fluid);
 		//if(!FluidRegistry.registerFluid(fluid)) {
-		//    LycanitesMobs.printWarning("", "Another fluid was registered as " + fluidName);
+		//    LycanitesMobs.logWarning("", "Another fluid was registered as " + fluidName);
         //}
         return null;
 	}
@@ -242,7 +236,7 @@ public class ObjectManager {
         event.getRegistry().registerAll(blocks.values().toArray(new Block[blocks.size()]));
         for(Block block : blocks.values()) {
             if(block.getRegistryName() == null) {
-                LycanitesMobs.printWarning("", "Block: " + block + " has no Registry Name!");
+                LycanitesMobs.logWarning("", "Block: " + block + " has no Registry Name!");
             }
         }
     }
@@ -251,7 +245,7 @@ public class ObjectManager {
     public static void registerItems(RegistryEvent.Register<Item> event) {
 	    for(Item item : items.values()) {
 	        if(item.getRegistryName() == null) {
-	            LycanitesMobs.printWarning("", "Item: " + item + " has no Registry Name!");
+	            LycanitesMobs.logWarning("", "Item: " + item + " has no Registry Name!");
             }
             event.getRegistry().register(item);
         }
@@ -287,7 +281,7 @@ public class ObjectManager {
 	public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
 		for(SoundEvent soundEvent : sounds.values()) {
 			if(soundEvent.getRegistryName() == null) {
-				LycanitesMobs.printWarning("", "Sound: " + soundEvent + " has no Registry Name!");
+				LycanitesMobs.logWarning("", "Sound: " + soundEvent + " has no Registry Name!");
 			}
 			event.getRegistry().register(soundEvent);
 		}

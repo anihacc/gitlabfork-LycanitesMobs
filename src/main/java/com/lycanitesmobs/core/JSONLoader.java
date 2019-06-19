@@ -36,7 +36,7 @@ public abstract class JSONLoader {
 	 * @param pathType Whether to load from assets (resource packs, client side), data (data packs, server side) or common (both but not accessible to packs).
 	 */
 	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom, FileLoader.PathType pathType) {
-		LycanitesMobs.printDebug(name, "Loading JSON " + name + "...");
+		LycanitesMobs.logDebug(name, "Loading JSON " + name + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
 
@@ -59,19 +59,19 @@ public abstract class JSONLoader {
 
 
 		// Parse Json:
-		LycanitesMobs.printDebug(name, "Loading " + jsons.size() + " " + name + "...");
+		LycanitesMobs.logDebug(name, "Loading " + jsons.size() + " " + name + "...");
 		for(String jsonName : jsons.keySet()) {
 			try {
 				JsonObject json = jsons.get(jsonName);
-				LycanitesMobs.printDebug(name, "Loading " + name + " JSON: " + json);
+				LycanitesMobs.logDebug(name, "Loading " + name + " JSON: " + json);
 				this.parseJson(groupInfo, name, json);
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.printWarning("", "Parsing error loading JSON " + name + ": " + jsonName);
+				LycanitesMobs.logWarning("", "Parsing error loading JSON " + name + ": " + jsonName);
 				e.printStackTrace();
 			}
 			catch(Exception e) {
-				LycanitesMobs.printWarning("", "There was a problem loading JSON " + name + ": " + jsonName);
+				LycanitesMobs.logWarning("", "There was a problem loading JSON " + name + ": " + jsonName);
 				e.printStackTrace();
 			}
 		}
@@ -126,11 +126,11 @@ public abstract class JSONLoader {
 						}
 					}
 					catch (JsonParseException e) {
-						LycanitesMobs.printWarning("", "Parsing error loading JSON " + relativePath + "\n" + e.toString());
+						LycanitesMobs.logWarning("", "Parsing error loading JSON " + relativePath + "\n" + e.toString());
 						e.printStackTrace();
 					}
 					catch (Exception e) {
-						LycanitesMobs.printWarning("", "There was a problem loading JSON " + relativePath + "\n" + e.toString());
+						LycanitesMobs.logWarning("", "There was a problem loading JSON " + relativePath + "\n" + e.toString());
 						e.printStackTrace();
 					}
 				}
@@ -140,7 +140,7 @@ public abstract class JSONLoader {
 			}
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "Unable to read files from directory.\n" + e.toString());
+			LycanitesMobs.logWarning("", "Unable to read files from directory.\n" + e.toString());
 			//e.printStackTrace();
 		}
 	}
@@ -174,11 +174,11 @@ public abstract class JSONLoader {
 				}
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.printWarning("", "Parsing error loading JSON: " + jsonName);
+				LycanitesMobs.logWarning("", "Parsing error loading JSON: " + jsonName);
 				e.printStackTrace();
 			}
 			catch(Exception e) {
-				LycanitesMobs.printWarning("", "There was a problem loading JSON: " + jsonName);
+				LycanitesMobs.logWarning("", "There was a problem loading JSON: " + jsonName);
 				e.printStackTrace();
 			}
 		}
@@ -213,11 +213,11 @@ public abstract class JSONLoader {
 					return json;
 				}
 				catch (JsonParseException e) {
-					LycanitesMobs.printWarning("", "Parsing error loading JSON " + relativePath + "\n" + e.toString());
+					LycanitesMobs.logWarning("", "Parsing error loading JSON " + relativePath + "\n" + e.toString());
 					e.printStackTrace();
 				}
 				catch (Exception e) {
-					LycanitesMobs.printWarning("", "There was a problem loading JSON " + relativePath + "\n" + e.toString());
+					LycanitesMobs.logWarning("", "There was a problem loading JSON " + relativePath + "\n" + e.toString());
 					e.printStackTrace();
 				}
 			}
@@ -226,7 +226,7 @@ public abstract class JSONLoader {
 			}
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "Unable to read file from path.\n" + e.toString());
+			LycanitesMobs.logWarning("", "Unable to read file from path.\n" + e.toString());
 			//e.printStackTrace();
 		}
 		return null;
@@ -257,11 +257,11 @@ public abstract class JSONLoader {
 			}
 		}
 		catch (JsonParseException e) {
-			LycanitesMobs.printWarning("", "Parsing error loading JSON: " + jsonName);
+			LycanitesMobs.logWarning("", "Parsing error loading JSON: " + jsonName);
 			e.printStackTrace();
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem loading JSON: " + jsonName);
+			LycanitesMobs.logWarning("", "There was a problem loading JSON: " + jsonName);
 			e.printStackTrace();
 		}
 		return null;
@@ -282,7 +282,7 @@ public abstract class JSONLoader {
 			outputStream.close();
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "Unable to save JSON into the config folder.");
+			LycanitesMobs.logWarning("", "Unable to save JSON into the config folder.");
 			e.printStackTrace();
 		}
 	}

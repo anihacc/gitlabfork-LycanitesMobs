@@ -32,7 +32,7 @@ public class TabManager {
 	            field.set(gui, buttonList);
 			}
         	catch(Exception e) {
-				LycanitesMobs.printWarning("", "A problem occured when adding custom inventory tabs:");
+				LycanitesMobs.logWarning("", "A problem occured when adding custom inventory tabs:");
 				e.printStackTrace();
 			}
         }

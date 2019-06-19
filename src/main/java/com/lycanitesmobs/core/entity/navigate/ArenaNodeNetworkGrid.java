@@ -34,7 +34,7 @@ public class ArenaNodeNetworkGrid extends ArenaNodeNetwork {
                 for (int z = 0; z < arenaNodeZ; z++) {
                     ArenaNode node = arenaNodes[x][y][z];
                     if(node == null) {
-                        LycanitesMobs.printWarning("", "A null arena node was encountered when adding grid nodes.");
+                        LycanitesMobs.logWarning("", "A null arena node was encountered when adding grid nodes.");
                         continue;
                     }
                     this.nodes.add(node);

@@ -186,7 +186,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 */
 	public void onBlockDestroyed(World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving)
 	{
-		LycanitesMobs.printWarning("", "Area Harvesting! " + this.harvestRange);
+		LycanitesMobs.logWarning("", "Area Harvesting! " + this.harvestRange);
 		// Block and Random Area Harvesting:
 		if(this.harvestShape.equalsIgnoreCase("block") || this.harvestShape.equalsIgnoreCase("random")) {
 			if(this.harvestRange.getX() <= 1 && this.harvestRange.getY() <= 1 && this.harvestRange.getZ() <= 1) {

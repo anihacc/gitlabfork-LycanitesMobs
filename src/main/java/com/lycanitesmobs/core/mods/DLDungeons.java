@@ -16,7 +16,7 @@ public class DLDungeons {
 		if(!ModList.get().isLoaded("DLDungeonsJBG") && !ModList.get().isLoaded("dldungeonsjbg"))
 			return;
 		
-		LycanitesMobs.printInfo("", "Doomlike Dungeons Mod Detected...");
+		LycanitesMobs.logInfo("", "Doomlike Dungeons Mod Detected...");
 		
 		Class dlDungeonsAPI = null;
 		Method isLoaded = null;
@@ -24,7 +24,7 @@ public class DLDungeons {
 			dlDungeonsAPI = Class.forName("jaredbgreat.dldungeons.api.DLDungeonsAPI");
 			isLoaded = dlDungeonsAPI.getMethod("isLoaded");
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "Unable to find DLDungeons API Class/Method via reflection:");
+			LycanitesMobs.logWarning("", "Unable to find DLDungeons API Class/Method via reflection:");
 			e.printStackTrace();
 		}
 		
@@ -35,7 +35,7 @@ public class DLDungeons {
 			if(((Boolean)isLoaded.invoke(null)).booleanValue())
 				CreatureManager.getInstance().dlDungeonsLoaded = true;
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "Unable to invoke DLDungeons API method isLoaded():");
+			LycanitesMobs.logWarning("", "Unable to invoke DLDungeons API method isLoaded():");
 			e.printStackTrace();
 		}
 	}
@@ -85,9 +85,9 @@ public class DLDungeons {
 				Method addMob = dlDungeonsAPI.getMethod("addMob", String.class, int.class, String[].class);
 				addMob.invoke(null, mobName, creatureInfo.dungeonLevel, themes.split(","));
 				//DLDungeonsAPI.addMob(mobName, creatureInfo.dungeonLevel, themes.split(","));
-				LycanitesMobs.printDebug("MobSetup", "[DLDungeons] Added " + mobName + " with the level: " + creatureInfo.dungeonLevel + " and themes: " + themes);
+				LycanitesMobs.logDebug("MobSetup", "[DLDungeons] Added " + mobName + " with the level: " + creatureInfo.dungeonLevel + " and themes: " + themes);
 			} catch(Exception e) {
-				LycanitesMobs.printWarning("", "Unable to add " + mobName + " to DLDungeons API:");
+				LycanitesMobs.logWarning("", "Unable to add " + mobName + " to DLDungeons API:");
 			}
 		}
 	}

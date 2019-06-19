@@ -46,7 +46,7 @@ public class MessageCreatureKnowledge {
 			message.rank = packet.readInt();
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 		return message;

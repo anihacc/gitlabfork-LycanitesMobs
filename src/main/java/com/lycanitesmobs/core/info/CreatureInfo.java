@@ -14,7 +14,6 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -28,7 +27,6 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.function.BiFunction;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -163,7 +161,7 @@ public class CreatureInfo {
 			this.entityClass = (Class<? extends LivingEntity>) Class.forName(json.get("entityClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 		}
 
 		if(json.has("enabled"))
@@ -177,14 +175,14 @@ public class CreatureInfo {
 		try {
 			ClientManager.getInstance().loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+			LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
 		}
 
 		// Creature Type:
 		if(json.has("creatureType")) {
 			this.creatureType = CreatureManager.getInstance().getCreatureType(json.get("creatureType").getAsString());
 			if(this.creatureType == null) {
-				LycanitesMobs.printWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
+				LycanitesMobs.logWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
 			}
 		}
 		if(this.creatureType == null) {
@@ -292,7 +290,7 @@ public class CreatureInfo {
 					this.drops.add(itemDrop);
 				}
 				else {
-					LycanitesMobs.printWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
+					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
 				}
 			}
 		}
@@ -339,7 +337,7 @@ public class CreatureInfo {
 		// Vanilla Spawning:
 		this.creatureSpawn.registerVanillaSpawns(this);
 
-		LycanitesMobs.printDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+		LycanitesMobs.logDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 
@@ -392,11 +390,12 @@ public class CreatureInfo {
 	public EntityType getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
-			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
+			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction); Client Factory never called.
 			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
-			entityTypeBuilder.setUpdateInterval(10);
+			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);
 			entityTypeBuilder.size((float)this.width, (float)this.height);
+			entityTypeBuilder.disableSerialization();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityClass);
@@ -560,16 +559,16 @@ public class CreatureInfo {
 	 * @return A Subspecies or null if using the base species.
 	 */
 	public Subspecies getRandomSubspecies(LivingEntity entity, boolean rare) {
-		LycanitesMobs.printDebug("Subspecies", "~0===== Subspecies =====0~");
-		LycanitesMobs.printDebug("Subspecies", "Selecting random subspecies for: " + entity);
+		LycanitesMobs.logDebug("Subspecies", "~0===== Subspecies =====0~");
+		LycanitesMobs.logDebug("Subspecies", "Selecting random subspecies for: " + entity);
 		if(rare) {
-			LycanitesMobs.printDebug("Subspecies", "The conditions have been set to rare increasing the chances of a subspecies being picked.");
+			LycanitesMobs.logDebug("Subspecies", "The conditions have been set to rare increasing the chances of a subspecies being picked.");
 		}
 		if(this.subspecies.isEmpty()) {
-			LycanitesMobs.printDebug("Subspecies", "No species available, will be base species.");
+			LycanitesMobs.logDebug("Subspecies", "No species available, will be base species.");
 			return null;
 		}
-		LycanitesMobs.printDebug("Subspecies", "Subspecies Available: " + this.subspecies.size());
+		LycanitesMobs.logDebug("Subspecies", "Subspecies Available: " + this.subspecies.size());
 
 		// Get Viable Subspecies:
 		List<Subspecies> possibleSubspecies = new ArrayList<>();
@@ -583,7 +582,7 @@ public class CreatureInfo {
 			}
 		}
 		if(possibleSubspecies.isEmpty()) {
-			LycanitesMobs.printDebug("Subspecies", "No species allowed, will be base species.");
+			LycanitesMobs.logDebug("Subspecies", "No species allowed, will be base species.");
 			return null;
 		}
 
@@ -596,7 +595,7 @@ public class CreatureInfo {
 			}
 		}
 
-		LycanitesMobs.printDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
+		LycanitesMobs.logDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
 
 		// Get Weights:
 		int baseSpeciesWeightScaled = Subspecies.BASE_WEIGHT;
@@ -610,13 +609,13 @@ public class CreatureInfo {
 		for(Subspecies subspeciesEntry : possibleSubspecies) {
 			totalWeight += subspeciesEntry.weight;
 		}
-		LycanitesMobs.printDebug("Subspecies", "Total Weight: " + totalWeight);
+		LycanitesMobs.logDebug("Subspecies", "Total Weight: " + totalWeight);
 
 		// Roll and Check Default:
 		int roll = entity.getRNG().nextInt(totalWeight) + 1;
-		LycanitesMobs.printDebug("Subspecies", "Rolled: " + roll);
+		LycanitesMobs.logDebug("Subspecies", "Rolled: " + roll);
 		if(roll <= baseSpeciesWeightScaled) {
-			LycanitesMobs.printDebug("Subspecies", "Base species selected: " + baseSpeciesWeightScaled);
+			LycanitesMobs.logDebug("Subspecies", "Base species selected: " + baseSpeciesWeightScaled);
 			return null;
 		}
 
@@ -625,12 +624,12 @@ public class CreatureInfo {
 		for(Subspecies subspeciesEntry : possibleSubspecies) {
 			checkWeight += subspeciesEntry.weight;
 			if(roll <= checkWeight) {
-				LycanitesMobs.printDebug("Subspecies", "Subspecies selected: " + subspeciesEntry.toString());
+				LycanitesMobs.logDebug("Subspecies", "Subspecies selected: " + subspeciesEntry.toString());
 				return subspeciesEntry;
 			}
 		}
 
-		LycanitesMobs.printWarning("Subspecies", "The roll was higher than the Total Weight, this shouldn't happen.");
+		LycanitesMobs.logWarning("Subspecies", "The roll was higher than the Total Weight, this shouldn't happen.");
 		return null;
 	}
 

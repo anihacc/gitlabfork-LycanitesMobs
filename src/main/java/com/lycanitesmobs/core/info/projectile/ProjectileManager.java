@@ -63,10 +63,10 @@ public class ProjectileManager extends JSONLoader {
 	public void loadAllFromJSON(ModInfo groupInfo) {
 		try {
 			this.loadAllJson(groupInfo, "Projectile", "projectiles", "name", true, FileLoader.PathType.COMMON);
-			LycanitesMobs.printDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
+			LycanitesMobs.logDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Projectiles loaded for: " + groupInfo.name);
+			LycanitesMobs.logWarning("", "No Projectiles loaded for: " + groupInfo.name);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ProjectileManager extends JSONLoader {
 		ProjectileInfo projectileInfo = new ProjectileInfo(modInfo);
 		projectileInfo.loadFromJSON(json);
 		if (projectileInfo.name == null) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
+			LycanitesMobs.logWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
 			return;
 		}
 
@@ -107,7 +107,7 @@ public class ProjectileManager extends JSONLoader {
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		ModInfo modInfo = LycanitesMobs.modInfo;
-		LycanitesMobs.printDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
+		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
 
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
 			if(projectileInfo.modInfo != modInfo) {

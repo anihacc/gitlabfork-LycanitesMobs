@@ -67,7 +67,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
 		this.wavefrontParts = this.wavefrontObject.objObjects;
 		if(this.wavefrontParts.isEmpty())
-			LycanitesMobs.printWarning("", "Unable to load any parts for the " + name + " model!");
+			LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
 
 		// Create Animator:
 		this.animator = new Animator();
@@ -93,7 +93,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem loading animation parts for " + name + ":");
+			LycanitesMobs.logWarning("", "There was a problem loading animation parts for " + name + ":");
 			e.toString();
 		}
 
@@ -118,7 +118,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("Model", "Unable to load animation json for " + name + ".");
+			LycanitesMobs.logWarning("Model", "Unable to load animation json for " + name + ".");
 		}
 
 		return this;
@@ -131,7 +131,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	// ========== Add Animation Part ==========
 	public void addAnimationPart(ModelObjPart animationPart) {
 		if(this.animationParts.containsKey(animationPart.name)) {
-			LycanitesMobs.printWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
+			LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
 			return;
 		}
 		if(animationPart.parentName != null) {

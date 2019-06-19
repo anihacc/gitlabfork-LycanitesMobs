@@ -109,7 +109,7 @@ public class CreatureSpawn {
 		if(json.has("spawners")) {
 			this.spawners = JSONHelper.getJsonStrings(json.get("spawners").getAsJsonArray());
 			for(String spawner : this.spawners) {
-				LycanitesMobs.printDebug("Creature", "Adding " + creatureInfo.getName() + " to " + spawner + " global spawn list.");
+				LycanitesMobs.logDebug("Creature", "Adding " + creatureInfo.getName() + " to " + spawner + " global spawn list.");
 				SpawnerMobRegistry.createSpawn(creatureInfo, spawner);
 
 				if ("monster".equalsIgnoreCase(spawner))
@@ -201,7 +201,7 @@ public class CreatureSpawn {
 		if(!CreatureManager.getInstance().spawnConfig.disableDungeonSpawners) {
 			if(this.dungeonWeight > 0) {
 				DungeonHooks.addDungeonMob(creatureInfo.getEntityType(), this.dungeonWeight);
-				LycanitesMobs.printDebug("MobSetup", "Dungeon Spawn Added - Weight: " + this.dungeonWeight);
+				LycanitesMobs.logDebug("MobSetup", "Dungeon Spawn Added - Weight: " + this.dungeonWeight);
 			}
 		}
 	}
@@ -214,7 +214,7 @@ public class CreatureSpawn {
 	 */
 	public boolean isAllowedDimension(World world) {
 		if(world == null) {
-			LycanitesMobs.printDebug("MobSpawns", "No world or dimension spawn settings were found, defaulting to valid.");
+			LycanitesMobs.logDebug("MobSpawns", "No world or dimension spawn settings were found, defaulting to valid.");
 			return true;
 		}
 
@@ -231,11 +231,11 @@ public class CreatureSpawn {
 		// Check IDs:
 		for(int dimensionId : this.dimensionIds) {
 			if(world.getDimension().getType().getId() == dimensionId) {
-				LycanitesMobs.printDebug("MobSpawns", "Dimension is in " + this.dimensionListType + ".");
+				LycanitesMobs.logDebug("MobSpawns", "Dimension is in " + this.dimensionListType + ".");
 				return this.dimensionListType.equalsIgnoreCase("whitelist");
 			}
 		}
-		LycanitesMobs.printDebug("MobSpawns", "Dimension was not in " + this.dimensionListType + ".");
+		LycanitesMobs.logDebug("MobSpawns", "Dimension was not in " + this.dimensionListType + ".");
 		return this.dimensionListType.equalsIgnoreCase("blacklist");
 	}
 

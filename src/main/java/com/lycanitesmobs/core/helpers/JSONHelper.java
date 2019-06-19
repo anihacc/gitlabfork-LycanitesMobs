@@ -190,7 +190,7 @@ public class JSONHelper {
 					biomeType = BiomeDictionary.Type.getType(biomeEntry);
 				} catch (Exception e) {
 					biomeType = null;
-					LycanitesMobs.printWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
+					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
 				if (biomeType != null) {
 					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);

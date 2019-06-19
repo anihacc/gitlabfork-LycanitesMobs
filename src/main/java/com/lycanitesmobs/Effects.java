@@ -89,7 +89,7 @@ public class Effects {
 		for(Object potionEffectObj : entity.getActivePotionEffects()) {
 			if(potionEffectObj == null) {
 				entity.clearActivePotions();
-				LycanitesMobs.printWarning("EffectsSetup", "Found a null potion effect on entity: " + entity + " all effects have been removed from this entity.");
+				LycanitesMobs.logWarning("EffectsSetup", "Found a null potion effect on entity: " + entity + " all effects have been removed from this entity.");
 			}
 		}
 		
@@ -173,7 +173,7 @@ public class Effects {
 						}
 					}
 					catch(Exception e) {
-						LycanitesMobs.printWarning("", "Failed to create and send a network packet for instability velocity!");
+						LycanitesMobs.logWarning("", "Failed to create and send a network packet for instability velocity!");
 						e.printStackTrace();
 					}
 				}

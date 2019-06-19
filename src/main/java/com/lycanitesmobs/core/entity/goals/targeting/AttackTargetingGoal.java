@@ -161,7 +161,7 @@ public class AttackTargetingGoal extends TargetingGoal {
                     return false;
             }
             catch (Exception e) {
-                LycanitesMobs.printWarning("", "An exception occurred when assessing pack sizes, this has been skipped to prevent a crash.");
+                LycanitesMobs.logWarning("", "An exception occurred when assessing pack sizes, this has been skipped to prevent a crash.");
                 e.printStackTrace();
             }
         }
@@ -231,7 +231,7 @@ public class AttackTargetingGoal extends TargetingGoal {
 				newTarget = possibleTargets.get(0);
 			}
 			catch (Exception e) {
-				LycanitesMobs.printWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
+				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
 				e.printStackTrace();
 			}
 			return newTarget;

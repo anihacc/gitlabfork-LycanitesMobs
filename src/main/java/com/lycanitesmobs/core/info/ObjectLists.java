@@ -249,21 +249,21 @@ public class ObjectLists {
 	// ========== Add From Config Value ==========
 	public static void addFromConfig(String listName) {
 		/*String customDropsString = ConfigCreatures.INSTANCE.customDrops.get();
-		LycanitesMobs.printDebug("Items", "~O========== Custom " + listName + " ==========O~");
+		LycanitesMobs.logDebug("Items", "~O========== Custom " + listName + " ==========O~");
 		if(customDropsString != null && customDropsString.length() > 0) {
 			for (String customDropEntryString : customDropsString.replace(" ", "").split(";")) {
-				LycanitesMobs.printDebug("Items", "Adding: " + customDropEntryString);
+				LycanitesMobs.logDebug("Items", "Adding: " + customDropEntryString);
 				String[] customDropValues = customDropEntryString.split(",");
 				String dropName = customDropValues[0];
 				if (Item.getByNameOrId(dropName) != null) {
 					Item customItem = Item.getByNameOrId(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customItem, 1));
-					LycanitesMobs.printDebug("ItemSetup", "As Item: " + customItem);
+					LycanitesMobs.logDebug("ItemSetup", "As Item: " + customItem);
 				}
 				else if (Block.getBlockFromName(dropName) != null) {
 					Block customBlock = Block.getBlockFromName(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customBlock, 1));
-					LycanitesMobs.printDebug("ItemSetup", "As Block: " + customBlock);
+					LycanitesMobs.logDebug("ItemSetup", "As Block: " + customBlock);
 				}
 			}
 		}*/

@@ -88,7 +88,7 @@ public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
             }
         }
         catch(Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred when selecting help targets in rider revenge, this has been skipped to prevent a crash.");
+            LycanitesMobs.logWarning("", "An exception occurred when selecting help targets in rider revenge, this has been skipped to prevent a crash.");
             e.printStackTrace();
         }
 

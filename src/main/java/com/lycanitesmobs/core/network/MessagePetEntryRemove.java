@@ -37,7 +37,7 @@ public class MessagePetEntryRemove {
 				PetManager petManager = playerExt.petManager;
 				PetEntry petEntry = petManager.getEntry(message.petEntryID);
 				if(petEntry == null) {
-					LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from server!");
+					LycanitesMobs.logWarning("", "Tried to remove a null PetEntry from server!");
 					return; // Nothing to remove!
 				}
 				petEntry.remove();
@@ -54,7 +54,7 @@ public class MessagePetEntryRemove {
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-			LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from client!");
+			LycanitesMobs.logWarning("", "Tried to remove a null PetEntry from client!");
             return; // Nothing to remove!
         }
         petEntry.remove();
@@ -68,7 +68,7 @@ public class MessagePetEntryRemove {
 		try {
             message.petEntryID = packet.readInt();
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 		return message;
@@ -81,7 +81,7 @@ public class MessagePetEntryRemove {
 		try {
 			packet.writeInt(message.petEntryID);
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem encoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 	}

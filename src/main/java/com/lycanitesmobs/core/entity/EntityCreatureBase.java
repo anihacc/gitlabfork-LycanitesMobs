@@ -538,6 +538,12 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     // ==================================================
     //                     Data Manager
     // ==================================================
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+    	// TODO Move data manager sync to here and remove these getters.
+    	super.notifyDataManagerChange(key);
+	}
+
     public boolean getBoolFromDataManager(DataParameter<Boolean> key) {
         try {
             return this.getDataManager().get(key);
@@ -636,55 +642,55 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         	return true;
 		}
 
-    	LycanitesMobs.printDebug("MobSpawns", " ~O==================== Vanilla Spawn Check: " + this.creatureInfo.getName() + " ====================O~");
-    	LycanitesMobs.printDebug("MobSpawns", "Attempting to Spawn: " + this.creatureInfo.getName());
-		LycanitesMobs.printDebug("MobSpawns", "Target Spawn Location: " + pos);
+    	LycanitesMobs.logDebug("MobSpawns", " ~O==================== Vanilla Spawn Check: " + this.creatureInfo.getName() + " ====================O~");
+    	LycanitesMobs.logDebug("MobSpawns", "Attempting to Spawn: " + this.creatureInfo.getName());
+		LycanitesMobs.logDebug("MobSpawns", "Target Spawn Location: " + pos);
 
 		// Enabled Check:
-		LycanitesMobs.printDebug("MobSpawns", "Checking if creature is enabled...");
+		LycanitesMobs.logDebug("MobSpawns", "Checking if creature is enabled...");
 		if(!this.creatureInfo.enabled || !this.creatureInfo.creatureSpawn.enabled) {
 			return false;
 		}
     	
     	// Peaceful Check:
-    	LycanitesMobs.printDebug("MobSpawns", "Checking for peaceful difficulty...");
+    	LycanitesMobs.logDebug("MobSpawns", "Checking for peaceful difficulty...");
         if(!this.creatureInfo.peaceful && this.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL) {
         	return false;
 		}
 
 		// Gamerule Check:
-		LycanitesMobs.printDebug("MobSpawns", "Checking gamerules...");
+		LycanitesMobs.logDebug("MobSpawns", "Checking gamerules...");
 		if(!this.getEntityWorld().getGameRules().getBoolean("doMobSpawning")) {
 			return false;
 		}
         
         // Fixed Spawning Checks:
-    	LycanitesMobs.printDebug("MobSpawns", "Fixed spawn check (light level, collisions)...");
+    	LycanitesMobs.logDebug("MobSpawns", "Fixed spawn check (light level, collisions)...");
         if(!this.fixedSpawnCheck(world, pos)) {
 			return false;
 		}
         
     	// Mob Spawner Check:
         if(spawnReason == SpawnReason.SPAWNER) {
-        	LycanitesMobs.printDebug("MobSpawns", "Spawned from Mob Spawner, skipping other checks.");
-        	LycanitesMobs.printDebug("MobSpawns", "Vanilla Spawn Check Passed!");
+        	LycanitesMobs.logDebug("MobSpawns", "Spawned from Mob Spawner, skipping other checks.");
+        	LycanitesMobs.logDebug("MobSpawns", "Vanilla Spawn Check Passed!");
         	return true;
         }
-    	LycanitesMobs.printDebug("MobSpawns", "No Mob Spawner found.");
+    	LycanitesMobs.logDebug("MobSpawns", "No Mob Spawner found.");
 
         // Global Spawn Check:
-		LycanitesMobs.printDebug("MobSpawns", "Global Spawn Check (Master Dimension List, etc)...");
+		LycanitesMobs.logDebug("MobSpawns", "Global Spawn Check (Master Dimension List, etc)...");
 		if(!CreatureManager.getInstance().spawnConfig.isAllowedGlobal(world)) {
 			return false;
 		}
         
         // Environment Spawning Checks:
-    	LycanitesMobs.printDebug("MobSpawns", "Environment spawn check (dimension, group limit, ground type, water, lava, underground)...");
+    	LycanitesMobs.logDebug("MobSpawns", "Environment spawn check (dimension, group limit, ground type, water, lava, underground)...");
         if(!this.environmentSpawnCheck(world, pos)) {
 			return false;
 		}
 
-        LycanitesMobs.printDebug("MobSpawns", "Vanilla Spawn Check Passed!");
+        LycanitesMobs.logDebug("MobSpawns", "Vanilla Spawn Check Passed!");
         return true;
     }
 
@@ -695,12 +701,12 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 			return false;
 		}
 
-    	LycanitesMobs.printDebug("MobSpawns", "Checking collision...");
+    	LycanitesMobs.logDebug("MobSpawns", "Checking collision...");
         if(!this.checkSpawnCollision(world, pos)) {
         	return false;
 		}
 
-		LycanitesMobs.printDebug("MobSpawns", "Counting mobs of the same kind, max allowed is: " + this.creatureInfo.creatureSpawn.spawnAreaLimit);
+		LycanitesMobs.logDebug("MobSpawns", "Counting mobs of the same kind, max allowed is: " + this.creatureInfo.creatureSpawn.spawnAreaLimit);
 		if(!this.checkSpawnGroupLimit(world, pos, CreatureManager.getInstance().spawnConfig.spawnLimitRange))
 			return false;
 
@@ -712,22 +718,22 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     public boolean environmentSpawnCheck(World world, BlockPos pos) {
         if(this.creatureInfo.creatureSpawn.worldDayMin > 0) {
             int currentDay = (int) Math.floor(world.getGameTime() / 24000D);
-            LycanitesMobs.printDebug("MobSpawns", "Checking game time, currently on day: " + currentDay + ", must be at least day: " + this.creatureInfo.creatureSpawn.worldDayMin + ".");
+            LycanitesMobs.logDebug("MobSpawns", "Checking game time, currently on day: " + currentDay + ", must be at least day: " + this.creatureInfo.creatureSpawn.worldDayMin + ".");
             if (currentDay < this.creatureInfo.creatureSpawn.worldDayMin)
                 return false;
         }
-    	LycanitesMobs.printDebug("MobSpawns", "Checking dimension.");
+    	LycanitesMobs.logDebug("MobSpawns", "Checking dimension.");
     	if(!this.isNativeDimension(this.getEntityWorld()))
     		return false;
-    	LycanitesMobs.printDebug("MobSpawns", "Checking for liquid (water, lava, ooze, etc).");
+    	LycanitesMobs.logDebug("MobSpawns", "Checking for liquid (water, lava, ooze, etc).");
         if(!this.spawnsInWater && this.getEntityWorld().containsAnyLiquid(this.getBoundingBox()))
             return false;
         else if(!this.spawnsOnLand && !this.getEntityWorld().containsAnyLiquid(this.getBoundingBox()))
             return false;
-    	LycanitesMobs.printDebug("MobSpawns", "Checking for underground.");
+    	LycanitesMobs.logDebug("MobSpawns", "Checking for underground.");
         if(!this.spawnsUnderground && this.isBlockUnderground(pos.getX(), pos.getY() + 1, pos.getZ()))
         	return false;
-        LycanitesMobs.printDebug("MobSpawns", "Checking for nearby bosses.");
+        LycanitesMobs.logDebug("MobSpawns", "Checking for nearby bosses.");
 		if(!this.checkSpawnBoss(world, pos))
 			return false;
 
@@ -1041,11 +1047,11 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     	if(this.subspecies == null && !this.isMinion()) {
     		Subspecies randomSubspecies = this.creatureInfo.getRandomSubspecies(this, this.spawnedRare);
     		if(randomSubspecies != null) {
-				LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + randomSubspecies.getTitle());
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + randomSubspecies.getTitle());
 				this.applySubspecies(randomSubspecies.index);
 			}
     		else {
-				LycanitesMobs.printDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
+				LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
 				this.applySubspecies(0);
 			}
     	}
@@ -2505,7 +2511,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 			projectile = (EntityProjectileBase) projectileClass.getConstructor(World.class, LivingEntity.class).newInstance(this.getEntityWorld(), this);
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "Unable to create a projectile from the class: " + projectileClass);
+			LycanitesMobs.logWarning("", "Unable to create a projectile from the class: " + projectileClass);
 		}
 		return this.fireProjectile(projectile, target, range, angle, offset, velocity, scale, inaccuracy);
 	}

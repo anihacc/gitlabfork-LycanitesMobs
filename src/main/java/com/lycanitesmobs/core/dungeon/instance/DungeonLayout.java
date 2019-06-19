@@ -45,7 +45,7 @@ public class DungeonLayout {
 
 		// Start:
 		SectorInstance entranceSector = this.start(random);
-		LycanitesMobs.printDebug("Dungeon", "Created Entrance Sector: " + entranceSector);
+		LycanitesMobs.logDebug("Dungeon", "Created Entrance Sector: " + entranceSector);
 		this.openConnectors.clear();
 
 		// Levels:
@@ -54,34 +54,34 @@ public class DungeonLayout {
 		boolean onLastLevel = false;
 		while(!onLastLevel && level <= 10) {
 			int sectorCount = this.dungeonInstance.schematic.getRandomSectorCount(random);
-			LycanitesMobs.printDebug("Dungeon", "Starting Level " + level + " - Sector Count: " + sectorCount);
+			LycanitesMobs.logDebug("Dungeon", "Starting Level " + level + " - Sector Count: " + sectorCount);
 
 			// Snake:
 			int snakeCount = Math.round((float)sectorCount * 0.4f);
 			exitSector = this.snake(random, exitSector, Math.max(3, snakeCount));
-			LycanitesMobs.printDebug("Dungeon", "Snake Sectors: " + snakeCount + " - From Sector: " + exitSector);
+			LycanitesMobs.logDebug("Dungeon", "Snake Sectors: " + snakeCount + " - From Sector: " + exitSector);
 			if(exitSector.connectors.isEmpty()) {
 				onLastLevel = true;
 			}
 
 			// Stem:
 			sectorCount -= snakeCount;
-			LycanitesMobs.printDebug("Dungeon", "Stem Sectors: " + sectorCount + " Open Snake Sectors: " + this.openConnectors.size());
+			LycanitesMobs.logDebug("Dungeon", "Stem Sectors: " + sectorCount + " Open Snake Sectors: " + this.openConnectors.size());
 			while(sectorCount > 0) {
 				int stemmedSectors = this.stem(random, sectorCount).size();
 				if(stemmedSectors == 0) {
-					LycanitesMobs.printWarning("Dungeon", "Unable to stem any sectors.");
+					LycanitesMobs.logWarning("Dungeon", "Unable to stem any sectors.");
 					break;
 				}
 				sectorCount -= stemmedSectors;
 			}
 
 			this.openConnectors.clear();
-			LycanitesMobs.printDebug("Dungeon", "Completed Level " + level + (onLastLevel ? " (Final)" : ""));
+			LycanitesMobs.logDebug("Dungeon", "Completed Level " + level + (onLastLevel ? " (Final)" : ""));
 			level++;
 		}
 
-		LycanitesMobs.printDebug("Dungeon", "Dungeon Instance Generation Complete!");
+		LycanitesMobs.logDebug("Dungeon", "Dungeon Instance Generation Complete!");
 	}
 
 
@@ -145,7 +145,7 @@ public class DungeonLayout {
 		}
 
 		if(generatedSectors.isEmpty()) {
-			LycanitesMobs.printWarning("Dungeon", "Unable to generate any sectors for the dungeon: " + this.dungeonInstance.schematic.name);
+			LycanitesMobs.logWarning("Dungeon", "Unable to generate any sectors for the dungeon: " + this.dungeonInstance.schematic.name);
 		}
 
 		return generatedSectors.get(generatedSectors.size() - 1);

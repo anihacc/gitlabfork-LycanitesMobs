@@ -97,7 +97,7 @@ public class ItemEquipmentPart extends ItemBase {
 			while (jsonIterator.hasNext()) {
 				JsonObject featureJson = jsonIterator.next().getAsJsonObject();
 				if(!this.addFeature(EquipmentFeature.createFromJSON(featureJson))) {
-					LycanitesMobs.printWarning("", "[Equipment] The feature " + featureJson.toString() + " was unable to be added, check the JSON format.");
+					LycanitesMobs.logWarning("", "[Equipment] The feature " + featureJson.toString() + " was unable to be added, check the JSON format.");
 				}
 			}
 		}
@@ -191,11 +191,11 @@ public class ItemEquipmentPart extends ItemBase {
 	 **/
 	public boolean addFeature(EquipmentFeature feature) {
 		if(feature == null) {
-			LycanitesMobs.printWarning("", "[Equipment] Unable to add a null feature to " + this);
+			LycanitesMobs.logWarning("", "[Equipment] Unable to add a null feature to " + this);
 			return false;
 		}
 		if(feature.featureType == null) {
-			LycanitesMobs.printWarning("", "[Equipment] Feature type not set for part " + this);
+			LycanitesMobs.logWarning("", "[Equipment] Feature type not set for part " + this);
 			return false;
 		}
 		this.features.add(feature);

@@ -206,7 +206,7 @@ public class EntityPortal extends EntityProjectileBase {
 			try {
 				entity = (Entity)this.summonClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.getEntityWorld()});
 			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "A none Entity class type was passed to an EntityPortal, only entities can be summoned from portals!");
+				LycanitesMobs.logWarning("", "A none Entity class type was passed to an EntityPortal, only entities can be summoned from portals!");
 				e.printStackTrace();
 			}
 	    	if(entity == null) {

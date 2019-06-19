@@ -51,7 +51,7 @@ public class ExtendedEntity implements IExtendedEntity {
     // ==================================================
 	public static ExtendedEntity getForEntity(LivingEntity entity) {
 		if(entity == null) {
-			//LycanitesMobs.printWarning("", "Tried to access an ExtendedEntity from a null Entity.");
+			//LycanitesMobs.logWarning("", "Tried to access an ExtendedEntity from a null Entity.");
 			return null;
 		}
 
@@ -115,7 +115,7 @@ public class ExtendedEntity implements IExtendedEntity {
 		ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = ConfigAdmin.INSTANCE.forceRemoveEntityIds.get();
 		ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = 40;
         if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.size() > 0 && !this.forceRemoveChecked) {
-            LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + this.entity.getName());
+            LycanitesMobs.logDebug("ForceRemoveEntity", "Forced entity removal, checking: " + this.entity.getName());
             for (String forceRemoveID : FORCE_REMOVE_ENTITY_IDS) {
                 if (forceRemoveID.equalsIgnoreCase(this.entity.getType().getRegistryName().toString())) {
                     this.forceRemove = true;
