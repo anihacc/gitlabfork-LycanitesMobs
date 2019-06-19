@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.ConfigGeneral;
 import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
+import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
@@ -21,6 +22,8 @@ import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -58,6 +61,9 @@ public class LycanitesMobs {
 	public static ModInfo modInfo;
 	//public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
+	public static boolean configReady = false;
+	public static boolean earlyDebug = false;
+
 	// Capabilities:
 	@CapabilityInject(IExtendedEntity.class)
 	public static final Capability<IExtendedEntity> EXTENDED_ENTITY = null;
@@ -92,24 +98,14 @@ public class LycanitesMobs {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+
 		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	private void commonSetup(final FMLCommonSetupEvent event) {
-		ObjectManager.setCurrentModInfo(modInfo);
-		this.loadConfigs();
-
-		// Event Listeners:
 		MinecraftForge.EVENT_BUS.register(new EventListener());
 		MinecraftForge.EVENT_BUS.register(CreatureManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
-
-		// Network:
-		packetHandler.register();
-		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
-
-		// Change Health Limit:
-		//LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute) SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
+		MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
+		MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
+		MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
 
 		// Blocks and Items:
 		ItemManager.getInstance().loadItems();
@@ -128,23 +124,18 @@ public class LycanitesMobs {
 		ElementManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Creatures:
-		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
-		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 		CreatureManager.getInstance().startup(modInfo);
 
 		// Projectiles:
 		ProjectileManager.getInstance().startup(modInfo);
 
 		// Spawners:
-		MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
 		SpawnerManager.getInstance().loadAllFromJSON();
 
 		// Altars:
 		AltarInfo.createAltars();
 
 		// Mob Events:
-		MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());
-		MinecraftForge.EVENT_BUS.register(MobEventListener.getInstance());
 		MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Dungeons:
@@ -153,6 +144,23 @@ public class LycanitesMobs {
 		// Treat Lists:
 		ItemHalloweenTreat.createObjectLists();
 		ItemWinterGift.createObjectLists();
+	}
+
+	private void commonSetup(final FMLCommonSetupEvent event) {
+		configReady = true;
+		ObjectManager.setCurrentModInfo(modInfo);
+		this.loadConfigs();
+
+		// Capabilities:
+		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
+		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
+
+		// Network:
+		packetHandler.register();
+		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
+
+		// Change Health Limit:
+		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
 		// Mod Support:
 		DLDungeons.init();
@@ -196,7 +204,7 @@ public class LycanitesMobs {
 	 * @param message The message to print.
 	 */
 	public static void logInfo(String key, String message) {
-		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+		if("".equals(key) || (!configReady && earlyDebug) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.info("[LycanitesMobs] [Info] [" + key + "] " + message);
 		}
 	}
@@ -208,7 +216,7 @@ public class LycanitesMobs {
 	 * @param message The message to print.
 	 */
 	public static void logDebug(String key, String message) {
-		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+		if("".equals(key) || (!configReady && earlyDebug) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.debug("[LycanitesMobs] [Debug] [" + key + "] " + message);
 		}
 	}
@@ -220,7 +228,7 @@ public class LycanitesMobs {
 	 * @param message The message to print.
 	 */
 	public static void logWarning(String key, String message) {
-		if("".equals(key) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
+		if("".equals(key) || (!configReady && earlyDebug) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
 		}
 	}

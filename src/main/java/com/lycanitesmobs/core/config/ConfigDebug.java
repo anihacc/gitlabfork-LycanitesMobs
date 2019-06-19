@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.config;
 
 import com.google.common.collect.Lists;
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -72,8 +73,13 @@ public class ConfigDebug {
 	}
 
 	public boolean isEnabled(String debugKey) {
-		if(this.enabled.get().size() == 0)
+		if(!LycanitesMobs.configReady) {
 			return false;
+		}
+
+		if(this.enabled.get().isEmpty()) {
+			return false;
+		}
 
 		for(String enabledDebugKey : this.enabled.get()) {
 			if(debugKey.equals(enabledDebugKey))
