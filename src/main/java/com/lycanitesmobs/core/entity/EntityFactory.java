@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.World;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -19,15 +21,15 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 		return INSTANCE;
 	}
 
-	public Map<EntityType, Class<? extends Entity>> entityTypeClassMap = new HashMap<>();
-	public Map<Class<? extends Entity>, EntityType> entityClassTypeMap = new HashMap<>();
+	public Map<EntityType, Constructor<? extends Entity>> entityTypeClassMap = new HashMap<>();
+	public Map<Constructor<? extends Entity>, EntityType> entityClassTypeMap = new HashMap<>();
 
 	/**
 	 * Adds a new Entity Type and Entity Class mapping for this Factory to create.
 	 * @param entityType The Entity Type to create from.
 	 * @param entityClass The Entity Class to instantiate for the type.
 	 */
-	public void addEntityType(EntityType entityType, Class<? extends Entity> entityClass) {
+	public void addEntityType(EntityType entityType, Constructor<? extends Entity> entityClass) {
 		LycanitesMobs.logDebug("", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
 		this.entityTypeClassMap.put(entityType, entityClass);
 		this.entityClassTypeMap.put(entityClass, entityType);
@@ -42,17 +44,14 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	@Override
 	public Entity create(EntityType entityType, World world) {
 		LycanitesMobs.logDebug("", "Spawning entity: " + this.entityTypeClassMap.get(entityType).toString() + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification()); // Name always shows pig!
-		Class<? extends Entity> entityClass = this.entityTypeClassMap.get(entityType);
+		Constructor<? extends Entity> constructor = this.entityTypeClassMap.get(entityType);
 
 		try {
-			Entity entity = entityClass.getConstructor(EntityType.class, World.class).newInstance(entityType, world);
-			world.addEntity(entity);
-			return entity;
+			return constructor.newInstance(entityType, world);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-
-		return null;
 	}
 
 

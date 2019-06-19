@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -126,7 +127,12 @@ public class ProjectileManager extends JSONLoader {
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(modInfo.modid, entityName);
-			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
+			try {
+				EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			event.getRegistry().register(entityType);
 		}
 
@@ -140,7 +146,12 @@ public class ProjectileManager extends JSONLoader {
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(modInfo.modid, entityName);
-			EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName));
+			try {
+				EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			event.getRegistry().register(entityType);
 		}
 	}

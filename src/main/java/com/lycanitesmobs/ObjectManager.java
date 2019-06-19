@@ -15,6 +15,7 @@ import net.minecraft.stats.Stat;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 
 import java.util.HashMap;
@@ -272,7 +273,12 @@ public class ObjectManager {
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(LycanitesMobs.modid, entityName);
-			EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName));
+			try {
+				EntityFactory.getInstance().addEntityType(entityType, specialEntities.get(entityName).getConstructor(EntityType.class, World.class));
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			event.getRegistry().register(entityType);
 		}
 	}

@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
+import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
@@ -28,6 +29,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +44,11 @@ public class ProjectileInfo {
 	public boolean enabled = true;
 
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
-	public Class<? extends Entity> entityClass = EntityProjectileCustom.class;
+	public Class<? extends EntityProjectileBase> entityClass = EntityProjectileCustom.class;
+
+	/** The constructor used by this creature to create entity instances. **/
+	public Constructor<? extends EntityProjectileBase> entityConstructor;
+
 	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
 	public Class<? extends ModelProjectileBase> modelClass;
 
@@ -131,9 +137,11 @@ public class ProjectileInfo {
 
 		if(json.has("entityClass")) {
 			try {
-				this.entityClass = (Class<? extends Entity>) Class.forName(json.get("entityClass").getAsString());
+				this.entityClass = (Class<? extends EntityProjectileBase>) Class.forName(json.get("entityClass").getAsString());
+				this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 			} catch (Exception e) {
 				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -273,7 +281,7 @@ public class ProjectileInfo {
 			entityTypeBuilder.size(this.width, this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
-			EntityFactory.getInstance().addEntityType(this.entityType, this.entityClass);
+			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor);
 		}
 		return this.entityType;
 	}

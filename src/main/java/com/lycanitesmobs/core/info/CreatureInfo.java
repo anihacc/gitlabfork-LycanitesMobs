@@ -7,6 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityFactory;
@@ -25,6 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.*;
 
@@ -36,7 +38,10 @@ public class CreatureInfo {
 	protected String name;
 
 	/** The entity class used by this creature. **/
-	public Class<? extends LivingEntity> entityClass;
+	public Class<? extends EntityCreatureBase> entityClass;
+
+	/** The constructor used by this creature to create entity instances. **/
+	public Constructor<? extends EntityCreatureBase> entityConstructor;
 
 	/** The model class used by this creature. **/
 	@OnlyIn(Dist.CLIENT)
@@ -158,10 +163,12 @@ public class CreatureInfo {
 
 		// Entity Class:
 		try {
-			this.entityClass = (Class<? extends LivingEntity>) Class.forName(json.get("entityClass").getAsString());
+			this.entityClass = (Class<? extends EntityCreatureBase>) Class.forName(json.get("entityClass").getAsString());
+			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 		}
 		catch(Exception e) {
 			LycanitesMobs.logWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			throw new RuntimeException(e);
 		}
 
 		if(json.has("enabled"))
@@ -398,7 +405,7 @@ public class CreatureInfo {
 			entityTypeBuilder.disableSerialization();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
-			EntityFactory.getInstance().addEntityType(this.entityType, this.entityClass);
+			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor);
 		}
 		return this.entityType;
 	}
@@ -667,7 +674,7 @@ public class CreatureInfo {
 		try {
 			if(this.entityClass == null)
 				return null;
-			return this.entityClass.getConstructor(EntityType.class, World.class).newInstance(this.getEntityType(), world);
+			return this.entityConstructor.newInstance(this.getEntityType(), world);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
