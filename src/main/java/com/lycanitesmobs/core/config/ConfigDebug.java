@@ -67,7 +67,7 @@ public class ConfigDebug {
 		this.enabled = builder
 				.comment("Shows debugging info for Mob Events.")
 				.translation(CoreConfig.CONFIG_PREFIX + "debug.enabled")
-				.define("enabled", Lists.newArrayList(), o -> o instanceof String);
+				.defineList("enabled", Lists.newArrayList(), o -> o instanceof String);
 
 		builder.pop();
 	}

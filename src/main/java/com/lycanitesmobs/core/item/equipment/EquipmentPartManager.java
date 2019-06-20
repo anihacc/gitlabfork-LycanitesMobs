@@ -55,14 +55,14 @@ public class EquipmentPartManager extends JSONLoader {
 		equipmentPart.loadFromJSON(json);
 		if(this.equipmentParts.containsKey(equipmentPart.itemName)) {
 			LycanitesMobs.logWarning("", "[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);
-			return;
+			throw new RuntimeException("[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);
 		}
 		if(this.equipmentParts.values().contains(equipmentPart)) {
 			LycanitesMobs.logWarning("", "[Equipment] Tried to add a Equipment Part that is already added: " + equipmentPart.itemName);
-			return;
+			throw new RuntimeException("[Equipment] Tried to add a Equipment Part that is already added: " + equipmentPart.itemName);
 		}
 		this.equipmentParts.put(equipmentPart.itemName, equipmentPart);
-		//ObjectManager.addItem(equipmentPart.itemName, equipmentPart);
+		ObjectManager.addItem(equipmentPart.itemName, equipmentPart);
 	}
 
 

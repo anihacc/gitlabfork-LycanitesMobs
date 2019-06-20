@@ -584,7 +584,7 @@ public class CreatureInfo {
 			}
 		}
 		if(possibleSubspecies.isEmpty()) {
-			LycanitesMobs.logDebug("Subspecies", "No species allowed, will be base species.");
+			LycanitesMobs.logDebug("Subspecies", "No subspecies allowed, will be base species.");
 			return null;
 		}
 

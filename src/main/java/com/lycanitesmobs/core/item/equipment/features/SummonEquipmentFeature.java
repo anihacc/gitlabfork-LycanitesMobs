@@ -63,7 +63,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
-		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + "%";
+		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + LanguageManager.translate("common.percent");
 		if(this.summonDuration > 0) {
 			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
 		}

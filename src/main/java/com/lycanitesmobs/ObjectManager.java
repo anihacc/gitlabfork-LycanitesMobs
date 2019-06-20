@@ -2,6 +2,7 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.entity.EntityFactory;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -9,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
@@ -240,7 +242,7 @@ public class ObjectManager {
 	@SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         for(Block block : blocks.values()) {
-			LycanitesMobs.logDebug("", "Registering block: " + block.getRegistryName());
+			LycanitesMobs.logDebug("Item", "Registering block: " + block.getRegistryName());
             if(block.getRegistryName() == null) {
                 LycanitesMobs.logWarning("", "Block: " + block + " has no Registry Name!");
             }
@@ -258,6 +260,17 @@ public class ObjectManager {
             }
             event.getRegistry().register(item);
         }
+
+	    Item.Properties blockItemProperties = new Item.Properties().group(ItemManager.getInstance().blocks);
+		for(Block block : blocks.values()) {
+			BlockItem blockItem = new BlockItem(block, blockItemProperties);
+			blockItem.setRegistryName(block.getRegistryName());
+			LycanitesMobs.logDebug("Item", "Registering item block: " + blockItem.getRegistryName());
+			if(block.getRegistryName() == null) {
+				LycanitesMobs.logWarning("", "Block Item: " + blockItem + " has no Registry Name!");
+			}
+			event.getRegistry().register(blockItem);
+		}
     }
 
     // ========== Potions ==========

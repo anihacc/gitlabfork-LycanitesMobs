@@ -115,7 +115,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
         this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
-            LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
+			LycanitesMobs.logWarning("", "Unable to load model onj for: " + name + "");
 
         // Create Animator:
 		this.animator = new Animator();
@@ -141,8 +141,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
             }
         }
         catch (Exception e) {
-            LycanitesMobs.logWarning("", "There was a problem loading animation parts for " + name + ":");
-            e.toString();
+			LycanitesMobs.logWarning("", "Unable to load model parts json for: " + name + "");
         }
 
         // Assign Model Part Children:
@@ -166,7 +165,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.logWarning("Models", "Unable to load animation json for " + name + ".");
+			LycanitesMobs.logWarning("Models", "Unable to load animation json for: " + name + ".");
 		}
 
         return this;

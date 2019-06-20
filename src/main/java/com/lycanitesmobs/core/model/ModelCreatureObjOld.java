@@ -87,7 +87,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
-            LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
+			LycanitesMobs.logWarning("", "Unable to load (old format) model obj for: " + name + "");
 
         return this;
     }

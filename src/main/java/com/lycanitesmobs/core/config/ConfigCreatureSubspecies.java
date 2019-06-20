@@ -32,7 +32,7 @@ public class ConfigCreatureSubspecies {
 
 		baseWeight = builder.comment("The minimum base starting level of every mob. Cannot be less than 1.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creature.subspecies.baseWeight")
-				.define("baseWeight", 1);
+				.define("baseWeight", 400);
 
 		for(String subspeciesName : Subspecies.SUBSPECIES_NAMES) {
 			commonWeights.put(subspeciesName, builder

@@ -103,7 +103,7 @@ public class ItemEquipmentPart extends ItemBase {
 		}
 		this.sortFeatures();
 
-		this.setRegistryName(this.modInfo.modid, this.itemName);
+		this.setup();
 
 		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}
@@ -133,7 +133,6 @@ public class ItemEquipmentPart extends ItemBase {
 
 	@Override
 	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		ITEMSTACK_TO_RENDER = stack; // Render hack to get ItemStack when rendering TEISR. TODO Still needed?
 		return LanguageManager.translate("item.equipmentpart.description");
 	}
 

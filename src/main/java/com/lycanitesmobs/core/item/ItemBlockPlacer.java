@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.item;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import net.minecraft.block.BlockState;
