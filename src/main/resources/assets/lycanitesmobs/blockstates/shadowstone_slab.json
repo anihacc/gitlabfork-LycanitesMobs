@@ -1,6 +1,7 @@
 {
     "variants": {
-        "half=bottom,variant=default": { "model": "lycanitesmobs:block/shadowstone_slab" },
-        "half=top,variant=default": { "model": "lycanitesmobs:block/shadowstone_slab_upper" }
+        "type=bottom": { "model": "lycanitesmobs:block/shadowstone_slab" },
+        "type=top": { "model": "lycanitesmobs:block/shadowstone_slab_top" },
+        "type=double": { "model": "lycanitesmobs:block/shadowstone_slab_double" }
     }
 }

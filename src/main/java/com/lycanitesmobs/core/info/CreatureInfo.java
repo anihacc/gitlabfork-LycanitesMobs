@@ -68,9 +68,6 @@ public class CreatureInfo {
 	/** The Spawn Information for this creature. **/
 	public CreatureSpawn creatureSpawn;
 
-	/** The spawn egg item this type uses. **/
-	protected Item spawnEgg;
-
 
 	// Stats:
 	public double width = 0.8D;
@@ -315,16 +312,6 @@ public class CreatureInfo {
 			return;
 		}
 
-		// Spawn Egg:
-		if(this.creatureType != null) {
-			String spawnEggName = this.creatureType.getSpawnEggName() + "_" + this.getName();
-			Item.Properties spawnEggProperties = new Item.Properties();
-			spawnEggProperties.group(ItemManager.getInstance().creatures);
-
-			this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
-			ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
-		}
-
 		/*/ Add Trophy: TODO Creature Trophies
 		ItemStack advancementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
 		achievementStack.setTagInfo("Mob", new StringNBT(this.getName()));*/
@@ -492,15 +479,6 @@ public class CreatureInfo {
 			elementNames += element.getTitle();
 		}
 		return elementNames;
-	}
-
-
-	/**
-	 * Returns the the spawn egg this creature uses.
-	 * @return Spawn egg item.
-	 */
-	public Item getSpawnEgg() {
-		return this.spawnEgg;
 	}
 
 

@@ -1,13 +1,18 @@
 package com.lycanitesmobs.core.block;
 
+import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -48,18 +53,8 @@ public class BlockSummoningPedestal extends BlockBase {
         builder.add(PROPERTY_OWNER);
     }
 
-
-    // ==================================================
-    //                     Block Events
-    // ==================================================
-    /*@Override
-    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
-        super.onBlockAdded(world, pos, state);
-    }
-
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if(tileentity instanceof TileEntitySummoningPedestal) {
             TileEntitySummoningPedestal tileEntitySummoningPedestal = (TileEntitySummoningPedestal)tileentity;
@@ -75,14 +70,22 @@ public class BlockSummoningPedestal extends BlockBase {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if(tileEntity != null && tileEntity instanceof TileEntityBase)
-            ((TileEntityBase)tileEntity).onRemove();
-        super.breakBlock(worldIn, pos, state);
-        worldIn.removeTileEntity(pos);
+    public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
+        return new TileEntitySummoningPedestal();
     }
 
+    public static void setState(EnumSummoningPedestal owner, World worldIn, BlockPos pos) {
+        BlockState blockState = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        worldIn.setBlockState(pos, blockState.getBlock().getDefaultState().with(PROPERTY_OWNER, owner.getOwnerId()), 3);
+
+        if (tileentity != null) {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
+    }
+
+    /*
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
@@ -98,28 +101,4 @@ public class BlockSummoningPedestal extends BlockBase {
         }
         return true;
     }*/
-
-
-    // ==================================================
-    //                    Tile Entity
-    // ==================================================
-    @Override
-    public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
-        return new TileEntitySummoningPedestal();
-    }
-
-
-    // ==================================================
-    //                    Block State
-    // ==================================================
-    public static void setState(EnumSummoningPedestal owner, World worldIn, BlockPos pos) {
-        BlockState blockState = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        worldIn.setBlockState(pos, blockState.getBlock().getDefaultState().with(PROPERTY_OWNER, owner.getOwnerId()), 3);
-
-        if (tileentity != null) {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
-        }
-    }
 }

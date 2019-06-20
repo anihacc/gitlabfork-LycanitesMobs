@@ -246,7 +246,7 @@ public class ItemEquipmentPart extends ItemBase {
 
 
 	// ==================================================
-	//                   Get Sub Items
+	//                    Item Group
 	// ==================================================
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -33,6 +34,9 @@ public class CreatureType {
 
 	/** The soulstone item this type uses. **/
 	protected ItemSoulstone soulstone;
+
+	/** The spawn egg item this type uses. **/
+	protected Item spawnEgg;
 
 
 	/**
@@ -133,6 +137,14 @@ public class CreatureType {
 		treatProperties.maxStackSize(16);
 		this.treat = new ItemTreat(treatProperties, this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);
+
+		// Spawn Eggs:
+		String spawnEggName = this.getSpawnEggName();
+		Item.Properties spawnEggProperties = new Item.Properties();
+		spawnEggProperties.group(ItemManager.getInstance().creatures);
+
+		this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
+		ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
 
 		// Soulstone:
 		// TODO Create soulstones for each group type (so long as there are tameable creatures).

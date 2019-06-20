@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/soulcubedemonic" }
+		"": { "model": "lycanitesmobs:block/soulcubedemonic" }
 	}
 }

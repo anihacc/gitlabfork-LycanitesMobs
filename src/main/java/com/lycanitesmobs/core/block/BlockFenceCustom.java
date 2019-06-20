@@ -24,8 +24,6 @@ public class BlockFenceCustom extends FenceBlock {
 	public BlockFenceCustom(Block.Properties properties, BlockBase block) {
 		super(properties);
         this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_fence"));
-        //block.copyAttributesTo(this);
-        //this.setSoundType(block.getSoundType());
 	}
 
 

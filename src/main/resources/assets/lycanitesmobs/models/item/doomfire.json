@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:blocks/doomfire_layer_0"
+		"layer0": "lycanitesmobs:block/doomfire_layer_0"
 	}
 }

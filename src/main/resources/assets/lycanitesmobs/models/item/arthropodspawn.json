@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/spawns/arthropod",
-		"layer1": "lycanitesmobs:items/spawns/arthropod_overlay"
+		"layer0": "lycanitesmobs:item/spawns/arthropod",
+		"layer1": "lycanitesmobs:item/spawns/arthropod_overlay"
 	}
 }

@@ -1,7 +1,7 @@
 {
 	"parent": "lycanitesmobs:item/summoningstaff",
 	"textures": {
-		"layer0": "lycanitesmobs:items/sturdysummoningstaff"
+		"layer0": "lycanitesmobs:item/sturdysummoningstaff"
 	},
 	"overrides": [
         {

@@ -21,15 +21,13 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockSlabCustom extends SlabBlock {
-    protected Block doubleBlock;
     public String blockName = "BlockBase";
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockSlabCustom(Block.Properties properties, BlockBase block, Block doubleBlock) {
+	public BlockSlabCustom(Block.Properties properties, BlockBase block) {
 		super(properties);
-        this.doubleBlock = doubleBlock;
         String slabName = "_slab";
         this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + slabName));
 	}
@@ -37,10 +35,6 @@ public class BlockSlabCustom extends SlabBlock {
     @Override
     public boolean func_220074_n(BlockState blockState) {
         return false; // Double slabs are defined as BlockSlabDouble.
-    }
-
-    public Block getDoubleBlock() {
-        return this.doubleBlock;
     }
 
 

@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/desertstonetile" }
+		"": { "model": "lycanitesmobs:block/desertstonetile" }
 	}
 }

@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/lushstone" }
+		"": { "model": "lycanitesmobs:block/lushstone" }
 	}
 }

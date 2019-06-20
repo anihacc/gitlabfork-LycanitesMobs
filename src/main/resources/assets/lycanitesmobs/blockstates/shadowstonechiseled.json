@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/shadowstonechiseled" }
+		"": { "model": "lycanitesmobs:block/shadowstonechiseled" }
 	}
 }

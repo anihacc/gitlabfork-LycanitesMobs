@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-        "all": "lycanitesmobs:blocks/desertstonepolished"
+        "all": "lycanitesmobs:block/desertstonepolished"
 	}
 }

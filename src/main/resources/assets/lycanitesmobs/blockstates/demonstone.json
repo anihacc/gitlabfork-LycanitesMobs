@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/demonstone" }
+		"": { "model": "lycanitesmobs:block/demonstone" }
 	}
 }

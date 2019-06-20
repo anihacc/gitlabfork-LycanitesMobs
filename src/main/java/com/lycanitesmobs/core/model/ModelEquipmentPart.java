@@ -16,7 +16,7 @@ public class ModelEquipmentPart extends ModelItemBase {
 	//                    Constructor
 	// ==================================================
 	public ModelEquipmentPart(String name, ModInfo groupInfo) {
-		this.initModel(name, groupInfo, "equipment/" + name);
+		this.initModel(name, groupInfo, "equipment/" + name.replace("equipmentpart_", ""));
 	}
 
 

@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:blocks/frostweb"
+		"layer0": "lycanitesmobs:block/frostweb"
 	}
 }

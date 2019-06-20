@@ -167,8 +167,11 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     	if(itemStack != null) {
     		
     		// Spawn Egg:
-    		if(itemStack.getItem() == this.creatureInfo.getSpawnEgg())
-    			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Spawn Baby");
+    		if(itemStack.getItem() instanceof ItemCustomSpawnEgg) {
+    			CreatureInfo creatureInfo = ((ItemCustomSpawnEgg)itemStack.getItem()).getCreatureInfo(itemStack);
+    			if(creatureInfo == this.creatureInfo)
+					commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Spawn Baby");
+			}
     		
     		// Breeding Item:
     		if(this.isBreedingItem(itemStack) && this.canBreed() && !this.isInLove())
@@ -183,9 +186,10 @@ public abstract class EntityCreatureAgeable extends EntityCreatureBase {
     public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Spawn Baby:
-    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote) {
+    	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && itemStack.getItem() instanceof ItemCustomSpawnEgg) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.creatureInfo;
+
+			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
 			if(spawnEggCreatureInfo != null) {
 				if (spawnEggCreatureInfo.entityClass != null && spawnEggCreatureInfo.entityClass.isAssignableFrom(this.getClass())) {
 					EntityCreatureAgeable baby = this.createChild(this);

@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"lycanitesmobs:demonstonebrick_fence",
+		"lycanitesmobs:desertstonebrick_fence",
+		"lycanitesmobs:lushstonebrick_fence",
+		"lycanitesmobs:shadowstonebrick_fence"
+	]
+}

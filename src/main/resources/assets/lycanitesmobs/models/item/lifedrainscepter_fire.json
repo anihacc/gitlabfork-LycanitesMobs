@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/lifedrainscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/lifedrainscepter_fire"
-	}
-}

@@ -43,21 +43,19 @@ public class BlockMaker {
         BlockBase stoneBlock = new BlockBase(properties, group, stoneName + "stone");
         ObjectManager.addBlock(stoneName + "stone", stoneBlock);
         ObjectManager.addBlock(stoneName + "stone_stairs", new BlockStairsCustom(properties, stoneBlock));
-        Block stoneSlabDoubleBlock = new BlockDoubleSlab(properties, group, stoneName + "stone_slab_double", stoneName + "stone_slab");
-        ObjectManager.addBlock(stoneName + "stone_slab_double", stoneSlabDoubleBlock);
-        ObjectManager.addBlock(stoneName + "stone_slab", new BlockSlabCustom(properties, stoneBlock, stoneSlabDoubleBlock));
+        ObjectManager.addBlock(stoneName + "stone_slab", new BlockSlabCustom(properties, stoneBlock));
 
         BlockBase stoneBrickBlock = new BlockBase(properties, group, stoneName + "stonebrick");
         ObjectManager.addBlock(stoneName + "stonebrick", stoneBrickBlock);
         ObjectManager.addBlock(stoneName + "stonebrick_stairs", new BlockStairsCustom(properties, stoneBrickBlock));
-        ObjectManager.addBlock(stoneName + "stonebrick_slab", new BlockSlabCustom(properties, stoneBrickBlock, stoneBrickBlock));
+        ObjectManager.addBlock(stoneName + "stonebrick_slab", new BlockSlabCustom(properties, stoneBrickBlock));
         ObjectManager.addBlock(stoneName + "stonebrick_fence", new BlockFenceCustom(properties, stoneBrickBlock));
         ObjectManager.addBlock(stoneName + "stonebrick_wall", new BlockWallCustom(properties, stoneBrickBlock));
 
         BlockBase stoneTileBlock = new BlockBase(properties, group, stoneName + "stonetile");
         ObjectManager.addBlock(stoneName + "stonetile", stoneTileBlock);
         ObjectManager.addBlock(stoneName + "stonetile_stairs", new BlockStairsCustom(properties, stoneTileBlock));
-        ObjectManager.addBlock(stoneName + "stonetile_slab", new BlockSlabCustom(properties, stoneTileBlock, stoneTileBlock));
+        ObjectManager.addBlock(stoneName + "stonetile_slab", new BlockSlabCustom(properties, stoneTileBlock));
 
         ObjectManager.addBlock(stoneName + "stonepolished", new BlockBase(properties, group, stoneName + "stonepolished"));
         ObjectManager.addBlock(stoneName + "stonechiseled", new BlockBase(properties, group, stoneName + "stonechiseled"));

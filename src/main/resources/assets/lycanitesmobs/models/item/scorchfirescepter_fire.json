@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/scorchfirescepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/scorchfirescepter_fire"
-	}
-}

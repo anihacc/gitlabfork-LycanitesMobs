@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/hellfirescepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/hellfirescepter_fire"
-	}
-}

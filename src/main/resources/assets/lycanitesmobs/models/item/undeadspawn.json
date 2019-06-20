@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/spawns/undead",
-		"layer1": "lycanitesmobs:items/spawns/undead_overlay"
+		"layer0": "lycanitesmobs:item/spawns/undead",
+		"layer1": "lycanitesmobs:item/spawns/undead_overlay"
 	}
 }

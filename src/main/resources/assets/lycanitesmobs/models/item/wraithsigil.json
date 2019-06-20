@@ -1,7 +1,7 @@
 {
 	"parent": "lycanitesmobs:item/scepter",
 	"textures": {
-		"layer0": "lycanitesmobs:items/wraithsigil"
+		"layer0": "lycanitesmobs:item/wraithsigil"
 	},
 	"overrides": [
         {

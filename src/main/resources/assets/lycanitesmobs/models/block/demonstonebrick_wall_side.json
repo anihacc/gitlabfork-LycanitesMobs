@@ -1,6 +1,6 @@
 {
-	"parent": "block/wall_side",
+	"parent": "block/template_wall_side",
 	"textures": {
-        "wall": "lycanitesmobs:blocks/demonstonebrick"
+        "wall": "lycanitesmobs:block/demonstonebrick"
 	}
 }

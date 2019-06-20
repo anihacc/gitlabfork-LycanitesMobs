@@ -1,6 +1,6 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/summoningpedestal_none" },
+		"": { "model": "lycanitesmobs:block/summoningpedestal_none" },
 		"owner=none": { "model": "lycanitesmobs:block/summoningpedestal_none" },
 		"owner=client": { "model": "lycanitesmobs:block/summoningpedestal_client" },
 		"owner=player": { "model": "lycanitesmobs:block/summoningpedestal_player" }

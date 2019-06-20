@@ -1,6 +1,0 @@
-{
-	"parent": "lycanitesmobs:item/poopscepter",
-	"textures": {
-		"layer0": "lycanitesmobs:items/poopscepter_fire"
-	}
-}

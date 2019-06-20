@@ -1,6 +1,6 @@
 {
 	"parent": "block/fence_side",
 	"textures": {
-        "texture": "lycanitesmobs:blocks/desertstonebrick"
+        "texture": "lycanitesmobs:block/desertstonebrick"
 	}
 }

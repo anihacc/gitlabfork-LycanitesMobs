@@ -1,8 +1,8 @@
 {
-	"parent": "block/half_slab",
+	"parent": "block/slab",
 	"textures": {
-		"bottom": "lycanitesmobs:blocks/shadowstonepolished",
-        "top": "lycanitesmobs:blocks/shadowstonepolished",
-        "side": "lycanitesmobs:blocks/shadowstoneslab"
+		"bottom": "lycanitesmobs:block/shadowstonepolished",
+        "top": "lycanitesmobs:block/shadowstonepolished",
+        "side": "lycanitesmobs:block/shadowstoneslab"
 	}
 }

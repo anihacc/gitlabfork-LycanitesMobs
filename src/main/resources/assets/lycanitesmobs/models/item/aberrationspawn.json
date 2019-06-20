@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/spawns/aberration",
-		"layer1": "lycanitesmobs:items/spawns/aberration_overlay"
+		"layer0": "lycanitesmobs:item/spawns/aberration",
+		"layer1": "lycanitesmobs:item/spawns/aberration_overlay"
 	}
 }

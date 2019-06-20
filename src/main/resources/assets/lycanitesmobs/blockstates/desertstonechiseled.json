@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "lycanitesmobs:block/desertstonechiseled" }
+		"": { "model": "lycanitesmobs:block/desertstonechiseled" }
 	}
 }

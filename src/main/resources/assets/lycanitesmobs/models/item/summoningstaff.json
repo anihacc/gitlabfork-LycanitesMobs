@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/summoningstaff"
+		"layer0": "lycanitesmobs:item/summoningstaff"
 	},
 	"display": {
 		"thirdperson_righthand": {

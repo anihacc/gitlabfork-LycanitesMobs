@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.item;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -15,14 +17,13 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -33,16 +34,16 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
-	public CreatureInfo creatureInfo;
+	public CreatureType creatureType;
     
 	// ==================================================
 	//                    Constructor
 	// ==================================================
-    public ItemCustomSpawnEgg(Item.Properties properties, String name, CreatureInfo creatureInfo) {
+    public ItemCustomSpawnEgg(Item.Properties properties, String name, CreatureType creatureType) {
         super(properties);
 
         this.itemName = name;
-        this.creatureInfo = creatureInfo;
+        this.creatureType = creatureType;
         this.setRegistryName(this.modInfo.modid, this.itemName);
 
         DispenserBlock.registerDispenseBehavior(this, new DispenserBehaviorMobEggCustom());
@@ -55,8 +56,8 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 	// ==================================================
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
-		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureInfo.creatureType.getTitle() + ": ";
-		displayName += this.creatureInfo.getTitle();
+		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureType.getTitle() + ": ";
+		displayName += this.creatureType.getTitle();
         return new TranslationTextComponent(displayName);
     }
     
@@ -78,9 +79,45 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
     }
 
     @Override
-	public String getDescription(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        return this.creatureInfo.getDescription();
+	public String getDescription(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+		if(creatureInfo == null) {
+			String creatureName = this.getCreatureName(itemStack);
+			LycanitesMobs.logWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
+			return "Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.";
+		}
+		return creatureInfo.getDescription();
     }
+
+
+	// ==================================================
+	//                    Item Group
+	// ==================================================
+	@Override
+	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
+		if(!this.isInGroup(tab)) {
+			return;
+		}
+
+		for(CreatureInfo creatureInfo : this.creatureType.creatures.values()) {
+			ItemStack itemstack = new ItemStack(this, 1);
+			this.applyCreatureInfoToItemStack(itemstack, creatureInfo);
+			items.add(itemstack);
+		}
+	}
+
+	/**
+	 * Applies creature info to a spawn egg item stack.
+	 * @param itemStack The spawn egg item stack top apply to.
+	 * @param creatureInfo The creature info to apply.
+	 */
+	public void applyCreatureInfoToItemStack(ItemStack itemStack, CreatureInfo creatureInfo) {
+		CompoundNBT itemStackNBT = itemStack.hasTag() ? itemStack.getTag() : new CompoundNBT();
+		CompoundNBT spawnEggNBT = new CompoundNBT();
+		spawnEggNBT.putString("creaturename", creatureInfo.getName());
+		itemStackNBT.put("CreatureInfoSpawnEgg", spawnEggNBT);
+		itemStack.setTag(itemStackNBT);
+	}
     
     
 	// ==================================================
@@ -107,7 +144,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
         if(block == Blocks.SPAWNER) {
             TileEntity tileEntity = world.getTileEntity(pos);
 			AbstractSpawner mobspawnerbaselogic = ((MobSpawnerTileEntity)tileEntity).getSpawnerBaseLogic();
-            mobspawnerbaselogic.setEntityType(this.creatureInfo.getEntityType());
+            mobspawnerbaselogic.setEntityType(this.getCreatureInfo(itemStack).getEntityType());
             tileEntity.markDirty();
             world.notifyBlockUpdate(pos, blockState, blockState, 3);
             if (!player.abilities.isCreativeMode) {
@@ -191,13 +228,38 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
     // ========== Get Color from ItemStack ==========
     @Override
     public int getColor(ItemStack itemStack, int tintIndex) {
-		return this.creatureInfo != null ? (tintIndex == 0 ? this.creatureInfo.eggBackColor : this.creatureInfo.eggForeColor) : 16777215;
+		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+		return creatureInfo != null ? (tintIndex == 0 ? creatureInfo.eggBackColor : creatureInfo.eggForeColor) : 16777215;
     }
 
 
 	// ==================================================
 	//                     Spawning
 	// ==================================================
+	/**
+	 * Get Creature Info
+	 * @param itemStack The spawn egg item stack to get the creature from.
+	 * @return The Creature Info of the stack spawn egg or null if unknown.
+	 */
+	public CreatureInfo getCreatureInfo(ItemStack itemStack) {
+		String creatureName = this.getCreatureName(itemStack);
+		return CreatureManager.getInstance().getCreature(creatureName);
+	}
+
+	/**
+	 * Get Creature Name
+	 * @param itemStack The spawn egg item stack to get the creature name from.
+	 * @return The name of the creature that the spawn egg item stack should spawn.
+	 */
+	public String getCreatureName(ItemStack itemStack) {
+		CompoundNBT itemStackNBT = itemStack.getTag();
+		if (itemStackNBT == null || !itemStackNBT.contains("CreatureInfoSpawnEgg", 10)) {
+			return null;
+		}
+		CompoundNBT spawnEggNBT = itemStackNBT.getCompound("CreatureInfoSpawnEgg");
+		return !spawnEggNBT.contains("creaturename", 8) ? null : spawnEggNBT.getString("creaturename");
+	}
+
 	/**
 	 * Spawn Creature
 	 * @param world The world to spawn in.
@@ -208,7 +270,7 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
 	 * @return The spawned entity instance.
 	 */
 	public LivingEntity spawnCreature(World world, ItemStack itemStack, double x, double y, double z) {
-		LivingEntity entity = this.creatureInfo.createEntity(world);
+		LivingEntity entity = this.getCreatureInfo(itemStack).createEntity(world);
 		if(entity != null) {
 			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
 			entity.rotationYawHead = entity.rotationYaw;

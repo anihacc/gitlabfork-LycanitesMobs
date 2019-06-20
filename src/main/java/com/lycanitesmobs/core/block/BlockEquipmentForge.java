@@ -4,15 +4,24 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 
 public class BlockEquipmentForge extends BlockBase {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public int level;
 
 	// ==================================================
@@ -43,61 +52,42 @@ public class BlockEquipmentForge extends BlockBase {
 		builder.add(FACING);
 	}
 
-    /*@Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
-    }*/
+	@Override
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
+		return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+	}
 
-
-    // ==================================================
-    //                     Block Events
-    // ==================================================
-    /*@Override
-    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
-		this.setDefaultFacing(world, pos, state);
-        super.onBlockAdded(world, pos, state);
-    }
-
-	protected void setDefaultFacing(World world, BlockPos pos, BlockState state) {
-		if (!world.isRemote) {
-			BlockState iblockstate = world.getBlockState(pos.north());
-			BlockState iblockstate1 = world.getBlockState(pos.south());
-			BlockState iblockstate2 = world.getBlockState(pos.west());
-			BlockState iblockstate3 = world.getBlockState(pos.east());
-			EnumFacing enumfacing = state.getValue(FACING);
-
-			if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock()) {
-				enumfacing = EnumFacing.SOUTH;
-			}
-			else if (enumfacing == EnumFacing.SOUTH && iblockstate1.isFullBlock() && !iblockstate.isFullBlock()) {
-				enumfacing = EnumFacing.NORTH;
-			}
-			else if (enumfacing == EnumFacing.WEST && iblockstate2.isFullBlock() && !iblockstate3.isFullBlock()) {
-				enumfacing = EnumFacing.EAST;
-			}
-			else if (enumfacing == EnumFacing.EAST && iblockstate3.isFullBlock() && !iblockstate2.isFullBlock()) {
-				enumfacing = EnumFacing.WEST;
+	@Override
+	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			TileEntity tileentity = worldIn.getTileEntity(pos);
+			if (tileentity instanceof TileEntityEquipmentForge) {
+				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityEquipmentForge)tileentity);
+				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 
-			world.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+			super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
 	}
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
+	@Override
+	public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+		return state.with(FACING, direction.rotate(state.get(FACING)));
+	}
 
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if(tileEntity != null && tileEntity instanceof TileEntityBase)
-            ((TileEntityBase)tileEntity).onRemove();
-        super.breakBlock(worldIn, pos, state);
-        worldIn.removeTileEntity(pos);
-    }
+	@Override
+	public BlockState mirror(BlockState state, Mirror mirrorIn) {
+		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+	}
 
+	@Override
+	public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
+		TileEntityEquipmentForge tileEntityEquipmentForge = new TileEntityEquipmentForge();
+		tileEntityEquipmentForge.setLevel(this.level);
+		return tileEntityEquipmentForge;
+	}
+
+	/*
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
@@ -113,40 +103,4 @@ public class BlockEquipmentForge extends BlockBase {
         }
         return true;
     }*/
-
-
-    // ==================================================
-    //                    Tile Entity
-    // ==================================================
-    @Override
-    public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
-		TileEntityEquipmentForge tileEntityEquipmentForge = new TileEntityEquipmentForge();
-		tileEntityEquipmentForge.setLevel(this.level);
-        return tileEntityEquipmentForge;
-    }
-
-
-    // ==================================================
-    //                    Block State
-    // ==================================================
-	/*@Override
-	public BlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
-
-		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
-			enumfacing = EnumFacing.NORTH;
-		}
-
-		return this.getDefaultState().withProperty(FACING, enumfacing);
-	}
-
-    @Override
-	public int getMetaFromState(BlockState state) {
-		return (state.getValue(FACING)).getIndex();
-	}
-
-	@Override
-	public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-	}*/
 }

@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/soulgazer"
+		"layer0": "lycanitesmobs:item/soulgazer"
 	},
 	"display": {
 		"thirdperson": {

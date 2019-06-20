@@ -1,7 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "lycanitesmobs:items/soulkeydiamond"
+		"layer0": "lycanitesmobs:item/soulkeydiamond"
 	},
 	"display": {
 		"thirdperson": {
