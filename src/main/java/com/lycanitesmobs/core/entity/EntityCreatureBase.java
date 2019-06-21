@@ -1541,7 +1541,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         	this.setAttackTarget(this.getFixateTarget());
 		}
 
-        // Prevent Creative Attack Target:
+        // Remove Creative Attack Target:
         if(this.hasAttackTarget()) {
             if(this.getAttackTarget() instanceof PlayerEntity) {
                 PlayerEntity targetPlayer = (PlayerEntity)this.getAttackTarget();
@@ -1830,24 +1830,45 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
     @Override
     public void travel(Vec3d direction) {
-    	if(!this.useDirectNavigator()) {
-            if(this.isFlying() && !this.isInWater() && !this.isInLava()) {
-                this.moveFlyingWithHeading(direction.getX(), direction.getZ());
-                this.updateLimbSwing();
-            }
-            else if(this.shouldSwim()) {
-                this.moveSwimmingWithHeading(direction.getX(), direction.getZ());
-                this.updateLimbSwing();
-            }
-            else {
-                super.travel(direction);
-            }
-        }
-    	else {
-            this.directNavigator.flightMovement(direction.getX(), direction.getZ());
-            this.updateLimbSwing();
-        }
+		if(this.useDirectNavigator()) {
+			this.directNavigator.flightMovement(direction.getX(), direction.getZ());
+			this.updateLimbSwing();
+			return;
+		}
+
+		if(this.shouldSwim()) {
+			this.travelSwimming(direction);
+		}
+		else if(this.isFlying()) {
+			this.travelFlying(direction);
+		}
+		else {
+			super.travel(direction);
+		}
     }
+
+    public void travelFlying(Vec3d direction) {
+    	double flightDampening = 0.91F;
+		if (this.onGround) {
+			BlockState groundState = this.getEntityWorld().getBlockState(this.getPosition().down());
+			flightDampening = groundState.getSlipperiness(this.getEntityWorld(), this.getPosition().down(), this) * 0.91F;
+		}
+		this.move(MoverType.SELF, this.getMotion());
+		this.setMotion(this.getMotion().mul(flightDampening, flightDampening, flightDampening));
+
+		this.updateLimbSwing();
+	}
+
+	public void travelSwimming(Vec3d direction) {
+		super.moveRelative(0.1F, direction);
+		this.move(MoverType.SELF, this.getMotion());
+		this.setMotion(this.getMotion().scale(0.9D));
+		if (!this.isMoving() && this.getAttackTarget() == null && !this.isCurrentlyFlying()) {
+			this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
+		}
+
+		this.updateLimbSwing();
+	}
 
     /** Updates limb swing animation, used when flying or swimming as their movements don't update it like the standard walking movement. **/
     public void updateLimbSwing() {
@@ -1860,53 +1881,6 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         }
         this.limbSwingAmount += (distance - this.limbSwingAmount) * 0.4F;
         this.limbSwing += this.limbSwingAmount;
-    }
-
-    // ========== Move Flying with Heading ==========
-    public void moveFlyingWithHeading(double strafe, double forward) {
-        double f = 0.91F;
-        if (this.onGround) {
-            f = this.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
-        }
-
-		double f1 = 0.16277136F / (f * f * f);
-        this.moveFlying(strafe, forward, this.onGround ? 0.1F * f1 : 0.02F);
-        f = 0.91F;
-
-        if (this.onGround) {
-            f = this.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
-        }
-        this.move(MoverType.SELF, this.getMotion());
-        this.getMotion().mul(f, f, f);
-
-        this.prevLimbSwingAmount = this.limbSwingAmount;
-        double d1 = this.posX - this.prevPosX;
-        double d0 = this.posZ - this.prevPosZ;
-        float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
-        if (f2 > 1.0F) {
-            f2 = 1.0F;
-        }
-        this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
-        this.limbSwing += this.limbSwingAmount;
-    }
-
-    public void moveFlying(double strafe, double forward, double friction) {
-        if(!this.isPushedByWater() && this.canWalk() && this.isInWater()) {
-			double sliperryness = 0.91F;
-            BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain(this.posX, this.getBoundingBox().minY - 1.0D, this.posZ);
-            if (this.onGround) {
-                sliperryness = this.getEntityWorld().getBlockState(blockpos$pooledmutableblockpos).getBlock().getSlipperiness() * sliperryness * 2;
-            }
-			double f7 = 0.16277136F / (sliperryness * sliperryness * sliperryness);
-            friction = this.getAIMoveSpeed() * f7;
-        }
-    }
-
-    // ========== Move Swimming with Heading ==========
-    public void moveSwimmingWithHeading(double strafe, double forward) {
-        super.moveRelative((float)strafe, new Vec3d(0, forward, 0.1F));
-        this.move(MoverType.SELF, this.getMotion());
-        this.setMotion(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D);
     }
 
     // ========== Get New Navigator ==========
@@ -3788,8 +3762,6 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	 */
 	public boolean isSwimmable(int x, int y, int z) {
         BlockState blockState = this.getEntityWorld().getBlockState(new BlockPos(x, y, z));
-		if(blockState == null)
-			return false;
 		if(this.isLavaCreature && Material.LAVA.equals(blockState.getMaterial()))
 			return true;
 		else if(Material.WATER.equals(blockState.getMaterial()))

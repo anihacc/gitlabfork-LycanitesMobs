@@ -241,10 +241,10 @@ public class CreaturePathNavigator extends PathNavigator {
     @Override
     protected boolean isDirectPathBetweenPoints(Vec3d startVec, Vec3d endVec, int sizeX, int sizeY, int sizeZ) {
         // Flight/Swimming:
-        if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) { // TODO Check Water RayTrace Fluid Mode
-            double endHeight = endVec.y + (double)this.entity.getSize(Pose.STANDING).height * 0.5D;
-            RayTraceResult raytraceresult = this.world.rayTraceBlocks(new RayTraceContext(startVec, new Vec3d(endVec.x, endHeight, endVec.z), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity));
-            return raytraceresult.getType() == RayTraceResult.Type.MISS || raytraceresult.getType() == RayTraceResult.Type.ENTITY;
+        if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) {
+            Vec3d vec3d = new Vec3d(endVec.x, endVec.y + (double)this.entity.getHeight() * 0.5D, endVec.z);
+            RayTraceResult.Type directTraceType =  this.world.rayTraceBlocks(new RayTraceContext(startVec, vec3d, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity)).getType();
+            return directTraceType == RayTraceResult.Type.MISS;
         }
 
         int i = MathHelper.floor(startVec.x);

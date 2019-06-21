@@ -347,9 +347,9 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         PathNodeType pathnodetype = PathNodeType.BLOCKED;
         BlockPos blockpos = new BlockPos(mobEntity);
 
-        for (int i = 0; i < xSize; ++i) {
+        for (int i = -xSize; i < xSize; ++i) {
             for (int j = 0; j < ySize; ++j) {
-                for (int k = 0; k < zSize; ++k) {
+                for (int k = -zSize; k < zSize; ++k) {
                     int l = i + x;
                     int i1 = j + y;
                     int j1 = k + z;
@@ -519,11 +519,11 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     }
 
     protected PathNodeType isFlyablePathNode(int x, int y, int z) {
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-        for (int i = x; i < x + this.entitySizeX; ++i) {
-            for (int j = y; j < y + this.entitySizeY; ++j) {
-                for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+        BlockPos centerPos = new BlockPos(x, y, z);
+        for (int i = 0; i <= this.entitySizeX; ++i) {
+            for (int j = 0; j <= Math.min(this.entitySizeY, 2); ++j) {
+                for (int k = 0; k <= this.entitySizeZ; ++k) {
+                    BlockState iblockstate = this.blockaccess.getBlockState(centerPos.add(i, k, j));
 
                     // Non-Solid:
 					if (!iblockstate.getMaterial().isSolid() && !iblockstate.getMaterial().isLiquid()) {
@@ -547,7 +547,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     @Nullable
     private PathPoint getWaterNode(int x, int y, int z) {
-        PathNodeType pathnodetype = null;
+        PathNodeType pathnodetype;
         if(this.entityCreature != null && this.entityCreature.isFlying()) {
             pathnodetype = this.isFlyablePathNode(x, y, z);
             if(pathnodetype == PathNodeType.OPEN)
@@ -560,41 +560,36 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     }
 
     private PathNodeType isSwimmablePathNode(int x, int y, int z) {
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
-        for (int i = x; i < x + this.entitySizeX; ++i) {
-            for (int j = y; j < y + Math.min(this.entitySizeY, 3); ++j) {
-                for (int k = z; k < z + this.entitySizeZ; ++k) {
-                    BlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+        BlockPos centerPos = new BlockPos(x, y, z);
+        for (int i = 0; i <= this.entitySizeX; ++i) {
+            for (int j = 0; j <= Math.min(this.entitySizeY, 2); ++j) {
+                for (int k = 0; k <= this.entitySizeZ; ++k) {
+                    BlockPos blockPos = centerPos.add(i, k, j);
+                    BlockState blockState = this.blockaccess.getBlockState(blockPos);
+                    IFluidState fluidState = this.blockaccess.getFluidState(blockPos);
 
-                    if(this.entityCreature == null) {
+                    if(this.entityCreature == null || !blockState.allowsMovement(this.blockaccess, blockPos, PathType.WATER)) {
+                        if(j == y) { // Y must be water.
+                            return PathNodeType.BLOCKED;
+                        }
+                        if(!blockState.allowsMovement(this.blockaccess, blockPos, PathType.AIR)) { // Blocked above water.
+                            return PathNodeType.BLOCKED;
+                        }
+                    }
+
+                    // Water Damages:
+                    if(this.entityCreature.waterDamage() && fluidState.isTagged(FluidTags.WATER)) {
                         return PathNodeType.BLOCKED;
                     }
 
-                    // Water Swimming:
-                    if(!this.entityCreature.waterDamage()) {
-                        if (iblockstate.getMaterial() != Material.WATER) {
-                            // Ooze Swimming:
-                            if(!this.entityCreature.canFreeze()) {
-                                if (iblockstate.getBlock() != ObjectManager.getBlock("ooze")) {
-                                    return PathNodeType.BLOCKED;
-                                }
-                            }
-                            return PathNodeType.BLOCKED;
-                        }
-                    }
-
-                    // Lava Swimming:
-                    else if(!this.entityCreature.canBurn()) {
-                        if (iblockstate.getMaterial() != Material.LAVA) {
-                            return PathNodeType.BLOCKED;
-                        }
+                    // Lava Damages:
+                    if(this.entityCreature.canBurn() && fluidState.isTagged(FluidTags.LAVA)) {
+                        return PathNodeType.BLOCKED;
                     }
 
                     // Ooze Swimming (With Water Damage):
-                    else if(!this.entityCreature.canFreeze()) {
-                        if (iblockstate.getBlock() != ObjectManager.getBlock("ooze")) {
-                            return PathNodeType.BLOCKED;
-                        }
+                    if(this.entityCreature.canFreeze() && ObjectManager.getBlock("ooze") != null && blockState.getBlock() != ObjectManager.getBlock("ooze")) {
+                        return PathNodeType.BLOCKED;
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
+import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -351,6 +352,9 @@ public class GameEventListener {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void onGameOverlay(RenderGameOverlayEvent.Text event) {
+		if(!ConfigDebug.INSTANCE.creatureOverlay.get())
+			return;
+
 		// Entity:
 		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
 		if(mouseOver instanceof EntityRayTraceResult) {

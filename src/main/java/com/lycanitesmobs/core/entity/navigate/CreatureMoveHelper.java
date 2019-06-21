@@ -29,13 +29,13 @@ public class CreatureMoveHelper extends MovementController {
 
         // Swimming:
         if(this.entityCreature.isStrongSwimmer() && this.entityCreature.isInWater()) {
-            this.onUpdateSwimming();
+            this.tickSwimming();
             return;
         }
 
         // Flying:
         if(this.entityCreature.isFlying() && !this.entityCreature.isInWater()) {
-            this.onUpdateFlying();
+            this.tickFlying();
             return;
         }
 
@@ -58,7 +58,7 @@ public class CreatureMoveHelper extends MovementController {
 
     // ==================== Movements ====================
     /** Used by strong swimmers for fast, smooth movement. **/
-    public void onUpdateSwimming() {
+    public void tickSwimming() {
         if (this.action == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
             double x = this.posX - this.entityCreature.posX;
             double y = this.posY - this.entityCreature.posY;
@@ -104,7 +104,7 @@ public class CreatureMoveHelper extends MovementController {
     }
 
     /** Used by flyers for swift, fast air movement. **/
-    public void onUpdateFlying() {
+    public void tickFlying() {
         if (this.action == MovementController.Action.MOVE_TO) {
             double xDistance = this.posX - this.entityCreature.posX;
             double yDistance = this.posY - this.entityCreature.posY;

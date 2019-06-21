@@ -48,6 +48,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
 
 		this.listType = "whitelist";
 		this.blockIds.add(Blocks.AIR.getRegistryName().toString());
+		this.blockIds.add(Blocks.CAVE_AIR.getRegistryName().toString());
 		this.blockIds.add(Blocks.TALL_GRASS.getRegistryName().toString());
 		super.loadFromJSON(json);
     }

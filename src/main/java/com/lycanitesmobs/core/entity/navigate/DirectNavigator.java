@@ -8,6 +8,7 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class DirectNavigator {
 	// Targets:
@@ -134,44 +135,15 @@ public class DirectNavigator {
   	// ==================================================
 	public void flightMovement(double moveStrafe, double moveForward) {
 		if(this.host.isInWater()) {
-            this.host.moveSwimmingWithHeading(moveStrafe, moveForward);
-            this.host.move(MoverType.SELF, this.host.getMotion());
-			this.host.setMotion(this.host.getMotion().mul(0.800000011920929D, 0.800000011920929D, 0.800000011920929D));
+            this.host.travelSwimming(new Vec3d(moveStrafe, 0, moveForward));
         }
         else if(this.host.lavaContact()) {
-            this.host.moveSwimmingWithHeading(moveStrafe, moveForward);
-            this.host.move(MoverType.SELF, this.host.getMotion());
-			this.host.setMotion(this.host.getMotion().mul(0.5D, 0.5D, 0.5D));
+            this.host.travelSwimming(new Vec3d(moveStrafe, 0, moveForward));
         }
         else {
-        	float motion = 0.91F;
-            if(this.host.onGround) {
-                Block block = this.host.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(this.host.posX), MathHelper.floor(this.host.getBoundingBox().minY) - 1, MathHelper.floor(this.host.posZ))).getBlock();
-                motion = block.getSlipperiness(this.host.getEntityWorld().getBlockState(this.host.getPosition()), this.host.getEntityWorld(), this.host.getPosition(), this.host) * 0.91F;
-            }
-            float flyingMotion = 0.16277136F / (motion * motion * motion);
-            this.host.moveFlying(moveStrafe, moveForward, this.host.onGround ? 0.1F * flyingMotion : (float)(0.02F * this.speedModifier));
-            
-            motion = 0.91F;
-            if(this.host.onGround) {
-                Block block = this.host.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(this.host.posX), MathHelper.floor(this.host.getBoundingBox().minY) - 1, MathHelper.floor(this.host.posZ))).getBlock();
-				motion = block.getSlipperiness(this.host.getEntityWorld().getBlockState(this.host.getPosition()), this.host.getEntityWorld(), this.host.getPosition(), this.host) * 0.91F;
-            }
-            
-            if(this.host != null) {
-				this.host.getBoundingBox();
-				this.host.move(MoverType.SELF, this.host.getMotion());
-			}
-			this.host.setMotion(this.host.getMotion().mul(motion, motion, motion));
+            this.host.travelFlying(new Vec3d(moveStrafe, 0, moveForward));
         }
-		
-        this.host.prevLimbSwingAmount = this.host.limbSwingAmount;
-        double deltaX = this.host.posX - this.host.prevPosX;
-        double deltaZ = this.host.posZ - this.host.prevPosZ;
-        float var7 = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ) * 4.0F;
-        if(var7 > 1.0F) var7 = 1.0F;
-        this.host.limbSwingAmount += (var7 - this.host.limbSwingAmount) * 0.4F;
-        this.host.limbSwing += this.host.limbSwingAmount;
+        this.host.updateLimbSwing();
 	}
 	
 	

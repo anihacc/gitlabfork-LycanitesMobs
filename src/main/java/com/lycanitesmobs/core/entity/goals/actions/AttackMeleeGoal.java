@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -111,6 +112,7 @@ public class AttackMeleeGoal extends Goal {
 					this.pathToTarget = this.host.getNavigator().getPathToEntityLiving(this.attackTarget);
 				}
 	            this.repathTime = 4 + this.host.getRNG().nextInt(7);
+
 	            return this.pathToTarget != null;
         	}
 

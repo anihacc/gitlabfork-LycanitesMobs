@@ -57,7 +57,11 @@ public class ItemCustomSpawnEgg extends ItemBase implements IItemColor {
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
 		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureType.getTitle() + ": ";
-		displayName += this.creatureType.getTitle();
+		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
+		if(creatureInfo != null)
+			displayName += creatureInfo.getTitle();
+		else
+			displayName += "Missing Creature NBT";
         return new TranslationTextComponent(displayName);
     }
     

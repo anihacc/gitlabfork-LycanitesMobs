@@ -20,7 +20,6 @@ public class SwimmingGoal extends Goal {
    	// ==================================================
     public SwimmingGoal(EntityCreatureBase setEntity) {
         this.host = setEntity;
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
         if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
             setEntity.getNavigator().setCanSwim(true);
     }
