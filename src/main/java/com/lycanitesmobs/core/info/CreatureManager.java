@@ -6,16 +6,14 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.config.ConfigCreatures;
 import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
-import net.minecraft.stats.Stat;
-import net.minecraft.stats.StatType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ObjectHolder;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -255,12 +253,27 @@ public class CreatureManager extends JSONLoader {
 	/**
 	 * Gets a creature by name.
 	 * @param creatureName The name of the creature to get.
-	 * @return The Creature Info.
+	 * @return The Creature Info or null.
 	 */
+	@Nullable
 	public CreatureInfo getCreature(String creatureName) {
 		if(!this.creatures.containsKey(creatureName))
 			return null;
 		return this.creatures.get(creatureName);
+	}
+
+
+	/**
+	 * Gets a Creature Entity Type by name.
+	 * @param creatureName The name of the creature to get.
+	 * @return The Entity Type or null.
+	 */
+	@Nullable
+	public EntityType<? extends LivingEntity> getEntityType(String creatureName) {
+		CreatureInfo creatureInfo = this.getCreature(creatureName);
+		if(creatureInfo == null)
+			return null;
+		return creatureInfo.getEntityType();
 	}
 
 

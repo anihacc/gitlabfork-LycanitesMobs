@@ -29,7 +29,7 @@ public class MobSpawn {
 	public CreatureInfo creatureInfo;
 
 	/** The entity class that this Mob Spawn should spawn if not using a MobInfo (for non-Lycanites Mobs entities). **/
-	public EntityType<Entity> entityType;
+	public EntityType<? extends LivingEntity> entityType;
 
 	/** If set to true, the Forge Can Spawn Event is fired but its result is ignored, use this to prevent other mods from stopping the spawn via the event. **/
 	protected boolean ignoreForgeCanSpawnEvent = false;

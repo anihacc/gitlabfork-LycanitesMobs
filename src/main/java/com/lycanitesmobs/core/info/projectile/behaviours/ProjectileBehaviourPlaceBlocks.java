@@ -43,6 +43,7 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 			return;
 		}
 
+		pos = pos.up();
 		for(int x = -this.radius + 1; x < this.radius; x++) {
 			for(int y = this.height - 1; y < this.height; y++) {
 				for(int z = -this.radius + 1; z < this.radius; z++) {

@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.entity.goals.actions;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 
 public class FollowFuseGoal extends FollowGoal {
 	// Targets:
@@ -86,11 +88,7 @@ public class FollowFuseGoal extends FollowGoal {
 
 		// Do Fusion:
 		if(this.host instanceof IFusable && followTarget instanceof IFusable) {
-			Class fusionClass = ((IFusable)this.host).getFusionClass((IFusable)followTarget);
-			if(fusionClass == null) {
-				return;
-			}
-			this.host.transform(fusionClass, followTarget, true);
+			this.host.transform(((IFusable)this.host).getFusionType((IFusable)followTarget), followTarget, true);
 		}
 	}
 }

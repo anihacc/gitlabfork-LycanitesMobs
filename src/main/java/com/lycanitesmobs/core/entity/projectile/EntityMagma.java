@@ -66,6 +66,8 @@ public class EntityMagma extends EntityProjectileBase {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
         if(block == Blocks.SNOW)
             return true;
+        if(block == Blocks.GRASS)
+			return true;
         if(block == Blocks.TALL_GRASS)
             return true;
         if(block == Blocks.FIRE)
@@ -96,8 +98,8 @@ public class EntityMagma extends EntityProjectileBase {
     //========== Place Block ==========
     @Override
     public void placeBlock(World world, BlockPos pos) {
-        BlockState placedBlockBig = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
-        BlockState placedBlock = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
+        BlockState placedBlockBig = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 6);
+        BlockState placedBlock = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 12);
         if(this.canDestroyBlockSub(pos))
             world.setBlockState(pos, placedBlockBig, 3);
         if(this.canDestroyBlockSub(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))

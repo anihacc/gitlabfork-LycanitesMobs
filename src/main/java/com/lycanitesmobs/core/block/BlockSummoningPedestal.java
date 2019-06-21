@@ -12,7 +12,6 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -33,7 +32,7 @@ public class BlockSummoningPedestal extends BlockBase {
         }
     }
 
-    public static final IntegerProperty PROPERTY_OWNER = BlockStateProperties.AGE_0_2;
+    public static final IntegerProperty PROPERTY_OWNER = IntegerProperty.create("owner", 0, 2);
 
 
 	// ==================================================

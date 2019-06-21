@@ -5,6 +5,7 @@ import com.lycanitesmobs.api.IGroupRock;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -179,21 +180,21 @@ public class EntityAegis extends EntityCreatureTameable implements IGroupRock, I
 	}
 
 	@Override
-	public Class getFusionClass(IFusable fusable) {
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityWisp.class;
+			return CreatureManager.getInstance().getEntityType("wisp");
 		}
 		if(fusable instanceof EntityJengu) {
-			return EntityNymph.class;
+			return CreatureManager.getInstance().getEntityType("nymph");
 		}
 		if(fusable instanceof EntityGeonach) {
-			return EntityVapula.class;
+			return CreatureManager.getInstance().getEntityType("vapula");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntitySylph.class;
+			return CreatureManager.getInstance().getEntityType("sylph");
 		}
 		if(fusable instanceof EntityArgus) {
-			return EntitySpectre.class;
+			return CreatureManager.getInstance().getEntityType("spectre");
 		}
 		return null;
 	}

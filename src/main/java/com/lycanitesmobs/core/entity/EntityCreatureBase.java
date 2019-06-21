@@ -1290,14 +1290,11 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	 * destroyPartner If true and a partner is set, the partner will be removed.
 	 * return The transformed entity instance. Null on failure (usually when an invalid class is provided).
 	 */
-	public LivingEntity transform(Class transformClass, Entity partner, boolean destroyPartner) {
-		LivingEntity transformedEntity = null;
-		try {
-			transformedEntity = (LivingEntity)transformClass.getConstructor(new Class[]{World.class}).newInstance(this.getEntityWorld());
+	public LivingEntity transform(EntityType<? extends LivingEntity> transformType, Entity partner, boolean destroyPartner) {
+		if(transformType == null) {
+			return null;
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		LivingEntity transformedEntity = transformType.create(this.getEntityWorld());
 		if(transformedEntity == null) {
 			return null;
 		}

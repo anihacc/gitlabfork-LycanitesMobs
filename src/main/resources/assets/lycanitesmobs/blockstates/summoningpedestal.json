@@ -1,8 +1,8 @@
 {
 	"variants": {
 		"": { "model": "lycanitesmobs:block/summoningpedestal_none" },
-		"owner=none": { "model": "lycanitesmobs:block/summoningpedestal_none" },
-		"owner=client": { "model": "lycanitesmobs:block/summoningpedestal_client" },
-		"owner=player": { "model": "lycanitesmobs:block/summoningpedestal_player" }
+		"owner=0": { "model": "lycanitesmobs:block/summoningpedestal_none" },
+		"owner=1": { "model": "lycanitesmobs:block/summoningpedestal_client" },
+		"owner=2": { "model": "lycanitesmobs:block/summoningpedestal_player" }
 	}
 }

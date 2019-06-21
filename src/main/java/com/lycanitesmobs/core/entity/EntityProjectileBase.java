@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -22,6 +23,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -63,26 +66,24 @@ public class EntityProjectileBase extends ThrowableEntity {
 
 
 	// ==================================================
- 	//                   Constructors
+ 	//			    Constructors
  	// ==================================================
     public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world) {
-        super(entityType, world);
-        this.dataManager.register(SCALE, this.projectileScale);
-        this.setProjectileScale(this.projectileScale);
-        this.setup();
+	   super(entityType, world);
+	   this.setup();
     }
 
     public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving) {
-        this(entityType, world);
-        this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
-        this.setProjectileScale(this.projectileScale);
-        this.setup();
+	   this(entityType, world);
+		this.setPosition(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+	   this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
+	   this.setup();
     }
 
     public EntityProjectileBase(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
-        this(entityType, world);
-        this.setProjectileScale(this.projectileScale);
-        this.setup();
+	   this(entityType, world);
+	   this.setPosition(x, y, z);
+	   this.setup();
     }
     
     // ========== Setup Projectile ==========
@@ -101,34 +102,35 @@ public class EntityProjectileBase extends ThrowableEntity {
 
 	@Override
 	public void registerData() {
-
+		this.dataManager.register(SCALE, this.projectileScale);
+		this.setProjectileScale(this.projectileScale);
 	}
 	
     
     // ==================================================
- 	//                      Update
+ 	//				  Update
  	// ==================================================
     @Override
     public void tick() {
     	this.updateTick++;
 
-        if(!this.movement) {
-            this.inGround = false;
-            this.timeUntilPortal = this.getPortalCooldown();
-        }
-        double initX = this.posX;
-        double initY = this.posY;
-        double initZ = this.posZ;
+	   if(!this.movement) {
+		  this.inGround = false;
+		  this.timeUntilPortal = this.getPortalCooldown();
+	   }
+	   double initX = this.posX;
+	   double initY = this.posY;
+	   double initZ = this.posZ;
 
 		super.tick();
 
-        if(!this.movement) {
-            this.posX = initX;
-            this.posY = initY;
-            this.posZ = initZ;
-            this.setMotion(0, 0, 0);
-            this.setPosition(this.posX, this.posY, this.posZ);
-        }
+	   if(!this.movement) {
+		  this.posX = initX;
+		  this.posY = initY;
+		  this.posZ = initZ;
+		  this.setMotion(0, 0, 0);
+		  this.setPosition(this.posX, this.posY, this.posZ);
+	   }
     	
     	// Terrain Destruction
     	if(!this.getEntityWorld().isRemote) {
@@ -139,23 +141,24 @@ public class EntityProjectileBase extends ThrowableEntity {
     	}
 
     	// Life Timeout:
-        if(!this.getEntityWorld().isRemote || this.clientOnly) {
-            if(this.projectileLife-- <= 0)
-                this.remove();
+	   if(!this.getEntityWorld().isRemote || this.clientOnly) {
+		  if(this.projectileLife-- <= 0) {
+				this.remove();
+			}
 		}
 
-        // Sync Scale:
-        if(this.getEntityWorld().isRemote) {
-            this.projectileScale = this.dataManager.get(SCALE);
-        }
+	   // Sync Scale:
+	   if(this.getEntityWorld().isRemote) {
+		  this.projectileScale = this.dataManager.get(SCALE);
+	   }
 
-        // Animation:
-        if(this.animationFrameMax > 0) {
-            if (this.animationFrame == this.animationFrameMax || this.animationFrame < 0)
-                this.animationFrame = 0;
-            else
-                this.animationFrame++;
-        }
+	   // Animation:
+	   if(this.animationFrameMax > 0) {
+		  if (this.animationFrame == this.animationFrameMax || this.animationFrame < 0)
+			 this.animationFrame = 0;
+		  else
+			 this.animationFrame++;
+	   }
     }
 
 	/**
@@ -169,7 +172,7 @@ public class EntityProjectileBase extends ThrowableEntity {
 	
     
     // ==================================================
- 	//                      Movement
+ 	//				  Movement
  	// ==================================================
     // ========== Gravity ==========
     @Override
@@ -182,24 +185,24 @@ public class EntityProjectileBase extends ThrowableEntity {
     
     
     // ==================================================
-  	//                       Impact
+  	//                     Impact
   	// ==================================================
-     @Override
-     protected void onImpact(RayTraceResult rayTraceResult) {
-     	 boolean collided = false;
-         boolean entityCollision = false;
-         boolean blockCollision = false;
-         BlockPos impactPos = this.getPosition();
-     	
-     	// Entity Hit:
+	@Override
+	protected void onImpact(RayTraceResult rayTraceResult) {
+		 boolean collided = false;
+	    boolean entityCollision = false;
+	    boolean blockCollision = false;
+	    BlockPos impactPos = this.getPosition();
+		
+		// Entity Hit:
 		 Entity entityHit = null;
-		if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && rayTraceResult.hitInfo instanceof Entity) {
-			entityHit = (Entity)rayTraceResult.hitInfo;
+		if(rayTraceResult.getType() == RayTraceResult.Type.ENTITY && rayTraceResult instanceof EntityRayTraceResult) {
+			entityHit = ((EntityRayTraceResult)rayTraceResult).getEntity();
 		}
-     	if(entityHit != null) {
-     		if(this.getThrower() != null && entityHit == this.getThrower())
-     			return;
-     		boolean doDamage = true;
+		if(entityHit != null) {
+			if(this.getThrower() != null && entityHit == this.getThrower())
+				return;
+			boolean doDamage = true;
  			if(entityHit instanceof LivingEntity) {
  				doDamage = this.canDamage((LivingEntity)entityHit);
  			}
@@ -214,7 +217,7 @@ public class EntityProjectileBase extends ThrowableEntity {
  					if(this.onEntityLivingDamage(target)) {
  						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((LivingEntity)movingObjectPosition.entityHit));
 
-                        boolean attackSuccess = false;
+				    boolean attackSuccess = false;
  						float damage = this.getDamage(target);
 
  						if(damage != 0) {
@@ -262,30 +265,25 @@ public class EntityProjectileBase extends ThrowableEntity {
  				}
  			}
  			collided = true;
-            entityCollision = true;
+		  entityCollision = true;
 
-     		int i = (int)Math.floor(entityHit.posX);
-     		int j = (int)Math.floor(entityHit.posY);
-            int k = (int)Math.floor(entityHit.posZ);
-            impactPos = new BlockPos(i, j, k);
-            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
-            	try {
+		  impactPos = entityHit.getPosition();
+		  if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
+		  	try {
 					this.placeBlock(this.getEntityWorld(), impactPos);
 				}
 				catch(Exception e) {}
 			}
-     	}
-     	
-     	// Block Hit:
-     	else {
-			int i = (int)rayTraceResult.getHitVec().getX();
-			int j = (int)rayTraceResult.getHitVec().getY();
-			int k = (int)rayTraceResult.getHitVec().getZ();
-			BlockPos blockPos = new BlockPos(i, j, k);
-			BlockState blockState = this.getEntityWorld().getBlockState(blockPos);
+		}
+		
+		// Block Hit:
+		else if(rayTraceResult.getType() == RayTraceResult.Type.BLOCK && rayTraceResult instanceof BlockRayTraceResult) {
+			BlockRayTraceResult blockRayTraceResult = (BlockRayTraceResult)rayTraceResult;
+			impactPos = blockRayTraceResult.getPos();
+			BlockState blockState = this.getEntityWorld().getBlockState(impactPos);
 			if (blockState.getBlock() instanceof TallGrassBlock || blockState.getBlock() == Blocks.TALL_GRASS) {
 				if (this.cutsGrass) {
-					world.destroyBlock(blockPos, false);
+					world.destroyBlock(impactPos, false);
 				}
 			}
 			else {
@@ -297,73 +295,72 @@ public class EntityProjectileBase extends ThrowableEntity {
 					collided = true;
 				}
 			}
-             
- 	        if(collided) {
-                blockCollision = true;
- 	            /*switch(rayTraceResult.sideHit) { TODO Block Collision Side
-                    case DOWN:
- 		                --j;
- 		                break;
-                    case UP:
- 		                ++j;
- 		                break;
-                    case SOUTH:
- 		                --k;
- 		                break;
-                    case NORTH:
- 		                ++k;
- 		                break;
-                    case WEST:
- 		                --i;
- 		                break;
-                    case EAST:
- 		                ++i;
- 	            }*/
+		   
+ 		   if(collided) {
+			 blockCollision = true;
+ 			  /*switch(rayTraceResult.sideHit) { TODO Block Collision Side
+				case DOWN:
+ 					 --j;
+ 					 break;
+				case UP:
+ 					 ++j;
+ 					 break;
+				case SOUTH:
+ 					 --k;
+ 					 break;
+				case NORTH:
+ 					 ++k;
+ 					 break;
+				case WEST:
+ 					 --i;
+ 					 break;
+				case EAST:
+ 					 ++i;
+ 			  }*/
 
-                impactPos = new BlockPos(i, j, k);
- 	            if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos)) {
- 	            	try {
-						this.placeBlock(this.getEntityWorld(), impactPos);
+ 			  if(!this.getEntityWorld().isRemote && this.canDestroyBlock(impactPos.up())) {
+ 			  	try {
+						this.placeBlock(this.getEntityWorld(), impactPos.up());
 					}
 					catch(Exception e) {}
 				}
- 	        }
-     	}
-     	
-     	if(collided) {
+ 		   }
+		}
+		
+		if(collided) {
  	    	// Impact Particles:
- 	        if(!this.getEntityWorld().isRemote) {
+ 		   if(!this.getEntityWorld().isRemote) {
 				this.onImpactComplete(impactPos);
 			}
- 	        else {
+ 		   else {
 				this.onImpactVisuals();
 			}
- 	        
- 	        // Remove Projectile:
-            boolean entityPierced = this.ripper && entityCollision;
-            boolean blockPierced = this.pierceBlocks && blockCollision;
- 	        if(!this.getEntityWorld().isRemote && !entityPierced && !blockPierced) {
- 	            this.remove();
+ 		   
+ 		   // Remove Projectile:
+		  boolean entityPierced = this.ripper && entityCollision;
+		  boolean blockPierced = this.pierceBlocks && blockCollision;
+ 		   if(!this.getEntityWorld().isRemote && !entityPierced && !blockPierced) {
+ 			  this.remove();
 				if(this.getImpactSound() != null) {
 					this.playSound(this.getImpactSound(), 1.0F, 1.0F / (this.getEntityWorld().rand.nextFloat() * 0.4F + 0.8F));
 				}
- 	        }
-     	}
-     }
-     
-     //========== Do Damage Check ==========
-     public boolean canDamage(LivingEntity targetEntity) {
-         if(this.getEntityWorld().isRemote)
-             return false;
+ 		   }
+		}
+	}
+	
+	//========== Do Damage Check ==========
+	public boolean canDamage(LivingEntity targetEntity) {
+	    if(this.getEntityWorld().isRemote)
+		   return false;
 
     	 LivingEntity owner = this.getThrower();
-	     if(owner != null) {
+		if(owner != null) {
 
-            if(owner instanceof EntityCreatureBase) {
-                EntityCreatureBase ownerCreature = (EntityCreatureBase)owner;
-                if(!ownerCreature.canAttack(targetEntity))
-                    return false;
-            }
+		  if(owner instanceof EntityCreatureBase) {
+			 EntityCreatureBase ownerCreature = (EntityCreatureBase)owner;
+			 if(!ownerCreature.canAttack(targetEntity))
+				return false;
+		  }
 	    	
 	    	// Player Damage Event:
 		    if(owner instanceof PlayerEntity) {
@@ -392,8 +389,8 @@ public class EntityProjectileBase extends ThrowableEntity {
 	    }
 	    
 	    return true;
-     }
-     
+	}
+	
 
 	/**
 	 * Called when this projectile damages an entity (successfully or on failure).
@@ -401,79 +398,79 @@ public class EntityProjectileBase extends ThrowableEntity {
 	 * @param damage The full amount of damage that was meant to be dealt.
 	 * @param attackSuccess True if the entity was damaged, false if it wasn't.
 	 */
-     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {}
-     
-     //========== Entity Collision ==========
-     public void onEntityCollision(Entity entity) {}
-     
-     //========== Entity Living Collision ==========
-     public boolean onEntityLivingDamage(LivingEntity entityLiving) {
+	public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {}
+	
+	//========== Entity Collision ==========
+	public void onEntityCollision(Entity entity) {}
+	
+	//========== Entity Living Collision ==========
+	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	 return true;
-     }
-     
-     //========== Can Destroy Block ==========
-     public boolean canDestroyBlock(BlockPos pos) {
-    	 return this.getEntityWorld().isAirBlock(pos) && this.getEntityWorld().getBlockState(pos.down()).getMaterial().isSolid();
-     }
-     
-     //========== Place Block ==========
-     public void placeBlock(World world, BlockPos pos) {
+	}
+	
+	//========== Can Destroy Block ==========
+	public boolean canDestroyBlock(BlockPos pos) {
+    	 return this.getEntityWorld().isAirBlock(pos) && this.getEntityWorld().getBlockState(pos.down()).isSolid();
+	}
+	
+	//========== Place Block ==========
+	public void placeBlock(World world, BlockPos pos) {
     	 //world.setBlock(pos, ObjectManager.getBlock("BlockName").blockID);
-     }
-     
-     //========== On Impact Splash/Ricochet Server Side ==========
-     public void onImpactComplete(BlockPos impactPos) {}
-     
-     //========== On Impact Particles/Sounds Client Side ==========
-     public void onImpactVisuals() {
+	}
+	
+	//========== On Impact Splash/Ricochet Server Side ==========
+	public void onImpactComplete(BlockPos impactPos) {}
+	
+	//========== On Impact Particles/Sounds Client Side ==========
+	public void onImpactVisuals() {
     	 //for(int i = 0; i < 8; ++i)
     		 //this.getEntityWorld().addParticle("particlename", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-     }
-     
-     
-     // ==================================================
-     //                    Collision
-     // ==================================================
-     @Override
-     public boolean canBeCollidedWith() {
-         return false;
-     }
-     
-     
-     // ==================================================
-     //                     Attacked
-     // ==================================================
-     @Override
-     public boolean attackEntityFrom(DamageSource damageSource, float damage) {
-         return false;
-     }
-     
-     
-     // ==================================================
-     //                      Scale
-     // ==================================================
-     public void setProjectileScale(float scale) {
-     	 this.projectileScale = scale;
-         //this.getSize(Pose.STANDING).setSize(scale, scale); TODO Move to EntityType
-         if(this.getEntityWorld().isRemote && !this.clientOnly)
-             return;
-         if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
-             this.projectileScale *= ((EntityCreatureBase)this.getThrower()).sizeScale;
-         this.dataManager.set(SCALE, this.projectileScale);
-     }
-     
-     public float getProjectileScale() {
-         return this.projectileScale;
-     }
+	}
+	
+	
+	// ==================================================
+	//				Collision
+	// ==================================================
+	@Override
+	public boolean canBeCollidedWith() {
+	    return false;
+	}
+	
+	
+	// ==================================================
+	//				 Attacked
+	// ==================================================
+	@Override
+	public boolean attackEntityFrom(DamageSource damageSource, float damage) {
+	    return false;
+	}
+	
+	
+	// ==================================================
+	//				  Scale
+	// ==================================================
+	public void setProjectileScale(float scale) {
+		 this.projectileScale = scale;
+	    //this.getSize(Pose.STANDING).setSize(scale, scale); TODO Move to EntityType
+	    if(this.getEntityWorld().isRemote && !this.clientOnly)
+		   return;
+	    if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
+		   this.projectileScale *= ((EntityCreatureBase)this.getThrower()).sizeScale;
+	    this.dataManager.set(SCALE, this.projectileScale);
+	}
+	
+	public float getProjectileScale() {
+	    return this.projectileScale;
+	}
 
     public float getTextureOffsetY() {
-        return 0;
+	   return 0;
     }
-     
-     
-     // ==================================================
-     //                      Damage
-     // ==================================================
+	
+	
+	// ==================================================
+	//				  Damage
+	// ==================================================
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
@@ -496,49 +493,49 @@ public class EntityProjectileBase extends ThrowableEntity {
 		return this.pierce;
 	}
 
-     /** When given a base time (in seconds) this will return the scaled time with difficulty and other modifiers taken into account
-      * seconds - The base duration in seconds that this effect should last for.
-     **/
-     public int getEffectDuration(int seconds) {
+	/** When given a base time (in seconds) this will return the scaled time with difficulty and other modifiers taken into account
+	 * seconds - The base duration in seconds that this effect should last for.
+	**/
+	public int getEffectDuration(int seconds) {
     	 if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
     		 return Math.round((float)((EntityCreatureBase)this.getThrower()).getEffectDuration(seconds) / 5);
     	 return seconds * 20;
-     }
+	}
 
     /** When given a base effect strngth value such as a life drain amount, this will return the scaled value with difficulty and other modifiers taken into account
-     * value - The base effect strength.
-     **/
+	* value - The base effect strength.
+	**/
     public float getEffectStrength(float value) {
-        if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
-            return ((EntityCreatureBase)this.getThrower()).getEffectStrength(value);
-        return value;
+	   if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
+		  return ((EntityCreatureBase)this.getThrower()).getEffectStrength(value);
+	   return value;
     }
 
 
     // ==================================================
-    //                      Utility
+    //				  Utility
     // ==================================================
     // ========== Get Facing Coords ==========
     /** Returns the XYZ coordinate in front or behind this entity (using its rotation angle) with the given distance, use a negative distance for behind. **/
     public double[] getFacingPosition(double distance) {
-        return this.getFacingPosition(this, distance, 0D);
+	   return this.getFacingPosition(this, distance, 0D);
     }
 
     /** Returns the XYZ coordinate in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public double[] getFacingPosition(Entity entity, double distance, double angleOffset) {
-        double angle = Math.toRadians(entity.rotationYaw) + angleOffset;
-        double xAmount = -Math.sin(angle);
-        double zAmount = Math.cos(angle);
-        double[] coords = new double[3];
-        coords[0] = entity.posX + (distance * xAmount);
-        coords[1] = entity.posY;
-        coords[2] = entity.posZ + (distance * zAmount);
-        return coords;
+	   double angle = Math.toRadians(entity.rotationYaw) + angleOffset;
+	   double xAmount = -Math.sin(angle);
+	   double zAmount = Math.cos(angle);
+	   double[] coords = new double[3];
+	   coords[0] = entity.posX + (distance * xAmount);
+	   coords[1] = entity.posY;
+	   coords[2] = entity.posZ + (distance * zAmount);
+	   return coords;
     }
 
 
 	// ==================================================
-	//                       NBT
+	//				   NBT
 	// ==================================================
 	@Override
 	public void writeAdditional(CompoundNBT compound) {
@@ -559,28 +556,28 @@ public class EntityProjectileBase extends ThrowableEntity {
 			this.projectileLife = compound.getInt("ProjectileLife");
 		}
 	}
-     
-     
-     // ==================================================
-     //                      Visuals
-     // ==================================================
+	
+	
+	// ==================================================
+	//				  Visuals
+	// ==================================================
     public String getTextureName() {
-        return this.entityName.toLowerCase();
+	   return this.entityName.toLowerCase();
     }
 
-     public ResourceLocation getTexture() {
-     	if(AssetManager.getTexture(this.getTextureName()) == null)
-     		AssetManager.addTexture(this.getTextureName(), this.modInfo, "textures/items/" + this.getTextureName() + ".png");
-     	return AssetManager.getTexture(this.getTextureName());
-     }
-     
-     
-     // ==================================================
-     //                      Sounds
-     // ==================================================
-     public SoundEvent getLaunchSound() {
-     	return ObjectManager.getSound(this.entityName);
-     }
+	public ResourceLocation getTexture() {
+		if(AssetManager.getTexture(this.getTextureName()) == null)
+			AssetManager.addTexture(this.getTextureName(), this.modInfo, "textures/items/" + this.getTextureName() + ".png");
+		return AssetManager.getTexture(this.getTextureName());
+	}
+	
+	
+	// ==================================================
+	//				  Sounds
+	// ==================================================
+	public SoundEvent getLaunchSound() {
+		return ObjectManager.getSound(this.entityName);
+	}
 
 	public SoundEvent getImpactSound() {
 		return ObjectManager.getSound(this.entityName + "_impact");

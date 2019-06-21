@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,13 +116,9 @@ public class ProjectileManager extends JSONLoader {
 	 */
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
-		ModInfo modInfo = LycanitesMobs.modInfo;
-		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
+		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles...");
 
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
-			if(projectileInfo.modInfo != modInfo) {
-				continue;
-			}
 			event.getRegistry().register(projectileInfo.getEntityType());
 		}
 
@@ -134,7 +131,7 @@ public class ProjectileManager extends JSONLoader {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(modInfo.modid, entityName);
+			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 			try {
 				EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
 			} catch (NoSuchMethodException e) {
@@ -154,7 +151,7 @@ public class ProjectileManager extends JSONLoader {
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(modInfo.modid, entityName);
+			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 			try {
 				EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
 			} catch (NoSuchMethodException e) {
@@ -172,10 +169,25 @@ public class ProjectileManager extends JSONLoader {
 	 * @param projectileName The name of the projectile to get.
 	 * @return The Projectile Info.
 	 */
+	@Nullable
 	public ProjectileInfo getProjectile(String projectileName) {
 		if(!this.projectiles.containsKey(projectileName))
 			return null;
 		return this.projectiles.get(projectileName);
+	}
+
+
+	/**
+	 * Gets a Projectile Entity Type by name.
+	 * @param projectileName The name of the projectile to get.
+	 * @return The Entity Type or null.
+	 */
+	@Nullable
+	public EntityType<? extends EntityProjectileBase> getEntityType(String projectileName) {
+		ProjectileInfo projectileInfo = this.getProjectile(projectileName);
+		if(projectileInfo == null)
+			return null;
+		return projectileInfo.getEntityType();
 	}
 
 

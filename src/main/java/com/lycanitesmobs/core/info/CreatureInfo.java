@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.lang.reflect.Constructor;
@@ -57,7 +58,7 @@ public class CreatureInfo {
 	public CreatureType creatureType;
 
 	/** The entity type used to store base attributes of this creature. **/
-	protected EntityType entityType;
+	protected EntityType<? extends LivingEntity> entityType;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -377,10 +378,11 @@ public class CreatureInfo {
 	 * Returns the entity type of this creature.
 	 * @return Creature's entity type.
 	 */
-	public EntityType getEntityType() {
+	@Nonnull
+	public EntityType<? extends LivingEntity> getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), this.peaceful ? EntityClassification.CREATURE : EntityClassification.MONSTER);
-			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction); Client Factory never called.
+			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
 			entityTypeBuilder.setTrackingRange(this.isBoss() ? 32 : 10);
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(false);

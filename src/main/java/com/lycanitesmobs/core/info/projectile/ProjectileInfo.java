@@ -22,11 +22,13 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,7 +56,7 @@ public class ProjectileInfo {
 	public ModInfo modInfo;
 
 	/** The entity type used to store base attributes of this projectile. **/
-	protected EntityType entityType = EntityType.SNOWBALL;
+	protected EntityType<? extends EntityProjectileBase> entityType;
 
 	// Item:
 	/** The item used to fire this projectile from a dispenser and on use. **/
@@ -270,7 +272,8 @@ public class ProjectileInfo {
 	 * Returns the entity type of this projectile.
 	 * @return Projectiles's entity type.
 	 */
-	public EntityType getEntityType() {
+	@Nonnull
+	public EntityType<? extends EntityProjectileBase> getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(5);

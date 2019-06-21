@@ -5,8 +5,10 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.EntityFear;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -141,7 +143,7 @@ public class Effects {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
-						EntityFear fearEntity = new EntityFear(EntityFactory.getInstance().entityConstructorTypeMap.get(EntityFear.class), entity.getEntityWorld(), entity);
+						EntityFear fearEntity = new EntityFear((EntityType<? extends EntityFear>) CreatureManager.getInstance().getEntityType("fear"), entity.getEntityWorld(), entity);
 						entity.getEntityWorld().addEntity(fearEntity);
 						extendedEntity.fearEntity = fearEntity;
 					}

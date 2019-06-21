@@ -96,7 +96,7 @@ public class FuseTargetingGoal extends TargetingGoal {
             return false;
 
     	// Fusable Check:
-		if(!(this.host instanceof IFusable) || ((IFusable)this.host).getFusionClass((IFusable)target) == null)
+		if(!(this.host instanceof IFusable) || ((IFusable)this.host).getFusionType((IFusable)target) == null)
 			return false;
 
 		// Owner Check:

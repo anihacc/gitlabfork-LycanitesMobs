@@ -5,6 +5,7 @@ import com.lycanitesmobs.api.IGroupRock;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
@@ -106,10 +107,10 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 			// Environmental Transformation:
 			if(!this.isTamed()) {
 				if (this.updateTick % 40 == 0 && this.isInLava()) {
-					this.transform(EntityVolcan.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityType("volcan"), null, false);
 				}
 				if (this.fireDamageAbsorbed >= 10) {
-					this.transform(EntityVolcan.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityType("volcan"), null, false);
 				}
 			}
 		}
@@ -249,21 +250,21 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 	}
 
 	@Override
-	public Class getFusionClass(IFusable fusable) {
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityVolcan.class;
+			return CreatureManager.getInstance().getEntityType("volcan");
 		}
 		if(fusable instanceof EntityJengu) {
-			return EntitySpriggan.class;
+			return CreatureManager.getInstance().getEntityType("spriggan");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntityBanshee.class;
+			return CreatureManager.getInstance().getEntityType("banshee");
 		}
 		if(fusable instanceof EntityAegis) {
-			return EntityVapula.class;
+			return CreatureManager.getInstance().getEntityType("vapula");
 		}
 		if(fusable instanceof EntityArgus) {
-			return EntityTremor.class;
+			return CreatureManager.getInstance().getEntityType("tremor");
 		}
 		return null;
 	}

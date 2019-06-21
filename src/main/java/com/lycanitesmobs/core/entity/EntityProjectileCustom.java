@@ -31,13 +31,11 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	// ==================================================
 	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world) {
 		super(entityType, world);
-		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 	}
 
 	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world, ProjectileInfo projectileInfo) {
 		super(entityType, world);
-		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
@@ -46,16 +44,20 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		super(entityType, world, entityLiving);
 		if(projectileInfo != null)
 			this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F);
-		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
 
 	public EntityProjectileCustom(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z, ProjectileInfo projectileInfo) {
 		super(entityType, world, x, y, z);
-		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
+	}
+
+	@Override
+	public void registerData() {
+		super.registerData();
+		this.dataManager.register(PROJECTILE_NAME, "");
 	}
 
 

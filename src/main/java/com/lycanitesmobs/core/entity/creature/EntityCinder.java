@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
@@ -85,7 +86,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
         // Suffocation Transform:
 		if(!this.getEntityWorld().isRemote) {
 			if(this.inWallDamageAbsorbed >= 10) {
-				this.transform(EntityVolcan.class, null, false);
+				this.transform(CreatureManager.getInstance().getEntityType("volcan"), null, false);
 			}
 		}
         
@@ -260,21 +261,21 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
 	}
 
 	@Override
-	public Class getFusionClass(IFusable fusable) {
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityJengu) {
-			return EntityXaphan.class;
+			return CreatureManager.getInstance().getEntityType("xaphan");
 		}
 		if(fusable instanceof EntityGeonach) {
-			return EntityVolcan.class;
+			return CreatureManager.getInstance().getEntityType("volcan");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntityZephyr.class;
+			return CreatureManager.getInstance().getEntityType("zephyr");
 		}
 		if(fusable instanceof EntityAegis) {
-			return EntityWisp.class;
+			return CreatureManager.getInstance().getEntityType("aegis");
 		}
 		if(fusable instanceof EntityArgus) {
-			return EntityGrue.class;
+			return CreatureManager.getInstance().getEntityType("argus");
 		}
 		return null;
 	}

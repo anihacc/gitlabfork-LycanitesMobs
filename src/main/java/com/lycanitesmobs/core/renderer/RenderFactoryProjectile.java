@@ -21,13 +21,8 @@ public class RenderFactoryProjectile<T extends EntityProjectileBase> implements 
 
     @Override
     public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
-		// New JSON Projectiles
-		if(this.oldProjectileClass == null) {
-			return new RenderProjectileSprite(manager, EntityProjectileCustom.class);
-		}
-
 		// Old Projectile Obj Models:
-        if(this.oldModel) {
+		if(this.oldModel) {
 			try {
 				return new RenderProjectileModel(this.oldProjectileName, manager);
 			} catch (Exception e) {
@@ -35,8 +30,13 @@ public class RenderFactoryProjectile<T extends EntityProjectileBase> implements 
 			}
 		}
 
-        // Old Projectile Item Sprite Models:
-        return new RenderProjectileSprite(manager, this.oldProjectileClass);
+		// Old Projectile Item Sprite Models:
+		if(this.oldProjectileClass != null) {
+			return new RenderProjectileSprite(manager, this.oldProjectileClass);
+		}
+
+		// New JSON Projectile:
+		return new RenderProjectileSprite(manager, EntityProjectileCustom.class);
     }
 
 }

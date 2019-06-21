@@ -61,6 +61,8 @@ public class EntityBlizzard extends EntityProjectileBase {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
         if(block == Blocks.SNOW)
             return true;
+			if(block == Blocks.GRASS)
+			return true;
         if(block == Blocks.TALL_GRASS)
             return true;
         if(block == Blocks.COBWEB)

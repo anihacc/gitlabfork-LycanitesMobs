@@ -82,7 +82,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 			// Light Aura:
 			if(!this.isPetType("familiar")) {
 				if (this.updateTick % 10 == 0) {
-					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
+					List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 2);
 					for (Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity) entityObj;
 						if(target == this) {

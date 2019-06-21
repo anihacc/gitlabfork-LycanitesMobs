@@ -6,9 +6,11 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityWhirlwind;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,7 +72,7 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
 			// Environmental Transformation:
 			if(!this.isTamed()) {
 				if (this.fireDamageAbsorbed >= 10) {
-					this.transform(EntityZephyr.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityType("zephyr"), null, false);
 				}
 			}
 		}
@@ -130,7 +132,7 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
             return false;
         }
         if(type.equals("lightningBolt") && !this.isTamed()) {
-        	this.transform(EntityZephyr.class, null, false);
+        	this.transform(CreatureManager.getInstance().getEntityType("zephyr"), null, false);
         	return false;
 		}
         return super.isInvulnerableTo(type, source, damage);
@@ -161,21 +163,21 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
     }
 
     @Override
-    public Class getFusionClass(IFusable fusable) {
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityZephyr.class;
+			return CreatureManager.getInstance().getEntityType("zephyr");
 		}
         if(fusable instanceof EntityJengu) {
-            return EntityReiver.class;
+			return CreatureManager.getInstance().getEntityType("reiver");
         }
         if(fusable instanceof EntityGeonach) {
-            return EntityBanshee.class;
+			return CreatureManager.getInstance().getEntityType("banshee");
         }
         if(fusable instanceof EntityAegis) {
-            return EntitySylph.class;
+			return CreatureManager.getInstance().getEntityType("sylph");
         }
 		if(fusable instanceof EntityArgus) {
-			return EntityWraith.class;
+			return CreatureManager.getInstance().getEntityType("wraith");
 		}
         return null;
     }

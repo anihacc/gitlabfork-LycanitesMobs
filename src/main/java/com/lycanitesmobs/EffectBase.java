@@ -20,7 +20,7 @@ public class EffectBase extends Effect {
 		super(badEffect ? EffectType.HARMFUL : EffectType.BENEFICIAL, color);
 		this.name = name;
 		this.setRegistryName(LycanitesMobs.MODID, name);
-		AssetManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/effects/" + name + ".png");
+		AssetManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/mob_effect/" + name + ".png");
 	}
 	
 	

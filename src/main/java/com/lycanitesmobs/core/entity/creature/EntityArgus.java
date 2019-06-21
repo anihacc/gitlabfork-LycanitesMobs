@@ -5,10 +5,8 @@ import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityChaosOrb;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.Pose;
+import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.entity.*;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
@@ -149,21 +147,21 @@ public class EntityArgus extends EntityCreatureTameable implements IMob, IFusabl
 	}
 
 	@Override
-	public Class getFusionClass(IFusable fusable) {
+	public EntityType<? extends LivingEntity> getFusionType(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityGrue.class;
+			return CreatureManager.getInstance().getEntityType("grue");
 		}
 		if(fusable instanceof EntityJengu) {
-			return EntityEechetik.class;
+			return CreatureManager.getInstance().getEntityType("eechetik");
 		}
 		if(fusable instanceof EntityGeonach) {
-			return EntityTremor.class;
+			return CreatureManager.getInstance().getEntityType("tremor");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntityWraith.class;
+			return CreatureManager.getInstance().getEntityType("wraith");
 		}
 		if(fusable instanceof EntityAegis) {
-			return EntitySpectre.class;
+			return CreatureManager.getInstance().getEntityType("spectre");
 		}
 		return null;
 	}

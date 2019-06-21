@@ -67,6 +67,8 @@ public class EntityTundra extends EntityProjectileBase {
         Block block = this.getEntityWorld().getBlockState(pos).getBlock();
         if(block == Blocks.SNOW)
             return true;
+        if(block == Blocks.GRASS)
+			return true;
         if(block == Blocks.TALL_GRASS)
             return true;
         if(block == Blocks.FIRE)
@@ -98,8 +100,8 @@ public class EntityTundra extends EntityProjectileBase {
     @Override
     public void placeBlock(World world, BlockPos pos) {
         if(ObjectManager.getBlock("ooze") != null) {
-            BlockState placedBlockBig = ObjectManager.getBlock("ooze").getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
-            BlockState placedBlock = ObjectManager.getBlock("ooze").getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
+            BlockState placedBlockBig = ObjectManager.getBlock("ooze").getDefaultState().with(FlowingFluidBlock.LEVEL, 6);
+            BlockState placedBlock = ObjectManager.getBlock("ooze").getDefaultState().with(FlowingFluidBlock.LEVEL, 12);
             if(this.canDestroyBlockSub(pos))
                 world.setBlockState(pos, placedBlockBig, 3);
             if(this.canDestroyBlockSub(new BlockPos(pos.getX() + 1, pos.getY(), pos.getZ())))

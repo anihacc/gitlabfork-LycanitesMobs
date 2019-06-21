@@ -58,6 +58,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     @Override
     public void tick() {
     	super.tick();
+
     	if(!this.getEntityWorld().isRemote) {
 	    	if(rapidTicks % 5 == 0 && this.isAlive()) {
                 for(int i = 0; i < 6; i++) {
@@ -86,11 +87,9 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 		EntityProjectileBase projectile;
 		if(this.getThrower() != null) {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getThrower());
-			if(projectile instanceof Entity) {
-				projectile.posX = this.posX;
-				projectile.posY = this.posY;
-				projectile.posZ = this.posZ;
-			}
+			projectile.posX = this.posX;
+			projectile.posY = this.posY;
+			projectile.posZ = this.posZ;
 		}
 		else {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.posX, this.posY, this.posZ);
