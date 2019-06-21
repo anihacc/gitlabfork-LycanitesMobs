@@ -99,6 +99,8 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 
 	// Size:
+	/** The main size of this creature, used to override vanilla sizing. **/
+	public EntitySize creatureSize;
     /** The size scale of this mob. Randomly varies normally by 10%. **/
 	public double sizeScale = 1.0D;
     /** A scale relative to this entity's width for melee and ranged hit collision. **/
@@ -392,6 +394,8 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	@Override
 	protected void registerAttributes() {
 		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
+		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
+
 		this.creatureStats = new CreatureStats(this);
 		this.extraMobBehaviour = new ExtraMobBehaviour(this);
 		this.directNavigator = new DirectNavigator(this);
@@ -1090,7 +1094,13 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	@Override
 	@Nonnull
 	public EntitySize getSize(Pose pose) {
-    	return super.getSize(pose).scale((float)this.sizeScale);
+		if(pose == Pose.SLEEPING) {
+			return SLEEPING_SIZE;
+		}
+		if(this.creatureSize == null) {
+			return super.getSize(pose);
+		}
+    	return this.creatureSize.scale(this.getRenderScale()).scale((float)this.sizeScale);
 	}
 
 	/** Sets the size scale of this creature. **/
@@ -1776,6 +1786,17 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     // ==================================================
   	//                     Movement
   	// ==================================================
+	@Override
+	public void setPosition(double x, double y, double z) {
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
+		if (this.isAddedToWorld() && !this.world.isRemote && world instanceof ServerWorld) ((ServerWorld)this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
+		double radius = this.getSize(Pose.STANDING).width / 2.0D;
+		double height = this.getSize(Pose.STANDING).height;
+		this.setBoundingBox(new AxisAlignedBB(x - radius, y, z - radius, x + radius, y + height, z + radius));
+	}
+
 	/**
 	 * Returns the importance of blocks when searching for random positions, also used when checking if this mob can spawn in locations via vanilla spawners.
 	 * @param x The x position to check.
