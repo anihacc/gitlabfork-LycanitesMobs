@@ -3739,7 +3739,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     	super.setAir(air);
     }
 	
-	/** Returns true if this mob is in water. If this mob is a lava creature, this will return true if it is in lava too.
+	/** Returns true if this mob is in a swimmable fluid, usually water. If this mob is a lava creature, this will return true if it is in lava too.
 	 * Use waterContact() or lavaContact() to check for damage, speed boosts, etc.
 	**/
 	@Override
@@ -3801,6 +3801,12 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     public float getFallResistance() {
     	return 0;
     }
+
+    /** Gets the maximum fall height this creature is willing to do when pathing, varies depending on if it has an attack target, health, etc. **/
+    @Override
+	public int getMaxFallHeight() {
+		return super.getMaxFallHeight() + (int)this.getFallResistance();
+	}
     
     
     // ==================================================

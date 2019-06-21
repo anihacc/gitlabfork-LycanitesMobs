@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.navigate;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.pathfinding.*;
@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class CreaturePathNavigator extends PathNavigator {
 
     public EntityCreatureBase entityCreature;
-    protected BlockPos targetPosition;
+    protected BlockPos climbTargetPos;
 
     public CreaturePathNavigator(EntityCreatureBase entityCreature, World world) {
         super(entityCreature, world);
@@ -39,7 +39,7 @@ public class CreaturePathNavigator extends PathNavigator {
             return true;
         if(this.entityCreature.isInWater())
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
-        return this.entity.onGround || this.entity.getRidingEntity() != null;
+        return this.entity.onGround || this.entity.isPassenger();
     }
 
     /** Sets if the creature should navigate as though it can break doors. **/
@@ -67,25 +67,23 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Returns a new path from starting path position to the provided target position. **/
     @Override
     public Path getPathToPos(BlockPos pos) {
-        this.targetPosition = this.getSuitableDestination(pos);
-        return super.getPathToPos(this.targetPosition);
+        return super.getPathToPos(this.getSuitableDestination(pos));
     }
 
     /** Returns the path to the given EntityLiving. **/
     @Override
     public Path getPathToEntityLiving(Entity entity) {
-        this.targetPosition = new BlockPos(entity);
-        return super.getPathToEntityLiving(entity);
+        return this.getPathToPos(new BlockPos(entity));
     }
 
 
     // ==================== Pathing Destination ====================
-    /** Returns a suitable position close to the provided position if the position itself isn't suitable. **/
+    /** Returns a suitable position close to the provided position if the position itself isn't suitable depending on how the creature can travel. **/
     protected BlockPos getSuitableDestination(BlockPos pos) {
         BlockState targetBlockState = this.world.getBlockState(pos);
 
         // Air:
-        if(targetBlockState.getMaterial() == Material.AIR) {
+        if(targetBlockState.isAir(this.world, pos)) {
             // Flying:
             if (this.entityCreature.isFlying()) {
                 return pos;
@@ -152,7 +150,7 @@ public class CreaturePathNavigator extends PathNavigator {
 
         // Climbing:
         else if(this.entityCreature.canClimb()) {
-            this.targetPosition = new BlockPos(entityIn);
+            this.climbTargetPos = new BlockPos(entityIn);
             this.speed = speedIn;
             return true;
         }
@@ -216,19 +214,23 @@ public class CreaturePathNavigator extends PathNavigator {
     // ==================== Block Searching ====================
     /** Searches for the ground from the provided position. If the void is hit then the initial position is returned. Experimental: Searched for non-solids instead of just air. **/
     public BlockPos getGround(BlockPos pos) {
-        BlockPos resultPos = pos;
-        for(resultPos = pos.down(); resultPos.getY() > 0 && !this.world.getBlockState(resultPos).getMaterial().isSolid(); resultPos = resultPos.down()) {}
-        resultPos = resultPos.up();
-        if(resultPos.getY() == 0 && !this.world.getBlockState(resultPos).getMaterial().isSolid())
-            return pos;
+        BlockPos resultPos;
+        for(resultPos = pos.down(); resultPos.getY() > 0 && this.world.getBlockState(resultPos).isAir(this.world, resultPos); resultPos = resultPos.down()) {}
+
+        if(resultPos.getY() > 0)
+            return resultPos.up();
+
+        while(resultPos.getY() < this.world.getHeight() && this.world.getBlockState(resultPos).isAir(this.world, resultPos))
+            resultPos = resultPos.up();
+
         return resultPos;
     }
 
     /** Searches up for a non-solid block. If the sky limit is hit then the initial position is returned. **/
     public BlockPos getSurface(BlockPos pos) {
-        BlockPos resultPos = pos;
-        for(resultPos = pos.up(); resultPos.getY() < this.world.getActualHeight() && this.world.getBlockState(resultPos).getMaterial().isSolid(); resultPos = resultPos.up()) {}
-        if(resultPos.getY() == this.world.getActualHeight() && this.world.getBlockState(resultPos).getMaterial().isSolid())
+        BlockPos resultPos;
+        for(resultPos = pos.up(); resultPos.getY() < this.world.getHeight() && !this.world.getBlockState(resultPos).isAir(this.world, resultPos); resultPos = resultPos.up()) {}
+        if(resultPos.getY() == this.world.getHeight() && !this.world.getBlockState(resultPos).isAir(this.world, resultPos))
             return pos;
         return resultPos;
     }
@@ -422,7 +424,7 @@ public class CreaturePathNavigator extends PathNavigator {
 
 
     // ==================== Pathing ====================
-    /** Follows the path moving to the next index when needed, etc. **/
+    /** Follows the path moving to the next index when needed, etc. Called by tick() if canNavigate() and noPath() are both true. **/
     @Override
     protected void pathFollow() {
         // Flight:
@@ -457,17 +459,18 @@ public class CreaturePathNavigator extends PathNavigator {
     public void tick() {
         if (!this.noPath() || !this.entityCreature.canClimb()) {
             super.tick();
+            return;
         }
-        else {
-            if (this.targetPosition != null) {
-                double d0 = (double)(this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width);
 
-                if (this.entity.getDistanceSq(new Vec3d(this.targetPosition)) >= d0 && (this.entity.posY <= (double)this.targetPosition.getY() || this.entity.getDistanceSq(new Vec3d(this.targetPosition.getX(), MathHelper.floor(this.entity.posY), this.targetPosition.getZ())) >= d0)) {
-                    this.entity.getMoveHelper().setMoveTo((double)this.targetPosition.getX(), (double)this.targetPosition.getY(), (double)this.targetPosition.getZ(), this.speed);
-                }
-                else {
-                    this.targetPosition = null;
-                }
+        // Climbing Tick:
+        if (this.climbTargetPos != null) {
+            double d0 = (double)(this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width);
+
+            if (this.entity.getDistanceSq(new Vec3d(this.climbTargetPos)) >= d0 && (this.entity.posY <= (double)this.climbTargetPos.getY() || this.entity.getDistanceSq(new Vec3d(this.climbTargetPos.getX(), MathHelper.floor(this.entity.posY), this.climbTargetPos.getZ())) >= d0)) {
+                this.entity.getMoveHelper().setMoveTo((double)this.climbTargetPos.getX(), (double)this.climbTargetPos.getY(), (double)this.climbTargetPos.getZ(), this.speed);
+            }
+            else {
+                this.climbTargetPos = null;
             }
         }
     }

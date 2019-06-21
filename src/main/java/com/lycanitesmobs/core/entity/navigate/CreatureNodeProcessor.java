@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.*;
@@ -32,9 +33,9 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     public EntityCreatureBase entityCreature;
     protected float avoidsWater;
 
-    public static double getGroundY(IBlockReader p_197682_0_, BlockPos pos) {
+    public static double getGroundY(IBlockReader blockReader, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        VoxelShape voxelshape = p_197682_0_.getBlockState(blockpos).getCollisionShape(p_197682_0_, blockpos);
+        VoxelShape voxelshape = blockReader.getBlockState(blockpos).getCollisionShape(blockReader, blockpos);
         return (double)blockpos.getY() + (voxelshape.isEmpty() ? 0.0D : voxelshape.getEnd(Direction.Axis.Y));
     }
 
@@ -163,18 +164,18 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
 
     // ==================== Options ====================
-    /** Returns options from the current point to the target point. **/
+    /** Checks points around the provided fromPoint and adds it to path options if it is a valid point to travel to. **/
     @Override
-    public int func_222859_a(PathPoint[] pathOptions, PathPoint currentPoint) {
+    public int func_222859_a(PathPoint[] pathOptions, PathPoint fromPoint) {
         // Flying/Strong Swimming/Diving:
         if(this.flying() || this.swimming()) {
             int i = 0;
             for (Direction direction : Direction.values()) {
                 PathPoint pathPoint;
                 if(this.flying())
-                    pathPoint = this.getFlightNode(currentPoint.x + direction.getXOffset(), currentPoint.y + direction.getYOffset(), currentPoint.z + direction.getZOffset());
+                    pathPoint = this.getFlightNode(fromPoint.x + direction.getXOffset(), fromPoint.y + direction.getYOffset(), fromPoint.z + direction.getZOffset());
                 else
-                    pathPoint = this.getWaterNode(currentPoint.x + direction.getXOffset(), currentPoint.y + direction.getYOffset(), currentPoint.z + direction.getZOffset());
+                    pathPoint = this.getWaterNode(fromPoint.x + direction.getXOffset(), fromPoint.y + direction.getYOffset(), fromPoint.z + direction.getZOffset());
                 if(pathPoint != null && !pathPoint.visited) {
                     pathOptions[i++] = pathPoint;
                 }
@@ -184,145 +185,155 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
         // Walking:
         int i = 0;
-        int j = 0;
-        PathNodeType pathnodetype = this.getPathNodeType(this.entity, currentPoint.x, currentPoint.y + 1, currentPoint.z);
+        int pathPriority = 0;
+        PathNodeType pathnodetype = this.getPathNodeType(this.entity, fromPoint.x, fromPoint.y + 1, fromPoint.z);
         if (this.entity.getPathPriority(pathnodetype) >= 0.0F) {
-            j = MathHelper.floor(Math.max(1.0F, this.entity.stepHeight));
+            pathPriority = MathHelper.floor(Math.max(1.0F, this.entity.stepHeight));
         }
 
-        double d0 = getGroundY(this.blockaccess, new BlockPos(currentPoint.x, currentPoint.y, currentPoint.z));
-        PathPoint pathpoint = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
-        if (pathpoint != null && !pathpoint.visited && pathpoint.costMalus >= 0.0F) {
-            pathOptions[i++] = pathpoint;
+        double groundY = getGroundY(this.blockaccess, new BlockPos(fromPoint.x, fromPoint.y, fromPoint.z));
+
+        PathPoint southPoint = this.getSafePoint(fromPoint.x, fromPoint.y, fromPoint.z + 1, pathPriority, groundY, Direction.SOUTH);
+        if (southPoint != null && !southPoint.visited && southPoint.costMalus >= 0.0F) {
+            pathOptions[i++] = southPoint;
         }
 
-        PathPoint pathpoint1 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z, j, d0, Direction.WEST);
-        if (pathpoint1 != null && !pathpoint1.visited && pathpoint1.costMalus >= 0.0F) {
-            pathOptions[i++] = pathpoint1;
+        PathPoint westPoint = this.getSafePoint(fromPoint.x - 1, fromPoint.y, fromPoint.z, pathPriority, groundY, Direction.WEST);
+        if (westPoint != null && !westPoint.visited && westPoint.costMalus >= 0.0F) {
+            pathOptions[i++] = westPoint;
         }
 
-        PathPoint pathpoint2 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z, j, d0, Direction.EAST);
-        if (pathpoint2 != null && !pathpoint2.visited && pathpoint2.costMalus >= 0.0F) {
-            pathOptions[i++] = pathpoint2;
+        PathPoint eastPoint = this.getSafePoint(fromPoint.x + 1, fromPoint.y, fromPoint.z, pathPriority, groundY, Direction.EAST);
+        if (eastPoint != null && !eastPoint.visited && eastPoint.costMalus >= 0.0F) {
+            pathOptions[i++] = eastPoint;
         }
 
-        PathPoint pathpoint3 = this.getSafePoint(currentPoint.x, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
-        if (pathpoint3 != null && !pathpoint3.visited && pathpoint3.costMalus >= 0.0F) {
-            pathOptions[i++] = pathpoint3;
+        PathPoint northPoint = this.getSafePoint(fromPoint.x, fromPoint.y, fromPoint.z - 1, pathPriority, groundY, Direction.NORTH);
+        if (northPoint != null && !northPoint.visited && northPoint.costMalus >= 0.0F) {
+            pathOptions[i++] = northPoint;
         }
 
-        PathPoint pathpoint4 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
-        if (this.func_222860_a(currentPoint, pathpoint1, pathpoint3, pathpoint4)) {
-            pathOptions[i++] = pathpoint4;
+        PathPoint northWestPoint = this.getSafePoint(fromPoint.x - 1, fromPoint.y, fromPoint.z - 1, pathPriority, groundY, Direction.NORTH);
+        if (this.testDiagonalPoint(fromPoint, westPoint, northPoint, northWestPoint)) {
+            pathOptions[i++] = northWestPoint;
         }
 
-        PathPoint pathpoint5 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z - 1, j, d0, Direction.NORTH);
-        if (this.func_222860_a(currentPoint, pathpoint2, pathpoint3, pathpoint5)) {
-            pathOptions[i++] = pathpoint5;
+        PathPoint northEastPoint = this.getSafePoint(fromPoint.x + 1, fromPoint.y, fromPoint.z - 1, pathPriority, groundY, Direction.NORTH);
+        if (this.testDiagonalPoint(fromPoint, eastPoint, northPoint, northEastPoint)) {
+            pathOptions[i++] = northEastPoint;
         }
 
-        PathPoint pathpoint6 = this.getSafePoint(currentPoint.x - 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
-        if (this.func_222860_a(currentPoint, pathpoint1, pathpoint, pathpoint6)) {
-            pathOptions[i++] = pathpoint6;
+        PathPoint southWestPoint = this.getSafePoint(fromPoint.x - 1, fromPoint.y, fromPoint.z + 1, pathPriority, groundY, Direction.SOUTH);
+        if (this.testDiagonalPoint(fromPoint, westPoint, southPoint, southWestPoint)) {
+            pathOptions[i++] = southWestPoint;
         }
 
-        PathPoint pathpoint7 = this.getSafePoint(currentPoint.x + 1, currentPoint.y, currentPoint.z + 1, j, d0, Direction.SOUTH);
-        if (this.func_222860_a(currentPoint, pathpoint2, pathpoint, pathpoint7)) {
-            pathOptions[i++] = pathpoint7;
+        PathPoint southEastPoint = this.getSafePoint(fromPoint.x + 1, fromPoint.y, fromPoint.z + 1, pathPriority, groundY, Direction.SOUTH);
+        if (this.testDiagonalPoint(fromPoint, eastPoint, southPoint, southEastPoint)) {
+            pathOptions[i++] = southEastPoint;
         }
 
         return i;
     }
 
-    // I think this determines the best path to go with?
-    private boolean func_222860_a(PathPoint p_222860_1_, @Nullable PathPoint p_222860_2_, @Nullable PathPoint p_222860_3_, @Nullable PathPoint p_222860_4_) {
-        return p_222860_4_ != null && !p_222860_4_.visited && p_222860_3_ != null && p_222860_3_.costMalus >= 0.0F && p_222860_3_.y <= p_222860_1_.y && p_222860_2_ != null && p_222860_2_.costMalus >= 0.0F && p_222860_2_.y <= p_222860_1_.y;
+    /** Checks a diagonal point (such as North East) and returns true if it should be added to the path options. **/
+    private boolean testDiagonalPoint(PathPoint targetPoint, @Nullable PathPoint lateralPoint, @Nullable PathPoint longitudinalPoint, @Nullable PathPoint diagonalPoint) {
+        return diagonalPoint != null && !diagonalPoint.visited && longitudinalPoint != null && longitudinalPoint.costMalus >= 0.0F && longitudinalPoint.y <= targetPoint.y && lateralPoint != null && lateralPoint.costMalus >= 0.0F && lateralPoint.y <= targetPoint.y;
     }
 
-    /** Returns a point that the entity can move to safely, only used when walking. **/
+    /** Returns a point that the entity can move to safely from the provided coords, or null if invalid, only used when walking and checks for drops/climbs. **/
     @Nullable
-    private PathPoint getSafePoint(int x, int y, int z, int stepHeight, double groundY, Direction facing) {
-        PathPoint pathpoint = null;
-        BlockPos blockpos = new BlockPos(x, y, z);
-        double d0 = getGroundY(this.blockaccess, blockpos);
+    private PathPoint getSafePoint(int x, int y, int z, int stepHeight, double fromGroundY, Direction direction) {
+        PathPoint safePoint = null;
+        BlockPos blockPos = new BlockPos(x, y, z);
+        double groundY = getGroundY(this.blockaccess, blockPos);
 
-        if (d0 - groundY > 1.125D) {
+        if (groundY - fromGroundY > 1.125D) {
             return null;
         }
-        else {
-            PathNodeType pathnodetype = this.getPathNodeType(this.entity, x, y, z);
-            float f = this.entity.getPathPriority(pathnodetype);
-            double entityRadius = this.getWidth() / 2;
 
-            if (f >= 0.0F) {
-                pathpoint = this.openPoint(x, y, z);
-                pathpoint.nodeType = pathnodetype;
-                pathpoint.costMalus = Math.max(pathpoint.costMalus, f);
-            }
+        PathNodeType pathnodetype = this.getPathNodeType(this.entity, x, y, z);
+        float pathPriority = this.entity.getPathPriority(pathnodetype);
+        double entityRadius = this.getWidth() / 2;
 
-            if (pathnodetype == PathNodeType.WALKABLE) {
-                return pathpoint;
-            }
-            else {
-                if (pathpoint == null && stepHeight > 0 && pathnodetype != PathNodeType.FENCE && pathnodetype != PathNodeType.TRAPDOOR) {
-                    pathpoint = this.getSafePoint(x, y + 1, z, stepHeight - 1, groundY, facing);
+        if (pathPriority >= 0.0F) {
+            safePoint = this.openPoint(x, y, z);
+            safePoint.nodeType = pathnodetype;
+            safePoint.costMalus = Math.max(safePoint.costMalus, pathPriority);
+        }
 
-                    if (pathpoint != null && (pathpoint.nodeType == PathNodeType.OPEN || pathpoint.nodeType == PathNodeType.WALKABLE) && this.getWidth() < 1.0F) {
-                        double d2 = (double)(x - facing.getXOffset()) + 0.5D;
-                        double d3 = (double)(z - facing.getZOffset()) + 0.5D;
-                        AxisAlignedBB axisalignedbb = new AxisAlignedBB(d2 - entityRadius, getGroundY(this.blockaccess, new BlockPos(d2, (double)(y + 1), d3)) + 0.001D, d3 - entityRadius, d2 + entityRadius, (double)this.entity.getHeight() + getGroundY(this.blockaccess, new BlockPos(pathpoint.x, pathpoint.y, pathpoint.z)) - 0.002D, d3 + entityRadius);
-                        if (!this.blockaccess.isCollisionBoxesEmpty(this.entity, axisalignedbb)) {
-                            pathpoint = null;
-                        }
-                    }
+        if (pathnodetype == PathNodeType.WALKABLE) {
+            return safePoint;
+        }
+
+        if ((safePoint == null || safePoint.costMalus < 0.0F) && stepHeight > 0 && pathnodetype != PathNodeType.FENCE && pathnodetype != PathNodeType.TRAPDOOR) {
+            safePoint = this.getSafePoint(x, y + 1, z, stepHeight - 1, fromGroundY, direction);
+
+            if (safePoint != null && (safePoint.nodeType == PathNodeType.OPEN || safePoint.nodeType == PathNodeType.WALKABLE) && this.getWidth() < 1.0F) {
+                double offsetX = (double)(x - direction.getXOffset()) + 0.5D;
+                double offsetZ = (double)(z - direction.getZOffset()) + 0.5D;
+                AxisAlignedBB axisalignedbb = new AxisAlignedBB(offsetX - entityRadius, getGroundY(this.blockaccess, new BlockPos(offsetX, (double)(y + 1), offsetZ)) + 0.001D, offsetZ - entityRadius, offsetX + entityRadius, (double)this.entity.getHeight() + getGroundY(this.blockaccess, new BlockPos(safePoint.x, safePoint.y, safePoint.z)) - 0.002D, offsetZ + entityRadius);
+                if (!this.blockaccess.isCollisionBoxesEmpty(this.entity, axisalignedbb)) {
+                    safePoint = null;
                 }
-
-                if (pathnodetype == PathNodeType.OPEN) {
-                    AxisAlignedBB axisalignedbb3 = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.entity.getSize(Pose.STANDING).height), (double)z + entityRadius + 0.5D);
-
-                    if (this.entity.world.areCollisionShapesEmpty(axisalignedbb3)) {
-                        return null;
-                    }
-
-                    if (this.getWidth() >= 1.0F) {
-                        PathNodeType pathnodetype1 = this.getPathNodeType(this.entity, x, y - 1, z);
-
-                        if (pathnodetype1 == PathNodeType.BLOCKED) {
-                            pathpoint = this.openPoint(x, y, z);
-                            pathpoint.nodeType = PathNodeType.WALKABLE;
-                            pathpoint.costMalus = Math.max(pathpoint.costMalus, f);
-                            return pathpoint;
-                        }
-                    }
-
-                    int i = 0;
-
-                    while (y > 0 && pathnodetype == PathNodeType.OPEN) {
-                        --y;
-
-                        if (i++ >= this.entity.getMaxFallHeight()) {
-                            return null;
-                        }
-
-                        pathnodetype = this.getPathNodeType(this.entity, x, y, z);
-                        f = this.entity.getPathPriority(pathnodetype);
-
-                        if (pathnodetype != PathNodeType.OPEN && f >= 0.0F) {
-                            pathpoint = this.openPoint(x, y, z);
-                            pathpoint.nodeType = pathnodetype;
-                            pathpoint.costMalus = Math.max(pathpoint.costMalus, f);
-                            break;
-                        }
-
-                        if (f < 0.0F) {
-                            return null;
-                        }
-                    }
-                }
-
-                return pathpoint;
             }
         }
+
+        if (pathnodetype == PathNodeType.OPEN) {
+            AxisAlignedBB pathingCollision = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.entity.getSize(Pose.STANDING).height), (double)z + entityRadius + 0.5D);
+
+            if (!this.blockaccess.isCollisionBoxesEmpty(this.entity, pathingCollision)) {
+                return null;
+            }
+
+            if (this.getWidth() >= 1.0F) {
+                PathNodeType pathnodetype1 = this.getPathNodeType(this.entity, x, y - 1, z);
+
+                if (pathnodetype1 == PathNodeType.BLOCKED) {
+                    safePoint = this.openPoint(x, y, z);
+                    safePoint.nodeType = PathNodeType.WALKABLE;
+                    safePoint.costMalus = Math.max(safePoint.costMalus, pathPriority);
+                    return safePoint;
+                }
+            }
+
+            // Test Drop:
+            int i = 0;
+            int initialY = y;
+            while(pathnodetype == PathNodeType.OPEN) {
+                --y;
+                if (y < 0) {
+                    PathPoint voidDropPoint = this.openPoint(x, initialY, z);
+                    voidDropPoint.nodeType = PathNodeType.BLOCKED;
+                    voidDropPoint.costMalus = -1.0F;
+                    return voidDropPoint;
+                }
+
+                PathPoint dropPoint = this.openPoint(x, y, z);
+                if (i++ >= this.entity.getMaxFallHeight()) {
+                    dropPoint.nodeType = PathNodeType.BLOCKED;
+                    dropPoint.costMalus = -1.0F;
+                    return dropPoint;
+                }
+
+                pathnodetype = this.getPathNodeType(this.entity, x, y, z);
+                pathPriority = this.entity.getPathPriority(pathnodetype);
+                if (pathnodetype != PathNodeType.OPEN && pathPriority >= 0.0F) {
+                    safePoint = dropPoint;
+                    dropPoint.nodeType = pathnodetype;
+                    dropPoint.costMalus = Math.max(dropPoint.costMalus, pathPriority);
+                    break;
+                }
+
+                if (pathPriority < 0.0F) {
+                    dropPoint.nodeType = PathNodeType.BLOCKED;
+                    dropPoint.costMalus = -1.0F;
+                    return dropPoint;
+                }
+            }
+        }
+
+        return safePoint;
     }
 
 
