@@ -197,6 +197,11 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     public boolean waterDamage() { return true; }
 
     @Override
+    public boolean canBreatheUnderlava() {
+        return true;
+    }
+
+    @Override
     public float getFallResistance() {
         return 100;
     }

@@ -1,9 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.BlockPos;
@@ -134,7 +132,7 @@ public class DirectNavigator {
   	//                      Movement
   	// ==================================================
 	public void flightMovement(double moveStrafe, double moveForward) {
-		if(this.host.isInWater()) {
+		if(this.host.canSwim()) {
             this.host.travelSwimming(new Vec3d(moveStrafe, 0, moveForward));
         }
         else if(this.host.lavaContact()) {

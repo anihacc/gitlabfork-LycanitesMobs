@@ -171,7 +171,7 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 }

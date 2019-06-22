@@ -8,13 +8,13 @@ import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class CreatureMoveHelper extends MovementController {
+public class CreatureMoveController extends MovementController {
 
     protected EntityCreatureBase entityCreature;
     /** Used by flight movement for changing course, makes for smoother movement. **/
     protected int courseChangeCooldown;
 
-    public CreatureMoveHelper(EntityCreatureBase entityCreatureBase) {
+    public CreatureMoveController(EntityCreatureBase entityCreatureBase) {
         super(entityCreatureBase);
         this.entityCreature = entityCreatureBase;
     }
@@ -28,13 +28,13 @@ public class CreatureMoveHelper extends MovementController {
         }
 
         // Swimming:
-        if(this.entityCreature.isStrongSwimmer() && this.entityCreature.isInWater()) {
+        if(this.entityCreature.isStrongSwimmer() && this.entityCreature.canSwim()) {
             this.tickSwimming();
             return;
         }
 
         // Flying:
-        if(this.entityCreature.isFlying() && !this.entityCreature.isInWater()) {
+        if(this.entityCreature.isFlying() && !this.entityCreature.canSwim()) {
             this.tickFlying();
             return;
         }

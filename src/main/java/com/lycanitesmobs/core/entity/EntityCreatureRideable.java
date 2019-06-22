@@ -92,7 +92,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     public void onDismounted(Entity entity) {
 		if(this.isSitting()) {
 			int homeY = MathHelper.floor(this.posY);
-			if(!this.isCurrentlyFlying()) {
+			if(!this.isFlying()) {
 				homeY = this.getGroundY(this.getPosition());
 			}
 			this.setHomePosition(MathHelper.floor(this.posX), homeY, MathHelper.floor(this.posZ));

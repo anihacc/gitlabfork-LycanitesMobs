@@ -149,12 +149,12 @@ public class EntityCephignis extends EntityCreatureAgeable implements IGroupAnim
     public boolean waterDamage() { return true; }
     
     @Override
-    public boolean canBreatheUnderwater() {
+    public boolean canBreatheUnderlava() {
         return true;
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
     

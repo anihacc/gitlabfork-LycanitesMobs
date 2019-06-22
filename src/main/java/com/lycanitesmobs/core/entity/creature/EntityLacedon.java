@@ -144,7 +144,7 @@ public class EntityLacedon extends EntityCreatureTameable implements IMob {
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
     

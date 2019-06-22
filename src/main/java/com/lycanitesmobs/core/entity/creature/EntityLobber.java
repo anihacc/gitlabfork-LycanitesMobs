@@ -238,12 +238,12 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     public boolean waterDamage() { return this.getSubspeciesIndex() < 3; }
     
     @Override
-    public boolean canBreatheUnderwater() {
+    public boolean canBreatheUnderlava() {
         return true;
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
     

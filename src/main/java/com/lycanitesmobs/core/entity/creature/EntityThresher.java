@@ -234,7 +234,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 

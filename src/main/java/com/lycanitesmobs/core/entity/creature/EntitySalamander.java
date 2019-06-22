@@ -250,12 +250,12 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     public boolean waterDamage() { return true; }
     
     @Override
-    public boolean canBreatheUnderwater() {
+    public boolean canBreatheUnderlava() {
         return true;
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
 

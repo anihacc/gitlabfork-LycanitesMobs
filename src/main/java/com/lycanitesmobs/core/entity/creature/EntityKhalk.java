@@ -164,12 +164,12 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
     public boolean waterDamage() { return true; }
     
     @Override
-    public boolean canBreatheUnderwater() {
+    public boolean canBreatheUnderlava() {
         return true;
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
     

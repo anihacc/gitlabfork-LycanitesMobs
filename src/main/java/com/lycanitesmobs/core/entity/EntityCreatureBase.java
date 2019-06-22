@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
-import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
+import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.info.*;
@@ -25,6 +25,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -47,7 +48,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
@@ -359,11 +359,10 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         // Path On Fire or In Lava:
         if(!this.canBurn()) {
             this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
-            this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
-            if(this.canBreatheUnderwater()) {
-                this.setPathPriority(PathNodeType.LAVA, 8.0F);
-                if(!this.canBreatheAboveWater() || this.isLavaCreature) {
-                    this.setPathPriority(PathNodeType.LAVA, 0.0F);
+            if(this.canBreatheUnderlava()) {
+                this.setPathPriority(PathNodeType.LAVA, 1.0F);
+                if(!this.canBreatheAir()) {
+                    this.setPathPriority(PathNodeType.LAVA, 8.0F);
                 }
             }
         }
@@ -372,15 +371,15 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         if(this.waterDamage())
             this.setPathPriority(PathNodeType.WATER, -1.0F);
         else if(this.canBreatheUnderwater()) {
-            this.setPathPriority(PathNodeType.WATER, 8.0F);
-            if(!this.canBreatheAboveWater())
-                this.setPathPriority(PathNodeType.WATER, 0.0F);
+            this.setPathPriority(PathNodeType.WATER, 1.0F);
+            if(!this.canBreatheAir())
+                this.setPathPriority(PathNodeType.WATER, 8.0F);
         }
 
         // Swimming:
-        if(this.canWade() && this.getNavigator() instanceof GroundPathNavigator) {
-			GroundPathNavigator groundNavigator = (GroundPathNavigator)this.getNavigator();
-            groundNavigator.setCanSwim(true);
+        if(this.canWade() && this.getNavigator() instanceof CreaturePathNavigator) {
+			CreaturePathNavigator pathNavigator = (CreaturePathNavigator)this.getNavigator();
+            pathNavigator.setCanSwim(true);
         }
     }
 
@@ -1420,9 +1419,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     @Override
     public void tick() {
         super.tick();
-        if(this.getDataManager() != null) {
-			this.onSyncUpdate();
-		}
+        this.onSyncUpdate();
 
         if(this.despawnCheck()) {
             if(!this.isBoundPet())
@@ -1436,7 +1433,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 		}
 
         // Not Walking On Land:
-        if((!this.canWalk() && !this.isCurrentlyFlying() && !this.isInWater() && this.isMoving()) || !this.canMove()) {
+        if((!this.canWalk() && !this.isFlying() && !this.isInWater() && this.isMoving()) || !this.canMove()) {
 			this.clearMovement();
 		}
 
@@ -1594,23 +1591,13 @@ public abstract class EntityCreatureBase extends CreatureEntity {
             this.attackEntityFrom(DamageSource.DROWN, 1.0F);
         }
 
-        // Out of Water Suffocation:
-        if(!this.getEntityWorld().isRemote && !this.canBreatheAboveWater()) {
-	        int currentAir = this.getAir();
-	        if(this.isAlive()) {
-	        	if((!this.isLavaCreature && !this.waterContact())
-	        		|| (this.isLavaCreature && !this.lavaContact())) {
-		        	currentAir--;
-		            this.setAir(currentAir);
-		            if(this.getAir() <= -200) {
-		                this.setAir(-180);
-		                this.attackEntityFrom(DamageSource.DROWN, 2.0F);
-		            }
-		        }
-		        else {
-		            this.setAir(299);
-		        }
-	        }
+        // Suffocation:
+        if(!this.getEntityWorld().isRemote && this.isAlive() && !this.canBreatheAir()) {
+        	this.setAir(this.determineNextAir(this.getAir()));
+			if(this.getAir() <= -200) {
+				this.setAir(-160);
+				this.attackEntityFrom(DamageSource.DROWN, 1.0F);
+			}
         }
 
         // Natural Despawn Light Scaling:
@@ -1881,7 +1868,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 		super.moveRelative(0.1F, direction);
 		this.move(MoverType.SELF, this.getMotion());
 		this.setMotion(this.getMotion().scale(0.9D));
-		if (!this.isMoving() && this.getAttackTarget() == null && !this.isCurrentlyFlying()) {
+		if (!this.isMoving() && this.getAttackTarget() == null && !this.isFlying()) {
 			this.setMotion(this.getMotion().add(0.0D, -0.005D, 0.0D));
 		}
 
@@ -1911,7 +1898,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     // ========== Get New Move Helper ==========
     /** Called when this entity is constructed for initial move helper. **/
     protected MovementController createMoveController() {
-        return new CreatureMoveHelper(this);
+        return new CreatureMoveController(this);
     }
 
     // ========== Get Navigator ==========
@@ -2356,7 +2343,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 	 */
 	public double getMeleeAttackRange() {
 		double range = this.getSize(Pose.STANDING).width * 1.55D;
-		if(this.isCurrentlyFlying()) {
+		if(this.isFlying()) {
 			range += 0.5D;
 		}
 		return range;
@@ -2961,21 +2948,39 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     
     // ========== Movement ==========
     /** Can this entity move currently? **/
-    public boolean canMove() { return !this.isBlocking(); }
+    public boolean canMove() {
+    	return !this.isBlocking();
+    }
+
     /** Can this entity move across land currently? Usually used for swimming mobs to prevent land movement. **/
-    public boolean canWalk() { return true; }
-    /** Can this entity wade through water (walks on ground and through water but does not freely swim). **/
+    public boolean canWalk() {
+    	return true;
+    }
+
+    /** Can this entity wade through fluids currently (walks on ground and through fluids but does not freely swim). **/
     public boolean canWade() {
         return true;
     }
-    /** Returns true if this entity should swim to the water surface when pathing, by default entities that can't breather underwater will try to surface. **/
-    public boolean canFloat() {
-        return !this.canBreatheUnderwater();
+
+	/** Better name would be isSwimming(). Can this entity swim this tick checks if in fluids, checks for lava instead of water if isLavaCreature is true. **/
+	@Override
+	public boolean canSwim() {
+		if(this.isLavaCreature) {
+			return this.isInLava();
+		}
+		return super.canSwim();
+	}
+
+    /** Returns true if this entity should swim to the liquid surface when pathing, by default entities that can't breather underwater will try to surface. **/
+    public boolean shouldFloat() {
+        return !this.canBreatheUnderwater() && !this.canBreatheUnderlava();
     }
-    /** Returns true if this entity should dive underwater when pathing, by default entities that can breathe underwater will try to dive. **/
-    public boolean canDive() {
-        return this.canBreatheUnderwater();
+
+    /** Returns true if this entity should dive underwater/underlava when pathing, by default entities that can breathe underwater or underlava will try to dive. **/
+    public boolean shouldDive() {
+        return this.canBreatheUnderwater() || this.canBreatheUnderlava();
     }
+
     /** Should this entity use smoother, faster swimming? (This doesn't stop the entity from moving in water but is used for smooth flight-like swimming). **/
     public boolean isStrongSwimmer() {
     	if(this.extraMobBehaviour != null)
@@ -2983,23 +2988,27 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     			return true;
     	return false;
     }
-    /** Can this entity jump currently? **/
-    public boolean canJump() { return !this.isBlocking(); }
+
     /** Can this entity climb currently? **/
-    public boolean canClimb() { return false; }
-    /** Is this entity flying currently? If true it will use flight navigation, etc. **/
+    public boolean canClimb() {
+    	return false;
+    }
+
+    /** Returns true if this mob is currently flying. If true this entity will use flight navigation, etc. **/
     public boolean isFlying() {
     	if(this.extraMobBehaviour != null)
     		if(this.extraMobBehaviour.flightOverride)
     			return true;
     	return false;
     }
+
     /** Returns how high this mob prefers to fly about the ground, usually when randomly wandering. **/
     public int getFlyingHeight() {
         if(!this.isFlying())
             return 20;
         return 0;
     }
+
     /** Returns true if this creature can safely land from its current position. **/
     public boolean isSafeToLand() {
         if(this.onGround)
@@ -3010,14 +3019,16 @@ public abstract class EntityCreatureBase extends CreatureEntity {
             return true;
         return false;
     }
+
     /** Returns how high above attack targets this mob should fly when chasing. **/
     public double getFlightOffset() {
         return 0D;
     }
-    /** Returns true if this mob is currently flying. **/
-    public boolean isCurrentlyFlying() { return this.isFlying(); }
+
     /** Can this entity by tempted (usually lured by an item) currently? **/
-    public boolean canBeTempted() { return !this.isRareSubspecies(); }
+    public boolean canBeTempted() {
+    	return !this.isRareSubspecies();
+    }
 
 	@Override
 	public boolean canBeRiddenInWater(Entity rider) {
@@ -3649,6 +3660,20 @@ public abstract class EntityCreatureBase extends CreatureEntity {
         return true;
     }
 
+	@Override
+	protected void setOnFireFromLava() {
+		if(!this.canBurn())
+			return;
+		super.setOnFireFromLava();
+	}
+
+	@Override
+	public void setFire(int seconds) {
+		if(!this.canBurn())
+			return;
+		super.setFire(seconds);
+	}
+
     /** Deals fire damage to this entity if it is burning. **/
     @Override
 	protected void dealFireDamage(int amount) {
@@ -3714,7 +3739,33 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     }
     
     // Breathing:
-    /** If true, this mob wont lose air when underwater. **/
+	/** Returns the amount of air gained for the tick. Drowning in water is handled by LivingEntity and this isn't called in that case. **/
+	@Override
+	protected int determineNextAir(int currentAir) {
+    	if(this.canBreatheUnderwater() && this.waterContact()) {
+    		return super.determineNextAir(currentAir);
+		}
+    	if(this.canBreatheUnderlava() && this.lavaContact()) {
+			return super.determineNextAir(currentAir);
+		}
+    	if(this.canBreatheAir()) { // No drowning in lava and this method is called when eyes are not in water so no need to check twice.
+			return super.determineNextAir(currentAir);
+		}
+
+		return this.decreaseAirSupply(currentAir);
+	}
+
+	@Override
+	protected int decreaseAirSupply(int air) {
+		return super.decreaseAirSupply(air);
+	}
+
+	/** If true, this creature will gain air when in contact with air. **/
+	public boolean canBreatheAir() {
+		return true;
+	}
+
+    /** If true, this creature will gain air when in contact with water. **/
     @Override
     public boolean canBreatheUnderwater() {
     	if(this.extraMobBehaviour != null)
@@ -3722,54 +3773,36 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     			return true;
     	return false;
     }
-    /** If false, this mob will lose air when above water or lava if isLavaCreature is true. **/
-    public boolean canBreatheAboveWater() { return true; }
+
+	/** If true, this creature will gain air when in contact with lava. **/
+	public boolean canBreatheUnderlava() {
+		return true;
+	}
+
     /** Sets the current amount of air this mob has. **/
 	@Override
 	public void setAir(int air) {
-		if(air == 300 && !this.canBreatheAboveWater()) return;
-    	super.setAir(air);
+		super.setAir(air);
     }
 	
-	/** Returns true if this mob is in a swimmable fluid, usually water. If this mob is a lava creature, this will return true if it is in lava too.
-	 * Use waterContact() or lavaContact() to check for damage, speed boosts, etc.
-	**/
+	/** Returns true if this mob is in water. **/
 	@Override
 	public boolean isInWater() {
-		if(this.isLavaCreature)
-			return this.isInLava() || super.isInWater();
-		else
-			return super.isInWater();
+		return super.isInWater();
 	}
     
-    /** Returns true if this mob is in water or the rain. Uses the vanilla isWet() but takes dripping leaves, etc into account. **/
+    /** Returns true if this mob is in contact with water in any way. **/
     public boolean waterContact() {
-    	if(this.isWet())
+    	if(this.isInWaterRainOrBubbleColumn())
     		return true;
     	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.posX, (int)this.posY, (int)this.posZ))
     		return true;
     	return false;
     }
     
-    /** Returns true if this mob is in lava. TODO Remove as it is now replaced with isInLava() **/
+    /** Returns true if this mob is in contact with lava in any water. **/
     public boolean lavaContact() {
     	return this.isInLava();
-    }
-    
-    /** Returns true if the target location has a block that this mob can breathe in (air, water, lava, depending on the creature). **/
-    public boolean canBreatheAtLocation(BlockPos pos) {
-    	BlockState blockState = this.getEntityWorld().getBlockState(pos);
-    	if(blockState == null)
-    		return true;
-    	if(this.canBreatheAboveWater() && blockState.getMaterial() == Material.AIR)
-    		return true;
-    	if(this.canBreatheUnderwater()) {
-	    	if(!this.isLavaCreature && blockState.getMaterial() == Material.WATER)
-	    		return true;
-	    	if(this.isLavaCreature && blockState.getMaterial() == Material.LAVA)
-	    		return true;
-    	}
-    	return false;
     }
 	
 	/** Returns true if the specified xyz coordinate is in water swimmable by this mob. (Checks for lava for lava creatures).
@@ -4276,7 +4309,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Plays an additional footstep sound that this creature makes when moving on the ground (all mobs use the block's stepping sounds by default). **/
     @Override
     protected void playStepSound(BlockPos pos, BlockState block) {
-    	 if(this.isCurrentlyFlying())
+    	 if(this.isFlying())
              return;
         if(!this.hasStepSound) {
             super.playStepSound(pos, block);

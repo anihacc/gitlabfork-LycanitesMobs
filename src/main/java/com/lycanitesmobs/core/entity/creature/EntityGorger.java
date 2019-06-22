@@ -202,7 +202,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     }
 
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
 

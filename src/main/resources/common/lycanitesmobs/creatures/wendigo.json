@@ -1,6 +1,6 @@
 {
 	"name": "wendigo",
-	"creatureType": "brute",
+	"creatureType": "undead",
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWendigo",
 	"loadDefault": true,

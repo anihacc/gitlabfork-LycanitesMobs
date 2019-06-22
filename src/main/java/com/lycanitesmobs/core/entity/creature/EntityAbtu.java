@@ -170,7 +170,7 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 }

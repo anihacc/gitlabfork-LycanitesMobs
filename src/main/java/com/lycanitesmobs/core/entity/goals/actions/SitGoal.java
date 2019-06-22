@@ -57,7 +57,7 @@ public class SitGoal extends Goal {
         	if(!this.host.canBreatheUnderwater())
         		return false;
 		}
-        else if(!this.host.onGround && !this.host.isCurrentlyFlying())
+        else if(!this.host.onGround && !this.host.isFlying())
             return false;
 
         if (!(this.host.getOwner() instanceof LivingEntity))

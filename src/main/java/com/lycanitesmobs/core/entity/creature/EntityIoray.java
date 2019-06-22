@@ -143,7 +143,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 

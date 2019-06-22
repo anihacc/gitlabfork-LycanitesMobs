@@ -37,7 +37,7 @@ public class CreaturePathNavigator extends PathNavigator {
     protected boolean canNavigate() {
         if(this.entityCreature.isFlying())
             return true;
-        if(this.entityCreature.isInWater())
+        if(this.entityCreature.canSwim())
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
         return this.entity.onGround || this.entity.isPassenger();
     }
@@ -112,11 +112,11 @@ public class CreaturePathNavigator extends PathNavigator {
 
     /** Return the Y position to path from. **/
     protected int getPathablePosY() {
-        // If in water (or lava for lava swimmers):
-        if(this.entityCreature.isInWater()) {
+        // If can swim:
+        if(this.entityCreature.canSwim()) {
 
             // Slow swimmers (water bobbing):
-            if(this.entityCreature.canFloat() && !this.entityCreature.canDive()) {
+            if(this.entityCreature.shouldFloat() && !this.entityCreature.shouldDive()) {
                 int posY = (int)this.entity.getBoundingBox().minY;
                 Block block = this.world.getBlockState(new BlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ))).getBlock();
                 int searchCount = 0;
@@ -200,7 +200,7 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Returns true if the entity can move to the block position. **/
     public boolean canEntityStandOnPos(BlockPos pos) {
         // Flight/Swimming:
-        if(this.entityCreature.isFlying() || (this.entityCreature.isInWater() && this.entityCreature.isStrongSwimmer())) {
+        if(this.entityCreature.isFlying() || (this.entityCreature.canSwim() && this.entityCreature.isStrongSwimmer())) {
             BlockState blockState = this.world.getBlockState(pos);
             if(blockState.getMaterial().isLiquid()) {
             	return this.entityCreature.isStrongSwimmer();
@@ -241,7 +241,7 @@ public class CreaturePathNavigator extends PathNavigator {
     @Override
     protected boolean isDirectPathBetweenPoints(Vec3d startVec, Vec3d endVec, int sizeX, int sizeY, int sizeZ) {
         // Flight/Swimming:
-        if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) {
+        if(this.entityCreature.isFlying() || this.entityCreature.canSwim()) {
             Vec3d vec3d = new Vec3d(endVec.x, endVec.y + (double)this.entity.getHeight() * 0.5D, endVec.z);
             RayTraceResult.Type directTraceType =  this.world.rayTraceBlocks(new RayTraceContext(startVec, vec3d, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.entity)).getType();
             return directTraceType == RayTraceResult.Type.MISS;
@@ -428,11 +428,11 @@ public class CreaturePathNavigator extends PathNavigator {
     @Override
     protected void pathFollow() {
         // Flight:
-        if(this.entityCreature.isFlying() || this.entityCreature.isInWater()) {
+        if(this.entityCreature.isFlying() || this.entityCreature.canSwim()) {
             Vec3d entityVector = this.getEntityPosition();
             float entitySize = this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width;
 
-            if (entityVector.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < (double) entitySize) {
+            if (entityVector.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < entitySize) {
                 this.currentPath.incrementPathIndex();
             }
 
@@ -457,6 +457,15 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Called on entity update to update the navigation progress. **/
     @Override
     public void tick() {
+        // Clear Path If Close To Last Node: (Stop stupid spinning)
+        if(!this.noPath() && !this.entityCreature.hasAttackTarget()) {
+            PathPoint finalPoint = this.getPath().getFinalPathPoint();
+            Vec3d finalVec = new Vec3d((double)finalPoint.x, (double)finalPoint.y, (double)finalPoint.z);
+            if(this.entityCreature.getDistanceSq(finalVec) <= this.entityCreature.getSize(Pose.STANDING).width)
+                this.clearPath();
+        }
+
+        // Update Path and Move:
         if (!this.noPath() || !this.entityCreature.canClimb()) {
             super.tick();
             return;

@@ -146,7 +146,7 @@ public class EntityDweller extends EntityCreatureTameable implements IMob {
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
     

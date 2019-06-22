@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -105,7 +104,7 @@ public class AttackMeleeGoal extends Goal {
         if(--this.repathTime <= 0) {
             // Set Path:
         	if(!this.host.useDirectNavigator()) {
-				if(this.host.isCurrentlyFlying()) {
+				if(this.host.isFlying()) {
 					this.pathToTarget = this.host.getNavigator().getPathToXYZ(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ);
 				}
 				else {
@@ -187,7 +186,7 @@ public class AttackMeleeGoal extends Goal {
 			this.repathTime = failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
 
         	if(!this.host.useDirectNavigator()) {
-				if(this.host.isCurrentlyFlying()) {
+				if(this.host.isFlying()) {
 					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, this.speed);
 				}
 				else {

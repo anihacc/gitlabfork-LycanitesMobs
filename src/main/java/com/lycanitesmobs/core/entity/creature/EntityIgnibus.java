@@ -278,7 +278,9 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     public boolean canBurn() { return false; }
 
     @Override
-    public boolean waterDamage() { return false; }
+    public boolean canBreatheUnderlava() {
+        return true;
+    }
 
     @Override
     public float getFallResistance() {

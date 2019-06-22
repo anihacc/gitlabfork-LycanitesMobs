@@ -150,7 +150,7 @@ public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
     

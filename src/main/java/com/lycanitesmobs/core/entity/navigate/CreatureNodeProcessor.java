@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import net.minecraft.block.*;
@@ -77,15 +76,15 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         if(this.entityCreature == null) {
             return false;
         }
-        if(this.entityCreature.isInWater()) {
-            return this.entityCreature.isStrongSwimmer() || (this.entityCreature.canWade() && this.entityCreature.canDive());
+        if(this.entityCreature.canSwim()) {
+            return this.entityCreature.isStrongSwimmer() || (this.entityCreature.canWade() && this.entityCreature.shouldDive());
         }
         return false;
     }
 
     /** Returns true if the entity should use flight focused pathing. **/
     public boolean flying() {
-        return this.entityCreature != null && this.entityCreature.isFlying() && !this.entityCreature.isInWater();
+        return this.entityCreature != null && this.entityCreature.isFlying() && !this.entityCreature.canSwim();
     }
 
     /** Returns a width to path with. **/
@@ -118,7 +117,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
         // Wading Through Water:
         int posY;
-        if (this.getCanSwim() && this.entity.isInWater()) {
+        if (this.getCanSwim() && this.entity.canSwim()) {
             posY = (int)this.entity.getBoundingBox().minY;
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
 

@@ -42,7 +42,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	@Override
 	public Entity create(EntityType entityType, World world) {
-		LycanitesMobs.logDebug("", "Spawning entity: " + this.entityTypeConstrcutorMap.get(entityType).toString() + " - " + entityType.getClassification());
+		LycanitesMobs.logDebug("Entity", "Spawning entity: " + this.entityTypeConstrcutorMap.get(entityType).toString() + " - " + entityType.getClassification());
 		Constructor<? extends Entity> constructor = this.entityTypeConstrcutorMap.get(entityType);
 
 		try {
