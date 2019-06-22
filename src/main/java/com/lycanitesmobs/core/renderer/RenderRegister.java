@@ -34,6 +34,7 @@ public class RenderRegister {
     }
 
     public void registerRenderFactories() {
+
         // Creatures:
         for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
             if(creatureInfo.dummy) {

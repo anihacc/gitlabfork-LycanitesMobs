@@ -11,6 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -54,13 +55,13 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 	public double offsetZ = 0;
 	public int offsetIDStart = 14;
 
-    // Datawatcher:
-    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.<Integer>createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
-    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.<Float>createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
+    // Data Parameters:
+    protected static final DataParameter<Integer> SHOOTING_ENTITY_ID = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> LASER_TIME = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.VARINT);
+    protected static final DataParameter<Float> OFFSET_X = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Y = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> OFFSET_Z = EntityDataManager.createKey(EntityProjectileLaser.class, DataSerializers.FLOAT);
 	
     // ==================================================
  	//                   Constructors
@@ -278,32 +279,31 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 				excludedEntities.add(this.shootingEntity);
 			if(this.followEntity != null)
 				excludedEntities.add(this.followEntity);
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
+			RayTraceResult rayTraceResult = Utilities.raytrace(this.getEntityWorld(), this.posX, this.posY, this.posZ, this.targetX, this.targetY, this.targetZ, this.laserWidth, this, excludedEntities);
 			
 			// Update Laser End Position:
 			double newTargetX = this.targetX;
 			double newTargetY = this.targetY;
 			double newTargetZ = this.targetZ;
-			if(target != null && target.getHitVec() != null && !lockedLaser) {
-				newTargetX = target.getHitVec().x;
-				newTargetY = target.getHitVec().y;
-				newTargetZ = target.getHitVec().z;
+			if(rayTraceResult != null && !lockedLaser) {
+				newTargetX = rayTraceResult.getHitVec().x;
+				newTargetY = rayTraceResult.getHitVec().y;
+				newTargetZ = rayTraceResult.getHitVec().z;
 			}
 			this.laserEnd.onUpdateEnd(newTargetX, newTargetY, newTargetZ);
 			
-			/*/ Damage: TODO Figure out how to get entity hit!
-			if(this.laserTime % this.laserDelay == 0 && this.isAlive()) {
-                if (target != null && target.entityHit != null) {
-                    if(this.laserEnd.getDistance(target.entityHit) <= (this.laserWidth * 10)) {
-                        boolean doDamage = true;
-                        if (target.entityHit instanceof LivingEntity) {
-                            doDamage = this.canDamage((LivingEntity) target.entityHit);
-                        }
-                        if (doDamage)
-                            this.updateDamage(target.entityHit);
-                    }
-                }
-            }*/
+			// Damage:
+			if(this.laserTime % this.laserDelay == 0 && this.isAlive() && rayTraceResult instanceof EntityRayTraceResult) {
+				EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)rayTraceResult;
+				if(this.laserEnd.getDistance(entityRayTraceResult.getEntity()) <= (this.laserWidth * 10)) {
+					boolean doDamage = true;
+					if (entityRayTraceResult.getEntity() instanceof LivingEntity) {
+						doDamage = this.canDamage((LivingEntity) entityRayTraceResult.getEntity());
+					}
+					if (doDamage)
+						this.updateDamage(entityRayTraceResult.getEntity());
+				}
+            }
 		}
 		
 		this.dataManager.set(LASER_END_ID, this.laserEndRef);
@@ -334,12 +334,12 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     	
 		try {
 			if(this.shootingEntity == null) {
-				laserEnd = (EntityProjectileLaserEnd)this.getLaserEndClass().getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class, EntityProjectileLaser.class)
-						.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.posX, this.posY, this.posZ, this);
+				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class, EntityProjectileLaser.class);
+				this.laserEnd = (EntityProjectileLaserEnd)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.posX, this.posY, this.posZ, this);
 			}
 	        else {
-				laserEnd = (EntityProjectileLaserEnd)this.getLaserEndClass().getConstructor(EntityType.class, World.class, LivingEntity.class, EntityProjectileLaser.class)
-						.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.shootingEntity, this);
+				Constructor laserEndConstructor = this.getLaserEndClass().getConstructor(EntityType.class, World.class, LivingEntity.class, EntityProjectileLaser.class);
+				this.laserEnd = (EntityProjectileLaserEnd)laserEndConstructor.newInstance(ProjectileManager.getInstance().oldProjectileTypes.get(this.getLaserEndClass()), world, this.shootingEntity, this);
 	        }
 	        
 			if(this.getLaunchSound() != null)

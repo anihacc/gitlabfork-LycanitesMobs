@@ -5,6 +5,8 @@ import com.lycanitesmobs.core.block.BlockBase;
 import com.lycanitesmobs.core.entity.creature.EntityVespidQueen;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -40,13 +42,12 @@ public class BlockVeswax extends BlockBase {
     // ==================================================
     //                   Placement
     // ==================================================
-    /*@Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+    @Override
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         int orientationMeta = placer.getHorizontalFacing().getOpposite().getIndex();
         orientationMeta += 8;
-        world.setBlockState(pos, state.withProperty(HIVE, orientationMeta), 2);
-        super.onBlockPlacedBy(world, pos, state, placer, itemStack);
-    }*/
+        world.setBlockState(pos, state.with(AGE, orientationMeta), 1);
+    }
 
 
     // ==================================================
@@ -58,13 +59,15 @@ public class BlockVeswax extends BlockBase {
         return this.tickRate;
     }
 
+    @Override
+	public boolean ticksRandomly(BlockState state) {
+		return state.get(AGE) < 8;
+	}
+
     // ========== Tick Update ==========
     @Override
     public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
         if(world.isRemote)
-            return;
-		int age = state.get(AGE);
-        if(age >= 8)
             return;
         double range = 32D;
         if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())

@@ -76,7 +76,7 @@ public class EntityEnt extends EntityCreatureTameable implements IMob, IGroupPla
         if(this.getAir() >= 0) {
             if (this.isInWater())
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
-            else if (this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
+            else if (this.isInWaterRainOrBubbleColumn())
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
         }
     }

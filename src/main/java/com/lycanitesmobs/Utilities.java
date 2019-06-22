@@ -27,30 +27,19 @@ public class Utilities {
 		// Get Block Collision:
         RayTraceResult collision = world.rayTraceBlocks(new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, entity));
 		startVec = new Vec3d(x, y, z);
-		endVec = new Vec3d(tx, ty, tz);
-		float distance = (float)endVec.distanceTo(startVec);
 
 		// Get Entity Collision:
 		if(excluded != null) {
 			AxisAlignedBB bb = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ).expand(borderSize, borderSize, borderSize);
-			List<Entity> allEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
+			List<Entity> allHitEntities = world.getEntitiesWithinAABBExcludingEntity(null, bb);
 			Entity closestHitEntity = null;
-			float closestHit = Float.POSITIVE_INFINITY;
-			float currentHit = distance;
-			AxisAlignedBB entityBb;
-			EntityRayTraceResult intercept;
-			for(Entity ent : allEntities) {
-				if(ent.canBeCollidedWith() && !excluded.contains(ent)) {
-					float entBorder = ent.getCollisionBorderSize();
-					entityBb = ent.getBoundingBox();
-					entityBb = entityBb.expand(entBorder, entBorder, entBorder);
-					intercept = ProjectileHelper.func_221271_a(entity.getEntityWorld(), entity, startVec, endVec, entity.getBoundingBox().expand(entity.getMotion()).grow(1.0D), (hitEntity) -> hitEntity != entity);
-					if(intercept != null) {
-						currentHit = (float) intercept.getHitVec().distanceTo(startVec);
-						if(currentHit < closestHit || currentHit == 0) {
-							closestHit = currentHit;
-							closestHitEntity = ent;
-						}
+			double closestEntDistance = Float.POSITIVE_INFINITY;
+			for(Entity hitEntity : allHitEntities) {
+				if(hitEntity.canBeCollidedWith() && !excluded.contains(hitEntity)) {
+					double entDistance = startVec.distanceTo(hitEntity.getPositionVec());
+					if(entDistance < closestEntDistance) {
+						closestEntDistance = entDistance;
+						closestHitEntity = hitEntity;
 					}
 				}
 			}

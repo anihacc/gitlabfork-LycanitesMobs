@@ -34,9 +34,6 @@ import javax.vecmath.Vector4f;
 import java.util.*;
 
 public class ItemEquipmentPart extends ItemBase {
-	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
-	public static ItemStack ITEMSTACK_TO_RENDER;
-
 	/** A map of mob classes and parts that they drop. **/
 	public static Map<String, ItemEquipmentPart> MOB_PART_DROPS = new HashMap<>();
 

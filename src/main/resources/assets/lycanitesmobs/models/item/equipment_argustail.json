@@ -1,0 +1,6 @@
+{
+	"parent": "builtin/teisr",
+	"textures": {
+		"particle": "item/trident"
+	}
+}
