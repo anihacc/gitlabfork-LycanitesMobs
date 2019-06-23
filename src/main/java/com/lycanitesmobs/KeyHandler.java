@@ -78,24 +78,24 @@ public class KeyHandler {
 			controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_INVENTORY.id;
 		}
 
-		// LM Main Menu:
+		// Beastiary Index:
 		if(this.index.isPressed()) {
-			GuiBeastiaryIndex.openToPlayer(this.mc.player);
+			this.mc.displayGuiScreen(new GuiBeastiaryIndex(this.mc.player));
 		}
 
-		// Beastiary:
+		// Beastiary Creatures:
 		if(this.beastiary.isPressed()) {
-			GuiBeastiaryCreatures.openToPlayer(this.mc.player);
+			this.mc.displayGuiScreen(new GuiBeastiaryCreatures(this.mc.player));
 		}
 
-		// Pet Manager:
+		// Beastiary Pets:
 		if(this.pets.isPressed()) {
-			GuiBeastiaryPets.openToPlayer(this.mc.player);
+			this.mc.displayGuiScreen(new GuiBeastiaryPets(this.mc.player));
 		}
 
-		// Minion Manager:
+		// Beastiary Summoning:
 		if(this.summoning.isPressed()) {
-			GuiBeastiarySummoning.openToPlayer(this.mc.player);
+			this.mc.displayGuiScreen(new GuiBeastiarySummoning(this.mc.player));
 		}
 		
 		// Minion Selection: Closes If Not Holding:

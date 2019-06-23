@@ -18,17 +18,6 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 	public GuiSubspeciesList subspeciesList;
 	public GuiCreatureDescriptionList descriptionList;
 
-	/**
-	 * Opens this GUI up to the provided player.
-	 * @param player The player to open the GUI to.
-	 */
-	public static void openToPlayer(PlayerEntity player) {
-		if(player != null) {
-			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.CREATURES.id, 0, 0);
-		}
-	}
-
-
 	public GuiBeastiaryCreatures(PlayerEntity player) {
 		super(player);
 	}

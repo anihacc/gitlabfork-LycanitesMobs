@@ -70,16 +70,6 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
         this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(GhastEntity.class));
     }
 
-    // ========== Set Size ==========
-    @Override
-    public void setSizeScale(double scale) {
-        if(this.isRareSubspecies()) {
-            super.setSizeScale(scale * 1.5D);
-            return;
-        }
-        super.setSizeScale(scale);
-    }
-
 
     // ==================================================
     //                      Updates

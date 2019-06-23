@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -8,25 +9,35 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class LMCreaturesGroup extends ItemGroup {
-	
-	// ========== Constructor ==========
+	private ItemStack iconStack = ItemStack.EMPTY;
+	private boolean fallbackIcon = false;
+
 	public LMCreaturesGroup(int tabID, String modID) {
 		super(tabID, modID);
 	}
-	
-	// ========== Tab Icon ==========
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack createIcon() {
+		this.fallbackIcon = false;
 		if(ObjectManager.getItem("beastspawn") != null)
 			return new ItemStack(ObjectManager.getItem("beastspawn"));
-		else if(ObjectManager.getItem("demonspawn") != null)
+		if(ObjectManager.getItem("demonspawn") != null)
 			return new ItemStack(ObjectManager.getItem("demonspawn"));
-		else if(ObjectManager.getItem("avianspawn") != null)
+		if(ObjectManager.getItem("avianspawn") != null)
 			return new ItemStack(ObjectManager.getItem("avianspawn"));
-		else if(ObjectManager.getItem("arthropodspawn") != null)
+		if(ObjectManager.getItem("arthropodspawn") != null)
 			return new ItemStack(ObjectManager.getItem("arthropodspawn"));
-		else
-			return new ItemStack(Items.CREEPER_SPAWN_EGG);
+
+		this.fallbackIcon = true;
+		return new ItemStack(Items.CREEPER_SPAWN_EGG);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public ItemStack getIcon() {
+		if (this.iconStack.isEmpty() || this.fallbackIcon) {
+			this.iconStack = this.createIcon();
+		}
+		return this.iconStack;
 	}
 }

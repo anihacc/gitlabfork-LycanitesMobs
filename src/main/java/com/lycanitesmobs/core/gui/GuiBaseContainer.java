@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.gui;
 
-import com.lycanitesmobs.core.container.ContainerBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -9,9 +8,10 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.util.text.ITextComponent;
 
-public abstract class GuiBaseContainer extends ContainerScreen<ContainerBase> implements Button.IPressable {
+public abstract class GuiBaseContainer<T extends Container> extends ContainerScreen<T> implements Button.IPressable {
     public int zLevel = 0;
     public PlayerInventory playerInventory; // Here until parent is full deobfuscated.
     public FontRenderer fontRenderer;
@@ -19,8 +19,8 @@ public abstract class GuiBaseContainer extends ContainerScreen<ContainerBase> im
     // ==================================================
     //                    Constructor
     // ==================================================
-    public GuiBaseContainer(ContainerBase container, PlayerInventory playerInventory, ITextComponent containerName) {
-        super(container, playerInventory, containerName);
+    public GuiBaseContainer(T container, PlayerInventory playerInventory, ITextComponent name) {
+        super(container, playerInventory, name);
         this.playerInventory = playerInventory;
         this.fontRenderer = Minecraft.getInstance().fontRenderer;
     }
@@ -47,12 +47,12 @@ public abstract class GuiBaseContainer extends ContainerScreen<ContainerBase> im
         float scaleX = 0.00390625F * resolution;
         float scaleY = scaleX;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferBuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 

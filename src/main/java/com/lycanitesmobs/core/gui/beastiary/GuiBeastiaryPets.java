@@ -23,17 +23,6 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 	private int releaseConfirmId = 300;
 	private int releaseCancelId = 301;
 
-	/**
-	 * Opens this GUI up to the provided player.
-	 * @param player The player to open the GUI to.
-	 */
-	public static void openToPlayer(PlayerEntity player) {
-		if(player != null) {
-			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.PETS.id, 0, 0);
-		}
-	}
-
-
 	public GuiBeastiaryPets(PlayerEntity player) {
 		super(player);
 		this.playerExt.selectedSubspecies = 0;
@@ -377,7 +366,7 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 
 				this.playerExt.sendPetEntryToServer(petEntry);
 				if (this.playerExt.selectedPet == null) {
-					openToPlayer(this.player);
+					this.mc.displayGuiScreen(new GuiBeastiaryPets(this.mc.player));
 				}
 				return;
 			}

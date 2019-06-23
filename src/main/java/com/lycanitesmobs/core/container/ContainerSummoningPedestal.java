@@ -1,18 +1,37 @@
 package com.lycanitesmobs.core.container;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class ContainerSummoningPedestal extends ContainerBase {
+    public static final ContainerType<ContainerSummoningPedestal> TYPE = (ContainerType<ContainerSummoningPedestal>)IForgeContainerType.create(ContainerCreature::new).setRegistryName(LycanitesMobs.MODID, "summoning_pedestal");
     public TileEntitySummoningPedestal summoningPedestal;
 
-    // ========================================
-    //                Constructor
-    // ========================================
-    public ContainerSummoningPedestal(TileEntitySummoningPedestal summoningPedestal, PlayerInventory playerInventory) {
-        super(0);
+    /**
+     * Client Constructor
+     * @param windowId The window id for the gui screen to use.
+     * @param playerInventory The accessing player's inventory.
+     * @param extraData A packet sent from the server to create the Container from.
+     */
+    public ContainerSummoningPedestal(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+        this(windowId, playerInventory, (TileEntitySummoningPedestal)playerInventory.player.getEntityWorld().getTileEntity(BlockPos.fromLong(extraData.readLong())));
+    }
+
+    /**
+     * Main Constructor
+     * @param windowId
+     * @param playerInventory
+     * @param summoningPedestal
+     */
+    public ContainerSummoningPedestal(int windowId, PlayerInventory playerInventory, TileEntitySummoningPedestal summoningPedestal) {
+        super(TYPE, windowId);
         this.summoningPedestal = summoningPedestal;
         this.inventoryStart = this.inventorySlots.size();
 
@@ -28,10 +47,6 @@ public class ContainerSummoningPedestal extends ContainerBase {
         this.inventoryFinish = this.inventoryStart + slots;
     }
 
-
-    // ========================================
-    //                  Interact
-    // ========================================
     @Override
     public boolean canInteractWith(PlayerEntity player) {
         if(this.summoningPedestal == null)
@@ -39,10 +54,6 @@ public class ContainerSummoningPedestal extends ContainerBase {
         return player == this.summoningPedestal.getPlayer();
     }
 
-
-    // ========================================
-    //                 Inventory
-    // ========================================
     @Override
     public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
         return ItemStack.EMPTY;

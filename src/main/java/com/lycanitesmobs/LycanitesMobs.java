@@ -172,6 +172,7 @@ public class LycanitesMobs {
 	@SubscribeEvent
 	public void clientSetup(final FMLClientSetupEvent event) {
 		ClientManager.getInstance().initLanguageManager();
+		ClientManager.getInstance().registerGUIs();
 		ClientManager.getInstance().registerEvents();
 		ClientManager.getInstance().registerTextures();
 		ClientManager.getInstance().initRenderRegister();

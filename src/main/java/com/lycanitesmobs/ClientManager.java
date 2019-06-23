@@ -1,6 +1,12 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.container.ContainerCreature;
+import com.lycanitesmobs.core.container.ContainerEquipmentForge;
+import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
+import com.lycanitesmobs.core.gui.GuiCreature;
+import com.lycanitesmobs.core.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.gui.GuiOverlay;
+import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -17,6 +23,7 @@ import com.lycanitesmobs.core.renderer.RenderRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
@@ -47,6 +54,15 @@ public class ClientManager {
 			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));
 		}
 		return this.fontRenderer;
+	}
+
+	/**
+	 * Registers all GUI Screens, etc used by this mod.
+	 */
+	public void registerGUIs() {
+    	ScreenManager.registerFactory(ContainerCreature.TYPE, GuiCreature::new);
+    	ScreenManager.registerFactory(ContainerSummoningPedestal.TYPE, GuiSummoningPedestal::new);
+    	ScreenManager.registerFactory(ContainerEquipmentForge.TYPE, GuiEquipmentForge::new);
 	}
 
 	/**

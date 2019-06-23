@@ -1,20 +1,26 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.container.CreatureContainerProvider;
+import com.lycanitesmobs.core.container.SummoningPedestalContainerProvider;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockSummoningPedestal extends BlockBase {
     public enum EnumSummoningPedestal {
@@ -84,20 +90,21 @@ public class BlockSummoningPedestal extends BlockBase {
         }
     }
 
-    /*
+    @Override
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(!world.isRemote() && player instanceof ServerPlayerEntity) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if(tileEntity instanceof TileEntitySummoningPedestal) {
+                ((ServerPlayerEntity)player).connection.sendPacket(tileEntity.getUpdatePacket());
+                NetworkHooks.openGui((ServerPlayerEntity)player, new SummoningPedestalContainerProvider((TileEntitySummoningPedestal)tileEntity), buf -> buf.writeBlockPos(pos));
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int eventID, int eventParam) {
         TileEntity tileEntity = worldIn.getTileEntity(pos);
         return tileEntity != null && tileEntity.receiveClientEvent(eventID, eventParam);
     }
-
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!world.isRemote) {
-            if(playerIn != null && playerIn.getEntityWorld() != null) {
-                playerIn.openGui(LycanitesMobs.instance, GuiHandler.GuiType.TILEENTITY.id, playerIn.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-            }
-        }
-        return true;
-    }*/
 }

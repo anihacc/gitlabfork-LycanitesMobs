@@ -9,11 +9,17 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class MessageGUIRequest {
-	public byte guiID;
+	public enum GuiRequest {
+		BEASTIARY((byte)0);
+		public byte id;
+		GuiRequest(byte i) { id = i; }
+	}
+
+	public byte guiId;
 	
 	public MessageGUIRequest() {}
-	public MessageGUIRequest(byte guiID) {
-		this.guiID = guiID;
+	public MessageGUIRequest(GuiRequest guiRequest) {
+		this.guiId = guiRequest.id;
 	}
 	
 	/**
@@ -26,7 +32,9 @@ public class MessageGUIRequest {
 		ctx.get().enqueueWork(() -> {
 			PlayerEntity player = ctx.get().getSender();
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-			playerExt.requestGUI(message.guiID);
+
+			if(message.guiId == GuiRequest.BEASTIARY.id)
+				playerExt.onOpenBeastiary();
 		});
 	}
 	
@@ -35,7 +43,7 @@ public class MessageGUIRequest {
 	 */
 	public static MessageGUIRequest decode(PacketBuffer packet) {
 		MessageGUIRequest message = new MessageGUIRequest();
-		message.guiID = packet.readByte();
+		message.guiId = packet.readByte();
 		return message;
 	}
 	
@@ -43,7 +51,7 @@ public class MessageGUIRequest {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessageGUIRequest message, PacketBuffer packet) {
-		packet.writeByte(message.guiID);
+		packet.writeByte(message.guiId);
 	}
 	
 }

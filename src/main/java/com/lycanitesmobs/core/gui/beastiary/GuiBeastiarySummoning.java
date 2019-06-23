@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
@@ -24,17 +25,6 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 
 	private int summoningSlotIdStart = 200;
 	private int petCommandIdStart = 300;
-
-	/**
-	 * Opens this GUI up to the provided player.
-	 * @param player The player to open the GUI to.
-	 */
-	public static void openToPlayer(PlayerEntity player) {
-		if(player != null) {
-			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.SUMMONING.id, 0, 0);
-		}
-	}
-
 
 	public GuiBeastiarySummoning(PlayerEntity player) {
 		super(player);
@@ -330,7 +320,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 
 				this.playerExt.sendSummonSetToServer((byte) this.playerExt.selectedSummonSet);
 				if (this.playerExt.selectedPet == null) {
-					openToPlayer(this.player);
+					this.mc.displayGuiScreen(new GuiBeastiarySummoning(this.mc.player));
 				}
 				return;
 			}

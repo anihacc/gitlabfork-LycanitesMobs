@@ -3,14 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.spawner.Spawner;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static sun.audio.AudioPlayer.player;
 
 /** Called when a Mob Event is active. **/
 public class MobEventSpawnTrigger extends SpawnTrigger {

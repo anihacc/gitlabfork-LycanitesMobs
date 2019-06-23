@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.creature.EntityAbaia;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -115,7 +116,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
         this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
-			LycanitesMobs.logWarning("", "Unable to load model onj for: " + name + "");
+			LycanitesMobs.logWarning("", "Unable to load model obj for: " + name + "");
 
         // Create Animator:
 		this.animator = new Animator();
@@ -216,7 +217,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 		else {
 			if(entity != null) {
 				scale *= 16;
-                scale *= entity.getRenderScale();
+				scale *= entity.getRenderScale();
             }
 		}
 

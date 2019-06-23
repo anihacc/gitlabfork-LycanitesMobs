@@ -10,25 +10,24 @@ import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class GuiEquipmentForge extends GuiBaseContainer {
+public class GuiEquipmentForge extends GuiBaseContainer<ContainerEquipmentForge> {
 	public TileEntityEquipmentForge equipmentForge;
 	public String currentMode = "empty";
 	public boolean confirmation = false;
 
 	/**
 	 * Constructor
-	 * @param equipmentForge
-	 * @param playerInventory
 	 */
-	public GuiEquipmentForge(TileEntityEquipmentForge equipmentForge, PlayerInventory playerInventory) {
-		super(new ContainerEquipmentForge(equipmentForge, playerInventory), playerInventory, new TranslationTextComponent(equipmentForge.getName()));
+	public GuiEquipmentForge(ContainerEquipmentForge container, PlayerInventory playerInventory, ITextComponent name) {
+		super(container, playerInventory, name);
 		this.playerInventory = playerInventory;
-		this.equipmentForge = equipmentForge;
+		this.equipmentForge = container.equipmentForge;
 	}
 
 

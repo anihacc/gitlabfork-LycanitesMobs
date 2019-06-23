@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContainerBase extends Container {
+public abstract class ContainerBase extends Container {
 	public Map<Integer, String> specialSlots = new HashMap<>();
 	public int playerInventoryStart = -1;
 	public int playerInventoryFinish = -1;
@@ -23,12 +23,8 @@ public class ContainerBase extends Container {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public ContainerBase(int windowId) {
-		super(ContainerType.GENERIC_9X3, windowId);
-	}
-
-	public ContainerType<?> getType() {
-		return super.getType();
+	public ContainerBase(ContainerType<?> type, int windowId) {
+		super(type, windowId);
 	}
 	
 	

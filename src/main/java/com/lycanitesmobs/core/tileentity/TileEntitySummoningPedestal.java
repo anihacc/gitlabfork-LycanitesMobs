@@ -88,6 +88,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     /** The main update called every tick. **/
     @Override
     public void tick() {
+        LycanitesMobs.logInfo("", "Summoning Pedestal Alive!");
+
         // Client Side Only:
         if(this.getWorld().isRemote) {
 
@@ -541,16 +543,5 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
 
         return nbtTagCompound;
-    }
-
-
-    // ========================================
-    //                Open GUI
-    // ========================================
-    @Override
-    public Object getGUI(PlayerEntity player) {
-        if(this.getWorld().isRemote)
-            return new GuiSummoningPedestal(player, this);
-        return new ContainerSummoningPedestal(this, player.inventory);
     }
 }

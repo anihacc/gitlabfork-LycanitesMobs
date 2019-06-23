@@ -13,17 +13,6 @@ public class GuiBeastiaryElements extends GuiBeastiary {
 	protected GuiElementList elementList;
 	protected GuiElementDescriptionList descriptionList;
 
-	/**
-	 * Opens this GUI up to the provided player.
-	 * @param player The player to open the GUI to.
-	 */
-	public static void openToPlayer(PlayerEntity player) {
-		if(player != null) {
-			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.ELEMENTS.id, 0, 0);
-		}
-	}
-
-
 	public GuiBeastiaryElements(PlayerEntity player) {
 		super(player);
 	}

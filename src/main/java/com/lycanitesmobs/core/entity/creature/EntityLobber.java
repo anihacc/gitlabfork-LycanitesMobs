@@ -78,16 +78,6 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
         this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 2);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
     
     
     // ==================================================

@@ -25,6 +25,12 @@ import net.minecraft.world.World;
 import java.net.URI;
 
 public abstract class GuiBeastiary extends GuiBaseScreen {
+	public enum Page {
+		INDEX((byte)0), CREATURES((byte)1), PETS((byte)2), SUMMONING((byte)3), ELEMENTS((byte)4);
+		public byte id;
+		Page(byte i) { id = i; }
+	}
+	
 	/** A snapshot of the users GUI Scale setting so it can be restored on closing the Beastiary. **/
 	static int OPENED_GUI_SCALE;
 	/** Set to true when any Beastiary GUI is active in order to prevent the GUI Scaling going out of sync. **/
@@ -216,15 +222,15 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		ButtonBase button;
 
 		// Top Menu:
-		button = new ButtonBase(GuiHandler.Beastiary.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.index.title"), this);
+		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.index.title"), this);
 		this.buttons.add(button);
-		button = new ButtonBase(GuiHandler.Beastiary.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.creatures"), this);
+		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.creatures"), this);
 		this.buttons.add(button);
-		button = new ButtonBase(GuiHandler.Beastiary.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.pets"), this);
+		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.pets"), this);
 		this.buttons.add(button);
-		button = new ButtonBase(GuiHandler.Beastiary.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.summoning"), this);
+		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.summoning"), this);
 		this.buttons.add(button);
-		button = new ButtonBase(GuiHandler.Beastiary.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.elements"), this);
+		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.elements"), this);
 		this.buttons.add(button);
 	}
 
@@ -288,20 +294,20 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 */
 	@Override
 	public void actionPerformed(byte buttonId) {
-		if(buttonId == GuiHandler.Beastiary.INDEX.id) {
-			GuiBeastiaryIndex.openToPlayer(this.player);
+		if(buttonId == Page.INDEX.id) {
+			this.mc.displayGuiScreen(new GuiBeastiaryIndex(Minecraft.getInstance().player));
 		}
-		if(buttonId == GuiHandler.Beastiary.CREATURES.id) {
-			GuiBeastiaryCreatures.openToPlayer(this.player);
+		if(buttonId == Page.CREATURES.id) {
+			this.mc.displayGuiScreen(new GuiBeastiaryCreatures(Minecraft.getInstance().player));
 		}
-		if(buttonId == GuiHandler.Beastiary.PETS.id) {
-			GuiBeastiaryPets.openToPlayer(this.player);
+		if(buttonId == Page.PETS.id) {
+			this.mc.displayGuiScreen(new GuiBeastiaryPets(Minecraft.getInstance().player));
 		}
-		if(buttonId == GuiHandler.Beastiary.SUMMONING.id) {
-			GuiBeastiarySummoning.openToPlayer(this.player);
+		if(buttonId == Page.SUMMONING.id) {
+			this.mc.displayGuiScreen(new GuiBeastiarySummoning(Minecraft.getInstance().player));
 		}
-		if(buttonId == GuiHandler.Beastiary.ELEMENTS.id) {
-			GuiBeastiaryElements.openToPlayer(this.player);
+		if(buttonId == Page.ELEMENTS.id) {
+			this.mc.displayGuiScreen(new GuiBeastiaryElements(Minecraft.getInstance().player));
 		}
 
 		super.actionPerformed(buttonId);

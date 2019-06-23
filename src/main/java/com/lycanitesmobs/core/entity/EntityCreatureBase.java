@@ -6,6 +6,8 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.container.ContainerCreature;
+import com.lycanitesmobs.core.container.CreatureContainerProvider;
+import com.lycanitesmobs.core.entity.creature.EntityAbaia;
 import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -60,6 +62,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1064,7 +1067,10 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     public void getRandomSize() {
 		double range = CreatureManager.getInstance().config.randomSizeMax - CreatureManager.getInstance().config.randomSizeMin;
     	double randomScale = range * this.getRNG().nextDouble();
-    	this.setSizeScale(CreatureManager.getInstance().config.randomSizeMin + randomScale);
+    	double scale = CreatureManager.getInstance().config.randomSizeMin + randomScale;
+    	if(this.subspecies != null)
+			scale *= this.subspecies.getScale();
+    	this.setSizeScale(scale);
     }
 
     /**
@@ -1099,7 +1105,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 		if(this.creatureSize == null) {
 			return super.getSize(pose);
 		}
-    	return this.creatureSize.scale(this.getRenderScale()).scale((float)this.sizeScale);
+    	return this.creatureSize.scale(this.getRenderScale());
 	}
 
 	/** Sets the size scale of this creature. **/
@@ -3371,8 +3377,8 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     
     /** Actually opens the GUI to the player, should be used by openGUI() for an initial opening and then by refreshGUIViewers() for constant updates. **/
     public void openGUIToPlayer(PlayerEntity player) {
-    	//if(player != null)
-    		//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.ENTITY.id, this.getEntityWorld(), this.getEntityId(), 0, 0);
+    	if(player instanceof ServerPlayerEntity)
+			NetworkHooks.openGui((ServerPlayerEntity)player, new CreatureContainerProvider(this), buf -> buf.writeInt(this.getEntityId()));
     }
     
     /** Schedules a GUI refresh, normally takes 2 ticks for everything to update for display. **/

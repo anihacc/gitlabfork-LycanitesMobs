@@ -402,13 +402,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	// ==================================================
     //                 Request GUI Data
     // ==================================================
-	public void requestGUI(byte guiID) {
-		if(guiID == GuiHandler.Beastiary.PETS.id)
-			this.sendPetEntriesToPlayer("pet");
-		if(guiID == GuiHandler.Beastiary.PETS.id)
-			this.sendPetEntriesToPlayer("mount");
-        if(guiID == GuiHandler.Beastiary.PETS.id)
-            this.sendPetEntriesToPlayer("familiar");
+	public void onOpenBeastiary() {
+		this.sendPetEntriesToPlayer("pet");
+		this.sendPetEntriesToPlayer("mount");
+        this.sendPetEntriesToPlayer("familiar");
 	}
 
 

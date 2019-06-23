@@ -15,27 +15,24 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class GuiCreature extends GuiBaseContainer {
+public class GuiCreature extends GuiBaseContainer<ContainerCreature> {
 	public EntityCreatureBase creature;
 	public InventoryCreature creatureInventory;
-	
-	// ==================================================
-  	//                    Constructor
-  	// ==================================================
-	public GuiCreature(EntityCreatureBase creature, PlayerInventory playerInventory) {
-		super(new ContainerCreature(0, creature, playerInventory), playerInventory, creature.getDisplayName());
-		this.creature = creature;
-		this.creatureInventory = creature.inventory;
+
+	/**
+	 * Constructor
+	 */
+	public GuiCreature(ContainerCreature container, PlayerInventory playerInventory, ITextComponent name) {
+		super(container, playerInventory, name);
+		this.creature = container.creature;
+		this.creatureInventory = container.creature.inventory;
 	}
-	
-	
-	// ==================================================
-  	//                       Init
-  	// ==================================================
+
 	@Override
 	public void init() {
 		super.init();
@@ -45,21 +42,13 @@ public class GuiCreature extends GuiBaseContainer {
         int backY = (this.height - this.ySize) / 2;
 		this.drawControls(backX, backY);
 	}
-	
-	
-	// ==================================================
-  	//                    Foreground
-  	// ==================================================
+
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
         this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName().toString()), 8, this.ySize - 96 + 2, 4210752);
     }
-	
-	
-	// ==================================================
-  	//                    Background
-  	// ==================================================
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -74,8 +63,7 @@ public class GuiCreature extends GuiBaseContainer {
 		this.drawHealth(backX, backY);
 		this.drawSlots(backX, backY);
 	}
-	
-	// ========== Draw Creature Frame ===========
+
 	protected void drawFrames(int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
@@ -91,8 +79,7 @@ public class GuiCreature extends GuiBaseContainer {
         this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
 		InventoryScreen.drawEntityOnScreen(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature);
 	}
-	
-	// ========== Draw Creature Health ===========
+
 	protected void drawHealth(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
@@ -111,8 +98,7 @@ public class GuiCreature extends GuiBaseContainer {
         barV = barV + barHeight;
         this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
 	}
-	
-	// ========== Draw Slots ===========
+
 	protected void drawSlots(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
@@ -139,8 +125,7 @@ public class GuiCreature extends GuiBaseContainer {
 			this.drawTexturedModalRect(slotX, slotY, slotU, slotV, slotWidth, slotHeight);
 		}
 	}
-	
-	// ========== Draw Controls ===========
+
 	protected void drawControls(int backX, int backY) {
 		if(!(this.creature instanceof EntityCreatureTameable))
 			return;
@@ -214,11 +199,7 @@ public class GuiCreature extends GuiBaseContainer {
         buttonY += buttonHeight + (buttonSpacing * 2);
         this.buttons.add(new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
     }
-	
-	
-	// ==================================================
-  	//                     Actions
-  	// ==================================================
+
 	@Override
 	public void actionPerformed(byte buttonId) {
 		MessageEntityGUICommand message = new MessageEntityGUICommand(buttonId, this.creature);

@@ -1,6 +1,9 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
+import com.lycanitesmobs.core.container.ContainerCreature;
+import com.lycanitesmobs.core.container.ContainerEquipmentForge;
+import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -10,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
@@ -309,5 +313,13 @@ public class ObjectManager {
 			}
 			event.getRegistry().register(soundEvent);
 		}
+	}
+
+	// ========== Containers ==========
+	@SubscribeEvent
+	public void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+		event.getRegistry().register(ContainerCreature.TYPE);
+		event.getRegistry().register(ContainerSummoningPedestal.TYPE);
+		event.getRegistry().register(ContainerEquipmentForge.TYPE);
 	}
 }

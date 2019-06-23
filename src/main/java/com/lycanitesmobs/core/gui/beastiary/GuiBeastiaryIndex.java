@@ -5,26 +5,17 @@ import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.gui.ButtonBase;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class GuiBeastiaryIndex extends GuiBeastiary {
 	public GuiIndexList indexList;
-
-	/**
-	 * Opens this GUI up to the provided player.
-	 * @param player The player to open the GUI to.
-	 */
-	public static void openToPlayer(PlayerEntity player) {
-		if(player != null) {
-			//player.openGui(LycanitesMobs.instance, GuiHandler.GuiType.BEASTIARY.id, player.getEntityWorld(), GuiHandler.Beastiary.INDEX.id, 0, 0);
-		}
-	}
-
 
 	@Override
 	public ITextComponent getTitle() {

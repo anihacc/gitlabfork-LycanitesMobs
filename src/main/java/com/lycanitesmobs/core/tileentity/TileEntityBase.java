@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.tileentity;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -69,15 +68,6 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-    }
-
-    /**
-     * Called by the GUI Handler when opening a GUI.
-     * @param player The player opening the GUI.
-     * @return A GUI if client side and an optional Container if server side.
-     */
-    public Object getGUI(PlayerEntity player) {
-        return null;
     }
 
     /**

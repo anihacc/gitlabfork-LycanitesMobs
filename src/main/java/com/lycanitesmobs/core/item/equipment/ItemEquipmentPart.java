@@ -269,8 +269,9 @@ public class ItemEquipmentPart extends ItemBase {
 
 	/** Returns the texture to use for the provided ItemStack. **/
 	public ResourceLocation getTexture(ItemStack itemStack, String suffix) {
-		if(AssetManager.getTexture(this.itemName + suffix) == null)
-			AssetManager.addTexture(this.itemName + suffix, this.modInfo, "textures/equipment/" + this.itemName.toLowerCase() + suffix + ".png");
-		return AssetManager.getTexture(this.itemName + suffix);
+		String textureName = this.itemName.toLowerCase().replace("equipmentpart_", "") + suffix;
+		if(AssetManager.getTexture(textureName) == null)
+			AssetManager.addTexture(textureName, this.modInfo, "textures/equipment/" + textureName + ".png");
+		return AssetManager.getTexture(textureName);
 	}
 }

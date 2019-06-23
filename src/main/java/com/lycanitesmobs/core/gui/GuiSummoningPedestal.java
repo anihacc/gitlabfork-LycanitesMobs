@@ -11,12 +11,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
-public class GuiSummoningPedestal extends GuiBaseContainer {
+public class GuiSummoningPedestal extends GuiBaseContainer<ContainerSummoningPedestal> {
     public PlayerEntity player;
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
@@ -34,16 +35,16 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
     public int windowY;
 
     public static int TAB_BUTTON_ID = 55555;
-    public int editSet;
 
-    // ==================================================
-    //                    Constructor
-    // ==================================================
-    public GuiSummoningPedestal(PlayerEntity player, TileEntitySummoningPedestal summoningPedestal) {
-        super(new ContainerSummoningPedestal(summoningPedestal, player.inventory), player.inventory, new TranslationTextComponent("gui.summoningpedestal"));
-        this.summoningPedestal = summoningPedestal;
-        this.player = player;
-        this.playerExt = ExtendedPlayer.getForPlayer(player);
+
+    /**
+     * Constructor
+     */
+    public GuiSummoningPedestal(ContainerSummoningPedestal container, PlayerInventory playerInventory, ITextComponent name) {
+        super(container, playerInventory, name);
+        this.summoningPedestal = container.summoningPedestal;
+        this.player = playerInventory.player;
+        this.playerExt = ExtendedPlayer.getForPlayer(this.player);
         this.summonSet = this.summoningPedestal.summonSet;
     }
 
@@ -56,10 +57,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         return false;
     }
 
-
-    // ==================================================
-    //                       Init
-    // ==================================================
     @Override
     public void init() {
         super.init();
@@ -121,10 +118,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
     }
 
-
-    // ==================================================
-    //                    Draw Screen
-    // ==================================================
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
@@ -136,10 +129,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
             this.list.render(mouseX, mouseY, partialTicks);
     }
 
-
-    // ==================================================
-    //                    Foreground
-    // ==================================================
     protected void drawGuiContainerForegroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getInstance().getTextureManager().bindTexture(this.getTexture());
@@ -166,10 +155,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         return LanguageManager.translate("stat.portal.name");
     }
 
-
-    // ==================================================
-    //                    Background
-    // ==================================================
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -248,10 +233,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
     }
 
-
-    // ==================================================
-    //                     Controls
-    // ==================================================
     public void updateControls() {
         for(Object buttonObj : this.buttons) {
             if(buttonObj instanceof ButtonBase) {
@@ -291,10 +272,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
             button.setMessage(LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
     }
 
-
-    // ==================================================
-    //                      Actions
-    // ==================================================
     public void sendCommandsToServer() {
         this.summoningPedestal.sendSummonSetToServer(this.summonSet);
     }
@@ -326,10 +303,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         super.actionPerformed(buttonId);
     }
 
-
-    // ==================================================
-    //                     Key Press
-    // ==================================================
     /*@Override
     protected void keyTyped(char par1, int par2) {
         if(par2 == 1 || par2 == this.mc.gameSettings.keyBindInventory.getKeyCode())
@@ -337,10 +310,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         super.keyTyped(par1, par2);
     }*/
 
-
-    // ==================================================
-    //                  Minion Selection
-    // ==================================================
     public void selectMinion(String minionName) {
         if(this.summonSet == null) {
             if(this.summoningPedestal.summonSet == null) {
@@ -359,10 +328,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         return this.summonSet.summonType;
     }
 
-
-    // ==================================================
-    //                     Has Pets
-    // ==================================================
     public boolean hasPets() {
         return this.playerExt.getBeastiary().getSummonableList().size() > 0;
     }
@@ -371,10 +336,6 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         return this.hasPets() && this.summonSet != null && !this.summonSet.summonType.equals("");
     }
 
-
-    // ==================================================
-    //                     Get Texture
-    // ==================================================
     protected ResourceLocation getTexture() {
         return AssetManager.getTexture("GUIMinionLg");
     }

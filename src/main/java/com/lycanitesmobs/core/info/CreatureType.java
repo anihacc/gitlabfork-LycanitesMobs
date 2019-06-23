@@ -144,7 +144,7 @@ public class CreatureType {
 		spawnEggProperties.group(ItemManager.getInstance().creatures);
 
 		this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
-		ObjectManager.addItem(spawnEggName + this.getName(), this.spawnEgg);
+		ObjectManager.addItem(spawnEggName, this.spawnEgg);
 
 		// Soulstone:
 		// TODO Create soulstones for each group type (so long as there are tameable creatures).

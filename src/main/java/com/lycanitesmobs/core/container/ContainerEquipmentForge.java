@@ -1,24 +1,40 @@
 package com.lycanitesmobs.core.container;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class ContainerEquipmentForge extends ContainerBase {
+	public static final ContainerType<ContainerEquipmentForge> TYPE = (ContainerType<ContainerEquipmentForge>)IForgeContainerType.create(ContainerCreature::new).setRegistryName(LycanitesMobs.MODID, "equipment_forge");
 	public TileEntityEquipmentForge equipmentForge;
 
 	/**
-	 * Constructor
+	 * Client Constructor
+	 * @param windowId The window id for the gui screen to use.
+	 * @param playerInventory The accessing player's inventory.
+	 * @param extraData A packet sent from the server to create the Container from.
+	 */
+	public ContainerEquipmentForge(int windowId, PlayerInventory playerInventory, PacketBuffer extraData) {
+		this(windowId, playerInventory, (TileEntityEquipmentForge)playerInventory.player.getEntityWorld().getTileEntity(BlockPos.fromLong(extraData.readLong())));
+	}
+
+	/**
+	 * Main Constructor
 	 * @param equipmentForge The Equipment Forge Tile Entity.
 	 * @param playerInventory The Inventory of the accessing player.
 	 */
-	public ContainerEquipmentForge(TileEntityEquipmentForge equipmentForge, PlayerInventory playerInventory) {
-		super(0);
+	public ContainerEquipmentForge(int windowId, PlayerInventory playerInventory, TileEntityEquipmentForge equipmentForge) {
+		super(TYPE, windowId);
 		this.equipmentForge = equipmentForge;
 
 		// Player Inventory

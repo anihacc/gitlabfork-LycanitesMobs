@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupElectric;
 import com.lycanitesmobs.api.IGroupPredator;
@@ -72,16 +73,6 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
         }
         this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 3);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
 
 
     // ==================================================

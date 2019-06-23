@@ -68,16 +68,6 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
 		this.targetSelector.addGoal(7, new FuseTargetingGoal(this));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 1.5D);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
 	
 	
     // ==================================================

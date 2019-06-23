@@ -195,20 +195,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 
 
 	// ========================================
-	//                Open GUI
-	// ========================================
-	public Object getGUI(PlayerEntity player) {
-		if(player.world.isRemote) {
-			return new GuiEquipmentForge(this, player.inventory);
-		}
-		if(player instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity)player).connection.sendPacket(this.getUpdatePacket());
-		}
-		return new ContainerEquipmentForge(this, player.inventory);
-	}
-
-
-	// ========================================
 	//              Equipment Forge
 	// ========================================
 	/**

@@ -66,16 +66,6 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
         this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
         this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
     }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSizeScale(double scale) {
-        if(this.isRareSubspecies()) {
-            super.setSizeScale(scale * 1.5D);
-            return;
-        }
-        super.setSizeScale(scale);
-    }
 	
 	
     // ==================================================

@@ -60,8 +60,6 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		modelItemBase.clearAnimationFrames();
 
 		GlStateManager.popMatrix();
-
-		super.renderByItem(itemStack);
 	}
 
 	@Override

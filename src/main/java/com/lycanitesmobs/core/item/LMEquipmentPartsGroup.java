@@ -8,31 +8,37 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class LMEquipmentPartsGroup extends ItemGroup {
+	private ItemStack iconStack = ItemStack.EMPTY;
+	private boolean fallbackIcon = false;
 
-	// ========== Constructor ==========
 	public LMEquipmentPartsGroup(int tabID, String modID) {
 		super(tabID, modID);
 	}
-	
-	// ========== Tab Icon ==========
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack createIcon() {
-		if(ObjectManager.getItem("darklingskull") != null)
-			return new ItemStack(ObjectManager.getItem("darklingskull"));
-		else if(ObjectManager.getItem("grueclaw") != null)
-			return new ItemStack(ObjectManager.getItem("grueclaw"));
-		else if(ObjectManager.getItem("xaphanspine") != null)
-			return new ItemStack(ObjectManager.getItem("xaphanspine"));
-		else if(ObjectManager.getItem("geonachfist") != null)
-			return new ItemStack(ObjectManager.getItem("geonachfist"));
-		else if(ObjectManager.getItem("HellfireCharge") != null)
-			return new ItemStack(ObjectManager.getItem("HellfireCharge"));
-		else if(ObjectManager.getItem("JoustMeat") != null)
-			return new ItemStack(ObjectManager.getItem("JoustMeat"));
-		else if(ObjectManager.getItem("PoisonGland") != null)
-			return new ItemStack(ObjectManager.getItem("PoisonGland"));
-		else
-			return new ItemStack(Items.BONE);
+		this.fallbackIcon = false;
+		if(ObjectManager.getItem("equipmentpart_darklingskull") != null)
+			return new ItemStack(ObjectManager.getItem("equipmentpart_darklingskull"));
+		if(ObjectManager.getItem("equipmentpart_grueclaw") != null)
+			return new ItemStack(ObjectManager.getItem("equipmentpart_grueclaw"));
+		if(ObjectManager.getItem("equipmentpart_xaphanspine") != null)
+			return new ItemStack(ObjectManager.getItem("equipmentpart_xaphanspine"));
+		if(ObjectManager.getItem("equipmentpart_geonachfist") != null)
+			return new ItemStack(ObjectManager.getItem("equipmentpart_geonachfist"));
+
+		this.fallbackIcon = true;
+		if(ObjectManager.getItem("geistliver") != null)
+			return new ItemStack(ObjectManager.getItem("geistliver"));
+		return new ItemStack(Items.BONE);
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	public ItemStack getIcon() {
+		if (this.iconStack.isEmpty() || this.fallbackIcon) {
+			this.iconStack = this.createIcon();
+		}
+		return this.iconStack;
 	}
 }
