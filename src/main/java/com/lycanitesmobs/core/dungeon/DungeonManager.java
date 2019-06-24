@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
@@ -141,12 +141,12 @@ public class DungeonManager extends JSONLoader {
 
 	/** Loads all JSON Dungeons. **/
 	public Map<String, JsonObject> loadDungeonsFromJSON(String type) {
-		LycanitesMobs.logDebug("Dungeon", "Loading JSON Dungeons!");
+		LycanitesMobs.logDebug("Dungeon", "Loading JSON Dungeons " + type + "!");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
 
 		// Load Defaults:
-		Path path = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "dungeons/" + type, FileLoader.PathType.SERVER);
+		Path path = FileLoader.SERVER.getPath("dungeons/" + type);
 		Map<String, JsonObject> defaultJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultJSONs, "name", null);
 

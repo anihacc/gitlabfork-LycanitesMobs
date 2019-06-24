@@ -1,8 +1,13 @@
 package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.*;
-import com.lycanitesmobs.*;
+import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.world.World;
@@ -54,56 +59,27 @@ public class MobEventManager extends JSONLoader {
 	}
 
 
-	/** Loads all JSON Mob Events. **/
+	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
 	public void loadAllFromJSON(ModInfo groupInfo) {
-		LycanitesMobs.logDebug("MobEvents", "Loading JSON Mob Events!");
-		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-		Map<String, JsonObject> mobEventJSONs = new HashMap<>();
-
-		// Load Default Mob Events:
-		Path path = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, "mobevents", FileLoader.PathType.COMMON);
-		Map<String, JsonObject> defaultMobEventJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, defaultMobEventJSONs, "name", "event");
-
-		// Load Mob Events:
-		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
-		File customDir = new File(configPath + "mobevents");
-		customDir.mkdirs();
-		path = customDir.toPath();
-		Map<String, JsonObject> customMobEventJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, customMobEventJSONs, "name", "event");
-
-
-		// Write Defaults:
-		this.writeDefaultJSONObjects(gson, defaultMobEventJSONs, customMobEventJSONs, mobEventJSONs, true, "mobevents");
-
-
-		// Create Mob Events:
-		LycanitesMobs.logDebug("MobEvents", "Loading " + mobEventJSONs.size() + " Mob Events...");
-		for(String spawnerJSONName : mobEventJSONs.keySet()) {
-			try {
-				JsonObject spawnerJSON = mobEventJSONs.get(spawnerJSONName);
-				LycanitesMobs.logDebug("MobEvents", "Loading Mob Event JSON: " + spawnerJSON);
-				MobEvent mobEvent = new MobEvent();
-				mobEvent.loadFromJSON(spawnerJSON);
-				this.addMobEvent(mobEvent);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Mob Event: " + spawnerJSONName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Mob Event: " + spawnerJSONName);
-				e.printStackTrace();
-			}
+		try {
+			this.loadAllJson(groupInfo, "Mob Event", "mobevents", "name", true, "event", FileLoader.COMMON, StreamLoader.COMMON);
+			LycanitesMobs.logDebug("MobEvents", "Complete! " + this.mobEvents.size() + " JSON Mob Events Loaded In Total.");
 		}
-		LycanitesMobs.logDebug("MobEvents", "Complete! " + this.mobEvents.size() + " JSON Mob Events Loaded In Total.");
-
+		catch(Exception e) {}
 
 		// Load Scheduled Events:
+		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 		this.mobEventSchedules.clear();
-		Path defaultSchedulePath = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, "mobeventschedule.json", FileLoader.PathType.SERVER);
-		JsonObject defaultScheduleJson = this.loadJsonObject(gson, defaultSchedulePath);
+
+		JsonObject defaultScheduleJson;
+		if(FileLoader.SERVER.ready) {
+			Path defaultSchedulePath = FileLoader.SERVER.getPath("mobeventschedule.json");
+			defaultScheduleJson = this.loadJsonObject(gson, defaultSchedulePath);
+		}
+		else {
+			defaultScheduleJson = this.loadJsonObject(gson, StreamLoader.SERVER.getStream("mobeventschedule.json"));
+		}
 
 		File customScheduleFile = new File(configPath + "mobeventschedule.json");
 		JsonObject customScheduleJson = null;
@@ -126,10 +102,12 @@ public class MobEventManager extends JSONLoader {
 		}
 	}
 
-
 	@Override
 	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-
+		LycanitesMobs.logDebug("MobEvents", "Loading Mob Event JSON: " + json);
+		MobEvent mobEvent = new MobEvent();
+		mobEvent.loadFromJSON(json);
+		this.addMobEvent(mobEvent);
 	}
 
 

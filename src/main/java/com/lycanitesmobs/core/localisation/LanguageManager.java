@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.localisation;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.FileLoader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -89,11 +89,11 @@ public class LanguageManager {
 			languageList.add(mainLanguage);
 		}
 
-		// Load Languages Into Map:
+		/*/ Load Languages Into Map:
 		int laodedLangFiles = 0;
 		for (String language : languageList) {
 			String languageDir = String.format("lang/%s/", language);
-			Path languageDirPath = FileLoader.getPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.modid, languageDir, FileLoader.PathType.CLIENT);
+			Path languageDirPath = FileLoader.CLIENT.getPath(languageDir);
 			try {
 				// Iterate Language Directories:
 				Iterator<Path> languageDirIter = Files.walk(languageDirPath).iterator();
@@ -112,6 +112,6 @@ public class LanguageManager {
 			catch (Exception var9) {}
 		}
 
-		LycanitesMobs.logDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));
+		LycanitesMobs.logDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));*/
 	}
 }

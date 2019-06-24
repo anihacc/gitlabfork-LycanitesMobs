@@ -8,6 +8,8 @@ import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
+import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -18,6 +20,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -245,7 +249,7 @@ public class ObjectManager {
     // ========== Blocks ==========
 	@SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
-        for(Block block : blocks.values()) {
+		for(Block block : blocks.values()) {
 			LycanitesMobs.logDebug("Item", "Registering block: " + block.getRegistryName());
             if(block.getRegistryName() == null) {
                 LycanitesMobs.logWarning("", "Block: " + block + " has no Registry Name!");
@@ -257,7 +261,7 @@ public class ObjectManager {
     // ========== Items ==========
 	@SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
-	    for(Item item : items.values()) {
+		for(Item item : items.values()) {
 	    	LycanitesMobs.logDebug("Item", "Registering item: " + item.getRegistryName());
 	        if(item.getRegistryName() == null) {
 	            LycanitesMobs.logWarning("", "Item: " + item + " has no Registry Name!");
@@ -280,7 +284,7 @@ public class ObjectManager {
     // ========== Potions ==========
 	@SubscribeEvent
     public void registerEffects(RegistryEvent.Register<Effect> event) {
-        for(EffectBase effect : effects.values()) {
+		for(EffectBase effect : effects.values()) {
         	event.getRegistry().register(effect);
 		}
     }
@@ -321,5 +325,17 @@ public class ObjectManager {
 		event.getRegistry().register(ContainerCreature.TYPE);
 		event.getRegistry().register(ContainerSummoningPedestal.TYPE);
 		event.getRegistry().register(ContainerEquipmentForge.TYPE);
+	}
+
+	// ========== Tile Entities ==========
+	@SubscribeEvent
+	public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
+		TileEntityType<TileEntitySummoningPedestal> summoningPedestalType = TileEntityType.Builder.create(TileEntitySummoningPedestal::new, getBlock("summoningpedestal")).build(null);
+		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
+		event.getRegistry().register(summoningPedestalType);
+
+		TileEntityType<TileEntitySummoningPedestal> equipmentForgeType = TileEntityType.Builder.create(TileEntitySummoningPedestal::new, getBlock("equipmentforge_lesser"), getBlock("equipmentforge_greater"), getBlock("equipmentforge_master")).build(null);
+		equipmentForgeType.setRegistryName(LycanitesMobs.MODID, "equipmentforge");
+		event.getRegistry().register(equipmentForgeType);
 	}
 }

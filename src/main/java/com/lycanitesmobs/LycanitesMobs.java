@@ -1,5 +1,7 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.FileLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
@@ -74,7 +76,7 @@ public class LycanitesMobs {
 	public static String texturePath = "mods/lycanitesmobs/";
 
 	// Potion Effects:
-	public Effects effects;
+	public static Effects EFFECTS;
 
 	// Universal Bucket:
 	static {
@@ -86,6 +88,8 @@ public class LycanitesMobs {
 	 */
 	public LycanitesMobs() {
 		modInfo = new ModInfo(this, name, 1000);
+		FileLoader.initAll(modInfo.modid);
+		StreamLoader.initAll(modInfo.modid);
 
 		// Config:
 		CoreConfig.buildSpec();
@@ -111,18 +115,20 @@ public class LycanitesMobs {
 		// Network:
 		packetHandler.register();
 
+		// Load Content:
+		this.loadContent();
+	}
+
+	// Content Loading:
+	public void loadContent() {
 		// Blocks and Items:
 		ItemManager.getInstance().loadItems();
 		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 		ObjectLists.createCustomItems();
 		ObjectLists.createLists();
 
-		// Tile Entities:
-		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
-		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
-
 		// Potion Effects:
-		this.effects = new Effects();
+		EFFECTS = new Effects();
 
 		// Elements:
 		ElementManager.getInstance().loadAllFromJSON(modInfo);
@@ -143,7 +149,7 @@ public class LycanitesMobs {
 		MobEventManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Dungeons:
-		DungeonManager.getInstance().loadAllFromJSON();
+		//DungeonManager.getInstance().loadAllFromJSON();
 
 		// Treat Lists:
 		ItemHalloweenTreat.createObjectLists();
@@ -162,8 +168,8 @@ public class LycanitesMobs {
 		// GUI:
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
-		// Change Health Limit:
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
+		// Change Health Limit: TODO Make work in production!
+		//LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
 		// Mod Support:
 		DLDungeons.init();
@@ -184,7 +190,6 @@ public class LycanitesMobs {
 	}
 
 	public void loadConfigs() {
-		ConfigGeneral.INSTANCE.clearOldConfigs("2.1.0.0", version);
 		ItemManager.getInstance().loadConfig();
 		CreatureManager.getInstance().loadConfig();
 		MobEventManager.getInstance().loadConfig();
@@ -235,5 +240,14 @@ public class LycanitesMobs {
 		if("".equals(key) || (!configReady && earlyDebug) || ConfigDebug.INSTANCE.isEnabled(key.toLowerCase())) {
 			LOGGER.warn("[LycanitesMobs] [WARNING] [" + key + "] " + message);
 		}
+	}
+
+
+	/**
+	 * Prints an error message into the console.
+	 * @param message The error message to print.
+	 */
+	public static void logError(String message) {
+		LOGGER.error("[LycanitesMobs] " + message);
 	}
 }

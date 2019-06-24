@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.info.projectile;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorProjectile;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.entity.projectile.*;
@@ -71,13 +72,8 @@ public class ProjectileManager extends JSONLoader {
 
 	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
 	public void loadAllFromJSON(ModInfo groupInfo) {
-		try {
-			this.loadAllJson(groupInfo, "Projectile", "projectiles", "name", true, FileLoader.PathType.COMMON);
-			LycanitesMobs.logDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
-		}
-		catch(Exception e) {
-			LycanitesMobs.logWarning("", "No Projectiles loaded for: " + groupInfo.name);
-		}
+		this.loadAllJson(groupInfo, "Projectile", "projectiles", "name", true, null, FileLoader.COMMON, StreamLoader.COMMON);
+		LycanitesMobs.logDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
 	}
 
 

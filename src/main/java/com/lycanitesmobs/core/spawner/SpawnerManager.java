@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.google.gson.*;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 
@@ -31,69 +32,32 @@ public class SpawnerManager extends JSONLoader {
 
 	/** Loads all JSON Spawners. **/
 	public void loadAllFromJSON() {
-		LycanitesMobs.logDebug("JSONSpawner", "Loading JSON Spawners!");
-		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
+		ModInfo modInfo = LycanitesMobs.modInfo;
 
-		// Load Default Spawners:
-		Path path = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "spawners", FileLoader.PathType.SERVER);
-		Map<String, JsonObject> defaultSpawnerJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, defaultSpawnerJSONs, "name", "spawner");
+		// Spawners:
+		this.loadAllJson(modInfo, "Spawner", "spawners", "name", true, "spawner", FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("Spawner", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
 
-		// Load Default Mob Event Spawners:
-		path = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "mobevents", FileLoader.PathType.SERVER);
-		Map<String, JsonObject> defaultMobEventsJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, defaultMobEventsJSONs, "name", "spawner");
-
-		// Custom:
-		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
-
-		// Load Custom Spawners:
-		File customSpawnersDir = new File(configPath + "spawners");
-		customSpawnersDir.mkdirs();
-		path = customSpawnersDir.toPath();
-		Map<String, JsonObject> customSpawnerJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, customSpawnerJSONs, "name", "spawner");
-
-		File customMobEventsDir = new File(configPath + "mobevents");
-		path = customMobEventsDir.toPath();
-		Map<String, JsonObject> customMobEventsJSONs = new HashMap<>();
-		this.loadJsonObjects(gson, path, customMobEventsJSONs, "name", "spawner");
-
-
-		// Write Defaults:
-		this.writeDefaultJSONObjects(gson, defaultSpawnerJSONs, customSpawnerJSONs, spawnerJSONs, true, "spawners");
-		this.writeDefaultJSONObjects(gson, defaultMobEventsJSONs, customMobEventsJSONs, spawnerJSONs, true, "mobevents");
-
-
-		// Create Spawners:
-		LycanitesMobs.logDebug("", "Loading " + spawnerJSONs.size() + " JSON Spawners...");
-		for(String spawnerJSONName : spawnerJSONs.keySet()) {
-			try {
-				JsonObject spawnerJSON = spawnerJSONs.get(spawnerJSONName);
-				LycanitesMobs.logDebug("JSONSpawner", "Loading Spawner JSON: " + spawnerJSON);
-				Spawner spawner = new Spawner();
-				spawner.loadFromJSON(spawnerJSON);
-				this.addSpawner(spawner);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Spawner: " + spawnerJSONName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Spawner: " + spawnerJSONName);
-				e.printStackTrace();
-			}
-		}
-		LycanitesMobs.logDebug("", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
-
+		// Mob Event Spawners:
+		this.loadAllJson(modInfo, "Spawner", "mobevents", "name", true, "spawner", FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("Spawner", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
 
 		// Load Global Spawn Conditions:
+		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 		this.globalSpawnConditions.clear();
-		Path defaultGlobalPath = FileLoader.getPath(this.getClass(), LycanitesMobs.modInfo.modid, "globalspawner.json", FileLoader.PathType.SERVER);
-		JsonObject defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
+
+		JsonObject defaultGlobalJson;
+		if(FileLoader.SERVER.ready) {
+			Path defaultGlobalPath = FileLoader.SERVER.getPath("globalspawner.json");
+			LycanitesMobs.logDebug("", "Global Spawner JSON Path:" + defaultGlobalPath);
+			defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
+		}
+		else {
+			defaultGlobalJson = this.loadJsonObject(gson, StreamLoader.SERVER.getStream("globalspawner.json"));
+		}
 		if(defaultGlobalJson == null) {
-			LycanitesMobs.logWarning("", "Could not find Global Spawning JSON file at path: " + defaultGlobalPath);
+			LycanitesMobs.logWarning("", "Could not find Global Spawning JSON.");
 		}
 
 		File customGlobalFile = new File(configPath + "globalspawner.json");
@@ -120,7 +84,10 @@ public class SpawnerManager extends JSONLoader {
 
 	@Override
 	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-
+		LycanitesMobs.logDebug("JSONSpawner", "Loading Spawner JSON: " + json);
+		Spawner spawner = new Spawner();
+		spawner.loadFromJSON(json);
+		this.addSpawner(spawner);
 	}
 
 

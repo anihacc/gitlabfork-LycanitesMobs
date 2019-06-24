@@ -4,28 +4,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.util.JSONUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import javax.annotation.Nullable;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public abstract class JSONLoader {
 	public File getMinecraftDir() {
 		return new File(".");
 	}
-	
+
 	/**
 	 * Loads all JSON files into this manager. Should only be done on pre-init.
 	 * @param groupInfo The group that this manager should load from.
@@ -33,25 +31,31 @@ public abstract class JSONLoader {
 	 * @param dataPath The path to load json files from relative to the group data folder and the config folder.
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
-	 * @param pathType Whether to load from assets (resource packs, client side), data (data packs, server side) or common (both but not accessible to packs).
+	 * @param fileLoader The file loader to get paths from.
+	 * @param streamLoader The stream loader to get jar files from.
 	 */
-	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom, FileLoader.PathType pathType) {
+	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom, @Nullable String jsonType, FileLoader fileLoader, StreamLoader streamLoader) {
 		LycanitesMobs.logDebug(name, "Loading JSON " + name + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
 
 		// Load Default:
-		Path path = FileLoader.getPath(groupInfo.getClass(), groupInfo.modid, dataPath, pathType);
 		Map<String, JsonObject> defaultJsons = new HashMap<>();
-		this.loadJsonObjects(gson, path, defaultJsons, mapKey, null);
+		if(fileLoader.ready) {
+			Path path = fileLoader.getPath(dataPath);
+			this.loadJsonObjects(gson, path, defaultJsons, mapKey, jsonType);
+		}
+		else {
+			this.loadJsonObjects(gson, streamLoader.getStreams(dataPath), defaultJsons, mapKey, jsonType);
+		}
 
 		// Load Custom:
 		String configPath = this.getMinecraftDir() + "/config/" + LycanitesMobs.MODID + "/";
 		File customDir = new File(configPath + dataPath);
 		customDir.mkdirs();
-		path = customDir.toPath();
+		Path customPath = customDir.toPath();
 		Map<String, JsonObject> customJsons = new HashMap<>();
-		this.loadJsonObjects(gson, path, customJsons, mapKey, null);
+		this.loadJsonObjects(gson, customPath, customJsons, mapKey, jsonType);
 
 
 		// Write Defaults:
@@ -61,19 +65,22 @@ public abstract class JSONLoader {
 		// Parse Json:
 		LycanitesMobs.logDebug(name, "Loading " + jsons.size() + " " + name + "...");
 		for(String jsonName : jsons.keySet()) {
+			JsonObject json;
 			try {
-				JsonObject json = jsons.get(jsonName);
+				json = jsons.get(jsonName);
 				LycanitesMobs.logDebug(name, "Loading " + name + " JSON: " + json);
-				this.parseJson(groupInfo, name, json);
+				if(json.isJsonNull())
+					throw new RuntimeException("Tried to load JSON data from a null json object.");
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON " + name + ": " + jsonName);
-				e.printStackTrace();
+				LycanitesMobs.logError("Parsing error loading JSON " + name + ": " + jsonName);
+				throw new RuntimeException(e);
 			}
 			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON " + name + ": " + jsonName);
-				e.printStackTrace();
+				LycanitesMobs.logError("There was a problem loading JSON " + name + ": " + jsonName);
+				throw new RuntimeException(e);
 			}
+			this.parseJson(groupInfo, name, json);
 		}
 	}
 
@@ -85,6 +92,61 @@ public abstract class JSONLoader {
 	 * @param json The Json Object to read.
 	 */
 	public abstract void parseJson(ModInfo groupInfo, String name, JsonObject json);
+
+
+	/**
+	 * Loads JSON objects from the specified input stream with additional options.
+	 * @param gson The JSON parser.
+	 * @param inputStreams The stream to load from.
+	 * @param jsonObjectMap The map to add the loaded JSON to.
+	 * @param mapKey The JSON value to use as the map key.
+	 * @param jsonType If set, a "type" value is checked in the JSON and must match.
+	 */
+	public void loadJsonObjects(Gson gson, List<InputStream> inputStreams, Map<String, JsonObject> jsonObjectMap, String mapKey, String jsonType) {
+		for(InputStream inputStream : inputStreams) {
+			JsonObject json = this.loadJsonObject(gson, inputStream);
+			boolean validJSON = true;
+			if (jsonType != null) {
+				if (!json.has("type")) {
+					validJSON = false;
+				}
+				else {
+					validJSON = jsonType.equalsIgnoreCase(json.get("type").getAsString());
+				}
+			}
+			if (validJSON) {
+				jsonObjectMap.put(json.get(mapKey).getAsString(), json);
+			}
+		}
+	}
+
+	/**
+	 * Loads a JSON object from the specified input stream with additional options.
+	 * @param gson The JSON parser.
+	 * @param inputStream The input stream to load from.
+	 * @return An instance of the json object.
+	 */
+	public JsonObject loadJsonObject(Gson gson, InputStream inputStream) {
+		try {
+			JsonObject json;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+			try {
+				json = JSONUtils.fromJson(gson, reader, JsonObject.class);
+			}
+			finally {
+				IOUtils.closeQuietly(reader);
+			}
+			if(json.isJsonNull()) {
+				throw new RuntimeException("Unable to load JSON from Input Stream: " + inputStream);
+			}
+			inputStream.close();
+			return json;
+		}
+		catch(Exception e) {
+			LycanitesMobs.logWarning("", "Unable to read file from path.\n" + e.toString());
+		}
+		return null;
+	}
 
 
 	/**
@@ -145,6 +207,43 @@ public abstract class JSONLoader {
 		}
 	}
 
+	/**
+	 * Loads a JSON object from the specified path with additional options.
+	 * @param gson The JSON parser.
+	 * @param path The path to load from.
+	 * @return An instance of the json object.
+	 */
+	public JsonObject loadJsonObject(Gson gson, Path path) {
+		if(path == null) {
+			return null;
+		}
+		try {
+			BufferedReader reader = null;
+			try {
+				try {
+					reader = Files.newBufferedReader(path);
+					JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
+					return json;
+				}
+				catch (JsonParseException e) {
+					LycanitesMobs.logWarning("", "Parsing error loading JSON from path: " + path + "\n" + e.toString());
+					e.printStackTrace();
+				}
+				catch (Exception e) {
+					LycanitesMobs.logWarning("", "There was a problem loading JSON from path: " + path + "\n" + e.toString());
+					e.printStackTrace();
+				}
+			}
+			finally {
+				IOUtils.closeQuietly(reader);
+			}
+		}
+		catch(Exception e) {
+			LycanitesMobs.logWarning("", "Unable to read file from path.\n" + e.toString());
+		}
+		return null;
+	}
+
 
 	/** Cycles through both maps of JSON Objects, a default and a custom map and determines if the defaults should overwrite the custom JSON. Puts the chosen JSON into the mixed map. **/
 	public void writeDefaultJSONObjects(Gson gson, Map<String, JsonObject> defaultJSONs, Map<String, JsonObject> customJSONs, Map<String, JsonObject> mixedJSONs, boolean custom, String dataPath) {
@@ -193,45 +292,6 @@ public abstract class JSONLoader {
 		}
 	}
 
-	/**
-	 * Loads a JSON object from the specified path with additional options.
-	 * @param gson The JSON parser.
-	 * @param path The path to load from.
-	 * @return An instance of the json object.
-	 */
-	public JsonObject loadJsonObject(Gson gson, Path path) {
-		if(path == null) {
-			return null;
-		}
-		try {
-			Path relativePath = path.relativize(path);
-			BufferedReader reader = null;
-			try {
-				try {
-					reader = Files.newBufferedReader(path);
-					JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
-					return json;
-				}
-				catch (JsonParseException e) {
-					LycanitesMobs.logWarning("", "Parsing error loading JSON " + relativePath + "\n" + e.toString());
-					e.printStackTrace();
-				}
-				catch (Exception e) {
-					LycanitesMobs.logWarning("", "There was a problem loading JSON " + relativePath + "\n" + e.toString());
-					e.printStackTrace();
-				}
-			}
-			finally {
-				IOUtils.closeQuietly(reader);
-			}
-		}
-		catch(Exception e) {
-			LycanitesMobs.logWarning("", "Unable to read file from path.\n" + e.toString());
-			//e.printStackTrace();
-		}
-		return null;
-	}
-
 
 	/** Compares two json objects a default and a custom and determines if the defaults should overwrite the custom JSON. Returns the chosen JSON. **/
 	public JsonObject writeDefaultJSONObject(Gson gson, String jsonName, JsonObject defaultJSON, JsonObject customJSON) {
@@ -258,11 +318,11 @@ public abstract class JSONLoader {
 		}
 		catch (JsonParseException e) {
 			LycanitesMobs.logWarning("", "Parsing error loading JSON: " + jsonName);
-			e.printStackTrace();
+			throw new RuntimeException("Error Parsing JSON: " + jsonName + "\n" + e);
 		}
 		catch(Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem loading JSON: " + jsonName);
-			e.printStackTrace();
+			throw new RuntimeException("Error Loading JSON: " + jsonName + "\n" + e);
 		}
 		return null;
 	}

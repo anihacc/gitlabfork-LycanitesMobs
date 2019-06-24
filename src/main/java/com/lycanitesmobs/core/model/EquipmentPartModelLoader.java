@@ -26,8 +26,8 @@ public class EquipmentPartModelLoader implements ICustomModelLoader {
 	}
 
 	@Override
-	public IUnbakedModel loadModel(ResourceLocation modelLocation) throws Exception {
+	public IUnbakedModel loadModel(ResourceLocation modelLocation) {
 		LycanitesMobs.logDebug("", "Equipment Part Loader: " + modelLocation);
-		return null; // TODO Unbaked models? No more reflection hack?
+		return null;
 	}
 }

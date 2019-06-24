@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.FileLoader;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.item.Item;
@@ -38,13 +39,8 @@ public class EquipmentPartManager extends JSONLoader {
 		if(!this.loadedGroups.contains(groupInfo)) {
 			this.loadedGroups.add(groupInfo);
 		}
-		try {
-			this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false, FileLoader.PathType.COMMON);
-			LycanitesMobs.logDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
-		}
-		catch(Exception e) {
-			LycanitesMobs.logWarning("", "No Equipment loaded for: " + groupInfo.name);
-		}
+		this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false, null, FileLoader.COMMON, StreamLoader.COMMON);
+		LycanitesMobs.logDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
 	}
 
 
