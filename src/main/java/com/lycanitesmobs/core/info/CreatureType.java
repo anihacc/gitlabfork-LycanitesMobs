@@ -30,13 +30,13 @@ public class CreatureType {
 	public List<CreatureInfo> tameableCreatures = new ArrayList<>();
 
 	/** The treat item this type uses. **/
-	protected Item treat;
+	public Item treat;
 
 	/** The soulstone item this type uses. **/
-	protected ItemSoulstone soulstone;
+	public ItemSoulstone soulstone;
 
 	/** The spawn egg item this type uses. **/
-	protected Item spawnEgg;
+	public Item spawnEgg;
 
 
 	/**

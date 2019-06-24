@@ -7,31 +7,29 @@ import com.lycanitesmobs.core.gui.GuiCreature;
 import com.lycanitesmobs.core.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.gui.GuiOverlay;
 import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.info.Subspecies;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.core.info.*;
+import com.lycanitesmobs.core.item.ItemColorCustomSpawnEgg;
+import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageLoader;
 import com.lycanitesmobs.core.localisation.LanguageManager;
-import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
-import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
-import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
-import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
-import com.lycanitesmobs.core.model.projectile.ModelLightBall;
 import com.lycanitesmobs.core.renderer.RenderRegister;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IRegistryDelegate;
 
 public class ClientManager {
 	protected static ClientManager INSTANCE;
@@ -54,6 +52,16 @@ public class ClientManager {
 			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));
 		}
 		return this.fontRenderer;
+	}
+
+	/**
+	 * Registers Colored Items
+	 */
+	@SubscribeEvent
+	public void registerItemColors(ColorHandlerEvent.Item event) {
+		for(CreatureType creatureType : CreatureManager.getInstance().creatureTypes.values()) {
+			event.getItemColors().register(new ItemColorCustomSpawnEgg(), creatureType.spawnEgg);
+		}
 	}
 
 	/**
@@ -148,7 +156,15 @@ public class ClientManager {
 	 * Returns the client player entity.
 	 * @return Client player entity.
 	 */
-    public ClientPlayerEntity getClientPlayer() {
+    public PlayerEntity getClientPlayer() {
 		return Minecraft.getInstance().player;
+	}
+
+	/**
+	 * Displays a Screen GUI on the client.
+	 */
+	public void displayGuiScreen(String screenName, PlayerEntity player) {
+		if("beastiary".equals(screenName))
+			Minecraft.getInstance().displayGuiScreen(new GuiBeastiarySummoning(player));
 	}
 }

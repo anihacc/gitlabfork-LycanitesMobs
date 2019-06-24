@@ -6,7 +6,6 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -163,23 +162,5 @@ public class ItemBase extends Item {
 
     public void playSound(World world, BlockPos pos, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         world.playSound(null, pos, sound, category, volume, pitch);
-    }
-    
-	
-	// ==================================================
-	//                     Visuals
-	// ==================================================
-	public ModelResourceLocation getModelResourceLocation() {
-		return null;
-	}
-
-    // ========== Use Colors ==========
-    public boolean useItemColors() {
-        return false;
-    }
-
-    // ========== Get Color from ItemStack ==========
-    public int getColor(ItemStack itemStack, int tintIndex) {
-        return 16777215;
     }
 }

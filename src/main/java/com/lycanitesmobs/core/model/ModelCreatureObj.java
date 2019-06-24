@@ -128,7 +128,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
             InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class);
+				JsonArray jsonArray = JSONUtils.fromJson(gson, reader, JsonArray.class, false);
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
@@ -157,7 +157,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class);
+				JsonObject json = JSONUtils.fromJson(gson, reader, JsonObject.class, false);
 				this.animation = new ModelAnimation();
 				this.animation.loadFromJson(json);
 			}

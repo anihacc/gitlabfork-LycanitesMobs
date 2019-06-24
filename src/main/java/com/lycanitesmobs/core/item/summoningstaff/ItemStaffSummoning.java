@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.item.summoningstaff;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
@@ -87,10 +88,10 @@ public class ItemStaffSummoning extends ItemBase {
 			// Open Minion GUI If None Selected:
 			else {
 				playerExt.staffPortal = null;
-				if(!player.getEntityWorld().isRemote)
+				if(!player.getEntityWorld().isRemote())
 					playerExt.sendAllSummonSetsToPlayer();
-				if(player.getEntityWorld().isRemote)
-					net.minecraft.client.Minecraft.getInstance().displayGuiScreen(new com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning(player));
+				else
+					ClientManager.getInstance().displayGuiScreen("beastiary", player);
 			}
 		}
 		player.setActiveHand(hand);

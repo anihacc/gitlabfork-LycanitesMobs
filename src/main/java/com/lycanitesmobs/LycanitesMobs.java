@@ -177,6 +177,8 @@ public class LycanitesMobs {
 
 	@SubscribeEvent
 	public void clientSetup(final FMLClientSetupEvent event) {
+		MinecraftForge.EVENT_BUS.register(ClientManager.getInstance());
+
 		ClientManager.getInstance().initLanguageManager();
 		ClientManager.getInstance().registerGUIs();
 		ClientManager.getInstance().registerEvents();

@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
