@@ -1,11 +1,11 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.gui.GuiMinionSelection;
-import com.lycanitesmobs.core.gui.TabManager;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryCreatures;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryIndex;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryPets;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.core.gui.MinionSelectionOverlay;
+import com.lycanitesmobs.core.gui.buttons.TabManager;
+import com.lycanitesmobs.core.gui.beastiary.CreaturesBeastiaryScreen;
+import com.lycanitesmobs.core.gui.beastiary.IndexBeastiaryScreen;
+import com.lycanitesmobs.core.gui.beastiary.PetsBeastiaryScreen;
+import com.lycanitesmobs.core.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
 import net.minecraft.client.Minecraft;
@@ -80,27 +80,27 @@ public class KeyHandler {
 
 		// Beastiary Index:
 		if(this.index.isPressed()) {
-			this.mc.displayGuiScreen(new GuiBeastiaryIndex(this.mc.player));
+			this.mc.displayGuiScreen(new IndexBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Creatures:
 		if(this.beastiary.isPressed()) {
-			this.mc.displayGuiScreen(new GuiBeastiaryCreatures(this.mc.player));
+			this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Pets:
 		if(this.pets.isPressed()) {
-			this.mc.displayGuiScreen(new GuiBeastiaryPets(this.mc.player));
+			this.mc.displayGuiScreen(new PetsBeastiaryScreen(this.mc.player));
 		}
 
 		// Beastiary Summoning:
 		if(this.summoning.isPressed()) {
-			this.mc.displayGuiScreen(new GuiBeastiarySummoning(this.mc.player));
+			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(this.mc.player));
 		}
 		
 		// Minion Selection: Closes If Not Holding:
 		try {
-			if (!this.minionSelection.isPressed() && this.mc.currentScreen instanceof GuiMinionSelection) {
+			if (!this.minionSelection.isPressed() && this.mc.currentScreen instanceof MinionSelectionOverlay) {
 				this.mc.player.closeScreen();
 			}
 		}
@@ -111,7 +111,7 @@ public class KeyHandler {
 			// ========== HUD Controls ==========
 			// Minion Selection:
 			if(this.minionSelection.isPressed()) {
-				GuiMinionSelection.openToPlayer(this.mc.player);
+				this.mc.displayGuiScreen(new MinionSelectionOverlay(this.mc.player));
 			}
 			
 			

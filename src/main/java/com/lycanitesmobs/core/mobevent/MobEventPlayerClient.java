@@ -5,7 +5,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.MobEventSound;
-import com.lycanitesmobs.core.gui.GuiOverlay;
+import com.lycanitesmobs.core.gui.overlays.BaseOverlay;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
@@ -93,7 +93,7 @@ public class MobEventPlayerClient {
     //                       GUI
     // ==================================================
     @OnlyIn(Dist.CLIENT)
-    public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
+    public void onGUIUpdate(BaseOverlay gui, int sWidth, int sHeight) {
     	PlayerEntity player = ClientManager.getInstance().getClientPlayer();
         if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;

@@ -78,7 +78,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
                 if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing)
-	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
+	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.NONE);
 	        	this.remove();
         	}
         }

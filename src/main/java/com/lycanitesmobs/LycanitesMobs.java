@@ -168,8 +168,8 @@ public class LycanitesMobs {
 		// GUI:
 		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
-		// Change Health Limit: TODO Make work in production!
-		//LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
+		// Change Health Limit:
+		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, 1); // maximumValue
 
 		// Mod Support:
 		DLDungeons.init();

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.GuiListBase;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import java.text.Collator;
 import java.util.*;
 
-public class GuiCreatureList extends GuiListBase<GuiBeastiary> {
+public class GuiCreatureList extends BaseList<BeastiaryScreen> {
 	public enum Type {
 		KNOWLEDGE((byte)0), SUMMONABLE((byte)1), PET((byte)2), MOUNT((byte)3), FAMILIAR((byte)4);
 		public byte id;
@@ -33,7 +33,7 @@ public class GuiCreatureList extends GuiListBase<GuiBeastiary> {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiCreatureList(Type listType, GuiBeastiary parentGui, GuiCreatureFilterList filterList, int width, int height, int top, int bottom, int x) {
+	public GuiCreatureList(Type listType, BeastiaryScreen parentGui, GuiCreatureFilterList filterList, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 24);
 		this.listType = listType;
 		this.filterList = filterList;

@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.GuiListBase;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryElements;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.beastiary.ElementsBeastiaryScreen;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 
 import java.util.*;
 
-public class GuiElementList extends GuiListBase {
+public class GuiElementList extends BaseList {
 	private Map<Integer, String> elementNames = new HashMap<>();
 
 	/**
@@ -19,7 +19,7 @@ public class GuiElementList extends GuiListBase {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiElementList(GuiBeastiaryElements parentGui, int width, int height, int top, int bottom, int x) {
+	public GuiElementList(ElementsBeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 24);
 
 		int i = 0;

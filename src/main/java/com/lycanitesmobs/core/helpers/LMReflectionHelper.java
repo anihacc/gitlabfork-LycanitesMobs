@@ -38,20 +38,20 @@ public class LMReflectionHelper {
 	 * @param value
 	 * @param fieldName
 	 */
-    public static <T, E> void setPrivateFinalValue(Class <? super T > classToAccess, T instance, E value, String fieldName) {
-		ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldName);
+    public static <T, E> void setPrivateFinalValue(Class <? super T > classToAccess, T instance, E value, int fieldIndex) {
+		try {
+			ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldIndex);
+			//ObfuscationReflectionHelper.setPrivateValue(classToAccess, instance, value, fieldName);
 
-    	/*Field field = ObfuscationReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD, fieldName));
-    	
-    	try {
+    		/*Field field = ObfuscationReflectionHelper.findField(classToAccess, ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD, fieldName));
     		Field modifiersField = Field.class.getDeclaredField("modifiers");
     		modifiersField.setAccessible(true);
     		modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
-    		field.set(instance, value);
+    		field.set(instance, value);*/
     	}
     	catch (Exception e) {
     		e.printStackTrace();
-    	}*/
+    	}
     }
 }

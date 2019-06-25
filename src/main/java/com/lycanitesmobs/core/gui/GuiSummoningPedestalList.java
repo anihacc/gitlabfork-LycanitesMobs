@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.client.Minecraft;
@@ -12,14 +13,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 import java.util.Map;
 
-public class GuiSummoningPedestalList extends GuiListBase<GuiSummoningPedestal> {
-	GuiSummoningPedestal parentGUI;
+public class GuiSummoningPedestalList extends BaseList<SummoningPedestalScreen> {
+	SummoningPedestalScreen parentGUI;
 	Map<Integer, String> minionList;
 
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public GuiSummoningPedestalList(GuiSummoningPedestal parentGUI, ExtendedPlayer playerExt, int width, int height, int top, int bottom, int left) {
+	public GuiSummoningPedestalList(SummoningPedestalScreen parentGUI, ExtendedPlayer playerExt, int width, int height, int top, int bottom, int left) {
 		super(parentGUI, width, height, top, bottom, 28);
 		this.setLeftPos(left);
 		this.parentGUI = parentGUI;
@@ -56,7 +57,7 @@ public class GuiSummoningPedestalList extends GuiListBase<GuiSummoningPedestal> 
 	//                     Entries
 	// ==================================================
 	@OnlyIn(Dist.CLIENT)
-	public class SummoningPedestalEntry extends GuiListBase.Entry {
+	public class SummoningPedestalEntry extends BaseList.Entry {
 		GuiSummoningPedestalList parentGUI;
 		String minionName;
 

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
@@ -18,7 +18,7 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiCreatureTypeList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
+	public GuiCreatureTypeList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 16);
 		this.refreshList();
 	}

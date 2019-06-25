@@ -1,15 +1,15 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.GuiListBase;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GuiSubspeciesList extends GuiListBase {
-	private GuiBeastiary parentGui;
+public class GuiSubspeciesList extends BaseList {
+	private BeastiaryScreen parentGui;
 	private CreatureInfo creature;
 	private Map<Integer, Integer> subspeciesList = new HashMap<>();
 	private boolean summoning;
@@ -23,7 +23,7 @@ public class GuiSubspeciesList extends GuiListBase {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiSubspeciesList(GuiBeastiary parentGui, boolean summoning, int width, int height, int top, int bottom, int x) {
+	public GuiSubspeciesList(BeastiaryScreen parentGui, boolean summoning, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 24);
 		this.parentGui = parentGui;
 		this.summoning = summoning;

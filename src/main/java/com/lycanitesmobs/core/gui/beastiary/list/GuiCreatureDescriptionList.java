@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.GuiListBase;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-public class GuiCreatureDescriptionList extends GuiListBase {
+public class GuiCreatureDescriptionList extends BaseList {
 	public CreatureKnowledge creatureKnowledge;
 
 	/**
@@ -18,7 +18,7 @@ public class GuiCreatureDescriptionList extends GuiListBase {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiCreatureDescriptionList(GuiBeastiary parentGui, int width, int height, int top, int bottom, int x) {
+	public GuiCreatureDescriptionList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
 		super(parentGui, width, height, top, bottom, x, 10800);
 	}
 

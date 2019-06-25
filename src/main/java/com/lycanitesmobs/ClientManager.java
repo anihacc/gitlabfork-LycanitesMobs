@@ -3,14 +3,13 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.container.ContainerCreature;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
-import com.lycanitesmobs.core.gui.GuiCreature;
-import com.lycanitesmobs.core.gui.GuiEquipmentForge;
-import com.lycanitesmobs.core.gui.GuiOverlay;
-import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.core.gui.CreatureInventoryScreen;
+import com.lycanitesmobs.core.gui.EquipmentForgeScreen;
+import com.lycanitesmobs.core.gui.overlays.BaseOverlay;
+import com.lycanitesmobs.core.gui.SummoningPedestalScreen;
+import com.lycanitesmobs.core.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.ItemColorCustomSpawnEgg;
-import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.localisation.LanguageLoader;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
@@ -19,17 +18,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.gui.fonts.Font;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IRegistryDelegate;
 
 public class ClientManager {
 	protected static ClientManager INSTANCE;
@@ -68,9 +63,9 @@ public class ClientManager {
 	 * Registers all GUI Screens, etc used by this mod.
 	 */
 	public void registerGUIs() {
-    	ScreenManager.registerFactory(ContainerCreature.TYPE, GuiCreature::new);
-    	ScreenManager.registerFactory(ContainerSummoningPedestal.TYPE, GuiSummoningPedestal::new);
-    	ScreenManager.registerFactory(ContainerEquipmentForge.TYPE, GuiEquipmentForge::new);
+    	ScreenManager.registerFactory(ContainerCreature.TYPE, CreatureInventoryScreen::new);
+    	ScreenManager.registerFactory(ContainerSummoningPedestal.TYPE, SummoningPedestalScreen::new);
+    	ScreenManager.registerFactory(ContainerEquipmentForge.TYPE, EquipmentForgeScreen::new);
 	}
 
 	/**
@@ -79,7 +74,7 @@ public class ClientManager {
 	public void registerEvents() {
 		// Event Listeners:
 		MinecraftForge.EVENT_BUS.register(new KeyHandler(Minecraft.getInstance()));
-		MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getInstance()));
+		MinecraftForge.EVENT_BUS.register(new BaseOverlay(Minecraft.getInstance()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
 		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
@@ -165,6 +160,6 @@ public class ClientManager {
 	 */
 	public void displayGuiScreen(String screenName, PlayerEntity player) {
 		if("beastiary".equals(screenName))
-			Minecraft.getInstance().displayGuiScreen(new GuiBeastiarySummoning(player));
+			Minecraft.getInstance().displayGuiScreen(new SummoningBeastiaryScreen(player));
 	}
 }
