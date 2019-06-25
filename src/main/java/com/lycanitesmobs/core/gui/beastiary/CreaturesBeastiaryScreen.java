@@ -12,32 +12,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiBeastiaryCreatures extends GuiBeastiary {
+public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 	public GuiCreatureTypeList creatureTypeList;
 	public GuiCreatureList creatureList;
 	public GuiSubspeciesList subspeciesList;
 	public GuiCreatureDescriptionList descriptionList;
 
-	public GuiBeastiaryCreatures(PlayerEntity player) {
+	public CreaturesBeastiaryScreen(PlayerEntity player) {
 		super(player);
 	}
-
-
-	@Override
-	public ITextComponent getTitle() {
-		if(this.creatureList != null && this.playerExt.selectedCreature != null) {
-			return new TranslationTextComponent("");
-			//return this.playerExt.selectedCreature.getTitle();
-		}
-		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {
-			return new TranslationTextComponent(this.playerExt.selectedCreatureType.getTitle());
-		}
-		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			LanguageManager.translate("gui.beastiary.creatures.empty.title");
-		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.creatures"));
-	}
-
 
 	@Override
 	public void initWidgets() {
@@ -62,30 +45,13 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 
 	@Override
-	public void drawBackground(int mouseX, int mouseY, float partialTicks) {
-		super.drawBackground(mouseX, mouseY, partialTicks);
+	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(mouseX, mouseY, partialTicks);
 	}
 
-
 	@Override
-	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
-		super.updateControls(mouseX, mouseY, partialTicks);
-
-		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			return;
-		}
-
-		this.creatureTypeList.render(mouseX, mouseY, partialTicks);
-		if(this.playerExt.selectedCreatureType != null) {
-			this.creatureList.render(mouseX, mouseY, partialTicks);
-			this.subspeciesList.render(mouseX, mouseY, partialTicks);
-		}
-	}
-
-
-	@Override
-	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
-		super.drawForeground(mouseX, mouseY, partialTicks);
+	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
+		super.renderForeground(mouseX, mouseY, partialTicks);
 
 		int marginX = this.getScaledX(240F / 1920F) + 8;
 		int nextX = this.colRightX + marginX;
@@ -147,5 +113,35 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 			String text = LanguageManager.translate("gui.beastiary.creatures.select");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
+	}
+
+	@Override
+	protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+		super.renderWidgets(mouseX, mouseY, partialTicks);
+
+		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
+			return;
+		}
+
+		this.creatureTypeList.render(mouseX, mouseY, partialTicks);
+		if(this.playerExt.selectedCreatureType != null) {
+			this.creatureList.render(mouseX, mouseY, partialTicks);
+			this.subspeciesList.render(mouseX, mouseY, partialTicks);
+		}
+	}
+
+	@Override
+	public ITextComponent getTitle() {
+		if(this.creatureList != null && this.playerExt.selectedCreature != null) {
+			return new TranslationTextComponent("");
+			//return this.playerExt.selectedCreature.getTitle();
+		}
+		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {
+			return new TranslationTextComponent(this.playerExt.selectedCreatureType.getTitle());
+		}
+		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
+			LanguageManager.translate("gui.beastiary.creatures.empty.title");
+		}
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.creatures"));
 	}
 }

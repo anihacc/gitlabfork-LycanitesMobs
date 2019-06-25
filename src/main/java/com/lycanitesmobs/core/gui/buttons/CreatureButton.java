@@ -1,21 +1,17 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.buttons;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.Button;
-import org.lwjgl.opengl.GL11;
 
-public class GuiButtonCreature extends ButtonBase {
+public class CreatureButton extends ButtonBase {
 	public CreatureInfo creatureInfo;
 
-	public GuiButtonCreature(int buttonID, int x, int y, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
+	public CreatureButton(int buttonID, int x, int y, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
         super(buttonID, x, y, 32, 32, text, pressable);
         this.creatureInfo = creatureInfo;
     }
 	
-	public GuiButtonCreature(int buttonID, int x, int y, int w, int h, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
+	public CreatureButton(int buttonID, int x, int y, int w, int h, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
         super(buttonID, x, y, w, h, text, pressable);
         this.creatureInfo = creatureInfo;
     }

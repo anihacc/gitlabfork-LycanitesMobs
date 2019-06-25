@@ -1,13 +1,13 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.buttons;
 
 import com.lycanitesmobs.KeyHandler;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiTabMount extends GuiTab {
+public class MountTab extends Tab {
 	
-	public GuiTabMount(int id, IPressable pressable) {
-        super(id, GuiTab.startX, GuiTab.startY, new ResourceLocation("textures/items/saddle.png"), pressable);
+	public MountTab(int id, IPressable pressable) {
+        super(id, Tab.startX, Tab.startY, new ResourceLocation("textures/items/saddle.png"), pressable);
     }
 
     @Override

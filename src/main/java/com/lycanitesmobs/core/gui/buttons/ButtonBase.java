@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.buttons;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

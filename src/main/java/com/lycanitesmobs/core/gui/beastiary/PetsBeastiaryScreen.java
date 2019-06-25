@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.gui.beastiary;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.ButtonBase;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureFilterList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiPetTypeList;
@@ -16,34 +16,17 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiBeastiaryPets extends GuiBeastiary {
+public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public GuiCreatureFilterList petTypeList;
 	public GuiCreatureList petList;
 	private int petCommandIdStart = 200;
 	private int releaseConfirmId = 300;
 	private int releaseCancelId = 301;
 
-	public GuiBeastiaryPets(PlayerEntity player) {
+	public PetsBeastiaryScreen(PlayerEntity player) {
 		super(player);
 		this.playerExt.selectedSubspecies = 0;
 	}
-
-
-	@Override
-	public ITextComponent getTitle() {
-		if(this.playerExt.selectedPet != null) {
-			String title = this.playerExt.selectedPet.getDisplayName();
-			if(this.playerExt.selectedPet.releaseEntity) {
-				title = LanguageManager.translate("gui.pet.release") + " " + title;
-			}
-			return new TranslationTextComponent(title);
-		}
-		if(this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty()) {
-			return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.pets.empty.title"));
-		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.pets"));
-	}
-
 
 	@Override
 	public void initWidgets() {
@@ -123,16 +106,14 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 		this.buttons.add(button);
 	}
 
-
 	@Override
-	public void drawBackground(int mouseX, int mouseY, float partialTicks) {
-		super.drawBackground(mouseX, mouseY, partialTicks);
+	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(mouseX, mouseY, partialTicks);
 	}
 
-
 	@Override
-	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
-		super.updateControls(mouseX, mouseY, partialTicks);
+	protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+		super.renderWidgets(mouseX, mouseY, partialTicks);
 
 		boolean empty = this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty();
 
@@ -207,10 +188,9 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 		}
 	}
 
-
 	@Override
-	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
-		super.drawForeground(mouseX, mouseY, partialTicks);
+	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
+		super.renderForeground(mouseX, mouseY, partialTicks);
 
 		int marginX = 0;
 		int nextX = this.colRightX + marginX;
@@ -304,7 +284,6 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 		}
 	}
 
-
 	@Override
 	public void actionPerformed(byte buttonId) {
 		if(this.playerExt.selectedPet != null && this.playerExt.selectedPet.summonSet != null) {
@@ -366,7 +345,7 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 
 				this.playerExt.sendPetEntryToServer(petEntry);
 				if (this.playerExt.selectedPet == null) {
-					this.mc.displayGuiScreen(new GuiBeastiaryPets(this.mc.player));
+					this.mc.displayGuiScreen(new PetsBeastiaryScreen(this.mc.player));
 				}
 				return;
 			}
@@ -386,12 +365,25 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 		super.actionPerformed(buttonId);
 	}
 
+	@Override
+	public ITextComponent getTitle() {
+		if(this.playerExt.selectedPet != null) {
+			String title = this.playerExt.selectedPet.getDisplayName();
+			if(this.playerExt.selectedPet.releaseEntity) {
+				title = LanguageManager.translate("gui.pet.release") + " " + title;
+			}
+			return new TranslationTextComponent(title);
+		}
+		if(this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty()) {
+			return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.pets.empty.title"));
+		}
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.pets"));
+	}
 
 	@Override
 	public int getDisplaySubspecies(CreatureInfo creatureInfo) {
 		return this.playerExt.selectedPet.subspeciesID;
 	}
-
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {

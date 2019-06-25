@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.gui.beastiary;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
-import com.lycanitesmobs.core.gui.ButtonBase;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,19 +12,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class GuiBeastiaryIndex extends GuiBeastiary {
+public class IndexBeastiaryScreen extends BeastiaryScreen {
 	public GuiIndexList indexList;
 
-	@Override
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.index.title"));
-	}
-
-
-	public GuiBeastiaryIndex(PlayerEntity player) {
+	public IndexBeastiaryScreen(PlayerEntity player) {
 		super(player);
 	}
-
 
 	@Override
 	protected void initWidgets() {
@@ -51,22 +44,14 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		this.indexList = new GuiIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2);
 	}
 
-
 	@Override
-	public void drawBackground(int mouseX, int mouseY, float partialTicks) {
-		super.drawBackground(mouseX, mouseY, partialTicks);
+	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(mouseX, mouseY, partialTicks);
 	}
 
-
 	@Override
-	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
-		super.updateControls(mouseX, mouseY, partialTicks);
-	}
-
-
-	@Override
-	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
-		super.drawForeground(mouseX, mouseY, partialTicks);
+	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
+		super.renderForeground(mouseX, mouseY, partialTicks);
 
 		int yOffset = this.colRightY + 13;
 		String info = LanguageManager.translate("gui.beastiary.index.description");
@@ -89,13 +74,11 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 			version += " \u00A7l" + LanguageManager.translate("gui.beastiary.index.version.newer") + ": \u00A7r\u00A72" + latestVersion.versionNumber + "\u00A7r";
 		}
 		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
-		yOffset += this.getFontRenderer().getWordWrappedHeight(version, this.colRightWidth);
 
 		// Latest Changes:
 		this.indexList.versionInfo = latestVersion;
 		//this.indexList.render(mouseX, mouseY, partialTicks); TODO Lists
 	}
-
 
 	@Override
 	public void actionPerformed(byte buttonId) {
@@ -111,5 +94,10 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 			} catch (URISyntaxException e) {}
 		}
 		super.actionPerformed(buttonId);
+	}
+
+	@Override
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.index.title"));
 	}
 }

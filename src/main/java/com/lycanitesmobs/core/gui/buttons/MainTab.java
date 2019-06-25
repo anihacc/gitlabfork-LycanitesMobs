@@ -1,17 +1,17 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.buttons;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.gui.beastiary.IndexBeastiaryScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiTabMain extends GuiTab {
+public class MainTab extends Tab {
 
-	public GuiTabMain(int id, IPressable pressable) {
-        super(id, GuiTab.startX, GuiTab.startY, new ResourceLocation(LycanitesMobs.MODID, "textures/items/soulgazer.png"), pressable);
+	public MainTab(int id, IPressable pressable) {
+        super(id, Tab.startX, Tab.startY, new ResourceLocation(LycanitesMobs.MODID, "textures/items/soulgazer.png"), pressable);
     }
 
-    public GuiTabMain(int id, int x, int y, IPressable pressable) {
+    public MainTab(int id, int x, int y, IPressable pressable) {
         super(id, x, y, new ResourceLocation(LycanitesMobs.MODID, "textures/items/soulgazer.png"), pressable);
     }
 

@@ -1,10 +1,11 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.overlays;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.gui.BaseGui;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
@@ -20,7 +21,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-public class GuiOverlay extends GuiBase {
+public class BaseOverlay extends BaseGui {
 	public Minecraft mc;
 	
 	private int mountMessageTimeMax = 10 * 20;
@@ -29,7 +30,7 @@ public class GuiOverlay extends GuiBase {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public GuiOverlay(Minecraft minecraft) {
+	public BaseOverlay(Minecraft minecraft) {
 		super(new TranslationTextComponent("gui.overlay"));
 		this.mc = Minecraft.getInstance();
 	}

@@ -1,17 +1,18 @@
 package com.lycanitesmobs.core.gui.beastiary;
 
-import com.lycanitesmobs.*;
+import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.ButtonBase;
-import com.lycanitesmobs.core.gui.GuiBaseScreen;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.core.gui.BaseScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
@@ -22,9 +23,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-import java.net.URI;
-
-public abstract class GuiBeastiary extends GuiBaseScreen {
+public abstract class BeastiaryScreen extends BaseScreen {
 	public enum Page {
 		INDEX((byte)0), CREATURES((byte)1), PETS((byte)2), SUMMONING((byte)3), ELEMENTS((byte)4);
 		public byte id;
@@ -43,7 +42,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	public LivingEntity creaturePreviewEntity;
 	public float creaturePreviewTicks = 0;
 
-	public MainWindow scaledResolution;
 	public int centerX;
 	public int centerY;
 	public int windowWidth;
@@ -72,7 +70,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 * Constructor
 	 * @param player The player to create the GUI instance for.
 	 */
-	public GuiBeastiary(PlayerEntity player) {
+	public BeastiaryScreen(PlayerEntity player) {
 		super(new TranslationTextComponent("gui.beastiary.name"));
 		this.player = player;
 		this.playerExt = ExtendedPlayer.getForPlayer(player);
@@ -88,7 +86,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		}
 	}
 
-
 	@Override
 	public void onClose() {
 		if(this.mc.gameSettings.guiScale == 2 && !GUI_ACTIVE) {
@@ -99,71 +96,11 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		super.onClose();
 	}
 
-
-	/**
-	 * Returns the title of this Beastiary Page.
-	 * @return The title text string to display.
-	 */
-	public ITextComponent getTitle() {
-		return new TranslationTextComponent("gui.beastiary.name");
-	}
-
-
-	/**
-	 * Whether this GUI should pause a single player game or not.
-	 * @return True to pause the game.
-	 */
 	@Override
 	public boolean isPauseScreen() {
 		return false;
 	}
 
-
-	/**
-	 * Returns a scaled x coordinate.
-	 * @param x The x float to scale where 1.0 is the entire GUI width.
-	 * @return A scaled x position.
-	 */
-	public int getScaledX(float x) {
-		if(this.scaledResolution == null) {
-			this.scaledResolution = this.mc.mainWindow;
-		}
-
-		// Aspect Ratio:
-		float targetAspect = 0.5625f; // 16:9
-		float scaledHeight = scaledResolution.getScaledHeight();
-		float scaledWidth = scaledResolution.getScaledWidth();
-		float currentAspect = (scaledHeight * x) / (scaledWidth * x);
-
-		// Wider Than target:
-		if(currentAspect < targetAspect) {
-			scaledWidth = scaledHeight + (scaledHeight * targetAspect);
-		}
-
-		// Taller Than target:
-		else if(currentAspect > targetAspect) {
-			scaledHeight = scaledWidth + (scaledWidth * targetAspect);
-		}
-
-		float guiWidth = scaledWidth * x;
-		return Math.round(Math.max(x, guiWidth));
-	}
-
-
-	/**
-	 * Returns a scaled y coordinate based on the scaled width with an aspect ratio applied to it.
-	 * @param y The y float to scale where 1.0 is the entire GUI height.
-	 * @return A scaled y position.
-	 */
-	public int getScaledY(float y) {
-		float baseHeight = Math.round((float)this.getScaledX(y) * 0.5625f);
-		return Math.round(baseHeight * y);
-	}
-
-
-	/**
-	 * Initializes this gui, called when first opening or on window resizing.
-	 */
 	@Override
 	public void init() {
 		super.init();
@@ -200,10 +137,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		this.colRightCenterY = this.colRightY + Math.round(this.colRightHeight / 2);
 	}
 
-
-	/**
-	 * Draws the buttons and other controls for this GUI.
-	 */
 	@Override
 	protected void initWidgets() {
 		int menuPadding = 6;
@@ -232,59 +165,17 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		this.buttons.add(button);
 	}
 
-
-	/**
-	 * Draws and updates the GUI.
-	 * @param mouseX The x position of the mouse cursor.
-	 * @param mouseY The y position of the mouse cursor.
-	 * @param partialTicks Ticks for animation.
-	 */
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.drawBackground(mouseX, mouseY, partialTicks);
-		this.drawForeground(mouseX, mouseY, partialTicks);
-		this.updateControls(mouseX, mouseY, partialTicks);
-
-		super.render(mouseX, mouseY, partialTicks);
-	}
-
-
-	/**
-	 * Draws the background image.
-	 * @param mouseX The x position of the mouse cursor.
-	 * @param mouseY The y position of the mouse cursor.
-	 * @param partialTicks Ticks for animation.
-	 */
-	public void drawBackground(int mouseX, int mouseY, float partialTicks) {
+	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		this.drawTexture(AssetManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
 	}
 
-
-	/**
-	 * Updates buttons and other controls for this GUI.
-	 * @param mouseX The x position of the mouse cursor.
-	 * @param mouseY The y position of the mouse cursor.
-	 * @param partialTicks Ticks for animation.
-	 */
-	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
-		for(Widget button : this.buttons) {
-			button.renderButton(mouseX, mouseY, partialTicks);
-		}
-	}
-
-
-	/**
-	 * Draws foreground elements.
-	 * @param mouseX The x position of the mouse cursor.
-	 * @param mouseY The y position of the mouse cursor.
-	 * @param partialTicks Ticks for animation.
-	 */
-	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
+	@Override
+	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		String title = "\u00A7l\u00A7n" + this.getTitle();
 		float width = this.getFontRenderer().getStringWidth(title);
 		this.getFontRenderer().drawString(title, this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
 	}
-
 
 	/**
 	 * Called when a GUI button is interacted with.
@@ -293,24 +184,21 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	@Override
 	public void actionPerformed(byte buttonId) {
 		if(buttonId == Page.INDEX.id) {
-			this.mc.displayGuiScreen(new GuiBeastiaryIndex(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
 		}
 		if(buttonId == Page.CREATURES.id) {
-			this.mc.displayGuiScreen(new GuiBeastiaryCreatures(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new CreaturesBeastiaryScreen(Minecraft.getInstance().player));
 		}
 		if(buttonId == Page.PETS.id) {
-			this.mc.displayGuiScreen(new GuiBeastiaryPets(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new PetsBeastiaryScreen(Minecraft.getInstance().player));
 		}
 		if(buttonId == Page.SUMMONING.id) {
-			this.mc.displayGuiScreen(new GuiBeastiarySummoning(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(Minecraft.getInstance().player));
 		}
 		if(buttonId == Page.ELEMENTS.id) {
-			this.mc.displayGuiScreen(new GuiBeastiaryElements(Minecraft.getInstance().player));
+			this.mc.displayGuiScreen(new ElementsBeastiaryScreen(Minecraft.getInstance().player));
 		}
-
-		super.actionPerformed(buttonId);
 	}
-
 
 	/**
 	 * Called when a key is pressed.
@@ -323,22 +211,13 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		return super.keyReleased(keyCode, keyCodeB, keyCodeC);
 	}
 
-
 	/**
-	 * Opens a URI in the users default web browser.
-	 * @param uri The URI link to open.
+	 * Returns the title of this Beastiary Page.
+	 * @return The title text string to display.
 	 */
-	protected void openURI(URI uri) {
-		try {
-			Class oclass = Class.forName("java.awt.Desktop");
-			Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
-			oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, uri);
-		}
-		catch (Throwable throwable) {
-			LycanitesMobs.logWarning("", "Unable to open link: " + uri.toString());
-		}
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("gui.beastiary.name");
 	}
-
 
 	/**
 	 * Draws a level bar for the provided creature info.
@@ -353,7 +232,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 			this.drawBar(texture, x, y, 0, 9, 9, level, 10);
 		}
 	}
-
 
 	public void renderCreature(CreatureInfo creatureInfo, int x, int y, int mouseX, int mouseY, float partialTicks) {
 		// Clear:
@@ -443,7 +321,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		}
 	}
 
-
 	/**
 	 * Gets the Subspecies to use for the display creature.
 	 * @param creatureInfo The Creature Info being displayed.
@@ -452,7 +329,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		return this.playerExt.selectedSubspecies;
 	}
 
-
 	/**
 	 * Plays an idle or tame sound of the provided creature when it is selected in the GUI.
 	 * @param creatureInfo The creature to play the sound from.
@@ -460,7 +336,6 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
 		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, ObjectManager.getSound(creatureInfo.getName() + "_say"), SoundCategory.NEUTRAL, 1, 1);
 	}
-
 
 	/**
 	 * Called when a display entity is created.

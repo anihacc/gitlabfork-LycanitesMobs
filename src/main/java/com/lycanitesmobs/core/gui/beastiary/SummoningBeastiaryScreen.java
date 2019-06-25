@@ -4,8 +4,8 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.ButtonBase;
-import com.lycanitesmobs.core.gui.GuiButtonCreature;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.core.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -18,26 +18,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiBeastiarySummoning extends GuiBeastiary {
+public class SummoningBeastiaryScreen extends BeastiaryScreen {
 	public GuiCreatureList petList;
 	public GuiSubspeciesList subspeciesList;
 
 	private int summoningSlotIdStart = 200;
 	private int petCommandIdStart = 300;
 
-	public GuiBeastiarySummoning(PlayerEntity player) {
+	public SummoningBeastiaryScreen(PlayerEntity player) {
 		super(player);
 	}
-
-
-	@Override
-	public ITextComponent getTitle() {
-		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
-			return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning.empty.title"));
-		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning"));
-	}
-
 
 	@Override
 	public void initWidgets() {
@@ -64,7 +54,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 			String buttonText = String.valueOf(i);
 			CreatureInfo creatureInfo = this.playerExt.getSummonSet(i).getCreatureInfo();
 			buttonX += tabSpacing;
-			ButtonBase tabButton = new GuiButtonCreature(this.summoningSlotIdStart + i, buttonX, buttonY, buttonWidth, buttonHeight, buttonText, creatureInfo, this);
+			ButtonBase tabButton = new CreatureButton(this.summoningSlotIdStart + i, buttonX, buttonY, buttonWidth, buttonHeight, buttonText, creatureInfo, this);
 			this.buttons.add(tabButton);
 			if(i == this.playerExt.selectedSummonSet) {
 				tabButton.active = false;
@@ -115,16 +105,14 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		this.buttons.add(button);
 	}
 
-
 	@Override
-	public void drawBackground(int mouseX, int mouseY, float partialTicks) {
-		super.drawBackground(mouseX, mouseY, partialTicks);
+	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
+		super.renderBackground(mouseX, mouseY, partialTicks);
 	}
 
-
 	@Override
-	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
-		super.updateControls(mouseX, mouseY, partialTicks);
+	protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+		super.renderWidgets(mouseX, mouseY, partialTicks);
 
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
 			return;
@@ -142,8 +130,8 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 			// Summoning Slots:
 			if(button.buttonId >= this.summoningSlotIdStart && button.buttonId < this.petCommandIdStart) {
 				button.active = button.buttonId - this.summoningSlotIdStart != this.playerExt.selectedSummonSet;
-				if(button instanceof GuiButtonCreature) {
-					GuiButtonCreature buttonCreature = (GuiButtonCreature)button;
+				if(button instanceof CreatureButton) {
+					CreatureButton buttonCreature = (CreatureButton)button;
 					buttonCreature.creatureInfo = this.playerExt.getSummonSet(button.buttonId - this.summoningSlotIdStart).getCreatureInfo();
 				}
 			}
@@ -195,10 +183,9 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		}
 	}
 
-
 	@Override
-	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
-		super.drawForeground(mouseX, mouseY, partialTicks);
+	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
+		super.renderForeground(mouseX, mouseY, partialTicks);
 
 		int marginX = 0;
 		int nextX = this.colRightX + marginX;
@@ -259,7 +246,6 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.movement"), this.colRightX, buttonY + 6, 0xFFFFFF);
 	}
 
-
 	@Override
 	public void actionPerformed(byte buttonId) {
 		// Summoning Slots:
@@ -319,7 +305,7 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 
 				this.playerExt.sendSummonSetToServer((byte) this.playerExt.selectedSummonSet);
 				if (this.playerExt.selectedPet == null) {
-					this.mc.displayGuiScreen(new GuiBeastiarySummoning(this.mc.player));
+					this.mc.displayGuiScreen(new SummoningBeastiaryScreen(this.mc.player));
 				}
 				return;
 			}
@@ -328,12 +314,18 @@ public class GuiBeastiarySummoning extends GuiBeastiary {
 		super.actionPerformed(buttonId);
 	}
 
+	@Override
+	public ITextComponent getTitle() {
+		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
+			return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning.empty.title"));
+		}
+		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning"));
+	}
 
 	@Override
 	public int getDisplaySubspecies(CreatureInfo creatureInfo) {
 		return this.playerExt.getSelectedSummonSet().subspecies;
 	}
-
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {

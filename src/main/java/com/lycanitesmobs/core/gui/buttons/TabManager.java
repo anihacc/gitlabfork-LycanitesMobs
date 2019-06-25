@@ -1,7 +1,8 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.core.gui.buttons;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigClient;
+import com.lycanitesmobs.core.gui.InventorySnooperScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
@@ -11,21 +12,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TabManager {
-	public static ArrayList<GuiTab> tabList = new ArrayList<GuiTab>();
+	public static ArrayList<Tab> tabList = new ArrayList<Tab>();
 
-    public static void registerTab (GuiTab tab) {
+    public static void registerTab (Tab tab) {
         tabList.add(tab);
     }
 
-    public static ArrayList<GuiTab> getTabList () {
+    public static ArrayList<Tab> getTabList () {
         return tabList;
     }
     
     public static void addTabsToInventory (Screen gui) {
     	if(ConfigClient.INSTANCE.inventoryTab.get()) {
-        	GuiInventorySnooper guiInventorySnooper = new GuiInventorySnooper(mc.player);
+        	InventorySnooperScreen inventorySnooperScreen = new InventorySnooperScreen(mc.player);
         	try {
-            	Field field = Screen.class.getDeclaredField(guiInventorySnooper.getButtonListFieldName());
+            	Field field = Screen.class.getDeclaredField(inventorySnooperScreen.getButtonListFieldName());
 	            field.setAccessible(true);
 	            List buttonList = (List)field.get(gui);
 	            addTabsToList(buttonList);
@@ -49,7 +50,7 @@ public class TabManager {
     public static void updateTabValues (int cornerX, int cornerY, Class<?> selectedButton) {
         int count = 2;
         for(int i = 0; i < tabList.size(); i++) {
-        	GuiTab t = tabList.get(i);
+        	Tab t = tabList.get(i);
 
             if(t.shouldAddToList()) {
                 t.buttonId = (byte)count;
@@ -62,7 +63,7 @@ public class TabManager {
     }
 
     public static void addTabsToList (List buttonList) {
-        for(GuiTab tab : tabList) {
+        for(Tab tab : tabList) {
             if(tab.shouldAddToList()) {
                 buttonList.add(tab);
             }
