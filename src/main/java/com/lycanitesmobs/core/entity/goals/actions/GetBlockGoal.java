@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,10 +83,10 @@ public class GetBlockGoal extends Goal {
   	// ==================================================
 	@Override
     public boolean shouldExecute() {
-    	if(!this.host.canPickupItems() || !this.host.getEntityWorld().getGameRules().getBoolean("mobGriefing"))
+    	if(!this.host.canPickupItems() || !this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
     	
-    	if(!this.host.getEntityWorld().getGameRules().getBoolean("mobGriefing"))
+    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
 
     	if(!this.tamedLooting) {
@@ -144,7 +145,7 @@ public class GetBlockGoal extends Goal {
     	if(this.target == null)
             return false;
     	
-    	if(!this.host.getEntityWorld().getGameRules().getBoolean("mobGriefing"))
+    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
         
         double distance = this.host.getDistanceSq(this.target.getX(), this.target.getY(), this.target.getZ());

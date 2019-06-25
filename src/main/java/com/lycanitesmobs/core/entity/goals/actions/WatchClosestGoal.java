@@ -62,7 +62,7 @@ public class WatchClosestGoal extends Goal {
             if(this.watchedClass == PlayerEntity.class)
                 this.closestEntity = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.maxDistance, entity -> true);
             else
-                this.host.world.func_217374_a(LivingEntity.class, this.searchPredicate, this.host, this.host.getBoundingBox().grow((double)this.maxDistance));
+                this.host.world.getTargettableEntitiesWithinAABB(LivingEntity.class, this.searchPredicate, this.host, this.host.getBoundingBox().grow((double)this.maxDistance));
 
             return this.closestEntity != null;
         }

@@ -39,8 +39,8 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
     // ==================================================
    	//                  Render Model
    	// ==================================================
-    @Override
-    public void render(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    @Override //render
+    public void func_78088_a(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 

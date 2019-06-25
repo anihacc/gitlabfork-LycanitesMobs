@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupShadow {
@@ -101,7 +102,7 @@ public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupSh
     @Override
     public void onDeath(DamageSource damageSource) {
         try {
-            if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.geistShadowfireDeath) {
+            if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.geistShadowfireDeath) {
                 int shadowfireWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) + 1;
                 int shadowfireHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) + 1;
                 for(int x = (int)this.posX - shadowfireWidth; x <= (int)this.posX + shadowfireWidth; x++) {

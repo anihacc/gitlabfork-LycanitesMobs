@@ -20,6 +20,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -250,7 +251,7 @@ public class Spawner {
 
 	/** Returns true if this Spawner is considered enabled, this is checked first before major logging and more in depth checks are done in canSpawn(). **/
 	public boolean isEnabled(World world, PlayerEntity player) {
-		if(!this.enabled || CreatureManager.getInstance().spawnConfig.disableAllSpawning || !world.getGameRules().getBoolean("doMobSpawning")) {
+		if(!this.enabled || CreatureManager.getInstance().spawnConfig.disableAllSpawning || !world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
 			return false;
 		}
 

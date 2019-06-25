@@ -10,10 +10,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -128,7 +125,7 @@ public class BlockFireBase extends BlockBase {
     // ========== Tick Update ==========
     @Override
     public void tick(BlockState state, World world, BlockPos pos, Random rand) {
-        if (!world.getGameRules().getBoolean("doFireTick")) {
+        if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             if(this.removeOnNoFireTick)
                 world.removeBlock(pos, false);
             return;

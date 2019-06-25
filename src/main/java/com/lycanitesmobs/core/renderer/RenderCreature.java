@@ -49,8 +49,8 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 		return false; // Disabled as this doesn't have the desired effect.
 	}
 
-	@Override
-	public void doRender(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	@Override //doRender
+	public void func_76986_a(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
 			this.field_77045_g = AssetManager.getCreatureModel(entity);
 		} catch (Exception e) {
@@ -62,7 +62,7 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 			return;
 		}
 
-    	super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    	super.func_76986_a(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	@Override
@@ -91,15 +91,15 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
     // ========== Main ==========
     @Override
     protected boolean bindEntityTexture(EntityCreatureBase entity) {
-        ResourceLocation texture = this.getEntityTexture(entity);
+        ResourceLocation texture = this.func_110775_a(entity);
         if(texture == null)
             return false;
         this.bindTexture(texture);
         return true;
     }
     
-    @Override
-    protected ResourceLocation getEntityTexture(EntityCreatureBase entity) {
+    @Override //getEntityTexture
+    protected ResourceLocation func_110775_a(EntityCreatureBase entity) {
 		return entity.getTexture();
 	}
     
@@ -118,14 +118,14 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
     // ==================================================
   	//                     Effects
   	// ==================================================
-    @Override
-    protected void preRenderCallback(EntityCreatureBase entity, float particleTickTime) {
+    @Override //preRenderCallback
+    protected void func_77041_b(EntityCreatureBase entity, float particleTickTime) {
         // No effects.
     }
     
     /** If true, display the name of the entity above it. **/
-    @Override
-    protected boolean canRenderName(EntityCreatureBase entity) {
+    @Override //canRenderName
+    protected boolean func_177070_b(EntityCreatureBase entity) {
         if(!Minecraft.isGuiEnabled()) return false;
     	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
     	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;

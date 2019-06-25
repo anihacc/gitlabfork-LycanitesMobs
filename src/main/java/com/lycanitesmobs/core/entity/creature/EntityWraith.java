@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -131,7 +132,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
    	// ==================================================
     @Override
     public void onDeath(DamageSource par1DamageSource) {
-		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
+		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int explosionRadius = 1;
 			if(this.subspecies != null)
 				explosionRadius = 3;

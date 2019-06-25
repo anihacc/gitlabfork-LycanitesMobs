@@ -14,6 +14,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -150,7 +151,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 		if(this.getThrower() != null && this.getThrower().getRidingEntity() == entity) {
 			return;
 		}
-		if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
+		if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int explosionRadius = 2;
 			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
 				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();

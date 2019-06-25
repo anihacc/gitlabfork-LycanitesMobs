@@ -18,6 +18,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityTroll extends EntityCreatureTameable implements IMob {
@@ -102,7 +103,7 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
         
         // Destroy Blocks:
  		if(!this.getEntityWorld().isRemote)
- 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.trollGreifing) {
+ 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.trollGreifing) {
  		    	float distance = this.getAttackTarget().getDistance(this);
  		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
  		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);

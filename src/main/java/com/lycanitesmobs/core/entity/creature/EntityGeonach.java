@@ -22,6 +22,7 @@ import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityGeonach extends EntityCreatureTameable implements IMob, IGroupRock, IFusable {
@@ -88,7 +89,7 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 						this.leap(6.0F, 1.0D, this.getAttackTarget());
 					else
 						this.leap(6.0F, 0D, this.getAttackTarget());
-					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.geonachBlockBreakRadius > -1 && !this.isTamed()) {
+					if (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.geonachBlockBreakRadius > -1 && !this.isTamed()) {
 						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.geonachBlockBreakRadius);
 					}
 				}

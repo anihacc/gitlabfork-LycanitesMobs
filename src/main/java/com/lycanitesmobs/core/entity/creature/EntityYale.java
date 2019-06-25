@@ -219,7 +219,7 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
 		DyeColor dyeB = mother.getColor();
 		CraftingInventory craftinginventory = mixColors(dyeA, dyeB);
 		return this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftinginventory, this.world).map((p_213614_1_) ->
-				p_213614_1_.getCraftingResult(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
+				p_213614_1_.func_77572_b(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
 				this.world.rand.nextBoolean() ? dyeA : dyeB);
 	}
 

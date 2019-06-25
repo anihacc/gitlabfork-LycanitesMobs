@@ -12,6 +12,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityEttin extends EntityCreatureAgeable implements IMob {
@@ -66,7 +67,7 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     public void livingTick() {
     	// Destroy Blocks:
 		if(!this.getEntityWorld().isRemote)
-	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.ettinGreifing) {
+	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.ettinGreifing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
 		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);

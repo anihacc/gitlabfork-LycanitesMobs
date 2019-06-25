@@ -22,6 +22,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityVapula extends EntityCreatureTameable implements IMob, IGroupRock {
@@ -87,7 +88,7 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
 						this.leap(6.0F, 1.0D, this.getAttackTarget());
 					else
 						this.leap(6.0F, 0D, this.getAttackTarget());
-					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.vapulaBlockBreakRadius > -1 && !this.isTamed()) {
+					if (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.vapulaBlockBreakRadius > -1 && !this.isTamed()) {
 						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.vapulaBlockBreakRadius);
 					}
 				}

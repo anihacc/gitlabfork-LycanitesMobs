@@ -629,7 +629,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     // ========== Can Spawn Here ==========
     /** Checks if the creature is able to spawn at it's initial position. **/
     @Override
-    public boolean canSpawn(IWorld world, SpawnReason spawnReason, BlockPos blockPos) {
+    public boolean canSpawn(IWorld world, SpawnReason spawnReason) {
 	    return this.checkSpawnVanilla(this.getEntityWorld(), spawnReason, this.getPosition());
     }
 
@@ -666,7 +666,7 @@ public abstract class EntityCreatureBase extends CreatureEntity {
 
 		// Gamerule Check:
 		LycanitesMobs.logDebug("MobSpawns", "Checking gamerules...");
-		if(!this.getEntityWorld().getGameRules().getBoolean("doMobSpawning")) {
+		if(!this.getEntityWorld().getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
 			return false;
 		}
         
@@ -2154,9 +2154,12 @@ public abstract class EntityCreatureBase extends CreatureEntity {
     /** Gets the distance this mob is allowed to stray from it's home. -1 is used to unlimited distance. **/
     public float getHomeDistanceMax() { return this.homeDistanceMax; }
 
-    /** Clears the current home position. **/
-    public void detachHome() {
+    /** Clears the current home position. Returns true if a home was detached. **/
+    public boolean detachHome() {
+    	if(this.hasHome())
+    		return false;
     	this.setHomeDistanceMax(-1);
+    	return true;
     }
 
     /** Returns whether or not this mob has a home set. **/

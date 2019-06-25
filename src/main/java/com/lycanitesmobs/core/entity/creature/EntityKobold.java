@@ -18,6 +18,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class EntityKobold extends EntityCreatureTameable implements IMob, IGroup
         super.livingTick();
         
         // Torch Looting:
-        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.torchGreifing) {
+        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.torchGreifing) {
 	        if(this.torchLootingTime-- <= 0) {
 	        	this.torchLootingTime = 60;
 	        	int distance = 2;

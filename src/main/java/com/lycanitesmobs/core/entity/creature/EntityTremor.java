@@ -4,11 +4,7 @@ import com.lycanitesmobs.api.IGroupRock;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
@@ -18,6 +14,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityTremor extends EntityCreatureTameable implements IMob, IGroupRock {
@@ -102,7 +99,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
     	
     	// Explosion:
 		int explosionStrength = Math.max(1, this.tremorExplosionStrength);
-		Explosion.Mode damageTerrain = this.tremorExplosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+		Explosion.Mode damageTerrain = this.tremorExplosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
 			damageTerrain = Explosion.Mode.NONE;

@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -133,7 +134,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
    	// ==================================================
     @Override
     public void onDeath(DamageSource damageSource) {
-		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.khalkLavaDeath && !this.isTamed()) {
+		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.khalkLavaDeath && !this.isTamed()) {
 			int lavaWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) - 1;
 			int lavaHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) - 1;
 			for(int x = (int)this.posX - lavaWidth; x <= (int)this.posX + lavaWidth; x++) {

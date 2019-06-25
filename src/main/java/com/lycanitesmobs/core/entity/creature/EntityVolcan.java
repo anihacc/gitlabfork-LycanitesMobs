@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -94,7 +95,7 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 		}
 
 		// Melt Blocks:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.volcanMeltRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
+		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.volcanMeltRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int range = this.volcanMeltRadius;
 			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
 				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {

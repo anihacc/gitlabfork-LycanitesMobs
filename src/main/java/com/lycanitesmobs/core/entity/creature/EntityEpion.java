@@ -18,6 +18,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupShadow {
@@ -77,7 +78,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
 				if(this.subspecies != null)
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
-                if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing)
+                if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.epionGreifing)
 	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.NONE);
 	        	this.remove();
         	}
@@ -108,7 +109,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
     @Override
     public boolean isFlying() {
     	if(this.getEntityWorld().isRemote) return true;
-    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing) {
+    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.epionGreifing) {
     		float brightness = this.getBrightness();
         	if(brightness > 0.5F && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
         		return false;

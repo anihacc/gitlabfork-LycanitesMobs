@@ -27,8 +27,8 @@ public class DefendVillageTargetingGoal extends AttackTargetingGoal {
 		}
 
 		AxisAlignedBB villageSearchArea = this.host.getBoundingBox().grow(10.0D, 8.0D, 10.0D);
-		List<LivingEntity> villagers = this.host.world.func_217374_a(VillagerEntity.class, this.villageSearchPredicate, this.host, villageSearchArea);
-		List<PlayerEntity> players = this.host.world.func_217373_a(this.villageSearchPredicate, this.host, villageSearchArea);
+		List<LivingEntity> villagers = this.host.world.getTargettableEntitiesWithinAABB(VillagerEntity.class, this.villageSearchPredicate, this.host, villageSearchArea);
+		List<PlayerEntity> players = this.host.world.getTargettablePlayersWithinAABB(this.villageSearchPredicate, this.host, villageSearchArea);
 		Iterator villagerIter = villagers.iterator();
 
 		while(villagerIter.hasNext()) {

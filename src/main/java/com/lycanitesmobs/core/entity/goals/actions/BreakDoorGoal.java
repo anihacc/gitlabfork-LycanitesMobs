@@ -5,6 +5,7 @@ import net.minecraft.block.DoorBlock;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.GameRules;
 
 public class BreakDoorGoal extends DoorInteractGoal {
 	//Properties:
@@ -26,7 +27,7 @@ public class BreakDoorGoal extends DoorInteractGoal {
     public boolean shouldExecute() {
     	if(!super.shouldExecute())
     		return false;
-    	if(!this.host.getEntityWorld().getGameRules().getBoolean("mobGriefing"))
+    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
     	return true;
     }

@@ -19,6 +19,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 		}
 
 		// Grow Mycelium:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 100 == 0 && this.eechetikMyceliumRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
+		if(!this.getEntityWorld().isRemote && this.updateTick % 100 == 0 && this.eechetikMyceliumRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int range = this.eechetikMyceliumRadius;
 			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
 				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
