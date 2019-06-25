@@ -93,10 +93,10 @@ public class LanguageManager {
 		int laodedLangFiles = 0;
 		for (String language : languageList) {
 			String languageDir = String.format("lang/%s/", language);
-			Path languageDirPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.filename, languageDir);
+			Path languageWalkPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.filename, "lang/en_us/"); // Always walk en_us files.
 			try {
 				// Iterate Language Directories:
-				Iterator<Path> languageDirIter = Files.walk(languageDirPath).iterator();
+				Iterator<Path> languageDirIter = Files.walk(languageWalkPath).iterator();
 				String languageSubdir = "";
 				while(languageDirIter.hasNext()) {
 					Path subdirPath = languageDirIter.next();
@@ -108,13 +108,13 @@ public class LanguageManager {
 								languageSubdir = "";
 							}
 							String languagePath = languageDir + languageSubdir + subdirPath.getFileName();
-							LycanitesMobs.printDebug("Language", "Reading translations from lang: " + languagePath + " Subdir Path:" + subdirPath.toString());
+							LycanitesMobs.printDebug("Language", "Reading translations from lang: " + languagePath + " Subdir Path:" + subdirPath.toString().replace("en_us", language));
 							ResourceLocation langLocation = new ResourceLocation(LycanitesMobs.modInfo.filename, languagePath);
 							getInstance().loadLocaleData(resourceManager.getResource(langLocation).getInputStream());
 							//getInstance().loadLocaleData(Files.newInputStream(subdirPath));
 						}
 						catch(Exception e) {
-							LycanitesMobs.printWarning("", "Error reading translations from lang: " + languageDir + languageSubdir + subdirPath.getFileName() + " Subdir: " + languageSubdir + " Subdir Path: " + subdirPath.toString());
+							LycanitesMobs.printWarning("", "Error reading translations from lang: " + languageDir + languageSubdir + subdirPath.getFileName() + " Subdir: " + languageSubdir + " Subdir Path: " + subdirPath.toString().replace("en_us", language));
 							//throw new RuntimeException(e);
 						}
 						laodedLangFiles++;
@@ -128,7 +128,7 @@ public class LanguageManager {
 
 				}
 			}
-			catch (IOException e) {
+			catch (Exception e) {
 				//throw new RuntimeException(e);
 			}
 		}
