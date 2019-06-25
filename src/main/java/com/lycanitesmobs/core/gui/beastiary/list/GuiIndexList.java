@@ -66,20 +66,20 @@ public class GuiIndexList extends GuiScrollingList {
 			return "";
 		}
 
-		String content = "§l§n" + LanguageManager.translate("gui.beastiary.index.changes") + "§r";
-		content += "\n§l" + LanguageManager.translate("gui.beastiary.index.changes.name") + ":§r " + this.versionInfo.name;
+		String content = "\u00A7l\u00A7n" + LanguageManager.translate("gui.beastiary.index.changes") + "\u00A7r";
+		content += "\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.name") + ":\u00A7r " + this.versionInfo.name;
 		if(this.versionInfo.newFeatures.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.new") + ":§r\n" + this.versionInfo.newFeatures;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.new") + ":\u00A7r\n" + this.versionInfo.newFeatures;
 		if(this.versionInfo.configChanges.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.config") + ":§r\n" + this.versionInfo.configChanges;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.config") + ":\u00A7r\n" + this.versionInfo.configChanges;
 		if(this.versionInfo.majorFixes.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.major") + ":§r\n" + this.versionInfo.majorFixes;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.major") + ":\u00A7r\n" + this.versionInfo.majorFixes;
 		if(this.versionInfo.changes.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.gameplay") + ":§r\n" + this.versionInfo.changes;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.gameplay") + ":\u00A7r\n" + this.versionInfo.changes;
 		if(this.versionInfo.balancing.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.balancing") + ":§r\n" + this.versionInfo.balancing;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.balancing") + ":\u00A7r\n" + this.versionInfo.balancing;
 		if(this.versionInfo.minorFixes.length() > 0)
-			content += "\n\n§l" + LanguageManager.translate("gui.beastiary.index.changes.minor") + ":§r\n" + this.versionInfo.minorFixes;
+			content += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.changes.minor") + ":\u00A7r\n" + this.versionInfo.minorFixes;
 
 		return content;
 	}

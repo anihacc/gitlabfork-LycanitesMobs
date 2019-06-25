@@ -25,11 +25,11 @@ public class LanguageLoader implements IResourceManagerReloadListener {
 
 
 	/**
-	 * Called when the Resource Manager is reloaded included the initial load up of the game.
+	 * Called when the Resource Manager is reloaded including the initial load up of the game.
 	 * @param resourceManager The resource manager instance.
 	 */
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
-		LanguageManager.getInstance().loadLanguage(Minecraft.getMinecraft().gameSettings.language);
+		LanguageManager.getInstance().loadLanguage(Minecraft.getMinecraft().gameSettings.language, resourceManager);
 	}
 }

@@ -5,6 +5,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import org.apache.commons.io.IOUtils;
 
@@ -78,7 +80,7 @@ public class LanguageManager {
 	 * Loads the provided language.
 	 * @param mainLanguage The language to load, default is en_us.
 	 */
-	public void loadLanguage(String mainLanguage) {
+	public void loadLanguage(String mainLanguage, IResourceManager resourceManager) {
 		LycanitesMobs.printDebug("Localisation", "Loading additional lang files...");
 
 		// Get Languages To Load:
@@ -95,19 +97,40 @@ public class LanguageManager {
 			try {
 				// Iterate Language Directories:
 				Iterator<Path> languageDirIter = Files.walk(languageDirPath).iterator();
+				String languageSubdir = "";
 				while(languageDirIter.hasNext()) {
 					Path subdirPath = languageDirIter.next();
 
 					// Read Root Lang File:
 					if(!Files.isDirectory(subdirPath)) {
-						LycanitesMobs.printDebug("Localisation", "Reading translations from lang: " + subdirPath.toAbsolutePath());
-						LanguageManager.getInstance().loadLocaleData(Files.newInputStream(subdirPath));
+						try {
+							if(!subdirPath.toString().replace("\\", "/").contains(languageSubdir)) {
+								languageSubdir = "";
+							}
+							String languagePath = languageDir + languageSubdir + subdirPath.getFileName();
+							LycanitesMobs.printDebug("Language", "Reading translations from lang: " + languagePath + " Subdir Path:" + subdirPath.toString());
+							ResourceLocation langLocation = new ResourceLocation(LycanitesMobs.modInfo.filename, languagePath);
+							getInstance().loadLocaleData(resourceManager.getResource(langLocation).getInputStream());
+							//getInstance().loadLocaleData(Files.newInputStream(subdirPath));
+						}
+						catch(Exception e) {
+							LycanitesMobs.printWarning("", "Error reading translations from lang: " + languageDir + languageSubdir + subdirPath.getFileName() + " Subdir: " + languageSubdir + " Subdir Path: " + subdirPath.toString());
+							//throw new RuntimeException(e);
+						}
 						laodedLangFiles++;
+					}
+					else {
+						languageSubdir = subdirPath.getName(subdirPath.getNameCount() - 1).toString().replace("\\", "/");
+						if(!languageSubdir.substring(languageSubdir.length() - 1).equals("/"))
+							languageSubdir = languageSubdir + "/";
+						LycanitesMobs.printDebug("Language", "Setting Subdir: " + languageSubdir);
 					}
 
 				}
 			}
-			catch (Exception var9) {}
+			catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
 		LycanitesMobs.printDebug("Localisation", laodedLangFiles + " Additional lang files loaded! Test translation: " + LanguageManager.translate("lycanitesmobs.test"));

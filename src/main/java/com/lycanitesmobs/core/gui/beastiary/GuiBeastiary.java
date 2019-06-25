@@ -274,7 +274,7 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 	 * @param partialTicks Ticks for animation.
 	 */
 	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
-		String title = "§l§n" + this.getTitle();
+		String title = "\u00A7l\u00A7n" + this.getTitle();
 		float width = this.getFontRenderer().getStringWidth(title);
 		this.getFontRenderer().drawString(title, this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF, true);
 	}

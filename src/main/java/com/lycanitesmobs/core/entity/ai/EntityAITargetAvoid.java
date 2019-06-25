@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.ai;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -83,6 +84,10 @@ public class EntityAITargetAvoid extends EntityAITarget {
         // Own Class Check:
     	if(this.targetClass != this.host.getClass() && target.getClass() == this.host.getClass())
             return false;
+
+    	// Tamed Check:
+		if(target instanceof EntityCreatureTameable && ((EntityCreatureTameable)target).isTamed())
+			return false;
         
     	return true;
     }

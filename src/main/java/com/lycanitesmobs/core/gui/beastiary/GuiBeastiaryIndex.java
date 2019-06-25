@@ -91,13 +91,13 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		}
 
 		// Check Mod Version:
-		String version = "\n§l" + LanguageManager.translate("gui.beastiary.index.version") + ": §r";
+		String version = "\n\u00A7l" + LanguageManager.translate("gui.beastiary.index.version") + ": \u00A7r";
 		if(latestVersion.isNewer) {
-			version += "§4";
+			version += "\u00A74";
 		}
-		version += LycanitesMobs.versionNumber + "§r";
+		version += LycanitesMobs.versionNumber + "\u00A7r";
 		if(latestVersion.isNewer) {
-			version += " §l" + LanguageManager.translate("gui.beastiary.index.version.newer") + ": §r§2" + latestVersion.versionNumber + "§r";
+			version += " \u00A7l" + LanguageManager.translate("gui.beastiary.index.version.newer") + ": \u00A7r\u00A72" + latestVersion.versionNumber + "\u00A7r";
 		}
 		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(version, this.colRightWidth);
