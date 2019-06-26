@@ -1,4 +1,4 @@
-creaturetype.spawn=产卵
+creaturetype.spawn=生成
 creaturetype.beast.name=野兽
 creaturetype.avian.name=禽类
 creaturetype.arthropod.name=节肢动物

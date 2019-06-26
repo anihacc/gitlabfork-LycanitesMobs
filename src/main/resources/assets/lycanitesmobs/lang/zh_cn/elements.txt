@@ -31,7 +31,7 @@ element.light.description=一种代表辐射的复合元素，使其成为一种
 element.shadow.name=阴影
 element.shadow.description=一种代表将黑暗为阻止辐射或能量产生的力量的复合元素。阴影可以从火和混沌中融合，因为它体现了火的能量方面，然后被混沌颠倒成一种对抗能量创造的力量，将其消除。
 #
-element.armbour.name=植物
+element.arbour.name=植物
 element.arbour.description=一种代表生长和自然的复合元素，它紧紧围绕着大量利用这种元素的植物。植物可以从水和大地融合，因为它体现了水的流动形式和大地的固体存在。
 #
 element.frost.name=凛冰
