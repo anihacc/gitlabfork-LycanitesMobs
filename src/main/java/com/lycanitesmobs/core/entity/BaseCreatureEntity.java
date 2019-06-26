@@ -3747,6 +3747,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(blockState.getBlock() == Blocks.COBWEB && webProof()) {
     		return;
 		}
+		if(blockState.getBlock() == ObjectManager.getBlock("quickweb") && webProof()) {
+			return;
+		}
+		if(blockState.getBlock() == ObjectManager.getBlock("frostweb") && webProof()) {
+			return;
+		}
     	super.setMotionMultiplier(blockState, motionMultiplier);
     }
     
