@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:bansheeeye"
+      "item": "lycanitesmobs:equipmentpart_bansheeeye"
     }
   ],
   "type": "minecraft:crafting_shapeless"

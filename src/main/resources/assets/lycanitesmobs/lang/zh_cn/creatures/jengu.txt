@@ -1,0 +1,4 @@
+entity.lycanitesmobs.jengu.name=水元素
+entity.lycanitesmobs.jengu.description=水元素被称为纯净水的保护者，它们会攻击任何它们认为对它们的水纯度构成威胁的东西。
+entity.lycanitesmobs.jengu.habitat=作为水的元素，水元素在黑暗中从大型水体中显现。
+entity.lycanitesmobs.jengu.combat=水元素通过投掷大量的水攻击，碰到这些水会形成一个临时的水池。

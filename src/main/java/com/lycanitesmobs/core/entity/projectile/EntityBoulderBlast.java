@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +13,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityBoulderBlast extends EntityProjectileBase {
+public class EntityBoulderBlast extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -21,15 +21,15 @@ public class EntityBoulderBlast extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityBoulderBlast(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityBoulderBlast(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityBoulderBlast(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityBoulderBlast(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityBoulderBlast(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityBoulderBlast(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

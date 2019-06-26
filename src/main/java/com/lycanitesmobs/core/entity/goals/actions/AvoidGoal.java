@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
@@ -10,7 +10,7 @@ import java.util.EnumSet;
 
 public class AvoidGoal extends Goal {
     // Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     private LivingEntity avoidTarget;
     
     // Properties:
@@ -25,7 +25,7 @@ public class AvoidGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public AvoidGoal(EntityCreatureBase setHost) {
+    public AvoidGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

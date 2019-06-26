@@ -38,11 +38,11 @@ public class ElementManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		ElementInfo elementInfo = new ElementInfo();
 		elementInfo.loadFromJSON(json);
 		if(elementInfo.name == null) {
-			LycanitesMobs.logWarning("", "Unable to load " + name + " json due to missing name.");
+			LycanitesMobs.logWarning("", "Unable to load " + loadGroup + " json due to missing name.");
 			return;
 		}
 		this.elements.put(elementInfo.name, elementInfo);

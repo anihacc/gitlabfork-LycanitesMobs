@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityDawon extends EntityCreatureTameable implements IGroupAnimal, IGroupPredator, IGroupHunter {
+public class EntityDawon extends TameableCreatureEntity implements IGroupAnimal, IGroupPredator, IGroupHunter {
 
 	// ==================================================
  	//                    Constructor

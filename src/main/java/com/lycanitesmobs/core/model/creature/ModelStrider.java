@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
 import net.minecraft.entity.LivingEntity;
@@ -82,7 +82,7 @@ public class ModelStrider extends ModelCreatureObjOld {
             rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 
         // Attack:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
             if(partName.equals("armleft"))
                 rotate(-25.0F, 0.0F, 0.0F);
             if(partName.equals("armright"))
@@ -90,7 +90,7 @@ public class ModelStrider extends ModelCreatureObjOld {
         }
 
         // Pickup:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).hasPickupEntity()) {
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
             if (partName.equals("armleft") || partName.equals("armright")) {
                 rotX += 20D;
             }

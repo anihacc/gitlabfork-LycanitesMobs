@@ -1,10 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -25,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDemon {
+public class EntityAstaroth extends BaseCreatureEntity implements IMob, IGroupDemon {
     
     // ==================================================
  	//                    Constructor
@@ -68,7 +65,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 
         // Asmodeus Master:
         if(this.updateTick % 20 == 0) {
-            if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((EntityCreatureBase)this.getMasterTarget()).getBattlePhase() > 0) {
+            if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((BaseCreatureEntity)this.getMasterTarget()).getBattlePhase() > 0) {
                 EntityHellShield projectile = new EntityHellShield(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellShield.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
                 projectile.posY -= this.getSize(Pose.STANDING).height * 0.35D;

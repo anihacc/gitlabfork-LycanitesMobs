@@ -1,0 +1,4 @@
+entity.lycanitesmobs.lobber.name=熔岩巨魔
+entity.lycanitesmobs.lobber.description=巨大的熔岩狂兽，大裂片是非常强大的生物。
+entity.lycanitesmobs.lobber.habitat=这些狂兽在熔岩湖中发现。
+entity.lycanitesmobs.lobber.combat=熔岩巨魔因其攻击而得名，在攻击中它们向受害者投掷大量岩浆球，这很快就开始向该地区注入临时熔岩。

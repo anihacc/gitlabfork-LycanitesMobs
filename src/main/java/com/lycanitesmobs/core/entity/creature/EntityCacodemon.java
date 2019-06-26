@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCacodemon extends EntityCreatureRideable implements IGroupDemon {
+public class EntityCacodemon extends RideableCreatureEntity implements IGroupDemon {
     public boolean cacodemonGreifing = true; // TODO Creature flags.
     
     // ==================================================

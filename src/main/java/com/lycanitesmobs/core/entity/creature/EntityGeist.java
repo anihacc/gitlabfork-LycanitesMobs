@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityGeist extends EntityCreatureAgeable implements IMob, IGroupShadow {
+public class EntityGeist extends AgeableCreatureEntity implements IMob, IGroupShadow {
 
     public boolean geistShadowfireDeath = true; // TODO Creature flags.
 

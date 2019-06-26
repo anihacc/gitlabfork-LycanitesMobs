@@ -22,7 +22,8 @@
 			"rangeMax": [16, 16, 16],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true,
+			"solidGround": false,
+			"underground": false,
 			"structureType": "Village"
 		}
 	],

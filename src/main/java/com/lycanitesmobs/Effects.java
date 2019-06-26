@@ -3,8 +3,7 @@ package com.lycanitesmobs;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.config.ConfigExtra;
-import com.lycanitesmobs.core.entity.EntityFactory;
-import com.lycanitesmobs.core.entity.EntityFear;
+import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityVelocity;
 import net.minecraft.entity.Entity;
@@ -143,7 +142,7 @@ public class Effects {
 				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 				if(extendedEntity != null) {
 					if(extendedEntity.fearEntity == null) {
-						EntityFear fearEntity = new EntityFear((EntityType<? extends EntityFear>) CreatureManager.getInstance().getEntityType("fear"), entity.getEntityWorld(), entity);
+						FearEntity fearEntity = new FearEntity((EntityType<? extends FearEntity>) CreatureManager.getInstance().getEntityType("fear"), entity.getEntityWorld(), entity);
 						entity.getEntityWorld().addEntity(fearEntity);
 						extendedEntity.fearEntity = fearEntity;
 					}

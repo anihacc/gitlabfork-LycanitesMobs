@@ -21,11 +21,11 @@ public class EquipmentForgeContainerProvider implements INamedContainerProvider 
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerEquipmentForge(windowId, playerInventory, this.equipmentForge);
+		return new EquipmentForgeContainer(windowId, playerInventory, this.equipmentForge);
 	}
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent(this.equipmentForge.getName());
+		return this.equipmentForge.getName();
 	}
 }

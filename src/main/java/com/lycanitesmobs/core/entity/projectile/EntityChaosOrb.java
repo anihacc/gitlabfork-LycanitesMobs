@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileModel;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.ModelProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityChaosOrb extends EntityProjectileModel {
+public class EntityChaosOrb extends ModelProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -21,15 +21,15 @@ public class EntityChaosOrb extends EntityProjectileModel {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityChaosOrb(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityChaosOrb(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityChaosOrb(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityChaosOrb(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityChaosOrb(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityChaosOrb(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

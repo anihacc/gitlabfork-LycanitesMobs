@@ -2,10 +2,9 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class ProjectileEquipmentFeature extends EquipmentFeature {
@@ -84,21 +85,28 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + projectileInfo.getTitle();
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ").appendSibling(projectileInfo.getTitle());
 
-		description += "\n" + LanguageManager.translate("equipment.feature.projectile.trigger") + " " + LanguageManager.translate("equipment.feature.projectile.trigger." + this.projectileTrigger);
+		description.appendText("\n")
+				.appendSibling(new TranslationTextComponent("equipment.feature.projectile.trigger"))
+				.appendText(" ")
+				.appendSibling( new TranslationTextComponent("equipment.feature.projectile.trigger." + this.projectileTrigger));
 		if("hit".equals(this.projectileTrigger)) {
-			description += " " + (this.hitChance * 100) + "%";
+			description.appendText(" " + (this.hitChance * 100) + "%");
 		}
 
 		if(!"simple".equals(this.projectilePattern)) {
-			description += "\n" + LanguageManager.translate("equipment.feature.projectile.pattern") + " " + LanguageManager.translate("equipment.feature.projectile.pattern." + this.projectilePattern);
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern."))
+					.appendText(this.projectilePattern);
 		}
 
 		return description;
@@ -159,7 +167,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		World world = shooter.getEntityWorld();
-		EntityProjectileBase mainProjectile = null;
+		BaseProjectileEntity mainProjectile = null;
 		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.posZ);
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
@@ -180,7 +188,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				double yaw = shooter.rotationYaw + (this.spreadX * shooter.getRNG().nextDouble()) - (this.spreadX / 2);
 				double pitch = shooter.rotationPitch + (this.spreadY * shooter.getRNG().nextDouble()) - (this.spreadY / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				world.addEntity(projectile);
@@ -192,7 +200,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			for(int i = 0; i < this.count; i++) {
 				double yaw = shooter.rotationYaw + (angle * i) - (this.ringRange / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				world.addEntity(projectile);
 				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);

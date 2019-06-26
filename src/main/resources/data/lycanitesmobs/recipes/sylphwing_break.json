@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:sylphwing"
+      "item": "lycanitesmobs:equipmentpart_sylphwing"
     }
   ],
   "type": "minecraft:crafting_shapeless"

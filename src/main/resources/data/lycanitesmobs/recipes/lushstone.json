@@ -5,8 +5,7 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:tallgrass",
-      "data": 1
+      "item": "minecraft:grass"
     },
     {
       "item": "minecraft:cobblestone"

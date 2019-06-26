@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.info.altar;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
@@ -164,7 +163,7 @@ public class AltarInfoEbonCacodemon extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityCreature = (EntityCreatureBase) CreatureManager.getInstance().getCreature("cacodemon").createEntity(world);
+        BaseCreatureEntity entityCreature = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("cacodemon").createEntity(world);
         if(checkDimensions && !entityCreature.isNativeDimension(world))
             return false;
 

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import com.lycanitesmobs.core.renderer.RenderProjectileModel;
 import net.minecraft.client.Minecraft;
@@ -14,7 +14,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerProjectileBase extends LayerRenderer<EntityProjectileBase, ModelProjectileBase> {
+public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ModelProjectileBase> {
     public RenderProjectileModel renderer;
     public String name;
 
@@ -32,7 +32,7 @@ public class LayerProjectileBase extends LayerRenderer<EntityProjectileBase, Mod
     //                  Render Layer
     // ==================================================
     @Override //render
-    public void func_212842_a_(EntityProjectileBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_212842_a_(BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {
@@ -43,7 +43,7 @@ public class LayerProjectileBase extends LayerRenderer<EntityProjectileBase, Mod
         }
     }
 
-    public boolean canRenderLayer(EntityProjectileBase entity, float scale) {
+    public boolean canRenderLayer(BaseProjectileEntity entity, float scale) {
         if(entity == null)
             return false;
         if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getInstance().player))
@@ -55,22 +55,22 @@ public class LayerProjectileBase extends LayerRenderer<EntityProjectileBase, Mod
     // ==================================================
     //                      Visuals
     // ==================================================
-    public ResourceLocation getLayerTexture(EntityProjectileBase entity) {
+    public ResourceLocation getLayerTexture(BaseProjectileEntity entity) {
         return null;
     }
 
-    public boolean canRenderPart(String partName, EntityProjectileBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseProjectileEntity entity, boolean trophy) {
         if(this.renderer.getMainModel() != null) {
             this.renderer.getMainModel().canBaseRenderPart(partName, entity, trophy);
         }
         return true;
     }
 
-    public Vector4f getPartColor(String partName, EntityProjectileBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public Vector2f getTextureOffset(String partName, EntityProjectileBase entity, boolean trophy, float loop) {
+    public Vector2f getTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
         return new Vector2f(0, 0);
     }
 

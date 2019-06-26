@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupLight;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
+public class EntityWisp extends TameableCreatureEntity implements IGroupLight {
 	EntityWisp playPartner = null;
 
     // ==================================================
@@ -102,8 +102,8 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 						if(target instanceof ZombieEntity || target instanceof SkeletonEntity) {
 							target.setFire(1);
 						}
-						if(target instanceof EntityCreatureBase) {
-							EntityCreatureBase targetCreature = (EntityCreatureBase)target;
+						if(target instanceof BaseCreatureEntity) {
+							BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
 							if(targetCreature.daylightBurns()) {
 								targetCreature.setFire(1);
 							}

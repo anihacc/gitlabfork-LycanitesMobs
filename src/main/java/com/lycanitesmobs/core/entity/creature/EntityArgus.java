@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityChaosOrb;
@@ -15,7 +15,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityArgus extends EntityCreatureTameable implements IMob, IFusable {
+public class EntityArgus extends TameableCreatureEntity implements IMob, IFusable {
 
 	private int teleportTime = 60;
 

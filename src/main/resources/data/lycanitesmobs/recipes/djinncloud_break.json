@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:djinncloud"
+      "item": "lycanitesmobs:equipmentpart_djinncloud"
     }
   ],
   "type": "minecraft:crafting_shapeless"

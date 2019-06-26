@@ -1,0 +1,4 @@
+entity.lycanitesmobs.crusk.name=死亡之虫
+entity.lycanitesmobs.crusk.description=大型沙蠕虫，有厚厚的外骨骼保护它们。较小的幼崽可以被驯服，但是它们需要很长的时间才能成长，但却可以成为很好地保护宠物。
+entity.lycanitesmobs.crusk.habitat=这些生物可以在沙漠沙丘中找到。
+entity.lycanitesmobs.crusk.combat=死亡之虫撕咬得很厉害，可以潜入柔软地形，如沙子、草方块或泥土。

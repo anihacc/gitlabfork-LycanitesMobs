@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityHellfireball extends EntityProjectileBase {
+public class EntityHellfireball extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -26,15 +25,15 @@ public class EntityHellfireball extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireball(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityHellfireball(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityHellfireball(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityHellfireball(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityHellfireball(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityHellfireball(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

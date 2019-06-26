@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -17,7 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAegis extends EntityCreatureTameable implements IGroupRock, IFusable {
+public class EntityAegis extends TameableCreatureEntity implements IGroupRock, IFusable {
 	protected BlockPos villagePos;
 	public boolean chestProtection = true; // TODO Creature flags.
 

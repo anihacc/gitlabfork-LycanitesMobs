@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
@@ -389,8 +389,8 @@ public class MobSpawn {
 			((MobEntity)entityLiving).enablePersistence();
 		}
 
-		if(entityLiving instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
+		if(entityLiving instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
 			boolean firstSpawn = true;
 			if(this.mobSizeScale > -1) {
 				entityCreature.setSizeScale(this.mobSizeScale);

@@ -62,7 +62,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 	public short difficultyMax = -1;
 
 	/** The required moon phase. 0 is a full moon. **/
-	public int moonPhase = -1;
+	public float moonPhase = -1;
 
 
 	@Override
@@ -120,7 +120,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 			this.difficultyMax = json.get("difficultyMax").getAsShort();
 
 		if(json.has("moonPhase"))
-			this.moonPhase = json.get("moonPhase").getAsInt();
+			this.moonPhase = json.get("moonPhase").getAsFloat();
 
 		super.loadFromJSON(json);
 	}
@@ -194,7 +194,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 		}
 
 		// Check Moon Phase:
-		if(this.moonPhase >= 0 && world.getMoonPhase() != this.moonPhase) {
+		if(this.moonPhase >= 0 && world.getCurrentMoonPhaseFactor() != this.moonPhase) {
 			return false;
 		}
 

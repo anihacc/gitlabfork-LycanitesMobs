@@ -4,7 +4,7 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
@@ -21,7 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey {
+public class EntityCalpod extends BaseCreatureEntity implements IMob, IGroupPrey {
 	private int calpodSwarmLimit = 5; // TODO Creature flags.
 	private boolean calpodGreifing = true;
 
@@ -91,7 +91,7 @@ public class EntityCalpod extends EntityCreatureBase implements IMob, IGroupPrey
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityCreatureBase minion = (EntityCreatureBase)this.creatureInfo.createEntity(this.getEntityWorld());
+    	BaseCreatureEntity minion = (BaseCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
 		minion.applySubspecies(this.getSubspeciesIndex());

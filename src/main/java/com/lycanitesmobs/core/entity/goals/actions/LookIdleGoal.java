@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
 public class LookIdleGoal extends Goal {
     // Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
 
     // Properties:
     private int idleTime;
@@ -19,7 +19,7 @@ public class LookIdleGoal extends Goal {
     // ==================================================
    	//                    Constructor
    	// ==================================================
-    public LookIdleGoal(EntityCreatureBase setHost) {
+    public LookIdleGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexFlags(EnumSet.of(Flag.LOOK));
     }

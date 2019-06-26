@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.block.Block;
@@ -25,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupFire, IGroupHeavy {
+public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupFire, IGroupHeavy {
 
     public boolean khalkLavaDeath = true; // TODO Creature flags.
 
@@ -192,7 +191,7 @@ public class EntityKhalk extends EntityCreatureTameable implements IMob, IGroupF
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityitem) {
+    public void applyDropEffects(CustomItemEntity entityitem) {
     	entityitem.setCanBurn(false);
     }
     

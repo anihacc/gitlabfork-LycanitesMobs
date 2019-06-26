@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 
 import java.util.EnumSet;
@@ -17,7 +17,7 @@ public class AvoidTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public AvoidTargetingGoal(EntityCreatureBase setHost) {
+    public AvoidTargetingGoal(BaseCreatureEntity setHost) {
         super(setHost);
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
@@ -85,7 +85,7 @@ public class AvoidTargetingGoal extends TargetingGoal {
             return false;
 
 		// Tamed Check:
-		if(target instanceof EntityCreatureTameable && ((EntityCreatureTameable)target).isTamed())
+		if(target instanceof TameableCreatureEntity && ((TameableCreatureEntity)target).isTamed())
 			return false;
         
     	return true;

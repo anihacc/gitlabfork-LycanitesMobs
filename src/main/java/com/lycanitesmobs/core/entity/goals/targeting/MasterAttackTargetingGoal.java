@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
@@ -8,7 +8,7 @@ import java.util.EnumSet;
 
 public class MasterAttackTargetingGoal extends Goal {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	
 	// Properties:
     private boolean tameTargeting = false;
@@ -16,7 +16,7 @@ public class MasterAttackTargetingGoal extends Goal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public MasterAttackTargetingGoal(EntityCreatureBase setHost) {
+    public MasterAttackTargetingGoal(BaseCreatureEntity setHost) {
         host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }

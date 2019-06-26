@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
@@ -18,7 +18,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityEyewig extends EntityCreatureRideable {
+public class EntityEyewig extends RideableCreatureEntity {
 
 	AttackRangedGoal rangedAttackAI;
     

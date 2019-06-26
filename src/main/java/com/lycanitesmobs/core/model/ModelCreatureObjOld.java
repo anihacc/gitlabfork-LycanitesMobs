@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -97,7 +97,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
    	//                  Render Model
    	// ==================================================
     @Override
-	public void render(EntityCreatureBase entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
 		boolean isChild = false; // TODO Baby heads!
 
         // Assess Scale and Check if Trophy:

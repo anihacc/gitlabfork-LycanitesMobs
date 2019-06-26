@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.LivingEntity;
 
@@ -19,7 +19,7 @@ public class FuseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public FuseTargetingGoal(EntityCreatureBase setHost) {
+    public FuseTargetingGoal(BaseCreatureEntity setHost) {
         super(setHost);
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
@@ -100,8 +100,8 @@ public class FuseTargetingGoal extends TargetingGoal {
 			return false;
 
 		// Owner Check:
-		if(this.host instanceof EntityCreatureTameable && target instanceof EntityCreatureTameable) {
-			if(((EntityCreatureTameable)this.host).getPlayerOwner() != ((EntityCreatureTameable)target).getPlayerOwner()) {
+		if(this.host instanceof TameableCreatureEntity && target instanceof TameableCreatureEntity) {
+			if(((TameableCreatureEntity)this.host).getPlayerOwner() != ((TameableCreatureEntity)target).getPlayerOwner()) {
 				return false;
 			}
 		}

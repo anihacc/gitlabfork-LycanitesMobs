@@ -1,0 +1,4 @@
+entity.lycanitesmobs.vespid.name=胡蜂
+entity.lycanitesmobs.vespid.description=带有毒刺的入侵性大黄蜂。单独的胡蜂不是什么问题，但要是有一群或者有女王蜂存在，它们可能是非常危险的。人们知道它们在女王附近筑巢。
+entity.lycanitesmobs.vespid.habitat=这些昆虫生活在热带地区，如丛林。
+entity.lycanitesmobs.vespid.combat=胡蜂快但很弱，它们的刺有毒。它们经常成群结队，在蜂巢里会有危险的数量。

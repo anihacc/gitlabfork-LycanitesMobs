@@ -6,7 +6,7 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.Targeting;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.PillagerEntity;
@@ -32,7 +32,7 @@ public class AttackTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public AttackTargetingGoal(EntityCreatureBase setHost) {
+    public AttackTargetingGoal(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }

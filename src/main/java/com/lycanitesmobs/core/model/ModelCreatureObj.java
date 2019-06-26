@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.creature.EntityAbaia;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -206,7 +205,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
    	//                  Render Model
    	// ==================================================
     @Override
-	public void render(EntityCreatureBase entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
 		boolean isChild = false; // TODO Baby heads!
@@ -448,9 +447,9 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
     //                   Attack Frame
     // ==================================================
     public void updateAttackProgress(Entity entity) {
-        if(this.currentModelState == null || !(entity instanceof EntityCreatureBase))
+        if(this.currentModelState == null || !(entity instanceof BaseCreatureEntity))
             return;
-        EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+        BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 
         if(this.currentModelState.attackAnimationPlaying) {
             if (this.currentModelState.attackAnimationIncreasing) {

@@ -6,9 +6,8 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -37,7 +36,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntitySalamander extends EntityCreatureRideable implements IMob, IGroupFire {
+public class EntitySalamander extends RideableCreatureEntity implements IMob, IGroupFire {
 
     // ==================================================
  	//                    Constructor
@@ -282,7 +281,7 @@ public class EntitySalamander extends EntityCreatureRideable implements IMob, IG
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityItem) {
+    public void applyDropEffects(CustomItemEntity entityItem) {
         entityItem.setCanBurn(false);
     }
     

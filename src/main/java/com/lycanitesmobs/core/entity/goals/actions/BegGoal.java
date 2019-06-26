@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 
 public class BegGoal extends Goal {
 	// Targets:
-    private EntityCreatureTameable host;
+    private TameableCreatureEntity host;
     private PlayerEntity player;
     
     // Properties:
@@ -19,7 +19,7 @@ public class BegGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public BegGoal(EntityCreatureTameable setHost) {
+    public BegGoal(TameableCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

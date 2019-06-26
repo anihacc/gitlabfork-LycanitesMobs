@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -29,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityThresher extends EntityCreatureRideable implements IMob, IGroupPredator, IGroupHeavy {
+public class EntityThresher extends RideableCreatureEntity implements IMob, IGroupPredator, IGroupHeavy {
 
 	WanderGoal wanderAI;
     protected int whirlpoolRange = 8; // TODO Creature flags.

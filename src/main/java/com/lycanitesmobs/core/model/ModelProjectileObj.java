@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
@@ -180,7 +180,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
    	//                  Render Model
    	// ==================================================
     @Override
-	public void render(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
+	public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
 		if(scale < 0) {
@@ -239,7 +239,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     }
 
 	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerProjectileBase layer, EntityProjectileBase entity) {
+	public void onRenderStart(LayerProjectileBase layer, BaseProjectileEntity entity) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.enableBlend();
 		}
@@ -250,7 +250,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	}
 
 	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerProjectileBase layer, EntityProjectileBase entity) {
+	public void onRenderFinish(LayerProjectileBase layer, BaseProjectileEntity entity) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.disableBlend();
 		}
@@ -260,7 +260,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	}
 
 	/** Generates all animation frames for a render tick. **/
-	public void generateAnimationFrames(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+	public void generateAnimationFrames(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		for(ObjObject part : this.wavefrontParts) {
 			String partName = part.getName().toLowerCase();
 			//if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
@@ -287,7 +287,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     // ==================================================
     /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
     @Override
-    public boolean canRenderPart(String partName, EntityProjectileBase entity, LayerProjectileBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy) {
         if(partName == null)
             return false;
         partName = partName.toLowerCase();
@@ -314,7 +314,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
      * @param lookX An x looking rotation used by the head, etc.
      * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
      */
-    public void animatePart(String partName, EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void animatePart(String partName, BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	float rotX = 0F;
     	float rotY = 0F;
     	float rotZ = 0F;
@@ -324,7 +324,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     }
 
     /** Returns an existing or new model state for the given entity. **/
-    public ModelObjState getModelState(EntityProjectileBase entity) {
+    public ModelObjState getModelState(BaseProjectileEntity entity) {
         if(entity == null)
             return null;
         if(this.modelStates.containsKey(entity)) {

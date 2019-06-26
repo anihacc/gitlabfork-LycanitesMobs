@@ -16,7 +16,7 @@ import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.mods.DLDungeons;
+import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
@@ -56,7 +56,6 @@ public class LycanitesMobs {
 	public static final PacketHandler packetHandler = new PacketHandler();
 
 	public static ModInfo modInfo;
-	//public static IProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	public static boolean configReady = false;
 	public static boolean earlyDebug = false;
@@ -98,6 +97,7 @@ public class LycanitesMobs {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().register(ObjectManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(ItemManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 
@@ -117,14 +117,17 @@ public class LycanitesMobs {
 
 	// Content Loading:
 	public void loadContent() {
-		// Blocks and Items:
-		ItemManager.getInstance().loadItems();
-		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
-		ObjectLists.createCustomItems();
-		ObjectLists.createLists();
+		// Vanilla Item Lists:
+		ObjectLists.createVanillaLists();
 
 		// Potion Effects:
 		EFFECTS = new Effects();
+
+		// Blocks and Items:
+		ItemManager.getInstance().startup(modInfo);
+
+		// Equipment Parts:
+		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Elements:
 		ElementManager.getInstance().loadAllFromJSON(modInfo);

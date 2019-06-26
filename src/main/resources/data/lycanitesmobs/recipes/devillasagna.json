@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:devillasagna"
+    "item": "lycanitesmobs:devil_lasagna"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:wheat"
     },
     {
-      "item": "lycanitesmobs:pinkymeatcooked"
+      "item": "lycanitesmobs:cooked_pinky_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

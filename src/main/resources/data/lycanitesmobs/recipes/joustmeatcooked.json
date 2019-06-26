@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:joustmeatcooked"
+    "item": "lycanitesmobs:cooked_joust_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:ambercake"
+      "item": "lycanitesmobs:amber_cake"
     }
   ],
   "type": "minecraft:crafting_shapeless"

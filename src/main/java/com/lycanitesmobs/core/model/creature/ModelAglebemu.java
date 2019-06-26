@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateQuadruped;
 
 import net.minecraft.entity.LivingEntity;

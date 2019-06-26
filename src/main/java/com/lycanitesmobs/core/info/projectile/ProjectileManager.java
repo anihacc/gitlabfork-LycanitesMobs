@@ -6,7 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
-import com.lycanitesmobs.core.dispenser.DispenserBehaviorProjectile;
+import com.lycanitesmobs.core.dispenser.BaseProjectileDispenseBehaviour;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ItemManager;
@@ -39,7 +39,7 @@ public class ProjectileManager extends JSONLoader {
 	public Map<String, Class<? extends Entity>> oldModelProjectiles = new HashMap<>();
 
 	/** A map of old projectile classes to types for creating enw instances. **/
-	public Map<Class<? extends Entity>, EntityType<? extends EntityProjectileBase>> oldProjectileTypes = new HashMap<>();
+	public Map<Class<? extends Entity>, EntityType<? extends BaseProjectileEntity>> oldProjectileTypes = new HashMap<>();
 
 	/** The next available network id for projectiles to register by. **/
 	protected int nextProjectileNetworkId = 1000;
@@ -62,7 +62,7 @@ public class ProjectileManager extends JSONLoader {
 			projectileInfo.load();
 		}
 		try {
-			ObjectManager.addSpecialEntity("rapidfire", EntityProjectileRapidFire.class, EntityProjectileRapidFire.class.getConstructor(EntityType.class, World.class));
+			ObjectManager.addSpecialEntity("rapidfire", RapidFireProjectileEntity.class, RapidFireProjectileEntity.class.getConstructor(EntityType.class, World.class));
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -78,11 +78,11 @@ public class ProjectileManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(ModInfo modInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		ProjectileInfo projectileInfo = new ProjectileInfo(modInfo);
 		projectileInfo.loadFromJSON(json);
 		if (projectileInfo.name == null) {
-			LycanitesMobs.logWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
+			LycanitesMobs.logWarning("", "[Projectile] Unable to load " + loadGroup + " json due to missing name.");
 			return;
 		}
 
@@ -179,7 +179,7 @@ public class ProjectileManager extends JSONLoader {
 	 * @return The Entity Type or null.
 	 */
 	@Nullable
-	public EntityType<? extends EntityProjectileBase> getEntityType(String projectileName) {
+	public EntityType<? extends BaseProjectileEntity> getEntityType(String projectileName) {
 		ProjectileInfo projectileInfo = this.getProjectile(projectileName);
 		if(projectileInfo == null)
 			return null;
@@ -189,7 +189,7 @@ public class ProjectileManager extends JSONLoader {
 
 	/** Called during early start up, loads all items. **/
 	public void loadOldProjectiles() {
-		this.addOldProjectile("summoningportal", EntityPortal.class);
+		this.addOldProjectile("summoningportal", PortalEntity.class);
 		this.addOldProjectile("frostweb", EntityFrostweb.class, true, true);
 		this.addOldProjectile("tundra", EntityTundra.class, true, true);
 		this.addOldProjectile("icefireball", EntityIcefireball.class, true, true);
@@ -238,15 +238,15 @@ public class ProjectileManager extends JSONLoader {
 		this.addOldProjectile("poisonrayend", EntityPoisonRayEnd.class, false);
 	}
 
-	public void addOldProjectile(String name, Class<? extends EntityProjectileBase> entityClass) {
-		if(EntityProjectileModel.class.isAssignableFrom(entityClass)) {
+	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass) {
+		if(ModelProjectileEntity.class.isAssignableFrom(entityClass)) {
 			this.oldModelProjectiles.put(name, entityClass);
 			return;
 		}
 		this.oldSpriteProjectiles.put(name, entityClass);
 	}
 	
-	public void addOldProjectile(String name, Class<? extends EntityProjectileBase> entityClass, boolean impactSound) {
+	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass, boolean impactSound) {
 		ModInfo modInfo = LycanitesMobs.modInfo;
 		ObjectManager.addSound(name, modInfo, "projectile." + name);
 		if(impactSound) {
@@ -255,24 +255,24 @@ public class ProjectileManager extends JSONLoader {
 		this.addOldProjectile(name, entityClass);
 	}
 
-	public void addOldProjectile(String name, Class<? extends EntityProjectileBase> entityClass, boolean createChargeItem, boolean createDispenserBehaviour) {
+	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass, boolean createChargeItem, boolean createDispenserBehaviour) {
 		this.addOldProjectile(name, entityClass, createChargeItem, createDispenserBehaviour, false);
 	}
 
-	public void addOldProjectile(String name, Class<? extends EntityProjectileBase> entityClass, boolean createChargeItem, boolean createDispenserBehaviour, boolean impactSound) {
+	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass, boolean createChargeItem, boolean createDispenserBehaviour, boolean impactSound) {
 		this.addOldProjectile(name, entityClass, impactSound);
 		if(createChargeItem) {
-			Item.Properties itemProperties = new Item.Properties().group(ItemManager.getInstance().items);
+			Item.Properties itemProperties = new Item.Properties().group(ItemManager.getInstance().itemsGroup);
 			ItemCharge chargeItem = new ItemCharge(itemProperties, name + "charge", entityClass);
 			ObjectManager.addItem(name + "charge", chargeItem);
 			if (createDispenserBehaviour) {
-				DispenserBehaviorProjectile dispenserBehaviour = new DispenserBehaviorProjectile(entityClass, name);
+				BaseProjectileDispenseBehaviour dispenserBehaviour = new BaseProjectileDispenseBehaviour(entityClass, name);
 				DispenserBlock.registerDispenseBehavior(chargeItem, dispenserBehaviour);
 			}
 		}
 	}
 
-	public EntityProjectileBase createOldProjectile(Class<? extends EntityProjectileBase> projectileClass, World world, LivingEntity entity) {
+	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, LivingEntity entity) {
 		try {
 			return projectileClass.getConstructor(EntityType.class, World.class, LivingEntity.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, entity);
 		} catch (Exception e) {
@@ -281,7 +281,7 @@ public class ProjectileManager extends JSONLoader {
 		}
 	}
 
-	public EntityProjectileBase createOldProjectile(Class<? extends EntityProjectileBase> projectileClass, World world, double x, double y, double z) {
+	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, double x, double y, double z) {
 		try {
 			return projectileClass.getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
 		} catch (Exception e) {

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.wildkin.name=枭兽
+entity.lycanitesmobs.wildkin.description=一种熊与猫头鹰的结合，行动敏捷而迅猛。
+entity.lycanitesmobs.wildkin.habitat=已知这些野兽生活在高山和寒冷地区，如冰原。
+entity.lycanitesmobs.wildkin.combat=枭兽使用强大的袭击，造成沉重效果。

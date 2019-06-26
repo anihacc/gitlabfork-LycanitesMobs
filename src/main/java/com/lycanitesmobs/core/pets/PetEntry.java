@@ -3,9 +3,9 @@ package com.lycanitesmobs.core.pets;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -13,6 +13,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -79,7 +81,7 @@ public class PetEntry {
     //                 Create from Entity
     // ==================================================
     /** Returns a new PetEntry based off the provided entity for the provided player. **/
-    public static PetEntry createFromEntity(PlayerEntity player, EntityCreatureBase entity, String petType) {
+    public static PetEntry createFromEntity(PlayerEntity player, BaseCreatureEntity entity, String petType) {
         CreatureInfo creatureInfo = entity.creatureInfo;
         String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
         PetEntry petEntry = new PetEntry(entryName, petType, player, creatureInfo.getName());
@@ -206,11 +208,17 @@ public class PetEntry {
     // ==================================================
     //                       Name
     // ==================================================
-    public String getDisplayName() {
-        String displayName = this.summonSet.getCreatureInfo().getTitle();
+    public String getName() {
+        return this.name;
+    }
+
+    public ITextComponent getDisplayName() {
+        ITextComponent displayName = this.summonSet.getCreatureInfo().getTitle();
         if(this.entityName != null && !"".equals(this.entityName)) {
-			displayName = this.entityName + " (" + displayName + ")";
-		}
+            displayName = new StringTextComponent(this.entityName + " (")
+                    .appendSibling(displayName)
+                    .appendText(")");
+        }
         return displayName;
     }
 
@@ -332,8 +340,8 @@ public class PetEntry {
     // ==================================================
     /** Called when this entry's entity behaviour has been changed by the client. **/
     public void onBehaviourUpdate() {
-        if(this.entity != null && this.entity instanceof EntityCreatureTameable)
-            this.summonSet.applyBehaviour((EntityCreatureTameable)this.entity);
+        if(this.entity != null && this.entity instanceof TameableCreatureEntity)
+            this.summonSet.applyBehaviour((TameableCreatureEntity)this.entity);
     }
 
 
@@ -372,13 +380,13 @@ public class PetEntry {
         // Spawn Location:
         this.entity.setLocationAndAngles(this.host.posX, this.host.posY, this.host.posZ, this.host.rotationYaw, 0.0F);
 
-        if(this.entity instanceof EntityCreatureBase) {
-            EntityCreatureBase entityCreature = (EntityCreatureBase)this.entity;
+        if(this.entity instanceof BaseCreatureEntity) {
+            BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
 
-            if(entityCreature instanceof EntityCreatureTameable) {
-                EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
+            if(entityCreature instanceof TameableCreatureEntity) {
+                TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 this.summonSet.applyBehaviour(entityTameable);
             }
 
@@ -407,8 +415,8 @@ public class PetEntry {
             entityCreature.applySubspecies(this.subspeciesID);
 
             // Tamed Behaviour:
-            if(entityCreature instanceof EntityCreatureTameable && this.host instanceof PlayerEntity) {
-                EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
+            if(entityCreature instanceof TameableCreatureEntity && this.host instanceof PlayerEntity) {
+                TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 entityTameable.setPlayerOwner((PlayerEntity)this.host);
                 this.summonSet.applyBehaviour(entityTameable);
             }
@@ -461,13 +469,13 @@ public class PetEntry {
         this.setSpawningActive(true);
         this.entity = entity;
 
-        if(this.entity instanceof EntityCreatureBase) {
-            EntityCreatureBase entityCreature = (EntityCreatureBase) this.entity;
+        if(this.entity instanceof BaseCreatureEntity) {
+            BaseCreatureEntity entityCreature = (BaseCreatureEntity) this.entity;
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
 
-            if(entityCreature instanceof EntityCreatureTameable) {
-                EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
+            if(entityCreature instanceof TameableCreatureEntity) {
+                TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
                 this.summonSet.updateBehaviour(entityTameable);
             }
 
@@ -579,23 +587,23 @@ public class PetEntry {
 		}
 
 		// Creature Base:
-        if(this.entity instanceof EntityCreatureBase) {
-            EntityCreatureBase entityCreatureBase = (EntityCreatureBase)this.entity;
+        if(this.entity instanceof BaseCreatureEntity) {
+            BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
 
-            entityCreatureBase.inventory.write(this.entityNBT);
+            baseCreatureEntity.inventory.write(this.entityNBT);
 
             CompoundNBT extTagCompound = new CompoundNBT();
-            entityCreatureBase.extraMobBehaviour.write(extTagCompound);
+            baseCreatureEntity.extraMobBehaviour.write(extTagCompound);
             this.entityNBT.put("ExtraBehaviour", extTagCompound);
 
-            if(this.entity instanceof EntityCreatureAgeable) {
-                EntityCreatureAgeable entityCreatureAgeable = (EntityCreatureAgeable)this.entity;
-                this.entityNBT.putInt("Age", entityCreatureAgeable.getGrowingAge());
+            if(this.entity instanceof AgeableCreatureEntity) {
+                AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
+                this.entityNBT.putInt("Age", ageableCreatureEntity.getGrowingAge());
             }
         }
 
         // Update Pet Name:
-		if(this.entity instanceof EntityCreatureBase && this.entity.hasCustomName()) {
+		if(this.entity instanceof BaseCreatureEntity && this.entity.hasCustomName()) {
 			this.entityName = this.entity.getCustomName().toString();
 		}
 		this.entity.writeWithoutTypeId(this.entityNBT);
@@ -606,20 +614,20 @@ public class PetEntry {
     public void loadEntityNBT() {
         if(this.entity == null || this.entityNBT == null)
             return;
-        if(this.entity instanceof EntityCreatureBase) {
-            EntityCreatureBase entityCreatureBase = (EntityCreatureBase)this.entity;
+        if(this.entity instanceof BaseCreatureEntity) {
+            BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)this.entity;
 
-            entityCreatureBase.inventory.read(this.entityNBT);
+            baseCreatureEntity.inventory.read(this.entityNBT);
 
             if(this.entityNBT.contains("ExtraBehaviour"))
-                entityCreatureBase.extraMobBehaviour.read(this.entityNBT.getCompound("ExtraBehaviour"));
+                baseCreatureEntity.extraMobBehaviour.read(this.entityNBT.getCompound("ExtraBehaviour"));
 
-            if(this.entity instanceof EntityCreatureAgeable) {
-                EntityCreatureAgeable entityCreatureAgeable = (EntityCreatureAgeable)this.entity;
+            if(this.entity instanceof AgeableCreatureEntity) {
+                AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
                 if(this.entityNBT.contains("Age"))
-                    entityCreatureAgeable.setGrowingAge(this.entityNBT.getInt("Age"));
+                    ageableCreatureEntity.setGrowingAge(this.entityNBT.getInt("Age"));
                 else
-                    entityCreatureAgeable.setGrowingAge(0);
+                    ageableCreatureEntity.setGrowingAge(0);
             }
         }
 //        this.entity.readFromNBT(this.entityNBT);

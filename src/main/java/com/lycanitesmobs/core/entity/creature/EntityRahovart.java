@@ -5,9 +5,9 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
@@ -49,7 +49,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
+public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
 
     public List<PlayerEntity> playerTargets = new ArrayList<PlayerEntity>();
     public int hellfireEnergy = 0;
@@ -198,7 +198,7 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
 
             // Random Projectiles:
             for(int i = 0; i < 3; i++) {
-                EntityProjectileBase projectile = new EntityHellfireball(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireball.class), this.getEntityWorld(), this);
+                BaseProjectileEntity projectile = new EntityHellfireball(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireball.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(8f);
                 projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -503,8 +503,8 @@ public class EntityRahovart extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     public boolean canAttack(LivingEntity targetEntity) {
         if(targetEntity instanceof EntityBelph || targetEntity instanceof IGroupDemon || targetEntity instanceof IGroupFire) {
-            if(targetEntity instanceof EntityCreatureTameable)
-                return ((EntityCreatureTameable)targetEntity).getOwner() instanceof PlayerEntity;
+            if(targetEntity instanceof TameableCreatureEntity)
+                return ((TameableCreatureEntity)targetEntity).getOwner() instanceof PlayerEntity;
             else
                 return false;
         }

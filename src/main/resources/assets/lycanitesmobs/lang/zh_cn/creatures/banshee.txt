@@ -1,0 +1,4 @@
+entity.lycanitesmobs.banshee.name=女妖
+entity.lycanitesmobs.banshee.description=女妖是可怕的相位元素，它们可以通过现实本身来相位，它们经常被听到“歌唱”。据说元素其实是一双眼睛，而不是它“目的”的尸体。地魔和幻灵元素也可以融合成强大的女妖。
+entity.lycanitesmobs.banshee.habitat=这些元素常出没于怪诞和废弃的地方，通常在废弃矿井周围，以及黑暗的森林和其他体现不安的地方。
+entity.lycanitesmobs.banshee.combat=与女妖接触后，受害者的灵魂会被相位魔法震惊，这通常会引发恐惧和恐慌。

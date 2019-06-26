@@ -1,14 +1,12 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
-
-import java.util.EnumSet;
 
 public class OwnerRevengeTargetingGoal extends AttackTargetingGoal {
 	
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
     private int revengeTime;
@@ -16,7 +14,7 @@ public class OwnerRevengeTargetingGoal extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public OwnerRevengeTargetingGoal(EntityCreatureTameable setHost) {
+    public OwnerRevengeTargetingGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;

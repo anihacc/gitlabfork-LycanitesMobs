@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -16,7 +16,7 @@ public class DefenseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public DefenseTargetingGoal(EntityCreatureBase setHost, Class<? extends LivingEntity> defendClass) {
+    public DefenseTargetingGoal(BaseCreatureEntity setHost, Class<? extends LivingEntity> defendClass) {
         super(setHost);
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
         this.defendClass = defendClass;
@@ -81,7 +81,7 @@ public class DefenseTargetingGoal extends TargetingGoal {
 			if(target instanceof TameableEntity && this.host.getOwner() == ((TameableEntity)target).getOwner()) {
 				return false;
 			}
-			if(target instanceof EntityCreatureTameable && this.host.getOwner() == ((EntityCreatureTameable)target).getOwner()) {
+			if(target instanceof TameableCreatureEntity && this.host.getOwner() == ((TameableCreatureEntity)target).getOwner()) {
 				return false;
 			}
 			if(target == this.host.getOwner()) {

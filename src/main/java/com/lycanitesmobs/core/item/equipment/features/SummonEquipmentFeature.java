@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +12,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
@@ -58,21 +59,34 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
-		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + LanguageManager.translate("common.percent");
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+				.appendText(" ")
+				.appendSibling(new TranslationTextComponent("entity." + this.summonMobId + ".name"))
+				.appendText("\n")
+				.appendSibling(new TranslationTextComponent("equipment.feature.summon.chance"))
+				.appendText(" " + Math.round(this.summonChance * 100) + "%");
+
 		if(this.summonDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
+					.appendText(" " + ((float)this.summonDuration / 20));
 		}
+
 		if(this.summonCountMin != this.summonCountMax) {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMin + " - " + this.summonCountMax;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.summon.count"))
+					.appendText(" " + (this.summonCountMin + " - " + this.summonCountMax));
 		}
 		else {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMax;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.summon.count"))
+					.appendText(" " + this.summonCountMax);
 		}
+
 		return description;
 	}
 
@@ -107,14 +121,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			try {
 				Entity entity = entityType.create(attacker.getEntityWorld());
 				entity.setLocationAndAngles(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ(), attacker.rotationYaw, 0.0F);
-				if(entity instanceof EntityCreatureBase) {
-					EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+				if(entity instanceof BaseCreatureEntity) {
+					BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 					entityCreature.setMinion(true);
 					entityCreature.setTemporary(this.summonDuration * 20);
 					entityCreature.setSizeScale(this.sizeScale);
 
-					if(attacker instanceof PlayerEntity && entityCreature instanceof EntityCreatureTameable) {
-						EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
+					if(attacker instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
+						TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
 						entityTameable.setPlayerOwner((PlayerEntity)attacker);
 						entityTameable.setSitting(false);
 						entityTameable.setFollowing(true);

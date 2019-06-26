@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
@@ -11,7 +10,7 @@ import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
-public class EntityGeken extends EntityCreatureTameable implements IMob {
+public class EntityGeken extends TameableCreatureEntity implements IMob {
 	
 	private AttackMeleeGoal meleeAttackAI;
     

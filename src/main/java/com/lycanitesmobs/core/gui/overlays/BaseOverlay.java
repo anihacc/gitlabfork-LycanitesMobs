@@ -4,10 +4,9 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.gui.BaseGui;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
@@ -108,8 +107,8 @@ public class BaseOverlay extends BaseGui {
 		}
 		
 		// ========== Mount Stamina Bar ==========
-		if(this.mc.player.getRidingEntity() != null && this.mc.player.getRidingEntity() instanceof EntityCreatureRideable) {
-			EntityCreatureRideable mount = (EntityCreatureRideable)this.mc.player.getRidingEntity();
+		if(this.mc.player.getRidingEntity() != null && this.mc.player.getRidingEntity() instanceof RideableCreatureEntity) {
+			RideableCreatureEntity mount = (RideableCreatureEntity)this.mc.player.getRidingEntity();
             float mountStamina = mount.getStaminaPercent();
             
             // Mount Controls Message:
@@ -117,7 +116,7 @@ public class BaseOverlay extends BaseGui {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             	if(this.mountMessageTime < 60)
             		GL11.glColor4f(1.0F, 1.0F, 1.0F, (float)this.mountMessageTime / (float)60);
-            	String mountMessage = LanguageManager.translate("gui.mount.controls");
+            	String mountMessage = new TranslationTextComponent("gui.mount.controls").getFormattedText();
             	//mountMessage = mountMessage.replace("%control%", this.mc.gameSettings.(KeyHandler.instance.mountAbility.getKey().getKeyCode()));
             	int stringWidth = this.mc.fontRenderer.getStringWidth(mountMessage);
             	this.mc.fontRenderer.drawString(mountMessage, (sWidth / 2) - (stringWidth / 2), sHeight - 64, 0xFFFFFF);

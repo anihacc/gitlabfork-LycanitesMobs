@@ -1,0 +1,4 @@
+entity.lycanitesmobs.cephignis.name=岩浆鱼
+entity.lycanitesmobs.cephignis.description=适应极端温度生活的大型和平鱼类，其身体像熔岩一样热。岩浆鱼可以用煤炭或木炭繁殖！
+entity.lycanitesmobs.cephignis.habitat=这些鱼可以在熔岩中游泳，不能在熔岩外长期生存。
+entity.lycanitesmobs.cephignis.combat=岩浆鱼通常是被动的，依靠它们的环境来保护它们免受大多数掠食者的伤害。

@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -30,7 +29,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityShade extends EntityCreatureRideable implements IGroupPredator, IGroupHunter, IGroupShadow {
+public class EntityShade extends RideableCreatureEntity implements IGroupPredator, IGroupHunter, IGroupShadow {
 
 	// ==================================================
  	//                    Constructor

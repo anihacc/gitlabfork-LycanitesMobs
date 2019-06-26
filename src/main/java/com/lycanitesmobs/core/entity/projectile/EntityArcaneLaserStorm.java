@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityBeholder;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityArcaneLaserStorm extends EntityProjectileBase {
+public class EntityArcaneLaserStorm extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -32,15 +32,15 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityArcaneLaserStorm(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLiving) {
+    public EntityArcaneLaserStorm(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
         super(entityType, world, entityLiving);
     }
 
-    public EntityArcaneLaserStorm(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+    public EntityArcaneLaserStorm(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
         super(entityType, world, par2, par4, par6);
     }
     
@@ -75,13 +75,13 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
     // ==================================================
  	//                 Fire Projectile
  	// ==================================================
-    List<EntityProjectileLaser> lasers = new ArrayList<EntityProjectileLaser>();
+    List<LaserProjectileEntity> lasers = new ArrayList<LaserProjectileEntity>();
     int laserTick = 0;
     public void updateLasers() {
     	World world = this.getEntityWorld();
 
         while(this.lasers.size() < this.laserMax) {
-            EntityProjectileLaser laser;
+            LaserProjectileEntity laser;
             if(this.getThrower() != null) {
                 laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getThrower(), 20, 10, this);
                 laser.posX = this.posX;
@@ -96,7 +96,7 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
         }
 
         int laserCount = 0;
-        for(EntityProjectileLaser laser : this.lasers) {
+        for(LaserProjectileEntity laser : this.lasers) {
             laser.setTime(20);
             double[] target = new double[]{this.posX, this.posY, this.posZ};
 
@@ -153,19 +153,19 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 		}
 		if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int explosionRadius = 2;
-			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
-				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
-				if(entityCreatureBase instanceof EntityBeholder && !((EntityBeholder)entityCreatureBase).beholderGreifing) {
+			if (this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity) {
+				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) this.getThrower();
+				if(baseCreatureEntity instanceof EntityBeholder && !((EntityBeholder) baseCreatureEntity).beholderGreifing) {
 					return;
 				}
-				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
+				if(baseCreatureEntity.getOwner() == entity || baseCreatureEntity.getControllingPassenger() == entity) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 0) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 0) {
 					explosionRadius += 2;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 2) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 2) {
 					explosionRadius += 2;
 				}
 			}

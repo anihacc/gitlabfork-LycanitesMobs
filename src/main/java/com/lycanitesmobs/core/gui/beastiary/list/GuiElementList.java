@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.gui.beastiary.ElementsBeastiaryScreen;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 
@@ -25,7 +25,7 @@ public class GuiElementList extends BaseList {
 		int i = 0;
 		List<ElementInfo> elements = new ArrayList<>();
 		elements.addAll(ElementManager.getInstance().elements.values());
-		elements.sort(Comparator.comparing(ElementInfo::getTitle));
+		elements.sort(Comparator.comparing(ElementInfo::getName));
 		for(ElementInfo elementInfo : elements) {
 			this.elementNames.put(i++, elementInfo.name);
 		}

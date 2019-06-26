@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GetBlockGoal extends Goal {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	private BlockPos target;
 	private int targetingTime = 0;
     private TargetSorterNearest targetSorter;
@@ -36,7 +36,7 @@ public class GetBlockGoal extends Goal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public GetBlockGoal(EntityCreatureBase setHost) {
+    public GetBlockGoal(BaseCreatureEntity setHost) {
         super();
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.host = setHost;
@@ -90,7 +90,7 @@ public class GetBlockGoal extends Goal {
     		return false;
 
     	if(!this.tamedLooting) {
-    		if(this.host instanceof EntityCreatureTameable)
+    		if(this.host instanceof TameableCreatureEntity)
     			if(this.host.isTamed())
     				return false;
     	}

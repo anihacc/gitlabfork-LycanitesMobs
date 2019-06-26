@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.block.BlockState;
@@ -14,7 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityLacedon extends EntityCreatureTameable implements IMob {
+public class EntityLacedon extends TameableCreatureEntity implements IMob {
 	
 	WanderGoal wanderAI;
     

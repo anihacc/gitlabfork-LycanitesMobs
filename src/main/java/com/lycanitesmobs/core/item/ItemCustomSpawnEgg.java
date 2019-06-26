@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
+import com.lycanitesmobs.core.dispenser.SpawnEggDispenseBehaviour;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -25,6 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.spawner.AbstractSpawner;
@@ -32,7 +32,7 @@ import net.minecraft.world.spawner.AbstractSpawner;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCustomSpawnEgg extends ItemBase {
+public class ItemCustomSpawnEgg extends BaseItem {
 	public CreatureType creatureType;
     
 	// ==================================================
@@ -45,7 +45,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
         this.creatureType = creatureType;
         this.setRegistryName(this.modInfo.modid, this.itemName);
 
-        DispenserBlock.registerDispenseBehavior(this, new DispenserBehaviorMobEggCustom());
+        DispenserBlock.registerDispenseBehavior(this, new SpawnEggDispenseBehaviour());
 
 		LycanitesMobs.logDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
@@ -55,13 +55,16 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	// ==================================================
     @Override
     public ITextComponent getDisplayName(ItemStack itemStack) {
-		String displayName = LanguageManager.translate("creaturetype.spawn") + " " + this.creatureType.getTitle() + ": ";
+		ITextComponent displayName = new TranslationTextComponent("creaturetype.spawn")
+				.appendText(" ")
+				.appendSibling(this.creatureType.getTitle())
+				.appendText(": ");
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo != null)
-			displayName += creatureInfo.getTitle();
+			displayName.appendSibling(creatureInfo.getTitle());
 		else
-			displayName += "Missing Creature NBT";
-        return new TranslationTextComponent(displayName);
+			displayName.appendText("Missing Creature NBT");
+        return displayName;
     }
     
     
@@ -70,10 +73,10 @@ public class ItemCustomSpawnEgg extends ItemBase {
 	// ==================================================
     @Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        String description = this.getDescription(stack, worldIn, tooltip, flag);
-        if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
+		ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
+        if(!"".equalsIgnoreCase(description.getFormattedText()) && !("item." + this.itemName + ".description").equals(description.getUnformattedComponentText())) {
             FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
+            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), BaseItem.DESCRIPTION_WIDTH);
             for(Object formattedDescription : formattedDescriptionList) {
                 if(formattedDescription instanceof String)
                     tooltip.add(new TranslationTextComponent((String)formattedDescription));
@@ -82,12 +85,12 @@ public class ItemCustomSpawnEgg extends ItemBase {
     }
 
     @Override
-	public String getDescription(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
+	public ITextComponent getDescription(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
 		CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
 		if(creatureInfo == null) {
 			String creatureName = this.getCreatureName(itemStack);
 			LycanitesMobs.logWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
-			return "Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.";
+			return new StringTextComponent("Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.");
 		}
 		return creatureInfo.getDescription();
     }

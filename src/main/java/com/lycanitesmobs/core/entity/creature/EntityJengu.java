@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityAquaPulse;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityJengu extends EntityCreatureTameable implements IMob, IGroupWater, IFusable {
+public class EntityJengu extends TameableCreatureEntity implements IMob, IGroupWater, IFusable {
 
     // ==================================================
  	//                    Constructor

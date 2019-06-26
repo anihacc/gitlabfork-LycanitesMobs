@@ -2,11 +2,10 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -18,12 +17,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemWinterGift extends ItemBase {
+public class ItemWinterGift extends BaseItem {
 
 	// ==================================================
 	//                   Constructor
@@ -63,8 +63,8 @@ public class ItemWinterGift extends ItemBase {
   	//                       Good
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
-    	String message = LanguageManager.translate("item." + this.itemName + ".good");
-		player.sendMessage(new TranslationTextComponent(message));
+		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".good");
+		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Gifts:
@@ -73,7 +73,7 @@ public class ItemWinterGift extends ItemBase {
 			return;
 		ItemStack dropStack = dropStacks.get(player.getRNG().nextInt(dropStacks.size()));
 		dropStack.setCount(1 + player.getRNG().nextInt(4));
-		EntityItemCustom entityItem = new EntityItemCustom(world, player.posX, player.posY, player.posZ, dropStack);
+		CustomItemEntity entityItem = new CustomItemEntity(world, player.posX, player.posY, player.posZ, dropStack);
 		entityItem.setPickupDelay(10);
 		world.addEntity(entityItem);
     }
@@ -83,8 +83,8 @@ public class ItemWinterGift extends ItemBase {
   	//                       Bad
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
-    	String message = LanguageManager.translate("item." + this.itemName + ".bad");
-		player.sendMessage(new TranslationTextComponent(message));
+		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".bad");
+		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 
         // One Random Trick:
@@ -98,8 +98,8 @@ public class ItemWinterGift extends ItemBase {
 	            entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 
                 // Themed Names:
-                if (entity instanceof EntityCreatureBase) {
-                    EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
+                if (entity instanceof BaseCreatureEntity) {
+                    BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 					entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("wildkin"))
                         entityCreature.setCustomName(new TranslationTextComponent("Gooderness"));

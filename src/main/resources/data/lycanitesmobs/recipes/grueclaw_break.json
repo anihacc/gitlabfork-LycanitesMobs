@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:grueclaw"
+      "item": "lycanitesmobs:equipmentpart_grueclaw"
     }
   ],
   "type": "minecraft:crafting_shapeless"

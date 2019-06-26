@@ -134,13 +134,13 @@ public class CreatureManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		// Parse Creature Type JSON:
-		if("Creature Type".equals(name)) {
-			CreatureType creatureType = new CreatureType(groupInfo);
+		if("Creature Type".equals(loadGroup)) {
+			CreatureType creatureType = new CreatureType(modInfo);
 			creatureType.loadFromJSON(json);
 			if (creatureType.name == null) {
-				LycanitesMobs.logWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				LycanitesMobs.logWarning("", "[Creature] Unable to load " + loadGroup + " json due to missing name.");
 				return;
 			}
 
@@ -155,11 +155,11 @@ public class CreatureManager extends JSONLoader {
 		}
 
 		// Parse Creature JSON:
-		if("Creature".equals(name)) {
-			CreatureInfo creatureInfo = new CreatureInfo(groupInfo);
+		if("Creature".equals(loadGroup)) {
+			CreatureInfo creatureInfo = new CreatureInfo(modInfo);
 			creatureInfo.loadFromJSON(json);
 			if (creatureInfo.name == null) {
-				LycanitesMobs.logWarning("", "[Creature] Unable to load " + name + " json due to missing name.");
+				LycanitesMobs.logWarning("", "[Creature] Unable to load " + loadGroup + " json due to missing name.");
 				return;
 			}
 

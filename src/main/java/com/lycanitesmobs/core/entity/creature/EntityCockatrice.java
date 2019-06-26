@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -26,7 +26,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityCockatrice extends EntityCreatureRideable implements IMob, IGroupHunter {
+public class EntityCockatrice extends RideableCreatureEntity implements IMob, IGroupHunter {
 
     protected WanderGoal wanderAI;
     protected AttackMeleeGoal attackAI;

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
@@ -14,7 +14,7 @@ import java.util.EnumSet;
 
 public class AttackMeleeGoal extends Goal {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
     private LivingEntity attackTarget;
     private Path pathToTarget;
     
@@ -36,7 +36,7 @@ public class AttackMeleeGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public AttackMeleeGoal(EntityCreatureBase setHost) {
+    public AttackMeleeGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

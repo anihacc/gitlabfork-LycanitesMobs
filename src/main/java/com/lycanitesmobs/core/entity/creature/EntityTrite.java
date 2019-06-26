@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -21,7 +21,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class EntityTrite extends EntityCreatureBase implements IMob, IGroupDemon {
+public class EntityTrite extends BaseCreatureEntity implements IMob, IGroupDemon {
     
     // ==================================================
  	//                    Constructor

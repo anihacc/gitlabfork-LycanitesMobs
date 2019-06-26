@@ -24,7 +24,6 @@ public class EquipmentPartManager extends JSONLoader {
 	/** A list of mod groups that have loaded with this Equipment Part Manager. **/
 	public List<ModInfo> loadedGroups = new ArrayList<>();
 
-
 	/** Returns the main EquipmentPartManager INSTANCE or creates it and returns it. **/
 	public static EquipmentPartManager getInstance() {
 		if(INSTANCE == null) {
@@ -33,21 +32,19 @@ public class EquipmentPartManager extends JSONLoader {
 		return INSTANCE;
 	}
 
-
-	/** Loads all JSON Equipment Parts. Should only be done on pre-init. **/
-	public void loadAllFromJSON(ModInfo groupInfo) {
-		if(!this.loadedGroups.contains(groupInfo)) {
-			this.loadedGroups.add(groupInfo);
+	/** Loads all JSON Equipment Parts. **/
+	public void loadAllFromJSON(ModInfo modInfo) {
+		if(!this.loadedGroups.contains(modInfo)) {
+			this.loadedGroups.add(modInfo);
 		}
-		this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false, null, FileLoader.COMMON, StreamLoader.COMMON);
+		this.loadAllJson(modInfo, "Equipment", "equipment", "itemName", false, null, FileLoader.COMMON, StreamLoader.COMMON);
 		LycanitesMobs.logDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
 	}
 
-
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
-		Item.Properties properties = new Item.Properties().maxStackSize(1).setNoRepair().group(ItemManager.getInstance().equipmentParts).setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentPartRenderer::new);
-		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(properties, groupInfo);
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
+		Item.Properties properties = new Item.Properties().maxStackSize(1).setNoRepair().group(ItemManager.getInstance().equipmentPartsGroup).setTEISR(() -> com.lycanitesmobs.core.renderer.EquipmentPartRenderer::new);
+		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(properties, modInfo);
 		equipmentPart.loadFromJSON(json);
 		if(this.equipmentParts.containsKey(equipmentPart.itemName)) {
 			LycanitesMobs.logWarning("", "[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);
@@ -60,7 +57,6 @@ public class EquipmentPartManager extends JSONLoader {
 		this.equipmentParts.put(equipmentPart.itemName, equipmentPart);
 		ObjectManager.addItem(equipmentPart.itemName, equipmentPart);
 	}
-
 
 	/**
 	 * Reloads all Equipment part JSON.

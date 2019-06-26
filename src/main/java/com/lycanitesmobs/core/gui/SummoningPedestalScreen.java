@@ -2,15 +2,13 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.container.SummoningPedestalContainer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.gui.buttons.MainTab;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -19,7 +17,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
-public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummoningPedestal> {
+public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedestalContainer> {
     public PlayerEntity player;
     public ExtendedPlayer playerExt;
     public TileEntitySummoningPedestal summoningPedestal;
@@ -38,7 +36,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
 
     public static int TAB_BUTTON_ID = 55555;
 
-    public SummoningPedestalScreen(ContainerSummoningPedestal container, PlayerInventory playerInventory, ITextComponent name) {
+    public SummoningPedestalScreen(SummoningPedestalContainer container, PlayerInventory playerInventory, ITextComponent name) {
         super(container, playerInventory, name);
         this.summoningPedestal = container.summoningPedestal;
         this.player = playerInventory.player;
@@ -95,16 +93,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
-        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(EntityCreatureBase.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
     }
 
     @Override
@@ -148,17 +146,17 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
                 }
 
                 // Behaviour Buttons:
-                if (button.buttonId == EntityCreatureBase.GUI_COMMAND.SITTING.id)
-                    button.setMessage(LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
+                if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
+                    button.setMessage(new TranslationTextComponent("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")));
 
-                if (button.buttonId == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
-                    button.setMessage(LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
+                if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
+                    button.setMessage(new TranslationTextComponent("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")));
 
-                if (button.buttonId == EntityCreatureBase.GUI_COMMAND.STANCE.id)
-                    button.setMessage((this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive")));
+                if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
+                    button.setMessage((this.summonSet.getAggressive() ? new TranslationTextComponent("gui.pet.aggressive").getFormattedText() : new TranslationTextComponent("gui.pet.defensive").getFormattedText()));
 
-                if (button.buttonId == EntityCreatureBase.GUI_COMMAND.PVP.id)
-                    button.setMessage(LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no")));
+                if (button.buttonId == BaseCreatureEntity.GUI_COMMAND.PVP.id)
+                    button.setMessage(new TranslationTextComponent("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")));
             }
         }
 
@@ -177,8 +175,8 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
 
         // No Pets:
         if (!this.hasPets()) {
-            this.getFontRenderer().drawString(LanguageManager.translate("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
-            this.getFontRenderer().drawSplitString(LanguageManager.translate("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
+            this.getFontRenderer().drawString(new TranslationTextComponent("gui.beastiary.summoning.empty.title").getFormattedText(), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+            this.getFontRenderer().drawSplitString(new TranslationTextComponent("gui.beastiary.summoning.empty.info").getFormattedText(), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
             return;
         }
 
@@ -186,7 +184,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
         this.getFontRenderer().drawString(this.getTitle().toString(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
 
         // Spirit Title:
-        this.getFontRenderer().drawString(this.getEnergyTitle(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
+        this.getFontRenderer().drawString(this.getEnergyTitle().getFormattedText(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
     }
 
     @Override
@@ -197,15 +195,15 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
         }
 
         // Behaviour Button:
-        if(buttonId == EntityCreatureBase.GUI_COMMAND.SITTING.id)
+        if(buttonId == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
             this.summonSet.sitting = !this.summonSet.sitting;
-        if(buttonId == EntityCreatureBase.GUI_COMMAND.FOLLOWING.id)
+        if(buttonId == BaseCreatureEntity.GUI_COMMAND.FOLLOWING.id)
             this.summonSet.following = !this.summonSet.following;
-        if(buttonId == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
+        if(buttonId == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
             this.summonSet.passive = !this.summonSet.passive;
-        if(buttonId == EntityCreatureBase.GUI_COMMAND.STANCE.id)
+        if(buttonId == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
             this.summonSet.aggressive = !this.summonSet.aggressive;
-        if(buttonId == EntityCreatureBase.GUI_COMMAND.PVP.id)
+        if(buttonId == BaseCreatureEntity.GUI_COMMAND.PVP.id)
             this.summonSet.pvp = !this.summonSet.pvp;
 
         if(buttonId < 100) {
@@ -221,11 +219,11 @@ public class SummoningPedestalScreen extends BaseContainerScreen<ContainerSummon
     }*/
 
     public ITextComponent getTitle() {
-        return new TranslationTextComponent(LanguageManager.translate("gui." + "summoningpedestal.name"));
+        return new TranslationTextComponent("gui." + "summoningpedestal.name");
     }
 
-    public String getEnergyTitle() {
-        return LanguageManager.translate("stat.portal.name");
+    public ITextComponent getEnergyTitle() {
+        return new TranslationTextComponent("stat.portal.name");
     }
 
     public void drawFuel() {

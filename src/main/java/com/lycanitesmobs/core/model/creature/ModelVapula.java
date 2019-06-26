@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
@@ -91,9 +91,9 @@ public class ModelVapula extends ModelTemplateElemental {
 
 		if(layer instanceof LayerCreatureEffect) {
 			if(partName.contains("effect")) {
-				if(entity instanceof EntityCreatureBase) {
-					int attackPhase = ((EntityCreatureBase) entity).getAttackPhase();
-					if (((EntityCreatureBase) entity).isAttackOnCooldown() && attackPhase == 0) {
+				if(entity instanceof BaseCreatureEntity) {
+					int attackPhase = ((BaseCreatureEntity) entity).getAttackPhase();
+					if (((BaseCreatureEntity) entity).isAttackOnCooldown() && attackPhase == 0) {
 						return false;
 					}
 					if ("effect01".equals(partName)) {

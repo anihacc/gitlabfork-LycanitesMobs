@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
-public class EntitySpriggan extends EntityCreatureTameable implements IMob, IGroupPlant {
+public class EntitySpriggan extends TameableCreatureEntity implements IMob, IGroupPlant {
 	
 	AttackRangedGoal rangedAttackAI;
 	public int farmingRate = 20; // TODO Creature flags.

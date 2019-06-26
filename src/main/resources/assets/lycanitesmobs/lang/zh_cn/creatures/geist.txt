@@ -1,0 +1,4 @@
+entity.lycanitesmobs.geist.name=感知
+entity.lycanitesmobs.geist.description=感知是机会主义的亡灵生物，它们变形并爬进其他亡灵生物的生命体或尸体，并以宿主能够杀死的任何东西为食。当它们的主人死了，感知就会跳出来，然后发起突袭！
+entity.lycanitesmobs.geist.habitat=感知通常来自其他亡灵生物，但也可以发现它们潜伏在黑暗森林和末地中。
+entity.lycanitesmobs.geist.combat=感知使用简单的近战攻击，但在死亡时释放影火，虽然不会燃烧，但会造成伤害和失明。

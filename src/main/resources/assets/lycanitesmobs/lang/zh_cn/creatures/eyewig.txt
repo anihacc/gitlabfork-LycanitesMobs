@@ -1,0 +1,4 @@
+entity.lycanitesmobs.eyewig.name=毒眼
+entity.lycanitesmobs.eyewig.description=在黑暗中，眼睛是敌对的，可以爬过水面也可以滑过水面。
+entity.lycanitesmobs.eyewig.habitat=这些昆虫经常在沼泽、黑暗森林和丛林中发现。
+entity.lycanitesmobs.eyewig.combat=毒眼可以从它们的巨眼发射有毒激光！它们的撕咬也会导致失明！

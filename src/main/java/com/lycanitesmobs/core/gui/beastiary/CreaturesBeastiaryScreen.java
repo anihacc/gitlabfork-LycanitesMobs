@@ -59,7 +59,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		int width = this.colRightWidth - marginX;
 
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			String text = LanguageManager.translate("gui.beastiary.creatures.empty.info");
+			String text = new TranslationTextComponent("gui.beastiary.creatures.empty.info").getFormattedText();
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 			return;
 		}
@@ -72,19 +72,19 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			CreatureKnowledge creatureKnowledge = this.playerExt.beastiary.getCreatureKnowledge(this.playerExt.selectedCreature.getName());
 
 			// Element:
-			String text = "\u00A7l" + LanguageManager.translate("creature.stat.element") + ": " + "\u00A7r";
+			String text = "\u00A7l" + new TranslationTextComponent("creature.stat.element").getFormattedText() + ": " + "\u00A7r";
 			text += creatureInfo.elements != null ? creatureInfo.getElementNames() : "None";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 
 			// Level:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
-			text = "\u00A7l" + LanguageManager.translate("creature.stat.cost") + ": " + "\u00A7r";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.cost").getFormattedText() + ": " + "\u00A7r";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(creatureInfo, AssetManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
-			text = "\u00A7l" + LanguageManager.translate("creature.stat.knowledge") + ": " + "\u00A7r";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getFormattedText() + ": " + "\u00A7r";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
 			this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
@@ -97,12 +97,12 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		// Creature Type Display:
 		else if(this.playerExt.selectedCreatureType != null) {
 			// Description:
-			String text = this.playerExt.selectedCreatureType.getTitle();
+			String text = this.playerExt.selectedCreatureType.getTitle().getFormattedText();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 
 			// Descovered:
 			nextY += 12 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
+			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getFormattedText() + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
@@ -110,7 +110,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 
 		// Base Display:
 		else {
-			String text = LanguageManager.translate("gui.beastiary.creatures.select");
+			String text = new TranslationTextComponent("gui.beastiary.creatures.select").getFormattedText();
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}
 	}
@@ -137,11 +137,11 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			//return this.playerExt.selectedCreature.getTitle();
 		}
 		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {
-			return new TranslationTextComponent(this.playerExt.selectedCreatureType.getTitle());
+			return this.playerExt.selectedCreatureType.getTitle();
 		}
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
-			LanguageManager.translate("gui.beastiary.creatures.empty.title");
+			return new TranslationTextComponent("gui.beastiary.creatures.empty.title");
 		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.creatures"));
+		return new TranslationTextComponent("gui.beastiary.creatures");
 	}
 }

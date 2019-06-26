@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +10,7 @@ import java.util.EnumSet;
 
 public class ChaseGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     private LivingEntity target;
     
     // Properties:
@@ -23,7 +22,7 @@ public class ChaseGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public ChaseGoal(EntityCreatureBase setHost) {
+    public ChaseGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

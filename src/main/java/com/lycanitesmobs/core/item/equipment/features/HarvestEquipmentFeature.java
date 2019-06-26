@@ -13,6 +13,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.Set;
@@ -70,15 +72,23 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.harvestType;
-		description += "\n" + LanguageManager.translate("equipment.feature.harvest.shape") + " " + this.harvestShape;
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+			.appendText(" " + this.harvestType);
+
+		description.appendText("\n")
+			.appendSibling(new TranslationTextComponent("equipment.feature.harvest.shape"))
+			.appendText(" " + this.harvestShape);
+
 		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.harvest.range") + " " + this.getHarvestRangeString(level);
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.harvest.range"))
+					.appendText(" " + this.getHarvestRangeString(level));
 		}
+
 		return description;
 	}
 

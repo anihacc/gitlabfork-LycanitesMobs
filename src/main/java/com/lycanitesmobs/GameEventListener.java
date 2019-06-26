@@ -3,10 +3,10 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderEntity;
 import com.lycanitesmobs.core.capabilities.CapabilityProviderPlayer;
 import com.lycanitesmobs.core.config.ConfigDebug;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.info.ItemConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -14,11 +14,9 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -28,7 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -202,8 +199,8 @@ public class GameEventListener {
 		}
 
 		// Can Be Targeted:
-		if(event.getEntityLiving() instanceof MobEntity && targetEntity instanceof EntityCreatureBase) {
-			if(!((EntityCreatureBase)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
+		if(event.getEntityLiving() instanceof MobEntity && targetEntity instanceof BaseCreatureEntity) {
+			if(!((BaseCreatureEntity)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
 				event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -237,7 +234,7 @@ public class GameEventListener {
 
 		// ========== Mounted Protection ==========
 		if(damagedEntity.getRidingEntity() != null) {
-			if(damagedEntity.getRidingEntity() instanceof EntityCreatureRideable) {
+			if(damagedEntity.getRidingEntity() instanceof RideableCreatureEntity) {
 
 				// Prevent Mounted Entities from Suffocating:
 				if("inWall".equals(event.getSource().damageType)) {
@@ -247,7 +244,7 @@ public class GameEventListener {
 				}
 
 				// Copy Mount Immunities to Rider:
-				EntityCreatureRideable creatureRideable = (EntityCreatureRideable)event.getEntityLiving().getRidingEntity();
+				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getRidingEntity();
 				if(!creatureRideable.isInvulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
@@ -280,10 +277,10 @@ public class GameEventListener {
             && (Utilities.isHalloween() || Utilities.isYuletide() || Utilities.isNewYear())) {
             boolean noSeaonalDrop = false;
             boolean alwaysDrop = false;
-            if(event.getEntityLiving() instanceof EntityCreatureBase) {
-                if (((EntityCreatureBase) event.getEntityLiving()).isMinion())
+            if(event.getEntityLiving() instanceof BaseCreatureEntity) {
+                if (((BaseCreatureEntity) event.getEntityLiving()).isMinion())
                     noSeaonalDrop = true;
-                if (((EntityCreatureBase) event.getEntityLiving()).getSubspecies() != null)
+                if (((BaseCreatureEntity) event.getEntityLiving()).getSubspecies() != null)
                     alwaysDrop = true;
             }
 
@@ -298,7 +295,7 @@ public class GameEventListener {
 
             if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance)) {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
-                EntityItemCustom entityItem = new EntityItemCustom(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
+                CustomItemEntity entityItem = new CustomItemEntity(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
                 entityItem.setPickupDelay(10);
                 world.addEntity(entityItem);
             }
@@ -359,8 +356,8 @@ public class GameEventListener {
 		RayTraceResult mouseOver = Minecraft.getInstance().objectMouseOver;
 		if(mouseOver instanceof EntityRayTraceResult) {
 			Entity mouseOverEntity = ((EntityRayTraceResult)mouseOver).getEntity();
-			if(mouseOverEntity instanceof EntityCreatureBase) {
-				EntityCreatureBase mouseOverCreature = (EntityCreatureBase)mouseOverEntity;
+			if(mouseOverEntity instanceof BaseCreatureEntity) {
+				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");
 				event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
 				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
@@ -388,8 +385,8 @@ public class GameEventListener {
 				event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
 				event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
 				event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
-				if(mouseOverEntity instanceof EntityCreatureTameable) {
-					EntityCreatureTameable mouseOverTameable = (EntityCreatureTameable)mouseOverCreature;
+				if(mouseOverEntity instanceof TameableCreatureEntity) {
+					TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
 					event.getLeft().add("");
 					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
 					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -9,12 +9,12 @@ import net.minecraft.world.World;
 
 public class FollowOwnerGoal extends FollowGoal {
 	// Targets:
-	EntityCreatureTameable host;
+	TameableCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public FollowOwnerGoal(EntityCreatureTameable setHost) {
+    public FollowOwnerGoal(TameableCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
     }

@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:searingtaco"
+    "item": "lycanitesmobs:searing_taco"
   },
   "ingredients": [
     {
       "item": "minecraft:blaze_powder"
     },
     {
-      "item": "lycanitesmobs:cephignismeatcooked"
+      "item": "lycanitesmobs:cooked_cephignis_meat"
     },
     {
       "item": "minecraft:wheat"

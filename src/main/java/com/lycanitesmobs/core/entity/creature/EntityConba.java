@@ -3,12 +3,11 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
@@ -21,9 +20,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
-public class EntityConba extends EntityCreatureTameable implements IMob {
+public class EntityConba extends TameableCreatureEntity implements IMob {
 	AttackRangedGoal aiAttackRanged;
 	AttackMeleeGoal aiAttackMelee;
 	AvoidGoal aiAvoid;
@@ -82,14 +84,16 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     // ==================================================
     /** Returns the species name of this entity. **/
 	@Override
-    public String getSpeciesName() {
-		String infection = "";
+    public ITextComponent getSpeciesName() {
+		ITextComponent infection = new StringTextComponent("");
 		if(this.vespidInfection) {
 			String entityName = this.creatureInfo.getName();
-	    	if(entityName != null)
-	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected") + " ";
+	    	if(entityName != null) {
+				infection = new TranslationTextComponent("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected");
+				infection.appendText(" ");
+			}
 		}
-    	return infection + super.getSpeciesName();
+    	return infection.appendSibling(super.getSpeciesName());
     }
     
     public String getTextureName() {

@@ -6,12 +6,12 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.MobEventSound;
 import com.lycanitesmobs.core.gui.overlays.BaseOverlay;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,9 +50,12 @@ public class MobEventPlayerClient {
 		if(!this.extended) {
 			this.ticks = 0;
 		}
-		String eventMessage = LanguageManager.translate("event." + (extended ? "extended" : "started"));
-		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
-		player.sendMessage(new TranslationTextComponent(eventMessage));
+		ITextComponent eventMessage = new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".prefix")
+				.appendText(" ")
+				.appendSibling(this.mobEvent.getTitle())
+				.appendText(" ")
+				.appendSibling(new TranslationTextComponent("event." + (extended ? "extended" : "started") + ".suffix"));
+		player.sendMessage(eventMessage);
 
 		if(player.abilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;
@@ -75,9 +78,12 @@ public class MobEventPlayerClient {
     //                      Finish
     // ==================================================
 	public void onFinish(PlayerEntity player) {
-		String eventMessage = LanguageManager.translate("event.finished");
-		eventMessage = eventMessage.replace("%event%", this.mobEvent.getTitle());
-		player.sendMessage(new TranslationTextComponent(eventMessage));
+		ITextComponent eventMessage = new TranslationTextComponent("event.finished.prefix")
+				.appendText(" ")
+				.appendSibling(this.mobEvent.getTitle())
+				.appendText(" ")
+				.appendSibling(new TranslationTextComponent("event.finished.suffix"));
+		player.sendMessage(eventMessage);
 	}
 
 

@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:sprigganroot"
+      "item": "lycanitesmobs:equipmentpart_sprigganroot"
     }
   ],
   "type": "minecraft:crafting_shapeless"

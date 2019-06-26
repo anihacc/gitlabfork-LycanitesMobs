@@ -6,8 +6,9 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.item.Item;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,8 +77,8 @@ public class CreatureType {
 	 * Returns a translated title for this creature type. Ex: Beast
 	 * @return The display name of this creature type.
 	 */
-	public String getTitle() {
-		return LanguageManager.translate("creaturetype." + this.getName() + ".name");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("creaturetype." + this.getName() + ".name");
 	}
 
 
@@ -141,7 +142,7 @@ public class CreatureType {
 		// Spawn Eggs:
 		String spawnEggName = this.getSpawnEggName();
 		Item.Properties spawnEggProperties = new Item.Properties();
-		spawnEggProperties.group(ItemManager.getInstance().creatures);
+		spawnEggProperties.group(ItemManager.getInstance().creaturesGroups);
 
 		this.spawnEgg = new ItemCustomSpawnEgg(spawnEggProperties, spawnEggName, this);
 		ObjectManager.addItem(spawnEggName, this.spawnEgg);

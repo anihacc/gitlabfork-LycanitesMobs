@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -23,7 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySkylus extends EntityCreatureTameable implements IMob, IGroupPredator {
+public class EntitySkylus extends TameableCreatureEntity implements IMob, IGroupPredator {
 	
 	WanderGoal wanderAI;
     public AttackMeleeGoal attackAI;

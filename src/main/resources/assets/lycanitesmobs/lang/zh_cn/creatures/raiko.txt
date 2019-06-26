@@ -1,0 +1,4 @@
+entity.lycanitesmobs.raiko.name=鹈鹕
+entity.lycanitesmobs.raiko.description=众所周知，大型海鸟会潜入海洋并抓住猎物。
+entity.lycanitesmobs.raiko.habitat=这些鸟可以在海洋上空找到。
+entity.lycanitesmobs.raiko.combat=鹈鹕会抓住猎物，在它们把你抬得太高之前杀死它们是很重要的。最终，鹈鹕会释放它们的猎物，并获得沉重效果，这会造成巨大的坠落伤害，但通常会将它们的受害者丢到深海中。

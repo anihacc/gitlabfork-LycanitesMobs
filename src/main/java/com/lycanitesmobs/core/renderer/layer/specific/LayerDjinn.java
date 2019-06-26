@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer.specific;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.entity.Entity;
@@ -27,12 +27,12 @@ public class LayerDjinn extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         return partName.contains("ribbon");
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		String textureName = entity.getTextureName();
 		if(entity.getSubspecies() != null) {
 			textureName += "_" + entity.getSubspecies().color;
@@ -44,12 +44,12 @@ public class LayerDjinn extends LayerCreatureBase {
     }
 
 	@Override
-	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
 		return new Vector2f(-loop * 25, 0);
 	}
 
 	@Override
-	public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+	public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
 		return new Vector4f(1, 1, 1, 0.75f);
 	}
 

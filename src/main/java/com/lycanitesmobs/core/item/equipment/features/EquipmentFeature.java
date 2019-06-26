@@ -2,6 +2,8 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 
@@ -75,10 +77,10 @@ public class EquipmentFeature {
 	}
 
 	/** Returns a description of this feature. Returns null if the feature is not active. **/
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return "";
+		return new StringTextComponent("");
 	}
 }

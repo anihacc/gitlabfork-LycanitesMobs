@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
@@ -22,7 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPredator {
+public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPredator {
 	
 	WanderGoal wanderAI;
     int swarmLimit = 5; // TODO Creature Flags
@@ -105,7 +105,7 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityCreatureAgeable minion = new EntityAbtu((EntityType<? extends EntityAbtu>) this.getType(), this.getEntityWorld());
+    	AgeableCreatureEntity minion = new EntityAbtu((EntityType<? extends EntityAbtu>) this.getType(), this.getEntityWorld());
     	minion.setGrowingAge(minion.growthTime);
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);

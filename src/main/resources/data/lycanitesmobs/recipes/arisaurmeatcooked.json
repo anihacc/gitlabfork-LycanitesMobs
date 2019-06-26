@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:arisaurmeatcooked"
+    "item": "lycanitesmobs:cooked_arisaur_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:paleosalad"
+      "item": "lycanitesmobs:paleo_salad"
     }
   ],
   "type": "minecraft:crafting_shapeless"

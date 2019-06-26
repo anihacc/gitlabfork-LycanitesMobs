@@ -2,8 +2,8 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.config.ConfigAdmin;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityFear;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
 import net.minecraft.entity.Entity;
@@ -39,7 +39,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	private int pickedUpByEntityID;
 
     // Fear:
-	public EntityFear fearEntity;
+	public FearEntity fearEntity;
 
     // Force Remove:
     boolean forceRemoveChecked = false;
@@ -249,8 +249,8 @@ public class ExtendedEntity implements IExtendedEntity {
 
 	public double[] getPickedUpOffset() {
         double[] pickupOffset = new double[] {0, 0, 0};
-        if(this.pickedUpByEntity instanceof EntityCreatureBase) {
-            pickupOffset = ((EntityCreatureBase) this.pickedUpByEntity).getPickupOffset(this.entity);
+        if(this.pickedUpByEntity instanceof BaseCreatureEntity) {
+            pickupOffset = ((BaseCreatureEntity) this.pickedUpByEntity).getPickupOffset(this.entity);
         }
         if(CreatureManager.getInstance().config.disablePickupOffsets && this.entity instanceof PlayerEntity) {
             return new double[] {0, 0, 0};
@@ -263,7 +263,7 @@ public class ExtendedEntity implements IExtendedEntity {
     }
 	
 	public boolean isFeared() {
-		return this.pickedUpByEntity instanceof EntityFear;
+		return this.pickedUpByEntity instanceof FearEntity;
 	}
 
 

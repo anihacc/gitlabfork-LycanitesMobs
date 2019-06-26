@@ -3,8 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -23,7 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityEnt extends EntityCreatureTameable implements IMob, IGroupPlant {
+public class EntityEnt extends TameableCreatureEntity implements IMob, IGroupPlant {
     
     // ==================================================
  	//                    Constructor

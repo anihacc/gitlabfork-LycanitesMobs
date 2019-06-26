@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileModel;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.ModelProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityLightBall extends EntityProjectileModel {
+public class EntityLightBall extends ModelProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -27,16 +27,16 @@ public class EntityLightBall extends EntityProjectileModel {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityLightBall(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityLightBall(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
         this.shootingEntity = entityLivingBase;
     }
 
-    public EntityLightBall(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityLightBall(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

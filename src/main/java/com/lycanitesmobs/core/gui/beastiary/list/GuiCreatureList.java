@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -83,7 +83,7 @@ public class GuiCreatureList extends BaseList<BeastiaryScreen> {
 			}
 			List<PetEntry> creatures = new ArrayList<>();
 			creatures.addAll(this.screen.playerExt.petManager.getEntryList(petType));
-			creatures.sort(Comparator.comparing(PetEntry::getDisplayName));
+			creatures.sort(Comparator.comparing(PetEntry::getName));
 			for(PetEntry petEntry : creatures) {
 				CreatureInfo creatureInfo = petEntry.getCreatureInfo();
 				if (creatureInfo != null && (this.filterList == null || this.filterList.canListCreature(creatureInfo, this.listType))) {

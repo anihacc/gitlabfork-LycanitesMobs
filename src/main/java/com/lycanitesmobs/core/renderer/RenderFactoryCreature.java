@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderFactoryCreature<T extends EntityCreatureBase> implements IRenderFactory {
+public class RenderFactoryCreature<T extends BaseCreatureEntity> implements IRenderFactory {
     protected CreatureInfo creatureInfo;
 
     public RenderFactoryCreature(CreatureInfo creatureInfo) {

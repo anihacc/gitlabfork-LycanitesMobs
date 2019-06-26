@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 
 public class MoveRestrictionGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private double speed = 1.0D;
@@ -20,7 +20,7 @@ public class MoveRestrictionGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public MoveRestrictionGoal(EntityCreatureBase setHost) {
+    public MoveRestrictionGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupElectric;
 import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityZephyr extends EntityCreatureTameable implements IMob, IGroupWater, IGroupElectric {
+public class EntityZephyr extends TameableCreatureEntity implements IMob, IGroupWater, IGroupElectric {
 
     protected short aoeAttackTick = 0;
 

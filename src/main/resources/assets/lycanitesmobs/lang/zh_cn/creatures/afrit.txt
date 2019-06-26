@@ -1,0 +1,4 @@
+entity.lycanitesmobs.afrit.name=伊夫利特
+entity.lycanitesmobs.afrit.description=邪恶的烈火小鬼，它们决心毁灭，它们会猛烈地烧毁周围的世界。
+entity.lycanitesmobs.afrit.habitat=这些小鬼通常会在熔岩池里洗澡。
+entity.lycanitesmobs.afrit.combat=伊夫利特通常从远处攻击，投掷烈火球，烈火和强酸的致命组合，削弱任何被击中的东西的防御。

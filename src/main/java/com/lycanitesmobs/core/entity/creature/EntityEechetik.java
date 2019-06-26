@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.EffectBase;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.block.BlockState;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityEechetik extends EntityCreatureTameable implements IMob {
+public class EntityEechetik extends TameableCreatureEntity implements IMob {
 
 	private AttackMeleeGoal meleeAttackAI;
 

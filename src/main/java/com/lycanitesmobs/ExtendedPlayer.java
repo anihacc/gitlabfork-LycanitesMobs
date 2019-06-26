@@ -3,13 +3,12 @@ package com.lycanitesmobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigExtra;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -23,6 +22,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int summonFocus = this.summonFocusMax;
 	public Map<Integer, SummonSet> summonSets = new HashMap<>();
 	public int summonSetMax = 5;
-	public EntityPortal staffPortal;
+	public PortalEntity staffPortal;
 
     // Initial Setup:
     private boolean initialSetup = false;
@@ -156,8 +156,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
             return false;
         float targetWidth = targetEntity.getWidth();
         float targetHeight = targetEntity.getHeight();
-        if(targetEntity instanceof EntityCreatureBase) {
-        	EntityCreatureBase targetCreature = (EntityCreatureBase)targetEntity;
+        if(targetEntity instanceof BaseCreatureEntity) {
+        	BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
         	targetWidth *= targetCreature.hitAreaWidthScale;
 			targetHeight *= targetCreature.hitAreaHeightScale;
 		}
@@ -252,7 +252,8 @@ public class ExtendedPlayer implements IExtendedPlayer {
 				VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(true);
 				VersionChecker.enabled = ConfigExtra.INSTANCE.versionCheckerEnabled.get();
 				if (latestVersion != null && latestVersion.isNewer && VersionChecker.enabled) {
-					this.player.sendMessage(new TranslationTextComponent(LanguageManager.translate("lyc.version.newer").replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber)));
+					String versionText = new TranslationTextComponent("lyc.version.newer").getString().replace("{current}", LycanitesMobs.versionNumber).replace("{latest}", latestVersion.versionNumber);
+					this.player.sendMessage(new StringTextComponent(versionText));
 				}
 			}
 

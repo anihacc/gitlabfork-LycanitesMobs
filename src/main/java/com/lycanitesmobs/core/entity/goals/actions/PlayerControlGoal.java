@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
@@ -8,7 +8,7 @@ import java.util.EnumSet;
 
 public class PlayerControlGoal extends Goal {
     // Targets:
-    private EntityCreatureRideable host;
+    private RideableCreatureEntity host;
     
     // Properties:
     private double speed = 1.0D;
@@ -19,7 +19,7 @@ public class PlayerControlGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public PlayerControlGoal(EntityCreatureRideable setHost) {
+    public PlayerControlGoal(RideableCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
     }

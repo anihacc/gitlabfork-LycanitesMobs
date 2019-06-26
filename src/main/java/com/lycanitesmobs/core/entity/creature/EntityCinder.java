@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -30,7 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCinder extends EntityCreatureTameable implements IMob, IGroupFire, IFusable {
+public class EntityCinder extends TameableCreatureEntity implements IMob, IGroupFire, IFusable {
 
 	public float inWallDamageAbsorbed = 0;
     
@@ -114,37 +114,37 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     @Override
     public void attackRanged(Entity target, float range) {
     	// Type:
-    	List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
+    	List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("ember");
     	
-    	EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectiles.add(projectileEntry);
     	
-    	EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry2.offsetX += 1.0D;
     	projectiles.add(projectileEntry2);
     	
-    	EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry3.offsetX -= 1.0D;
     	projectiles.add(projectileEntry3);
     	
-    	EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry4.offsetZ += 1.0D;
     	projectiles.add(projectileEntry4);
     	
-    	EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry5.offsetZ -= 1.0D;
     	projectiles.add(projectileEntry5);
     	
-    	EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry6.offsetY += 1.0D;
     	projectiles.add(projectileEntry6);
     	
-    	EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry7.offsetY -= 1.0D;
     	projectiles.add(projectileEntry7);
     	
-    	for(EntityProjectileRapidFire projectile : projectiles) {
+    	for(RapidFireProjectileEntity projectile : projectiles) {
 	        projectile.setProjectileScale(1f);
 	    	
 	    	// Y Offset:
@@ -226,7 +226,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityitem) {
+    public void applyDropEffects(CustomItemEntity entityitem) {
     	entityitem.setCanBurn(false);
     }
     

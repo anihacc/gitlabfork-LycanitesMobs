@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
@@ -13,6 +13,8 @@ import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -135,15 +137,10 @@ public class MobEvent {
     
 
     /** Returns the translated name of this event. **/
-	public String getTitle() {
-		return LanguageManager.translate("mobevent." + this.title + ".name");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("mobevent." + this.title + ".name");
 	}
 
-    /** Returns a translated string to overlay the event image, this returns an empty string for english as the image itself has the title in english. **/
-    public String getDisplayTitle() {
-        String title = this.getTitle().replaceAll(" ", "").toLowerCase();
-        return title.equalsIgnoreCase(this.title) ? "" : title;
-    }
 	
 	/** Returns whether this Mob Events is enabled or not. **/
     public boolean isEnabled() {
@@ -253,8 +250,8 @@ public class MobEvent {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 			int levelBoost = this.levelBoostMin;
 			if(this.levelBoostMax > this.levelBoostMin) {
 				levelBoost += entityCreature.getRNG().nextInt(this.levelBoostMax - this.levelBoostMin + 1);

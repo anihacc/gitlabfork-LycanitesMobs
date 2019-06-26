@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -63,7 +65,7 @@ public class ModInfo {
 	 * Returns the display title of this mod.
 	 * @return The text to display.
 	 */
-	public String getTitle() {
-    	return LanguageManager.translate(this.modid + ".name");
+	public ITextComponent getTitle() {
+    	return new TranslationTextComponent(this.modid + ".name");
 	}
 }

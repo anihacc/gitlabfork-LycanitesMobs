@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
 import net.minecraft.entity.LivingEntity;
@@ -89,10 +89,10 @@ public class ModelGeken extends ModelCreatureObjOld {
     	}
 		
 		// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
-	    	if(((EntityCreatureBase)entity).getAttackPhase() % 1 == 0 && partName.equals("leftarm"))
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
+	    	if(((BaseCreatureEntity)entity).getAttackPhase() % 1 == 0 && partName.equals("leftarm"))
 	    		rotX += 20.0F;
-	    	else if(((EntityCreatureBase)entity).getAttackPhase() % 2 == 0 && partName.equals("rightarm"))
+	    	else if(((BaseCreatureEntity)entity).getAttackPhase() % 2 == 0 && partName.equals("rightarm"))
 	    		rotX += 20.0F;
 		}
 		

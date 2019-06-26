@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:astarothclaw"
+      "item": "lycanitesmobs:equipmentpart_astarothclaw"
     }
   ],
   "type": "minecraft:crafting_shapeless"

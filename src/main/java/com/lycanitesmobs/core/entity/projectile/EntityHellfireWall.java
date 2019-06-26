@@ -4,8 +4,8 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-public class EntityHellfireWall extends EntityProjectileBase {
+public class EntityHellfireWall extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -30,15 +30,15 @@ public class EntityHellfireWall extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity) {
         super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireWall(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+    public EntityHellfireWall(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
         super(entityType, world, par2, par4, par6);
     }
     
@@ -122,8 +122,8 @@ public class EntityHellfireWall extends EntityProjectileBase {
         else if(target instanceof TameableEntity) {
             obliterate = !(((TameableEntity)target).getOwner() instanceof PlayerEntity);
         }
-        else if(target instanceof EntityCreatureTameable) {
-            obliterate = !(((EntityCreatureTameable)target).getOwner() instanceof PlayerEntity);
+        else if(target instanceof TameableCreatureEntity) {
+            obliterate = !(((TameableCreatureEntity)target).getOwner() instanceof PlayerEntity);
         }
         if(target instanceof IGroupBoss)
             obliterate = false;

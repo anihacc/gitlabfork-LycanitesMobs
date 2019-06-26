@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
+public class EntityNymph extends TameableCreatureEntity implements IGroupPlant {
 
 	public int healingRate = 20; // TODO Creature flags.
 

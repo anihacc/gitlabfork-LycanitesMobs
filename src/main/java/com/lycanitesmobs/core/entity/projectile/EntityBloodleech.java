@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -10,7 +10,7 @@ import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityBloodleech extends EntityProjectileBase {
+public class EntityBloodleech extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -18,15 +18,15 @@ public class EntityBloodleech extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityBloodleech(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityBloodleech(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityBloodleech(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityBloodleech(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityBloodleech(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityBloodleech(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

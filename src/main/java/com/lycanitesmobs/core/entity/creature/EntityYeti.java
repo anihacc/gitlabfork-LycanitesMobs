@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityYeti extends EntityCreatureAgeable implements IGroupAnimal, IGroupIce {
+public class EntityYeti extends AgeableCreatureEntity implements IGroupAnimal, IGroupIce {
 	
 	// ==================================================
  	//                    Constructor

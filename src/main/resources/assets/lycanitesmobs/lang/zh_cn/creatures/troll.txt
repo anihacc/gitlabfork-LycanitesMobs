@@ -1,0 +1,4 @@
+entity.lycanitesmobs.troll.name=巨怪
+entity.lycanitesmobs.troll.description=在阳光下，巨怪的皮肤像石头一样坚硬，在黑暗中，则是一个可怕的绿色肉体。巨怪是破坏性的。
+entity.lycanitesmobs.troll.habitat=这些狂兽通常生活在山上。
+entity.lycanitesmobs.troll.combat=巨怪使用强大的近战攻击，并将摧毁它们周围的软地形。在阳光下，它们变得像石头一样坚硬，防御能力更强，但容易受到镐的攻击，在阳光下，它们会失去防御能力，很容易受到攻击。

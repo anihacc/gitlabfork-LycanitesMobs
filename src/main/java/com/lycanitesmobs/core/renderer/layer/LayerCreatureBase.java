@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
@@ -14,7 +14,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerCreatureBase extends LayerRenderer<EntityCreatureBase, ModelCreatureBase> {
+public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCreatureBase> {
     public RenderCreature renderer;
     public String name;
 
@@ -32,7 +32,7 @@ public class LayerCreatureBase extends LayerRenderer<EntityCreatureBase, ModelCr
     //                  Render Layer
     // ==================================================
     @Override //render
-    public void func_212842_a_(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_212842_a_(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {
@@ -43,7 +43,7 @@ public class LayerCreatureBase extends LayerRenderer<EntityCreatureBase, ModelCr
         }
     }
 
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity == null)
             return false;
         if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getInstance().player))
@@ -55,22 +55,22 @@ public class LayerCreatureBase extends LayerRenderer<EntityCreatureBase, ModelCr
     // ==================================================
     //                      Visuals
     // ==================================================
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return null;
     }
 
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         if(this.renderer.getMainModel() != null) {
             this.renderer.getMainModel().canBaseRenderPart(partName, entity, trophy);
         }
         return true;
     }
 
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+    public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
         return new Vector2f(0, 0);
     }
 

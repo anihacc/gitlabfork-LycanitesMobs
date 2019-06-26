@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -11,7 +11,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityFrostbolt extends EntityProjectileBase {
+public class EntityFrostbolt extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -19,15 +19,15 @@ public class EntityFrostbolt extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityFrostbolt(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityFrostbolt(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityFrostbolt(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityFrostbolt(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityFrostbolt(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityFrostbolt(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

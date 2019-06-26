@@ -2,21 +2,21 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.AltarInfo;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemSoulkey extends ItemBase {
+public class ItemSoulkey extends BaseItem {
     public int rank = 0; // 0 = Standard, 1 = Diamond, 2 = Emerald
 
 	// ==================================================
@@ -41,8 +41,8 @@ public class ItemSoulkey extends ItemBase {
         ItemStack itemStack = context.getItem();
 
         if(!AltarInfo.checkAltarsEnabled() && !player.getEntityWorld().isRemote) {
-            String message = LanguageManager.translate("message.soulkey.disabled");
-            player.sendMessage(new TranslationTextComponent(message));
+            ITextComponent message = new TranslationTextComponent("message.soulkey.disabled");
+            player.sendMessage(message);
             return ActionResultType.FAIL;
         }
 
@@ -56,8 +56,8 @@ public class ItemSoulkey extends ItemBase {
             }
         }
         if(possibleAltars.isEmpty()) {
-            String message = LanguageManager.translate("message.soulkey.none");
-            player.sendMessage(new TranslationTextComponent(message));
+            ITextComponent message = new TranslationTextComponent("message.soulkey.none");
+            player.sendMessage(message);
             return ActionResultType.FAIL;
         }
 
@@ -72,18 +72,18 @@ public class ItemSoulkey extends ItemBase {
                     if (itemStack.getCount() <= 0)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
-                        String message = LanguageManager.translate("message.soulkey.badlocation");
-                        player.sendMessage(new TranslationTextComponent(message));
+                        ITextComponent message = new TranslationTextComponent("message.soulkey.badlocation");
+                        player.sendMessage(message);
                         return ActionResultType.FAIL;
                     }
-                    String message = LanguageManager.translate("message.soulkey.active");
-                    player.sendMessage(new TranslationTextComponent(message));
+                    ITextComponent message = new TranslationTextComponent("message.soulkey.active");
+                    player.sendMessage(message);
                 }
                 return ActionResultType.SUCCESS;
             }
         }
-        String message = LanguageManager.translate("message.soulkey.invalid");
-        player.sendMessage(new TranslationTextComponent(message));
+        ITextComponent message = new TranslationTextComponent("message.soulkey.invalid");
+        player.sendMessage(message);
 
         return ActionResultType.FAIL;
     }

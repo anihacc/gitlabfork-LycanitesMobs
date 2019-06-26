@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
@@ -21,7 +21,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityReaper extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityReaper extends TameableCreatureEntity implements IMob, IGroupShadow {
     
     // ==================================================
  	//                    Constructor

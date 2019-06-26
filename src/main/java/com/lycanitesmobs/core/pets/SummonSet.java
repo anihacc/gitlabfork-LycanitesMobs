@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.pets;
 
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -109,7 +109,7 @@ public class SummonSet {
     /**
 	 * Applies all behaviour in this set to the provided entity.
 	 */
-    public void applyBehaviour(EntityCreatureTameable minion) {
+    public void applyBehaviour(TameableCreatureEntity minion) {
         minion.setSitting(this.getSitting());
         minion.setFollowing(this.getFollowing());
         minion.setPassive(this.getPassive());
@@ -121,7 +121,7 @@ public class SummonSet {
     /**
 	 * Copies the provided entity's behaviour into this summon set's behaviour.
 	 */
-    public void updateBehaviour(EntityCreatureTameable minion) {
+    public void updateBehaviour(TameableCreatureEntity minion) {
         this.sitting = minion.isSitting();
         this.following = minion.isFollowing();
         this.passive = minion.isPassive();

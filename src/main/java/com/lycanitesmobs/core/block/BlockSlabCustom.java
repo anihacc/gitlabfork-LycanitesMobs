@@ -37,23 +37,19 @@ public class BlockSlabCustom extends SlabBlock {
         return false; // Double slabs are defined as BlockSlabDouble.
     }
 
-
-    // ==================================================
-    //                      Info
-    // ==================================================
     @Override
     public ITextComponent getNameTextComponent() {
-        return new TranslationTextComponent(LanguageManager.translate(this.getTranslationKey()));
+        return new TranslationTextComponent(this.getTranslationKey());
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        tooltip.add(new TranslationTextComponent(this.getDescription(stack, world)));
+        tooltip.add(this.getDescription(stack, world));
     }
 
-    public String getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return LanguageManager.translate("block." + this.blockName + ".description");
+    public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
+        return new TranslationTextComponent("block." + this.blockName + ".description");
     }
 
 

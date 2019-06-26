@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,10 +22,10 @@ public class LayerCreatureSaddle extends LayerCreatureBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
-        if(!super.canRenderLayer(entity, scale) || !(entity instanceof EntityCreatureRideable))
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
+        if(!super.canRenderLayer(entity, scale) || !(entity instanceof RideableCreatureEntity))
             return false;
-        return ((EntityCreatureRideable)entity).hasSaddle();
+        return ((RideableCreatureEntity)entity).hasSaddle();
     }
 
 
@@ -33,7 +33,7 @@ public class LayerCreatureSaddle extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getEquipmentTexture("saddle");
     }
 }

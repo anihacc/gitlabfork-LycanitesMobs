@@ -4,13 +4,11 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.*;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -26,6 +24,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemEquipment extends ItemBase {
+public class ItemEquipment extends BaseItem {
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
 	public static int PART_LIMIT = 20;
 
@@ -60,29 +59,32 @@ public class ItemEquipment extends ItemBase {
 	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, descriptionWidth);
+		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description.getFormattedText(), DESCRIPTION_WIDTH);
 			for (String formattedDescription : formattedDescriptionList) {
-				tooltip.add(new TranslationTextComponent(formattedDescription));
+				tooltip.add(new StringTextComponent(formattedDescription));
 			}
 		}
 	}
 
 	@Override
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return LanguageManager.translate("item.equipment.description");
+	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		return new TranslationTextComponent("item.equipment.description");
 	}
 
-	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
-		List<String> descriptions = new ArrayList<>();
+	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
+		List<ITextComponent> descriptions = new ArrayList<>();
 		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(itemStack)) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(equipmentPart.getDisplayName(itemStack) + " " + LanguageManager.translate("entity.level") + " " + partLevel);
+			descriptions.add(equipmentPart.getDisplayName(itemStack)
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("entity.level"))
+					.appendText(" " + partLevel));
 		}
-		//descriptions.add(LanguageManager.translate("common.holdshift"));
+		//descriptions.add(new TranslationTextComponent("common.holdshift"));
 		return descriptions;
 	}
 

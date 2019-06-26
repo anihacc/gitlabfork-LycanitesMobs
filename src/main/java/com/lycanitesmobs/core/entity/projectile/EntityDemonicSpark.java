@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityDemonicSpark extends EntityProjectileBase {
+public class EntityDemonicSpark extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -20,15 +20,15 @@ public class EntityDemonicSpark extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityDemonicSpark(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityDemonicSpark(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityDemonicSpark(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityDemonicSpark(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

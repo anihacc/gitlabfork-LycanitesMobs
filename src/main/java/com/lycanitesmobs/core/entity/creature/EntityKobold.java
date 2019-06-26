@@ -4,8 +4,7 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -24,7 +23,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityKobold extends EntityCreatureTameable implements IMob, IGroupPrey {
+public class EntityKobold extends TameableCreatureEntity implements IMob, IGroupPrey {
     public boolean torchGreifing = true; // TODO Creature flags.
     public boolean theivery = true;
 

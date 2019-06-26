@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,7 +11,7 @@ import java.util.EnumSet;
 
 public class AttackRangedGoal extends Goal {
     // Targets:
-	private final EntityCreatureBase host;
+	private final BaseCreatureEntity host;
     private LivingEntity attackTarget;
 
     // Properties
@@ -42,7 +42,7 @@ public class AttackRangedGoal extends Goal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public AttackRangedGoal(EntityCreatureBase setHost) {
+    public AttackRangedGoal(BaseCreatureEntity setHost) {
     	this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -123,8 +123,8 @@ public class AttackRangedGoal extends Goal {
         // Should Execute:
     	if(!this.enabled)
     		return false;
-        if(!this.mountedAttacking && this.host instanceof EntityCreatureRideable) {
-            EntityCreatureRideable rideableHost = (EntityCreatureRideable)this.host;
+        if(!this.mountedAttacking && this.host instanceof RideableCreatureEntity) {
+            RideableCreatureEntity rideableHost = (RideableCreatureEntity)this.host;
             if(rideableHost.getControllingPassenger() instanceof PlayerEntity)
                 return false;
         }

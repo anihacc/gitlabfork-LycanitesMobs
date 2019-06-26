@@ -2,14 +2,14 @@ package com.lycanitesmobs.core.entity.projectile;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityThrowingScythe extends EntityProjectileBase {
+public class EntityThrowingScythe extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -17,15 +17,15 @@ public class EntityThrowingScythe extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityThrowingScythe(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityThrowingScythe(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityThrowingScythe(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityThrowingScythe(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

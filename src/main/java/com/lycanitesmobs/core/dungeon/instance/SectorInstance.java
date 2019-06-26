@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
 import com.lycanitesmobs.core.dungeon.definition.DungeonTheme;
 import com.lycanitesmobs.core.dungeon.definition.SectorLayer;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.spawner.MobSpawn;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
@@ -878,8 +878,8 @@ public class SectorInstance {
 		LivingEntity entityLiving = mobSpawn.createEntity(world);
 		entityLiving.setPosition(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
-		if(entityLiving instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
+		if(entityLiving instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
 			entityCreature.setHome(blockPos.getX(), blockPos.getY(), blockPos.getZ(), Math.max(3, Math.max(this.roomSize.getX(), this.roomSize.getZ())));
 		}
 

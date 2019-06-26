@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,28 +14,28 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityWaterJet extends EntityProjectileLaser {
+public class EntityWaterJet extends LaserProjectileEntity {
 
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityWaterJet(EntityType<? extends EntityProjectileBase> entityType, World world) {
+	public EntityWaterJet(EntityType<? extends BaseProjectileEntity> entityType, World world) {
 		super(entityType, world);
 	}
 
-	public EntityWaterJet(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
+	public EntityWaterJet(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay) {
 		super(entityType, world, par2, par4, par6, setTime, setDelay);
 	}
 
-	public EntityWaterJet(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
+	public EntityWaterJet(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
 		super(entityType, world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
-	public EntityWaterJet(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
+	public EntityWaterJet(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay) {
 		super(entityType, world, par2LivingEntity, setTime, setDelay);
 	}
 
-	public EntityWaterJet(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
+	public EntityWaterJet(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity, int setTime, int setDelay, Entity followEntity) {
 		super(entityType, world, par2LivingEntity, setTime, setDelay, followEntity);
 	}
     

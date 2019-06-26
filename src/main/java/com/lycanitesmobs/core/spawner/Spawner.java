@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
@@ -19,6 +19,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -353,8 +354,8 @@ public class Spawner {
 		}
 		if(currentCount != lastCount) {
 			if(this.triggerCountMessages.containsKey(currentCount)) {
-				String message = LanguageManager.translate(this.triggerCountMessages.get(currentCount));
-				player.sendMessage(new TranslationTextComponent(message));
+				ITextComponent message = new TranslationTextComponent(this.triggerCountMessages.get(currentCount));
+				player.sendMessage(message);
 			}
 		}
 
@@ -460,9 +461,9 @@ public class Spawner {
 				LycanitesMobs.logWarning("JSONSpawner", "Unable to instantiate an entity. Class: " + mobSpawn.entityType);
 				continue;
 			}
-			EntityCreatureBase entityCreature = null;
-			if (entityLiving instanceof EntityCreatureBase) {
-				entityCreature = (EntityCreatureBase)entityLiving;
+			BaseCreatureEntity entityCreature = null;
+			if (entityLiving instanceof BaseCreatureEntity) {
+				entityCreature = (BaseCreatureEntity)entityLiving;
 				LycanitesMobs.logDebug("JSONSpawner", "Mob is a Lycanites Mob");
 			}
 			else {
@@ -644,8 +645,8 @@ public class Spawner {
 	 **/
 	public boolean mobInstanceSpawnCheck(LivingEntity entityLiving, MobSpawn mobSpawn, World world, PlayerEntity player, BlockPos spawnPos, int level, boolean forgeForced) {
 		// Lycanites Mobs:
-		if (entityLiving instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
+		if (entityLiving instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
 
 			LycanitesMobs.logDebug("JSONSpawner", "Checking Mob Collision...");
 			if(!this.ignoreCollision && !entityCreature.checkSpawnCollision(world, spawnPos)) {
@@ -697,9 +698,9 @@ public class Spawner {
 		// Before Spawn:
 		entityLiving.timeUntilPortal = entityLiving.getPortalCooldown();
 
-		EntityCreatureBase entityCreature;
-		if(entityLiving instanceof EntityCreatureBase) {
-			entityCreature = (EntityCreatureBase)entityLiving;
+		BaseCreatureEntity entityCreature;
+		if(entityLiving instanceof BaseCreatureEntity) {
+			entityCreature = (BaseCreatureEntity)entityLiving;
 			entityCreature.forceNoDespawn = this.forceNoDespawn;
 			entityCreature.spawnedRare = level > 0;
 			if (this.blockBreakRadius > -1 && chain == 0) {

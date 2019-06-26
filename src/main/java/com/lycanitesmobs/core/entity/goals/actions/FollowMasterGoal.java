@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class FollowMasterGoal extends FollowGoal {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public FollowMasterGoal(EntityCreatureBase setHost) {
+    public FollowMasterGoal(BaseCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
     }

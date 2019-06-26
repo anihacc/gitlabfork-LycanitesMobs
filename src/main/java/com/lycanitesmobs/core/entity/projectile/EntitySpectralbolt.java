@@ -3,8 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +12,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntitySpectralbolt extends EntityProjectileBase {
+public class EntitySpectralbolt extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -21,15 +20,15 @@ public class EntitySpectralbolt extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntitySpectralbolt(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntitySpectralbolt(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntitySpectralbolt(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntitySpectralbolt(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

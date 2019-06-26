@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:remobrawing"
+      "item": "lycanitesmobs:equipmentpart_remobrawing"
     }
   ],
   "type": "minecraft:crafting_shapeless"

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -31,8 +31,8 @@ public class MessageEntityGUICommand {
 			PlayerEntity player = ctx.get().getSender();
 			World world = player.getEntityWorld();
 			Entity entity = world.getEntityByID(message.entityID);
-			if (entity instanceof EntityCreatureTameable) {
-				EntityCreatureTameable pet = (EntityCreatureTameable) entity;
+			if (entity instanceof TameableCreatureEntity) {
+				TameableCreatureEntity pet = (TameableCreatureEntity) entity;
 				pet.performGUICommand(player, message.guiCommandID);
 			}
 		});

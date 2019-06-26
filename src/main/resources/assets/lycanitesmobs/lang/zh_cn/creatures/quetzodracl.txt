@@ -1,0 +1,4 @@
+entity.lycanitesmobs.quetzodracl.name=风神翼龙
+entity.lycanitesmobs.quetzodracl.description=强大的双足飞龙，仍然与它们的龙祖先翼龙有着强烈的相似之处。
+entity.lycanitesmobs.quetzodracl.habitat=这些飞龙可以在海上飞行。
+entity.lycanitesmobs.quetzodracl.combat=风神翼龙是不可思议的力量，它会抓住猎物，最好用它们的大块头来对付它们。

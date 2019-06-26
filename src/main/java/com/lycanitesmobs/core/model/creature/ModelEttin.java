@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
 import net.minecraft.entity.LivingEntity;
@@ -82,15 +82,15 @@ public class ModelEttin extends ModelCreatureObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
     	
     	// Attack:
-    	if(entity instanceof EntityCreatureBase) {
-    		if(((EntityCreatureBase)entity).isAttackOnCooldown()) {
+    	if(entity instanceof BaseCreatureEntity) {
+    		if(((BaseCreatureEntity)entity).isAttackOnCooldown()) {
     			if(partName.equals("leftarm"))
-    				if(((EntityCreatureBase)entity).getAttackPhase() == 0)
+    				if(((BaseCreatureEntity)entity).getAttackPhase() == 0)
     					rotX += 30;
     				else
     					rotX -= 30;
     			if(partName.equals("rightarm"))
-    				if(((EntityCreatureBase)entity).getAttackPhase() == 0)
+    				if(((BaseCreatureEntity)entity).getAttackPhase() == 0)
     					rotX -= 30;
     				else
     					rotX += 30;

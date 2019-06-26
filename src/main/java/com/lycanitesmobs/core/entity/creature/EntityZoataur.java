@@ -4,7 +4,7 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
@@ -20,7 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityZoataur extends EntityCreatureTameable implements IGroupPredator, IMob {
+public class EntityZoataur extends TameableCreatureEntity implements IGroupPredator, IMob {
     
     // ==================================================
  	//                    Constructor

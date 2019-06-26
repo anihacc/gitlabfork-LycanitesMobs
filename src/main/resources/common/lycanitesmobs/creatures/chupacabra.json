@@ -62,8 +62,8 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "lycanitesmobs:chupacabrameatraw",
-			"burningItem": "lycanitesmobs:chupacabrameatcooked",
+			"item": "lycanitesmobs:raw_chupacabra_meat",
+			"burningItem": "lycanitesmobs:cooked_chupacabra_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.lurker.name=潜伏者
+entity.lycanitesmobs.lurker.description=潜伏者非常适合隐藏在它们的环境之中。一旦得手，它们就会躲避起来，等待毒液慢慢生效。同时它也可以被驯服为不错的宠物，以防止爬行者。
+entity.lycanitesmobs.lurker.habitat=这些生物可以在森林和沼泽中找到，但会避开寒冷地区。
+entity.lycanitesmobs.lurker.combat=潜伏者的撕咬会导致中毒和失明，咬伤后潜伏者会逃跑并试图躲避起来，让毒素发挥作用，如果毒素消失，它们会再次发起攻击。

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -13,7 +13,7 @@ import java.util.EnumSet;
 
 public class EatBlockGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private Block[] blocks = new Block[0];
@@ -25,7 +25,7 @@ public class EatBlockGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EatBlockGoal(EntityCreatureBase setHost) {
+    public EatBlockGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }

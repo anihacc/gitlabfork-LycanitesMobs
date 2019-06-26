@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.item.Item;
 
 
-public class ItemTreat extends ItemBase {
+public class ItemTreat extends BaseItem {
 	protected CreatureType creatureType;
 
 	/**

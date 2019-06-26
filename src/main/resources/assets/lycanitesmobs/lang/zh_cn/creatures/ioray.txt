@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ioray.name=魔鬼鱼
+entity.lycanitesmobs.ioray.description=美丽的生物以极快的速度优雅地游泳，它们的背上有大量珍贵的宝石，但是它们很有攻击性。
+entity.lycanitesmobs.ioray.habitat=这些生物可以在海水中找到。
+entity.lycanitesmobs.ioray.combat=魔鬼鱼使用致命的水喷射攻击，将摧毁任何攻击的防御。

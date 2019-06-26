@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
@@ -21,7 +21,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityEpion extends TameableCreatureEntity implements IMob, IGroupShadow {
     
 	public boolean epionGreifing = true; // TODO Creature flags.
 	

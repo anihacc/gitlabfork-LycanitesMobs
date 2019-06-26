@@ -134,7 +134,7 @@ public class DungeonManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 
 	}
 

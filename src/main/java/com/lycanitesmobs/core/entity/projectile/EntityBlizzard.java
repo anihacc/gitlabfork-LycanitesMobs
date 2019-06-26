@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntitySerpix;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -15,7 +15,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityBlizzard extends EntityProjectileBase {
+public class EntityBlizzard extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -23,15 +23,15 @@ public class EntityBlizzard extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityBlizzard(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityBlizzard(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityBlizzard(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityBlizzard(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.volcan.name=火巨人
+entity.lycanitesmobs.volcan.description=一种炙热的熔岩元素，火巨人将融化它们所经过的一切！火元素和地魔元素可以融合，形成强大的火巨人。
+entity.lycanitesmobs.volcan.habitat=作为熔岩元素，火巨人在地下大量的熔岩周围出现，非常罕见。
+entity.lycanitesmobs.volcan.combat=火巨人会将周围的任何石头熔化成熔岩，因此必须快速消灭。火巨人在近战中攻击并应用燃烧效果，但它们也有一个炽热光环燃烧任何接近它们的东西。

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.model;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEquipment;
@@ -15,7 +15,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
+public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
     
 	// ==================================================
   	//                    Constructors
@@ -44,7 +44,7 @@ public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
    	//                  Render Model
    	// ==================================================
     @Override
-    public void func_78088_a(EntityCreatureBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void func_78088_a(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 
@@ -60,7 +60,7 @@ public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
 	 * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
 	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
 	 */
-    public void render(EntityCreatureBase entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         float sizeScale = 1F;
 		if(entity != null) {
             sizeScale *= entity.getRenderScale();
@@ -77,8 +77,8 @@ public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
     public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
         if(layer == null)
             return this.canBaseRenderPart(partName, entity, trophy);
-        if(entity instanceof EntityCreatureBase)
-            return layer.canRenderPart(partName, (EntityCreatureBase)entity, trophy);
+        if(entity instanceof BaseCreatureEntity)
+            return layer.canRenderPart(partName, (BaseCreatureEntity)entity, trophy);
         return false;
     }
 
@@ -93,9 +93,9 @@ public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
     // ==================================================
     /** Returns the coloring to be used for this part and layer. **/
     public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
-        if(layer == null || !(entity instanceof EntityCreatureBase))
+        if(layer == null || !(entity instanceof BaseCreatureEntity))
             return this.getBasePartColor(partName, entity, trophy, loop);
-        return layer.getPartColor(partName, (EntityCreatureBase)entity, trophy);
+        return layer.getPartColor(partName, (BaseCreatureEntity)entity, trophy);
     }
 
     /** Returns the coloring to be used for this part on the base layer. **/
@@ -109,9 +109,9 @@ public class ModelCreatureBase extends EntityModel<EntityCreatureBase> {
 	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
 	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
-		if(layer == null || !(entity instanceof EntityCreatureBase))
+		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
-		return layer.getTextureOffset(partName, (EntityCreatureBase)entity, trophy, loop);
+		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/

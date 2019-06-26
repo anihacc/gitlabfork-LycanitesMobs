@@ -1,17 +1,16 @@
 {
   "result": {
-    "item": "lycanitesmobs:bloodchili"
+    "item": "lycanitesmobs:blood_chili"
   },
   "ingredients": [
     {
       "item": "minecraft:bowl"
     },
     {
-      "item": "minecraft:dye",
-      "data": 3
+      "item": "minecraft:cocoa_beans"
     },
     {
-      "item": "lycanitesmobs:chupacabrameatcooked"
+      "item": "lycanitesmobs:cooked_chupacabra_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
 public class StealthGoal extends Goal {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	
 	// Properties:
 	private int stealthTimeMax = 20;
@@ -22,7 +22,7 @@ public class StealthGoal extends Goal {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-	public StealthGoal(EntityCreatureBase setHost) {
+	public StealthGoal(BaseCreatureEntity setHost) {
 		this.host = setHost;
 		this.setMutexFlags(EnumSet.noneOf(Goal.Flag.class));
 	}

@@ -2,31 +2,31 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.container.ContainerBase;
-import com.lycanitesmobs.core.container.ContainerCreature;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.container.BaseContainer;
+import com.lycanitesmobs.core.container.CreatureContainer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class CreatureInventoryScreen extends BaseContainerScreen<ContainerCreature> {
-	public EntityCreatureBase creature;
+public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContainer> {
+	public BaseCreatureEntity creature;
 	public InventoryCreature creatureInventory;
 
 	/**
 	 * Constructor
 	 */
-	public CreatureInventoryScreen(ContainerCreature container, PlayerInventory playerInventory, ITextComponent name) {
+	public CreatureInventoryScreen(CreatureContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
 		this.creature = container.creature;
 		this.creatureInventory = container.creature.inventory;
@@ -44,9 +44,9 @@ public class CreatureInventoryScreen extends BaseContainerScreen<ContainerCreatu
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 
-		if(!(this.creature instanceof EntityCreatureTameable))
+		if(!(this.creature instanceof TameableCreatureEntity))
 			return;
-		EntityCreatureTameable pet = (EntityCreatureTameable)this.creature;
+		TameableCreatureEntity pet = (TameableCreatureEntity)this.creature;
 		if(!pet.petControlsEnabled())
 			return;
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -56,71 +56,71 @@ public class CreatureInventoryScreen extends BaseContainerScreen<ContainerCreatu
 		int buttonX = backX + this.xSize;
 		int buttonY = backY;
 
-		String buttonText = LanguageManager.translate("gui.pet.follow");
+		String buttonText = new TranslationTextComponent("gui.pet.follow").getFormattedText();
 		buttonY += buttonSpacing;
-		Button button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		Button button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isFollowing() && !pet.isSitting()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.wander");
+		buttonText = new TranslationTextComponent("gui.pet.wander").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.WANDER.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && !pet.isSitting()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.sit");
+		buttonText = new TranslationTextComponent("gui.pet.sit").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.SIT.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isFollowing() && pet.isSitting()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.passive");
+		buttonText = new TranslationTextComponent("gui.pet.passive").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(pet.isPassive()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.defensive");
+		buttonText = new TranslationTextComponent("gui.pet.defensive").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && !pet.isAssisting() && !pet.isAggressive()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.assist");
+		buttonText = new TranslationTextComponent("gui.pet.assist").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAssisting() && !pet.isAggressive()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.aggressive");
+		buttonText = new TranslationTextComponent("gui.pet.aggressive").getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this);
 		if(!pet.isPassive() && pet.isAggressive()) {
 			button.active = false;
 		}
 		this.buttons.add(button);
 
-		buttonText = LanguageManager.translate("gui.pet.pvp") + ": " + (pet.isPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
+		buttonText = new TranslationTextComponent("gui.pet.pvp").appendText(": ").appendSibling(pet.isPVP() ? new TranslationTextComponent("common.yes") : new TranslationTextComponent("common.no")).getFormattedText();
 		buttonY += buttonHeight + (buttonSpacing * 2);
-		this.buttons.add(new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
+		this.buttons.add(new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
 	}
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName().toString()), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 
 	@Override
@@ -177,7 +177,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<ContainerCreatu
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
         
-		ContainerBase container = this.getContainer();
+		BaseContainer container = this.getContainer();
 		List<Slot> creatureSlots = container.inventorySlots.subList(container.specialStart, container.inventoryFinish + 1);
 		int slotWidth = 18;
 		int slotHeight = 18;

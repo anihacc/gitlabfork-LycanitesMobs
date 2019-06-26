@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:throwingscythe",
+    "item": "lycanitesmobs:throwingscythecharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:clinkscythe"
+      "item": "lycanitesmobs:equipmentpart_clinkscythe"
     }
   ],
   "type": "minecraft:crafting_shapeless"

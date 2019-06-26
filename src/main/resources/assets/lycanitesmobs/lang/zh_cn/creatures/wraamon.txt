@@ -1,0 +1,4 @@
+entity.lycanitesmobs.wraamon.name=雷阿蒙
+entity.lycanitesmobs.wraamon.description=充满混沌能量的致命啮齿动物，通过背部的刺发出这种能量来攻击猎物。很少有生物敢攻击这些危险的啮齿动物。
+entity.lycanitesmobs.wraamon.habitat=这些啮齿动物生活在地下深处，据说它们通过微小的随机混沌的传送门，偶尔会出现在世界各地，它们传送门所指向的地方是一个谜。
+entity.lycanitesmobs.wraamon.combat=雷阿蒙可以说是一个巨大的威胁，它们的撕咬会造成不稳定，一个强大的混沌诅咒会导致受苦者在这个地方随意摇晃。它们相当弱小，但又小又快。

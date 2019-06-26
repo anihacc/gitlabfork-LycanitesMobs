@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ghoul.name=食尸鬼
+entity.lycanitesmobs.ghoul.description=恶毒的亡灵生物，食尸鬼比一般的僵尸小，允许它们爬到较小的地方。
+entity.lycanitesmobs.ghoul.habitat=夜间可以发现潜伏在沼泽、暗森林和丛林周围的食尸鬼。
+entity.lycanitesmobs.ghoul.combat=食尸鬼近战攻击并造成中毒。

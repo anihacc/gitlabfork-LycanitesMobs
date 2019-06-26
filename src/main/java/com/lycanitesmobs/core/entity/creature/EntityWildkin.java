@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -15,7 +15,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityWildkin extends EntityCreatureTameable implements IMob {
+public class EntityWildkin extends TameableCreatureEntity implements IMob {
 
     // ==================================================
  	//                    Constructor

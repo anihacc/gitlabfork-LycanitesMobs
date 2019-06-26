@@ -1,0 +1,4 @@
+entity.lycanitesmobs.epion.name=厄匹恩
+entity.lycanitesmobs.epion.description=巨大的阴影吸血蝙蝠。当与阳光直接接触时，厄匹恩会掉到地上并在撞击中爆炸！
+entity.lycanitesmobs.epion.habitat=这些蝙蝠在满月的夜晚出来。
+entity.lycanitesmobs.epion.combat=厄匹恩向受害者吐吸血蚂蟥，在被击中时消耗生命。

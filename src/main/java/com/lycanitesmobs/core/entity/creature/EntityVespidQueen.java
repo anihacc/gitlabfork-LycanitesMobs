@@ -5,8 +5,8 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IGroupPredator {
+public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IGroupPredator {
 	public boolean inHiveCache = false;
 	private int hiveCheckCacheTime = 0;
 	public class HiveExposedCoordinates {
@@ -153,8 +153,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
 				LivingEntity minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
-				if(minion instanceof EntityCreatureAgeable) {
-		    		((EntityCreatureAgeable)minion).setGrowingAge(((EntityCreatureAgeable) minion).growthTime);
+				if(minion instanceof AgeableCreatureEntity) {
+		    		((AgeableCreatureEntity)minion).setGrowingAge(((AgeableCreatureEntity) minion).growthTime);
 		    	}
 			}
 		}
@@ -163,8 +163,8 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
     public LivingEntity spawnAlly(double x, double y, double z) {
 		LivingEntity minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-    	if(minion instanceof EntityCreatureBase) {
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
+    	if(minion instanceof BaseCreatureEntity) {
+    		((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
     	}
     	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)

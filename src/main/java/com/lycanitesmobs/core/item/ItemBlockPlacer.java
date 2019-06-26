@@ -12,7 +12,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemBlockPlacer extends ItemBase {
+public class ItemBlockPlacer extends BaseItem {
 	public String placedBlockName;
 
 	public ItemBlockPlacer(Item.Properties properties, String itemName, String placedBlockName) {

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -25,7 +25,7 @@ public class LayerCreatureShield extends LayerCreatureBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(!super.canRenderLayer(entity, scale))
             return false;
         return entity.isBlocking();
@@ -36,12 +36,12 @@ public class LayerCreatureShield extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         return "shield".equals(partName);
     }
 
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 

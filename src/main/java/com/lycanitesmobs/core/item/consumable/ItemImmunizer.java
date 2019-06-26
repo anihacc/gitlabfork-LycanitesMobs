@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,7 +12,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
-public class ItemImmunizer extends ItemBase {
+public class ItemImmunizer extends BaseItem {
 
 	// ==================================================
 	//                   Constructor

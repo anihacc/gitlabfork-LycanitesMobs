@@ -103,7 +103,7 @@ public class MobEventManager extends JSONLoader {
 	}
 
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		LycanitesMobs.logDebug("MobEvents", "Loading Mob Event JSON: " + json);
 		MobEvent mobEvent = new MobEvent();
 		mobEvent.loadFromJSON(json);

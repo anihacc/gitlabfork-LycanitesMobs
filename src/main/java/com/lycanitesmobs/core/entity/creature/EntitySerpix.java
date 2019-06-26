@@ -2,10 +2,9 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
@@ -32,7 +31,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntitySerpix extends EntityCreatureTameable implements IGroupPredator, IGroupIce, IGroupHeavy {
+public class EntitySerpix extends TameableCreatureEntity implements IGroupPredator, IGroupIce, IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
@@ -107,37 +106,37 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
+        List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>) ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>) ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
-        EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
         projectiles.add(projectileEntry2);
 
-        EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
         projectiles.add(projectileEntry3);
 
-        EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
         projectiles.add(projectileEntry4);
 
-        EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
         projectiles.add(projectileEntry5);
 
-        EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
         projectiles.add(projectileEntry6);
 
-        EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire((EntityType<? extends EntityProjectileBase>)ObjectManager.specialEntityTypes.get(EntityProjectileRapidFire.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>)ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 10D;
         projectiles.add(projectileEntry7);
 
         BlockPos launchPos = this.getFacingPosition(4D);
-        for(EntityProjectileRapidFire projectile : projectiles) {
+        for(RapidFireProjectileEntity projectile : projectiles) {
             projectile.setProjectileScale(1f);
 
             // Y Offset:

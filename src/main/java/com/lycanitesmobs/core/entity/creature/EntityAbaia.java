@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupElectric;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -26,7 +25,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupPredator, IGroupElectric {
+public class EntityAbaia extends TameableCreatureEntity implements IMob, IGroupPredator, IGroupElectric {
 
 	WanderGoal wanderAI;
     protected short aoeAttackTick = 0;

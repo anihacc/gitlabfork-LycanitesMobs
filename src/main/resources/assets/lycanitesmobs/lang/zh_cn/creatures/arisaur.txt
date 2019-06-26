@@ -1,0 +1,4 @@
+entity.lycanitesmobs.arisaur.name=阿里蛇颈龙
+entity.lycanitesmobs.arisaur.description=阿里蛇颈龙是一种大型的覆盖着植物的蜥脚类动物，它们是和平的，通常从树上或从自己的背上吃草，共享一种共生关系。
+entity.lycanitesmobs.arisaur.habitat=阿里蛇颈龙通常在茂密的森林中发现，但也可以看到它们在平原迁移。
+entity.lycanitesmobs.arisaur.combat=阿里蛇颈龙通常是和平的。

@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:geonachfist"
+      "item": "lycanitesmobs:equipmentpart_geonachfist"
     }
   ],
   "type": "minecraft:crafting_shapeless"

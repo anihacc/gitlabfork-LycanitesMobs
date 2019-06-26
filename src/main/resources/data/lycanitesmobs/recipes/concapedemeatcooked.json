@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:concapedemeatcooked"
+    "item": "lycanitesmobs:cooked_concapede_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:tropicalcurry"
+      "item": "lycanitesmobs:tropical_curry"
     }
   ],
   "type": "minecraft:crafting_shapeless"

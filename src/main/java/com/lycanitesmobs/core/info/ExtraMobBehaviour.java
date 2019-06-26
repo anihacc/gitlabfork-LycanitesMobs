@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ExtraMobBehaviour {
 	// ========== Mob ==========
 	/** The INSTANCE of the mob this extra behaviour belongs to. **/
-	public EntityCreatureBase host;
+	public BaseCreatureEntity host;
 	
 	// ========== Stats ==========
     public double multiplierHealth = 1.0D;
@@ -46,7 +46,7 @@ public class ExtraMobBehaviour {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public ExtraMobBehaviour(EntityCreatureBase host) {
+	public ExtraMobBehaviour(BaseCreatureEntity host) {
 		this.host = host;
 	}
 	

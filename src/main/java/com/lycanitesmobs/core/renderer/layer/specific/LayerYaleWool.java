@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer.specific;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityYale;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
@@ -25,7 +25,7 @@ public class LayerYaleWool extends LayerCreatureBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(!super.canRenderLayer(entity, scale))
             return false;
         if(!(entity instanceof EntityYale))
@@ -38,12 +38,12 @@ public class LayerYaleWool extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         return "fur".equals(partName);
     }
 
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         DyeColor color = entity.getColor();
         return new Vector4f(color.getColorComponentValues()[0], color.getColorComponentValues()[1], color.getColorComponentValues()[2], 1.0F);
     }

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityTreant extends EntityCreatureBase implements IMob, IGroupPlant, IGroupHeavy {
+public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupPlant, IGroupHeavy {
     
     // ==================================================
  	//                    Constructor

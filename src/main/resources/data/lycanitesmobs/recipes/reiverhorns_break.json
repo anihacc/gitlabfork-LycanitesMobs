@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:reiverhorns"
+      "item": "lycanitesmobs:equipmentpart_reiverhorns"
     }
   ],
   "type": "minecraft:crafting_shapeless"

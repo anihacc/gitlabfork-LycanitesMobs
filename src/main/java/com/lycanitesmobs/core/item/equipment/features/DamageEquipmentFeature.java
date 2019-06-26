@@ -2,7 +2,8 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class DamageEquipmentFeature extends EquipmentFeature {
 	/** How much damage this part adds to the weapon attack. **/
@@ -42,22 +43,31 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.damageAmount;
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+			.appendText(" " + this.damageAmount);
 		if(this.damageCooldown > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.cooldown") + " " + this.damageCooldown;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.damage.cooldown"))
+					.appendText(" " + this.damageCooldown);
 		}
 		if(this.damageKnockback > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.knockback") + " " + this.damageKnockback;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.damage.knockback"))
+					.appendText(" " + this.damageKnockback);
 		}
 		if(this.damageRange > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + this.damageRange;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.damage.range"))
+					.appendText(" " + this.damageRange);
 		}
 		if(this.damageSweep > 45) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + this.damageSweep;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.damage.sweep"))
+					.appendText(" " + this.damageSweep);
 		}
 		return description;
 	}

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityWraith extends EntityCreatureTameable implements IMob, IGroupDemon {
+public class EntityWraith extends TameableCreatureEntity implements IMob, IGroupDemon {
 
     protected int detonateTimer = -1;
     
@@ -79,8 +79,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
                     for (LivingEntity entity : this.getNearbyEntities(LivingEntity.class, null, 1)) {
                         if (this.getPlayerOwner() != null && entity == this.getPlayerOwner())
                             continue;
-                        if (entity instanceof EntityCreatureTameable) {
-                            EntityCreatureTameable entityCreature = (EntityCreatureTameable) entity;
+                        if (entity instanceof TameableCreatureEntity) {
+                            TameableCreatureEntity entityCreature = (TameableCreatureEntity) entity;
                             if (entityCreature.getPlayerOwner() != null && entityCreature.getPlayerOwner() == this.getPlayerOwner())
                                 continue;
                         }

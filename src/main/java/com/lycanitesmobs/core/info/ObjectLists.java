@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.*;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.Effects;
 import net.minecraftforge.common.ToolType;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ObjectLists {
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
 	public static Map<String, List<EntityType>> entityLists = new HashMap<>();
 	public static Map<String, List<Effect>> effectLists = new HashMap<>();
+	public static Map<String, Effect> allEffects = new HashMap<>();
 	
 	
     // ==================================================
@@ -72,9 +74,10 @@ public class ObjectLists {
 		}
 	}
 
-	public static void addEffect(String list, Effect effect) {
+	public static void addEffect(String list, Effect effect, String effectName) {
 		if(effect == null)
 			return;
+		allEffects.put(effectName, effect);
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
 			effectLists.put(list, new ArrayList<>());
@@ -136,27 +139,12 @@ public class ObjectLists {
 			return false;
 		return effectLists.get(list).contains(effect);
 	}
-
-
-    // ==================================================
-    //               Create Custom Items
-    // ==================================================
-    public static void createCustomItems() {
-        /*ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
-        config.setCategoryComment("Custom Objects", "here you can add your own custom items! These items wont do anything and will have no crafting recipes you can however have them drop from mobs by adding them to the custom mob drops. To add items just create a comma seperated list of names (spaces will be removed), you will need to use the item.youritem.name and item.youritem.description lang file entries in your resource pack to name your item and you will also need to save a texture for your item as: assets/lycanitesmobs/items/youritem.png");
-        String customItems = config.getString("Custom Objects", "Custom Items", "");
-        if("".equals(customItems))
-            return;
-        for(String itemEntry : customItems.replace(" ", "").split(",")) {
-            ObjectManager.addItem(itemEntry, new ItemCustom(itemEntry, LycanitesMobs.modInfo));
-        }*/
-    }
 	
 	
     // ==================================================
     //                   Create Lists
     // ==================================================
-	public static void createLists() {
+	public static void createVanillaLists() {
 		// ========== Item Lists ==========
 		// Raw Meat: (A bit cold...)
 		ObjectLists.addItem("rawmeat", Items.BEEF);
@@ -208,42 +196,37 @@ public class ObjectLists {
 		// Fuel: (Fiery awesomeness!)
 		ObjectLists.addItem("fuel", Items.COAL);
 		
-		// Custom Entries:
-		for(String itemListName : itemListNames) {
-			addFromConfig(itemListName.toLowerCase());
-		}
-		
 		// ========== Effects ==========
-		/*/ Buffs:
-		ObjectLists.addEffect("buffs", Effects.STRENGTH);
-		ObjectLists.addEffect("buffs", Effects.HASTE);
-		ObjectLists.addEffect("buffs", Effects.FIRE_RESISTANCE);
-		ObjectLists.addEffect("buffs", Effects.INSTANT_HEALTH);
-		ObjectLists.addEffect("buffs", Effects.INVISIBILITY);
-		ObjectLists.addEffect("buffs", Effects.JUMP_BOOST);
-		ObjectLists.addEffect("buffs", Effects.SPEED);
-		ObjectLists.addEffect("buffs", Effects.NIGHT_VISION);
-		ObjectLists.addEffect("buffs", Effects.REGENERATION);
-		ObjectLists.addEffect("buffs", Effects.RESISTANCE);
-		ObjectLists.addEffect("buffs", Effects.WATER_BREATHING);
-		ObjectLists.addEffect("buffs", Effects.HEALTH_BOOST);
-		ObjectLists.addEffect("buffs", Effects.ABSORPTION);
-		ObjectLists.addEffect("buffs", Effects.SATURATION);
-        ObjectLists.addEffect("buffs", Effects.GLOWING);
-        ObjectLists.addEffect("buffs", Effects.LEVITATION);
-        ObjectLists.addEffect("buffs", Effects.LUCK);
+		// Buffs:
+		ObjectLists.addEffect("buffs", Effects.STRENGTH, "strength");
+		ObjectLists.addEffect("buffs", Effects.HASTE, "haste");
+		ObjectLists.addEffect("buffs", Effects.FIRE_RESISTANCE, "fire_resistance");
+		ObjectLists.addEffect("buffs", Effects.INSTANT_HEALTH, "instant_health");
+		ObjectLists.addEffect("buffs", Effects.INVISIBILITY, "invisibility");
+		ObjectLists.addEffect("buffs", Effects.JUMP_BOOST, "jump_boost");
+		ObjectLists.addEffect("buffs", Effects.SPEED, "speed");
+		ObjectLists.addEffect("buffs", Effects.NIGHT_VISION, "night_vision");
+		ObjectLists.addEffect("buffs", Effects.REGENERATION, "regeneration");
+		ObjectLists.addEffect("buffs", Effects.RESISTANCE, "resistance");
+		ObjectLists.addEffect("buffs", Effects.WATER_BREATHING, "water_breathing");
+		ObjectLists.addEffect("buffs", Effects.HEALTH_BOOST, "health_boost");
+		ObjectLists.addEffect("buffs", Effects.ABSORPTION, "absorption");
+		ObjectLists.addEffect("buffs", Effects.SATURATION, "saturation");
+        ObjectLists.addEffect("buffs", Effects.GLOWING, "glowing");
+        ObjectLists.addEffect("buffs", Effects.LEVITATION, "levitation");
+        ObjectLists.addEffect("buffs", Effects.LUCK, "luck");
 		
 		// Debuffs:
-        ObjectLists.addEffect("debuffs", Effects.BLINDNESS);
-        ObjectLists.addEffect("debuffs", Effects.NAUSEA);
-        ObjectLists.addEffect("debuffs", Effects.MINING_FATIGUE);
-        ObjectLists.addEffect("debuffs", Effects.INSTANT_DAMAGE);
-        ObjectLists.addEffect("debuffs", Effects.HUNGER);
-        ObjectLists.addEffect("debuffs", Effects.SLOWNESS);
-        ObjectLists.addEffect("debuffs", Effects.POISON);
-        ObjectLists.addEffect("debuffs", Effects.WEAKNESS);
-        ObjectLists.addEffect("debuffs", Effects.WITHER);
-        ObjectLists.addEffect("debuffs", Effects.UNLUCK);*/
+        ObjectLists.addEffect("debuffs", Effects.BLINDNESS, "blindness");
+        ObjectLists.addEffect("debuffs", Effects.NAUSEA, "nausea");
+        ObjectLists.addEffect("debuffs", Effects.MINING_FATIGUE, "mining_fatigue");
+        ObjectLists.addEffect("debuffs", Effects.INSTANT_DAMAGE, "instant_damage");
+        ObjectLists.addEffect("debuffs", Effects.HUNGER, "hunger");
+        ObjectLists.addEffect("debuffs", Effects.SLOWNESS, "slowness");
+        ObjectLists.addEffect("debuffs", Effects.POISON, "poison");
+        ObjectLists.addEffect("debuffs", Effects.WEAKNESS, "weakness");
+        ObjectLists.addEffect("debuffs", Effects.WITHER, "wither");
+        ObjectLists.addEffect("debuffs", Effects.UNLUCK, "unluck");
 	}
 	
 	// ========== Add From Config Value ==========

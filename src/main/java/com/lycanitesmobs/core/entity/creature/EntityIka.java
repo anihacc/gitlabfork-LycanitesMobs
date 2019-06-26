@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -18,7 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityIka extends EntityCreatureAgeable implements IGroupAnimal {
+public class EntityIka extends AgeableCreatureEntity implements IGroupAnimal {
 
 	WanderGoal wanderAI;
 

@@ -62,8 +62,8 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "lycanitesmobs:arisaurmeatraw",
-			"burningItem": "lycanitesmobs:arisaurmeatcooked",
+			"item": "lycanitesmobs:raw_arisaur_meat",
+			"burningItem": "lycanitesmobs:cooked_arisaur_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

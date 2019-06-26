@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -55,12 +55,12 @@ public class LayerCreatureEffect extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		return entity.getTexture(this.textureSuffix);
     }
 
@@ -93,7 +93,7 @@ public class LayerCreatureEffect extends LayerCreatureBase {
 	}
 
 	@Override
-	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
     	if(this.scrollSpeed == null) {
 			this.scrollSpeed = new Vector2f(0, 0);
 		}

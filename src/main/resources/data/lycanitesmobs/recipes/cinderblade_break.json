@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:cinderblade"
+      "item": "lycanitesmobs:equipmentpart_cinderblade"
     }
   ],
   "type": "minecraft:crafting_shapeless"

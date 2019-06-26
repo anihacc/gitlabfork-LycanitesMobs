@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
 	
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
     boolean callForHelp = false;
@@ -22,7 +22,7 @@ public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public RiderRevengeTargetingGoal(EntityCreatureTameable setHost) {
+    public RiderRevengeTargetingGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;
@@ -81,7 +81,7 @@ public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {
-                    EntityCreatureBase possibleAlly = (EntityCreatureBase) possibleAllies.next();
+                    BaseCreatureEntity possibleAlly = (BaseCreatureEntity) possibleAllies.next();
                     if (possibleAlly != this.host && possibleAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target))
                         possibleAlly.setAttackTarget(this.target);
                 }

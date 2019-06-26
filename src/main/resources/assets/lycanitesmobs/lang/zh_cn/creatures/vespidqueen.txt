@@ -1,0 +1,4 @@
+entity.lycanitesmobs.vespidqueen.name=女王蜂
+entity.lycanitesmobs.vespidqueen.description=由标准胡蜂群保护的大型胡蜂。女王蜂将由附近的标准胡蜂为它们建造一个蜂巢。众所周知，女王蜂会将卵注入棕毛兽，把它们变成受感染的移动巢穴，等待孵化！
+entity.lycanitesmobs.vespidqueen.habitat=这些昆虫生活在热带地区，如丛林。
+entity.lycanitesmobs.vespidqueen.combat=女王蜂比常规的带有更强大毒刺的胡蜂更坚硬。它们通常被常规的胡蜂包围，这些胡蜂将优先保护它们的女王。

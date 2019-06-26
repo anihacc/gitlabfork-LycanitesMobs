@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityWhirlwind;
@@ -18,7 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusable {
+public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusable {
 
 	public float fireDamageAbsorbed = 0;
 

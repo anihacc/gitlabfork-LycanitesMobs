@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityGrue extends TameableCreatureEntity implements IMob, IGroupShadow {
     
 	private int teleportTime = 60;
 	

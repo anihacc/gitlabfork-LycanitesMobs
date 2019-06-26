@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer;
 
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
@@ -23,10 +23,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> implements IEntityRenderer<EntityProjectileBase, ModelProjectileBase> {
+public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> implements IEntityRenderer<BaseProjectileEntity, ModelProjectileBase> {
 	protected ModelProjectileBase renderModel;
 	protected ModelProjectileBase defaultModel;
-	protected final List<LayerRenderer<EntityProjectileBase, ModelProjectileBase>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
+	protected final List<LayerRenderer<BaseProjectileEntity, ModelProjectileBase>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
 
     // ==================================================
   	//                    Constructor
@@ -52,7 +52,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
 	//                    Do Render
 	// ==================================================
 	@Override
-	public void func_76986_a(EntityProjectileBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void func_76986_a(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 
@@ -70,7 +70,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
 			}
 			else {
 				((ModelProjectileObj)this.renderModel).generateAnimationFrames(entity, 0, 0, partialTicks, 0, 0, 1);
-				for (LayerRenderer<EntityProjectileBase, ModelProjectileBase> renderLayer : this.renderLayers) {
+				for (LayerRenderer<BaseProjectileEntity, ModelProjectileBase> renderLayer : this.renderLayers) {
 					if (renderLayer instanceof LayerProjectileBase)
 						this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, (LayerProjectileBase) renderLayer, false);
 				}
@@ -101,7 +101,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
     	return this.getMainModel();
 	}
 
-	public final boolean addLayer(LayerRenderer<EntityProjectileBase, ModelProjectileBase> layer) {
+	public final boolean addLayer(LayerRenderer<BaseProjectileEntity, ModelProjectileBase> layer) {
 		return this.renderLayers.add(layer);
 	}
     
@@ -111,7 +111,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
  	// ==================================================
     // ========== Main ==========
 	@Override
-    protected boolean bindEntityTexture(EntityProjectileBase entity) {
+    protected boolean bindEntityTexture(BaseProjectileEntity entity) {
         ResourceLocation texture = this.func_110775_a(entity);
         if(texture == null)
             return false;
@@ -121,7 +121,7 @@ public class RenderProjectileModel extends EntityRenderer<EntityProjectileBase> 
 
 	@Nullable
 	@Override
-	protected ResourceLocation func_110775_a(EntityProjectileBase entity) {
+	protected ResourceLocation func_110775_a(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 }

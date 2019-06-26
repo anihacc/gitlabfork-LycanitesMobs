@@ -2,9 +2,8 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -59,23 +58,23 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		// Hellfire Pillar Effect:
 		if(ticks == 25 * 20) {
 			for(int i = 0; i < 5; i++) {
-				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
-				entityProjectileBase.projectileLife = 9 * 20;
-				world.addEntity(entityProjectileBase);
+				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
+				baseProjectileEntity.projectileLife = 9 * 20;
+				world.addEntity(baseProjectileEntity);
 			}
 		}
 
 		// Spawn Boss:
 		if(ticks == 29 * 20) {
-			EntityCreatureBase entityCreatureBase = (EntityCreatureBase) CreatureManager.getInstance().getCreature("rahovart").createEntity(world);
-			entityCreatureBase.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.addEntity(entityCreatureBase);
-			entityCreatureBase.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
+			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("rahovart").createEntity(world);
+			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
+			world.addEntity(baseCreatureEntity);
+			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {
-					mobEventPlayerServer.mobEvent.onSpawn(entityCreatureBase, world, player, pos, level, ticks);
+					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks);
 				}
 			}
 		}

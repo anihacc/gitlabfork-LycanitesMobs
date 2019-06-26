@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityFrostweb;
@@ -23,7 +23,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityFrostweaver extends EntityCreatureTameable implements IMob, IGroupIce {
+public class EntityFrostweaver extends TameableCreatureEntity implements IMob, IGroupIce {
     
     // ==================================================
  	//                    Constructor

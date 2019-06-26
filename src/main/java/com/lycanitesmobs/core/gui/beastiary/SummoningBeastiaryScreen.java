@@ -3,13 +3,12 @@ package com.lycanitesmobs.core.gui.beastiary;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
-import com.lycanitesmobs.core.gui.buttons.CreatureButton;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
 import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.core.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.client.gui.widget.Widget;
@@ -62,46 +61,46 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			tabSpacing = buttonWidth + buttonSpacing;
 		}
 
-		int buttonMarginX = 10 + Math.max(Math.max(this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.actions")), this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.stance"))), this.getFontRenderer().getStringWidth(LanguageManager.translate("gui.pet.movement")));
+		int buttonMarginX = 10 + Math.max(Math.max(this.getFontRenderer().getStringWidth(new TranslationTextComponent("gui.pet.actions").getFormattedText()), this.getFontRenderer().getStringWidth(new TranslationTextComponent("gui.pet.stance").getFormattedText())), this.getFontRenderer().getStringWidth(new TranslationTextComponent("gui.pet.movement").getFormattedText()));
 		buttonWidth = 80;
 		buttonHeight = 20;
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 
 		// Actions:
-		ButtonBase button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.pvp"), this);
+		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.pvp").getFormattedText(), this);
 		this.buttons.add(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.passive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.passive").getFormattedText(), this);
 		this.buttons.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.defensive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.defensive").getFormattedText(), this);
 		this.buttons.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.assist"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.assist").getFormattedText(), this);
 		this.buttons.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.aggressive"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.aggressive").getFormattedText(), this);
 		this.buttons.add(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.follow"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.follow").getFormattedText(), this);
 		this.buttons.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.wander"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.wander").getFormattedText(), this);
 		this.buttons.add(button);
 
 		buttonX += buttonWidth + buttonSpacing;
-		button = new ButtonBase(EntityCreatureBase.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, LanguageManager.translate("gui.pet.sit"), this);
+		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.sit").getFormattedText(), this);
 		this.buttons.add(button);
 	}
 
@@ -142,37 +141,37 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 					button.visible = true;
 
 					// Actions:
-					if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.PVP.id + this.petCommandIdStart) {
+					if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart) {
 						if (this.playerExt.getSelectedSummonSet().getPVP()) {
-							button.setMessage(LanguageManager.translate("gui.pet.pvp") + ": " + LanguageManager.translate("common.yes"));
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp") + ": " + new TranslationTextComponent("common.yes"));
 						}
 						else {
-							button.setMessage(LanguageManager.translate("gui.pet.pvp") + ": " + LanguageManager.translate("common.no"));
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp") + ": " + new TranslationTextComponent("common.no"));
 						}
 					}
 
 					// Stance:
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart) {
 						button.active = !this.playerExt.getSelectedSummonSet().passive;
 					}
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart) {
 						button.active = !(!this.playerExt.getSelectedSummonSet().getPassive() && !this.playerExt.getSelectedSummonSet().getAssist() && !this.playerExt.getSelectedSummonSet().getAggressive());
 					}
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart) {
 						button.active = !(!this.playerExt.getSelectedSummonSet().getPassive() && this.playerExt.getSelectedSummonSet().getAssist() && !this.playerExt.getSelectedSummonSet().getAggressive());
 					}
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart) {
 						button.active = !(!this.playerExt.getSelectedSummonSet().getPassive() && this.playerExt.getSelectedSummonSet().getAggressive());
 					}
 
 					// Movement:
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart) {
 						button.active = !(!this.playerExt.getSelectedSummonSet().getSitting() && this.playerExt.getSelectedSummonSet().getFollowing());
 					}
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart) {
 						button.active = !(!this.playerExt.getSelectedSummonSet().getSitting() && !this.playerExt.getSelectedSummonSet().getFollowing());
 					}
-					else if (button.buttonId == EntityCreatureBase.PET_COMMAND_ID.SIT.id + this.petCommandIdStart) {
+					else if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart) {
 						button.active = !(this.playerExt.getSelectedSummonSet().getSitting());
 					}
 				}
@@ -194,7 +193,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 		// Empty:
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
-			String text = LanguageManager.translate("gui.beastiary.summoning.empty.info");
+			String text = new TranslationTextComponent("gui.beastiary.summoning.empty.info").getFormattedText();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 			return;
 		}
@@ -207,7 +206,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		}
 
 		// Player Summoning Focus:
-		String text = "\u00A7l" + LanguageManager.translate("gui.beastiary.player.focus") + ": ";
+		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.focus").getFormattedText() + ": ";
 		this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 		int barX = nextX + this.getFontRenderer().getStringWidth(text);
 		int focusMax = Math.round((float)this.playerExt.summonFocusMax / this.playerExt.summonFocusCharge);
@@ -223,7 +222,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		if(selectedCreature != null) {
 			// Focus Cost:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + LanguageManager.translate("creature.stat.focus") + ": ";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.focus").getFormattedText() + ": ";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(selectedCreature, AssetManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 		}
@@ -231,7 +230,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		// Base Display:
 		else {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = LanguageManager.translate("gui.beastiary.summoning.select");
+			text = new TranslationTextComponent("gui.beastiary.summoning.select").getFormattedText();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 		}
 
@@ -239,11 +238,11 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		int buttonHeight = 20;
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
-		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.actions"), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.actions").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.stance"), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.stance").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		buttonY += buttonHeight + buttonSpacing;
-		this.getFontRenderer().drawString("\u00A7l" + LanguageManager.translate("gui.pet.movement"), this.colRightX, buttonY + 6, 0xFFFFFF);
+		this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.movement").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 	}
 
 	@Override
@@ -263,42 +262,42 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 				int petCommandId = buttonId - this.petCommandIdStart;
 
 				// Actions:
-				if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.PVP.id) {
+				if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.PVP.id) {
 					summonSet.pvp = !summonSet.pvp;
 				}
 
 				// Stance:
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.PASSIVE.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id) {
 					summonSet.passive = true;
 					summonSet.assist = false;
 					summonSet.aggressive = false;
 				}
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.DEFENSIVE.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id) {
 					summonSet.passive = false;
 					summonSet.assist = false;
 					summonSet.aggressive = false;
 				}
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.ASSIST.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id) {
 					summonSet.passive = false;
 					summonSet.assist = true;
 					summonSet.aggressive = false;
 				}
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.AGGRESSIVE.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id) {
 					summonSet.passive = false;
 					summonSet.assist = true;
 					summonSet.aggressive = true;
 				}
 
 				// Movement:
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.FOLLOW.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id) {
 					summonSet.following = true;
 					summonSet.sitting = false;
 				}
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.WANDER.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.WANDER.id) {
 					summonSet.following = false;
 					summonSet.sitting = false;
 				}
-				else if (petCommandId == EntityCreatureBase.PET_COMMAND_ID.SIT.id) {
+				else if (petCommandId == BaseCreatureEntity.PET_COMMAND_ID.SIT.id) {
 					summonSet.following = false;
 					summonSet.sitting = true;
 				}
@@ -317,9 +316,9 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 	@Override
 	public ITextComponent getTitle() {
 		if(this.playerExt.beastiary.getSummonableList().isEmpty()) {
-			return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning.empty.title"));
+			return new TranslationTextComponent("gui.beastiary.summoning.empty.title");
 		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.summoning"));
+		return new TranslationTextComponent("gui.beastiary.summoning");
 	}
 
 	@Override

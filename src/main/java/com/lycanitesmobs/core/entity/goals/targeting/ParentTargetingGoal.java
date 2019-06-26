@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -9,7 +9,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 
 public class ParentTargetingGoal extends TargetingGoal {
 	// Targets:
-	private EntityCreatureAgeable host;
+	private AgeableCreatureEntity host;
     private Class targetClass;
     
     // Properties:
@@ -20,7 +20,7 @@ public class ParentTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public ParentTargetingGoal(EntityCreatureAgeable setHost) {
+    public ParentTargetingGoal(AgeableCreatureEntity setHost) {
         super(setHost);
         this.host = setHost;
         this.targetClass = this.host.getClass();
@@ -80,11 +80,11 @@ public class ParentTargetingGoal extends TargetingGoal {
 
         if(target instanceof AnimalEntity && ((AnimalEntity)target).getGrowingAge() < 0)
             return false;
-    	if(target instanceof EntityCreatureAgeable && ((EntityCreatureAgeable)target).getGrowingAge() < 0)
+    	if(target instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)target).getGrowingAge() < 0)
             return false;
         
         // Tamed Checks:
-        if(!this.tameTargeting && this.host instanceof EntityCreatureTameable && this.host.isTamed())
+        if(!this.tameTargeting && this.host instanceof TameableCreatureEntity && this.host.isTamed())
         	return false;
     	return true;
     }

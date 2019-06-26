@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:spectretendril"
+      "item": "lycanitesmobs:equipmentpart_spectretendril"
     }
   ],
   "type": "minecraft:crafting_shapeless"

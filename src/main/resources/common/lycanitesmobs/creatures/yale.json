@@ -62,8 +62,8 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:yalemeatraw",
-			"burningItem": "lycanitesmobs:yalemeatcooked",
+			"item": "lycanitesmobs:raw_yale_meat",
+			"burningItem": "lycanitesmobs:cooked_yale_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

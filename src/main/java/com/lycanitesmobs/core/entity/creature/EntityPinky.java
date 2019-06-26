@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -29,7 +28,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityPinky extends EntityCreatureRideable implements IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
+public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
 	
 	PlayerControlGoal playerControlAI;
 	

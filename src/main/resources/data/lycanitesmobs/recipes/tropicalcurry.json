@@ -1,20 +1,19 @@
 {
   "result": {
-    "item": "lycanitesmobs:tropicalcurry"
+    "item": "lycanitesmobs:tropical_curry"
   },
   "ingredients": [
     {
       "item": "minecraft:bowl"
     },
     {
-      "item": "minecraft:dye",
-      "data": 3
+      "item": "minecraft:cocoa_beans"
     },
     {
       "item": "minecraft:vine"
     },
     {
-      "item": "lycanitesmobs:concapedemeatcooked"
+      "item": "lycanitesmobs:cooked_concapede_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

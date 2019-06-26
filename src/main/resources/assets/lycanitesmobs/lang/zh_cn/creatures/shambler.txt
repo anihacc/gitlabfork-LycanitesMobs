@@ -1,0 +1,4 @@
+entity.lycanitesmobs.shambler.name=蹒跚者
+entity.lycanitesmobs.shambler.description=过度生长的灌木生物。可以被驯服，是一个很好的方式来活跃你的花园！
+entity.lycanitesmobs.shambler.habitat=蹒跚者在密林和丛林中生成。
+entity.lycanitesmobs.shambler.combat=蹒跚者从水中再生，可以造成麻痹，它们很危险，但速度很慢。

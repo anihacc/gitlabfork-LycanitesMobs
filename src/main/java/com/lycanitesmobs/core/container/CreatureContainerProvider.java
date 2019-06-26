@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.container;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -11,16 +11,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CreatureContainerProvider implements INamedContainerProvider {
-	public EntityCreatureBase creature;
+	public BaseCreatureEntity creature;
 
-	public CreatureContainerProvider(@Nonnull EntityCreatureBase creature) {
+	public CreatureContainerProvider(@Nonnull BaseCreatureEntity creature) {
 		this.creature = creature;
 	}
 
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerCreature(windowId, playerInventory, this.creature);
+		return new CreatureContainer(windowId, playerInventory, this.creature);
 	}
 
 	@Override

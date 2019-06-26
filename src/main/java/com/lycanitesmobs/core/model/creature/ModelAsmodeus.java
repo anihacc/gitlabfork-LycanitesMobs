@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureAttack;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureShield;
@@ -155,8 +155,8 @@ public class ModelAsmodeus extends ModelCreatureObjOld {
             if(partName.contains("weapon"))
                 this.centerPartToPart("weapon", "turret");
             float xRotation = 0F;
-            if(entity instanceof EntityCreatureBase) {
-                if(((EntityCreatureBase)entity).hasAttackTarget())
+            if(entity instanceof BaseCreatureEntity) {
+                if(((BaseCreatureEntity)entity).hasAttackTarget())
                     xRotation = (float) Math.toDegrees(lookX / (180F / Math.PI)) - 25F;
             }
             this.rotate(xRotation, (float) Math.toDegrees(lookY / (180F / Math.PI)), 0);

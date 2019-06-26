@@ -2,10 +2,9 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,12 +14,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemWinterGiftLarge extends ItemBase {
+public class ItemWinterGiftLarge extends BaseItem {
 
 	// ==================================================
 	//                   Constructor
@@ -56,8 +56,8 @@ public class ItemWinterGiftLarge extends ItemBase {
   	//                       Open
   	// ==================================================
     public void open(ItemStack itemStack, World world, PlayerEntity player) {
-    	String message = LanguageManager.translate("item." + this.itemName + ".bad");
-		player.sendMessage(new TranslationTextComponent(message));
+        ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".bad");
+		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Lots of Random Tricks:
@@ -71,8 +71,8 @@ public class ItemWinterGiftLarge extends ItemBase {
                 entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 
                 // Themed Names:
-                if (entity instanceof EntityCreatureBase) {
-                    EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
+                if (entity instanceof BaseCreatureEntity) {
+                    BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
                     entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("wildkin"))
                         entityCreature.setCustomName(new TranslationTextComponent("Gooderness"));

@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.block.effect;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -70,7 +70,7 @@ public class BlockScorchfire extends BlockFireBase {
 			if(((ItemEntity)entity).getItem().getItem() == ObjectManager.getItem("scorchfirecharge"))
 				return;
 
-		if(entity.isImmuneToFire())
+		if(entity.isImmuneToFire() || entity.isInvulnerableTo(DamageSource.IN_FIRE))
 			return;
 
 		entity.attackEntityFrom(DamageSource.IN_FIRE, 1);

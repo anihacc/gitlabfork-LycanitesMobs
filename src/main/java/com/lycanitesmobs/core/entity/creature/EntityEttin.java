@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -15,7 +15,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityEttin extends EntityCreatureAgeable implements IMob {
+public class EntityEttin extends AgeableCreatureEntity implements IMob {
 	public boolean ettinGreifing = true; // TODO Creature flags.
     
     // ==================================================

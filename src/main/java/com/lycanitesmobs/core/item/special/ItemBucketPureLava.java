@@ -4,8 +4,7 @@ import com.google.common.collect.Multimap;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -16,6 +15,7 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -25,10 +25,7 @@ import java.util.List;
 public class ItemBucketPureLava extends BucketItem {
 	public String itemName;
 	public ModInfo group;
-	
-	// ==================================================
-	//                   Constructor
-	// ==================================================
+
     public ItemBucketPureLava(Item.Properties properties, Fluid fluid) {
         super(fluid, properties);
         this.group = LycanitesMobs.modInfo;
@@ -37,31 +34,26 @@ public class ItemBucketPureLava extends BucketItem {
         ObjectManager.addBucket(this, ObjectManager.getBlock("purelava"), fluid);
     }
 
-
-    // ==================================================
-    //                      Info
-    // ==================================================
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(LanguageManager.translate(this.getTranslationKey(stack) + ".name").trim());
+        return new TranslationTextComponent(this.getTranslationKey(stack) + ".name");
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        String description = this.getDescription(stack, worldIn, tooltip, flag);
-        if(!"".equalsIgnoreCase(description)) {
+        ITextComponent description = this.getDescription(stack, worldIn, tooltip, flag);
+        if(!"".equalsIgnoreCase(description.getFormattedText())) {
             FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
-            for(Object formattedDescription : formattedDescriptionList) {
-                if(formattedDescription instanceof String)
-                    tooltip.add(new TranslationTextComponent((String)formattedDescription));
+            List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), BaseItem.DESCRIPTION_WIDTH);
+            for(String formattedDescription : formattedDescriptionList) {
+                tooltip.add(new StringTextComponent(formattedDescription));
             }
         }
         super.addInformation(stack, worldIn, tooltip, flag);
     }
 
-    public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        return LanguageManager.translate(this.getTranslationKey() + ".description");
+    public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
+        return new TranslationTextComponent(this.getTranslationKey() + ".description");
     }
 
     @Override

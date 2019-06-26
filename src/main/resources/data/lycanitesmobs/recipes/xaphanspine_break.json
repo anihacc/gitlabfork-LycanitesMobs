@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:xaphanspine"
+      "item": "lycanitesmobs:equipmentpart_xaphanspine"
     }
   ],
   "type": "minecraft:crafting_shapeless"

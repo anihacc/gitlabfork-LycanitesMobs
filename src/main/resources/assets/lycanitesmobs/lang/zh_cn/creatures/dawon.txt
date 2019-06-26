@@ -1,0 +1,4 @@
+entity.lycanitesmobs.dawon.name=水晶猫
+entity.lycanitesmobs.dawon.description=猫科动物的结晶体，有时在它们的身体上能发现罕见的晶体。
+entity.lycanitesmobs.dawon.habitat=这些野兽可以在丛林中找到。
+entity.lycanitesmobs.dawon.combat=水晶猫会攻击目标，使猎物残废，降低移动速度。

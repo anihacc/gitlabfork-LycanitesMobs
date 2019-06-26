@@ -8,12 +8,10 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -24,6 +22,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,7 +32,7 @@ import javax.annotation.Nullable;
 import javax.vecmath.Vector4f;
 import java.util.*;
 
-public class ItemEquipmentPart extends ItemBase {
+public class ItemEquipmentPart extends BaseItem {
 	/** A map of mob classes and parts that they drop. **/
 	public static Map<String, ItemEquipmentPart> MOB_PART_DROPS = new HashMap<>();
 
@@ -111,37 +110,43 @@ public class ItemEquipmentPart extends ItemBase {
 	// ==================================================
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
-		String displayName = LanguageManager.translate(this.getTranslationKey(itemStack) + ".name");
-		displayName += " " + LanguageManager.translate("equipment.level") + " " + this.getLevel(itemStack);
-		return new TranslationTextComponent(displayName);
+		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack) + ".name");
+		displayName.appendText(" ")
+			.appendSibling(new TranslationTextComponent("equipment.level"))
+			.appendText(" " + this.getLevel(itemStack));
+		return displayName;
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag tooltipFlag) {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
-		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, descriptionWidth);
+		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH);
 			for (String formattedDescription : formattedDescriptionList) {
-				tooltip.add(new TranslationTextComponent(formattedDescription));
+				tooltip.add(new StringTextComponent(formattedDescription));
 			}
 		}
 	}
 
 	@Override
-	public String getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return LanguageManager.translate("item.equipmentpart.description");
+	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		return new TranslationTextComponent("item.equipmentpart.description");
 	}
 
-	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
-		List<String> descriptions = new ArrayList<>();
+	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
+		List<ITextComponent> descriptions = new ArrayList<>();
 		int level = this.getLevel(itemStack);
-		String baseFeature = LanguageManager.translate("equipment.slottype") + " " + this.slotType;
-		baseFeature += "\n" + LanguageManager.translate("equipment.level") + " " + level + "/" + this.levelMax;
+
+		ITextComponent baseFeature = new TranslationTextComponent("equipment.slottype")
+				.appendText(" " + this.slotType)
+				.appendText("\n").appendSibling(new TranslationTextComponent("equipment.level"))
+				.appendText(" " + level + "/" + this.levelMax);
 		descriptions.add(baseFeature);
+
 		for(EquipmentFeature feature : this.features) {
-			String featureDescription = feature.getDescription(itemStack, level);
-			if(featureDescription != null && !"".equals(featureDescription)) {
+			ITextComponent featureDescription = feature.getDescription(itemStack, level);
+			if(featureDescription != null && !"".equals(featureDescription.getFormattedText())) {
 				descriptions.add(featureDescription);
 			}
 		}

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class DirectNavigator {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
 	public BlockPos targetPosition;
 	
 	// Properties:
@@ -21,7 +21,7 @@ public class DirectNavigator {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-	public DirectNavigator(EntityCreatureBase setHost) {
+	public DirectNavigator(BaseCreatureEntity setHost) {
 		this.host = setHost;
 	}
 	

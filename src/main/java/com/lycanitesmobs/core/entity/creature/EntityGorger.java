@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
@@ -26,7 +25,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityGorger extends EntityCreatureTameable implements IGroupPredator, IGroupFire, IGroupHeavy {
+public class EntityGorger extends TameableCreatureEntity implements IGroupPredator, IGroupFire, IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
@@ -102,7 +101,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        EntityProjectileBase projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
+        BaseProjectileEntity projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
         projectile.setProjectileScale(2f);
 
         // Y Offset:

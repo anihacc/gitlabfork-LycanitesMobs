@@ -1,0 +1,4 @@
+entity.lycanitesmobs.behemoth.name=比蒙巨兽
+entity.lycanitesmobs.behemoth.description=高大的恶魔怪物，比蒙巨兽都是决心毁灭的强大恶魔。
+entity.lycanitesmobs.behemoth.habitat=比蒙巨兽可以在下界中找到，如果它们足够大，也会通过未受保护的传送门入侵。
+entity.lycanitesmobs.behemoth.combat=这些恶魔投掷地狱火球，一种撕裂灵魂而产生的绿色火焰，不仅火焰会燃烧，而且它们也会凋零。

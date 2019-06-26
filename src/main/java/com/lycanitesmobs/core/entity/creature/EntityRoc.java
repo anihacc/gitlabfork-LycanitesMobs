@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ExtendedEntity;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -24,7 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityRoc extends EntityCreatureRideable implements IMob, IGroupHunter {
+public class EntityRoc extends RideableCreatureEntity implements IMob, IGroupHunter {
     public AttackMeleeGoal attackAI;
 
     public boolean creeperDropping = true; // TODO Creature Flags.

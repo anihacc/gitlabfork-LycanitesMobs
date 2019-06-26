@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityCrystalShard;
@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityVapula extends EntityCreatureTameable implements IMob, IGroupRock {
+public class EntityVapula extends TameableCreatureEntity implements IMob, IGroupRock {
 
 	public int vapulaBlockBreakRadius = 0; // TODO Creature flags.
 	public float fireDamageAbsorbed = 0;

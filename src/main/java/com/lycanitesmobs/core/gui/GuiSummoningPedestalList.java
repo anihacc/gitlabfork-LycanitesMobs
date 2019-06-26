@@ -85,7 +85,7 @@ public class GuiSummoningPedestalList extends BaseList<SummoningPedestalScreen> 
 				this.parentGUI.screen.drawTexturedModalRect(levelBarX + (levelBarWidth * currentLevel), levelBarY, levelBarU, levelBarV, levelBarWidth, levelBarHeight);
 			}
 
-			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle(), this.parentGUI.getLeft() + 20 , boxTop + 4, 0xFFFFFF);
+			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle().getFormattedText(), this.parentGUI.getLeft() + 20 , boxTop + 4, 0xFFFFFF);
 			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
 			this.parentGUI.screen.drawTexturedModalRect(this.parentGUI.getLeft() + 2, boxTop + 4, 0, 0, 16, 16, 16);
 		}

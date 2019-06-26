@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,12 +13,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class ItemCharge extends ItemBase {
+public class ItemCharge extends BaseItem {
     /** The projectile info that this projectile charge item belongs to. **/
     public ProjectileInfo projectileInfo;
 
     /** Used for created charges of old projectiles, this is the class that is instantiated when spawning the projectile. **/
-    public Class<? extends EntityProjectileBase> oldProjectileClass;
+    public Class<? extends BaseProjectileEntity> oldProjectileClass;
 
     /**
      * Constructor
@@ -38,7 +38,7 @@ public class ItemCharge extends ItemBase {
     /**
      * Older constructor for hard coded projectiles.
      */
-    public ItemCharge(Item.Properties properties, String itemName, Class<? extends EntityProjectileBase> projectileClass) {
+    public ItemCharge(Item.Properties properties, String itemName, Class<? extends BaseProjectileEntity> projectileClass) {
         super(properties);
         this.oldProjectileClass = projectileClass;
         this.modInfo = LycanitesMobs.modInfo;
@@ -54,7 +54,7 @@ public class ItemCharge extends ItemBase {
         }
 
         if(!world.isRemote) {
-            EntityProjectileBase projectile = this.createProjectile(itemStack, world, player);
+            BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null) {
                 LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);
                 return new ActionResult<>(ActionResultType.FAIL, itemStack);
@@ -73,7 +73,7 @@ public class ItemCharge extends ItemBase {
      * @param entityPlayer The player using the charge.
      * @return A projectile instance.
      */
-    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, PlayerEntity entityPlayer) {
+    public BaseProjectileEntity createProjectile(ItemStack itemStack, World world, PlayerEntity entityPlayer) {
         if(this.projectileInfo != null) {
             return this.projectileInfo.createProjectile(world, entityPlayer);
         }

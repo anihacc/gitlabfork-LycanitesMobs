@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
@@ -21,7 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySpectre extends EntityCreatureTameable implements IMob, IGroupShadow, IGroupHeavy {
+public class EntitySpectre extends TameableCreatureEntity implements IMob, IGroupShadow, IGroupHeavy {
 
 	protected int pullRange = 6;
 	protected int pullEnergy = 0;

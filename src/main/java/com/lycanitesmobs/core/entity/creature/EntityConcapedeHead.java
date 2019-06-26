@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroupAnimal, IGroupAlpha {
+public class EntityConcapedeHead extends AgeableCreatureEntity implements IGroupAnimal, IGroupAlpha {
 	
 	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
 	
@@ -70,7 +70,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
         if(!this.getEntityWorld().isRemote && !this.hasMaster()) {
         	this.setGrowingAge(-this.growthTime / 4);
         	int segmentCount = this.getRNG().nextInt(CONCAPEDE_SIZE_MAX);
-    		EntityCreatureAgeable parentSegment = this;
+    		AgeableCreatureEntity parentSegment = this;
         	for(int segment = 0; segment < segmentCount; segment++) {
         		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
         		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
@@ -101,13 +101,13 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
 		// Spawn Additional Segments:
 		if(!this.firstSpawn && age == 0 && CreatureManager.getInstance().getCreature("ConcapedeSegment") != null && !this.getEntityWorld().isRemote) {
 			age = -(this.growthTime / 4);
-			EntityCreatureBase parentSegment = this;
+			BaseCreatureEntity parentSegment = this;
 			boolean lastSegment = false;
 			int size = 0;
 			while(!lastSegment) {
 				size++;
-				if(parentSegment.hasMaster() && parentSegment.getMasterTarget() instanceof EntityCreatureBase)
-					parentSegment = (EntityCreatureBase)(parentSegment.getMasterTarget());
+				if(parentSegment.hasMaster() && parentSegment.getMasterTarget() instanceof BaseCreatureEntity)
+					parentSegment = (BaseCreatureEntity)(parentSegment.getMasterTarget());
 				else
 					lastSegment = true;
 			}
@@ -176,13 +176,13 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
     	if(this.isInLove())
     		return false;
     	if(entity instanceof EntityConcapedeSegment) {
-    		EntityCreatureBase checkSegment = this;
+    		BaseCreatureEntity checkSegment = this;
     		while(checkSegment != null) {
     			if(checkSegment == entity)
     				return true;
     			if(!checkSegment.hasMaster())
     				break;
-    			checkSegment = (EntityCreatureBase)checkSegment.getMasterTarget();
+    			checkSegment = (BaseCreatureEntity)checkSegment.getMasterTarget();
     		}
     	}
     	return false;
@@ -201,7 +201,7 @@ public class EntityConcapedeHead extends EntityCreatureAgeable implements IGroup
     // ==================================================
     // ========== Create Child ==========
     @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
 		return null;
 	}
     

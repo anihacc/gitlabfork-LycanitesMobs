@@ -4,8 +4,8 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
@@ -27,7 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupFire {
+public class EntityAfrit extends TameableCreatureEntity implements IMob, IGroupFire {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;
@@ -213,7 +213,7 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityitem) {
+    public void applyDropEffects(CustomItemEntity entityitem) {
         entityitem.setCanBurn(false);
     }
 

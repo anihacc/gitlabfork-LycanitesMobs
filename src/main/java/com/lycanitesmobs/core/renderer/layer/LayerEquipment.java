@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,7 +23,7 @@ public class LayerEquipment extends LayerCreatureBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(!super.canRenderLayer(entity, scale) || this.equipmentSlot == null)
             return false;
         return entity.getEquipmentName(this.equipmentSlot) != null;
@@ -34,7 +34,7 @@ public class LayerEquipment extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getEquipmentTexture(entity.getEquipmentName(this.equipmentSlot));
     }
 }

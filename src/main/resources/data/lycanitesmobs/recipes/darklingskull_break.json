@@ -5,7 +5,7 @@
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:darklingskull"
+      "item": "lycanitesmobs:equipmentpart_darklingskull"
     }
   ],
   "type": "minecraft:crafting_shapeless"

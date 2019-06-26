@@ -2,11 +2,10 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,12 +15,13 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ItemSoulstone extends ItemBase {
+public class ItemSoulstone extends BaseItem {
 	public CreatureType creatureType;
 
 
@@ -65,8 +65,8 @@ public class ItemSoulstone extends ItemBase {
 		if(entity != null) {
 			entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 			world.addEntity(entity);
-			if (!player.getEntityWorld().isRemote && entity instanceof EntityCreatureTameable) {
-				((EntityCreatureTameable) entity).setPlayerOwner(player);
+			if (!player.getEntityWorld().isRemote && entity instanceof TameableCreatureEntity) {
+				((TameableCreatureEntity) entity).setPlayerOwner(player);
 			}
 			this.applySoulstoneToEntity(player, entity);
 		}
@@ -99,22 +99,22 @@ public class ItemSoulstone extends ItemBase {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null)
 			return false;
-		if(!(entity instanceof EntityCreatureTameable)) {
+		if(!(entity instanceof TameableCreatureEntity)) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.invalid")));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.invalid"));
 			return false;
 		}
 
-		EntityCreatureTameable entityTameable = (EntityCreatureTameable)entity;
+		TameableCreatureEntity entityTameable = (TameableCreatureEntity)entity;
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 		if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.untamed")));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.untamed"));
 			return false;
 		}
 		if(entityTameable.getPetEntry() != null) {
 			if(!player.getEntityWorld().isRemote)
-				player.sendMessage(new TranslationTextComponent(LanguageManager.translate("message.soulstone.exists")));
+				player.sendMessage(new TranslationTextComponent("message.soulstone.exists"));
 			return false;
 		}
 
@@ -136,9 +136,12 @@ public class ItemSoulstone extends ItemBase {
 				petType = "mount";
 			}
 
-			String message = LanguageManager.translate("message.soulstone." + petType + ".added");
-			message = message.replace("%creature%", creatureInfo.getTitle());
-			player.sendMessage(new TranslationTextComponent(message));
+			ITextComponent message = new TranslationTextComponent("message.soulstone." + petType + ".added.prefix")
+					.appendText(" ")
+					.appendSibling(creatureInfo.getTitle())
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("message.soulstone." + petType + ".added.suffix"));
+			player.sendMessage(message);
 			//player.addStat(ObjectManager.getStat("soulstone"), 1);
 
 			// Add Pet Entry:

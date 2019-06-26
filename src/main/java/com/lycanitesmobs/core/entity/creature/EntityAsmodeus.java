@@ -1,12 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
@@ -48,7 +46,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
+public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
     protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.createKey(EntityAsmodeus.class, DataSerializers.BYTE);
@@ -456,7 +454,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ========== Devilstars ==========
     public void attackDevilstar(float angle) {
         // Type:
-        EntityProjectileBase projectile = new EntityDevilstar(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDevilstar.class), this.getEntityWorld(), this);
+        BaseProjectileEntity projectile = new EntityDevilstar(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDevilstar.class), this.getEntityWorld(), this);
         projectile.setProjectileScale(4f);
 
         // Y Offset:

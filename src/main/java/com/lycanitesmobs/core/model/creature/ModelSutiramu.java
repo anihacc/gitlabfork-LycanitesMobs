@@ -1,11 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.model.template.ModelTemplateArachnid;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
 
 public class ModelSutiramu extends ModelTemplateArachnid {
 

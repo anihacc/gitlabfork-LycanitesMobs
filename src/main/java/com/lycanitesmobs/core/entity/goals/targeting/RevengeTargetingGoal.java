@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +17,7 @@ public class RevengeTargetingGoal extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public RevengeTargetingGoal(EntityCreatureBase setHost) {
+    public RevengeTargetingGoal(BaseCreatureEntity setHost) {
         super(setHost);
     }
     
@@ -78,16 +78,16 @@ public class RevengeTargetingGoal extends AttackTargetingGoal {
                 List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), this.targetSelector);
                 if (this.helpClasses != null)
                     for (Class helpClass : this.helpClasses) {
-                        if (helpClass != null && EntityCreatureBase.class.isAssignableFrom(helpClass) && !this.target.getClass().isAssignableFrom(helpClass)) {
+                        if (helpClass != null && BaseCreatureEntity.class.isAssignableFrom(helpClass) && !this.target.getClass().isAssignableFrom(helpClass)) {
                             allies.addAll(this.host.getEntityWorld().getEntitiesWithinAABB(helpClass, this.host.getBoundingBox().grow(d0, 4.0D, d0), this.targetSelector));
                         }
                     }
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {
-                    EntityCreatureBase possibleAlly = (EntityCreatureBase) possibleAllies.next();
+                    BaseCreatureEntity possibleAlly = (BaseCreatureEntity) possibleAllies.next();
                     if (possibleAlly != this.host && possibleAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleAlly.isProtective(this.host))
-                        if (!(possibleAlly instanceof EntityCreatureTameable) || (possibleAlly instanceof EntityCreatureTameable && !((EntityCreatureTameable) possibleAlly).isTamed()))
+                        if (!(possibleAlly instanceof TameableCreatureEntity) || (possibleAlly instanceof TameableCreatureEntity && !((TameableCreatureEntity) possibleAlly).isTamed()))
                             possibleAlly.setAttackTarget(this.target);
                 }
             }

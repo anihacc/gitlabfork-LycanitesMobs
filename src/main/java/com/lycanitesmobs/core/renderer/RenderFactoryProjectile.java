@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.renderer;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderFactoryProjectile<T extends EntityProjectileBase> implements IRenderFactory {
+public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements IRenderFactory {
     protected String oldProjectileName;
     protected Class oldProjectileClass;
     protected boolean oldModel;
@@ -36,7 +36,7 @@ public class RenderFactoryProjectile<T extends EntityProjectileBase> implements 
 		}
 
 		// New JSON Projectile:
-		return new RenderProjectileSprite(manager, EntityProjectileCustom.class);
+		return new RenderProjectileSprite(manager, CustomProjectileEntity.class);
     }
 
 }

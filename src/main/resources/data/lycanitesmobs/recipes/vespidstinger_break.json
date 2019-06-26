@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:vespidstinger"
+      "item": "lycanitesmobs:equipmentpart_vespidstinger"
     }
   ],
   "type": "minecraft:crafting_shapeless"

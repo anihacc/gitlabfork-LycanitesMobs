@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:wendigoantler"
+      "item": "lycanitesmobs:equipmentpart_wendigoantler"
     }
   ],
   "type": "minecraft:crafting_shapeless"

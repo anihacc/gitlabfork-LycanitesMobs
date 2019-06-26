@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.Targeting;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
@@ -12,12 +12,12 @@ import java.util.EnumSet;
 
 public class OwnerDefenseTargetingGoal extends TargetingGoal {
 	// Properties:
-	private EntityCreatureTameable tamedHost;
+	private TameableCreatureEntity tamedHost;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public OwnerDefenseTargetingGoal(EntityCreatureTameable setHost) {
+    public OwnerDefenseTargetingGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.tamedHost = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
@@ -89,10 +89,10 @@ public class OwnerDefenseTargetingGoal extends TargetingGoal {
 		}
 
         // Threat Check:
-        if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof EntityCreatureBase)) {
+        if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof EntityCreatureBase && ((EntityCreatureBase)target).isHostile() && !(target instanceof IGroupAnimal)) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostile() && !(target instanceof IGroupAnimal)) {
             return true;
         }
         else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {

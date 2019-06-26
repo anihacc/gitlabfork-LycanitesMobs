@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.*;
@@ -17,7 +17,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityTremor extends EntityCreatureTameable implements IMob, IGroupRock {
+public class EntityTremor extends TameableCreatureEntity implements IMob, IGroupRock {
 
 	private AttackMeleeGoal meleeAttackAI;
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
@@ -26,12 +26,12 @@ public class LayerCreatureGlow extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		String textureName = entity.getTextureName();
 		if(entity.getSubspecies() != null) {
 			textureName += "_" + entity.getSubspecies().color;

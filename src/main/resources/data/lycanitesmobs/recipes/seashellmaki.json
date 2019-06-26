@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:seashellmaki"
+    "item": "lycanitesmobs:seashell_maki"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:wheat"
     },
     {
-      "item": "lycanitesmobs:ikameatcooked"
+      "item": "lycanitesmobs:cooked_ika_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

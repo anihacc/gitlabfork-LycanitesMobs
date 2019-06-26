@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.google.common.collect.Maps;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -17,7 +17,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
@@ -47,7 +46,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, IShearable {
+public class EntityYale extends AgeableCreatureEntity implements IGroupAnimal, IShearable {
 
 	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.BYTE);
 
@@ -214,7 +213,7 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
 	/**
 	 * Attempts to mix both parent sheep to come up with a mixed dye color.
 	 */
-	private DyeColor getMixedFurColor(EntityCreatureBase father, EntityCreatureBase mother) {
+	private DyeColor getMixedFurColor(BaseCreatureEntity father, BaseCreatureEntity mother) {
 		DyeColor dyeA = father.getColor();
 		DyeColor dyeB = mother.getColor();
 		CraftingInventory craftinginventory = mixColors(dyeA, dyeB);
@@ -296,8 +295,8 @@ public class EntityYale extends EntityCreatureAgeable implements IGroupAnimal, I
     // ==================================================
     // ========== Create Child ==========
 	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
-		EntityCreatureAgeable baby = super.createChild(partner);
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
+		AgeableCreatureEntity baby = super.createChild(partner);
 		DyeColor color = this.getMixedFurColor(this, partner);
         baby.setColor(color);
 		return baby;

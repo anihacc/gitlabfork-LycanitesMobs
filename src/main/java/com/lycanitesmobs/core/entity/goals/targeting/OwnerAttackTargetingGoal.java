@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 
 public class OwnerAttackTargetingGoal extends TargetingGoal {
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
 	private int lastAttackTime;
@@ -13,7 +13,7 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public OwnerAttackTargetingGoal(EntityCreatureTameable setHost) {
+    public OwnerAttackTargetingGoal(TameableCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
         this.checkSight = false;

@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -124,12 +124,12 @@ public class ModelJoust extends ModelCreatureObjOld {
 		float bob = MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance;
 		if(bob < 0) bob += -bob * 2;
     	if(partName.equals("head") || partName.equals("mouth"))
-    		if(entity instanceof EntityCreatureAgeable && ((EntityCreatureAgeable)entity).isChild())
+    		if(entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isChild())
     			bob /= 2;
 		posY += bob;
 		
 		// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
 	    		rotate(30.0F, 0.0F, 0.0F);
 	    	}

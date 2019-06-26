@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GetItemGoal extends Goal {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	private ItemEntity target;
 	
 	// Properties:
@@ -32,7 +32,7 @@ public class GetItemGoal extends Goal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public GetItemGoal(EntityCreatureBase setHost) {
+    public GetItemGoal(BaseCreatureEntity setHost) {
         super();
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.host = setHost;
@@ -79,8 +79,8 @@ public class GetItemGoal extends Goal {
 		this.recheckTime = 0;
 
     	if(!this.tamedLooting) {
-    		if(this.host instanceof EntityCreatureTameable)
-    			if(((EntityCreatureTameable)this.host).isTamed())
+    		if(this.host instanceof TameableCreatureEntity)
+    			if(((TameableCreatureEntity)this.host).isTamed())
     				return false;
     	}
     	

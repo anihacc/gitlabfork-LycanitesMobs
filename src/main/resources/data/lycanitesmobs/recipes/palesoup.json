@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:palesoup"
+    "item": "lycanitesmobs:pale_soup"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:bowl"
     },
     {
-      "item": "lycanitesmobs:yetimeatcooked"
+      "item": "lycanitesmobs:cooked_yeti_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

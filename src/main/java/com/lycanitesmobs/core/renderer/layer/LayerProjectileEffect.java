@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.renderer.RenderProjectileModel;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -55,12 +55,12 @@ public class LayerProjectileEffect extends LayerProjectileBase {
     //                      Visuals
     // ==================================================
     @Override
-    public Vector4f getPartColor(String partName, EntityProjectileBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityProjectileBase entity) {
+    public ResourceLocation getLayerTexture(BaseProjectileEntity entity) {
 		return super.getLayerTexture(entity);
     }
 
@@ -93,7 +93,7 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 	}
 
 	@Override
-	public Vector2f getTextureOffset(String partName, EntityProjectileBase entity, boolean trophy, float loop) {
+	public Vector2f getTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
     	if(this.scrollSpeed == null) {
 			this.scrollSpeed = new Vector2f(0, 0);
 		}

@@ -4,7 +4,7 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupHunter;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
@@ -19,7 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupPrey {
+public class EntityGorgomite extends BaseCreatureEntity implements IMob, IGroupPrey {
 	private int gorgomiteSwarmLimit = 10; // TODO Creature flags.
     
     // ==================================================
@@ -83,9 +83,9 @@ public class EntityGorgomite extends EntityCreatureBase implements IMob, IGroupP
     public void spawnAlly(double x, double y, double z) {
     	LivingEntity minion = CreatureManager.getInstance().getCreature("gorgomite").createEntity(getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-    	if(minion instanceof EntityCreatureBase) {
-    		((EntityCreatureBase)minion).setMinion(true);
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
+    	if(minion instanceof BaseCreatureEntity) {
+    		((BaseCreatureEntity)minion).setMinion(true);
+    		((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
     	}
     	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)

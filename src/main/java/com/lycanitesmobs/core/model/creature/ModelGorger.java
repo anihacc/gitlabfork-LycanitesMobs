@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObj;
 
 import net.minecraft.entity.LivingEntity;
@@ -62,7 +62,7 @@ public class ModelGorger extends ModelCreatureObj {
             this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
 
         // Attack:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
             if(partName.equals("mouthtop"))
                 rotX += -20.0F;
             if(partName.equals("mouthleft"))
@@ -75,7 +75,7 @@ public class ModelGorger extends ModelCreatureObj {
 
         // Walking:
         float walkSwing = 0.8F;
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).getStealth() > 0 && ((EntityCreatureBase)entity).getStealth() < 1)
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).getStealth() > 0 && ((BaseCreatureEntity)entity).getStealth() < 1)
             time = loop;
         time /= 2;
         if(partName.equals("head")) {
@@ -133,8 +133,8 @@ public class ModelGorger extends ModelCreatureObj {
         }
 
         // Stealth:
-        if(entity instanceof EntityCreatureBase)
-            posY -= (2 * ((EntityCreatureBase)entity).getStealth());
+        if(entity instanceof BaseCreatureEntity)
+            posY -= (2 * ((BaseCreatureEntity)entity).getStealth());
 
         // Apply Animations:
         this.translate(posX, posY, posZ);

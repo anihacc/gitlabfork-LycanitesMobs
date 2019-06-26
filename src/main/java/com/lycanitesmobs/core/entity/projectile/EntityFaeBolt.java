@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -14,7 +14,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 
-public class EntityFaeBolt extends EntityProjectileBase {
+public class EntityFaeBolt extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -22,15 +22,15 @@ public class EntityFaeBolt extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityFaeBolt(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityFaeBolt(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityFaeBolt(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityFaeBolt(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ettin.name=食人魔
+entity.lycanitesmobs.ettin.description=巨大的双头怪物。这些狂兽因为它们的破坏能力而受到威胁。
+entity.lycanitesmobs.ettin.habitat=这些狂兽经常生活在沼泽地。
+entity.lycanitesmobs.ettin.combat=食人魔动作缓慢，但会受到严重打击。如果你在战斗中离得太近，它们会惊慌并摧毁附近的柔软方块，如木头或泥土。

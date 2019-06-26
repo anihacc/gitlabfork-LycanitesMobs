@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -26,7 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce {
+public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce {
 
 	WanderGoal wanderAI;
 	

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:mosspie"
+    "item": "lycanitesmobs:moss_pie"
   },
   "ingredients": [
     {
@@ -10,7 +10,7 @@
       "item": "minecraft:red_mushroom"
     },
     {
-      "item": "lycanitesmobs:aspidmeatcooked"
+      "item": "lycanitesmobs:cooked_aspid_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

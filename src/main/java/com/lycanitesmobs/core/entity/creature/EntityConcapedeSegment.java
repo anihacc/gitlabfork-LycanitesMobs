@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGroupAnimal {
+public class EntityConcapedeSegment extends AgeableCreatureEntity implements IGroupAnimal {
     
 	// Parent UUID:
 	/** Used to identify the parent segment when loading this saved entity, set to null when found or lost for good. **/
@@ -85,8 +85,8 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
     			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
     	}
     	
-    	if(this.hasParent() && this.getParentTarget() instanceof EntityCreatureBase) {
-    		this.applySubspecies(((EntityCreatureBase)this.getParentTarget()).getSubspeciesIndex());
+    	if(this.hasParent() && this.getParentTarget() instanceof BaseCreatureEntity) {
+    		this.applySubspecies(((BaseCreatureEntity)this.getParentTarget()).getSubspeciesIndex());
     	}
     }
     
@@ -109,10 +109,10 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
         // Try to Load Parent from UUID:
         if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null) {
 	        double range = 64D;
-	        List connections = this.getEntityWorld().getEntitiesWithinAABB(EntityCreatureAgeable.class, this.getBoundingBox().grow(range, range, range));
+	        List connections = this.getEntityWorld().getEntitiesWithinAABB(AgeableCreatureEntity.class, this.getBoundingBox().grow(range, range, range));
 	        Iterator possibleConnections = connections.iterator();
 	        while(possibleConnections.hasNext()) {
-	        	EntityCreatureAgeable possibleConnection = (EntityCreatureAgeable)possibleConnections.next();
+	        	AgeableCreatureEntity possibleConnection = (AgeableCreatureEntity)possibleConnections.next();
 	            if(possibleConnection != this && possibleConnection.getUniqueID().equals(this.parentUUID)) {
 	            	this.setParentTarget(possibleConnection);
 	            	break;
@@ -143,8 +143,8 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
         		
         		double segmentDistance = 0.5D;
         		Vec3d pos;
-        		if(this.getParentTarget() instanceof EntityCreatureBase)
-        			pos = ((EntityCreatureBase)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.25D, 0);
+        		if(this.getParentTarget() instanceof BaseCreatureEntity)
+        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.25D, 0);
         		else
 					pos = new Vec3d(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ);
 
@@ -232,7 +232,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
 	@Override
 	public void setParentTarget(LivingEntity setTarget) {
 		if(setTarget instanceof EntityConcapedeSegment || setTarget instanceof EntityConcapedeHead)
-			((EntityCreatureBase)setTarget).setMasterTarget(this);
+			((BaseCreatureEntity)setTarget).setMasterTarget(this);
 		super.setParentTarget(setTarget);
 	}
     
@@ -275,7 +275,7 @@ public class EntityConcapedeSegment extends EntityCreatureAgeable implements IGr
   	// ==================================================
     // ========== Create Child ==========
     @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
 		return null;
 	}
     

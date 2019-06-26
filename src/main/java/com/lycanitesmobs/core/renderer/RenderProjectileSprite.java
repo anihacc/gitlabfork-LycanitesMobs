@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.renderer;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase> {
+public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity> {
     private int renderTime = 0;
     Class projectileClass;
     
@@ -37,21 +37,21 @@ public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase>
     //                     Do Render
     // ==================================================
     @Override
-	public void func_76986_a(EntityProjectileBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void func_76986_a(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
     	if(this.renderTime++ > Integer.MAX_VALUE - 1)
             this.renderTime = 0;
         this.renderProjectile(entity, x, y, z, entityYaw, partialTicks);
-    	if(entity instanceof EntityProjectileLaser)
-    		this.renderLaser((EntityProjectileLaser)entity, x, y, z, entityYaw, partialTicks);
+    	if(entity instanceof LaserProjectileEntity)
+    		this.renderLaser((LaserProjectileEntity)entity, x, y, z, entityYaw, partialTicks);
     }
     
     
     // ==================================================
     //                 Render Projectile
     // ==================================================
-    public void renderProjectile(EntityProjectileBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void renderProjectile(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
     	double scale = 0.5d;
-    	if(entity instanceof EntityProjectileCustom && ((EntityProjectileCustom)entity).projectileInfo == null) {
+    	if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
     		return;
 		}
         if(entity != null) {
@@ -75,7 +75,7 @@ public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase>
     // ==================================================
     //                  Render Texture
     // ==================================================
-    private void renderTexture(Tessellator tessellator, EntityProjectileBase entity) {
+    private void renderTexture(Tessellator tessellator, BaseProjectileEntity entity) {
         double minU = 0;
         double maxU = 1;
         double minV = 0;
@@ -128,7 +128,7 @@ public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase>
     // ==================================================
     //                 Render Laser
     // ==================================================
-    public void renderLaser(EntityProjectileLaser entity, double x, double y, double z, float par8, float par9) {
+    public void renderLaser(LaserProjectileEntity entity, double x, double y, double z, float par8, float par9) {
     	float scale = entity.getLaserWidth();
     	
     	// Create Laser Model If Null:
@@ -177,12 +177,12 @@ public class RenderProjectileSprite extends EntityRenderer<EntityProjectileBase>
     // ==================================================
     // ========== Get Texture ==========
     @Override
-    protected ResourceLocation func_110775_a(EntityProjectileBase entity) {
+    protected ResourceLocation func_110775_a(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 
     // ========== Get Laser Texture ==========
-    protected ResourceLocation getLaserTexture(EntityProjectileLaser entity) {
+    protected ResourceLocation getLaserTexture(LaserProjectileEntity entity) {
     	return entity.getBeamTexture();
     }
 }

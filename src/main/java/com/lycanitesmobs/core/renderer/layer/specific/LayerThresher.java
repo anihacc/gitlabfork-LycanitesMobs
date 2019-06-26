@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.renderer.layer.specific;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.renderer.RenderCreature;
 import com.lycanitesmobs.core.entity.creature.EntityThresher;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
@@ -26,7 +26,7 @@ public class LayerThresher extends LayerCreatureBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity instanceof EntityThresher) {
             EntityThresher entityThresher = (EntityThresher)entity;
             return entityThresher.canWhirlpool();
@@ -39,17 +39,17 @@ public class LayerThresher extends LayerCreatureBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         return "effect".equals(partName);
     }
 
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 0.5f);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getSubTexture("effect");
     }
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.template.ModelTemplateDragon;
 
 import net.minecraft.entity.LivingEntity;
@@ -54,7 +54,7 @@ public class ModelQuetzodracl extends ModelTemplateDragon {
 
         // Pickup:
         if (partName.equals("legleft") || partName.equals("legright")) {
-            if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).hasPickupEntity()) {
+            if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPickupEntity()) {
                 rotX -= 40D;
             }
         }

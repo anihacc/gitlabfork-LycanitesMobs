@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
@@ -22,7 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoust extends EntityCreatureAgeable implements IGroupAnimal {
+public class EntityJoust extends AgeableCreatureEntity implements IGroupAnimal {
 	
 	// ==================================================
  	//                    Constructor

@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.item.consumable;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 
-public class ItemCustomFood extends ItemBase {
+public class ItemCustomFood extends BaseItem {
 
     /** The various classes of foods, used mainly for generic configurable effect durations. **/
     public static enum FOOD_CLASS {

@@ -7,6 +7,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -101,8 +103,17 @@ public class ElementInfo {
 	 * Returns the display title of this element.
 	 * @return The title text.
 	 */
-	public String getTitle() {
-		return LanguageManager.translate("element." + this.name + ".name");
+	public String getName() {
+		return this.name;
+	}
+
+
+	/**
+	 * Returns the display title of this element.
+	 * @return The title text.
+	 */
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("element." + this.name + ".name");
 	}
 
 
@@ -110,15 +121,15 @@ public class ElementInfo {
 	 * Returns the description of this element.
 	 * @return The description text.
 	 */
-	public String getDescription() {
-		return LanguageManager.translate("element." + this.name + ".description");
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent("element." + this.name + ".description");
 	}
 
 
 	/**
 	 * Applies buffs to the target entity based on this element.
 	 * @param targetEntity The entity to buffs.
-	 * @param duration The duration of the buffs. If 0 or below, no debuff is applied.
+	 * @param duration The duration (in seconds) of the buffs. If 0 or below, no debuff is applied.
 	 * @param amplifier The amplifier of the buffs. If 0 or below, no debuff is applied.
 	 */
 	public void buffEntity(LivingEntity targetEntity, int duration, int amplifier) {

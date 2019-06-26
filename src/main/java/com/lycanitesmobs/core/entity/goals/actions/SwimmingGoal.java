@@ -1,16 +1,14 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 
-import java.util.EnumSet;
-
 public class SwimmingGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private boolean sink = false;
@@ -18,7 +16,7 @@ public class SwimmingGoal extends Goal {
     // ==================================================
    	//                    Constructor
    	// ==================================================
-    public SwimmingGoal(EntityCreatureBase setEntity) {
+    public SwimmingGoal(BaseCreatureEntity setEntity) {
         this.host = setEntity;
         if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
             setEntity.getNavigator().setCanSwim(true);

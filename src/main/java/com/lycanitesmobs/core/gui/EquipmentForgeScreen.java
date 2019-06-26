@@ -2,26 +2,26 @@ package com.lycanitesmobs.core.gui;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.container.ContainerBase;
-import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.core.container.SlotEquipment;
+import com.lycanitesmobs.core.container.BaseContainer;
+import com.lycanitesmobs.core.container.EquipmentForgeContainer;
+import com.lycanitesmobs.core.container.EquipmentSlot;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class EquipmentForgeScreen extends BaseContainerScreen<ContainerEquipmentForge> {
+public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeContainer> {
 	public TileEntityEquipmentForge equipmentForge;
 	public String currentMode = "empty";
 	public boolean confirmation = false;
 
-	public EquipmentForgeScreen(ContainerEquipmentForge container, PlayerInventory playerInventory, ITextComponent name) {
+	public EquipmentForgeScreen(EquipmentForgeContainer container, PlayerInventory playerInventory, ITextComponent name) {
 		super(container, playerInventory, name);
 		this.equipmentForge = container.equipmentForge;
 	}
@@ -45,10 +45,10 @@ public class EquipmentForgeScreen extends BaseContainerScreen<ContainerEquipment
 
 		String buttonText = "";
 		if("construct".equals(this.currentMode)) {
-			buttonText = LanguageManager.translate("gui.equipmentforge.forge");
+			buttonText = new TranslationTextComponent("gui.equipmentforge.forge").getFormattedText();
 		}
 		else if("deconstruct".equals(this.currentMode)) {
-			buttonText = LanguageManager.translate("gui.equipmentforge.deconstruct");
+			buttonText = new TranslationTextComponent("gui.equipmentforge.deconstruct").getFormattedText();
 		}
 		buttonY += buttonSpacing;
 		this.buttons.add(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
@@ -76,7 +76,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<ContainerEquipment
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
 
-		ContainerBase container = this.getContainer();
+		BaseContainer container = this.getContainer();
 		List<Slot> forgeSlots = container.inventorySlots.subList(container.inventoryStart, container.inventoryFinish);
 		int slotWidth = 18;
 		int slotHeight = 18;
@@ -87,30 +87,30 @@ public class EquipmentForgeScreen extends BaseContainerScreen<ContainerEquipment
 			int slotY = backY + forgeSlot.yPos - 1;
 			int slotV = slotVBase;
 
-			if(forgeSlot instanceof SlotEquipment) {
-				SlotEquipment slotEquipment =(SlotEquipment)forgeSlot;
-				if("base".equals(slotEquipment.type)) {
+			if(forgeSlot instanceof EquipmentSlot) {
+				EquipmentSlot equipmentSlot =(EquipmentSlot)forgeSlot;
+				if("base".equals(equipmentSlot.type)) {
 					slotV += slotHeight;
 				}
-				else if("head".equals(slotEquipment.type)) {
+				else if("head".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 2;
 				}
-				else if("blade".equals(slotEquipment.type)) {
+				else if("blade".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 3;
 				}
-				else if("axe".equals(slotEquipment.type)) {
+				else if("axe".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 4;
 				}
-				else if("pike".equals(slotEquipment.type)) {
+				else if("pike".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 5;
 				}
-				else if("pommel".equals(slotEquipment.type)) {
+				else if("pommel".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 6;
 				}
-				else if("jewel".equals(slotEquipment.type)) {
+				else if("jewel".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 7;
 				}
-				else if("aura".equals(slotEquipment.type)) {
+				else if("aura".equals(equipmentSlot.type)) {
 					slotV += slotHeight * 8;
 				}
 			}
@@ -121,8 +121,8 @@ public class EquipmentForgeScreen extends BaseContainerScreen<ContainerEquipment
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentForge.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName().toString()), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.equipmentForge.getName().getFormattedText(), 8, 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
     
 	@Override

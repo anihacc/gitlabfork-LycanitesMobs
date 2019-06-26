@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:entarm"
+      "item": "lycanitesmobs:equipmentpart_entarm"
     }
   ],
   "type": "minecraft:crafting_shapeless"

@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupPredator {
+public class EntityVespid extends AgeableCreatureEntity implements IMob, IGroupPredator {
     public PlaceBlockGoal aiPlaceBlock;
 	private boolean vespidHiveBuilding = true; // TODO Creature Flags.
 	

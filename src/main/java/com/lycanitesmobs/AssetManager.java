@@ -1,6 +1,6 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
@@ -69,7 +69,7 @@ public class AssetManager {
 	}
 	
 	// ========== Model ==========
-	public static ModelCreatureBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public static ModelCreatureBase getCreatureModel(BaseCreatureEntity entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (entityCreature.creatureInfo == null) {
 			return null;
 		}

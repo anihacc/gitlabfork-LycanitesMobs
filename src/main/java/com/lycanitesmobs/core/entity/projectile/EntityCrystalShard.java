@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileModel;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.ModelProjectileEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCrystalShard extends EntityProjectileModel {
+public class EntityCrystalShard extends ModelProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -25,15 +25,15 @@ public class EntityCrystalShard extends EntityProjectileModel {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityCrystalShard(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityCrystalShard(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityCrystalShard(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityCrystalShard(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

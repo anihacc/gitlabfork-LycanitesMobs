@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,20 +12,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityHellfireOrb extends EntityProjectileBase {
+public class EntityHellfireOrb extends BaseProjectileEntity {
 
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityHellfireOrb(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity par2LivingEntity) {
+    public EntityHellfireOrb(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity par2LivingEntity) {
         super(entityType, world, par2LivingEntity);
     }
 
-    public EntityHellfireOrb(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6) {
+    public EntityHellfireOrb(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
         super(entityType, world, par2, par4, par6);
     }
     

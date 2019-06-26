@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
 import net.minecraft.entity.LivingEntity;
@@ -67,7 +67,7 @@ public class ModelReaper extends ModelCreatureObjOld {
 		posY += bob;
 				
 		// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("armleft"))
 	    		rotate(0.0F, -25.0F, 0.0F);
 	    	if(partName.equals("armright"))

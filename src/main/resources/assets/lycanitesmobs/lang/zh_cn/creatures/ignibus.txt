@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ignibus.name=赤炎飞龙
+entity.lycanitesmobs.ignibus.description=火热的巨龙，暴躁的脾气，灼热的爪子，炽热的呼吸，燃烧的渴望融化你的脸！
+entity.lycanitesmobs.ignibus.habitat=赤炎飞龙可以在非常大的湖泊中找到，它们很罕见，但却非常强大。
+entity.lycanitesmobs.ignibus.combat=这些巨龙释放出一股强大的烈火和热余烬，可以点燃地面和任何物体。炽焰还将造成渗透削弱防御。

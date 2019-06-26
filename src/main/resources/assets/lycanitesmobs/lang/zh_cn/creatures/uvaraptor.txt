@@ -1,0 +1,4 @@
+entity.lycanitesmobs.uvaraptor.name=乌瓦食肉鸟
+entity.lycanitesmobs.uvaraptor.description=色彩斑斓的猛禽，有极强的跳跃和滑翔能力。可以驯服为有用的跳高坐骑，几乎可以维持飞行。
+entity.lycanitesmobs.uvaraptor.habitat=这些猛禽通常出现在丛林中。
+entity.lycanitesmobs.uvaraptor.combat=乌瓦食肉鸟跳到空中攻击猎物，使它们更难以受到攻击，但也容易受到远程攻击。

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.strider.name=斯特赖德
+entity.lycanitesmobs.strider.description=这些巨大的两栖动物有点像虾，它们害怕它们可怕的触须爪，从中捕捉和消费它们的受害者。
+entity.lycanitesmobs.strider.habitat=这些生物通常在大型湖泊或河流中发现。
+entity.lycanitesmobs.strider.combat=斯特赖德会把它们的受害者带走，慢慢地将它们的生命抽取出来，它们在水中或下雨时也很快。

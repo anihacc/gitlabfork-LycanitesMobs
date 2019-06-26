@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:ventoraptorskull"
+      "item": "lycanitesmobs:equipmentpart_ventoraptorskull"
     }
   ],
   "type": "minecraft:crafting_shapeless"

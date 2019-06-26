@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 
 import net.minecraft.entity.LivingEntity;
@@ -101,9 +101,9 @@ public class ModelCrusk extends ModelCreatureObjOld {
     	}
     	if(partName.equals("topleftmouth") || partName.equals("toprightmouth") || partName.equals("bottomleftmouth") || partName.equals("bottomrightmouth")) {
     		rotation += -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
-    		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown())
+    		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
     			rotation = -20;
-    		if(entity instanceof EntityCreatureTameable && ((EntityCreatureTameable)entity).isSitting())
+    		if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting())
     			rotation += 20;
         	rotate(rotation, angleX, angleY, angleZ);
         	rotation = 0F;
@@ -119,7 +119,7 @@ public class ModelCrusk extends ModelCreatureObjOld {
     	
     	// Walking:
     	float walkSwing = 0.8F;
-    	if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).getStealth() > 0 && ((EntityCreatureBase)entity).getStealth() < 1)
+    	if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).getStealth() > 0 && ((BaseCreatureEntity)entity).getStealth() < 1)
     		time = loop;
     	time /= 2;
     	if(partName.equals("head") || partName.equals("topleftmouth") || partName.equals("toprightmouth") || partName.equals("bottomleftmouth") || partName.equals("bottomrightmouth")) {
@@ -177,8 +177,8 @@ public class ModelCrusk extends ModelCreatureObjOld {
     	}
     	
     	// Stealth:
-    	if(entity instanceof EntityCreatureBase)
-    		posY -= (2 * ((EntityCreatureBase)entity).getStealth());
+    	if(entity instanceof BaseCreatureEntity)
+    		posY -= (2 * ((BaseCreatureEntity)entity).getStealth());
     	
     	// Apply Animations:
     	translate(posX, posY, posZ);

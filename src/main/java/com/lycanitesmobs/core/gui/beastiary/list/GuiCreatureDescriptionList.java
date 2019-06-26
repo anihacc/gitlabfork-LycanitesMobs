@@ -1,10 +1,12 @@
 package com.lycanitesmobs.core.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
 public class GuiCreatureDescriptionList extends BaseList {
@@ -72,59 +74,104 @@ public class GuiCreatureDescriptionList extends BaseList {
 		if(creatureInfo == null) {
 			return "";
 		}
-		String text = "";
+		ITextComponent text = new StringTextComponent("");
 
 		// Taming:
 		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getTranslationKey() + ".name") + "\n\n";
+			text.appendText("\u00A7l")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.tameable"))
+					.appendText(": " + "\u00A7r")
+					.appendSibling(new TranslationTextComponent(creatureInfo.creatureType.getTreatItem().getTranslationKey() + ".name"))
+					.appendText("\n\n");
 		}
 
 		// Summoning:
 		if(creatureInfo.creatureType != null && creatureInfo.isSummonable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
+			text.appendText("\u00A7l")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.summonable"))
+					.appendText("\u00A7r\n\n");
 		}
 
 		// Summary:
-		text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summary") + ": " + "\u00A7r";
-		text += "\n" + creatureInfo.getDescription();
+		text.appendText("\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.summary"))
+				.appendText(": " + "\u00A7r")
+				.appendText("\n")
+				.appendSibling(creatureInfo.getDescription());
 
 		// Stats:
-		text += "\n\n\u00A7l" + LanguageManager.translate("creature.stat.base") + ": " + "\u00A7r";
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("creature.stat.base"))
+				.appendText(": " + "\u00A7r");
+
 		if(this.creatureKnowledge.rank >= 2) {
 			// Stats:
-			String statPrefix = "\n" + LanguageManager.translate("creature.stat.base") + " ";
+			String statPrefix = "\n" + new TranslationTextComponent("creature.stat.base") + " ";
 
-			text += "\n" + LanguageManager.translate("creature.stat.health") + ": " + creatureInfo.health;
-			text += "\n" + LanguageManager.translate("creature.stat.defense") + ": " + creatureInfo.defense;
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.health"))
+					.appendText(": " + creatureInfo.health);
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.defense"))
+					.appendText(": " + creatureInfo.defense);
 
-			text += "\n" + LanguageManager.translate("creature.stat.speed") + ": " + creatureInfo.speed;
-			text += "\n" + LanguageManager.translate("creature.stat.damage") + ": " + creatureInfo.damage;
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.speed"))
+					.appendText(": " + creatureInfo.speed);
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.damage"))
+					.appendText(": " + creatureInfo.damage);
 
-			text += "\n" + LanguageManager.translate("creature.stat.pierce") + ": " + creatureInfo.pierce;
-			String effectText = creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X";
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.pierce"))
+					.appendText(": " + creatureInfo.pierce);
+			ITextComponent effectText = new StringTextComponent(creatureInfo.effectDuration + "s " + creatureInfo.effectAmplifier + "X");
 			if(creatureInfo.effectDuration <= 0 || creatureInfo.effectAmplifier < 0)
-				effectText = LanguageManager.translate("common.none");
-			text += "\n" + LanguageManager.translate("creature.stat.effect") + ": " + effectText;
+				effectText = new TranslationTextComponent("common.none");
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("creature.stat.effect"))
+					.appendText(": " + effectText);
 		}
 		else {
-			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
+					.appendText(" " + 2);
 		}
 
 		// Combat:
-		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.combat") + ": " + "\u00A7r";
-		if(this.creatureKnowledge.rank >= 2)
-			text += "\n" + creatureInfo.getCombatDescription();
-		else
-			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.combat"))
+				.appendText(": " + "\u00A7r");
+		if(this.creatureKnowledge.rank >= 2) {
+			text.appendText("\n").appendSibling(creatureInfo.getCombatDescription());
+		}
+		else {
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
+					.appendText(" " + 2);
+		}
 
 		// Habitat:
-		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.habitat") + ": " + "\u00A7r";
-		if(this.creatureKnowledge.rank >= 2)
-			text += "\n" + creatureInfo.getHabitatDescription();
-		else
-			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.habitat"))
+				.appendText(": " + "\u00A7r");
+		if(this.creatureKnowledge.rank >= 2) {
+			text.appendText("\n")
+					.appendSibling(creatureInfo.getHabitatDescription());
+		}
+		else {
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
+					.appendText(" " + 2);
+		}
 
-		return text;
+		return text.getFormattedText();
 	}
 
 	/** Overridden to change the background gradient without copying over an entire function. **/

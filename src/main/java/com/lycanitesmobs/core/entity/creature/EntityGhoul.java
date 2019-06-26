@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
@@ -17,7 +16,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityGhoul extends EntityCreatureAgeable implements IMob {
+public class EntityGhoul extends AgeableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor

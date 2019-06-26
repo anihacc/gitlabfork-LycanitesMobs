@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -9,7 +9,7 @@ import java.util.EnumSet;
 
 public abstract class FollowGoal extends Goal {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
     
     // Properties:
     double speed = 1.0D;
@@ -23,7 +23,7 @@ public abstract class FollowGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public FollowGoal(EntityCreatureBase setHost) {
+    public FollowGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.targetClass = this.host.getClass();
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -124,19 +124,19 @@ public abstract class FollowGoal extends Goal {
             this.updateRate = 10;
             Entity target = this.getTarget();
         	if(!this.host.useDirectNavigator()) {
-        		if(this.behindDistance == 0 || !(target instanceof EntityCreatureBase)) {
+        		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity)) {
                     this.host.getNavigator().tryMoveToEntityLiving(target, this.speed);
                 }
         		else {
-        			BlockPos pos = ((EntityCreatureBase)target).getFacingPosition(-this.behindDistance);
+        			BlockPos pos = ((BaseCreatureEntity)target).getFacingPosition(-this.behindDistance);
         			this.host.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), this.speed);
         		}
         	}
         	else {
-        		if(this.behindDistance == 0 || !(target instanceof EntityCreatureBase))
+        		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity))
         			this.host.directNavigator.setTargetPosition(new BlockPos((int)target.posX, (int)target.posY, (int)target.posZ), this.speed);
         		else {
-                    BlockPos pos = ((EntityCreatureBase)target).getFacingPosition(-this.behindDistance);
+                    BlockPos pos = ((BaseCreatureEntity)target).getFacingPosition(-this.behindDistance);
         			this.host.directNavigator.setTargetPosition(pos, this.speed);
         		}
         	}

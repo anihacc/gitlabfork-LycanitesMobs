@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class EffectEquipmentFeature extends EquipmentFeature {
@@ -39,17 +41,26 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.effectType + " (" + this.effectTarget + ")";
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+				.appendText(" ")
+				.appendText(this.effectType + " (" + this.effectTarget + ")");
+
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
+			description.appendText("\n")
+				.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
+				.appendText(" " + ((float)this.effectDuration / 20));
 		}
+
 		if(this.effectStrength > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.strength") + " " + this.effectStrength;
+			description.appendText("\n")
+					.appendSibling(new TranslationTextComponent("equipment.feature.effect.strength"))
+					.appendText(" " + this.effectStrength);
 		}
+
 		return description;
 	}
 

@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:sutiramustinger"
+      "item": "lycanitesmobs:equipmentpart_sutiramustinger"
     }
   ],
   "type": "minecraft:crafting_shapeless"

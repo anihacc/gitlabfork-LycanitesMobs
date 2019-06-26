@@ -1,0 +1,4 @@
+entity.lycanitesmobs.nymph.name=精灵
+entity.lycanitesmobs.nymph.description=异想天开的仙灵元素充满了治愈它们周围一切的能量。它们喜欢花！虽然直接无害，但当它们害怕时会造成伤害。水元素和宙斯盾元素可以融合，创造出强大的仙女。
+entity.lycanitesmobs.nymph.habitat=作为仙灵元素，精灵在生命源周围出现，因此在阳光下的花朵周围出现。
+entity.lycanitesmobs.nymph.combat=精灵是和平的，会治愈它们周围的一切，这对亡灵生物是有害的。如果被击中，精灵们会逃跑，用锋利的荆棘烧掉花，造成流血。

@@ -83,7 +83,7 @@ public class SpawnerManager extends JSONLoader {
 
 
 	@Override
-	public void parseJson(ModInfo groupInfo, String name, JsonObject json) {
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		LycanitesMobs.logDebug("JSONSpawner", "Loading Spawner JSON: " + json);
 		Spawner spawner = new Spawner();
 		spawner.loadFromJSON(json);

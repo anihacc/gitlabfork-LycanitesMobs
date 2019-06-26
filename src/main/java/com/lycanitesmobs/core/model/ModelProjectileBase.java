@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.model;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.renderer.RenderProjectileModel;
 import com.lycanitesmobs.core.renderer.layer.LayerProjectileBase;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -12,7 +12,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
+public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> {
     
 	// ==================================================
   	//                    Constructors
@@ -40,7 +40,7 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
    	//                  Render Model
    	// ==================================================
     @Override //render
-    public void func_78088_a(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void func_78088_a(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 
@@ -56,7 +56,7 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
 	 * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
 	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
 	 */
-    public void render(EntityProjectileBase entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
+    public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
         float sizeScale = 1F;
 		if(entity != null) {
             sizeScale *= entity.getProjectileScale();
@@ -70,7 +70,7 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
     //                Can Render Part
     // ==================================================
     /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
-    public boolean canRenderPart(String partName, EntityProjectileBase entity, LayerProjectileBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy) {
         if(layer == null)
             return this.canBaseRenderPart(partName, entity, trophy);
         if(entity != null)
@@ -79,7 +79,7 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
     }
 
     /** Returns true if the part can be rendered on the base layer. **/
-    public boolean canBaseRenderPart(String partName, EntityProjectileBase entity, boolean trophy) {
+    public boolean canBaseRenderPart(String partName, BaseProjectileEntity entity, boolean trophy) {
         return true;
     }
 
@@ -88,14 +88,14 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
     //                Get Part Color
     // ==================================================
     /** Returns the coloring to be used for this part and layer. **/
-    public Vector4f getPartColor(String partName, EntityProjectileBase entity, LayerProjectileBase layer, boolean trophy, float loop) {
+    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy, float loop) {
         if(layer == null || entity == null)
             return this.getBasePartColor(partName, entity, trophy, loop);
         return layer.getPartColor(partName, entity, trophy);
     }
 
     /** Returns the coloring to be used for this part on the base layer. **/
-    public Vector4f getBasePartColor(String partName, EntityProjectileBase entity, boolean trophy, float loop) {
+    public Vector4f getBasePartColor(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
         return new Vector4f(1, 1, 1, 1);
     }
 
@@ -104,14 +104,14 @@ public class ModelProjectileBase extends EntityModel<EntityProjectileBase> {
 	//              Get Part Texture Offset
 	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, EntityProjectileBase entity, LayerProjectileBase layer, boolean trophy, float loop) {
-		if(layer == null || !(entity instanceof EntityProjectileBase))
+	public Vector2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy, float loop) {
+		if(layer == null || !(entity instanceof BaseProjectileEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
 		return layer.getTextureOffset(partName, entity, trophy, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/
-	public Vector2f getBaseTextureOffset(String partName, EntityProjectileBase entity, boolean trophy, float loop) {
+	public Vector2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
 		return new Vector2f(0, 0);
 	}
 }

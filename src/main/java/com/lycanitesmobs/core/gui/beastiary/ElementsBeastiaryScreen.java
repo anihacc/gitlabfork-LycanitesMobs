@@ -47,7 +47,7 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 		super.renderForeground(x, y, partialTicks);
 
 		if(this.elementInfo == null) {
-			String info = LanguageManager.translate("gui.beastiary.elements.about");
+			String info = new TranslationTextComponent("gui.beastiary.elements.about").getFormattedText();
 			this.drawSplitString(info, colRightX + 1, colRightY + 12 + 1, colRightWidth, 0xFFFFFF, true);
 		}
 	}
@@ -57,6 +57,6 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 		if(this.elementInfo != null) {
 			return new TranslationTextComponent("");
 		}
-		return new TranslationTextComponent(LanguageManager.translate("gui.beastiary.elements"));
+		return new TranslationTextComponent("gui.beastiary.elements");
 	}
 }

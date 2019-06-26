@@ -1,8 +1,8 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.container.ContainerCreature;
-import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
+import com.lycanitesmobs.core.container.CreatureContainer;
+import com.lycanitesmobs.core.container.EquipmentForgeContainer;
+import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.gui.CreatureInventoryScreen;
 import com.lycanitesmobs.core.gui.EquipmentForgeScreen;
 import com.lycanitesmobs.core.gui.overlays.BaseOverlay;
@@ -42,11 +42,12 @@ public class ClientManager {
 	 * @return A sexy Font Renderer, thanks for the heads up CedKilleur!
 	 */
     public FontRenderer getFontRenderer() {
-		if(this.fontRenderer == null) {
-			ResourceLocation fontResource = new ResourceLocation("textures/font/ascii.png");
+    	return Minecraft.getInstance().fontRenderer;
+		/*if(this.fontRenderer == null) {
+			ResourceLocation fontResource = new ResourceLocation(LycanitesMobs.MODID, "fonts/diavlo_light.otf");
 			this.fontRenderer = new FontRenderer(Minecraft.getInstance().getTextureManager(), new Font(Minecraft.getInstance().getTextureManager(), fontResource));
 		}
-		return this.fontRenderer;
+		return this.fontRenderer;*/
 	}
 
 	/**
@@ -63,9 +64,9 @@ public class ClientManager {
 	 * Registers all GUI Screens, etc used by this mod.
 	 */
 	public void registerGUIs() {
-    	ScreenManager.registerFactory(ContainerCreature.TYPE, CreatureInventoryScreen::new);
-    	ScreenManager.registerFactory(ContainerSummoningPedestal.TYPE, SummoningPedestalScreen::new);
-    	ScreenManager.registerFactory(ContainerEquipmentForge.TYPE, EquipmentForgeScreen::new);
+    	ScreenManager.registerFactory(CreatureContainer.TYPE, CreatureInventoryScreen::new);
+    	ScreenManager.registerFactory(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
+    	ScreenManager.registerFactory(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
 	}
 
 	/**

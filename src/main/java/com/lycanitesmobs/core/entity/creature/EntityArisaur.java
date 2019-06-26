@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityArisaur extends EntityCreatureAgeable implements IGroupAnimal, IGroupHeavy {
+public class EntityArisaur extends AgeableCreatureEntity implements IGroupAnimal, IGroupHeavy {
 	
 	// ==================================================
  	//                    Constructor

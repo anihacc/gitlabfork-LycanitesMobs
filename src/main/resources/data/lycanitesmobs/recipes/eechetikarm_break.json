@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:eechetikarm"
+      "item": "lycanitesmobs:equipmentpart_eechetikarm"
     }
   ],
   "type": "minecraft:crafting_shapeless"

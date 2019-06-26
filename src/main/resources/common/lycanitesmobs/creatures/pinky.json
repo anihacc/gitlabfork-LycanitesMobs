@@ -62,8 +62,8 @@
 	"dungeonLevel": 2,
 	"drops": [
 		{
-			"item": "lycanitesmobs:pinkymeatraw",
-			"burning": "lycanitesmobs:pinkymeatcooked",
+			"item": "lycanitesmobs:raw_pinky_meat",
+			"burning": "lycanitesmobs:cooked_pinky_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

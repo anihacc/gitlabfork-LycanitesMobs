@@ -12,6 +12,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
 	/** A list of item stacks in the forge. **/
@@ -212,7 +214,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/**
 	 * Gets the name of this Equipment Forge.
 	 */
-	public String getName() {
+	public ITextComponent getName() {
 		String levelName = "lesser";
 		if(this.level == 2) {
 			levelName = "greater";
@@ -220,6 +222,6 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		else if(this.level >= 3) {
 			levelName = "master";
 		}
-		return LanguageManager.translate("tile.equipmentforge_" + levelName + ".name");
+		return new TranslationTextComponent("tile.equipmentforge_" + levelName + ".name");
 	}
 }

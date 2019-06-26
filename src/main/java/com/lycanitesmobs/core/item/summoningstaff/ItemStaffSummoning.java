@@ -2,11 +2,11 @@ package com.lycanitesmobs.core.item.summoningstaff;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemStaffSummoning extends ItemBase {
+public class ItemStaffSummoning extends BaseItem {
 	protected float damageScale = 1.0F;
 	protected int weaponFlash = 0;
 	
@@ -80,7 +80,7 @@ public class ItemStaffSummoning extends ItemBase {
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
 				if(!player.getEntityWorld().isRemote) {
-					playerExt.staffPortal = new EntityPortal((EntityType<? extends EntityPortal>)ProjectileManager.getInstance().oldProjectileTypes.get(EntityPortal.class), world, player, summonSet.getCreatureClass(), this);
+					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureClass(), this);
 					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 					world.addEntity(playerExt.staffPortal);
 				}
@@ -191,14 +191,14 @@ public class ItemStaffSummoning extends ItemBase {
     }
     
     // ========== Minion Behaviour ==========
-    public void applyMinionBehaviour(EntityCreatureTameable minion, PlayerEntity player) {
+    public void applyMinionBehaviour(TameableCreatureEntity minion, PlayerEntity player) {
     	SummonSet summonSet = ExtendedPlayer.getForPlayer(player).getSelectedSummonSet();
         summonSet.applyBehaviour(minion);
         minion.applySubspecies(summonSet.subspecies);
     }
     
     // ========== Minion Effects ==========
-    public void applyMinionEffects(EntityCreatureBase minion) {}
+    public void applyMinionEffects(BaseCreatureEntity minion) {}
 	
     
 	// ==================================================

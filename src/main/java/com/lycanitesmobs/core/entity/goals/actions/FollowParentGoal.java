@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
@@ -8,12 +8,12 @@ public class FollowParentGoal extends FollowGoal {
 	public boolean followAsAdult = false;
 	
 	// Targets:
-	EntityCreatureAgeable host;
+	AgeableCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public FollowParentGoal(EntityCreatureAgeable setHost) {
+    public FollowParentGoal(AgeableCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
     }

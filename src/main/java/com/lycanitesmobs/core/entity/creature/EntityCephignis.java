@@ -4,8 +4,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCephignis extends EntityCreatureAgeable implements IGroupAnimal, IGroupFire {
+public class EntityCephignis extends AgeableCreatureEntity implements IGroupAnimal, IGroupFire {
 
 	WanderGoal wanderAI;
 
@@ -176,7 +176,7 @@ public class EntityCephignis extends EntityCreatureAgeable implements IGroupAnim
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityitem) {
+    public void applyDropEffects(CustomItemEntity entityitem) {
     	entityitem.setCanBurn(false);
     }
 

@@ -5,9 +5,9 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
@@ -36,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire {
+public class EntityLobber extends BaseCreatureEntity implements IMob, IGroupFire {
 
 	WanderGoal wanderAI;
     public boolean lobberMelting = true; // TODO Creature flags.
@@ -137,7 +137,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
 
             // Random Projectiles:
             if(this.ticksExisted % 40 == 0) {
-                EntityProjectileBase projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
+                BaseProjectileEntity projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(2f);
                 projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -256,7 +256,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     @Override
-    public void applyDropEffects(EntityItemCustom entityitem) {
+    public void applyDropEffects(CustomItemEntity entityitem) {
     	entityitem.setCanBurn(false);
     }
     

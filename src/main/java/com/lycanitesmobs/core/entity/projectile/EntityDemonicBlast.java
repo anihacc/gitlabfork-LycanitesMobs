@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityDemonicBlast extends EntityProjectileBase {
+public class EntityDemonicBlast extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;
@@ -31,15 +31,15 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityDemonicBlast(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityDemonicBlast(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityDemonicBlast(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityDemonicBlast(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     
@@ -85,7 +85,7 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     public void fireProjectile() {
     	World world = this.getEntityWorld();
     	
-		EntityProjectileBase projectile;
+		BaseProjectileEntity projectile;
 		if(this.getThrower() != null) {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getThrower());
 			projectile.posX = this.posX;
@@ -140,20 +140,20 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 		}
 		if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
 			int explosionRadius = 2;
-			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
-				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
-				if(entityCreatureBase instanceof EntityCacodemon && !((EntityCacodemon)entityCreatureBase).cacodemonGreifing) {
+			if (this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity) {
+				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) this.getThrower();
+				if(baseCreatureEntity instanceof EntityCacodemon && !((EntityCacodemon) baseCreatureEntity).cacodemonGreifing) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
+				if(baseCreatureEntity.getOwner() == entity || baseCreatureEntity.getControllingPassenger() == entity) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 0) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 0) {
 					explosionRadius += 2;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 2) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 2) {
 					explosionRadius = 2;
 				}
 			}

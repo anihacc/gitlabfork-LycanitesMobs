@@ -1,22 +1,22 @@
 {
   "result": {
-    "item": "lycanitesmobs:battleburrito"
+    "item": "lycanitesmobs:battle_burrito"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:pinkymeatcooked"
+      "item": "lycanitesmobs:cooked_pinky_meat"
     },
     {
-      "item": "lycanitesmobs:makameatcooked"
+      "item": "lycanitesmobs:cooked_maka_meat"
     },
     {
-      "item": "lycanitesmobs:arisaurmeatcooked"
+      "item": "lycanitesmobs:cooked_arisaur_meat"
     },
     {
-      "item": "lycanitesmobs:yetimeatcooked"
+      "item": "lycanitesmobs:cooked_yeti_meat"
     },
     {
-      "item": "lycanitesmobs:aspidmeatcooked"
+      "item": "lycanitesmobs:cooked_aspid_meat"
     }
   ],
   "type": "minecraft:crafting_shapeless"

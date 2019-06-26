@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.projectile.EntityAcidSplash;
@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.HashMap;
 
-public class EntityXaphan extends EntityCreatureTameable implements IMob {
+public class EntityXaphan extends TameableCreatureEntity implements IMob {
 	private int nextSplash = 20;
 
     // ==================================================

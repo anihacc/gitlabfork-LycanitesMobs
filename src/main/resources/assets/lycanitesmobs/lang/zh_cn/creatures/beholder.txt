@@ -1,0 +1,4 @@
+entity.lycanitesmobs.beholder.name=观察者
+entity.lycanitesmobs.beholder.description=大量充满敌意的眼睛和触角，永远渴望魔法能量！
+entity.lycanitesmobs.beholder.habitat=观察者喜欢高高的地方，住在大洞穴和废墟中，晚上出来，可以在山上找到它们。
+entity.lycanitesmobs.beholder.combat=这些畸变会弯曲重力并使魔法无效，从而产生强大的神秘风暴，它们会从口中爆炸，然后这些攻击会向各个方向释放致命的激光，并在撞击中爆炸。

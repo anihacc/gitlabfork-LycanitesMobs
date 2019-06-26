@@ -39,7 +39,7 @@ public class LanguageManager {
 	 * @param key The key to translate into text.
 	 * @return
 	 */
-	public static String translate(String key) {
+	public static String translateOld(String key) {
 		return key;
 		/*if(!getInstance().map.containsKey(key)) {
 			return I18n.format(key);

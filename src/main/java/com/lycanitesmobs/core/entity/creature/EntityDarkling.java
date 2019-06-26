@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
@@ -29,7 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityDarkling extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityDarkling extends TameableCreatureEntity implements IMob, IGroupShadow {
 
     // Data Manager:
     protected static final DataParameter<Integer> LATCH_TARGET = EntityDataManager.createKey(EntityDarkling.class, DataSerializers.VARINT);

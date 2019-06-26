@@ -1,14 +1,12 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 
 public class FollowFuseGoal extends FollowGoal {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
 
 	// Fusion:
 	double fuseRange = 2;
@@ -16,7 +14,7 @@ public class FollowFuseGoal extends FollowGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public FollowFuseGoal(EntityCreatureBase setHost) {
+    public FollowFuseGoal(BaseCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
         this.strayDistance = 0;

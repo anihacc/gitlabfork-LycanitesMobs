@@ -1,0 +1,4 @@
+entity.lycanitesmobs.aglebemu.name=箭毒蛙
+entity.lycanitesmobs.aglebemu.description=一种十分擅长游泳的青蛙，拥有惊人的跳跃能力以及致命的长舌！
+entity.lycanitesmobs.aglebemu.habitat=这些两栖动物通常生活在沼泽地。
+entity.lycanitesmobs.aglebemu.combat=箭毒蛙用它们强有力的、非常长的、锋利的舌头刺穿受害者，并注射一种由传染性细菌构成的致命混合物。

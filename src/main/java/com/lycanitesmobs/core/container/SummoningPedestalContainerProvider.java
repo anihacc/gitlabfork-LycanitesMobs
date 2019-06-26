@@ -20,7 +20,7 @@ public class SummoningPedestalContainerProvider implements INamedContainerProvid
 	@Nullable
 	@Override
 	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return new ContainerSummoningPedestal(windowId, playerInventory, this.summoningPedestal);
+		return new SummoningPedestalContainer(windowId, playerInventory, this.summoningPedestal);
 	}
 
 	@Override

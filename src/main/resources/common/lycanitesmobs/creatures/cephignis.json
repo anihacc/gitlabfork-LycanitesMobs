@@ -62,7 +62,7 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:cephignismeatcooked",
+			"item": "lycanitesmobs:cooked_cephignis_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25

@@ -12,6 +12,9 @@ import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -213,16 +216,16 @@ public class Subspecies {
 	 * Gets the display name of this Subspecies.
 	 * @return The Subspecies title.
 	 */
-	public String getTitle() {
-		String subspeciesName = "";
+	public ITextComponent getTitle() {
+		ITextComponent subspeciesName = new StringTextComponent("");
 		if(this.color != null) {
-			subspeciesName += LanguageManager.translate("subspecies." + this.color + ".name");
+			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.color + ".name"));
 		}
 		if(this.skin != null) {
-			if(!subspeciesName.equals("")) {
-				subspeciesName += " ";
+			if(!subspeciesName.getFormattedText().equals("")) {
+				subspeciesName.appendText(" ");
 			}
-			subspeciesName += LanguageManager.translate("subspecies." + this.skin + ".name");
+			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.skin + ".name"));
 		}
         return subspeciesName;
     }

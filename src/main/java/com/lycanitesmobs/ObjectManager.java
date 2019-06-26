@@ -1,14 +1,13 @@
 package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.block.BlockSlabCustom;
-import com.lycanitesmobs.core.container.ContainerCreature;
-import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
+import com.lycanitesmobs.core.container.CreatureContainer;
+import com.lycanitesmobs.core.container.EquipmentForgeContainer;
+import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -20,7 +19,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -153,7 +151,7 @@ public class ObjectManager {
 	public static EffectBase addPotionEffect(String name, boolean isBad, int color, boolean goodEffect) {
         EffectBase effect = new EffectBase(name, isBad, color);
 		effects.put(name, effect);
-		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", effect);
+		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", effect, name);
 
 		return effect;
 	}
@@ -269,7 +267,7 @@ public class ObjectManager {
             event.getRegistry().register(item);
         }
 
-	    Item.Properties blockItemProperties = new Item.Properties().group(ItemManager.getInstance().blocks);
+	    Item.Properties blockItemProperties = new Item.Properties().group(ItemManager.getInstance().blocksGroup);
 		for(Block block : blocks.values()) {
 			BlockItem blockItem = new BlockItem(block, blockItemProperties);
 			blockItem.setRegistryName(block.getRegistryName());
@@ -322,9 +320,9 @@ public class ObjectManager {
 	// ========== Containers ==========
 	@SubscribeEvent
 	public void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
-		event.getRegistry().register(ContainerCreature.TYPE);
-		event.getRegistry().register(ContainerSummoningPedestal.TYPE);
-		event.getRegistry().register(ContainerEquipmentForge.TYPE);
+		event.getRegistry().register(CreatureContainer.TYPE);
+		event.getRegistry().register(SummoningPedestalContainer.TYPE);
+		event.getRegistry().register(EquipmentForgeContainer.TYPE);
 	}
 
 	// ========== Tile Entities ==========

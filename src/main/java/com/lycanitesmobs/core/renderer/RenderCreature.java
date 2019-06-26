@@ -1,9 +1,7 @@
 package com.lycanitesmobs.core.renderer;
 
 import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.client.Minecraft;
@@ -16,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.lang.reflect.InvocationTargetException;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCreatureBase> {
+public class RenderCreature extends LivingRenderer<BaseCreatureEntity, ModelCreatureBase> {
 	public boolean multipass = true;
 	protected ModelCreatureBase defaultModel;
 
@@ -50,7 +48,7 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 	}
 
 	@Override //doRender
-	public void func_76986_a(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void func_76986_a(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
 			this.field_77045_g = AssetManager.getCreatureModel(entity);
 		} catch (Exception e) {
@@ -66,17 +64,17 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
 	}
 
 	@Override
-	public void renderMultipass(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void renderMultipass(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		//super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	@Override
-	protected void renderModel(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
 	@Override
-	protected void renderLayers(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderLayers(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderLayers(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
@@ -90,7 +88,7 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
  	// ==================================================
     // ========== Main ==========
     @Override
-    protected boolean bindEntityTexture(EntityCreatureBase entity) {
+    protected boolean bindEntityTexture(BaseCreatureEntity entity) {
         ResourceLocation texture = this.func_110775_a(entity);
         if(texture == null)
             return false;
@@ -99,16 +97,16 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
     }
     
     @Override //getEntityTexture
-    protected ResourceLocation func_110775_a(EntityCreatureBase entity) {
+    protected ResourceLocation func_110775_a(BaseCreatureEntity entity) {
 		return entity.getTexture();
 	}
     
     // ========== Equipment ==========
-    protected void bindEquipmentTexture(EntityCreatureBase entity, String equipmentName) {
+    protected void bindEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
         this.bindTexture(this.getEquipmentTexture(entity, equipmentName));
     }
     
-    protected ResourceLocation getEquipmentTexture(EntityCreatureBase entity, String equipmentName) {
+    protected ResourceLocation getEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
     	if(entity != null)
     		return entity.getEquipmentTexture(equipmentName);
         return null;
@@ -119,13 +117,13 @@ public class RenderCreature extends LivingRenderer<EntityCreatureBase, ModelCrea
   	//                     Effects
   	// ==================================================
     @Override //preRenderCallback
-    protected void func_77041_b(EntityCreatureBase entity, float particleTickTime) {
+    protected void func_77041_b(BaseCreatureEntity entity, float particleTickTime) {
         // No effects.
     }
     
     /** If true, display the name of the entity above it. **/
     @Override //canRenderName
-    protected boolean func_177070_b(EntityCreatureBase entity) {
+    protected boolean func_177070_b(BaseCreatureEntity entity) {
         if(!Minecraft.isGuiEnabled()) return false;
     	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
     	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 public class DefendVillageTargetingGoal extends AttackTargetingGoal {
 	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).setDistance(64.0D);
 
-	public DefendVillageTargetingGoal(EntityCreatureBase setHost) {
+	public DefendVillageTargetingGoal(BaseCreatureEntity setHost) {
 		super(setHost);
 	}
 

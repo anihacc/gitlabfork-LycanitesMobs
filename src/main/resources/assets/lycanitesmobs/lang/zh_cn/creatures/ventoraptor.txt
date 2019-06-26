@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ventoraptor.name=风猛禽
+entity.lycanitesmobs.ventoraptor.description=快速的猛禽以难以置信的速度滑翔，可以驯服为已知最快的坐骑之一。
+entity.lycanitesmobs.ventoraptor.habitat=这些猛禽喜欢在草原上狩猎。
+entity.lycanitesmobs.ventoraptor.combat=风猛禽速度非常快，会向猎物跳跃并攻击。

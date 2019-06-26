@@ -1,14 +1,14 @@
 package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.BaseItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
-public class ItemSoulgazer extends ItemBase {
+public class ItemSoulgazer extends BaseItem {
 	
 	// ==================================================
 	//                   Constructor

@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:wargskull"
+      "item": "lycanitesmobs:equipmentpart_wargskull"
     }
   ],
   "type": "minecraft:crafting_shapeless"

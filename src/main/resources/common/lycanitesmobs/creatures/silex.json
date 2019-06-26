@@ -69,8 +69,8 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:silexmeatraw",
-			"burningItem": "lycanitesmobs:silexmeatcooked",
+			"item": "lycanitesmobs:raw_silex_meat",
+			"burningItem": "lycanitesmobs:cooked_silex_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

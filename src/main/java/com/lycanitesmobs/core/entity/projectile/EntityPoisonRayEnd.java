@@ -3,29 +3,29 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
-import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityPoisonRayEnd extends EntityProjectileLaserEnd {
+public class EntityPoisonRayEnd extends LaserEndProjectileEntity {
     
     // ==================================================
  	//                   Constructors
  	// ==================================================
-	public EntityPoisonRayEnd(EntityType<? extends EntityProjectileBase> entityType, World world) {
+	public EntityPoisonRayEnd(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityPoisonRayEnd(EntityType<? extends EntityProjectileBase> entityType, World world, double par2, double par4, double par6, EntityProjectileLaser laser) {
+    public EntityPoisonRayEnd(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, LaserProjectileEntity laser) {
         super(entityType, world, par2, par4, par6, laser);
     }
     
-    public EntityPoisonRayEnd(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooter, EntityProjectileLaser laser) {
+    public EntityPoisonRayEnd(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity shooter, LaserProjectileEntity laser) {
         super(entityType, world, shooter, laser);
     }
     

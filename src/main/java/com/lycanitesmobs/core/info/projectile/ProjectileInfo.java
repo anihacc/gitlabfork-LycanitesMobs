@@ -5,10 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.dispenser.DispenserBehaviorProjectile;
+import com.lycanitesmobs.core.dispenser.BaseProjectileDispenseBehaviour;
 import com.lycanitesmobs.core.entity.EntityFactory;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
@@ -16,16 +16,16 @@ import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -44,10 +44,10 @@ public class ProjectileInfo {
 	public boolean enabled = true;
 
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
-	public Class<? extends EntityProjectileBase> entityClass = EntityProjectileCustom.class;
+	public Class<? extends BaseProjectileEntity> entityClass = CustomProjectileEntity.class;
 
 	/** The constructor used by this creature to create entity instances. **/
-	public Constructor<? extends EntityProjectileBase> entityConstructor;
+	public Constructor<? extends BaseProjectileEntity> entityConstructor;
 
 	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
 	public Class<? extends ModelProjectileBase> modelClass;
@@ -56,7 +56,7 @@ public class ProjectileInfo {
 	public ModInfo modInfo;
 
 	/** The entity type used to store base attributes of this projectile. **/
-	protected EntityType<? extends EntityProjectileBase> entityType;
+	protected EntityType<? extends BaseProjectileEntity> entityType;
 
 	// Item:
 	/** The item used to fire this projectile from a dispenser and on use. **/
@@ -64,7 +64,7 @@ public class ProjectileInfo {
 	/** The name of the charge item for this projectile. Can be automatically generated using the name of this projectile or overridden. **/
 	public String chargeItemName;
 	/** The dispenser behaviour used by this projectile. If null, this item cannot be fired from a dispenser. **/
-	public DispenserBehaviorProjectile dispenserBehaviour;
+	public BaseProjectileDispenseBehaviour dispenserBehaviour;
 
 	// Stats:
 	/** The width of the projectile. **/
@@ -137,7 +137,7 @@ public class ProjectileInfo {
 
 		if(json.has("entityClass")) {
 			try {
-				this.entityClass = (Class<? extends EntityProjectileBase>) Class.forName(json.get("entityClass").getAsString());
+				this.entityClass = (Class<? extends BaseProjectileEntity>) Class.forName(json.get("entityClass").getAsString());
 				this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 			} catch (Exception e) {
 				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
@@ -234,13 +234,13 @@ public class ProjectileInfo {
 		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
 		if(this.chargeItem == null) {
 			Item.Properties properties = new Item.Properties();
-			properties.group(ItemManager.getInstance().items);
+			properties.group(ItemManager.getInstance().itemsGroup);
 			this.chargeItem = new ItemCharge(properties, this);
 			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
 		}
 
 		// Dispenser:
-		this.dispenserBehaviour = new DispenserBehaviorProjectile(this);
+		this.dispenserBehaviour = new BaseProjectileDispenseBehaviour(this);
 		DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
 
 		// Sounds:
@@ -273,7 +273,7 @@ public class ProjectileInfo {
 	 * @return Projectiles's entity type.
 	 */
 	@Nonnull
-	public EntityType<? extends EntityProjectileBase> getEntityType() {
+	public EntityType<? extends BaseProjectileEntity> getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(5);
@@ -307,8 +307,8 @@ public class ProjectileInfo {
 	 * Returns a translated title for this projectile. Ex: Chaos Orb
 	 * @return The display name of this projectile.
 	 */
-	public String getTitle() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".name");
 	}
 
 	/**
@@ -316,8 +316,8 @@ public class ProjectileInfo {
 	 * @param world The world to create the projectile in.
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
-	public EntityProjectileBase createProjectile(World world, LivingEntity entityLivingBase) {
-		return new EntityProjectileCustom(this.getEntityType(), world, entityLivingBase, this);
+	public BaseProjectileEntity createProjectile(World world, LivingEntity entityLivingBase) {
+		return new CustomProjectileEntity(this.getEntityType(), world, entityLivingBase, this);
 	}
 
 	/**
@@ -327,8 +327,8 @@ public class ProjectileInfo {
 	 * @param y The y position of the projectile.
 	 * @param z The z position of the projectile.
 	 */
-	public EntityProjectileBase createProjectile(World world, double x, double y, double z) {
-		return new EntityProjectileCustom(this.getEntityType(), world, x, y, z, this);
+	public BaseProjectileEntity createProjectile(World world, double x, double y, double z) {
+		return new CustomProjectileEntity(this.getEntityType(), world, x, y, z, this);
 	}
 
 	public SoundEvent getLaunchSound() {

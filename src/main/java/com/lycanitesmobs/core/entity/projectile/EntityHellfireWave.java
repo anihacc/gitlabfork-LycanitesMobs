@@ -4,7 +4,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityType;
@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityHellfireWave extends EntityProjectileBase {
+public class EntityHellfireWave extends BaseProjectileEntity {
 
 	// Properties:
     public EntityHellfireWall[][] hellfireWalls;
@@ -30,15 +30,15 @@ public class EntityHellfireWave extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityHellfireWave(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity shooterEntity) {
+    public EntityHellfireWave(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity shooterEntity) {
         super(entityType, world, shooterEntity);
     }
 
-    public EntityHellfireWave(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityHellfireWave(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

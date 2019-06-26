@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public abstract class ProjectileBehaviour {
 	 * Called on the projectile with this behaviour's update.
 	 * @param projectile The projectile entity instance.
 	 */
-	public void onProjectileUpdate(EntityProjectileBase projectile) {
+	public void onProjectileUpdate(BaseProjectileEntity projectile) {
 
 	}
 
@@ -50,7 +50,7 @@ public abstract class ProjectileBehaviour {
 	 * @param world The impact world.
 	 * @param pos The impact block position.
 	 */
-	public void onProjectileImpact(EntityProjectileBase projectile, World world, BlockPos pos) {
+	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
 
 	}
 }

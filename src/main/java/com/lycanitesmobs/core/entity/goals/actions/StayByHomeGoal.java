@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 
@@ -8,7 +8,7 @@ import java.util.EnumSet;
 
 public class StayByHomeGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private boolean enabled = true;
@@ -18,7 +18,7 @@ public class StayByHomeGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public StayByHomeGoal(EntityCreatureBase setHost) {
+    public StayByHomeGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }

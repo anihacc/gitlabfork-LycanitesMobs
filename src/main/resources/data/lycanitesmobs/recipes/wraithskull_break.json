@@ -5,7 +5,7 @@
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:wraithskull"
+      "item": "lycanitesmobs:equipmentpart_wraithskull"
     }
   ],
   "type": "minecraft:crafting_shapeless"

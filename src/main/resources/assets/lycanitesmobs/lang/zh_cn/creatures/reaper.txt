@@ -1,0 +1,4 @@
+entity.lycanitesmobs.reaper.name=收割者
+entity.lycanitesmobs.reaper.description=扭曲的灵魂以死亡为食，收割者会被死亡所吸引，有时会误以为睡着的人已经死了！
+entity.lycanitesmobs.reaper.habitat=这些灵魂有时出现在生物死亡时，有时出现在某人试图睡觉时。
+entity.lycanitesmobs.reaper.combat=收割者远程攻击会使它们的受害者在恐惧中奔跑！

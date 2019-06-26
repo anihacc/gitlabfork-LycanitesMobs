@@ -35,7 +35,7 @@ public class GuiCreatureTypeList extends GuiCreatureFilterList {
 		int groupIndex = 0;
 		List<CreatureType> creatureTypes = new ArrayList<>();
 		creatureTypes.addAll(CreatureManager.getInstance().creatureTypes.values());
-		creatureTypes.sort(Comparator.comparing(CreatureType::getTitle));
+		creatureTypes.sort(Comparator.comparing(CreatureType::getName));
 		for(CreatureType creatureType : creatureTypes) {
 			if(this.screen.playerExt.beastiary.getCreaturesDescovered(creatureType) > 0) {
 				this.creatureTypeList.put(groupIndex++, creatureType);

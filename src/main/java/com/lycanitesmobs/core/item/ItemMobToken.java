@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.item.Item;
 
 
-public class ItemMobToken extends ItemBase {
+public class ItemMobToken extends BaseItem {
 
 	// ==================================================
 	//                   Constructor

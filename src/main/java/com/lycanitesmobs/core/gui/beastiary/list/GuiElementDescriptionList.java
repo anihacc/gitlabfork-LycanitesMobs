@@ -5,6 +5,9 @@ import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
 public class GuiElementDescriptionList extends BaseList {
@@ -69,31 +72,41 @@ public class GuiElementDescriptionList extends BaseList {
 		}
 
 		// Summary:
-		String text = "\u00A7l" + elementInfo.getTitle() + ": " + "\u00A7r";
-		text += "\n" + elementInfo.getDescription();
+		ITextComponent text = new StringTextComponent("\u00A7l")
+				.appendSibling(elementInfo.getTitle())
+				.appendText(": " + "\u00A7r\n")
+				.appendSibling(elementInfo.getDescription());
 
 		// Buffs:
-		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.elements.buffs") + ": " + "\u00A7r";
+		text.appendText("\n\n\u00A7l")
+			.appendSibling(new TranslationTextComponent("gui.beastiary.elements.buffs"))
+			.appendText(": " + "\u00A7r");
 		for(String buff : this.elementInfo.buffs) {
 			ResourceLocation effectResource = new ResourceLocation(buff);
-			text += "\n" + LanguageManager.translate("effect." + effectResource.getPath());
-			text += ": " + LanguageManager.translate("effect." + effectResource.getPath() + ".description");
+			text.appendText("\n").appendSibling(new TranslationTextComponent("effect." + effectResource.getPath()));
+			text.appendText(": ").appendSibling(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
 		// Debuffs:
-		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.elements.debuffs") + ": " + "\u00A7r";
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.elements.debuffs"))
+				.appendText(": " + "\u00A7r");
 		for(String debuff : this.elementInfo.debuffs) {
 			if("burning".equals(debuff)) {
-				text += "\n" + LanguageManager.translate("effect.burning");
-				text += ": " + LanguageManager.translate("effect.burning.description");
+				text.appendText("\n")
+				.appendSibling(new TranslationTextComponent("effect.burning"))
+				.appendText(": ")
+				.appendSibling(new TranslationTextComponent("effect.burning.description"));
 				continue;
 			}
 			ResourceLocation effectResource = new ResourceLocation(debuff);
-			text += "\n" + LanguageManager.translate("effect." + effectResource.getPath());
-			text += ": " + LanguageManager.translate("effect." + effectResource.getPath() + ".description");
+			text.appendText("\n")
+				.appendSibling(new TranslationTextComponent("effect." + effectResource.getPath()))
+				.appendText(": ")
+				.appendSibling(new TranslationTextComponent("effect." + effectResource.getPath() + ".description"));
 		}
 
-		return text;
+		return text.getFormattedText();
 	}
 
 	/** Overridden to change the background gradient without copying over an entire function. **/

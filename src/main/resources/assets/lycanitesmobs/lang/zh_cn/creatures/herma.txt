@@ -1,0 +1,4 @@
+entity.lycanitesmobs.herma.name=巨钳蟹
+entity.lycanitesmobs.herma.description=巨蟹！它们通常十分保守，除非有东西离得太近了！
+entity.lycanitesmobs.herma.habitat=这些生物在咸水海洋和海滩上发现。
+entity.lycanitesmobs.herma.combat=巨钳蟹用它们强有力的爪子攻击。

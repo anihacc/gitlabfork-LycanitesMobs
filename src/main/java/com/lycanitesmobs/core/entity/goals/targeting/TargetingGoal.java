@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public abstract class TargetingGoal extends Goal {
     // Targets:
-    protected EntityCreatureBase host;
+    protected BaseCreatureEntity host;
     protected LivingEntity target;
     
     // Targeting:
@@ -41,7 +41,7 @@ public abstract class TargetingGoal extends Goal {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public TargetingGoal(EntityCreatureBase setHost) {
+    public TargetingGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 
         this.targetSelector = entity -> {
@@ -169,8 +169,8 @@ public abstract class TargetingGoal extends Goal {
 
             while (possibleAllies.hasNext()) {
                 LivingEntity possibleAlly = (LivingEntity)possibleAllies.next();
-                if(possibleAlly instanceof EntityCreatureBase) {
-                    EntityCreatureBase possibleCreatureAlly = (EntityCreatureBase)possibleAlly;
+                if(possibleAlly instanceof BaseCreatureEntity) {
+                    BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity)possibleAlly;
                     if (possibleCreatureAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleCreatureAlly.canAttack(this.target.getType()) && possibleCreatureAlly.canAttack(this.target))
                         possibleCreatureAlly.setAttackTarget(this.target);
                 }

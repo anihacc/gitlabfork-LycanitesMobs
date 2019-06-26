@@ -26,16 +26,16 @@ public abstract class JSONLoader {
 
 	/**
 	 * Loads all JSON files into this manager. Should only be done on pre-init.
-	 * @param groupInfo The group that this manager should load from.
-	 * @param name The name of this manager, used for debug keys and logging, etc.
+	 * @param modInfo The group that this manager should load from.
+	 * @param loadGroup The name of the group of JSON files being loaded, used both for debug output and for passing to parseJson for loading multiple sets of json files.
 	 * @param dataPath The path to load json files from relative to the group data folder and the config folder.
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
 	 * @param fileLoader The file loader to get paths from.
 	 * @param streamLoader The stream loader to get jar files from.
 	 */
-	public void loadAllJson(ModInfo groupInfo, String name, String dataPath, String mapKey, boolean loadCustom, @Nullable String jsonType, FileLoader fileLoader, StreamLoader streamLoader) {
-		LycanitesMobs.logDebug(name, "Loading JSON " + name + "...");
+	public void loadAllJson(ModInfo modInfo, String loadGroup, String dataPath, String mapKey, boolean loadCustom, @Nullable String jsonType, FileLoader fileLoader, StreamLoader streamLoader) {
+		LycanitesMobs.logDebug(loadGroup, "Loading JSON " + loadGroup + "...");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> jsons = new HashMap<>();
 
@@ -63,35 +63,35 @@ public abstract class JSONLoader {
 
 
 		// Parse Json:
-		LycanitesMobs.logDebug(name, "Loading " + jsons.size() + " " + name + "...");
+		LycanitesMobs.logDebug(loadGroup, "Loading " + jsons.size() + " " + loadGroup + "...");
 		for(String jsonName : jsons.keySet()) {
 			JsonObject json;
 			try {
 				json = jsons.get(jsonName);
-				LycanitesMobs.logDebug(name, "Loading " + name + " JSON: " + json);
+				LycanitesMobs.logDebug(loadGroup, "Loading " + loadGroup + " JSON: " + json);
 				if(json.isJsonNull())
 					throw new RuntimeException("Tried to load JSON data from a null json object.");
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.logError("Parsing error loading JSON " + name + ": " + jsonName);
+				LycanitesMobs.logError("Parsing error loading JSON " + loadGroup + ": " + jsonName);
 				throw new RuntimeException(e);
 			}
 			catch(Exception e) {
-				LycanitesMobs.logError("There was a problem loading JSON " + name + ": " + jsonName);
+				LycanitesMobs.logError("There was a problem loading JSON " + loadGroup + ": " + jsonName);
 				throw new RuntimeException(e);
 			}
-			this.parseJson(groupInfo, name, json);
+			this.parseJson(modInfo, loadGroup, json);
 		}
 	}
 
 
 	/**
 	 * Reads a JSON object and adds it to this JSON Loader.
-	 * @param groupInfo The Group Info to load with.
-	 * @param json The Json group name.
+	 * @param modInfo The Mod Info to load with.
+	 * @param loadGroup The Json group name.
 	 * @param json The Json Object to read.
 	 */
-	public abstract void parseJson(ModInfo groupInfo, String name, JsonObject json);
+	public abstract void parseJson(ModInfo modInfo, String loadGroup, JsonObject json);
 
 
 	/**

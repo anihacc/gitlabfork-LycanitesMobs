@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -19,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityDevilGatling extends EntityProjectileBase {
+public class EntityDevilGatling extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;
@@ -28,15 +27,15 @@ public class EntityDevilGatling extends EntityProjectileBase {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world, LivingEntity entityLivingBase) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLivingBase) {
         super(entityType, world, entityLivingBase);
     }
 
-    public EntityDevilGatling(EntityType<? extends EntityProjectileBase> entityType, World world, double x, double y, double z) {
+    public EntityDevilGatling(EntityType<? extends BaseProjectileEntity> entityType, World world, double x, double y, double z) {
         super(entityType, world, x, y, z);
     }
     

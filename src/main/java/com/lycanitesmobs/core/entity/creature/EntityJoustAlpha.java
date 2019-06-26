@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
@@ -23,7 +23,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoustAlpha extends EntityCreatureAgeable implements IGroupAlpha {
+public class EntityJoustAlpha extends AgeableCreatureEntity implements IGroupAlpha {
 	
 	// ==================================================
  	//                    Constructor
@@ -107,7 +107,7 @@ public class EntityJoustAlpha extends EntityCreatureAgeable implements IGroupAlp
     // ==================================================
     // ========== Create Child ==========
 	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partner) {
-		return (EntityCreatureAgeable) CreatureManager.getInstance().getCreature("joust").createEntity(this.getEntityWorld());
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
+		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("joust").createEntity(this.getEntityWorld());
 	}
 }

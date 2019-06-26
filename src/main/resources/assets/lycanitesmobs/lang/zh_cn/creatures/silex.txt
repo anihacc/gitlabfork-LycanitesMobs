@@ -1,0 +1,4 @@
+entity.lycanitesmobs.silex.name=青金石鱼
+entity.lycanitesmobs.silex.description=美丽的鱼，鳞片上镶嵌着青金石。众所周知，青金石鱼会吃掉彼此鳞片上的青金石以及岩石形成的天然岩层。
+entity.lycanitesmobs.silex.habitat=这些鱼经常在淡水湖泊和河流中发现。
+entity.lycanitesmobs.silex.combat=青金石鱼是和平的生物。

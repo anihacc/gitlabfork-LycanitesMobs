@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import net.minecraft.entity.CreatureAttribute;
@@ -14,7 +14,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityBanshee extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityBanshee extends TameableCreatureEntity implements IMob, IGroupShadow {
 
 	private int strafeTime = 60;
 

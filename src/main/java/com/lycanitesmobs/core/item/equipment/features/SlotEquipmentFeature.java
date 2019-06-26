@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.item.equipment.features;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import com.lycanitesmobs.core.localisation.LanguageManager;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class SlotEquipmentFeature extends EquipmentFeature {
 	/** The type of slot that this adds to the part. Can be: head, blade, axe, pike or jewel. Shouldn't be base else you can have infinitely large weapons! **/
@@ -15,11 +17,11 @@ public class SlotEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
+	public ITextComponent getDescription(ItemStack itemStack, int level) {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.slotType;
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" " + this.slotType);
 		return description;
 	}
 }

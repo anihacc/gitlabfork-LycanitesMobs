@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.PathNavigator;
@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class MoveVillageGoal extends Goal {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private int frequency = 200;
@@ -25,7 +25,7 @@ public class MoveVillageGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public MoveVillageGoal(EntityCreatureBase setHost) {
+    public MoveVillageGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }

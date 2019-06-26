@@ -4,12 +4,11 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.gui.BaseScreen;
+import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
@@ -20,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -153,15 +153,15 @@ public abstract class BeastiaryScreen extends BaseScreen {
 		ButtonBase button;
 
 		// Top Menu:
-		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.index.title"), this);
+		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.index.title").getFormattedText(), this);
 		this.buttons.add(button);
-		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.creatures"), this);
+		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.creatures").getFormattedText(), this);
 		this.buttons.add(button);
-		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.pets"), this);
+		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.pets").getFormattedText(), this);
 		this.buttons.add(button);
-		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.summoning"), this);
+		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.summoning").getFormattedText(), this);
 		this.buttons.add(button);
-		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, LanguageManager.translate("gui.beastiary.elements"), this);
+		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.elements").getFormattedText(), this);
 		this.buttons.add(button);
 	}
 
@@ -172,9 +172,9 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 	@Override
 	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		String title = "\u00A7l\u00A7n" + this.getTitle();
-		float width = this.getFontRenderer().getStringWidth(title);
-		this.getFontRenderer().drawString(title, this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
+		ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").appendSibling(this.getTitle());
+		float width = this.getFontRenderer().getStringWidth(title.getFormattedText());
+		this.getFontRenderer().drawString(title.getFormattedText(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
 	}
 
 	/**
@@ -243,19 +243,19 @@ public abstract class BeastiaryScreen extends BaseScreen {
 		try {
 			// Subspecies:
 			boolean subspeciesMatch = true;
-			if(this.creaturePreviewEntity instanceof EntityCreatureBase) {
-				subspeciesMatch = ((EntityCreatureBase)this.creaturePreviewEntity).getSubspeciesIndex() == this.getDisplaySubspecies(creatureInfo);
+			if(this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+				subspeciesMatch = ((BaseCreatureEntity)this.creaturePreviewEntity).getSubspeciesIndex() == this.getDisplaySubspecies(creatureInfo);
 			}
 
 			// Create New:
 			if(this.creaturePreviewEntity == null || this.creaturePreviewEntity.getClass() != creatureInfo.entityClass || !subspeciesMatch) {
 				this.creaturePreviewEntity = creatureInfo.entityClass.getConstructor(new Class[]{World.class}).newInstance(this.player.getEntityWorld());
 				this.creaturePreviewEntity.onGround = true;
-				if (this.creaturePreviewEntity instanceof EntityCreatureBase) {
-					((EntityCreatureBase) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
+				if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+					((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
 				}
-				if (this.creaturePreviewEntity instanceof EntityCreatureAgeable) {
-					((EntityCreatureAgeable) this.creaturePreviewEntity).setGrowingAge(0);
+				if (this.creaturePreviewEntity instanceof AgeableCreatureEntity) {
+					((AgeableCreatureEntity) this.creaturePreviewEntity).setGrowingAge(0);
 				}
 				this.onCreateDisplayEntity(creatureInfo, this.creaturePreviewEntity);
 				this.playCreatureSelectSound(creatureInfo);
@@ -272,8 +272,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
 				float lookX = (float)posX - mouseX;
 				float lookY = (float)posY - mouseY;
 				this.creaturePreviewTicks += partialTicks;
-				if(this.creaturePreviewEntity instanceof EntityCreatureBase) {
-					EntityCreatureBase previewCreatureBase = (EntityCreatureBase)this.creaturePreviewEntity;
+				if(this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+					BaseCreatureEntity previewCreatureBase = (BaseCreatureEntity)this.creaturePreviewEntity;
 					previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
 				}
 

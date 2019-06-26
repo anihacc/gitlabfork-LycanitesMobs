@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -11,8 +11,8 @@ import java.util.List;
 
 public class MateGoal extends Goal {
 	// Targets:
-    private EntityCreatureAgeable host;
-    private EntityCreatureAgeable partner;
+    private AgeableCreatureEntity host;
+    private AgeableCreatureEntity partner;
     
     // Properties:
     private double speed = 1.0D;
@@ -24,7 +24,7 @@ public class MateGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public MateGoal(EntityCreatureAgeable setHost) {
+    public MateGoal(AgeableCreatureEntity setHost) {
         this.host = setHost;
         this.targetClass = this.host.getClass();
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -103,17 +103,17 @@ public class MateGoal extends Goal {
     // ==================================================
   	//                    Get Partner
   	// ==================================================
-    private EntityCreatureAgeable getPartner() {
+    private AgeableCreatureEntity getPartner() {
         float distance = 8.0F;
         List possibleMates = this.host.getEntityWorld().getEntitiesWithinAABB(this.targetClass, this.host.getBoundingBox().grow((double)distance, (double)distance, (double)distance));
         double closestDistance = Double.MAX_VALUE;
-        EntityCreatureAgeable newMate = null;
+        AgeableCreatureEntity newMate = null;
         Iterator possibleMate = possibleMates.iterator();
         
         while(possibleMate.hasNext())  {
         	LivingEntity nextEntity = (LivingEntity)possibleMate.next();
-        	if(nextEntity instanceof EntityCreatureAgeable) {
-	        	EntityCreatureAgeable testMate = (EntityCreatureAgeable)nextEntity;
+        	if(nextEntity instanceof AgeableCreatureEntity) {
+	        	AgeableCreatureEntity testMate = (AgeableCreatureEntity)nextEntity;
 	            if(this.host.canBreedWith(testMate) && this.host.getDistance(testMate) < closestDistance) {
 	            	newMate = testMate;
 	            	closestDistance = this.host.getDistance(testMate);

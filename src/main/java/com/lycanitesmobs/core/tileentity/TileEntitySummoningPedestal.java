@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
@@ -39,7 +39,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public long updateTick = 0;
 
     // Summoning Properties:
-    public EntityPortal summoningPortal;
+    public PortalEntity summoningPortal;
     public UUID ownerUUID;
     public String ownerName = "";
     public SummonSet summonSet;
@@ -60,7 +60,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public int summoningFuelAmount = 10 * 60 * 20; // 10 minutes per Redstone Dust
 
     // Summoned Minions:
-    public List<EntityCreatureBase> minions = new ArrayList<>();
+    public List<BaseCreatureEntity> minions = new ArrayList<>();
     protected String[] loadMinionIDs; // Temporary array for initially populating from NBT data in update.
 
     // Block:
@@ -105,12 +105,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         // Load Minion IDs:
         if(this.loadMinionIDs != null) {
             int range = 20;
-            List nearbyEntities = this.getWorld().getEntitiesWithinAABB(EntityCreatureBase.class,
+            List nearbyEntities = this.getWorld().getEntitiesWithinAABB(BaseCreatureEntity.class,
                     new AxisAlignedBB(this.getPos().getX() - range, this.getPos().getY() - range, this.getPos().getZ() - range,
                             this.getPos().getX() + range, this.getPos().getY() + range, this.getPos().getZ() + range));
             Iterator possibleEntities = nearbyEntities.iterator();
             while(possibleEntities.hasNext()) {
-                EntityCreatureBase possibleEntity = (EntityCreatureBase)possibleEntities.next();
+                BaseCreatureEntity possibleEntity = (BaseCreatureEntity)possibleEntities.next();
                 for(String loadMinionID : this.loadMinionIDs) {
                     UUID uuid = null;
                     try { uuid = UUID.fromString(loadMinionID); } catch (Exception e) {}
@@ -131,7 +131,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
 			// Summoning Portal:
 			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
-				this.summoningPortal = new EntityPortal((EntityType<? extends EntityPortal>) ProjectileManager.getInstance().oldProjectileTypes.get(EntityPortal.class), this.getWorld(), this);
+				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getWorld(), this);
 				this.summoningPortal.setProjectileScale(8);
 				this.getWorld().addEntity(this.summoningPortal);
 			}
@@ -139,7 +139,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			// Update Minions:
 			if (this.updateTick % 100 == 0) {
 				this.capacity = 0;
-				for (EntityCreatureBase minion : this.minions.toArray(new EntityCreatureBase[this.minions.size()])) {
+				for (BaseCreatureEntity minion : this.minions.toArray(new BaseCreatureEntity[this.minions.size()])) {
 					if (minion == null || !minion.isAlive())
 						this.minions.remove(minion);
 					else {
@@ -258,7 +258,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     // ========== Minion Behaviour ==========
     /** Applies the minion behaviour to the summoned player owned minion. **/
-    public void applyMinionBehaviour(EntityCreatureTameable minion) {
+    public void applyMinionBehaviour(TameableCreatureEntity minion) {
         if(this.summonSet != null) {
             this.summonSet.applyBehaviour(minion);
             minion.applySubspecies(this.summonSet.subspecies);

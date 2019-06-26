@@ -7,22 +7,19 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.stats.Stat;
-import net.minecraft.stats.StatType;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,10 +39,10 @@ public class CreatureInfo {
 	protected String name;
 
 	/** The entity class used by this creature. **/
-	public Class<? extends EntityCreatureBase> entityClass;
+	public Class<? extends BaseCreatureEntity> entityClass;
 
 	/** The constructor used by this creature to create entity instances. **/
-	public Constructor<? extends EntityCreatureBase> entityConstructor;
+	public Constructor<? extends BaseCreatureEntity> entityConstructor;
 
 	/** The model class used by this creature. **/
 	@OnlyIn(Dist.CLIENT)
@@ -164,7 +161,7 @@ public class CreatureInfo {
 
 		// Entity Class:
 		try {
-			this.entityClass = (Class<? extends EntityCreatureBase>) Class.forName(json.get("entityClass").getAsString());
+			this.entityClass = (Class<? extends BaseCreatureEntity>) Class.forName(json.get("entityClass").getAsString());
 			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
 		}
 		catch(Exception e) {
@@ -343,7 +340,7 @@ public class CreatureInfo {
 		ObjectManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
 		ObjectManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
 		ObjectManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
-		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
+		if(this.isSummonable() || this.isTameable() || TameableCreatureEntity.class.isAssignableFrom(this.entityClass)) {
 			ObjectManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
 			ObjectManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
 		}
@@ -417,8 +414,8 @@ public class CreatureInfo {
 	 * Returns a translated title for this creature. Ex: Lurker
 	 * @return The display name of this creature.
 	 */
-	public String getTitle() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
+	public ITextComponent getTitle() {
+		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".name");
 	}
 
 
@@ -426,8 +423,8 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public String getDescription() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".description");
+	public ITextComponent getDescription() {
+		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".description");
 	}
 
 
@@ -435,8 +432,8 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public String getHabitatDescription() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".habitat");
+	public ITextComponent getHabitatDescription() {
+		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".habitat");
 	}
 
 
@@ -444,8 +441,29 @@ public class CreatureInfo {
 	 * Returns a translated description of this creature.
 	 * @return The creature description.
 	 */
-	public String getCombatDescription() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".combat");
+	public ITextComponent getCombatDescription() {
+		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".combat");
+	}
+
+
+	/**
+	 * Returns a comma separated list of Elements used by this Creature.
+	 * @return The Elements used by this Creature.
+	 */
+	public ITextComponent getElementNames() {
+		if(this.elements.isEmpty()) {
+			return new TranslationTextComponent("common.none");
+		}
+		ITextComponent elementNames = new StringTextComponent("");
+		boolean firstElement = true;
+		for(ElementInfo element : this.elements) {
+			if(!firstElement) {
+				elementNames.appendText(", ");
+			}
+			firstElement = false;
+			elementNames.appendSibling(element.getTitle());
+		}
+		return elementNames;
 	}
 
 
@@ -464,32 +482,11 @@ public class CreatureInfo {
 
 
 	/**
-	 * Returns a comma separated list of Elements used by this Creature.
-	 * @return The Elements used by this Creature.
-	 */
-	public String getElementNames() {
-		if(this.elements.isEmpty()) {
-			return "None";
-		}
-		String elementNames = "";
-		boolean firstElement = true;
-		for(ElementInfo element : this.elements) {
-			if(!firstElement) {
-				elementNames += ", ";
-			}
-			firstElement = false;
-			elementNames += element.getTitle();
-		}
-		return elementNames;
-	}
-
-
-	/**
 	 * Returns if this creature is summonable.
 	 * @return True if creature is summonable.
 	 */
 	public boolean isSummonable() {
-		return this.summonable && EntityCreatureTameable.class.isAssignableFrom(this.entityClass);
+		return this.summonable && TameableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 
@@ -498,7 +495,7 @@ public class CreatureInfo {
 	 * @return True if creature is tameable.
 	 */
 	public boolean isTameable() {
-		return this.tameable && EntityCreatureTameable.class.isAssignableFrom(this.entityClass);
+		return this.tameable && TameableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 
@@ -507,7 +504,7 @@ public class CreatureInfo {
 	 * @return True if creature is mountable.
 	 */
 	public boolean isMountable() {
-		return this.mountable && EntityCreatureRideable.class.isAssignableFrom(this.entityClass);
+		return this.mountable && RideableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.argus.name=阿格斯
+entity.lycanitesmobs.argus.description=破坏性的混沌元素，阿格斯在它们身后传播浩劫。
+entity.lycanitesmobs.argus.habitat=作为混沌元素，阿格斯是当区域内存在大量混沌时形成的，这可能是由多种因素造成的，但通常破坏其他元素会导致高浓度的混沌。
+entity.lycanitesmobs.argus.combat=这些元素通过发射一个具有集中混沌能量的球体进行攻击，这些球体的轨迹可能无法预测，并且在受到冲击时，这些球体破坏了其真实的结构，导致不稳定。
