@@ -1,0 +1,4 @@
+entity.lycanitesmobs.aspid.name=阿斯匹徳
+entity.lycanitesmobs.aspid.description=安静的爬行动物背上长着奇怪的东西。阿斯匹徳喜欢蘑菇，可以和它们一起繁殖。但是要小心，因为它们不断地释放出一团毒云，通常会在它们身后留下一道毒云。
+entity.lycanitesmobs.aspid.habitat=这些生物通常被发现在沼泽地，黑森林和蘑菇岛，因为它们对菇类的爱！
+entity.lycanitesmobs.aspid.combat=阿斯匹徳通常是和平的，但它们散发出的毒云是相当危险的，但这些并不能阻止热情的农民！

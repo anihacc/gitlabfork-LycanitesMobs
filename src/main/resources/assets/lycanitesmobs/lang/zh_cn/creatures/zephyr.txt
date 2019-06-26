@@ -1,0 +1,4 @@
+entity.lycanitesmobs.zephyr.name=微风之灵
+entity.lycanitesmobs.zephyr.description=凶猛的闪电元素，周围有强大的电场。火元素和幻灵元素可以融合，创造出强大的微风之灵。
+entity.lycanitesmobs.zephyr.habitat=作为闪电元素，微风之灵从雷暴等电性天气中显现出来，它们也很少在常规暴雨中出现。
+entity.lycanitesmobs.zephyr.combat=微风之灵将电击靠近它们的任何敌人并直接攻击它们导致麻痹。

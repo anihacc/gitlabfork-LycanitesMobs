@@ -1,0 +1,4 @@
+entity.lycanitesmobs.clink.name=劈楔
+entity.lycanitesmobs.clink.description=奇怪的小鬼，在它们的手臂上迅速长出金属刀片，然后很容易被分离。
+entity.lycanitesmobs.clink.habitat=这些小鬼经常在沙漠中被发现，因为它们以消耗矿物质生，就像肉一样，它们没有翅膀，所以在山区没有。
+entity.lycanitesmobs.clink.combat=劈楔分离它们生长的刀刃并向敌人投掷。

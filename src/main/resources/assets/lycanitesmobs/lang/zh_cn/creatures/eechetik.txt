@@ -1,0 +1,4 @@
+entity.lycanitesmobs.eechetik.name=毒元素
+entity.lycanitesmobs.eechetik.description=充满致命瘟疫的危险有毒元素会感染周围的人。它们喜欢蘑菇！水元素和阿格斯元素也可以融合成一个强大的毒元素。
+entity.lycanitesmobs.eechetik.habitat=作为有毒元素，毒元素在有毒和寄生生长的区域出现，蘑菇似乎经常导致它们在黑暗中出现。
+entity.lycanitesmobs.eechetik.combat=这些元素的外观和攻击会像检查一样，它们的许多细臂，它们的攻击会迅速传播瘟疫，因此需要准备治疗物品。

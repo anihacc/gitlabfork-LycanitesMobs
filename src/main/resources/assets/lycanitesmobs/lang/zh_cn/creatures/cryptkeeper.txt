@@ -1,0 +1,4 @@
+entity.lycanitesmobs.cryptkeeper.name=地穴守护者
+entity.lycanitesmobs.cryptkeeper.description=木乃伊化的尸体，不像通常的亡灵，它们不会在阳光下燃烧。
+entity.lycanitesmobs.cryptkeeper.habitat=这些亡灵经常在夜间的沙漠出没。
+entity.lycanitesmobs.cryptkeeper.combat=地穴守护者使用近战攻击并传播造成厌恶的有害细菌。

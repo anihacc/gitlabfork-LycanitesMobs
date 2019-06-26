@@ -1,0 +1,4 @@
+entity.lycanitesmobs.serpix.name=瑟皮克斯
+entity.lycanitesmobs.serpix.description=臭名昭著的冰虫在冰冻的土地上挖洞。
+entity.lycanitesmobs.serpix.habitat=这些蠕虫可以在大型的胶状冰池和冰原等寒冷地区找到。
+entity.lycanitesmobs.serpix.combat=瑟皮克斯通过咆哮产生一场致命的暴风雪，在地面上投下霜火，造成伤害和减速。

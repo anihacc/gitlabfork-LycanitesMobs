@@ -1,0 +1,4 @@
+entity.lycanitesmobs.tremor.name=地元素
+entity.lycanitesmobs.tremor.description=爆炸性震动元素，地元素具有难以置信的破坏性。地魔和阿格斯元素可以融合产生强烈的震动。
+entity.lycanitesmobs.tremor.habitat=作为震动元素，地元素表现为燃烧和响亮的声音，因此偶尔表现为大爆炸。
+entity.lycanitesmobs.tremor.combat=地元素通过在周围制造小爆炸进行攻击，它们相当弱，但具有相当大的破坏性，应该迅速消灭。

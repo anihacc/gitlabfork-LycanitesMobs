@@ -1,0 +1,4 @@
+entity.lycanitesmobs.salamander.name=蝾螈
+entity.lycanitesmobs.salamander.description=适应了难以置信的温度的致命两栖动物。驯服的蝾螈可以成为巨大的坐骑，甚至可以保护它们的骑手不受火的伤害！
+entity.lycanitesmobs.salamander.habitat=这些生物生活在熔岩湖中。
+entity.lycanitesmobs.salamander.combat=蝾螈使用烈火撕咬，导致燃烧。

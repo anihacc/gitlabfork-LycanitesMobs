@@ -1,0 +1,4 @@
+entity.lycanitesmobs.quillbeast.name=毛羽兽
+entity.lycanitesmobs.quillbeast.description=一种大型啮齿类动物，它们很容易受到惊吓，会从远处发射这些棘刺。
+entity.lycanitesmobs.quillbeast.habitat=这些动物可以在草原、热带草原和森林中找到。
+entity.lycanitesmobs.quillbeast.combat=毛羽兽用致命的棘刺攻击，同时割穿长草。

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.gorger.name=熔岩虫
+entity.lycanitesmobs.gorger.description=巨大的岩浆蠕虫在熔岩中游动，它们也能在陆地上生存，像泥土一样钻入柔软地面中。
+entity.lycanitesmobs.gorger.habitat=这些生物可以在大片熔岩中找到。
+entity.lycanitesmobs.gorger.combat=熔岩虫通过在各处释放几个熔岩球进行攻击，虽然这些攻击很强大，但它们不能准确击中目标。

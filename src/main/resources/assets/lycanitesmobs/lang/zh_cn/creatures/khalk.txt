@@ -1,0 +1,4 @@
+entity.lycanitesmobs.khalk.name=熔岩鳄龟
+entity.lycanitesmobs.khalk.description=大型岩浆动物以其难以置信的防御和致命的进攻而闻名。死后，它们的身体会分解成熔岩！
+entity.lycanitesmobs.khalk.habitat=这些野兽可以在地下熔岩湖深处找到。
+entity.lycanitesmobs.khalk.combat=熔岩鳄龟使用非常强大的近战攻击，可以造成燃烧，但是速度非常慢。当它们变成一个临时的熔岩小池子时，一定要在它们死去的时候留下来。

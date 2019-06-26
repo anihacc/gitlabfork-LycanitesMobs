@@ -1,0 +1,4 @@
+entity.lycanitesmobs.remobra.name=蛇龙
+entity.lycanitesmobs.remobra.description=一种可以飞在天空进行喷射毒液的蛇，如果它们喷吐的落在地面上，那么它会爆出一团毒雾。
+entity.lycanitesmobs.remobra.habitat=这些龙可以在沼泽和黑暗森林中找到。
+entity.lycanitesmobs.remobra.combat=蛇龙通过喷射毒液进行远程攻击，如果它们吐出的毒液击中受害者，就会造成瘟疫，如果它们吐出的毒液击中地面，就会形成一团毒雾。

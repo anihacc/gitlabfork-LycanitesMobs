@@ -1,0 +1,4 @@
+entity.lycanitesmobs.erepede.name=艾勒派德
+entity.lycanitesmobs.erepede.description=一种近似昆虫的岩石类生物，它们喜欢打猎，也会在视线中攻击死亡之虫。
+entity.lycanitesmobs.erepede.habitat=这些昆虫可以在沙漠和平顶山等炎热干燥的地形上游荡。
+entity.lycanitesmobs.erepede.combat=艾勒派德发出危险的泥浆弹，虚弱目标。

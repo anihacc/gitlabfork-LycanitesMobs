@@ -1,0 +1,4 @@
+entity.lycanitesmobs.thresher.name=蛇颈龙
+entity.lycanitesmobs.thresher.description=巨大而雄伟的水生物，有着巨大的胃口和强有力的鳍，能够制造巨大的漩涡来吸引猎物！非常危险！
+entity.lycanitesmobs.thresher.habitat==这些水生生物既可在淡水湖、大型河流中找到，也可在咸水海洋中找到。
+entity.lycanitesmobs.thresher.combat=蛇颈龙制造大型漩涡，从周围拉入猎物，在陆地上甚至不安全，因为它们也会把猎物拉向空中。

@@ -1,0 +1,14 @@
+creaturetype.spawn=产卵
+creaturetype.beast.name=野兽
+creaturetype.avian.name=禽类
+creaturetype.arthropod.name=节肢动物
+creaturetype.plant.name=植物
+creaturetype.aquatic.name=水生生物
+creaturetype.aberration.name=畸变
+creaturetype.undead.name=亡灵生物
+creaturetype.brute.name=狂兽
+creaturetype.imp.name=小鬼
+creaturetype.demon.name=恶魔
+creaturetype.angel.name=天使
+creaturetype.elemental.name=元素生物
+creaturetype.dragon.name=龙

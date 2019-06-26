@@ -1,0 +1,4 @@
+entity.lycanitesmobs.joust.name=骑斗士
+entity.lycanitesmobs.joust.description=凶猛的节肢动物，它们可以被繁殖，喜欢仙人掌绿！
+entity.lycanitesmobs.joust.habitat=这些生物可以在沙漠和平顶山中找到。
+entity.lycanitesmobs.joust.combat=骑斗士通常是和平的，但如果被攻击，会被咬回去，并遵循攻击性初代骑斗士的命令。

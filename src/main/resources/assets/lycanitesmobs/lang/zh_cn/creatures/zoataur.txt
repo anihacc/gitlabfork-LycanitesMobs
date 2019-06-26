@@ -1,0 +1,4 @@
+entity.lycanitesmobs.zoataur.name=半兽马
+entity.lycanitesmobs.zoataur.description=有厚鳞的大型爬行动物。
+entity.lycanitesmobs.zoataur.habitat=可以在平原上找到这些野兽。
+entity.lycanitesmobs.zoataur.combat=半兽马速度慢但打击力大，有时它们也会弯曲成防御姿势，这时它们可以阻挡大部分伤害，但是它们能移动或攻击。

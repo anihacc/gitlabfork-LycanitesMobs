@@ -1,0 +1,4 @@
+entity.lycanitesmobs.astaroth.name=阿斯塔罗特
+entity.lycanitesmobs.astaroth.description=一种由大脑以及红石技术组成的统治者。如果你想快速躲过火焰的袭击并杀死它，那么脑内的蛆虫会爬出来攻击你！
+entity.lycanitesmobs.astaroth.habitat=据说这些恶魔起源于被称为炼狱的无穷无尽的肉体地狱层，它们曾经只是陈腐的陈词滥调，经常被发现在下界之中。
+entity.lycanitesmobs.astaroth.combat=阿斯塔罗特使用强大的快速武器，将它们的恶魔能量提取成强大的弹射物，称为恶魔之星，在碰到这些时可以导致凋零。如果阿斯塔罗特被击杀，一小队蛆虫将从它们的尸体中出来，然后开始攻击！

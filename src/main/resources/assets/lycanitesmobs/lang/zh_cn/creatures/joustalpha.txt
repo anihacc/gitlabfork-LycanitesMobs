@@ -1,0 +1,4 @@
+entity.lycanitesmobs.joustalpha.name=初代骑斗士
+entity.lycanitesmobs.joustalpha.description=更大的骑斗士和首领，它们会攻击视野里其它的初代同时会命令除了初代之外的骑斗士，它们非常敌对。
+entity.lycanitesmobs.joustalpha.habitat=这些生物可以在沙漠和平顶山中找到。
+entity.lycanitesmobs.joustalpha.combat=骑斗士速度快，攻击速度也快，它们还将召集其他非初代骑斗士与它们一起攻击。

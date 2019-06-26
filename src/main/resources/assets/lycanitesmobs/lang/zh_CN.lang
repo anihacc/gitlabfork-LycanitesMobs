@@ -1,64 +1,21 @@
-# ========== Events ==========
-# %event% will be replaced with the name of the event, don't translate this! | %event% 将被替换为特定的事件名称，请不要翻译！
-event.started=%event%正在发生！
-event.extended=%event%被延长!
-event.finished=%event%已经结束了！
-event.boss.started=%event%被召唤了！
-event.boss.extended=%event%正在降临！
-event.boss.finished=%event%解除了！
-event.boss.phase=阶段
-#
-# Mob Events
-mobevent.arachnophobia.name=蜘蛛恐惧症
-mobevent.asmodeus.name=恶魔降临
-mobevent.bamstorm.name=恶作剧风暴
-mobevent.blackplague.name=黑死病
-mobevent.bladeflurry.name=剑刃乱舞
-mobevent.boulderdash.name=原石冲击
-mobevent.cinderfall.name=熔渣陨落
-mobevent.dragonsroar.name=龙之怒吼
-mobevent.eruption.name=火山爆发
-mobevent.halloween.name=万圣节快乐
-mobevent.hellsfury.name=地狱之怒
-mobevent.marchofthegorgomites.name=魔鬼螨的进军
-mobevent.poopparty.name="投翔"派对
-mobevent.primalfury.name=原始之怒
-mobevent.rahovart.name=拉赫凡特
-mobevent.raptorrampage.name=猛禽暴怒
-mobevent.reptileruckus.name=爬行生物骚动
-mobevent.roasting.name=烈火洗礼
-mobevent.rootriot.name=树根暴动
-mobevent.rudolph.name=鲁道夫血渍的低语
-mobevent.saltytree.name=讽刺的树
-mobevent.satanclaws.name=魔王之爪
-mobevent.seastorm.name=海上暴风
-mobevent.shadowgames.name=暗影游戏
-mobevent.sharknado.name=龙卷鲨
-mobevent.subzero.name=绝对零度
-mobevent.theswarm.name=杀人蜂群
-mobevent.tsunami.name=震风陵雨
-mobevent.windstorm.name=平原暴风
-mobevent.wingedvenom.name=翼毒蝎
-mobevent.wintersgrasp.name=凛冬将至
-#
-#
+lycanitesmobs.name=恐怖生物
 #
 # ========== Entites ==========
-entity.level=Lvl
+entity.level=等级
 entity.lycanitesmobs.summoningportal.name=召唤传送门
 entity.lycanitesmobs.fear.name=恐惧
 #
 #
 #
 # ========== Spawners ==========
-spawner.darkness.level1=一片漆黑，前方就像一片未知...
-spawner.darkness.level2=你可以从黑暗中听出从远方传来的某些声音...快，投入光明的怀抱中去！
+spawner.darkness.level1=一片漆黑，前方就像一片未知…
+spawner.darkness.level2=你可以从黑暗中听出从远方传来的某些声音…快，投入光明的怀抱中去！
 spawner.darkness.level3=一个影影绰绰的生物在漆黑中消失了！
-spawner.darkness.level1.back=那声音好像消失了...至少现在是...
+spawner.darkness.level1.back=那声音好像消失了…至少现在是…
 spawner.chaos.level1=你正在破坏大自然的平衡，请慎重行事！
 spawner.chaos.level2=你对自然的破坏加剧了混沌元素的产生！
 spawner.chaos.level3=混沌元素已经出现，请小心防范！
-spawner.chaos.level1.back=生态平衡似乎已经得以恢复...至少现在是...
+spawner.chaos.level1.back=生态平衡似乎已经得以恢复…至少现在是…
 #
 #
 #
@@ -87,75 +44,24 @@ subspecies.mottled.name=斑驳
 subspecies.celestial.name=天空
 subspecies.umber.name=棕土
 #
-#
-#
-# ========== Blocks ==========
-tile.summoningpedestal.name=召唤基座
-tile.summoningpedestal.description=这个基座可以打开一个稳定的传送门用来召唤选择的宠物。有些基座可以被玩家获得，有些不行。
-tile.equipmentforge_wood.name=木质锻造台（一阶）
-tile.equipmentforge_stone.name=石质锻造台（二阶）
-tile.equipmentforge_iron.name=铁质锻造台（三阶）
-tile.equipmentforge_wood.description=This forge can be used to create new Equipment from Level 1 creature body parts (higher level parts will be downgraded if possible).
-tile.equipmentforge_stone.description=This forge can be used to create new Equipment from Level 2 or below creature body parts (higher level parts will be downgraded if possible).
-tile.equipmentforge_iron.description=This forge can be used to create new Equipment from Level 3 or below creature body parts.
+# Skins:
+subspecies.void.name=虚空
 #
 #
 #
 # ========== Items ==========
-item.soulgazer.name=灵魂凝视者
-item.soulgazer.description=对着生物使用将其添加到生物图鉴中。打开你的生物图鉴的方法：点击生存模式物品栏的图标或者按生物图鉴的快捷键（在控制设置里修改）。
-item.soulstone.name=灵魂石
-item.soulstone.description=用来将驯服的宠物与你的精神连接允许你在任何地方召唤它或者解除它的绑定。绑定的坐骑或宠物都将在死后重生。
-item.soulkey.name=灵魂钥匙
-item.soulkey.description=用来激活一个召唤祭坛去召唤稀有种生物或者触发一个特殊事件。
-item.soulkeydiamond.name=钻石灵魂钥匙
-item.soulkeydiamond.description=更好的灵魂钥匙能召唤更强大的BOSS！
-item.soulkeyemerald.name=绿宝石灵魂钥匙
-item.soulkeyemerald.description=更好的灵魂钥匙能召唤更强大的BOSS！
-item.summoningstaff.name=召唤之杖
-item.summoningstaff.description=召唤听命于你的宠物！创建传送门后，随着时间的推移传送门将耗尽你的召唤力（在生存模式的饱食度条上方）。
-item.mobtoken.name=怪物标记
-item.mobtoken.description=一个装饰用道具，用于展示怪物完整形象，等等。
-item.stablesummoningstaff.name=稳定的召唤之杖
-item.stablesummoningstaff.description=召唤的野兽持续时间更长但消耗更多的精力。
-item.bloodsummoningstaff.name=流血的召唤之杖
-item.bloodsummoningstaff.description=通过献祭你的生命，只消耗一半的召唤力来召唤。
-item.savagesummoningstaff.name=野蛮的召唤之杖
-item.savagesummoningstaff.description=召唤两只生物，每次消耗一半生命。
-item.sturdysummoningstaff.name=坚挺的召唤之杖
-item.sturdysummoningstaff.description=召唤物持续时间更长但消耗更多的精力。
-item.battleburrito.name=战斗卷饼
-item.battleburrito.description=一种混合了许多风味的卷饼，将给予食用者力量、抗性提示、伤害吸收、生命提升以及治疗效果！
-item.explorersrisotto.name=探险家烩饭
-item.explorersrisotto.description=一股暗流从其中涌出，将给予食用者速度提升、急迫、水下呼吸以及跳跃提升效果！
-item.immunizer.name=抗生素
-item.immunizer.description=饮用后将清除身上的中毒、饥饿、虚弱、反胃以及麻痹效果。
-item.cleansingcrystal.name=圣洁水晶
-item.cleansingcrystal.description=由精神凝结而成的无暇水晶，将给予免疫凋零、运气不佳、恐惧和失眠效果。
-item.halloweentreat.name=万圣节的款待
-item.halloweentreat.description=捣蛋还是款待？！
-item.halloweentreat.good=这是款待！你真幸运！
-item.halloweentreat.bad=捣蛋！蹦哈哈哈哈！
-item.wintergift.name=圣诞礼物
-item.wintergift.description=好东西，圣诞快乐！打开它！
-item.wintergift.good=你打开了礼物，这是惊喜！
-item.wintergift.bad=噢不！这是让人痛苦的礼物！
-item.wintergiftlarge.name=巨大的圣诞礼物
-item.wintergiftlarge.description=现在是12月25号！是时候打开你的大礼物了！别在乎这箱子发出的尖叫声，也许是别处传来的噪音...
-item.wintergiftlarge.bad=啊啊啊啊啊啊 哈啊啊 哈啊啊 哈啊啊 哈 哈 哈！蹦哈哈哈哈！圣诞快乐！
-item.horsearmormetal.name=铁制宠物盔甲
-item.horsearmorgold.name=金制宠物盔甲
-item.horsearmordiamond.name=钻制宠物盔甲
-item.equipmentpart.description=这个物品可以作为一种强大的装备使用，也可以制造其他物品 >:D
+item.horsearmormetal.name=铁宠物盔甲
+item.horsearmorgold.name=金宠物盔甲
+item.horsearmordiamond.name=钻石宠物盔甲
 #
 #
 #
-# ========== GUIs ==========
+# ========== GUI ==========
 # Creative Tab names:
-itemGroup.lycanitesmobs.items=恐怖生物|材料
-itemGroup.lycanitesmobs.blocks=恐怖生物|方块
-itemGroup.lycanitesmobs.creatures=恐怖生物|生物
-itemGroup.lycanitesmobs.equipmentparts=恐怖生物|装备
+itemGroup.lycanitesmobs.items=恐怖生物：物品
+itemGroup.lycanitesmobs.blocks=恐怖生物：方块
+itemGroup.lycanitesmobs.creatures=恐怖生物：生物
+itemGroup.lycanitesmobs.equipmentparts=恐怖生物：装备
 #
 # Beastiary:
 gui.beastiary.name=生物图鉴
@@ -164,7 +70,17 @@ gui.beastiary.player.focus=召唤力点数
 #
 # Index:
 gui.beastiary.index.title=索引
-gui.beastiary.index.description=欢迎使用LycanitesMobs生物图鉴！你可在此查看并管理你所了解到的生物，以更好的适应这个模组的玩法！
+gui.beastiary.index.description=欢迎使用恐怖生物生物图鉴！你可在此查看并管理你所了解到的生物，以更好地适应这个模组的玩法！
+gui.beastiary.index.version=模组版本
+gui.beastiary.index.version.newer=有新版本可用
+gui.beastiary.index.changes=最近修改
+gui.beastiary.index.changes.name=名称
+gui.beastiary.index.changes.new=新特性
+gui.beastiary.index.changes.config=配置更改
+gui.beastiary.index.changes.major=主要修复
+gui.beastiary.index.changes.gameplay=游戏
+gui.beastiary.index.changes.balancing=平衡
+gui.beastiary.index.changes.minor=次要
 #
 # Creatures:
 gui.beastiary.creatures=生物图鉴
@@ -173,24 +89,32 @@ gui.beastiary.creatures.empty.info=你当前没有添加任何生物到你的生
 gui.beastiary.creatures.descovered=生物介绍
 gui.beastiary.creatures.select=请先选择一个对应的群系然后再进一步查看生物。
 gui.beastiary.website=访问网站
+gui.beastiary.summary=摘要
+gui.beastiary.habitat=栖息地
+gui.beastiary.combat=战斗
+gui.beastiary.unlockedat=解锁时间：
+gui.beastiary.tameable=这种生物可以被驯服
+gui.beastiary.summonable=这个生物可以被召唤为一个仆从。
 #
 # Pets:
 gui.beastiary.pets=宠物管理
 gui.beastiary.mounts=坐骑
 gui.beastiary.familiars=妖精
-gui.beastiary.pets.select=从左边的菜单选择一只宠物来管理它。
+gui.beastiary.pets.select=选择一只生物以进行召唤
 gui.beastiary.pets.empty.title=没有绑定宠物
 gui.beastiary.pets.empty.info=一些宠物可以被驯服为宠物或者坐骑。你可以做对应的款待去驯服它们。你可以用灵魂石将你的宠物与你灵魂绑定。一次灵魂绑定，你可以按照你的意愿召唤或解绑宠物，它们也会在死亡时复活！
 #
 # Summoning:
-gui.beastiary.summoning=眷属
-gui.beastiary.pets.select=选择一只生物以进行召唤
+gui.beastiary.summoning=召唤物
+gui.beastiary.pets.select=从左边的菜单选择一只宠物来管理它。
 gui.beastiary.summoning.empty.title=没有可以召唤的生物
 gui.beastiary.summoning.empty.info=你的生物图鉴没有任何可以召唤的生物。请继续探索，并不是每一个生物都可以被召唤。
 #
 # Elements:
 gui.beastiary.elements=元素
-gui.beastiary.elements.comingsoon=你可以在此查看到有关构造这个世界相关元素的知识以及某些药水效果。
+gui.beastiary.elements.about=一种被称为魔力的魔法力量在整个宇宙中激增，这种力量可以分为多个魔法元素。每个元素对现实和对其他元素的反应都有自己的影响。生物自然进化来利用这些元素中的一个或多个，元素生物是这些元素活生生的表现形式。
+gui.beastiary.elements.buffs=有益效果
+gui.beastiary.elements.debuffs=有害效果
 #
 # Summoning Pedestal:
 gui.summoningpedestal.name=召唤基座
@@ -205,7 +129,7 @@ gui.pet.dismiss=禁用
 gui.pet.teleport=瞬移
 gui.pet.pvp=PVP
 gui.pet.release=放生
-gui.pet.release.confirm=你确定要放生这种宠物？一但放生这只宠物将会消失，它身上所持有的物品也将掉落。
+gui.pet.release.confirm=你确定要放生这种宠物？一旦放生这只宠物将会消失，它身上所持有的物品也将掉落。
 gui.pet.passive=被动
 gui.pet.defensive=防守
 gui.pet.assist=协作
@@ -215,35 +139,30 @@ gui.pet.wander=游荡
 gui.pet.sit=坐下
 #
 # Mounts:
-gui.mount.controls=按下%control%使用坐骑能力
-#%control% will be replaced with the Mount Ability key, don't translate this! | %control% 将被替换为特定的能力名称，请不要翻译！
+gui.mount.controls=按下 %control% 使用坐骑能力
+#%control% will be replaced with the Mount Ability key, don't translate this!
 #
 # Equipment Forge:
-gui.equipmentforge.text.name=设备名称：
+gui.equipmentforge.text.name=装备名称：
 gui.equipmentforge.button.construct=构建
-gui.equipmentforge.button.deconstruct=解析
-gui.equipmentforge.info.empty=Insert a Base Equipment Part or piece of Equipment to get started.
-gui.equipmentforge.warning.construct=Warning! Some Equipment Parts used are a higher level than this Forge and will be leveled down, continue?
-gui.equipmentforge.warning.deconstruct=Warning! The Equipment you are deconstructing has parts that are a higher level than this forge and will be leveled down, continue?
-gui.equipmentforge.error.construct=Some Equipment Parts used have a higher minimum level than this Forge and cannot be used.
-gui.equipmentforge.error.deconstruct=The Equipment you are deconstructing has parts that have a higher minimum level than this Forge so it cannot be deconstructed.
-gui.equipmentforge.error.name=你必须为你的设备命名！
+gui.equipmentforge.button.deconstruct=解构
+gui.equipmentforge.info.empty=放入基础装备部件或装备碎片以开始。
+gui.equipmentforge.warning.construct=警告！使用的一些装备部件等级比这个锻造台高，并将被降级，继续吗？
+gui.equipmentforge.warning.deconstruct=警告！你正在解构的装备中有比这个锻造台更高的部件，并将被降级，继续吗？
+gui.equipmentforge.error.construct=所用的某些装备部件的最低级别高于此锻造台，因此无法使用。
+gui.equipmentforge.error.deconstruct=你正在解构的装备的部件最低级别高于此锻造台，因此无法解构。
+gui.equipmentforge.error.name=你必须为你的装备命名！
 #
 #
 #
 # ========== Messages ==========
 # Beastiary:
-message.beastiary.new=你获得了%rank%点%creature%的知识点数！请查看生物图鉴！
-message.beastiary.summonable=你现在能够召唤%creature%了！不过，再次之前你还需要准备好召唤的物品。
+message.beastiary.new=你获得了 %rank% 点%creature%的知识点数！请查看生物图鉴！
+message.beastiary.summonable=你现在能够召唤%creature%了！不过，在此之前你还需要准备好召唤的物品。
 message.beastiary.summonable.colors=你现在可以召唤%creature%的亚种（颜色变化）了！
 message.beastiary.summonable.skins=你现在可以召唤%creature%的亚种（皮肤变化）了！
-message.beastiary.known=你已经拥有了%rank%点%creature%的知识点数。
+message.beastiary.known=你已经拥有了 %rank% 点%creature%的知识点数。
 message.beastiary.unknown=你已习得这种生物的全部知识。
-# Soulgazer:
-message.soulgazer.new=你获得了%creature%的知识！通过你的生物图鉴可以查看！
-message.soulgazer.summonable=你现在能够召唤%creature%了！你还需要一把召唤之杖。
-message.soulgazer.known=你已习得这种生物的全部知识。
-message.soulgazer.unknown=灵魂凝视没有发现这种生物有什么特殊之处。
 #
 # Soulstone:
 message.soulstone.untamed=灵魂石只能用在已经被驯服的生物上。
@@ -260,7 +179,7 @@ message.soulkey.badlocation=灵魂钥匙差一点就能激活祭坛了，但是�
 message.soulkey.active=灵魂钥匙激活了祭坛！
 #
 # Pet:
-# %creature% will be replaced with the name of the tamed creature, don't translate this! | %creature% 将被替换为特定的生物名称，请不要翻译！
+# %creature% will be replaced with the name of the tamed creature, don't translate this!
 message.pet.tamed=%creature%和你的关系似乎变亲近了！
 message.pet.tamefail=%creature%想要更多！
 message.pet.mount.baby=这只%creature%太年轻了，不能背动你！
@@ -268,35 +187,40 @@ message.pet.mount.baby=这只%creature%太年轻了，不能背动你！
 #
 #
 # ========== Commands ==========
-lyc.command.invalid=无效的指令。
+lyc.command.invalid=无效参数。
 lyc.command.playeronly=这个指令只能由玩家触发。
-lyc.command.debug.invalid=无效的指令，正确用法：/lycanitesmobs debug debugKey debugValue
+lyc.command.debug.invalid=无效参数，正确用法：/lycanitesmobs debug debugKey debugValue
 lyc.command.debug.set=更新 %debug%。
 #
 # Spawners:
-lyc.command.spawners.invalid=无效的指令，正确用法：/lycanitesmobs spawners [reload]
+lyc.command.spawners.invalid=无效参数，正确用法：/lycanitesmobs spawners [reload]
 lyc.command.spawners.reload=JSON 生成已被重新加载。
 lyc.command.spawners.creative=为创造模式玩家切换生物事件触发。
 #
+# Equipment:
+lyc.command.equipment.invalid=无效参数，正确用法：/lycanitesmobs equipment [reload]
+lyc.command.equipment.reload=装备部件已重新加载。
+#
 # Dungeons:
-lyc.command.dungeon.invalid=无效指令，正确用法： /lycanitesmobs spawners [reload]
+lyc.command.dungeon.invalid=无效参数，正确用法：/lycanitesmobs spawners [reload]
 lyc.command.dungeon.reload=JSON 生成已被重新加载。
 lyc.command.dungeon.enable=恐怖生物地牢已被启用，它们会自然生成在区块中。
 lyc.command.dungeon.disable=恐怖生物地牢已被禁用，它们不会自然生成在区块中。
 #
 # Creatures:
-lyc.command.creatures.invalid=无效指令，正确用法： /lycanitesmobs creatures [reload]
+lyc.command.creatures.invalid=无效参数，正确用法：/lycanitesmobs creatures [reload]
 lyc.command.creatures.reload=生物设置已经重载。
 #
 # Beastiary:
-lyc.command.beastiary.invalid=无效的指令，正确用法：/lycanitesmobs beastiary [add <creature name>，complete]> 比如 /lycanitesmobs beastiary add quillbeast
+lyc.command.beastiary.invalid=无效参数，正确用法：/lycanitesmobs beastiary [add <creature name>, complete]> 比如 /lycanitesmobs beastiary add quillbeast
 lyc.command.beastiary.complete=将所有生物都加入生物图鉴。
-lyc.command.beastiary.add.invalid=无效的指令，正确用法：beastiary add <creature name> 比如 /lycanitesmobs beastiary add quillbeast
+lyc.command.beastiary.add.invalid=无效参数，正确用法：beastiary add <creature name> 比如 /lycanitesmobs beastiary add quillbeast
 lyc.command.beastiary.add.unknown=未知的生物。确保名称全部是小写字母，并且没有空格。
+lyc.command.beastiary.clear=已从生物图鉴中清除所有生物。
 #
 # Mob Events:
-lyc.command.mobevent.invalid=无效的指令，正确用法：/lycanitesmobs mobevent [start <event name>，stop，list，enable，disable]> 比如 /lycanitesmobs mobevent start hellsfury
-lyc.command.mobevent.start.invalid=无效的指令, 正确用法：mobevent start <event name> 比如 mobevent start hellsfury
+lyc.command.mobevent.invalid=无效参数，正确用法：/lycanitesmobs mobevent [start <event name>, stop, list, enable, disable]> 比如 /lycanitesmobs mobevent start hellsfury
+lyc.command.mobevent.start.invalid=无效参数, 正确用法：mobevent start <event name> 比如 mobevent start hellsfury
 lyc.command.mobevent.start.unknown=无效的生物事件，使用 /lycanitesmobs mobevent list 来查看所有的生物事件名称列表。
 lyc.command.mobevent.start.noworld=指令没有找到目标维度ID，请输入有效的维度ID。
 lyc.command.mobevent.start=生物事件正在发生。
@@ -313,7 +237,7 @@ lyc.command.mobevent.creative=为创造模式玩家切换生物事件。
 #
 #
 # ========== System ==========
-lyc.version.newer=您目前正在使用的恐怖生物版本是 {current} 但现在发现有新版本 {latest}， 建议您通过更新来获得更好的体验！
+lyc.version.newer=你目前正在使用的恐怖生物版本是 {current} 但现在发现有新版本 {latest}， 建议你通过更新来获得更好的体验！
 #
 #
 #
@@ -321,6 +245,8 @@ lyc.version.newer=您目前正在使用的恐怖生物版本是 {current} 但现
 common.yes=是
 common.no=否
 common.ok=好的
+common.none=无
+common.holdshift=按住 SHIFT 获取更多信息
 #
 #
 #
@@ -340,6 +266,7 @@ stat.portal.description=召唤传送门只能维持一定量的生物并且无�
 #
 # ========== Potion Effects ==========
 # Debuff:
+effect.burning=燃烧
 effect.paralysis=麻痹
 effect.penetration=渗透
 effect.recklessness=鲁莽
@@ -349,10 +276,11 @@ effect.fear=恐惧
 effect.decay=腐朽
 effect.insomnia=失眠
 effect.instability=不稳定
-effect.lifeleak=Lifeleak
+effect.bleed=流血
+effect.lifeleak=生命泄漏
 effect.plague=瘟疫
 effect.aphagia=厌恶
-effect.smited=Smited
+effect.smited=亡灵杀手
 effect.smouldering=阴燃
 #
 # Buffs:
@@ -369,60 +297,47 @@ effect.envenom=剧毒
 #
 #
 #
-# ========== Elements ==========
-element.fire=火
-element.water=水
-element.earth=大地
-element.air=风
-element.order=秩序
-element.chaos=混沌
-element.acid=浓酸
-element.lava=熔岩
-element.electric=暗影
-element.light=光
-element.shadow=锐利
-element.armbour=植物
-element.frost=凛冰
-element.fae=仙灵
-element.poison=剧毒
-element.phase=相位
-element.crystal=水晶
-element.quake=震动
-element.aether=以太
-element.nether=地狱
-element.void=虚空
-#
-#
-#
 # ========== Key Bindings ==========
 key.mount.ability=坐骑能力
 key.mount.inventory=坐骑物品栏
 key.index=索引
 key.beastiary=生物图鉴
 key.pets=宠物
-key.summoning=眷属
-key.minions=眷属管理
+key.summoning=召唤物
+key.minions=召唤物管理
 #
 #
 #
 # ========== Equipment ==========
-equipment.slottype=Slot Type:
+equipment.slottype=格子类型：
 equipment.level=等级：
-equipment.feature.slot=Adds Slot:
+equipment.feature.slot=增加格子：
 equipment.feature.damage=伤害：
 equipment.feature.damage.cooldown=冷却时间：
 equipment.feature.damage.knockback=击退：
 equipment.feature.damage.range=范围：
-equipment.feature.damage.sweep=Sweep:
+equipment.feature.damage.sweep=横扫：
 equipment.feature.effect=效果：
 equipment.feature.effect.duration=持续时间：
 equipment.feature.effect.strength=强度：
-equipment.feature.harvest=Harvest:
+equipment.feature.harvest=收获：
 equipment.feature.harvest.shape=形态：
 equipment.feature.harvest.range=范围：
 equipment.feature.summon=召唤：
 equipment.feature.summon.chance=概率：
-equipment.feature.summon.count=Amount:
+equipment.feature.summon.count=数量：
+equipment.feature.projectile=弹射物：
+equipment.feature.projectile.trigger=触发器：
+equipment.feature.projectile.trigger.hit=击中
+equipment.feature.projectile.trigger.primary=主要用途
+equipment.feature.projectile.trigger.secondary=次要用途
+equipment.feature.projectile.pattern=图形：
+equipment.feature.projectile.pattern.spread=分散
+equipment.feature.projectile.pattern.ring=环形
+item.woodenrod.name=木棒
+item.woodenhilt.name=木剑柄
+item.woodenpaxel.name=木镐尖斧
+item.equipment.name=合成的装备
 #
 #
 #
@@ -432,6 +347,12 @@ creature.stat.subspecies=亚种
 creature.stat.cost=召唤消耗
 creature.stat.spirit=召唤灵魂消耗
 creature.stat.focus=召唤指数消耗
-creature.stat.health=生命
 creature.stat.respawning=重生
 creature.stat.knowledge=知识点数
+creature.stat.base=基础属性
+creature.stat.health=生命
+creature.stat.defense=防御
+creature.stat.speed=速度
+creature.stat.damage=近战伤害
+creature.stat.pierce=近战穿透
+creature.stat.effect=近战效果

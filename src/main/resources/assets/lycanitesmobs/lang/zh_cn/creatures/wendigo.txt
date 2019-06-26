@@ -1,0 +1,4 @@
+entity.lycanitesmobs.wendigo.name=温迪戈
+entity.lycanitesmobs.wendigo.description=以在它们身后留下一道霜火而闻名的大型冰雪野兽！
+entity.lycanitesmobs.wendigo.habitat=这些狂兽可以在寒冷地区找到，比如冰原以及一大片的胶状冰池。
+entity.lycanitesmobs.wendigo.combat=温迪戈速度很慢，但会投掷苔原爆炸，在撞击时形成一滩胶状冰。它们也会在它们行走的地方留下霜火，如果不加以控制，这就是众所周知的雪元素显现。

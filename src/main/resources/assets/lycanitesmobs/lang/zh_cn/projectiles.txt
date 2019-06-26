@@ -1,0 +1,2 @@
+entity.lycanitesmobs.ember.name=灰烬
+entity.lycanitesmobs.venomshot.name=毒液弹

@@ -1,0 +1,4 @@
+entity.saltwatermobs.abtu.name=食人鱼
+entity.saltwatermobs.abtu.description=长着大牙的凶猛鱼类！成年食人鱼是很稀少的非常难被找到，但如果你找到了，你最好赶快游走因为它们会和成群的幼年鱼包围你！
+entity.lycanitesmobs.abtu.habitat=这些鱼普遍存在于咸水海洋和海滩。
+entity.lycanitesmobs.abtu.combat=一旦一只食人鱼察觉到它的猎物，它会不顾一切地吞食它，它们甚至会跳到陆地上追逐猎物！成年的食人鱼比较保守，但也很罕见，它们会叫附近的幼年鱼来驱散它们的猎物。

@@ -1,0 +1,4 @@
+entity.lycanitesmobs.maka.name=克莱
+entity.lycanitesmobs.maka.description=一种巨型的草食性生物，它们可以用蔬菜进行繁殖，以获取肉和皮革。请小心初代克莱。
+entity.lycanitesmobs.maka.habitat=克莱可在草原和热带草原中找到。
+entity.lycanitesmobs.maka.combat=克莱通常是和平的。

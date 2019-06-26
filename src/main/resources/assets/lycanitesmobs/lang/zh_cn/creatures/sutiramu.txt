@@ -1,0 +1,4 @@
+entity.lycanitesmobs.sutiramu.name=毒蝎
+entity.lycanitesmobs.sutiramu.description=好斗的大蝎子。
+entity.lycanitesmobs.sutiramu.habitat=这些生物可以在沙漠和平顶山中找到。
+entity.lycanitesmobs.sutiramu.combat=毒蝎用毒液攻击，导致饥饿。

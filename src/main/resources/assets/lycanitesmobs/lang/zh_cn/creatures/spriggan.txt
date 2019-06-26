@@ -1,0 +1,4 @@
+entity.lycanitesmobs.spriggan.name=保卫者
+entity.lycanitesmobs.spriggan.description=神秘的植物元素，保卫者保护自然免受威胁。水元素和地魔元素可以融合，创造出强大的枝条。
+entity.lycanitesmobs.spriggan.habitat=作为植物元素，保卫者可以偶尔在森林中游荡，并迅速出现在植物生命的防御中，因此在收获植物时要小心。
+entity.lycanitesmobs.spriggan.combat=保卫者发射有毒的强大激光并消耗生命来治疗保卫者。

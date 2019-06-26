@@ -1,0 +1,4 @@
+entity.lycanitesmobs.ika.name=伊卡
+entity.lycanitesmobs.ika.description=缓慢的蜗牛龟贝类！伊卡可以用蔬菜来引诱和繁殖，然而它们在陆地上只能活一小会儿。要细心养殖！
+entity.lycanitesmobs.ika.habitat=伊卡可以在海水和海滩上的水池中找到。
+entity.lycanitesmobs.ika.combat=伊卡通常是被动的。

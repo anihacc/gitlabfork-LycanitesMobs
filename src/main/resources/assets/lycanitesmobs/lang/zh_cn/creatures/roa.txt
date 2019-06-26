@@ -1,0 +1,4 @@
+entity.lycanitesmobs.roa.name=龙卷鲨
+entity.lycanitesmobs.roa.description=统治海洋的凶猛鲨鱼！把它们驯服成坐骑是勇敢或愚蠢的尝试。
+entity.lycanitesmobs.roa.habitat=这些鲨鱼可以在咸水海洋中找到。
+entity.lycanitesmobs.roa.combat=龙卷鲨在它们周围制造致命的漩涡，将猎物拉向它们致命的下颚！它们也能把陆地生物拉入水中，潜入水中有助于阻止它们把你拉离悬崖边缘。

@@ -1,0 +1,4 @@
+entity.freshwatermobs.abaia.name=电鳗
+entity.freshwatermobs.abaia.description=一种浑身包裹着电的鱼类，能对试图靠近者造成威胁以至令人闻风丧胆。
+entity.lycanitesmobs.abaia.habitat=这些鱼类是降海产卵的，意味着它们出生在咸水海洋，然后在淡水河流中迁移和成熟，然后再次返回咸水，有些最终被困在湖泊中，并在那里建立了一个群体，因此它们可以在大多数地方找到。
+entity.lycanitesmobs.abaia.combat=当电鳗用它们的电流电击它们附近的任何东西时，它们也会进行讨厌的撕咬。

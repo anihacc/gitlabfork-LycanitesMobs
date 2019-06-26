@@ -1,0 +1,4 @@
+entity.lycanitesmobs.trite.name=蛆虫
+entity.lycanitesmobs.trite.description=小而快的恶魔生物，看起来像一个有蜘蛛般腿的大脑。
+entity.lycanitesmobs.trite.habitat=蛆虫在下界里游荡，据说它们来自炼狱，是一个无尽肉体的地狱。
+entity.lycanitesmobs.trite.combat=蛆虫非常弱小，但由于速度和体积小，很难被击中，被它咬到的人会中凋零效果。
