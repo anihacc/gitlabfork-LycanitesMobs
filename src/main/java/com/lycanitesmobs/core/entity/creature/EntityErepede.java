@@ -58,21 +58,21 @@ public class EntityErepede extends RideableCreatureEntity implements IGroupPreda
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-		this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-		this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-		this.targetSelector.addGoal(2, new OwnerDefenseTargetingGoal(this));
-        this.targetSelector.addGoal(3, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+		this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+		this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+		this.targetSelector.addGoal(2, new DefendOwnerGoal(this));
+        this.targetSelector.addGoal(3, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             if(CreatureManager.getInstance().getCreature("Joust") != null)
-                this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
+                this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityJoust.class).setPackHuntingScale(1, 3));
             if(CreatureManager.getInstance().getCreature("JoustAlpha") != null)
-                this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
+                this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityJoustAlpha.class).setPackHuntingScale(1, 1));
         }
 
-        this.targetSelector.addGoal(0, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(0, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
     }
 	
 	

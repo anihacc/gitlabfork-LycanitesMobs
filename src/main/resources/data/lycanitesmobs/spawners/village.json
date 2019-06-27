@@ -19,10 +19,10 @@
 		{
 			"type": "structure",
 			"rangeMin": [0, 0, 0],
-			"rangeMax": [16, 16, 16],
+			"rangeMax": [16, 255, 16],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": false,
+			"solidGround": true,
 			"underground": false,
 			"structureType": "Village"
 		}

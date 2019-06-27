@@ -18,7 +18,6 @@ public class DefenseTargetingGoal extends TargetingGoal {
   	// ==================================================
     public DefenseTargetingGoal(BaseCreatureEntity setHost, Class<? extends LivingEntity> defendClass) {
         super(setHost);
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
         this.defendClass = defendClass;
     }
     

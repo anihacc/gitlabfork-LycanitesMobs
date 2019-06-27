@@ -4,9 +4,9 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefenseTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -50,12 +50,12 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityMaka.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityMaka.class));
 		this.targetSelector.addGoal(2, new DefenseTargetingGoal(this, VillagerEntity.class));
-		this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
-        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
-        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
+		this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
     }
 	
 	

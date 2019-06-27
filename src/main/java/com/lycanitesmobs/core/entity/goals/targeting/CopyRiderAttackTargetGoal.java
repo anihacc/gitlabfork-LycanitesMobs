@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 
-public class OwnerAttackTargetingGoal extends TargetingGoal {
+public class CopyRiderAttackTargetGoal extends TargetingGoal {
 	// Targets:
 	private TameableCreatureEntity host;
 	
@@ -13,7 +13,7 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public OwnerAttackTargetingGoal(TameableCreatureEntity setHost) {
+    public CopyRiderAttackTargetGoal(TameableCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
         this.checkSight = false;
@@ -25,23 +25,18 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public boolean shouldExecute() {
-    	if(!this.host.isTamed())
+    	if(!this.host.hasRiderTarget())
     		return false;
     	if(this.host.isSitting())
     		return false;
-		if(!this.host.isAssisting())
-			return false;
-    	if(this.host.getOwner() == null)
+    	if(this.host.getRider() == null)
     		return false;
-
-        if (!(this.host.getOwner() instanceof LivingEntity))
-            return false;
-        LivingEntity owner = (LivingEntity)this.host.getOwner();
-    	this.target = owner.getLastAttackedEntity();
+    	
+    	this.target = this.host.getRider().getLastAttackedEntity();
     	if(this.target == null) {
     		return false;
     	}
-    	if(lastAttackTime == owner.getLastAttackedEntityTime())
+    	if(lastAttackTime == this.host.getRider().getLastAttackedEntityTime())
     		return false;
     	return true;
     }
@@ -52,8 +47,8 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public void startExecuting() {
-    	if(this.isTargetValid(target)) {
-			lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastAttackedEntityTime();
+    	if(isTargetValid(target)) {
+			lastAttackTime = this.host.getRider().getLastAttackedEntityTime();
 			super.startExecuting();
 		}
     }
@@ -64,6 +59,8 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
  	// ==================================================
     @Override
     public boolean shouldContinueExecuting() {
+    	if(!this.host.hasRiderTarget())
+    		return false;
         if(this.host.isSitting())
             return false;
         return super.shouldContinueExecuting();
@@ -74,16 +71,10 @@ public class OwnerAttackTargetingGoal extends TargetingGoal {
   	//                    Valid Target
   	// ==================================================
     private boolean isTargetValid(LivingEntity target) {
-    	if(target == null)
-            return false;
-    	if(!target.isAlive())
-            return false;
-		if(target == this.host)
-            return false;
-		if(!this.host.canAttack(target.getType()))
-            return false;
-		if(!this.host.canAttack(target))
-            return false;
+    	if(target == null) return false;
+    	if(!target.isAlive()) return false;
+		if(target == this.host) return false;
+		if(!this.host.canAttack(target.getType())) return false;
     	return true;
     }
     

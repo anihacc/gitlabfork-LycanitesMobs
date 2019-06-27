@@ -121,8 +121,7 @@ public class Beastiary {
 		}
 		CreatureInfo creatureInfo = creatureKnowledge.getCreatureInfo();
 		ITextComponent message = new TranslationTextComponent("message.beastiary.new.prefix")
-				.appendText(" ")
-				.appendText(" " + creatureKnowledge.rank)
+				.appendText(" " + creatureKnowledge.rank + " ")
 				.appendSibling(new TranslationTextComponent("message.beastiary.new.of"))
 				.appendText(" ")
 				.appendSibling(creatureInfo.getTitle())

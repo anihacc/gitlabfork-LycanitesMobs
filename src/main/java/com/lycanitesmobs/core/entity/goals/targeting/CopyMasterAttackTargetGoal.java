@@ -6,17 +6,17 @@ import net.minecraft.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
-public class ParentAttackTargetingGoal extends Goal {
+public class CopyMasterAttackTargetGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
 	
 	// Properties:
-    private boolean tameTargeting = true;
+    private boolean tameTargeting = false;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public ParentAttackTargetingGoal(BaseCreatureEntity setHost) {
+    public CopyMasterAttackTargetGoal(BaseCreatureEntity setHost) {
         host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
@@ -25,7 +25,7 @@ public class ParentAttackTargetingGoal extends Goal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public ParentAttackTargetingGoal setTameTargetting(boolean setTargetting) {
+    public CopyMasterAttackTargetGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
@@ -40,7 +40,7 @@ public class ParentAttackTargetingGoal extends Goal {
     		if(!this.host.getAttackTarget().isAlive())
     			return false;
     	}
-    	if(this.host.getParentAttackTarget() == null)
+    	if(this.host.getMasterAttackTarget() == null)
     		return false;
     	return true;
     }
@@ -52,8 +52,8 @@ public class ParentAttackTargetingGoal extends Goal {
     @Override
     public void tick() {
     	if(this.host.getAttackTarget() == null) {
-    		LivingEntity target = this.host.getParentAttackTarget();
-    		if(this.isTargetValid(target))
+    		LivingEntity target = this.host.getMasterAttackTarget();
+    		if(isTargetValid(target))
     			this.host.setAttackTarget(target);
     	}
     }
@@ -63,12 +63,9 @@ public class ParentAttackTargetingGoal extends Goal {
   	//                    Valid Target
   	// ==================================================
     private boolean isTargetValid(LivingEntity target) {
-    	if(target == null)
-            return false;
-    	if(!target.isAlive())
-            return false;
-		if(target == this.host)
-            return false;
+    	if(target == null) return false;
+    	if(!target.isAlive()) return false;
+		if(target == this.host) return false;
 		if(!this.host.canAttack(target.getType()))
             return false;
 		if(!this.host.canAttack(target))

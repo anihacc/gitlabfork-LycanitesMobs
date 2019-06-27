@@ -5,9 +5,9 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -48,13 +48,13 @@ public class EntityJoustAlpha extends AgeableCreatureEntity implements IGroupAlp
         this.goalSelector.addGoal(6, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(EntityJoustAlpha.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(0, new RevengeGoal(this));
+        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(EntityJoustAlpha.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(4, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
     }
 	
 	

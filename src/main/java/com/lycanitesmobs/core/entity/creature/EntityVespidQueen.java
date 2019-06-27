@@ -8,8 +8,8 @@ import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -82,15 +82,15 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(EntityConba.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(EntityVespidQueen.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityVespid.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new CopyMasterAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(EntityConba.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(EntityVespidQueen.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityVespid.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 	

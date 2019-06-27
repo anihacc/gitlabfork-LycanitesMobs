@@ -6,10 +6,10 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -56,16 +56,16 @@ public class EntityZoataur extends TameableCreatureEntity implements IGroupPreda
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
+        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
-            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
         }
     }
 

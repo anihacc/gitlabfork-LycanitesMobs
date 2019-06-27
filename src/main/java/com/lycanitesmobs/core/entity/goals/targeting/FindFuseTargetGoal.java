@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 
 import java.util.EnumSet;
 
-public class FuseTargetingGoal extends TargetingGoal {
+public class FindFuseTargetGoal extends TargetingGoal {
 	// Targets:
     private Class<IFusable> targetClass = IFusable.class;
 
@@ -19,7 +19,7 @@ public class FuseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public FuseTargetingGoal(BaseCreatureEntity setHost) {
+    public FindFuseTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
@@ -28,37 +28,37 @@ public class FuseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public FuseTargetingGoal setChance(int setChance) {
+    public FindFuseTargetGoal setChance(int setChance) {
     	this.targetChance = setChance;
     	return this;
     }
 
-    public FuseTargetingGoal setTargetClass(Class<IFusable> setTargetClass) {
+    public FindFuseTargetGoal setTargetClass(Class<IFusable> setTargetClass) {
     	this.targetClass = setTargetClass;
     	return this;
     }
 
-    public FuseTargetingGoal setSightCheck(boolean setSightCheck) {
+    public FindFuseTargetGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
 
-    public FuseTargetingGoal setOnlyNearby(boolean setNearby) {
+    public FindFuseTargetGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
 
-    public FuseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public FindFuseTargetGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
 
-    public FuseTargetingGoal setTameTargetting(boolean setTargetting) {
+    public FindFuseTargetGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
 
-    public FuseTargetingGoal setHelpCall(boolean setHelp) {
+    public FindFuseTargetGoal setHelpCall(boolean setHelp) {
         this.callForHelp = setHelp;
         return this;
     }

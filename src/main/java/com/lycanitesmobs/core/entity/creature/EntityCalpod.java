@@ -6,9 +6,9 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import net.minecraft.block.LogBlock;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -47,12 +47,12 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob, IGroupPrey
         this.goalSelector.addGoal(6, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupHunter.class));
-        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupHunter.class));
+        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupAlpha.class));
     }
 	
 	

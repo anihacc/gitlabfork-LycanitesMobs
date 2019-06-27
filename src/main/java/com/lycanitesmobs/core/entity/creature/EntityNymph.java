@@ -3,10 +3,10 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupPlant;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import net.minecraft.entity.CreatureAttribute;
@@ -54,10 +54,10 @@ public class EntityNymph extends TameableCreatureEntity implements IGroupPlant {
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
 
 

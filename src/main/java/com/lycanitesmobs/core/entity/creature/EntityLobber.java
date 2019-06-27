@@ -9,8 +9,8 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
@@ -71,13 +71,13 @@ public class EntityLobber extends BaseCreatureEntity implements IMob, IGroupFire
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-		this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
-		this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupIce.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupWater.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPlant.class));
+		this.targetSelector.addGoal(1, new RevengeGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupIce.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupWater.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(SnowGolemEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPlant.class));
     }
     
     

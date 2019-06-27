@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import java.util.Iterator;
 import java.util.List;
 
-public class RevengeTargetingGoal extends AttackTargetingGoal {
+public class RevengeGoal extends FindAttackTargetGoal {
 	
 	// Properties:
     Class[] helpClasses = null;
@@ -17,7 +17,7 @@ public class RevengeTargetingGoal extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public RevengeTargetingGoal(BaseCreatureEntity setHost) {
+    public RevengeGoal(BaseCreatureEntity setHost) {
         super(setHost);
     }
     
@@ -25,28 +25,28 @@ public class RevengeTargetingGoal extends AttackTargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public RevengeTargetingGoal setHelpCall(boolean setHelp) {
+    public RevengeGoal setHelpCall(boolean setHelp) {
     	this.callForHelp = setHelp;
     	return this;
     }
-    public RevengeTargetingGoal setHelpClasses(Class... setHelpClasses) {
+    public RevengeGoal setHelpClasses(Class... setHelpClasses) {
     	this.helpClasses = setHelpClasses;
     	this.callForHelp = true;
     	return this;
     }
-    public RevengeTargetingGoal setSightCheck(boolean setSightCheck) {
+    public RevengeGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public RevengeTargetingGoal setOnlyNearby(boolean setNearby) {
+    public RevengeGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public RevengeTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public RevengeGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
-    public RevengeTargetingGoal setTameTargetting(boolean setTargetting) {
+    public RevengeGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }

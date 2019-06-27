@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -59,7 +59,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity implements IGr
         this.goalSelector.addGoal(0, new SwimmingGoal(this));
         this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
         this.goalSelector.addGoal(6, new WanderGoal(this).setPauseRate(30));
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityConcapedeHead.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityConcapedeHead.class));
     }
 
     // ==================================================

@@ -49,18 +49,18 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupPredato
         this.goalSelector.addGoal(7, new WanderGoal(this));
         this.goalSelector.addGoal(9, new BegGoal(this));
 
-        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
+        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
     
     

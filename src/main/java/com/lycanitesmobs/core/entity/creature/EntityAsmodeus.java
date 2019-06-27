@@ -9,8 +9,8 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
@@ -122,9 +122,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupDe
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-		this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpClasses(EntityTrite.class, EntityAstaroth.class, EntityCacodemon.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+		this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityTrite.class, EntityAstaroth.class, EntityCacodemon.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
     }
 
     // ========== Init ==========

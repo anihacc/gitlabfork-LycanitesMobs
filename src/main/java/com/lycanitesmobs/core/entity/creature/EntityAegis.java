@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.PillagerEntity;
+import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
@@ -32,7 +33,6 @@ public class EntityAegis extends TameableCreatureEntity implements IGroupRock, I
         this.hasAttackSound = true;
         
         this.setupMob();
-		this.isAggressiveByDefault = false;
         this.stepHeight = 1.0F;
 	}
 
@@ -49,16 +49,16 @@ public class EntityAegis extends TameableCreatureEntity implements IGroupRock, I
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
-		this.targetSelector.addGoal(3, new DefendVillageTargetingGoal(this));
+        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(3, new DefendVillageGoal(this));
 		this.targetSelector.addGoal(4, new DefenseTargetingGoal(this, VillagerEntity.class));
-        //this.targetSelector.addGoal(5, new EntityAITargetAttack(this).setTargetClass(PlayerEntity.class));
-		this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(EntityArgus.class));
-		this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PillagerEntity.class));
-        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
-		this.targetSelector.addGoal(7, new FuseTargetingGoal(this));
+		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(EntityArgus.class));
+		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PillagerEntity.class));
+		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(RavagerEntity.class));
+		this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+		this.targetSelector.addGoal(7, new FindFuseTargetGoal(this));
     }
 	
 	
@@ -155,6 +155,8 @@ public class EntityAegis extends TameableCreatureEntity implements IGroupRock, I
 	public void onDamage(DamageSource damageSrc, float damage) {
 		if(this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
+		if(damageSrc.getTrueSource() instanceof RavagerEntity)
+			damage *= 0.5F;
 		super.onDamage(damageSrc, damage);
 	}
 

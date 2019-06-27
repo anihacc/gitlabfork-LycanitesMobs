@@ -6,9 +6,9 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerDefenseTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -56,15 +56,15 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPr
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.targetSelector.addGoal(6, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
     
     

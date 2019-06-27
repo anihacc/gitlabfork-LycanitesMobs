@@ -67,19 +67,19 @@ public class EntityFeradon extends RideableCreatureEntity implements IGroupPreda
         this.goalSelector.addGoal(12, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(13, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
-        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
+        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
+        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
+        this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class).setPackHuntingScale(1, 1));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
-            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
+            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
         }
     }
 	

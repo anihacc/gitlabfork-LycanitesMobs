@@ -5,10 +5,10 @@ import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerAttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.OwnerRevengeTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -50,16 +50,16 @@ public class EntityWraamon extends TameableCreatureEntity implements IMob, IGrou
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(ChickenEntity.class));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
     }
 	

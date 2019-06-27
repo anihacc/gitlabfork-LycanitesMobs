@@ -4,8 +4,8 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
@@ -50,8 +50,8 @@ public class EntitySilex extends AgeableCreatureEntity implements IGroupAnimal {
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
         //this.targetSelector.addGoal(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
     }
 
 	

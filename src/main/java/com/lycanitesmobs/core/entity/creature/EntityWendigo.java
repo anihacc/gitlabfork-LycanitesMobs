@@ -5,8 +5,8 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -55,12 +55,12 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(1, new RevengeTargetingGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(BlazeEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(MagmaCubeEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new RevengeGoal(this).setHelpCall(true));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(BlazeEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(MagmaCubeEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
     }
     
     

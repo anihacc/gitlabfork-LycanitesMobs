@@ -10,10 +10,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import java.util.Iterator;
 import java.util.List;
 
-public class DefendVillageTargetingGoal extends AttackTargetingGoal {
+public class DefendVillageGoal extends FindAttackTargetGoal {
 	private final EntityPredicate villageSearchPredicate = (new EntityPredicate()).setDistance(64.0D);
 
-	public DefendVillageTargetingGoal(BaseCreatureEntity setHost) {
+	public DefendVillageGoal(BaseCreatureEntity setHost) {
 		super(setHost);
 	}
 

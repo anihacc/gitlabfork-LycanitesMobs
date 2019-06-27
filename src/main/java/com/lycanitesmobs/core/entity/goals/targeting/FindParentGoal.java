@@ -7,7 +7,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.passive.AnimalEntity;
 
-public class ParentTargetingGoal extends TargetingGoal {
+public class FindParentGoal extends TargetingGoal {
 	// Targets:
 	private AgeableCreatureEntity host;
     private Class targetClass;
@@ -20,7 +20,7 @@ public class ParentTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public ParentTargetingGoal(AgeableCreatureEntity setHost) {
+    public FindParentGoal(AgeableCreatureEntity setHost) {
         super(setHost);
         this.host = setHost;
         this.targetClass = this.host.getClass();
@@ -30,31 +30,31 @@ public class ParentTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public ParentTargetingGoal setChance(int setChance) {
+    public FindParentGoal setChance(int setChance) {
     	this.targetChance = setChance;
     	return this;
     }
-    public ParentTargetingGoal setTargetClass(Class setTargetClass) {
+    public FindParentGoal setTargetClass(Class setTargetClass) {
     	this.targetClass = setTargetClass;
     	return this;
     }
-    public ParentTargetingGoal setSightCheck(boolean setSightCheck) {
+    public FindParentGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public ParentTargetingGoal setOnlyNearby(boolean setNearby) {
+    public FindParentGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public ParentTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public FindParentGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
-    public ParentTargetingGoal setDistance(double setDist) {
+    public FindParentGoal setDistance(double setDist) {
     	this.targetDistance = setDist;
     	return this;
     }
-    public ParentTargetingGoal setTameTargetting(boolean setTargetting) {
+    public FindParentGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }

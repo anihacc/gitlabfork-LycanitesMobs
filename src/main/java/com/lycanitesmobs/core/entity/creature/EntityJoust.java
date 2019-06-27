@@ -3,10 +3,10 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -52,10 +52,10 @@ public class EntityJoust extends AgeableCreatureEntity implements IGroupAnimal {
         this.goalSelector.addGoal(6, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityJoustAlpha.class));
-        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(2, new MasterTargetingGoal(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityJoustAlpha.class));
+        this.targetSelector.addGoal(1, new CopyMasterAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(2, new FindMasterGoal(this).setTargetClass(EntityJoustAlpha.class).setSightCheck(false).setRange(64.0D));
     }
 
 

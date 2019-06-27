@@ -8,8 +8,8 @@ import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
@@ -213,6 +213,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 
     // Targets:
+	/** A list of Entity Types that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
+	protected List<EntityType> hostileTargets;
     /** A target used for alpha creatures or connected mobs such as following concapede segements. **/
     private LivingEntity masterTarget;
     /** A target used usually for child mobs or connected mobs such as leading concapede segments. **/
@@ -344,8 +346,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 
     // Override AI:
-    public AttackTargetingGoal aiTargetPlayer = new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class);
-    public RevengeTargetingGoal aiDefendAnimals = new RevengeTargetingGoal(this).setHelpClasses(AnimalEntity.class);
+    public FindAttackTargetGoal aiTargetPlayer = new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class);
+    public RevengeGoal aiDefendAnimals = new RevengeGoal(this).setHelpClasses(AnimalEntity.class);
 
 
     // ==================================================
@@ -843,6 +845,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
     // ========== Despawning ==========
+	@Override
+	public boolean isNoDespawnRequired() {
+    	if(!this.canDespawnNaturally())
+    		return false;
+		return super.isNoDespawnRequired();
+	}
+
     /** Returns whether this mob should despawn overtime or not. Config defined forced despawns override everything except tamed creatures and tagged creatures. **/
     protected boolean canDespawnNaturally() {
     	if(this.creatureInfo.creatureSpawn.despawnForced)
@@ -2354,11 +2363,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return The attack range.
 	 */
 	public double getMeleeAttackRange() {
-		double range = this.getSize(Pose.STANDING).width * 1.55D;
+		double range = this.getSize(Pose.STANDING).width + 1;
 		if(this.isFlying()) {
-			range += 0.5D;
+			range += this.getFlightOffset();
 		}
-		return range;
+		return range * range;
 	}
 	
     // ========== Targets ==========
@@ -2767,13 +2776,27 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ==================================================
   	//                      Targets
   	// ==================================================
-    /** Returns true if this mob should attack it's attack targets. Used mostly by attack AIs and update methods. **/
+    /** Returns true if this creature should attack it's attack targets. Used mostly by attack AIs and update methods. **/
     public boolean isAggressive() {
     	if(this.extraMobBehaviour != null)
     		if(this.extraMobBehaviour.aggressiveOverride)
     			return true;
     	return this.isAggressiveByDefault;
     }
+
+    /** Returns true if this creature is hostile to the provided entity. **/
+    public boolean isHostileTo(Entity target) {
+    	if(this.hostileTargets.contains(target.getType()))
+    		return true;
+    	return false;
+	}
+
+	/** Marks this creature as hostile towards the provided entity. **/
+	public void setHostileTo(Entity target) {
+		if(this.hostileTargets.contains(target.getType()))
+			return;
+		this.hostileTargets.add(target.getType());
+	}
     
     /** Returns true if this mob should defend other entities that cry for help. Used mainly by the revenge AI. **/
     public boolean isProtective(Entity entity) { return true; }
@@ -2953,11 +2976,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ==================================================
   	//                     Abilities
   	// ==================================================
-    /** Returns whether or not this mob is hostile towards players, changes if a mob is tamed, etc too. **/
-    public boolean isHostile() {
-    	return this.isAggressive();
-    }
-    
     // ========== Movement ==========
     /** Can this entity move currently? **/
     public boolean canMove() {

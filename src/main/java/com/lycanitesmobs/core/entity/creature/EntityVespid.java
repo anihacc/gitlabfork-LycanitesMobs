@@ -6,10 +6,10 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterAttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
@@ -62,14 +62,14 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob, IGroupP
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(1, new MasterAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
-        this.targetSelector.addGoal(3, new MasterTargetingGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new CopyMasterAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
+        this.targetSelector.addGoal(3, new FindMasterGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
     }
 	
 	// ==================================================

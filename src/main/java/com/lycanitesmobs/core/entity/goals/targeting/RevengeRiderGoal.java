@@ -10,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import java.util.Iterator;
 import java.util.List;
 
-public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
+public class RevengeRiderGoal extends FindAttackTargetGoal {
 	
 	// Targets:
 	private TameableCreatureEntity host;
@@ -22,7 +22,7 @@ public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public RiderRevengeTargetingGoal(TameableCreatureEntity setHost) {
+    public RevengeRiderGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;
@@ -32,19 +32,19 @@ public class RiderRevengeTargetingGoal extends AttackTargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public RiderRevengeTargetingGoal setHelpCall(boolean setHelp) {
+    public RevengeRiderGoal setHelpCall(boolean setHelp) {
     	this.callForHelp = setHelp;
     	return this;
     }
-    public RiderRevengeTargetingGoal setSightCheck(boolean setSightCheck) {
+    public RevengeRiderGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
-    public RiderRevengeTargetingGoal setOnlyNearby(boolean setNearby) {
+    public RevengeRiderGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
-    public RiderRevengeTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public RevengeRiderGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }

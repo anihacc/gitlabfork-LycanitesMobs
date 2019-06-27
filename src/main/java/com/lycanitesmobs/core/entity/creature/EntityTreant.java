@@ -5,8 +5,8 @@ import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.api.IGroupPlant;
 import net.minecraft.entity.Entity;
@@ -61,10 +61,10 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupPlan
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
         //this.targetSelector.addGoal(0, new EntityAITargetOwnerRevenge(this));
         //this.targetSelector.addGoal(1, new EntityAITargetOwnerAttack(this));
-        this.targetSelector.addGoal(2, new RevengeTargetingGoal(this).setHelpClasses(EntityEnt.class));
-        this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(IGroupFire.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityEnt.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
         //this.targetSelector.addGoal(6, new EntityAITargetOwnerThreats(this));
     }
 	

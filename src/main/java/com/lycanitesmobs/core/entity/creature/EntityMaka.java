@@ -4,10 +4,10 @@ import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AvoidTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.MasterTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.ParentTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -57,10 +57,10 @@ public class EntityMaka extends AgeableCreatureEntity implements IGroupAnimal {
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityMakaAlpha.class));
-        this.targetSelector.addGoal(2, new ParentTargetingGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(2, new MasterTargetingGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
-        this.targetSelector.addGoal(3, new AvoidTargetingGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityMakaAlpha.class));
+        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
+        this.targetSelector.addGoal(2, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
+        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
     }
 
 

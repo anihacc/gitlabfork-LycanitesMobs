@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -49,9 +49,9 @@ public class EntityAstaroth extends BaseCreatureEntity implements IMob, IGroupDe
         this.goalSelector.addGoal(6, new WanderGoal(this).setSpeed(1.0D));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this).setHelpClasses(EntityTrite.class));
-        this.targetSelector.addGoal(1, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityTrite.class));
+        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
     }
 
 

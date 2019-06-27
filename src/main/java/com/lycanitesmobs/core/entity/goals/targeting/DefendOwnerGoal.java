@@ -10,14 +10,14 @@ import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 
-public class OwnerDefenseTargetingGoal extends TargetingGoal {
+public class DefendOwnerGoal extends TargetingGoal {
 	// Properties:
 	private TameableCreatureEntity tamedHost;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public OwnerDefenseTargetingGoal(TameableCreatureEntity setHost) {
+    public DefendOwnerGoal(TameableCreatureEntity setHost) {
         super(setHost);
     	this.tamedHost = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.TARGET));
@@ -27,17 +27,17 @@ public class OwnerDefenseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public OwnerDefenseTargetingGoal setSightCheck(boolean setSightCheck) {
+    public DefendOwnerGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
     
-    public OwnerDefenseTargetingGoal setOnlyNearby(boolean setNearby) {
+    public DefendOwnerGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
     
-    public OwnerDefenseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public DefendOwnerGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
@@ -92,7 +92,7 @@ public class OwnerDefenseTargetingGoal extends TargetingGoal {
         if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostile() && !(target instanceof IGroupAnimal)) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.tamedHost.getOwner()) && !(target instanceof IGroupAnimal)) {
             return true;
         }
         else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {

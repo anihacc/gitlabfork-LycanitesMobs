@@ -6,8 +6,8 @@ import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.AttackTargetingGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -45,14 +45,14 @@ public class EntityTrite extends BaseCreatureEntity implements IMob, IGroupDemon
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new RevengeTargetingGoal(this));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(0, new RevengeGoal(this));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(3, new AttackTargetingGoal(this).setTargetClass(ChickenEntity.class));
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
-            this.targetSelector.addGoal(5, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(ChickenEntity.class));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(3, 1));
+            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(3, 1));
         }
     }
 	

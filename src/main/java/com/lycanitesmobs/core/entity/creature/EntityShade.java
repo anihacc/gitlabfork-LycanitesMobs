@@ -63,26 +63,26 @@ public class EntityShade extends RideableCreatureEntity implements IGroupPredato
         this.goalSelector.addGoal(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(12, new LookIdleGoal(this));
 
-        this.targetSelector.addGoal(0, new RiderRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(1, new RiderAttackTargetingGoal(this));
-        this.targetSelector.addGoal(2, new OwnerRevengeTargetingGoal(this));
-        this.targetSelector.addGoal(3, new OwnerAttackTargetingGoal(this));
-        this.targetSelector.addGoal(4, new OwnerDefenseTargetingGoal(this));
-        this.targetSelector.addGoal(5, new RevengeTargetingGoal(this));
+        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
+        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
+        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
+        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
+        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
+        this.targetSelector.addGoal(5, new RevengeGoal(this));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
-            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
-            this.targetSelector.addGoal(6, new AttackTargetingGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
+            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
-        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(7, new AttackTargetingGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(ZombiePigmanEntity.class));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(IGroupAlpha.class));
-            this.targetSelector.addGoal(8, new AttackTargetingGoal(this).setTargetClass(AnimalEntity.class));
+            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
+            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
         }
-        this.targetSelector.addGoal(9, new AttackTargetingGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(10, new OwnerDefenseTargetingGoal(this));
+        this.targetSelector.addGoal(9, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(10, new DefendOwnerGoal(this));
     }
 
 

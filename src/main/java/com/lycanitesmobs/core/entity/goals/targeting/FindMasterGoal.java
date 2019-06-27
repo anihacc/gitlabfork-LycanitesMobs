@@ -1,64 +1,64 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.passive.AnimalEntity;
 
-import java.util.EnumSet;
-
-public class AvoidTargetingGoal extends TargetingGoal {
+public class FindMasterGoal extends TargetingGoal {
 	// Targets:
     private Class targetClass = LivingEntity.class;
     
     // Properties:
+    private boolean tameTargeting = false;
     private int targetChance = 0;
-    protected boolean tameTargeting = false;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public AvoidTargetingGoal(BaseCreatureEntity setHost) {
+    public FindMasterGoal(BaseCreatureEntity setHost) {
         super(setHost);
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public AvoidTargetingGoal setChance(int setChance) {
-    	this.targetChance = setChance;
-    	return this;
-    }
-
-    public AvoidTargetingGoal setTargetClass(Class setTargetClass) {
-    	this.targetClass = setTargetClass;
-    	return this;
-    }
-
-    public AvoidTargetingGoal setSightCheck(boolean setSightCheck) {
-    	this.checkSight = setSightCheck;
-    	return this;
-    }
-
-    public AvoidTargetingGoal setOnlyNearby(boolean setNearby) {
-    	this.nearbyOnly = setNearby;
-    	return this;
-    }
-
-    public AvoidTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
-    	this.cantSeeTimeMax = setCantSeeTimeMax;
-    	return this;
-    }
-
-    public AvoidTargetingGoal setTameTargetting(boolean setTargetting) {
+    public FindMasterGoal setTameTargetting(boolean setTargetting) {
     	this.tameTargeting = setTargetting;
     	return this;
     }
-
-    public AvoidTargetingGoal setHelpCall(boolean setHelp) {
-        this.callForHelp = setHelp;
-        return this;
+    
+    
+    // ==================================================
+  	//                  Set Properties
+  	// ==================================================
+    public FindMasterGoal setChance(int setChance) {
+    	this.targetChance = setChance;
+    	return this;
+    }
+    public FindMasterGoal setTargetClass(Class setTargetClass) {
+    	this.targetClass = setTargetClass;
+    	return this;
+    }
+    public FindMasterGoal setSightCheck(boolean setSightCheck) {
+    	this.checkSight = setSightCheck;
+    	return this;
+    }
+    public FindMasterGoal setOnlyNearby(boolean setNearby) {
+    	this.nearbyOnly = setNearby;
+    	return this;
+    }
+    public FindMasterGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    	this.cantSeeTimeMax = setCantSeeTimeMax;
+    	return this;
+    }
+    public FindMasterGoal setRange(double setDist) {
+    	this.targetingRange = setDist;
+    	return this;
     }
     
     
@@ -66,9 +66,9 @@ public class AvoidTargetingGoal extends TargetingGoal {
  	//                    Host Target
  	// ==================================================
     @Override
-    protected LivingEntity getTarget() { return this.host.getAvoidTarget(); }
+    protected LivingEntity getTarget() { return this.host.getMasterTarget(); }
     @Override
-    protected void setTarget(LivingEntity newTarget) { this.host.setAvoidTarget(newTarget); }
+    protected void setTarget(LivingEntity newTarget) { this.host.setMasterTarget(newTarget); }
     
     
     // ==================================================
@@ -80,15 +80,27 @@ public class AvoidTargetingGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-        // Own Class Check:
-    	if(this.targetClass != this.host.getClass() && target.getClass() == this.host.getClass())
+        if(target instanceof AnimalEntity && ((AnimalEntity)target).getGrowingAge() < 0)
             return false;
-
-		// Tamed Check:
-		if(target instanceof TameableCreatureEntity && ((TameableCreatureEntity)target).isTamed())
-			return false;
+    	if(target instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)target).getGrowingAge() < 0)
+            return false;
         
+        // Tamed Checks:
+        if(!this.tameTargeting && this.host instanceof TameableCreatureEntity && ((TameableCreatureEntity)this.host).isTamed())
+        	return false;
     	return true;
+    }
+
+
+    // ==================================================
+ 	//                 Get Target Distance
+ 	// ==================================================
+    @Override
+    protected double getTargetDistance() {
+    	if(this.targetingRange > 0)
+    		return this.targetingRange;
+    	IAttributeInstance attributeinstance = this.host.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        return attributeinstance.getValue();
     }
     
     
@@ -104,21 +116,13 @@ public class AvoidTargetingGoal extends TargetingGoal {
 			return false;
 		}
 
-		// Check for other avoid target AIs:
-        LivingEntity avoidTarget = this.getTarget();
-        if(avoidTarget != null && !this.isValidTarget(avoidTarget)) {
-            return false;
-        }
-
-    	this.target = null;
+		this.target = null;
         
         double distance = this.getTargetDistance();
         double heightDistance = 4.0D;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);
-        if(this.callForHelp)
-            this.callNearbyForHelp();
         return this.target != null;
     }
 }

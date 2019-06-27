@@ -152,7 +152,7 @@ public abstract class TargetingGoal extends Goal {
         if(this.targetingRange > 0)
             return this.targetingRange;
     	IAttributeInstance attributeInstance = this.host.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-        return attributeInstance == null ? 16.0D : attributeInstance.getValue();
+        return attributeInstance.getValue();
     }
 
 
