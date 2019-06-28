@@ -1,13 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,15 +10,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityJoustAlpha extends AgeableCreatureEntity implements IGroupAlpha {
+public class EntityJoustAlpha extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
@@ -41,20 +34,11 @@ public class EntityJoustAlpha extends AgeableCreatureEntity implements IGroupAlp
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this).setSpeed(1.0D));
-        this.goalSelector.addGoal(6, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeGoal(this));
-        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(EntityJoustAlpha.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getType()));
+
+		super.registerGoals();
+
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	

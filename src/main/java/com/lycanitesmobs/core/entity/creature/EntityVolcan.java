@@ -13,7 +13,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SilverfishEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
@@ -52,10 +51,10 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.meleeAttackAI = new AttackMeleeGoal(this).setLongMemory(true);
         this.goalSelector.addGoal(2, meleeAttackAI);
-        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(3, this.stayGoal);
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(8, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
@@ -68,8 +67,8 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob, IGroup
 		this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupWater.class));
 		this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(SnowGolemEntity.class));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(SilverfishEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
 		this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPlant.class));
         this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }

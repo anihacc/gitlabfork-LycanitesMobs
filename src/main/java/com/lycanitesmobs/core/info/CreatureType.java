@@ -50,17 +50,17 @@ public class CreatureType {
 
 
 	/** Loads this creature type from a JSON object. **/
-	public void loadFromJSON(JsonObject json) {
+	public void loadFromJson(JsonObject json) {
 		this.name = json.get("name").getAsString();
 	}
 
 	/**
 	 * Loads this creature type (should only be called during startup), generates spawn egg, etc.
 	 */
-	public void load() {
+	public void init() {
 		this.createItems();
 
-		LycanitesMobs.logDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
+		LycanitesMobs.logDebug("Creature Type", "Loaded Creature Type: " + this.getName());
 	}
 
 

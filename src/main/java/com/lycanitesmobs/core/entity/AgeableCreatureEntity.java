@@ -1,5 +1,8 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
+import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
@@ -50,20 +53,36 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	public AgeableCreatureEntity(EntityType<? extends AgeableCreatureEntity> entityType, World world) {
 		super(entityType, world);
 	}
+
+	// ========== Init ==========
+	@Override
+	protected void registerData() {
+		super.registerData();
+		this.dataManager.register(AGE, 0);
+		this.dataManager.register(LOVE, 0);
+	}
+
+	// ========== Init ==========
+	@Override
+	protected void registerGoals() {
+		// Greater Actions:
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new MateGoal(this).setMateDistance(5.0D));
+
+		super.registerGoals();
+
+		// Lesser Targeting:
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
+
+		// Lesser Actions:
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(3.0D));
+	}
     
     // ========== Setup ==========
+	@Override
     public void setupMob() {
         if(this.babySpawnChance > 0D && this.rand.nextDouble() < this.babySpawnChance)
         	this.setGrowingAge(growthTime);
         super.setupMob();
-    }
-	
-	// ========== Init ==========
-    @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(AGE, 0);
-        this.dataManager.register(LOVE, 0);
     }
     
     // ========== Name ==========
@@ -244,6 +263,14 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
         return this.getGrowingAge() < 0;
     }
 
+	/**
+	 * Returns if this creature should follow and find parents. By default only returns true if this creature is a baby.
+	 * @return Returns true if parents should be searched for and followed.
+	 */
+	public boolean shouldFollowParent() {
+		return !this.isChild();
+	}
+
 	
 	// ==================================================
   	//                        Size
@@ -256,8 +283,10 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	// ==================================================
   	//                      Breeding
   	// ==================================================
-    /** Can this entity by tempted (usually lured by an item) currently? **/
-    public boolean canBeTempted() { return !this.isInLove(); }
+    @Override
+    public boolean canBeTempted() {
+    	return !this.isInLove() && super.canBeTempted();
+    }
 
 	// ========== Targets ==========
 	public AgeableCreatureEntity getBreedingTarget() { return this.breedingTarget; }

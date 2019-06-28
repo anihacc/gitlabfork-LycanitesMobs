@@ -66,15 +66,6 @@ public class CreatureConfig {
 
 
 	// Interaction:
-	/** If true, predators such as Ventoraptors will attack farm animals such as Sheep or Makas. **/
-	public boolean predatorsAttackAnimals = true;
-
-	/** If true, all mobs that attack players will also attack villagers. **/
-	public boolean mobsAttackVillagers = true;
-
-	/** If true, passive mobs will fight back when hit instead of running away. **/
-	public boolean animalsFightBack = false;
-
 	/** If true, some elemental mobs will fuse with each other on sight into a stronger different elemental. **/
 	public boolean elementalFusion = true;
 
@@ -147,9 +138,6 @@ public class CreatureConfig {
 		this.bossAntiFlight = ConfigCreatures.INSTANCE.bossAntiFlight.get();
 
 		// Interaction:
-		this.predatorsAttackAnimals = ConfigCreatures.INSTANCE.predatorsAttackAnimals.get();
-		this.mobsAttackVillagers = ConfigCreatures.INSTANCE.mobsAttackVillagers.get();
-		this.animalsFightBack = ConfigCreatures.INSTANCE.animalsFightBack.get();
 		this.elementalFusion = ConfigCreatures.INSTANCE.elementalFusion.get();
 		this.elementalFusionLevelMix = ConfigCreatures.INSTANCE.elementalFusionLevelMix.get();
 		this.elementalFusionLevelMultiplier = ConfigCreatures.INSTANCE.elementalFusionLevelMultiplier.get();

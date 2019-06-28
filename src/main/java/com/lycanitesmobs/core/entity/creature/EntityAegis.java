@@ -1,26 +1,22 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.api.IGroupRock;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendVillageGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAegis extends TameableCreatureEntity implements IGroupRock, IFusable {
-	protected BlockPos villagePos;
-	public boolean chestProtection = true; // TODO Creature flags.
+public class EntityAegis extends TameableCreatureEntity implements IFusable {
+	public boolean chestProtection = true; // TODO Creature flags. Chest protection.
 
     // ==================================================
  	//                    Constructor
@@ -40,25 +36,10 @@ public class EntityAegis extends TameableCreatureEntity implements IGroupRock, I
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-		this.goalSelector.addGoal(1, new FollowFuseGoal(this).setLostDistance(16));
-        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
-        this.goalSelector.addGoal(3, this.aiSit);
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(8, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
 
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-		this.targetSelector.addGoal(3, new DefendVillageGoal(this));
-		this.targetSelector.addGoal(4, new DefenseTargetingGoal(this, VillagerEntity.class));
-		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(EntityArgus.class));
-		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PillagerEntity.class));
-		this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(RavagerEntity.class));
-		this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
-		this.targetSelector.addGoal(7, new FindFuseTargetGoal(this));
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendVillageGoal(this));
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, VillagerEntity.class));
     }
 	
 	

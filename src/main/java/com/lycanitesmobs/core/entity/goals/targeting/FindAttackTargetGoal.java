@@ -1,35 +1,23 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityAegis;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.Difficulty;
 
 import java.util.*;
 
 public class FindAttackTargetGoal extends TargetingGoal {
 	// Targets:
-    public Class targetClass = LivingEntity.class;
-    private List<Class> targetClasses = new ArrayList<>();
-    
-    // Properties:
-    private int targetChance = 0;
-    protected boolean tameTargeting = false;
-    private int allySize = 0;
-    private int enemySize = 0;
+    private List<EntityType> targetTypes = new ArrayList<>();
 
-    // Temp Groups:
-	private static List<Class> VILLAGER_CLASSES = Arrays.asList(VillagerEntity.class, PillagerEntity.class);
-    
+    // Properties:
+	protected boolean targetPlayers;
+	private boolean requirePack = false;
+	protected int targetChance = 0;
+    protected boolean tameTargeting = false;
+
     // ==================================================
   	//                    Constructor
   	// ==================================================
@@ -37,8 +25,8 @@ public class FindAttackTargetGoal extends TargetingGoal {
         super(setHost);
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
-    
-    
+
+
     // ==================================================
   	//                  Set Properties
   	// ==================================================
@@ -51,17 +39,14 @@ public class FindAttackTargetGoal extends TargetingGoal {
     	this.checkSight = bool;
     	return this;
     }
-    
-    public FindAttackTargetGoal setTargetClass(Class setTargetClass) {
-    	this.targetClass = setTargetClass;
-    	if(setTargetClass == VillagerEntity.class && !(this.host instanceof EntityAegis)) {
-    		this.setTargetClasses(VILLAGER_CLASSES);
+
+	public FindAttackTargetGoal addTargets(EntityType... targets) {
+		this.targetTypes.addAll(Arrays.asList(targets));
+		for(EntityType targetType : targets) {
+			this.host.setHostileTo(targetType);
+			if(targetType == EntityType.PLAYER)
+				this.targetPlayers = true;
 		}
-    	return this;
-    }
-    
-    public FindAttackTargetGoal setTargetClasses(List<Class> classList) {
-    	this.targetClasses = classList;
     	return this;
     }
     
@@ -90,15 +75,9 @@ public class FindAttackTargetGoal extends TargetingGoal {
     	return this;
     }
     
-    /** If both values are above 0 then this mob will consider the size of the enemy pack and it's pack before attacking.
-     * setAllySize How many of this mob vs the enemy pack.
-     * setEnemySize How many of the enemy vs this mobs size.
-     * For example allySize of this mob will attack up to enemySize of the enemy at once.
-     * Setting either value at or below 0 will disable this functionality.
-    **/
-    public FindAttackTargetGoal setPackHuntingScale(int setAllySize, int setEnemySize) {
-    	this.allySize = setAllySize;
-    	this.enemySize = setEnemySize;
+    /** Makes the creature require a pack for this targeting to. **/
+    public FindAttackTargetGoal requiresPack() {
+    	this.requirePack = true;
     	return this;
     }
     
@@ -117,40 +96,14 @@ public class FindAttackTargetGoal extends TargetingGoal {
  	// ==================================================
     @Override
     protected boolean isValidTarget(LivingEntity target) {
-    	// Target Class List:
-		if(!this.targetClasses.isEmpty()) {
-			boolean foundTarget = false;
-			for(Class targetClass : this.targetClasses) {
-				if(targetClass.isAssignableFrom(target.getClass())) {
-					foundTarget = true;
-					break;
-				}
-			}
-			if(!foundTarget)
-				return false;
-		}
-
-        // Target Class Check:
-        else if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
-            return false;
-
-    	// Own Class Check:
-    	if(this.targetClass != this.host.getClass() && target.getClass() == this.host.getClass())
-            return false;
-
-		// Peaceful Difficulty Check:
-		if(this.host.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL && target instanceof PlayerEntity)
+    	// Target Type Check:
+		if(this.targetTypes.size() > 0 && !this.targetTypes.contains(target.getType())) {
 			return false;
+		}
 
 		// Tamed Targeting Check:
 		if(!this.tameTargeting && this.host.isTamed())
 			return false;
-
-        // Predator Animal/Alpha Check:
-        if(this.targetClass == IGroupAnimal.class || this.targetClass == IGroupAlpha.class) {
-            if(target instanceof IGroupPredator)
-                return false; // Do not attack predators when targeting animals or alphas (some predators could also count as alphas, etc).
-        }
     	
     	// Type Check:
     	if(!this.host.canAttack(target.getType()))
@@ -160,30 +113,10 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		if(!this.host.canAttack(target)) {
 			return false;
 		}
-
-		// Mod Interaction Check:
-		if(!Targeting.isValidTarget(this.host, target)) {
-			return false;
-		}
         
-        // Pack Size Check:
-        if(this.allySize > 0 && this.enemySize > 0) {
-            try {
-                double hostPackRange = 32D;
-                double hostPackSize = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(hostPackRange, hostPackRange, hostPackRange)).size();
-                double hostPackScale = hostPackSize / this.allySize;
-
-                double targetPackRange = 64D;
-                double targetPackSize = target.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, target.getBoundingBox().grow(targetPackRange, targetPackRange, targetPackRange), (Predicate<LivingEntity>) entity -> entity.getClass().isAssignableFrom(FindAttackTargetGoal.this.targetClass)).size();
-                double targetPackScale = targetPackSize / this.enemySize;
-
-                if (hostPackScale < targetPackScale)
-                    return false;
-            }
-            catch (Exception e) {
-                LycanitesMobs.logWarning("", "An exception occurred when assessing pack sizes, this has been skipped to prevent a crash.");
-                e.printStackTrace();
-            }
+        // Pack Check:
+        if(this.requirePack && !this.host.isInPack()) {
+            return false;
         }
         
     	return true;
@@ -199,7 +132,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 			return false;
 		}
 
-		if(this.targetClass == PlayerEntity.class) {
+		if(this.targetPlayers) {
 			if (this.host.updateTick % 10 != 0) {
 				return false;
 			}
@@ -234,7 +167,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 	@Override
 	public LivingEntity getNewTarget(double rangeX, double rangeY, double rangeZ) {
 		// Faster Player Targeting:
-		if(this.targetClass == PlayerEntity.class) {
+		if(this.targetPlayers) {
 			LivingEntity newTarget = null;
 			try {
 				List<? extends PlayerEntity> players = this.host.getEntityWorld().getPlayers();
@@ -254,9 +187,17 @@ public class FindAttackTargetGoal extends TargetingGoal {
 				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
 				e.printStackTrace();
 			}
-			return newTarget;
+
+			// Return player target unless other entities should also be targeted.
+			if(newTarget != null || this.targetTypes.size() == 1) {
+				return newTarget;
+			}
 		}
 
-		return super.getNewTarget(rangeX, rangeY, rangeZ);
+		if(this.host.updateTick % 40 == 0) {
+			return super.getNewTarget(rangeX, rangeY, rangeZ);
+		}
+
+		return null;
 	}
 }

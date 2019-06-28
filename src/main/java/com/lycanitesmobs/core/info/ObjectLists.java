@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ObjectLists {
-	
-	// Item List Names:
-	public static String[] itemListNames = new String[] {"RawMeat", "CookedMeat", "Vegetables", "RawFish", "CookedFish", "CactusFood", "Mushrooms", "Sweets", "Fuel"};
-	
 	// Maps:
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
 	public static Map<String, List<EntityType>> entityLists = new HashMap<>();

@@ -2,7 +2,13 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.goals.actions.SitGoal;
+import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
+import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
+import com.lycanitesmobs.core.entity.goals.actions.FollowOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StayGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.Entity;
@@ -44,15 +50,12 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // Owner:
 	public UUID ownerUUID;
 
-	// AI:
-	public SitGoal aiSit;
-
     // Datawatcher:
     protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.BYTE); // TODO Tame Type IDs.
     protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.FLOAT);
-	//protected static final DataParameter<Integer> LOYALTY = EntityDataManager.createKey(EntityCreatureTameable.class, DataSerializers.VARINT); TODO Loyalty.
+	protected static final DataParameter<Integer> LOYALTY = EntityDataManager.createKey(TameableCreatureEntity.class, DataSerializers.VARINT);
 
     /** Used for the TAMED WATCHER_ID, this holds a series of booleans that describe the tamed status as well as instructed behaviour. **/
 	public static enum TAMED_ID {
@@ -83,8 +86,22 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.aiSit = new SitGoal(this);
+		// Greater Targeting:
+		this.targetSelector.addGoal(this.nextReactTargetIndex++, new RevengeOwnerGoal(this));
+		this.targetSelector.addGoal(this.nextReactTargetIndex++, new CopyOwnerAttackTargetGoal(this));
+
+		// Greater Actions:
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new StayGoal(this));
+
+		super.registerGoals();
+
+		// Lesster Targeting:
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendOwnerGoal(this));
+
+		// Lesser Actions:
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new BegGoal(this));
+
     }
     
     // ========== Name ==========
@@ -674,7 +691,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * Called when this creature is first tamed by a player, this clears movement, targets, etc and sets default the pet behaviour.
 	 */
 	public void onTamedByPlayer() {
-		this.refreshStats();
+		this.refreshAttributes();
 		this.clearMovement();
 		this.setAttackTarget(null);
 		this.setSitting(false);
@@ -934,9 +951,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
     //                     Abilities
     // ==================================================
-    // =========== Movement ==========
-    public boolean canBeTempted() { return !this.isTamed(); }
-
     /*@Override
     public boolean shouldDismountInWater(Entity rider) { TODO Possibly in EntityType as some obfuscated method?
         return false;

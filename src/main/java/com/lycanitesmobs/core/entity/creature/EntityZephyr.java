@@ -9,7 +9,6 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
@@ -38,9 +37,9 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(2, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(3, this.stayGoal);
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(8, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
@@ -49,8 +48,8 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob, IGroup
         this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
         this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
 	
@@ -64,7 +63,7 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob, IGroup
         super.livingTick();
 
         // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
+        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
@@ -76,7 +75,7 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob, IGroup
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
             //this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);

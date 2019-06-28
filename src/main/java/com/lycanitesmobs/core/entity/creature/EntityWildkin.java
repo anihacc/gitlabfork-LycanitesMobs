@@ -8,7 +8,6 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.GroundPathNavigator;
@@ -40,13 +39,13 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
             GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(1, this.aiSit);
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
+        this.goalSelector.addGoal(1, this.stayGoal);
         this.goalSelector.addGoal(2, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(4, new BreakDoorGoal(this));
         this.goalSelector.addGoal(5, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(6, this.aiSit);
+        this.goalSelector.addGoal(6, this.stayGoal);
         this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(8, new WanderGoal(this));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
@@ -55,8 +54,8 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
         this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
         this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
 

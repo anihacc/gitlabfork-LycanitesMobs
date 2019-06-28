@@ -1,23 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupElectric;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.info.ElementManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -25,9 +19,8 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityAbaia extends TameableCreatureEntity implements IMob, IGroupPredator, IGroupElectric {
+public class EntityAbaia extends TameableCreatureEntity implements IMob {
 
-	WanderGoal wanderAI;
     protected short aoeAttackTick = 0;
 
     // ==================================================
@@ -51,26 +44,7 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob, IGroupP
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(2, this.aiSit);
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(7, wanderAI.setPauseRate(0));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        }
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 
 
@@ -83,19 +57,20 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob, IGroupP
         super.livingTick();
 
         // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
+        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
-                if(target != this && !(target instanceof IGroupElectric) && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    target.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage(1));
+                if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
+                    if(target instanceof BaseCreatureEntity)
+                    target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
                 }
             }
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote) {
+        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
             this.getEntityWorld().addParticle(ParticleTypes.CRIT, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);

@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.SquidEntity;
@@ -67,7 +66,7 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
         this.goalSelector.addGoal(2, new PlayerControlGoal(this));
         this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.goalSelector.addGoal(4, new AttackMeleeGoal(this).setLongMemory(false).setRange(2));
-        this.goalSelector.addGoal(5, this.aiSit);
+        this.goalSelector.addGoal(5, this.stayGoal);
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new WanderGoal(this);
         this.goalSelector.addGoal(7, wanderAI.setPauseRate(60));
@@ -81,8 +80,8 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
         this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
         this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));

@@ -22,7 +22,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.SnowGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -63,7 +62,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob, IGroupFire
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
         this.goalSelector.addGoal(1, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
         this.goalSelector.addGoal(2, new StayByWaterGoal(this).setSpeed(1.25D));
         this.wanderAI = new WanderGoal(this);
@@ -75,8 +74,8 @@ public class EntityLobber extends BaseCreatureEntity implements IMob, IGroupFire
 		this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupIce.class));
         this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupWater.class));
         this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPlant.class));
     }
     

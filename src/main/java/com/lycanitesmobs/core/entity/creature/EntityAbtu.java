@@ -1,30 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPredator {
-	
-	WanderGoal wanderAI;
+public class EntityAbtu extends TameableCreatureEntity implements IMob {
     int swarmLimit = 5; // TODO Creature Flags
     
     // ==================================================
@@ -48,23 +36,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPr
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(2, this.aiSit);
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(6, wanderAI.setPauseRate(0));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        }
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
     
     
@@ -96,7 +68,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPr
 			return;
 		
 		// Spawn Minions:
-		if(this.swarmLimit > 0 && this.nearbyCreatureCount(this.getClass(), 64D) < this.swarmLimit) {
+		if(this.swarmLimit > 0 && this.nearbyCreatureCount(this.getType(), 64D) < this.swarmLimit) {
 			float random = this.rand.nextFloat();
 			float spawnChance = 0.25F;
 			if(random <= spawnChance)
@@ -105,7 +77,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob, IGroupPr
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	AgeableCreatureEntity minion = new EntityAbtu((EntityType<? extends EntityAbtu>) this.getType(), this.getEntityWorld());
+    	AgeableCreatureEntity minion = (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
     	minion.setGrowingAge(minion.growthTime);
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);

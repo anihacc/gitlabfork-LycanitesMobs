@@ -1,16 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -41,21 +38,14 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        if(this.getNavigator() instanceof GroundPathNavigator) {
-            GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
-        }
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(1, new BreakDoorGoal(this));
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(6, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+		super.registerGoals();
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+		if(this.getNavigator() instanceof GroundPathNavigator) {
+			GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
+			pathNavigateGround.setBreakDoors(true);
+		}
     }
 	
 	

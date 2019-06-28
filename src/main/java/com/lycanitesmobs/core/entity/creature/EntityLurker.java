@@ -12,7 +12,6 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -40,11 +39,11 @@ public class EntityLurker extends TameableCreatureEntity implements IGroupHunter
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
         this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
         this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(4, this.aiSit);
+        this.goalSelector.addGoal(4, this.stayGoal);
         this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(6, new TemptGoal(this).setTemptDistanceMin(2.0D));
         this.goalSelector.addGoal(7, new MateGoal(this));
@@ -57,8 +56,8 @@ public class EntityLurker extends TameableCreatureEntity implements IGroupHunter
         this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
         this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(ChickenEntity.class));

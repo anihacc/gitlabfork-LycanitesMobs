@@ -1,25 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
-import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityGorgomite extends BaseCreatureEntity implements IMob, IGroupPrey {
+public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 	private int gorgomiteSwarmLimit = 10; // TODO Creature flags.
     
     // ==================================================
@@ -38,19 +28,8 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob, IGroupP
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(2.0D).setFarSpeed(1.5D).setNearDistance(5.0D).setFarDistance(10.0D));
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setLongMemory(true));
-        this.goalSelector.addGoal(6, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupHunter.class));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupAlpha.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityManticore.class));
     }
 	
 	
@@ -73,7 +52,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob, IGroupP
 			return;
 		
 		// Spawn Minions:
-		if(this.gorgomiteSwarmLimit > 0 && this.nearbyCreatureCount(this.getClass(), 64D) < this.gorgomiteSwarmLimit) {
+		if(this.gorgomiteSwarmLimit > 0 && this.countAllies(64D) < this.gorgomiteSwarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.25F)
 				this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
@@ -81,27 +60,14 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob, IGroupP
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	LivingEntity minion = CreatureManager.getInstance().getCreature("gorgomite").createEntity(getEntityWorld());
+		BaseCreatureEntity minion = (BaseCreatureEntity) this.creatureInfo.createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-    	if(minion instanceof BaseCreatureEntity) {
-    		((BaseCreatureEntity)minion).setMinion(true);
-    		((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
-    	}
+		minion.setMinion(true);
+		minion.applySubspecies(this.getSubspeciesIndex());
     	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());
     }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-	@Override
-	public boolean canAttack(LivingEntity target) {
-		if(target instanceof IGroupAlpha || target instanceof IGroupPredator)
-			return false;
-		return super.canAttack(target);
-	}
     
     
     // ==================================================

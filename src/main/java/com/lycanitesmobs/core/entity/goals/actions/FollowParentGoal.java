@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 
 public class FollowParentGoal extends FollowGoal {
-	public boolean followAsAdult = false;
 	
 	// Targets:
 	AgeableCreatureEntity host;
@@ -38,10 +37,6 @@ public class FollowParentGoal extends FollowGoal {
     	this.lostDistance = setDist;
     	return this;
     }
-    public FollowParentGoal setAdultFollowing(boolean setBool) {
-    	this.followAsAdult = setBool;
-    	return this;
-    }
     public FollowParentGoal setFollowBehind(double setDist) {
     	this.behindDistance = setDist;
     	return this;
@@ -68,7 +63,7 @@ public class FollowParentGoal extends FollowGoal {
   	// ==================================================
 	@Override
     public boolean shouldExecute() {
-    	if(!this.followAsAdult && !this.host.isChild())
+    	if(!this.host.shouldFollowParent())
     		return false;
     	return super.shouldExecute();
     }
@@ -79,7 +74,7 @@ public class FollowParentGoal extends FollowGoal {
   	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
-    	if(!this.followAsAdult && !this.host.isChild())
+    	if(!this.host.shouldFollowParent())
     		return false;
     	return super.shouldContinueExecuting();
     }

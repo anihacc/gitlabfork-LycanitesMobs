@@ -1,16 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupBoss;
-import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
-import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
@@ -18,12 +12,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -46,7 +35,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
+public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
     protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.createKey(EntityAsmodeus.class, DataSerializers.BYTE);
@@ -60,11 +49,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupDe
     // AI:
     public AttackRangedGoal aiRangedAttack;
 
-    public List<PlayerEntity> playerTargets = new ArrayList<PlayerEntity>();
+    public List<PlayerEntity> playerTargets = new ArrayList<>();
     public boolean firstPlayerTargetCheck = false;
-    public List<EntityTrite> triteMinions = new ArrayList<EntityTrite>();
-    public List<EntityAstaroth> astarothMinions = new ArrayList<EntityAstaroth>();
-    public List<EntityCacodemon> cacodemonMinions = new ArrayList<EntityCacodemon>();
+    public List<EntityTrite> triteMinions = new ArrayList<>();
+    public List<EntityAstaroth> astarothMinions = new ArrayList<>();
+    public List<EntityCacodemon> cacodemonMinions = new ArrayList<>();
 
     // First Phase:
     public int devilstarStreamTime = 0;
@@ -114,17 +103,8 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupDe
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
         this.aiRangedAttack = new AttackRangedGoal(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
-        this.goalSelector.addGoal(2, this.aiRangedAttack);
-        //this.goalSelector.addGoal(6, new EntityAIWander(this).setSpeed(1.0D));
-        //this.goalSelector.addGoal(7, new EntityAIStayByHome(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-		this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityTrite.class, EntityAstaroth.class, EntityCacodemon.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.aiRangedAttack);
     }
 
     // ========== Init ==========

@@ -1,19 +1,14 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -26,7 +21,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityCockatrice extends RideableCreatureEntity implements IMob, IGroupHunter {
+public class EntityCockatrice extends RideableCreatureEntity implements IMob {
 
     protected WanderGoal wanderAI;
     protected AttackMeleeGoal attackAI;
@@ -52,29 +47,10 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob, IG
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
-        this.goalSelector.addGoal(5, this.attackAI);
-        this.goalSelector.addGoal(6, this.aiSit);
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new WanderGoal(this).setPauseRate(0);
-        this.goalSelector.addGoal(8, this.wanderAI);
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
-        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
-        this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-		this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(EntityConcapedeSegment.class));
-		this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(EntityVespid.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+        EntityType vespidType = CreatureManager.getInstance().getEntityType("vespid");
+        if(vespidType != null)
+			this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(vespidType));
     }
 	
 	

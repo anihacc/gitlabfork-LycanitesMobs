@@ -52,8 +52,8 @@ public class EntityWraith extends TameableCreatureEntity implements IMob, IGroup
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
         this.targetSelector.addGoal(0, new RevengeGoal(this));
-        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
     }
     
     

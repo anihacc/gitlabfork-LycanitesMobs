@@ -12,7 +12,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CowEntity;
@@ -52,11 +51,11 @@ public class EntityShade extends RideableCreatureEntity implements IGroupPredato
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         //this.goalSelector.addGoal(2, this.aiSit);
         this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.goalSelector.addGoal(6, new AttackMeleeGoal(this).setSpeed(1.5D));
-        this.goalSelector.addGoal(7, this.aiSit);
+        this.goalSelector.addGoal(7, this.stayGoal);
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(9, new WanderGoal(this).setSpeed(1.0D));
         this.goalSelector.addGoal(10, new BegGoal(this));
@@ -74,8 +73,8 @@ public class EntityShade extends RideableCreatureEntity implements IGroupPredato
             this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
             this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
-        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));

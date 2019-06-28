@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
@@ -55,8 +54,8 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
-        this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
+        this.goalSelector.addGoal(2, this.stayGoal);
         this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
         this.goalSelector.addGoal(3, this.attackAI);
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
@@ -73,7 +72,7 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
         this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
         this.targetSelector.addGoal(3, new RevengeGoal(this).setHelpCall(true));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
     }
 	

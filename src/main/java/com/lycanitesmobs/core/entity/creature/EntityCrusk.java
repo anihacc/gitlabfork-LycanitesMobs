@@ -1,24 +1,21 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.*;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityCrusk extends TameableCreatureEntity implements IGroupPredator, IGroupHeavy {
+public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
     
     // ==================================================
  	//                    Constructor
@@ -39,28 +36,9 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupPredato
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(60));
-        this.goalSelector.addGoal(2, this.aiSit);
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.goalSelector.addGoal(6, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(7, new WanderGoal(this));
-        this.goalSelector.addGoal(9, new BegGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        }
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(60));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
     
     

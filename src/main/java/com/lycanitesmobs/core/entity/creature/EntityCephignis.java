@@ -1,21 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCephignis extends AgeableCreatureEntity implements IGroupAnimal, IGroupFire {
+public class EntityCephignis extends AgeableCreatureEntity {
 
 	WanderGoal wanderAI;
 
@@ -53,19 +50,8 @@ public class EntityCephignis extends AgeableCreatureEntity implements IGroupAnim
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(2, new TemptGoal(this).setItemList("Fuel"));
-        this.goalSelector.addGoal(3, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.goalSelector.addGoal(5, new MateGoal(this));
-        this.goalSelector.addGoal(6, new FollowParentGoal(this).setSpeed(1.0D));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(7, this.wanderAI);
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(1, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemStack(new ItemStack(Items.COAL, 1)));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
     
     

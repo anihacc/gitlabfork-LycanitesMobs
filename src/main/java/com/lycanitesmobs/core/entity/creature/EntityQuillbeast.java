@@ -41,13 +41,13 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(1, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
         this.goalSelector.addGoal(2, this.aiAttackMelee);
         this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
         this.goalSelector.addGoal(2, this.aiAttackRanged);
-        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(3, this.stayGoal);
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
         this.goalSelector.addGoal(5, this.aiAvoid);
@@ -58,8 +58,8 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
         this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
         this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class));
         this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupHunter.class));
         this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));

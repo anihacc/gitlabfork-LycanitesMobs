@@ -1,11 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupShadow;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
+import com.lycanitesmobs.core.entity.goals.actions.MoveVillageGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
@@ -19,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityGeist extends AgeableCreatureEntity implements IMob, IGroupShadow {
+public class EntityGeist extends AgeableCreatureEntity implements IMob {
 
     public boolean geistShadowfireDeath = true; // TODO Creature flags.
 
@@ -43,23 +42,19 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob, IGroupSh
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MoveVillageGoal(this));
+
         super.registerGoals();
+
+        this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
+
         if(this.getNavigator() instanceof GroundPathNavigator) {
             GroundPathNavigator pathNavigateGround = (GroundPathNavigator)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(1, new BreakDoorGoal(this));
-        this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.goalSelector.addGoal(4, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(6, new MoveVillageGoal(this));
-        this.goalSelector.addGoal(7, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class).setCheckSight(false));
     }
     
     

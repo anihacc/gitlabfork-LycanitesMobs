@@ -14,7 +14,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -49,12 +48,12 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob, IGroupH
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(2, new PlayerControlGoal(this));
         this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
         this.goalSelector.addGoal(5, this.attackAI);
-        this.goalSelector.addGoal(6, this.aiSit);
+        this.goalSelector.addGoal(6, this.stayGoal);
         this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.wanderAI = new WanderGoal(this).setPauseRate(0);
         this.goalSelector.addGoal(8, this.wanderAI);
@@ -67,8 +66,8 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob, IGroupH
         this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
         this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
     }
 	

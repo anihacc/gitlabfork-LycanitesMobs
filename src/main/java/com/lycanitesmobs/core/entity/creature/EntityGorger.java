@@ -1,31 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.SnowGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityGorger extends TameableCreatureEntity implements IGroupPredator, IGroupFire, IGroupHeavy {
+public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
@@ -49,30 +44,8 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupPredat
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
-        this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(60));
-        this.goalSelector.addGoal(2, this.aiSit);
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.goalSelector.addGoal(7, new WanderGoal(this));
-        this.goalSelector.addGoal(9, new BegGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupIce.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupWater.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPlant.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        }
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(60));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
 
 

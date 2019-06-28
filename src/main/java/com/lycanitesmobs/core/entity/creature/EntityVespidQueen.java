@@ -19,7 +19,6 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -75,7 +74,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
         this.goalSelector.addGoal(7, new StayByHomeGoal(this));
         this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(1200));
@@ -89,8 +88,8 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
     }
 
 	
@@ -149,7 +148,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
 			return;
 		
 		// Spawn Babies:
-		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(EntityVespid.class, 32D) < this.vespidQueenSwarmLimit) {
+		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityType(), 32D) < this.vespidQueenSwarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
 				LivingEntity minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));

@@ -45,20 +45,21 @@ public abstract class TargetingGoal extends Goal {
         this.host = setHost;
 
         this.targetSelector = entity -> {
-            double d0 = TargetingGoal.this.getTargetDistance();
+            double targetDistance = TargetingGoal.this.getTargetDistance();
             if(this.checkSight && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
                 return false;
             }
-            return !((double) entity.getDistance(TargetingGoal.this.host) > d0) && TargetingGoal.this.isEntityTargetable(entity, false);
+            return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isEntityTargetable(entity, false);
         };
 
         this.allySelector = entity -> {
-            double d0 = TargetingGoal.this.getTargetDistance();
+            double targetDistance = TargetingGoal.this.getTargetDistance();
 			if(this.checkSight && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
 				return false;
 			}
-            return !((double) entity.getDistance(TargetingGoal.this.host) > d0) && TargetingGoal.this.isAllyTarget(entity);
+            return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isAllyTarget(entity);
         };
+
         this.nearestSorter = new TargetSorterNearest(setHost);
     }
     

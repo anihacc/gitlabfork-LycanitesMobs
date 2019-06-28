@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -52,11 +53,14 @@ public class StayByWaterGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
+    	if(this.host.canBreatheAir())
+    		return false;
+
     	// Set home when in water or lava (for lava creatures).
     	if(this.host.isInWater()) {
-    		BlockState waterBlock = this.host.getEntityWorld().getBlockState(this.host.getPosition());
-    		if((!this.host.isLavaCreature && waterBlock.getMaterial() == Material.WATER) ||
-    			(this.host.isLavaCreature && waterBlock.getMaterial() == Material.LAVA)) {
+    		IFluidState fluidState = this.host.getEntityWorld().getFluidState(this.host.getPosition());
+    		if((!this.host.isLavaCreature && fluidState.isTagged(FluidTags.WATER)) ||
+    			(this.host.isLavaCreature && fluidState.isTagged(FluidTags.LAVA))) {
 	    		this.waterPos = this.host.getPosition();
 	    		this.hasWaterPos = true;
 	    		return false;

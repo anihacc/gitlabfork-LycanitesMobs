@@ -26,9 +26,6 @@ public class FollowFuseGoal extends FollowGoal {
 	// ==================================================
 	@Override
 	public boolean shouldExecute() {
-    	/*if(this.host instanceof EntityCreatureTameable && ((EntityCreatureTameable)this.host).isTamed()) {
-    		return false;
-		}*/
     	if(this.host.isBoss()) {
     		return false;
 		}

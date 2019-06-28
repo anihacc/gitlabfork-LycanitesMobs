@@ -7,16 +7,14 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.TameableEntity;
 
-import java.util.EnumSet;
-
-public class DefenseTargetingGoal extends TargetingGoal {
+public class DefendEntitiesGoal extends TargetingGoal {
 	/** The entity class to defend. **/
 	protected Class<? extends LivingEntity> defendClass;
 
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public DefenseTargetingGoal(BaseCreatureEntity setHost, Class<? extends LivingEntity> defendClass) {
+    public DefendEntitiesGoal(BaseCreatureEntity setHost, Class<? extends LivingEntity> defendClass) {
         super(setHost);
         this.defendClass = defendClass;
     }
@@ -25,17 +23,17 @@ public class DefenseTargetingGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public DefenseTargetingGoal setSightCheck(boolean setSightCheck) {
+    public DefendEntitiesGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
     
-    public DefenseTargetingGoal setOnlyNearby(boolean setNearby) {
+    public DefendEntitiesGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
     
-    public DefenseTargetingGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public DefendEntitiesGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }

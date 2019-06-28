@@ -17,11 +17,9 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.MagmaCubeEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -54,9 +52,9 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupPredat
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
         this.goalSelector.addGoal(1, new StealthGoal(this).setStealthTime(60));
-        this.goalSelector.addGoal(2, this.aiSit);
+        this.goalSelector.addGoal(2, this.stayGoal);
         this.goalSelector.addGoal(3, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
@@ -66,8 +64,8 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupPredat
         this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
         this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
         this.targetSelector.addGoal(2, new RevengeGoal(this));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));

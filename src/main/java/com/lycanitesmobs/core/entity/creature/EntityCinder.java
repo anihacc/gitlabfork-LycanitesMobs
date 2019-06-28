@@ -1,25 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.CustomItemEntity;
+import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.SnowGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -30,7 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCinder extends TameableCreatureEntity implements IMob, IGroupFire, IFusable {
+public class EntityCinder extends TameableCreatureEntity implements IMob, IFusable {
 
 	public float inWallDamageAbsorbed = 0;
     
@@ -53,25 +45,7 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-		this.goalSelector.addGoal(1, new FollowFuseGoal(this).setLostDistance(16));
-        this.goalSelector.addGoal(5, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
-        this.goalSelector.addGoal(6, this.aiSit);
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(8, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupIce.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupWater.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(SnowGolemEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPlant.class));
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
-		this.targetSelector.addGoal(7, new FindFuseTargetGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
     }
     
     
@@ -103,13 +77,6 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IGroup
     // ==================================================
     //                      Attacks
     // ==================================================
-	@Override
-	public boolean canAttack(LivingEntity target) {
-		if(target instanceof IGroupFire)
-			return false;
-		return super.canAttack(target);
-	}
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {

@@ -1,13 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
-import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -29,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-public class EntityConcapedeSegment extends AgeableCreatureEntity implements IGroupAnimal {
+public class EntityConcapedeSegment extends AgeableCreatureEntity {
     
 	// Parent UUID:
 	/** Used to identify the parent segment when loading this saved entity, set to null when found or lost for good. **/
@@ -56,10 +51,6 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity implements IGr
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.1D).setStrayDistance(0).setLostDistance(0).setAdultFollowing(true).setFollowBehind(0.25D));
-        this.goalSelector.addGoal(6, new WanderGoal(this).setPauseRate(30));
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityConcapedeHead.class));
     }
 
     // ==================================================
@@ -190,6 +181,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity implements IGr
 			this.remove();
 		}
     }
+
+    @Override
+	public boolean shouldFollowParent() {
+    	return true; // Follow as an adult.
+	}
 
 	
     // ==================================================

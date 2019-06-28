@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
-import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
+import com.lycanitesmobs.core.entity.goals.actions.PaddleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
@@ -25,7 +25,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -98,15 +97,15 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDe
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         //this.goalSelector.addGoal(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
         //this.goalSelector.addGoal(6, new EntityAIWander(this).setSpeed(1.0D));
         this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
     }
 
     // ========== Init ==========

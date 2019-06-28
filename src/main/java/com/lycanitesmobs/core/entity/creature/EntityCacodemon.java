@@ -1,20 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.GhastEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
@@ -23,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityCacodemon extends RideableCreatureEntity implements IGroupDemon {
+public class EntityCacodemon extends RideableCreatureEntity {
     public boolean cacodemonGreifing = true; // TODO Creature flags.
     
     // ==================================================
@@ -47,27 +40,8 @@ public class EntityCacodemon extends RideableCreatureEntity implements IGroupDem
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MateGoal(this));
-        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
-        this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(4, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-        this.goalSelector.addGoal(5, this.aiSit);
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(7, new FollowParentGoal(this));
-        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(30));
-        this.goalSelector.addGoal(9, new BegGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
-        this.targetSelector.addGoal(4, new RevengeGoal(this));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(GhastEntity.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
+        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.GHAST));
     }
 
 
@@ -99,7 +73,7 @@ public class EntityCacodemon extends RideableCreatureEntity implements IGroupDem
 
         // Spawn Minions:
         if(CreatureManager.getInstance().getCreature("wraith").enabled) {
-            if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").entityClass, 64D) < 10) {
+            if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").getEntityType(), 64D) < 10) {
                 float random = this.rand.nextFloat();
                 if (random <= 0.1F) {
                     this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));

@@ -98,7 +98,7 @@ public class EntityYale extends AgeableCreatureEntity implements IGroupAnimal, I
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
         this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
         this.goalSelector.addGoal(3, new MateGoal(this));

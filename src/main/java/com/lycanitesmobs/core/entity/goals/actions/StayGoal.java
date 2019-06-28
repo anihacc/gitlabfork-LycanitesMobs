@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
-public class SitGoal extends Goal {
+public class StayGoal extends Goal {
 	// Targets:
     private TameableCreatureEntity host;
     
@@ -19,7 +19,7 @@ public class SitGoal extends Goal {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public SitGoal(TameableCreatureEntity setHost) {
+    public StayGoal(TameableCreatureEntity setHost) {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
@@ -28,17 +28,17 @@ public class SitGoal extends Goal {
 	// ==================================================
  	//                  Set Properties
  	// ==================================================
-    public SitGoal setEnabled(boolean flag) {
+    public StayGoal setEnabled(boolean flag) {
         this.enabled = flag;
         return this;
     }
     
-    public SitGoal setSpeed(double setSpeed) {
+    public StayGoal setSpeed(double setSpeed) {
     	this.speed = setSpeed;
     	return this;
     }
     
-    public SitGoal setFarSpeed(double setSpeed) {
+    public StayGoal setFarSpeed(double setSpeed) {
     	this.farSpeed = setSpeed;
     	return this;
     }

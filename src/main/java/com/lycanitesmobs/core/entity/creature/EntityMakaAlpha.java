@@ -5,7 +5,7 @@ import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.DefenseTargetingGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
@@ -43,7 +43,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.goalSelector.addGoal(6, new AttackMeleeGoal(this));
         this.goalSelector.addGoal(9, new WanderGoal(this));
@@ -51,7 +51,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
         this.goalSelector.addGoal(11, new LookIdleGoal(this));
 
         this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityMaka.class));
-		this.targetSelector.addGoal(2, new DefenseTargetingGoal(this, VillagerEntity.class));
+		this.targetSelector.addGoal(2, new DefendEntitiesGoal(this, VillagerEntity.class));
 		this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPredator.class));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
         this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));

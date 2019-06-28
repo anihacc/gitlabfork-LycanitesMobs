@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.api.*;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
@@ -12,7 +13,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CowEntity;
@@ -52,12 +52,12 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(1, new MateGoal(this));
         this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
         this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
         this.goalSelector.addGoal(6, new AttackMeleeGoal(this).setSpeed(1.5D));
-        this.goalSelector.addGoal(7, this.aiSit);
+        this.goalSelector.addGoal(7, this.stayGoal);
         this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
         this.playerControlAI = new PlayerControlGoal(this);
         this.goalSelector.addGoal(9, playerControlAI);
@@ -76,8 +76,8 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
             this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
             this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
         }
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(ZombiePigmanEntity.class));
         if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
             this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
@@ -157,7 +157,7 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
         	return false;
         
     	// Breed:
-        if((target instanceof AnimalEntity || target instanceof IGroupAnimal) && target.getSize(Pose.STANDING).height < 1F)
+        if((target instanceof AnimalEntity || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.getSize(Pose.STANDING).height >= 1F)
     		this.breed();
     	
         return true;
@@ -167,18 +167,15 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
     public void specialAttack() {
         // Withering Roar:
         double distance = 5.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
-            @Override
-            public boolean apply(LivingEntity possibleTarget) {
-                if(!possibleTarget.isAlive()
-                        || possibleTarget == EntityPinky.this
-                        || EntityPinky.this.isRidingOrBeingRiddenBy(possibleTarget)
-                        || EntityPinky.this.isOnSameTeam(possibleTarget)
-                        || !EntityPinky.this.canAttack(possibleTarget.getType())
-                        || !EntityPinky.this.canAttack(possibleTarget))
-                    return false;
-                return true;
-            }
+        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), (Predicate<LivingEntity>) possibleTarget -> {
+            if(!possibleTarget.isAlive()
+                    || possibleTarget == EntityPinky.this
+                    || EntityPinky.this.isRidingOrBeingRiddenBy(possibleTarget)
+                    || EntityPinky.this.isOnSameTeam(possibleTarget)
+                    || !EntityPinky.this.canAttack(possibleTarget.getType())
+                    || !EntityPinky.this.canAttack(possibleTarget))
+                return false;
+            return true;
         });
         if(!possibleTargets.isEmpty()) {
             for(LivingEntity possibleTarget : possibleTargets) {

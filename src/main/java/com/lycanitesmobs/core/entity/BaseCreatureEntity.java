@@ -2,14 +2,15 @@ package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.*;
+import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
-import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
+import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveController;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
@@ -33,7 +34,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -70,7 +70,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public static final IAttribute DEFENSE = (new RangedAttribute(null, "generic.defense", 4.0D, 0.0D, 1024.0D)).setDescription("Defense").setShouldWatch(true);
 	public static final IAttribute RANGED_SPEED = (new RangedAttribute(null, "generic.rangedSpeed", 4.0D, 0.0D, 1024.0D)).setDescription("Ranged Speed").setShouldWatch(true);
 
-
 	// Core:
 	/** The Creature Info used by this creature. **/
 	public CreatureInfo creatureInfo;
@@ -82,7 +81,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public CreatureAttribute attribute = CreatureAttribute.UNDEAD;
 	/** A class that opens up extra stats and behaviours for NBT based customization.**/
 	public ExtraMobBehaviour extraMobBehaviour;
-
 
 	// Info:
 	/** The name of the event that spawned this mob if any, an empty string ("") if none. **/
@@ -98,7 +96,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** The living update tick. **/
     public long updateTick = 0;
 
-
 	// Size:
 	/** The main size of this creature, used to override vanilla sizing. **/
 	public EntitySize creatureSize;
@@ -108,7 +105,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public float hitAreaWidthScale = 1;
     /** A scale relative to this entity's height for melee and ranged hit collision. **/
     public float hitAreaHeightScale = 1;
-
 
 	// Stats:
 	/** The level of this mob, higher levels increase the stat multipliers by a small amount. **/
@@ -138,7 +134,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** The gorwing age of this mob. **/
     protected int growingAge;
 
-
 	// Boss Health:
 	/** How much damage this creature has taken over the latest second. **/
 	public float damageTakenThisSec = 0;
@@ -146,7 +141,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public float healthLastTick = -1;
 	/** If above 0, no more than this much health can be lost per second. **/
 	public float damageLimit = 0;
-
 
 	// Abilities:
     /** The battle range of this boss mob, anything out of this range cannot harm the boss. This will also affect other things related to the boss. **/
@@ -166,7 +160,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** If true, this entity will have a solid collision box allowing other entities to stand on top of it as well as blocking player movement based on mass more effectively. **/
     public boolean solidCollision = false;
 
-
 	// Positions:
     /** A location used for mobs that stick around a certain home spot. **/
     protected BlockPos homePosition = new BlockPos(0, 0, 0);
@@ -175,6 +168,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** A central point set by arenas or events that spawn mobs. Bosses use this to setup arena-based movement. **/
     protected BlockPos arenaCenter = null;
 
+	// AI Goals:
+	protected int nextPriorityGoalIndex = 10;
+	protected int nextDistractionGoalIndex = 30;
+	protected int nextCombatGoalIndex = 50;
+	protected int nextTravelGoalIndex = 70;
+	protected int nextIdleGoalIndex = 90;
+
+	protected int nextReactTargetIndex = 10;
+	protected int nextSpecialTargetIndex = 30;
+	protected int nextFindTargetIndex = 50;
 
     // Spawning:
     /** Use the onFirstSpawn() method and not this variable. True if this creature has spawned for the first time (naturally or via spawn egg, etc, not reloaded from a saved chunk). **/
@@ -202,7 +205,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Set to true when this mob is spawned as a boss, this is used to make non-boss mobs behave like bosses. **/
 	public boolean spawnedAsBoss = false;
 
-
     // Movement:
     /** Whether the mob should use it's leash AI or not. **/
     private boolean leashAIActive = false;
@@ -210,7 +212,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     private Goal leashMoveTowardsRestrictionAI = new MoveRestrictionGoal(this);
     /** The flight navigator class, a makeshift class that handles flight and free swimming movement, replaces the pathfinder. **/
     public DirectNavigator directNavigator;
-
 
     // Targets:
 	/** A list of Entity Types that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
@@ -248,11 +249,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** If positive, this creature entity is only being used for rendering in a GUI, etc and should play animation based off of this instead. **/
     public float onlyRenderTicks = -1;
 
-
 	// Data Manager:
-	/** If true, this entity has been initialized and the Data Manager is ready for use. **/
-	public boolean initialized = false;
-
 	/** Used to sync what targets this creature has. **/
     protected static final DataParameter<Byte> TARGET = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
     /** Used to sync which attack phase this creature is in. **/
@@ -309,8 +306,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	    public byte getValue() { return id; }
 	}
 
-
-	// Interact:
+	// Interaction:
 	/** Used for the tidier interact code, these are used for right click commands to determine which one is more important. The lower the priority number the higher the priority is. **/
 	public enum COMMAND_PIORITIES {
 		OVERRIDE(0), IMPORTANT(1), EQUIPPING(2), ITEM_USE(3), EMPTY_HAND(4), MAIN(5);
@@ -327,14 +323,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		GUI_COMMAND(byte i) { id = i; }
 	}
 
-	// GUI Commands:
+	// Pet Commands:
 	/** A list of pet command IDs to be used by pet or creature GUIs via a network packet. **/
 	public enum PET_COMMAND_ID {
 		ACTIVE((byte)0), TELEPORT((byte)1), PVP((byte)2), RELEASE((byte)3), PASSIVE((byte)4), DEFENSIVE((byte)5), ASSIST((byte)6), AGGRESSIVE((byte)7), FOLLOW((byte)8), WANDER((byte)9), SIT((byte)10), FLEE((byte)11);
 		public byte id;
 		PET_COMMAND_ID(byte i) { id = i; }
 	}
-
 
 	// Items:
     /** The inventory object of the creature, this is used for managing and using the creature's inventory. **/
@@ -344,16 +339,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** A collection of drops to be stored in NBT data. **/
 	public List<ItemDrop> savedDrops = new ArrayList<>();
 
-
     // Override AI:
-    public FindAttackTargetGoal aiTargetPlayer = new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class);
+    public FindAttackTargetGoal aiTargetPlayer = new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER);
     public RevengeGoal aiDefendAnimals = new RevengeGoal(this).setHelpClasses(AnimalEntity.class);
 
-
-    // ==================================================
-  	//                    Constructor
-  	// ==================================================
-    public BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
+	/**
+	 * Constructor
+	 * @param entityType The Entity Type.
+	 * @param world The world the entity is in.
+	 */
+	public BaseCreatureEntity(EntityType<? extends BaseCreatureEntity> entityType, World world) {
         super(entityType, world);
 
         // Movement:
@@ -391,8 +386,32 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	return this.creatureInfo.getEntityType();
 	}
 
-	// ========== Attributes and Stats ==========
-	/** Creates and sets all the entity attributes with default values. **/
+	/**
+	 * Registers all Data Manager Parameters.
+	 */
+	@Override
+	protected void registerData() {
+		super.registerData();
+		this.dataManager.register(TARGET, (byte) 0);
+		this.dataManager.register(ATTACK_PHASE, (byte) 0);
+		this.dataManager.register(ANIMATION_STATE, (byte) 0);
+		this.dataManager.register(ANIMATION_ATTACK_COOLDOWN_MAX, 0);
+
+		this.dataManager.register(CLIMBING, (byte) 0);
+		this.dataManager.register(STEALTH, 0.0F);
+
+		this.dataManager.register(COLOR, (byte) 0);
+		this.dataManager.register(SIZE, (float) 1D);
+		this.dataManager.register(LEVEL, 1);
+		this.dataManager.register(SUBSPECIES, (byte) 0);
+
+		this.dataManager.register(ARENA, Optional.empty());
+		InventoryCreature.registerData(this.dataManager);
+	}
+
+	/**
+	 * Creates and sets all the entity attributes with default values.
+	 */
 	@Override
 	protected void registerAttributes() {
 		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
@@ -408,13 +427,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
 		this.getAttributes().registerAttribute(RANGED_SPEED);
 
-		this.applyStats();
+		this.applyDynamicAttributes();
 	}
 
 	/**
-	 * Loads this entity's stats.
+	 * Loads this entity's dynamic attributes.
 	 */
-	public void applyStats() {
+	public void applyDynamicAttributes() {
 		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
@@ -427,16 +446,48 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	/**
-	 * Called when this entity needs to reload its stats. Should be called when the subspecies, level, etc of this creature changes.
+	 * Called when this entity needs to reload its (dynamic) attributes. Should be called when the subspecies, level, etc of this creature changes.
 	 */
-	public void refreshStats() {
-		this.applyStats();
+	public void refreshAttributes() {
+		this.applyDynamicAttributes();
 		this.setHealth((float)this.creatureStats.getHealth());
 		this.refreshBossHealthName();
 	}
+
+	/**
+	 * Registers all AI Goals for this entity.
+	 */
+	@Override
+	protected void registerGoals() {
+		// Greater Targeting:
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
+
+		// Greater Actions:
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new PaddleGoal(this));
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StayByWaterGoal(this));
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
+		if(this instanceof IFusable)
+			this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new FollowFuseGoal(this).setLostDistance(16));
+
+		super.registerGoals();
+
+		// Lesser Targeting:
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAttackTargetGoal(this));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
+
+		// Lesser Actions:
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setSpeed(1.0D));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WanderGoal(this));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new LookIdleGoal(this));
+	}
     
-    // ========== Setup ==========
-    /** This should be called by the specific mob entity and sets the default starting values. **/
+    /**
+	 * The final setup stage when constructing this entity, should be called last by the constructors each specific entity class.
+	 */
     public void setupMob() {
         // Size:
         this.setSizeScale(this.creatureInfo.sizeScale);
@@ -469,30 +520,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	this.drops.add(itemDrop);
     	this.savedDrops.add(itemDrop);
 	}
-
-	
-	// ========== Register Data ==========
-    /** Initiates the entity setting all the values to be watched by the datawatcher. **/
-    @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(TARGET, (byte) 0);
-        this.dataManager.register(ATTACK_PHASE, (byte) 0);
-        this.dataManager.register(ANIMATION_STATE, (byte) 0);
-		this.dataManager.register(ANIMATION_ATTACK_COOLDOWN_MAX, 0);
-
-		this.dataManager.register(CLIMBING, (byte) 0);
-        this.dataManager.register(STEALTH, 0.0F);
-
-        this.dataManager.register(COLOR, (byte) 0);
-        this.dataManager.register(SIZE, (float) 1D);
-		this.dataManager.register(LEVEL, 1);
-        this.dataManager.register(SUBSPECIES, (byte) 0);
-
-        this.dataManager.register(ARENA, Optional.empty());
-        InventoryCreature.registerData(this.dataManager);
-        this.initialized = true;
-    }
     
     // ========== Name ==========
     /** Returns the display name of this entity. Use this when displaying it's name. **/
@@ -805,7 +832,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Count Nearby Entities:
-		List<BaseCreatureEntity> targets = this.getNearbyEntities(BaseCreatureEntity.class, BaseCreatureEntity.class, range);
+		List<BaseCreatureEntity> targets = this.getNearbyEntities(BaseCreatureEntity.class, entity -> BaseCreatureEntity.class.isAssignableFrom(entity.getClass()), range);
 		int typesFound = 0;
 		int speciesFound = 0;
 		for(BaseCreatureEntity targetCreature : targets) {
@@ -832,7 +859,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	// ========== Boss Spawn Check ==========
 	/** Checks for nearby bosses, mobs usually shouldn't randomly spawn near a boss. **/
 	public boolean checkSpawnBoss(World world, BlockPos pos) {
-		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, IGroupBoss.class, CreatureManager.getInstance().spawnConfig.spawnLimitRange);
+		CreatureGroup bossGroup = CreatureManager.getInstance().getCreatureGroup("boss");
+		if(bossGroup == null)
+			return true;
+		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, entity -> bossGroup.hasEntity(entity), CreatureManager.getInstance().spawnConfig.spawnLimitRange);
 		return bosses.size() == 0;
 	}
 
@@ -1160,7 +1190,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** Sets and applies the level of this mob refreshing stats, higher levels have higher stats. **/
 	public void applyLevel(int level) {
 		this.setLevel(level);
-		this.refreshStats();
+		this.refreshAttributes();
 	}
 
 	/** Sets the level of this mob without refreshing stats, used when loading from NBT or from applyLevel(). If a level is changed use applyLevel() instead. **/
@@ -1227,7 +1257,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	/** Sets the subspecies of this mob by index and refreshes stats. If not a valid ID or 0 it will be set to null which is for base species. **/
 	public void applySubspecies(int subspeciesIndex) {
 		this.setSubspecies(subspeciesIndex);
-		this.refreshStats();
+		this.refreshAttributes();
 	}
 
 	/** Sets the subspecies of this mob by index without refreshing stats, use applySubspecies() if changing toa  new subspecies. If not a valid ID or 0 it will be set to null which is for base species. **/
@@ -1271,161 +1301,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	public boolean isRareSubspecies() {
 		return this.getSubspecies() != null && "rare".equals(this.getSubspecies().rarity);
-	}
-
-
-    // ==================================================
-    //                  Battle Phases
-    // ==================================================
-    /** Called every update, this usually manages which phase this mob is using health but it can use any aspect of the mob to determine the Battle Phase and could even be random. **/
-    public void updateBattlePhase() {
-
-    }
-
-    /** Returns the current battle phase. **/
-    public int getBattlePhase() {
-        return this.battlePhase;
-    }
-
-    /** Sets the current battle phase. **/
-    public void setBattlePhase(int phase) {
-        if(this.getBattlePhase() == phase)
-            return;
-        this.battlePhase = phase;
-        this.refreshBossHealthName();
-        this.playPhaseSound();
-    }
-
-
-	// ==================================================
-	//                    Transform
-	// ==================================================
-	/**
-	 * Transforms this entity into a new entity instantiated from the given class.
-	 * transformClass The entity class to transform into.
-	 * partner If not null, various stats, etc will be shared from this partner.
-	 * destroyPartner If true and a partner is set, the partner will be removed.
-	 * return The transformed entity instance. Null on failure (usually when an invalid class is provided).
-	 */
-	public LivingEntity transform(EntityType<? extends LivingEntity> transformType, Entity partner, boolean destroyPartner) {
-		if(transformType == null) {
-			return null;
-		}
-		LivingEntity transformedEntity = transformType.create(this.getEntityWorld());
-		if(transformedEntity == null) {
-			return null;
-		}
-
-		// Creature Base:
-		if(transformedEntity instanceof BaseCreatureEntity) {
-			BaseCreatureEntity transformedCreature = (BaseCreatureEntity) transformedEntity;
-			transformedCreature.firstSpawn = false;
-
-			// Temporary:
-			if (this.isTemporary) {
-				transformedCreature.setTemporary(this.temporaryDuration);
-			}
-
-			// Minion:
-			if(this.isMinion()) {
-				transformedCreature.setMinion(true);
-			}
-
-			// Master Target:
-			if (this.hasMaster()) {
-				transformedCreature.setMasterTarget(this.getMasterTarget());
-			}
-
-			// With Partner:
-			if (partner != null && partner instanceof BaseCreatureEntity) {
-				BaseCreatureEntity partnerCreature = (BaseCreatureEntity) partner;
-				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
-				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
-				transformedCreature.setSizeScale(this.sizeScale + partnerCreature.sizeScale);
-
-				// Level:
-				int transformedLevel = this.getLevel();
-				if("lowest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
-					if(transformedLevel > partnerCreature.getLevel()) {
-						transformedLevel = partnerCreature.getLevel();
-					}
-				}
-				else if("highest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
-					if(transformedLevel < partnerCreature.getLevel()) {
-						transformedLevel = partnerCreature.getLevel();
-					}
-				}
-				else {
-					transformedLevel += partnerCreature.getLevel();
-				}
-				transformedCreature.applyLevel(Math.round(transformedLevel * (float)CreatureManager.getInstance().config.elementalFusionLevelMultiplier));
-
-				// Tamed:
-				if (transformedCreature instanceof TameableCreatureEntity) {
-					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
-					Entity owner = null;
-					if(this instanceof TameableCreatureEntity) {
-						owner = ((TameableCreatureEntity)this).getPlayerOwner();
-					}
-					if (owner != null) {
-						transformedCreature.applyLevel(transformedLevel);
-						fusionTameable.setPlayerOwner((PlayerEntity)owner);
-					}
-
-					// Tamed Partner:
-					else {
-						Entity partnerOwner = null;
-						if (partnerCreature instanceof TameableCreatureEntity) {
-							partnerOwner = ((TameableCreatureEntity)partnerCreature).getPlayerOwner();
-						}
-						if (partnerOwner != null) {
-							transformedCreature.applyLevel(transformedLevel);
-							fusionTameable.setPlayerOwner((PlayerEntity) partnerOwner);
-
-							// Temporary:
-							if (partnerCreature.isTemporary) {
-								transformedCreature.setTemporary(partnerCreature.temporaryDuration);
-							}
-
-							// Minion:
-							transformedCreature.setMinion(partnerCreature.isMinion());
-
-							// Master Target:
-							if (partnerCreature.hasMaster()) {
-								transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
-							}
-						}
-					}
-				}
-			}
-
-			// Without Partner:
-			else {
-				transformedCreature.applySubspecies(this.getSubspeciesIndex());
-				transformedCreature.setSizeScale(this.sizeScale);
-				transformedCreature.applyLevel(this.getLevel());
-
-				// Tamed:
-				if (transformedCreature instanceof TameableCreatureEntity) {
-					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
-					if (this.getOwner() != null && this.getOwner() instanceof PlayerEntity) {
-						fusionTameable.setPlayerOwner((PlayerEntity) this.getOwner());
-					}
-				}
-			}
-		}
-
-		// Transformed Entity:
-		transformedEntity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-		this.getEntityWorld().addEntity(transformedEntity);
-
-		// Remove Parts:
-		this.remove();
-		if(partner != null && destroyPartner) {
-			partner.remove();
-		}
-
-		return transformedEntity;
 	}
 
 
@@ -2308,14 +2183,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns whether or not this mob is allowed to attack the given target class. **/
 	@Override
 	public boolean canAttack(EntityType<?> entityType) {
-		if(!CreatureManager.getInstance().config.mobsAttackVillagers && entityType == EntityType.VILLAGER)
-			return false;
 		return true;
 	}
 
     /** Returns whether or not this mob is allowed to attack the given target entity. **/
 	public boolean canAttack(LivingEntity targetEntity) {
-		if(!CreatureManager.getInstance().config.mobsAttackVillagers && targetEntity instanceof VillagerEntity) {
+		if(this.getEntityWorld().getDifficulty() == Difficulty.PEACEFUL && targetEntity instanceof PlayerEntity) {
+			return false;
+		}
+
+		if(!Targeting.isValidTarget(this, targetEntity)) {
 			return false;
 		}
 
@@ -2387,23 +2264,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(this.parentTarget instanceof MobEntity)
 			return ((MobEntity)this.parentTarget).getAttackTarget();
     	return null;
-    }
-
-    // ========== Revenge Target ==========
-    /**
-     * Used when giving this entity a revenge target, usually used when this entity is attacked by another entity.
-     * Can be called by anything to tell this entity to attack the given target, however it will still check canAttackClass() and canAttackEntity() first.
-     * Mobs with a fleeHealthPercent set above 0 will flee instead if it's health percentage is not above the fleehealthPercent value.
-    **/
-    @Override
-    public void setRevengeTarget(LivingEntity entityLivingBase) {
-    	boolean aggressiveOverride = CreatureManager.getInstance().config.animalsFightBack;
-    	if(!aggressiveOverride && this.extraMobBehaviour != null)
-    		aggressiveOverride = this.extraMobBehaviour.aggressiveOverride;
-    	if(!aggressiveOverride && this.fleeHealthPercent > 0 && this.getHealth() / this.getMaxHealth() <= this.fleeHealthPercent)
-    		this.setAvoidTarget(entityLivingBase);
-    	else
-    		super.setRevengeTarget(entityLivingBase);
     }
     
     // ========== Melee ==========
@@ -2774,7 +2634,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     
     // ==================================================
-  	//                      Targets
+  	//               Behaviour and Targets
   	// ==================================================
     /** Returns true if this creature should attack it's attack targets. Used mostly by attack AIs and update methods. **/
     public boolean isAggressive() {
@@ -2792,10 +2652,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	/** Marks this creature as hostile towards the provided entity. **/
-	public void setHostileTo(Entity target) {
-		if(this.hostileTargets.contains(target.getType()))
+	public void setHostileTo(EntityType targetType) {
+		if(this.hostileTargets.contains(targetType))
 			return;
-		this.hostileTargets.add(target.getType());
+		this.hostileTargets.add(targetType);
 	}
     
     /** Returns true if this mob should defend other entities that cry for help. Used mainly by the revenge AI. **/
@@ -2929,6 +2789,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return true;
 	}
 
+	/**
+	 * Returns true if this creature considers itself in a pack, used for attack targeting, etc.
+	 * @return True if in a pack.
+	 */
+	public boolean isInPack() {
+		return this.creatureInfo.packSize <= 1 || this.countAllies(32D) >= this.creatureInfo.packSize;
+	}
+
     
     // ========== Get Facing Coords ==========
     /** Returns the BlockPos in front or behind this entity (using its rotation angle) with the given distance, use a negative distance for behind. **/
@@ -2959,6 +2827,161 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         double zAmount = Math.cos(angle);
         return new Vec3d(x + (distance * xAmount), y, z + (distance * zAmount));
     }
+
+
+	// ==================================================
+	//                  Battle Phases
+	// ==================================================
+	/** Called every update, this usually manages which phase this mob is using health but it can use any aspect of the mob to determine the Battle Phase and could even be random. **/
+	public void updateBattlePhase() {
+
+	}
+
+	/** Returns the current battle phase. **/
+	public int getBattlePhase() {
+		return this.battlePhase;
+	}
+
+	/** Sets the current battle phase. **/
+	public void setBattlePhase(int phase) {
+		if(this.getBattlePhase() == phase)
+			return;
+		this.battlePhase = phase;
+		this.refreshBossHealthName();
+		this.playPhaseSound();
+	}
+
+
+	// ==================================================
+	//                    Transform
+	// ==================================================
+	/**
+	 * Transforms this entity into a new entity instantiated from the given class.
+	 * transformClass The entity class to transform into.
+	 * partner If not null, various stats, etc will be shared from this partner.
+	 * destroyPartner If true and a partner is set, the partner will be removed.
+	 * return The transformed entity instance. Null on failure (usually when an invalid class is provided).
+	 */
+	public LivingEntity transform(EntityType<? extends LivingEntity> transformType, Entity partner, boolean destroyPartner) {
+		if(transformType == null) {
+			return null;
+		}
+		LivingEntity transformedEntity = transformType.create(this.getEntityWorld());
+		if(transformedEntity == null) {
+			return null;
+		}
+
+		// Creature Base:
+		if(transformedEntity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity transformedCreature = (BaseCreatureEntity) transformedEntity;
+			transformedCreature.firstSpawn = false;
+
+			// Temporary:
+			if (this.isTemporary) {
+				transformedCreature.setTemporary(this.temporaryDuration);
+			}
+
+			// Minion:
+			if(this.isMinion()) {
+				transformedCreature.setMinion(true);
+			}
+
+			// Master Target:
+			if (this.hasMaster()) {
+				transformedCreature.setMasterTarget(this.getMasterTarget());
+			}
+
+			// With Partner:
+			if (partner != null && partner instanceof BaseCreatureEntity) {
+				BaseCreatureEntity partnerCreature = (BaseCreatureEntity) partner;
+				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
+				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
+				transformedCreature.setSizeScale(this.sizeScale + partnerCreature.sizeScale);
+
+				// Level:
+				int transformedLevel = this.getLevel();
+				if("lowest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
+					if(transformedLevel > partnerCreature.getLevel()) {
+						transformedLevel = partnerCreature.getLevel();
+					}
+				}
+				else if("highest".equalsIgnoreCase(CreatureManager.getInstance().config.elementalFusionLevelMix)) {
+					if(transformedLevel < partnerCreature.getLevel()) {
+						transformedLevel = partnerCreature.getLevel();
+					}
+				}
+				else {
+					transformedLevel += partnerCreature.getLevel();
+				}
+				transformedCreature.applyLevel(Math.round(transformedLevel * (float)CreatureManager.getInstance().config.elementalFusionLevelMultiplier));
+
+				// Tamed:
+				if (transformedCreature instanceof TameableCreatureEntity) {
+					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
+					Entity owner = null;
+					if(this instanceof TameableCreatureEntity) {
+						owner = ((TameableCreatureEntity)this).getPlayerOwner();
+					}
+					if (owner != null) {
+						transformedCreature.applyLevel(transformedLevel);
+						fusionTameable.setPlayerOwner((PlayerEntity)owner);
+					}
+
+					// Tamed Partner:
+					else {
+						Entity partnerOwner = null;
+						if (partnerCreature instanceof TameableCreatureEntity) {
+							partnerOwner = ((TameableCreatureEntity)partnerCreature).getPlayerOwner();
+						}
+						if (partnerOwner != null) {
+							transformedCreature.applyLevel(transformedLevel);
+							fusionTameable.setPlayerOwner((PlayerEntity) partnerOwner);
+
+							// Temporary:
+							if (partnerCreature.isTemporary) {
+								transformedCreature.setTemporary(partnerCreature.temporaryDuration);
+							}
+
+							// Minion:
+							transformedCreature.setMinion(partnerCreature.isMinion());
+
+							// Master Target:
+							if (partnerCreature.hasMaster()) {
+								transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
+							}
+						}
+					}
+				}
+			}
+
+			// Without Partner:
+			else {
+				transformedCreature.applySubspecies(this.getSubspeciesIndex());
+				transformedCreature.setSizeScale(this.sizeScale);
+				transformedCreature.applyLevel(this.getLevel());
+
+				// Tamed:
+				if (transformedCreature instanceof TameableCreatureEntity) {
+					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
+					if (this.getOwner() != null && this.getOwner() instanceof PlayerEntity) {
+						fusionTameable.setPlayerOwner((PlayerEntity) this.getOwner());
+					}
+				}
+			}
+		}
+
+		// Transformed Entity:
+		transformedEntity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+		this.getEntityWorld().addEntity(transformedEntity);
+
+		// Remove Parts:
+		this.remove();
+		if(partner != null && destroyPartner) {
+			partner.remove();
+		}
+
+		return transformedEntity;
+	}
 
 
 	// ==================================================
@@ -3057,7 +3080,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Can this entity by tempted (usually lured by an item) currently? **/
     public boolean canBeTempted() {
-    	return !this.isRareSubspecies();
+    	return !this.isRareSubspecies() && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
     }
 
 	@Override
@@ -3666,6 +3689,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			if (this.damageTakenThisSec >= this.damageLimit)
 				return true;
 		}
+
+    	// Element Damage:
+		if(source instanceof ElementDamageSource && this.creatureInfo.elements.contains(((ElementDamageSource)source).getElement())) {
+			return false;
+		}
+
         return super.isInvulnerableTo(source);
     }
 
@@ -3742,9 +3771,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this mob should be damaged by extreme cold such as from ooze. **/
     public boolean canFreeze() {
-    	if(this instanceof IGroupIce) {
-    		return false;
-		}
 		for(ElementInfo element : this.creatureInfo.elements) {
 			if(!element.canFreeze()) {
 				return false;
@@ -3914,12 +3940,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	return true;
     }
     
-    // Nearby Creature Count:
-    /** Returns how many entities of the specified class around within the specified ranged, used mostly for mobs that summon other mobs and other group behaviours. **/
-    public int nearbyCreatureCount(Class targetClass, double range) {
-    	return this.getNearbyEntities(Entity.class, targetClass, range).size();
-    }
-    
     // ========== Creature Attribute ==========
     /** Returns this creature's attribute. **/
    	@Override
@@ -3941,21 +3961,29 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public double getMountedZOffset() {
 		return 0;
 	}
-    
-   	// ========== Get Nearby Entities ==========
+
     /** Get entities that are near this entity. **/
-    public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, final Class filterClass, double range) {
-        return this.getEntityWorld().getEntitiesWithinAABB(clazz, this.getBoundingBox().grow(range, range, range), (Predicate<Entity>) entity -> {
-			if(filterClass == null)
-				return true;
-			return filterClass.isAssignableFrom(entity.getClass());
-		});
+    public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, Predicate<Entity> predicate, double range) {
+        return this.getEntityWorld().getEntitiesWithinAABB(clazz, this.getBoundingBox().grow(range, range, range), predicate);
     }
 
-    // ========== Get Nearest Entity ==========
+	/** Returns how many entities of the specified Entity Type are within the specified range, used mostly for spawning, mobs that summon other mobs and group behaviours. **/
+	public int nearbyCreatureCount(EntityType targetType, double range) {
+		return this.getNearbyEntities(Entity.class, entity -> entity.getType() == targetType, range).size();
+	}
+
+	/**
+	 * Returns how many ally creatures are within range of this creature, by default allied creatures are creatures of the same type.
+	 * @param range The range to search in.
+	 * @return The number of allies within range.
+	 */
+	public int countAllies(double range) {
+		return this.nearbyCreatureCount(this.getType(), range);
+	}
+
     /** Get the entity closest to this entity. **/
-    public <T extends Entity> T getNearestEntity(Class <? extends T > clazz, Class filterClass, double range, boolean canAttack) {
-        List aoeTargets = this.getNearbyEntities(clazz, filterClass, range);
+    public <T extends Entity> T getNearestEntity(Class <? extends T > clazz, Predicate<Entity> predicate, double range, boolean canAttack) {
+        List aoeTargets = this.getNearbyEntities(clazz, predicate, range);
         if(aoeTargets.size() == 0)
             return null;
         double nearestDistance = range + 10;

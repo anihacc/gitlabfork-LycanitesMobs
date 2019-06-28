@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 
-public class SwimmingGoal extends Goal {
+public class PaddleGoal extends Goal {
 	// Targets:
     private BaseCreatureEntity host;
     
@@ -16,7 +16,7 @@ public class SwimmingGoal extends Goal {
     // ==================================================
    	//                    Constructor
    	// ==================================================
-    public SwimmingGoal(BaseCreatureEntity setEntity) {
+    public PaddleGoal(BaseCreatureEntity setEntity) {
         this.host = setEntity;
         if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
             setEntity.getNavigator().setCanSwim(true);
@@ -26,7 +26,7 @@ public class SwimmingGoal extends Goal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public SwimmingGoal setSink(boolean setSink) {
+    public PaddleGoal setSink(boolean setSink) {
     	this.sink = setSink;
     	return this;
     }
@@ -37,6 +37,8 @@ public class SwimmingGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
+    	if(this.host.isStrongSwimmer())
+    		return false;
         if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeSteered())
             return false;
         return this.host.isInWater() || this.host.isInLava();

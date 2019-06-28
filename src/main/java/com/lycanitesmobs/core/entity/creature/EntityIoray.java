@@ -1,33 +1,25 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.SquidEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityIoray extends RideableCreatureEntity implements IMob, IGroupPredator {
+public class EntityIoray extends RideableCreatureEntity implements IMob {
 
 	WanderGoal wanderAI;
-    AttackRangedGoal rangedAttackAI;
 
     // ==================================================
  	//                    Constructor
@@ -50,35 +42,8 @@ public class EntityIoray extends RideableCreatureEntity implements IMob, IGroupP
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
-        this.goalSelector.addGoal(3, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(4, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
-        this.rangedAttackAI = new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
-        this.goalSelector.addGoal(5, rangedAttackAI);
-        this.goalSelector.addGoal(6, this.aiSit);
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(8, wanderAI.setPauseRate(60));
-        this.goalSelector.addGoal(9, new BegGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
-        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
-        this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-            this.targetSelector.addGoal(8, new FindAttackTargetGoal(this).setTargetClass(SquidEntity.class));
-        }
-        this.targetSelector.addGoal(9, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false));
     }
     
     

@@ -46,8 +46,8 @@ public class EntityNymph extends TameableCreatureEntity implements IGroupPlant {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(3, this.aiSit);
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
+        this.goalSelector.addGoal(3, this.stayGoal);
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
 		this.goalSelector.addGoal(5, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
         this.goalSelector.addGoal(8, new WanderGoal(this));

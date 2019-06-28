@@ -2,76 +2,75 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureGroup;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class RevengeGoal extends FindAttackTargetGoal {
-	
+public class AvoidIfHitGoal extends FindAvoidTargetGoal {
+
 	// Properties:
     Class[] helpClasses = null;
     private int revengeTime;
-	
+
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public RevengeGoal(BaseCreatureEntity setHost) {
+    public AvoidIfHitGoal(BaseCreatureEntity setHost) {
         super(setHost);
     }
-    
-    
+
+
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public RevengeGoal setHelpCall(boolean setHelp) {
+    public AvoidIfHitGoal setHelpCall(boolean setHelp) {
     	this.callForHelp = setHelp;
     	return this;
     }
 
-    public RevengeGoal setHelpClasses(Class... setHelpClasses) {
+    public AvoidIfHitGoal setHelpClasses(Class... setHelpClasses) {
     	this.helpClasses = setHelpClasses;
     	this.callForHelp = true;
     	return this;
     }
 
-    public RevengeGoal setSightCheck(boolean setSightCheck) {
+    public AvoidIfHitGoal setSightCheck(boolean setSightCheck) {
     	this.checkSight = setSightCheck;
     	return this;
     }
 
-    public RevengeGoal setOnlyNearby(boolean setNearby) {
+    public AvoidIfHitGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
     	return this;
     }
 
-    public RevengeGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
+    public AvoidIfHitGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
-	
-    
+
+
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
     public boolean shouldExecute() {
     	// Group Check:
-		boolean shouldRevenge = true;
+		boolean shouldFlee = true;
 		boolean shouldPackHunt = false;
 		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
-			if (!group.shouldRevenge(this.host.getRevengeTarget())) {
-				shouldRevenge = false;
+			if (group.shouldRevenge(this.host.getRevengeTarget())) {
+				shouldFlee = false;
 			}
 			if (group.shouldPackHunt(this.host.getRevengeTarget())) {
 				shouldPackHunt = true;
 			}
 		}
-		if(!shouldRevenge && (!shouldPackHunt || !this.host.isInPack())) {
+		if(!shouldFlee && (!shouldPackHunt || !this.host.isInPack())) {
 			return false;
 		}
 
-        return this.host.getRevengeTimer() != this.revengeTime && this.isEntityTargetable(this.host.getRevengeTarget(), false);
+        return this.host.getRevengeTimer() != this.revengeTime;
     }
 	
     

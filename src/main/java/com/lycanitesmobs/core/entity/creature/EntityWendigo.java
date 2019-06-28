@@ -15,7 +15,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MagmaCubeEntity;
@@ -48,7 +47,7 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this).setSink(true));
+        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
         this.goalSelector.addGoal(3, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
         this.wanderAI = new WanderGoal(this);
         this.goalSelector.addGoal(6, wanderAI);
@@ -59,8 +58,8 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce
         this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(BlazeEntity.class));
         this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(MagmaCubeEntity.class));
         this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
+        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
     }
     
     

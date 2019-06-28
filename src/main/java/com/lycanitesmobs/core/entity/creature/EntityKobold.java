@@ -1,19 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.GetBlockGoal;
+import com.lycanitesmobs.core.entity.goals.actions.GetItemGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +19,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityKobold extends TameableCreatureEntity implements IMob, IGroupPrey {
+public class EntityKobold extends TameableCreatureEntity implements IMob {
     public boolean torchGreifing = true; // TODO Creature flags.
     public boolean theivery = true;
 
@@ -46,31 +42,14 @@ public class EntityKobold extends TameableCreatureEntity implements IMob, IGroup
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
-        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.goalSelector.addGoal(2, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(3, new GetItemGoal(this).setDistanceMax(32).setSpeed(1.2D));
-        this.goalSelector.addGoal(4, this.aiSit);
-        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(6, new AvoidGoal(this).setNearSpeed(1.8D).setFarSpeed(1.4D).setNearDistance(3.0D).setFarDistance(16.0D));
-        if(this.torchGreifing)
-            this.goalSelector.addGoal(7, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
-        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(30));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetItemGoal(this).setDistanceMax(32).setSpeed(1.2D));
+		if(this.torchGreifing)
+			this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
 
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupHunter.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupAlpha.class));
-        this.targetSelector.addGoal(5, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+		super.registerGoals();
+
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
 	

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.goals.actions.SwimmingGoal;
+import com.lycanitesmobs.core.entity.goals.actions.PaddleGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.EntityType;
@@ -36,7 +36,7 @@ public class FearEntity extends BaseCreatureEntity {
         this.setupMob();
         
         // AI Tasks:
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(1, new WanderGoal(this).setPauseRate(0));
     }
 

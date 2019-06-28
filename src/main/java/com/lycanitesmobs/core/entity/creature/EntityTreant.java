@@ -14,7 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.item.Item;
@@ -51,7 +50,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupPlan
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+        this.goalSelector.addGoal(0, new PaddleGoal(this));
         this.goalSelector.addGoal(3, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
         this.goalSelector.addGoal(4, new AttackMeleeGoal(this));
         //this.goalSelector.addGoal(5, this.aiSit);
@@ -64,7 +63,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupPlan
         this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityEnt.class));
         this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));
         this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
         //this.targetSelector.addGoal(6, new EntityAITargetOwnerThreats(this));
     }
 	

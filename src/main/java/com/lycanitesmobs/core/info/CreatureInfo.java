@@ -7,10 +7,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityFactory;
+import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.entity.EntityClassification;
@@ -37,6 +34,9 @@ public class CreatureInfo {
 	// Core Info:
 	/** The name of this mob. Lowercase, no space, used for language entries and for generating the entity id, etc. Required. **/
 	protected String name;
+
+	/** A list of groups that this creature is in. **/
+	public List<CreatureGroup> groups = new ArrayList<>();
 
 	/** The entity class used by this creature. **/
 	public Class<? extends BaseCreatureEntity> entityClass;
@@ -86,6 +86,8 @@ public class CreatureInfo {
 	public double sight = 16.0D;
 	public double knockbackResistance = 0.0D;
 
+	public int packSize = 3;
+
 
 	// Spawn Egg:
 	/** The background color of this mob's egg. Required. **/
@@ -112,6 +114,9 @@ public class CreatureInfo {
 	// Creature Difficulty:
 	/** If true, this mob is allowed on Peaceful Difficulty. **/
 	public boolean peaceful = false;
+
+	/** If true, this mob can be farmed (bred and lured using food items). The entity must have age AI for this. **/
+	public boolean farmable = false;
 
 	/** If true, this mob can be summoned as a minion. The entity must have pet AI for this. **/
 	public boolean summonable = false;
@@ -156,7 +161,7 @@ public class CreatureInfo {
 
 
 	/** Loads this creature from a JSON object. **/
-	public void loadFromJSON(JsonObject json) {
+	public void loadFromJson(JsonObject json) {
 		this.name = json.get("name").getAsString();
 
 		// Entity Class:
@@ -169,6 +174,7 @@ public class CreatureInfo {
 			throw new RuntimeException(e);
 		}
 
+		// Enabled:
 		if(json.has("enabled"))
 			this.enabled = json.get("enabled").getAsBoolean();
 		if(json.has("dummy"))
@@ -180,14 +186,14 @@ public class CreatureInfo {
 		try {
 			ClientManager.getInstance().loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
-			LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+			LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for Creature: " + this.getTitle());
 		}
 
 		// Creature Type:
 		if(json.has("creatureType")) {
 			this.creatureType = CreatureManager.getInstance().getCreatureType(json.get("creatureType").getAsString());
 			if(this.creatureType == null) {
-				LycanitesMobs.logWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
+				LycanitesMobs.logWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " for Creature: " + this.name);
 			}
 		}
 		if(this.creatureType == null) {
@@ -195,6 +201,20 @@ public class CreatureInfo {
 		}
 		if(this.creatureType != null) {
 			this.creatureType.addCreature(this);
+		}
+
+		// Creature Group:
+		if(json.has("groups")) {
+			for(String groupName : JSONHelper.getJsonStrings(json.getAsJsonArray("groups"))) {
+				CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+				if(group != null) {
+					this.groups.add(group);
+					group.addCreature(this);
+				}
+				else {
+					LycanitesMobs.logWarning("", "[Creature] Unable to find the Creature Group: " + groupName + " for Creature: " + this.name);
+				}
+			}
 		}
 
 		// Spawning:
@@ -233,10 +253,14 @@ public class CreatureInfo {
 			this.effectAmplifier = json.get("effectAmplifier").getAsDouble();
 		if(json.has("pierce"))
 			this.pierce = json.get("pierce").getAsDouble();
+
 		if(json.has("knockbackResistance"))
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
+
+		if(json.has("packSize"))
+			this.packSize = json.get("packSize").getAsInt();
 
 		// Spawn Egg:
 		this.eggBackColor = Color.decode(json.get("eggBackColor").getAsString()).getRGB();
@@ -275,7 +299,9 @@ public class CreatureInfo {
 		if(json.has("peaceful"))
 			this.peaceful = json.get("peaceful").getAsBoolean();
 
-		// Pet or Minion:
+		// Features:
+		if(json.has("farmable"))
+			this.farmable = json.get("farmable").getAsBoolean();
 		if(json.has("summonable"))
 			this.summonable = json.get("summonable").getAsBoolean();
 		if(json.has("tameable"))
@@ -304,7 +330,7 @@ public class CreatureInfo {
 	/**
 	 * Loads this creature (should only be called during startup), generates sounds, achievement stats, etc.
 	 */
-	public void load() {
+	public void init() {
 		// Skip Dummies:
 		if(this.dummy) {
 			return;
@@ -368,6 +394,15 @@ public class CreatureInfo {
 	 */
 	public String getEntityId() {
 		return this.modInfo.modid + ":" + this.getName();
+	}
+
+
+	/**
+	 * Returns the groups that this creature is in.
+	 * @return Creature name.
+	 */
+	public List<CreatureGroup> getGroups() {
+		return this.groups;
 	}
 
 
@@ -478,6 +513,15 @@ public class CreatureInfo {
 			texture = AssetManager.getTexture(this.getName() + "_icon");
 		}
 		return texture;
+	}
+
+
+	/**
+	 * Returns if this creature is farmable.
+	 * @return True if creature is farmable.
+	 */
+	public boolean isFarmable() {
+		return this.farmable && AgeableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 

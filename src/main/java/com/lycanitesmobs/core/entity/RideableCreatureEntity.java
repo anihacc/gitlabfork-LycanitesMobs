@@ -2,6 +2,9 @@ package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyRiderAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeRiderGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.*;
@@ -34,6 +37,20 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 	public RideableCreatureEntity(EntityType<? extends RideableCreatureEntity> entityType, World world) {
 		super(entityType, world);
 		this.hasJumpSound = true;
+	}
+
+
+	// ========== Init AI ==========
+	@Override
+	protected void registerGoals() {
+		// Greater Actions:
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new PlayerControlGoal(this));
+
+		super.registerGoals();
+
+		// Lesser Targeting:
+		this.targetSelector.addGoal(this.nextReactTargetIndex++, new RevengeRiderGoal(this));
+		this.targetSelector.addGoal(this.nextReactTargetIndex++, new CopyRiderAttackTargetGoal(this));
 	}
     
     

@@ -1,20 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.PillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
@@ -47,35 +43,20 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(0, new SwimmingGoal(this));
+		this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, this.aiAttackMelee); // Melee is a priority as it is used when infected.
 
-        this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
-        this.goalSelector.addGoal(2, this.aiAttackMelee);
+		super.registerGoals();
 
-        this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
-        this.goalSelector.addGoal(2, this.aiAttackRanged);
+		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
+		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, this.aiAvoid);
 
-        this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
-        this.goalSelector.addGoal(3, this.aiAvoid);
+		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.aiAttackRanged);
 
-        this.goalSelector.addGoal(4, this.aiSit);
-        this.goalSelector.addGoal(5, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(6, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-		this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-		this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupHunter.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new FindAvoidTargetGoal(this).setTargetClass(IGroupAlpha.class));
-        this.targetSelector.addGoal(5, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PillagerEntity.class));
     }
     
     

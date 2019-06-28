@@ -11,7 +11,7 @@ public class FindAvoidTargetGoal extends TargetingGoal {
     private Class targetClass = LivingEntity.class;
     
     // Properties:
-    private int targetChance = 0;
+	protected int targetChance = 0;
     protected boolean tameTargeting = false;
     
     // ==================================================
