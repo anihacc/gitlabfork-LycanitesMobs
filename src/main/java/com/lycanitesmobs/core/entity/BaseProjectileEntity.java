@@ -4,6 +4,7 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
@@ -84,6 +85,11 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	   this.setPosition(x, y, z);
 	   this.setup();
     }
+
+    @Override
+	public EntityType getType() {
+    	return ProjectileManager.getInstance().oldProjectileTypes.get(this.getClass());
+	}
     
     // ========== Setup Projectile ==========
     public void setup() {

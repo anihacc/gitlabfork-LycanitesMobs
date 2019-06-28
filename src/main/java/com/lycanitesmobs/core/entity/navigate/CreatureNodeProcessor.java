@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.*;
@@ -8,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Pose;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
@@ -117,11 +119,11 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
         // Wading Through Water:
         int posY;
-        if (this.getCanSwim() && this.entity.canSwim()) {
+        if (this.getCanSwim() && this.entity.canSwim()) { // If can swim and is swimming underwater
             posY = (int)this.entity.getBoundingBox().minY;
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
 
-            for (Block block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock(); block == Blocks.WATER; block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock()) {
+            for (IFluidState fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos); fluidState.isTagged(FluidTags.WATER); fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos)) {
                 ++posY;
                 blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
             }

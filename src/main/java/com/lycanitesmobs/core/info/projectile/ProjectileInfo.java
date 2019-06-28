@@ -44,6 +44,7 @@ public class ProjectileInfo {
 	public boolean enabled = true;
 
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
+	@Nonnull
 	public Class<? extends BaseProjectileEntity> entityClass = CustomProjectileEntity.class;
 
 	/** The constructor used by this creature to create entity instances. **/
@@ -135,14 +136,14 @@ public class ProjectileInfo {
 			this.chargeItemName = this.name + "charge";
 		}
 
-		if(json.has("entityClass")) {
-			try {
+		try {
+			if(json.has("entityClass")) {
 				this.entityClass = (Class<? extends BaseProjectileEntity>) Class.forName(json.get("entityClass").getAsString());
-				this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
-			} catch (Exception e) {
-				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
-				throw new RuntimeException(e);
 			}
+			this.entityConstructor = this.entityClass.getConstructor(EntityType.class, World.class);
+		} catch (Exception e) {
+			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			throw new RuntimeException(e);
 		}
 
 		if(json.has("modelClass")) {
@@ -276,6 +277,7 @@ public class ProjectileInfo {
 	public EntityType<? extends BaseProjectileEntity> getEntityType() {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
 			entityTypeBuilder.setTrackingRange(5);
 			entityTypeBuilder.setUpdateInterval(20);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);

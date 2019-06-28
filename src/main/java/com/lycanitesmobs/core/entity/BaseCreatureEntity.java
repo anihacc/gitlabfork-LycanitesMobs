@@ -1817,6 +1817,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Can be overridden to add a random chance of wandering around. **/
 	public boolean rollWanderChance() {
+		/*if(this.canBreatheAir() && !this.isStrongSwimmer() && !this.isFlying() && this.isInWater())
+			return true;*/
 		return this.getRNG().nextDouble() <= 0.008D;
 	}
     

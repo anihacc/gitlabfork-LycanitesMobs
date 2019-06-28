@@ -75,6 +75,11 @@ public class BlockSummoningPedestal extends BlockBase {
     }
 
     @Override
+    public boolean hasTileEntity(BlockState blockState) {
+	    return true;
+    }
+
+    @Override
     public TileEntity createTileEntity(BlockState blockState, IBlockReader world) {
         return new TileEntitySummoningPedestal();
     }

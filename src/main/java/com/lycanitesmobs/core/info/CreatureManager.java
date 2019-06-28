@@ -195,7 +195,6 @@ public class CreatureManager extends JSONLoader {
 	 * Registers all creatures added to this creature manager, called from the registry event.
 	 * @param event The entity register event.
 	 */
-	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		LycanitesMobs.logDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {

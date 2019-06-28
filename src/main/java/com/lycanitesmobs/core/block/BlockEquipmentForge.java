@@ -65,15 +65,7 @@ public class BlockEquipmentForge extends BlockBase {
 
 	@Override
 	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof TileEntityEquipmentForge) {
-				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityEquipmentForge)tileentity);
-				worldIn.updateComparatorOutputLevel(pos, this);
-			}
-
-			super.onReplaced(state, worldIn, pos, newState, isMoving);
-		}
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
@@ -84,6 +76,16 @@ public class BlockEquipmentForge extends BlockBase {
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
 		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
+		super.onBlockPlacedBy(world, pos, state, entity, itemStack);
+	}
+
+	@Override
+	public boolean hasTileEntity(BlockState blockState) {
+		return true;
 	}
 
 	@Override

@@ -162,7 +162,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Pet List:
         if(this.hasPets()) {
-            this.list.render(mouseX, mouseY, partialTicks);
+            //this.list.render(mouseX, mouseY, partialTicks); TODO lists
         }
 
         super.renderWidgets(mouseX, mouseY, partialTicks);

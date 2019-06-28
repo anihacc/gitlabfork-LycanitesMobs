@@ -11,8 +11,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class LMBlocksGroup extends ItemGroup {
 
 	// ========== Constructor ==========
-	public LMBlocksGroup(int tabID, String modID) {
-		super(tabID, modID);
+	public LMBlocksGroup(String modID) {
+		super(modID);
 	}
 	
 	// ========== Tab Icon ==========

@@ -12,8 +12,8 @@ public class LMCreaturesGroup extends ItemGroup {
 	private ItemStack iconStack = ItemStack.EMPTY;
 	private boolean fallbackIcon = false;
 
-	public LMCreaturesGroup(int tabID, String modID) {
-		super(tabID, modID);
+	public LMCreaturesGroup(String modID) {
+		super(modID);
 	}
 
 	@Override

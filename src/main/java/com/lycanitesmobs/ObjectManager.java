@@ -5,9 +5,12 @@ import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.EntityFactory;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -19,6 +22,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.stats.Stat;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ObjectManager {
 	public static ObjectManager INSTANCE;
@@ -48,10 +53,11 @@ public class ObjectManager {
 	public static Map<String, EffectBase> effects = new HashMap<>();
 	public static Map<String, SoundEvent> sounds = new HashMap<>();
 
-	// Entity Maps:
+	// Type Maps:
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
 	public static Map<Class<? extends Entity>, Constructor<? extends Entity>> specialEntityConstructors = new HashMap<>();
 	public static Map<Class<? extends Entity>, EntityType<? extends Entity>> specialEntityTypes = new HashMap<>();
+	public static Map<Class<? extends TileEntity>, TileEntityType<? extends TileEntity>> tileEntityTypes = new HashMap<>();
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
@@ -289,8 +295,7 @@ public class ObjectManager {
 
 	// ========== Entities ==========
 	@SubscribeEvent
-	public void registerSpecialEntities(RegistryEvent.Register<EntityType<?>> event) {
-		// Special Entities:
+	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		for(String entityName : specialEntities.keySet()) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			entityTypeBuilder.setTrackingRange(10);
@@ -304,6 +309,9 @@ public class ObjectManager {
 			specialEntityTypes.put(specialEntities.get(entityName), entityType);
 			event.getRegistry().register(entityType);
 		}
+
+		CreatureManager.getInstance().registerEntities(event);
+		ProjectileManager.getInstance().registerEntities(event);
 	}
 
 	// ========== Sounds ==========
@@ -328,12 +336,20 @@ public class ObjectManager {
 	// ========== Tile Entities ==========
 	@SubscribeEvent
 	public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-		TileEntityType<TileEntitySummoningPedestal> summoningPedestalType = TileEntityType.Builder.create(TileEntitySummoningPedestal::new, getBlock("summoningpedestal")).build(null);
+		TileEntityType<TileEntity> summoningPedestalType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntitySummoningPedestal::new,
+				getBlock("summoningpedestal")
+		).build(null);
 		summoningPedestalType.setRegistryName(LycanitesMobs.MODID, "summoningpedestal");
 		event.getRegistry().register(summoningPedestalType);
+		tileEntityTypes.put(TileEntitySummoningPedestal.class, summoningPedestalType);
 
-		TileEntityType<TileEntitySummoningPedestal> equipmentForgeType = TileEntityType.Builder.create(TileEntitySummoningPedestal::new, getBlock("equipmentforge_lesser"), getBlock("equipmentforge_greater"), getBlock("equipmentforge_master")).build(null);
+		TileEntityType<TileEntity> equipmentForgeType = TileEntityType.Builder.create((Supplier<TileEntity>) TileEntityEquipmentForge::new,
+				getBlock("equipmentforge_lesser"),
+				getBlock("equipmentforge_greater"),
+				getBlock("equipmentforge_master")
+		).build(null);
 		equipmentForgeType.setRegistryName(LycanitesMobs.MODID, "equipmentforge");
 		event.getRegistry().register(equipmentForgeType);
+		tileEntityTypes.put(TileEntityEquipmentForge.class, equipmentForgeType);
 	}
 }

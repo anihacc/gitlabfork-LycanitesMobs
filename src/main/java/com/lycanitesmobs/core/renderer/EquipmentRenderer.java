@@ -38,8 +38,6 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		modelEquipment.render(itemStack, hand, this, loop);
 
 		GlStateManager.popMatrix();
-
-		super.renderByItem(itemStack);
 	}
 
 	@Override

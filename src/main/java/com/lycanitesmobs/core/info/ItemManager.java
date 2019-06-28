@@ -46,10 +46,10 @@ public class ItemManager extends JSONLoader {
 	public ItemConfig config;
 
 	// Creative Tabs:
-	public final ItemGroup itemsGroup = new LMItemsGroup(ItemGroup.GROUPS.length, LycanitesMobs.MODID + ".items");
-	public final ItemGroup blocksGroup = new LMBlocksGroup(ItemGroup.GROUPS.length, LycanitesMobs.MODID + ".blocks");
-	public final ItemGroup creaturesGroups = new LMCreaturesGroup(ItemGroup.GROUPS.length, LycanitesMobs.MODID + ".creatures");
-	public final ItemGroup equipmentPartsGroup = new LMEquipmentPartsGroup(ItemGroup.GROUPS.length, LycanitesMobs.MODID + ".equipmentparts");
+	public final ItemGroup itemsGroup = new LMItemsGroup(LycanitesMobs.MODID + ".items");
+	public final ItemGroup blocksGroup = new LMBlocksGroup(LycanitesMobs.MODID + ".blocks");
+	public final ItemGroup creaturesGroups = new LMCreaturesGroup(LycanitesMobs.MODID + ".creatures");
+	public final ItemGroup equipmentPartsGroup = new LMEquipmentPartsGroup(LycanitesMobs.MODID + ".equipmentparts");
 
 
 	/** Returns the main Item Manager instance or creates it and returns it. **/

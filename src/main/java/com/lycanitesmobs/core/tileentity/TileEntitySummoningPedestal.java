@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -22,6 +23,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -66,10 +68,11 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     // Block:
     protected boolean blockStateSet = false;
 
+    @Override
+    public TileEntityType<?> getType() {
+        return ObjectManager.tileEntityTypes.get(this.getClass());
+    }
 
-    // ========================================
-    //                  Remove
-    // ========================================
     /** Can be called by a block when broken to alert this TileEntity that it is being removed. **/
     @Override
     public void remove() {
@@ -79,15 +82,9 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         super.remove();
     }
 
-
-    // ========================================
-    //                  Update
-    // ========================================
     /** The main update called every tick. **/
     @Override
     public void tick() {
-        LycanitesMobs.logInfo("", "Summoning Pedestal Alive!");
-
         // Client Side Only:
         if(this.getWorld().isRemote) {
 

@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class SummoningPedestalContainer extends BaseContainer {
-    public static final ContainerType<SummoningPedestalContainer> TYPE = (ContainerType<SummoningPedestalContainer>)IForgeContainerType.create(CreatureContainer::new).setRegistryName(LycanitesMobs.MODID, "summoning_pedestal");
+    public static final ContainerType<SummoningPedestalContainer> TYPE = (ContainerType<SummoningPedestalContainer>)IForgeContainerType.create(SummoningPedestalContainer::new).setRegistryName(LycanitesMobs.MODID, "summoning_pedestal");
     public TileEntitySummoningPedestal summoningPedestal;
 
     /**

@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 
 public class EquipmentForgeContainer extends BaseContainer {
-	public static final ContainerType<EquipmentForgeContainer> TYPE = (ContainerType<EquipmentForgeContainer>)IForgeContainerType.create(CreatureContainer::new).setRegistryName(LycanitesMobs.MODID, "equipment_forge");
+	public static final ContainerType<EquipmentForgeContainer> TYPE = (ContainerType<EquipmentForgeContainer>)IForgeContainerType.create(EquipmentForgeContainer::new).setRegistryName(LycanitesMobs.MODID, "equipment_forge");
 	public TileEntityEquipmentForge equipmentForge;
 
 	/**

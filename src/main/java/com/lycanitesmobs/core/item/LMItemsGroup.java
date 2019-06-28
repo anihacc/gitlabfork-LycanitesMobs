@@ -10,8 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class LMItemsGroup extends ItemGroup {
 	
 	// ========== Constructor ==========
-	public LMItemsGroup(int tabID, String modID) {
-		super(tabID, modID);
+	public LMItemsGroup(String modID) {
+		super(modID);
 	}
 
 

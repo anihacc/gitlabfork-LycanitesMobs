@@ -11,8 +11,8 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 	private ItemStack iconStack = ItemStack.EMPTY;
 	private boolean fallbackIcon = false;
 
-	public LMEquipmentPartsGroup(int tabID, String modID) {
-		super(tabID, modID);
+	public LMEquipmentPartsGroup(String modID) {
+		super(modID);
 	}
 
 	@Override

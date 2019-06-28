@@ -18,7 +18,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CustomProjectileEntity extends BaseProjectileEntity {
-
 	/** Used to sync the Projectile Info's name to use. **/
 	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
 
@@ -52,6 +51,11 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		super(entityType, world, x, y, z);
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
+	}
+
+	@Override
+	public EntityType getType() {
+		return this.projectileInfo.getEntityType();
 	}
 
 	@Override

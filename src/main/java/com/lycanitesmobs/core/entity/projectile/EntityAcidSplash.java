@@ -21,7 +21,7 @@ public class EntityAcidSplash extends BaseProjectileEntity {
     // ==================================================
  	//                   Constructors
  	// ==================================================
-    public EntityAcidSplash(EntityType<? extends BaseProjectileEntity> entityType, World world) {
+    public EntityAcidSplash(EntityType<? extends EntityAcidSplash> entityType, World world) {
         super(entityType, world);
     }
 

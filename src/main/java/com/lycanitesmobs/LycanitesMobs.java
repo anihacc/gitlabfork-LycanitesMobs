@@ -98,8 +98,8 @@ public class LycanitesMobs {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().register(ObjectManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(ItemManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
+		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
+		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);

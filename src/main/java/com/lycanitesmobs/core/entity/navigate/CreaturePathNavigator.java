@@ -36,7 +36,7 @@ public class CreaturePathNavigator extends PathNavigator {
     protected boolean canNavigate() {
         if(this.entityCreature.isFlying())
             return true;
-        if(this.entityCreature.canSwim())
+        if(this.entityCreature.isInWater())
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
         return this.entity.onGround || this.entity.isPassenger();
     }

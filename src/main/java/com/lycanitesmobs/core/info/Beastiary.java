@@ -125,6 +125,7 @@ public class Beastiary {
 				.appendSibling(new TranslationTextComponent("message.beastiary.new.of"))
 				.appendText(" ")
 				.appendSibling(creatureInfo.getTitle())
+				.appendText(" ")
 				.appendSibling(new TranslationTextComponent("message.beastiary.new.suffix"));
 		this.extendedPlayer.player.sendMessage(message);
 

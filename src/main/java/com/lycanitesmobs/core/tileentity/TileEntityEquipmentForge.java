@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.localisation.LanguageManager;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -22,13 +24,16 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	/** The level of the forge. **/
 	protected int level = 1;
 
+	@Override
+	public TileEntityType<?> getType() {
+		return ObjectManager.tileEntityTypes.get(this.getClass());
+	}
 
 	@Override
 	public void remove() {
 		// TODO Drop parts or piece.
 		super.remove();
 	}
-
 
 	@Override
 	public void tick() {
