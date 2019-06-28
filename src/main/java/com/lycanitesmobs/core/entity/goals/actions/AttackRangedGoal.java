@@ -121,19 +121,29 @@ public class AttackRangedGoal extends Goal {
         }
         
         // Should Execute:
-    	if(!this.enabled)
-    		return false;
+    	if(!this.enabled) {
+			return false;
+		}
+
+    	// With Pickup:
+		if(this.host.hasPickupEntity() && !this.host.canAttackWithPickup()) {
+			return false;
+		}
+
+		// Mounted:
         if(!this.mountedAttacking && this.host instanceof RideableCreatureEntity) {
             RideableCreatureEntity rideableHost = (RideableCreatureEntity)this.host;
             if(rideableHost.getControllingPassenger() instanceof PlayerEntity)
                 return false;
         }
+
         LivingEntity possibleAttackTarget = this.host.getAttackTarget();
         if(possibleAttackTarget == null)
             return false;
         if(!possibleAttackTarget.isAlive())
             return false;
         this.attackTarget = possibleAttackTarget;
+
         return true;
     }
     

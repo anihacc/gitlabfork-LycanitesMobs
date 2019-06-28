@@ -1,14 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.collect.Maps;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -46,7 +42,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class EntityYale extends AgeableCreatureEntity implements IGroupAnimal, IShearable {
+public class EntityYale extends AgeableCreatureEntity implements IShearable {
 
 	protected static final DataParameter<Byte> FUR = EntityDataManager.createKey(EntityYale.class, DataSerializers.BYTE);
 
@@ -98,20 +94,8 @@ public class EntityYale extends AgeableCreatureEntity implements IGroupAnimal, I
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.goalSelector.addGoal(3, new MateGoal(this));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setItemList("vegetables"));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.0D));
-        this.goalSelector.addGoal(6, new EatBlockGoal(this).setBlocks(Blocks.GRASS_BLOCK).setReplaceBlock(Blocks.DIRT));
-        this.goalSelector.addGoal(7, new WanderGoal(this).setPauseRate(30));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(1, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("vegetables"));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	// ========== Init ==========

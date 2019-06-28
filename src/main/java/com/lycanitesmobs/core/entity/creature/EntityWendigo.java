@@ -1,31 +1,24 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupIce;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.monster.BlazeEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.monster.MagmaCubeEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce {
+public class EntityWendigo extends BaseCreatureEntity implements IMob {
 
 	WanderGoal wanderAI;
 	
@@ -47,19 +40,7 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
-        this.goalSelector.addGoal(3, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(6, wanderAI);
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(1, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(BlazeEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(MagmaCubeEntity.class));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(IGroupFire.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
     
     
@@ -152,13 +133,6 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob, IGroupIce
     // ==================================================
     //                      Attacks
     // ==================================================
-    @Override
-    public boolean canAttack(LivingEntity target) {
-        if(target instanceof IGroupIce)
-            return false;
-        return super.canAttack(target);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {

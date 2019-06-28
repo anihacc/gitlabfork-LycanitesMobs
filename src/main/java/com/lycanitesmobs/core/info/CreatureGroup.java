@@ -32,6 +32,24 @@ public class CreatureGroup {
 	public List<CreatureGroup> fleeGroups = new ArrayList<>();
 	public List<String> fleeGroupNames = new ArrayList<>();
 
+	/** A list of groups that this group will ignore completely. **/
+	public List<CreatureGroup> ignoreGroups = new ArrayList<>();
+	public List<String> ignoreGroupNames = new ArrayList<>();
+
+	enum Interaction {
+		HUNT("hunt"), PACKHUNT("pack"), WARY("wary"), FLEE("flee"), IGNORE("ignore");
+		public final String name;
+		Interaction(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return this.name;
+		}
+	}
+
+	/** The default interaction towards a group not in any interaction lists. **/
+	public Interaction defaultInteraction = Interaction.HUNT;
+
 	/** If true, this group includes humanoids like Player, Villagers or Illagers. **/
 	public boolean humanoids = false;
 
@@ -41,6 +59,7 @@ public class CreatureGroup {
 	public void loadFromJson(JsonObject json) {
 		this.name = json.get("name").getAsString();
 
+		// Interaction Lists:
 		if(json.has("hostile")) {
 			this.huntGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("hostile"));
 		}
@@ -57,6 +76,16 @@ public class CreatureGroup {
 			this.fleeGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("flee"));
 		}
 
+		if(json.has("ignore")) {
+			this.ignoreGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("ignore"));
+		}
+
+		// Interactions:
+		if(json.has("default")) {
+			this.defaultInteraction = Interaction.valueOf(json.get("default").getAsString());
+		}
+
+		// Special Entities:
 		if(json.has("humanoids")) {
 			this.humanoids = json.get("humanoids").getAsBoolean();
 		}
@@ -68,26 +97,42 @@ public class CreatureGroup {
 	public void init() {
 		for(String groupName : this.huntGroupNames) {
 			CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+			if(groupName.equals(this.name))
+				group = this;
 			if(group != null)
 				this.huntGroups.add(group);
 		}
 
 		for(String groupName : this.packGroupNames) {
 			CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+			if(groupName.equals(this.name))
+				group = this;
 			if(group != null)
 				this.packGroups.add(group);
 		}
 
 		for(String groupName : this.waryGroupNames) {
 			CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+			if(groupName.equals(this.name))
+				group = this;
 			if(group != null)
 				this.waryGroups.add(group);
 		}
 
 		for(String groupName : this.fleeGroupNames) {
 			CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+			if(groupName.equals(this.name))
+				group = this;
 			if(group != null)
 				this.fleeGroups.add(group);
+		}
+
+		for(String groupName : this.ignoreGroupNames) {
+			CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+			if(groupName.equals(this.name))
+				group = this;
+			if(group != null)
+				this.ignoreGroups.add(group);
 		}
 
 		LycanitesMobs.logDebug("Creature Group", "Loaded Creature Group: " + this.getName());
@@ -136,7 +181,11 @@ public class CreatureGroup {
 			if(group.hasEntity(entity))
 				return false;
 		}
-		return true;
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
+		return this.defaultInteraction == Interaction.HUNT;
 	}
 
 	/**
@@ -149,7 +198,7 @@ public class CreatureGroup {
 			if(group.hasEntity(entity))
 				return true;
 		}
-		return false;
+		return this.defaultInteraction == Interaction.HUNT;
 	}
 
 	/**
@@ -162,7 +211,7 @@ public class CreatureGroup {
 			if(group.hasEntity(entity))
 				return true;
 		}
-		return false;
+		return this.defaultInteraction == Interaction.PACKHUNT;
 	}
 
 	/**
@@ -175,6 +224,6 @@ public class CreatureGroup {
 			if(group.hasEntity(entity))
 				return true;
 		}
-		return false;
+		return this.defaultInteraction == Interaction.FLEE;
 	}
 }

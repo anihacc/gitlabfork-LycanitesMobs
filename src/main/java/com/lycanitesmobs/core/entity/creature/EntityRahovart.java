@@ -2,17 +2,10 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.api.IGroupFire;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
-import com.lycanitesmobs.core.entity.goals.actions.PaddleGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
@@ -20,11 +13,7 @@ import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -48,20 +37,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
+public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
 
-    public List<PlayerEntity> playerTargets = new ArrayList<PlayerEntity>();
+    public List<PlayerEntity> playerTargets = new ArrayList<>();
     public int hellfireEnergy = 0;
-    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();
+    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
 
     // Data Manager:
     protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityRahovart.class, DataSerializers.VARINT);
 
     // First Phase:
-    public List<EntityBelph> hellfireBelphMinions = new ArrayList<EntityBelph>();
+    public List<EntityBelph> hellfireBelphMinions = new ArrayList<>();
 
     // Second Phase:
-    public List<EntityBehemoth> hellfireBehemothMinions = new ArrayList<EntityBehemoth>();
+    public List<EntityBehemoth> hellfireBehemothMinions = new ArrayList<>();
     public int hellfireWallTime = 0;
     public int hellfireWallTimeMax = 20 * 20;
     public boolean hellfireWallClockwise = false;
@@ -69,7 +58,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDe
     public EntityHellfireBarrier hellfireWallRight;
 
     // Third Phase:
-    public List<EntityHellfireBarrier> hellfireBarriers = new ArrayList<EntityHellfireBarrier>();
+    public List<EntityHellfireBarrier> hellfireBarriers = new ArrayList<>();
     public int hellfireBarrierHealth = 100;
 
 
@@ -97,15 +86,6 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDe
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        //this.goalSelector.addGoal(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRate(60).setRange(32).setMinChaseDistance(0F).setChaseTime(-1));
-        //this.goalSelector.addGoal(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpClasses(EntityBelph.class, EntityBehemoth.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
     }
 
     // ========== Init ==========
@@ -501,7 +481,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupDe
     //                      Attacks
     // ==================================================
     public boolean canAttack(LivingEntity targetEntity) {
-        if(targetEntity instanceof EntityBelph || targetEntity instanceof IGroupDemon || targetEntity instanceof IGroupFire) {
+        if(targetEntity instanceof EntityBelph || targetEntity instanceof EntityBehemoth || targetEntity instanceof EntityWraith) {
             if(targetEntity instanceof TameableCreatureEntity)
                 return ((TameableCreatureEntity)targetEntity).getOwner() instanceof PlayerEntity;
             else

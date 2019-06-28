@@ -15,7 +15,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
     // Properties:
 	protected boolean targetPlayers;
 	private boolean requirePack = false;
-	protected int targetChance = 0;
     protected boolean tameTargeting = false;
 
     // ==================================================
@@ -30,11 +29,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public FindAttackTargetGoal setChance(int setChance) {
-    	this.targetChance = setChance;
-    	return this;
-    }
-    
     public FindAttackTargetGoal setCheckSight(boolean bool) {
     	this.checkSight = bool;
     	return this;
@@ -102,8 +96,14 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
 
 		// Tamed Targeting Check:
-		if(!this.tameTargeting && this.host.isTamed())
+		if(!this.tameTargeting && this.host.isTamed()) {
 			return false;
+		}
+
+		// Random Chance:
+		if(!this.host.rollAttackTargetChance(target)) {
+			return false;
+		}
     	
     	// Type Check:
     	if(!this.host.canAttack(target.getType()))
@@ -142,10 +142,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
 				return false;
 			}
 		}
-		if(this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0) {
-			return false;
-		}
-
 
 		this.target = null;
         

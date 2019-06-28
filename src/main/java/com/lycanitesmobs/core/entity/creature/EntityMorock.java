@@ -1,28 +1,19 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMorock extends RideableCreatureEntity implements IMob, IGroupHunter {
+public class EntityMorock extends RideableCreatureEntity implements IMob {
 
-    protected WanderGoal wanderAI;
-    protected AttackMeleeGoal attackAI;
     protected boolean wantsToLand;
     protected boolean  isLanded;
 
@@ -45,27 +36,7 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(2, new PlayerControlGoal(this));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
-        this.goalSelector.addGoal(5, this.attackAI);
-        this.goalSelector.addGoal(6, this.stayGoal);
-        this.goalSelector.addGoal(7, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new WanderGoal(this).setPauseRate(0);
-        this.goalSelector.addGoal(8, this.wanderAI);
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
-        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
-        this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	
@@ -83,14 +54,12 @@ public class EntityMorock extends RideableCreatureEntity implements IMob, IGroup
                 this.wantsToLand = false;
                 if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.getLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean())) {
                     this.leap(1.0D, 1.0D);
-                    this.wanderAI.setPauseRate(0);
                     this.isLanded = false;
                 }
             }
             else {
                 if(this.wantsToLand) {
                     if(!this.isLanded && this.isSafeToLand()) {
-                        this.wanderAI.setPauseRate(120);
                         this.isLanded = true;
                     }
                 }

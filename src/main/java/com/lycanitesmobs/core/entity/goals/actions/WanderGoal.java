@@ -13,7 +13,6 @@ public class WanderGoal extends Goal {
     
     // Properties:
     private double speed = 1.0D;
-    private int pauseRate = 120;
     
     private double xPosition;
     private double yPosition;
@@ -35,10 +34,6 @@ public class WanderGoal extends Goal {
     	this.speed = setSpeed;
     	return this;
     }
-    public WanderGoal setPauseRate(int setPause) {
-    	this.pauseRate = setPause;
-    	return this;
-    }
     
     
     // ==================================================
@@ -48,7 +43,7 @@ public class WanderGoal extends Goal {
     public boolean shouldExecute() {
         if(this.host.getAge() >= 100)
             return false;
-        else if(this.pauseRate != 0 && this.host.getRNG().nextInt(this.pauseRate) != 0)
+        else if(!this.host.rollWanderChance())
             return false;
         else {
             Vec3d newTarget = RandomPositionGenerator.findRandomTarget(this.host, 10, 7, this.host.getFlyingHeight());

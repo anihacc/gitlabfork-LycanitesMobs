@@ -22,11 +22,6 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public FindGroupAttackTargetGoal setChance(int setChance) {
-    	this.targetChance = setChance;
-    	return this;
-    }
-    
     public FindGroupAttackTargetGoal setCheckSight(boolean bool) {
     	this.checkSight = bool;
     	return this;
@@ -63,6 +58,11 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
  	// ==================================================
     @Override
     protected boolean isValidTarget(LivingEntity target) {
+		// Tamed Targeting Check:
+		if(!this.tameTargeting && this.host.isTamed()) {
+			return false;
+		}
+
     	// Group Check:
 		boolean shouldFlee = false;
 		boolean shouldAttack = false;
@@ -88,10 +88,6 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 				return false;
 			}
 		}
-
-		// Tamed Targeting Check:
-		if(!this.tameTargeting && this.host.isTamed())
-			return false;
     	
     	// Type Check:
     	if(!this.host.canAttack(target.getType()))
@@ -99,6 +95,11 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 
         // Entity Check:
 		if(!this.host.canAttack(target)) {
+			return false;
+		}
+
+		// Random Chance:
+		if(!this.host.rollAttackTargetChance(target)) {
 			return false;
 		}
         

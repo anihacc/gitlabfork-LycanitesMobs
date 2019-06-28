@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ElementInfo;
@@ -14,7 +13,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityWarg extends RideableCreatureEntity implements IGroupPredator {
+public class EntityWarg extends RideableCreatureEntity {
 
     protected boolean leapedAbilityQueued = false;
     protected boolean leapedAbilityReady = false;

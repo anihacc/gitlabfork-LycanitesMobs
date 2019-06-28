@@ -91,6 +91,11 @@ public class AttackMeleeGoal extends Goal {
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
+
+		// With Pickup:
+		if(this.host.hasPickupEntity() && !this.host.canAttackWithPickup()) {
+			return false;
+		}
     	
         attackTarget = this.host.getAttackTarget();
         if(attackTarget == null)

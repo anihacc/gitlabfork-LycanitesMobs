@@ -1,12 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
@@ -24,7 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlpha {
+public class EntityMakaAlpha extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
@@ -43,19 +38,10 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
-        this.goalSelector.addGoal(6, new AttackMeleeGoal(this));
-        this.goalSelector.addGoal(9, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getType()));
 
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityMaka.class));
-		this.targetSelector.addGoal(2, new DefendEntitiesGoal(this, VillagerEntity.class));
-		this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(IGroupPredator.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setOnlyNearby(true).setChance(100));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(VillagerEntity.class).setOnlyNearby(true).setChance(100));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
 	
@@ -110,8 +96,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
     		return false;
     	else return super.canAttack(target);
     }
-    
-    // ========== Set Attack Target ==========
+
     @Override
     public void setAttackTarget(LivingEntity entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
@@ -122,6 +107,13 @@ public class EntityMakaAlpha extends AgeableCreatureEntity implements IGroupAlph
     	}
     	super.setAttackTarget(entity);
     }
+
+	@Override
+	public boolean rollAttackTargetChance(LivingEntity target) {
+    	if(target instanceof PlayerEntity || target.getType() == this.getType())
+    		return this.getRNG().nextDouble() <= 0.01D;
+		return true;
+	}
     
     
     // ==================================================

@@ -1,34 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
+public class EntityPinky extends RideableCreatureEntity {
 	
 	PlayerControlGoal playerControlAI;
 	
@@ -52,39 +44,10 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(1, new MateGoal(this));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(5, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
-        this.goalSelector.addGoal(6, new AttackMeleeGoal(this).setSpeed(1.5D));
-        this.goalSelector.addGoal(7, this.stayGoal);
-        this.goalSelector.addGoal(8, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.playerControlAI = new PlayerControlGoal(this);
-        this.goalSelector.addGoal(9, playerControlAI);
-        this.goalSelector.addGoal(10, new WanderGoal(this).setSpeed(1.0D));
-        this.goalSelector.addGoal(11, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(12, new LookIdleGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(ZombiePigmanEntity.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
 
-        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
-        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(3, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(4, new DefendOwnerGoal(this));
-        this.targetSelector.addGoal(5, new RevengeGoal(this).setHelpCall(true));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(CowEntity.class).setTameTargetting(true));
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(PigEntity.class).setTameTargetting(true));
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(SheepEntity.class).setTameTargetting(true));
-        }
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
-        this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(ZombiePigmanEntity.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupAlpha.class));
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-            this.targetSelector.addGoal(6, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        }
-        this.targetSelector.addGoal(7, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
+        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.ZOMBIE_PIGMAN));
     }
 	
 	
@@ -236,8 +199,6 @@ public class EntityPinky extends RideableCreatureEntity implements IGroupAnimal,
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {
-        if(!CreatureManager.getInstance().config.predatorsAttackAnimals)
-            return ObjectLists.inItemList("rawmeat", itemStack) || ObjectLists.inItemList("cookedmeat", itemStack);
         return false; // Breeding is triggered by attacking specific mobs instead!
     }
     

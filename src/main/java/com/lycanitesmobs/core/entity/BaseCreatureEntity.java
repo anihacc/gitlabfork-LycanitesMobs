@@ -1814,6 +1814,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         else
         	this.directNavigator.clearTargetPosition(1.0D);
     }
+
+	/** Can be overridden to add a random chance of wandering around. **/
+	public boolean rollWanderChance() {
+		if(this.isFlying())
+			return true;
+		return this.getRNG().nextDouble() <= 0.008D;
+	}
     
     // ========== Leash ==========
     /** The leash update that manages all behaviour to do with the entity being leashed or unleashed. **/
@@ -2721,6 +2728,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return this.getFixateTarget() != null;
 	}
 
+	/** Can be overridden to add a random chance of targeting the provided entity. **/
+	public boolean rollAttackTargetChance(LivingEntity target) {
+		return true;
+	}
+
     /** Returns this entity's Owner Target. **/
     public Entity getOwner() {
     	return null;
@@ -3249,6 +3261,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public double[] getPickupOffset(Entity entity) {
     	return new double[]{0, 0, 0};
     }
+
+    public boolean canAttackWithPickup() {
+    	return false;
+	}
     
     // ========== Destroy Blocks ==========
     public void destroyArea(int x, int y, int z, float strength, boolean drop) {

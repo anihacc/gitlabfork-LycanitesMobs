@@ -1,30 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySkylus extends TameableCreatureEntity implements IMob, IGroupPredator {
-	
-	WanderGoal wanderAI;
-    public AttackMeleeGoal attackAI;
+public class EntitySkylus extends TameableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
@@ -50,28 +40,7 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(2, this.stayGoal);
-        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false).setRange(1D);
-        this.goalSelector.addGoal(3, this.attackAI);
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(6, wanderAI);
-        this.goalSelector.addGoal(9, new BegGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class).setPackHuntingScale(1, 3));
-            this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class).setPackHuntingScale(1, 3));
-        }
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1D));
     }
     
     
@@ -82,14 +51,6 @@ public class EntitySkylus extends TameableCreatureEntity implements IMob, IGroup
 	@Override
     public void livingTick() {
         super.livingTick();
-        
-        // Wander Pause Rates:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.isInWater())
-                this.wanderAI.setPauseRate(20);
-            else
-                this.wanderAI.setPauseRate(0);
-        }
 
         // Entity Pickup Update:
         if(!this.getEntityWorld().isRemote && this.getControllingPassenger() == null && this.hasPickupEntity()) {

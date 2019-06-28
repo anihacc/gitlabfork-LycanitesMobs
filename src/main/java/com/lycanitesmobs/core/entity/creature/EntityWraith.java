@@ -1,20 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.LookIdleGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WatchClosestGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -24,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class EntityWraith extends TameableCreatureEntity implements IMob, IGroupDemon {
+public class EntityWraith extends TameableCreatureEntity implements IMob {
 
     protected int detonateTimer = -1;
     
@@ -46,14 +38,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob, IGroup
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setSpeed(2.0D).setLongMemory(false));
-        this.goalSelector.addGoal(6, new WanderGoal(this).setSpeed(1.0D).setPauseRate(0));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeGoal(this));
-        this.targetSelector.addGoal(1, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(2.0D).setLongMemory(false));
     }
     
     
@@ -110,14 +95,6 @@ public class EntityWraith extends TameableCreatureEntity implements IMob, IGroup
         this.leap(5, this.rotationPitch);
         this.detonateTimer = 10;
     }
-
-	// ========== Set Attack Target ==========
-	@Override
-	public boolean canAttack(LivingEntity target) {
-		if(target instanceof IGroupDemon)
-			return false;
-		return super.canAttack(target);
-	}
 	
 	
 	// ==================================================

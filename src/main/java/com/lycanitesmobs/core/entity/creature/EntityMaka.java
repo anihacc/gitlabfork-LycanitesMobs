@@ -1,13 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -23,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMaka extends AgeableCreatureEntity implements IGroupAnimal {
+public class EntityMaka extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
@@ -46,21 +41,9 @@ public class EntityMaka extends AgeableCreatureEntity implements IGroupAnimal {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(1, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(2, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.goalSelector.addGoal(3, new MateGoal(this).setMateDistance(5.0D));
-        this.goalSelector.addGoal(4, new TemptGoal(this).setItemList("vegetables"));
-        this.goalSelector.addGoal(5, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(3.0D));
-        this.goalSelector.addGoal(6, new FollowMasterGoal(this).setSpeed(1.0D).setStrayDistance(12.0F));
-        this.goalSelector.addGoal(7, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetSelector.addGoal(0, new RevengeGoal(this).setHelpClasses(EntityMakaAlpha.class));
-        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(2, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
     }
 
 

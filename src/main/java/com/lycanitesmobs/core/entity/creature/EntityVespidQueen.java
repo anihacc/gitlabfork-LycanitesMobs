@@ -1,27 +1,22 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +26,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IGroupPredator {
+public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	public boolean inHiveCache = false;
 	private int hiveCheckCacheTime = 0;
 	public class HiveExposedCoordinates {
@@ -45,7 +40,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
 			this.orientationMeta = orientationMeta;
 		}
 	}
-	public List<HiveExposedCoordinates> hiveExposedBlocks = new ArrayList<HiveExposedCoordinates>();
+	public List<HiveExposedCoordinates> hiveExposedBlocks = new ArrayList<>();
 	private int hiveExposedBlockCacheTime = 0;
 	
 	private int vespidQueenSwarmLimit = 10; // TODO Creature Flags.
@@ -74,23 +69,19 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob, IG
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
-        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(true));
-        this.goalSelector.addGoal(7, new StayByHomeGoal(this));
-        this.goalSelector.addGoal(8, new WanderGoal(this).setPauseRate(1200));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
+        this.goalSelector.addGoal(this.nextTravelGoalIndex, new StayByHomeGoal(this));
 
-        this.targetSelector.addGoal(1, new CopyMasterAttackTargetGoal(this));
-        this.targetSelector.addGoal(2, new FindAttackTargetGoal(this).setTargetClass(EntityConba.class));
-        this.targetSelector.addGoal(3, new FindAttackTargetGoal(this).setTargetClass(EntityVespidQueen.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(EntityVespid.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupPrey.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(AnimalEntity.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(IGroupAnimal.class));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getType()));
+		EntityType conbaType = CreatureManager.getInstance().getEntityType("conba");
+		if(conbaType != null)
+			this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(conbaType));
     }
+
+    @Override
+	public boolean rollWanderChance() {
+		return this.getRNG().nextDouble() <= 0.0008D;
+	}
 
 	
 	// ==================================================

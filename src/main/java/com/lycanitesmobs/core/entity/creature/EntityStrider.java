@@ -1,19 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
@@ -22,10 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy {
-
-    protected WanderGoal wanderAI;
-    protected AttackMeleeGoal attackAI;
-
     protected int pickupCooldown = 100;
 
     // ==================================================
@@ -54,26 +48,7 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new PaddleGoal(this).setSink(true));
-        this.goalSelector.addGoal(2, this.stayGoal);
-        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
-        this.goalSelector.addGoal(3, this.attackAI);
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this).setStrayDistance(16).setLostDistance(32));
-        this.goalSelector.addGoal(5, new TemptGoal(this).setTemptDistanceMin(4.0D));
-        this.goalSelector.addGoal(6, new StayByWaterGoal(this).setSpeed(1.25D));
-        this.wanderAI = new WanderGoal(this);
-        this.goalSelector.addGoal(7, this.wanderAI);
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-
-        this.targetSelector.addGoal(0, new RevengeOwnerGoal(this));
-        this.targetSelector.addGoal(1, new CopyOwnerAttackTargetGoal(this));
-        this.targetSelector.addGoal(0, new RevengeRiderGoal(this));
-        this.targetSelector.addGoal(1, new CopyRiderAttackTargetGoal(this));
-        this.targetSelector.addGoal(3, new RevengeGoal(this).setHelpCall(true));
-        this.targetSelector.addGoal(4, new FindAttackTargetGoal(this).setTargetClass(PlayerEntity.class).setCheckSight(false));
-        this.targetSelector.addGoal(5, new FindAttackTargetGoal(this).addTargets(EntityType.VILLAGER));
-        this.targetSelector.addGoal(6, new DefendOwnerGoal(this));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	
@@ -86,18 +61,11 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     public void livingTick() {
         super.livingTick();
         if(!this.getEntityWorld().isRemote) {
-            // Wander Pause Rates:
-            if(this.isInWater())
-                this.wanderAI.setPauseRate(120);
-            else
-                this.wanderAI.setPauseRate(0);
-
             // Drop Owner When Tamed:
             if(this.isTamed() && this.hasPickupEntity() && this.getPickupEntity() == this.getOwner())
                 this.dropPickupEntity();
 
             // Entity Pickup Update:
-            this.attackAI.setEnabled(!this.hasPickupEntity());
             if(this.hasPickupEntity()) {
                 ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.getPickupEntity());
                 if(extendedEntity != null)

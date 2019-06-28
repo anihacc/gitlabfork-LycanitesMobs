@@ -1,23 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.*;
-import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
-import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySilex extends AgeableCreatureEntity implements IGroupAnimal {
+public class EntitySilex extends AgeableCreatureEntity {
 
     // ==================================================
  	//                    Constructor
@@ -40,18 +35,7 @@ public class EntitySilex extends AgeableCreatureEntity implements IGroupAnimal {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new StayByWaterGoal(this));
-        this.goalSelector.addGoal(2, new AttackMeleeGoal(this).setLongMemory(false));
-        this.goalSelector.addGoal(3, new TemptGoal(this).setItemStack(new ItemStack(Items.LAPIS_LAZULI, 1)));
-        this.goalSelector.addGoal(4, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.goalSelector.addGoal(5, new MateGoal(this));
-        this.goalSelector.addGoal(6, new FollowParentGoal(this).setSpeed(1.0D));
-        this.goalSelector.addGoal(7, new WanderGoal(this));
-        this.goalSelector.addGoal(10, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
-        this.goalSelector.addGoal(11, new LookIdleGoal(this));
-        //this.targetSelector.addGoal(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetSelector.addGoal(2, new FindParentGoal(this).setSightCheck(false).setDistance(32.0D));
-        this.targetSelector.addGoal(3, new FindAvoidTargetGoal(this).setTargetClass(IGroupPredator.class));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 
 	

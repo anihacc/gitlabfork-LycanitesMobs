@@ -63,7 +63,6 @@ public class EntityAbaia extends TameableCreatureEntity implements IMob {
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
                 if(target != this && this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    if(target instanceof BaseCreatureEntity)
                     target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
                 }
             }
