@@ -66,14 +66,6 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
     public void livingTick() {
         super.livingTick();
         
-        // Wander Pause Rates:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.lavaContact())
-                this.wanderAI.setPauseRate(120);
-            else
-                this.wanderAI.setPauseRate(0);
-        }
-        
         // Trail:
         if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
         	int trailHeight = 1;

@@ -1,6 +1,9 @@
 {
 	"name": "belph",
 	"creatureType": "demon",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityBelph",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBelph",
 	"loadDefault": true,

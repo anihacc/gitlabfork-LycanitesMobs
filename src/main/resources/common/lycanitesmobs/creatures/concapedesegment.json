@@ -1,6 +1,9 @@
 {
 	"name": "concapedesegment",
 	"creatureType": "arthropod",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConcapedeSegment",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConcapedeSegment",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "arbour",
 	"peaceful": true,
+	"farmable": false,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

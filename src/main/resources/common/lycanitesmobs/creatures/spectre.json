@@ -1,6 +1,9 @@
 {
 	"name": "spectre",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySpectre",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSpectre",
 	"loadDefault": true,

@@ -1,6 +1,9 @@
 {
 	"name": "aegis",
 	"creatureType": "elemental",
+	"groups": [
+		"guardian"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAegis",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAegis",
 	"loadDefault": true,

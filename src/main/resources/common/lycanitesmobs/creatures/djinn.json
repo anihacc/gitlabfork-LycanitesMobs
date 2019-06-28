@@ -1,6 +1,9 @@
 {
 	"name": "djinn",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityDjinn",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelDjinn",
 	"loadDefault": true,

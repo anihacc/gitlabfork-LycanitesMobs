@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -92,7 +91,7 @@ public class DefendOwnerGoal extends TargetingGoal {
         if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.tamedHost.getOwner()) && !(target instanceof IGroupAnimal)) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.tamedHost.getOwner())) {
             return true;
         }
         else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {

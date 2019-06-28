@@ -1,6 +1,10 @@
 {
 	"name": "joust",
 	"creatureType": "arthropod",
+	"groups": [
+		"animal",
+		"hardy"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityJoust",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoust",
 	"loadDefault": true,
@@ -55,6 +59,7 @@
 	],
 	"element": "quake",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

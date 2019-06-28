@@ -1,6 +1,9 @@
 {
 	"name": "zoataur",
 	"creatureType": "beast",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityZoataur",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelZoataur",
 	"loadDefault": true,
@@ -39,6 +42,7 @@
 	"pierce": 1,
 	"sight": 16,
 	"knockbackResistance": 0.25,
+	"packSize": 1,
 	"eggBackColor": "#442200",
 	"eggForeColor": "#FFDDBB",
 	"subspecies": [

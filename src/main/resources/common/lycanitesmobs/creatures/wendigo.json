@@ -1,6 +1,10 @@
 {
 	"name": "wendigo",
 	"creatureType": "undead",
+	"groups": [
+		"monster",
+		"frozen"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWendigo",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWendigo",
 	"loadDefault": true,

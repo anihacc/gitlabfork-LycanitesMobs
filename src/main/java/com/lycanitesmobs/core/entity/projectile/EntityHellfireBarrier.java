@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -144,8 +143,6 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
         LivingEntity owner = this.getThrower();
         if(owner == null) {
             if(targetEntity instanceof EntityRahovart)
-                return false;
-            if(targetEntity instanceof IGroupDemon)
                 return false;
         }
         return super.canDamage(targetEntity);

@@ -55,6 +55,9 @@ public class AvoidIfHitGoal extends FindAvoidTargetGoal {
  	//                  Should Execute
  	// ==================================================
     public boolean shouldExecute() {
+    	if(this.host.getRevengeTarget() == null)
+    		return false;
+
     	// Group Check:
 		boolean shouldFlee = true;
 		boolean shouldPackHunt = false;

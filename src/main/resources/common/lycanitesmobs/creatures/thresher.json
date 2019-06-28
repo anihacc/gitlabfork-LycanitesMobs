@@ -1,6 +1,9 @@
 {
 	"name": "thresher",
 	"creatureType": "aquatic",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityThresher",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelThresher",
 	"loadDefault": true,
@@ -12,7 +15,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["all"],
+		"biomes": ["all", "-swamp", "-jungle", "-dense"],
 		"spawnWeight": 1,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 1,
@@ -39,6 +42,7 @@
 	"pierce": 2,
 	"sight": 32,
 	"knockbackResistance": 1,
+	"packSize": 1,
 	"eggBackColor": "#77747e",
 	"eggForeColor": "#3f4567",
 	"subspecies": [

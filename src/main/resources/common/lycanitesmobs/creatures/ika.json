@@ -1,6 +1,9 @@
 {
 	"name": "ika",
 	"creatureType": "aquatic",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityIka",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelIka",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "earth",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

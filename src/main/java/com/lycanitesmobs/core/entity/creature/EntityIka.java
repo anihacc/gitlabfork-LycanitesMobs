@@ -45,24 +45,6 @@ public class EntityIka extends AgeableCreatureEntity {
         this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("vegetables"));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-    
-    
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
-	@Override
-    public void livingTick() {
-        super.livingTick();
-        
-        // Wander Pause Rates:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.isInWater())
-                this.wanderAI.setPauseRate(20);
-            else
-                this.wanderAI.setPauseRate(0);
-        }
-    }
 
 	
     // ==================================================

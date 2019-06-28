@@ -1,6 +1,9 @@
 {
 	"name": "remobra",
 	"creatureType": "dragon",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityRemobra",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelRemobra",
 	"loadDefault": true,

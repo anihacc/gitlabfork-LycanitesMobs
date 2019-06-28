@@ -56,12 +56,15 @@ public class RevengeGoal extends FindAttackTargetGoal {
  	//                  Should Execute
  	// ==================================================
     public boolean shouldExecute() {
+    	if(this.host.getRevengeTarget() == null)
+    		return false;
+
     	// Group Check:
-		boolean shouldRevenge = true;
+		boolean shouldRevenge = this.host.creatureInfo.getGroups().isEmpty();
 		boolean shouldPackHunt = false;
 		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
-			if (!group.shouldRevenge(this.host.getRevengeTarget())) {
-				shouldRevenge = false;
+			if (group.shouldRevenge(this.host.getRevengeTarget())) {
+				shouldRevenge = true;
 			}
 			if (group.shouldPackHunt(this.host.getRevengeTarget())) {
 				shouldPackHunt = true;
@@ -71,7 +74,7 @@ public class RevengeGoal extends FindAttackTargetGoal {
 			return false;
 		}
 
-        return this.host.getRevengeTimer() != this.revengeTime && this.isEntityTargetable(this.host.getRevengeTarget(), false);
+		return this.host.getRevengeTimer() != this.revengeTime && this.isEntityTargetable(this.host.getRevengeTarget(), false);
     }
 	
     

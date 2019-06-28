@@ -1,6 +1,9 @@
 {
 	"name": "lobber",
 	"creatureType": "brute",
+	"groups": [
+		"inferno"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityLobber",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelLobber",
 	"loadDefault": true,

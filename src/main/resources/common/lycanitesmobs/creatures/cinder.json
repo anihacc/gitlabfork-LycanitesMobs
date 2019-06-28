@@ -1,6 +1,9 @@
 {
 	"name": "cinder",
 	"creatureType": "elemental",
+	"groups": [
+		"inferno"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCinder",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCinder",
 	"loadDefault": true,

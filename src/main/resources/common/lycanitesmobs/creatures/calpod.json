@@ -1,6 +1,11 @@
 {
 	"name": "calpod",
 	"creatureType": "arthropod",
+	"groups": [
+		"monster",
+		"critter",
+		"hardy"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCalpod",
 	"loadDefault": true,

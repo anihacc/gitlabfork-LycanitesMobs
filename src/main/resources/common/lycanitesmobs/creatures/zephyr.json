@@ -1,6 +1,9 @@
 {
 	"name": "zephyr",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityZephyr",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelZephyr",
 	"loadDefault": true,

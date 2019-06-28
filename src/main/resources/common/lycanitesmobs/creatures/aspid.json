@@ -1,6 +1,9 @@
 {
 	"name": "aspid",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAspid",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAspid",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "poison",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

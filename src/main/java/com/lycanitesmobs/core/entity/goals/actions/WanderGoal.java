@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +42,8 @@ public class WanderGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
+    	if(this.host.hasAttackTarget())
+    		return false;
         if(this.host.getAge() >= 100)
             return false;
         else if(!this.host.rollWanderChance())

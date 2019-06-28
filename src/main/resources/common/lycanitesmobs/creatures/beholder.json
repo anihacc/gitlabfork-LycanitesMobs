@@ -1,6 +1,9 @@
 {
 	"name": "beholder",
 	"creatureType": "aberration",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityBeholder",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBeholder",
 	"loadDefault": true,

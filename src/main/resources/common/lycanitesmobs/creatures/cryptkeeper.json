@@ -1,6 +1,9 @@
 {
 	"name": "cryptkeeper",
 	"creatureType": "undead",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCryptkeeper",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCryptkeeper",
 	"loadDefault": true,

@@ -1,6 +1,9 @@
 {
 	"name": "cockatrice",
 	"creatureType": "dragon",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCockatrice",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCockatrice",
 	"loadDefault": true,

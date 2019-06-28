@@ -38,24 +38,6 @@ public class EntityLacedon extends TameableCreatureEntity implements IMob {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1));
     }
-    
-    
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== Living Update ==========
-	@Override
-    public void livingTick() {
-        super.livingTick();
-        
-        // Wander Pause Rates:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.isInWater())
-                this.wanderAI.setPauseRate(120);
-            else
-                this.wanderAI.setPauseRate(0);
-        }
-    }
 
 	
     // ==================================================

@@ -1,6 +1,9 @@
 {
 	"name": "nymph",
 	"creatureType": "elemental",
+	"groups": [
+		"mystic"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityNymph",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelNymph",
 	"loadDefault": true,

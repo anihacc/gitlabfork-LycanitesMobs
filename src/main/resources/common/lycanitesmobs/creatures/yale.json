@@ -1,6 +1,9 @@
 {
 	"name": "yale",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYale",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYale",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "earth",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

@@ -1,6 +1,9 @@
 {
 	"name": "chupacabra",
 	"creatureType": "beast",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelChupacabra",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "chaos",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": true,
 	"mountable": false,

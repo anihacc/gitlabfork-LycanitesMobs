@@ -1,6 +1,9 @@
 {
 	"name": "ettin",
 	"creatureType": "brute",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityEttin",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEttin",
 	"loadDefault": true,

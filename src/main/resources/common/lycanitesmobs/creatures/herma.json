@@ -1,6 +1,9 @@
 {
 	"name": "herma",
 	"creatureType": "arthropod",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityHerma",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelHerma",
 	"loadDefault": true,

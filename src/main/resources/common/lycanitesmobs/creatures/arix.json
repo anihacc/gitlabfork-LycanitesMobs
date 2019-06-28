@@ -1,6 +1,9 @@
 {
 	"name": "arix",
 	"creatureType": "imp",
+	"groups": [
+		"frozen"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityArix",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelArix",
 	"loadDefault": true,

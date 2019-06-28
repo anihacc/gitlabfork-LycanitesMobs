@@ -1,6 +1,9 @@
 {
 	"name": "yeti",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYeti",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYeti",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "frost",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": true,
 	"tameable": false,
 	"mountable": false,

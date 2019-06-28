@@ -1,6 +1,9 @@
 {
 	"name": "geonach",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeonach",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeonach",
 	"loadDefault": true,

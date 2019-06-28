@@ -1,6 +1,9 @@
 {
 	"name": "tarantula",
 	"creatureType": "arthropod",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTarantula",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTarantula",
 	"loadDefault": true,

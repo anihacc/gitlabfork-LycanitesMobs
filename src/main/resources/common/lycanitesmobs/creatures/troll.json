@@ -1,6 +1,9 @@
 {
 	"name": "troll",
 	"creatureType": "brute",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTroll",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTroll",
 	"loadDefault": true,

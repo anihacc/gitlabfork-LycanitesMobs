@@ -1,6 +1,9 @@
 {
 	"name": "crusk",
 	"creatureType": "arthropod",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCrusk",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCrusk",
 	"loadDefault": true,
@@ -39,6 +42,7 @@
 	"pierce": 1,
 	"sight": 16,
 	"knockbackResistance": 1,
+	"packSize": 1,
 	"eggBackColor": "#FFDDAA",
 	"eggForeColor": "#000000",
 	"subspecies": [

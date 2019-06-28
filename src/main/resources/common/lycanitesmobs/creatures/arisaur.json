@@ -1,6 +1,9 @@
 {
 	"name": "arisaur",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityArisaur",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelArisaur",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "arbour",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

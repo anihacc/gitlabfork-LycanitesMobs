@@ -1,6 +1,9 @@
 {
 	"name": "gorger",
 	"creatureType": "arthropod",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGorger",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGorger",
 	"loadDefault": true,
@@ -39,6 +42,7 @@
 	"pierce": 1,
 	"sight": 24,
 	"knockbackResistance": 0.5,
+	"packSize": 1,
 	"eggBackColor": "#DE2A00",
 	"eggForeColor": "#200905",
 	"subspecies": [

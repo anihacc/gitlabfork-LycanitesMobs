@@ -1,6 +1,9 @@
 {
 	"name": "kobold",
 	"creatureType": "beast",
+	"groups": [
+		"critter"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityKobold",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelKobold",
 	"loadDefault": true,

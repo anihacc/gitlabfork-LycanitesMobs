@@ -1,6 +1,9 @@
 {
 	"name": "wildkin",
 	"creatureType": "beast",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWildkin",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWildkin",
 	"loadDefault": true,

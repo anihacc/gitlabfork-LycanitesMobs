@@ -1,6 +1,9 @@
 {
 	"name": "cephignis",
 	"creatureType": "aquatic",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCephignis",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCephignis",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "lava",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

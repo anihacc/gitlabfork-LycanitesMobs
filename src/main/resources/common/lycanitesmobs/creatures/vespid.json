@@ -1,6 +1,9 @@
 {
 	"name": "vespid",
 	"creatureType": "arthropod",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityVespid",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVespid",
 	"loadDefault": true,

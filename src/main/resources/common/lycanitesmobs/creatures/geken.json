@@ -1,6 +1,9 @@
 {
 	"name": "geken",
 	"creatureType": "beast",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeken",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeken",
 	"loadDefault": true,

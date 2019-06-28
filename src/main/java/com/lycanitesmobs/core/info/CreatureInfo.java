@@ -35,6 +35,9 @@ public class CreatureInfo {
 	/** The name of this mob. Lowercase, no space, used for language entries and for generating the entity id, etc. Required. **/
 	protected String name;
 
+	/** The creature type this creature belongs to. **/
+	public CreatureType creatureType;
+
 	/** A list of groups that this creature is in. **/
 	public List<CreatureGroup> groups = new ArrayList<>();
 
@@ -50,9 +53,6 @@ public class CreatureInfo {
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;
-
-	/** The creature type this creature belongs to. **/
-	public CreatureType creatureType;
 
 	/** The entity type used to store base attributes of this creature. **/
 	protected EntityType<? extends LivingEntity> entityType;

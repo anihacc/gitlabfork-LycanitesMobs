@@ -1,6 +1,9 @@
 {
 	"name": "conba",
 	"creatureType": "beast",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConba",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConba",
 	"loadDefault": true,

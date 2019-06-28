@@ -1,6 +1,9 @@
 {
 	"name": "pinky",
 	"creatureType": "demon",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityPinky",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelPinky",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "nether",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": true,
 	"mountable": true,

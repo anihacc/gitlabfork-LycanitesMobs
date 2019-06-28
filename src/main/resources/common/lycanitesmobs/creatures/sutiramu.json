@@ -1,6 +1,9 @@
 {
 	"name": "sutiramu",
 	"creatureType": "arthropod",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySutiramu",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSutiramu",
 	"loadDefault": true,

@@ -68,14 +68,12 @@ public class EntityCockatrice extends RideableCreatureEntity implements IMob {
                 this.wantsToLand = false;
                 if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.getLeashed() || this.isInWater() || (!this.isTamed() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean())) {
                     this.leap(1.0D, 1.0D);
-                    this.wanderAI.setPauseRate(0);
                     this.isLanded = false;
                 }
             }
             else {
                 if(this.wantsToLand) {
                     if(!this.isLanded && this.isSafeToLand()) {
-                        this.wanderAI.setPauseRate(120);
                         this.isLanded = true;
                     }
                 }

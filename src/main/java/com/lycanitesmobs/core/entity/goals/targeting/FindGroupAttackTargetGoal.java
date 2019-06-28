@@ -69,7 +69,7 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 		boolean shouldPackAttack = false;
 		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
 			if(group.shouldFlee(target)) {
-				shouldFlee = false;
+				shouldFlee = true;
 			}
 			if(group.shouldHunt(target)) {
 				shouldAttack = true;
@@ -83,10 +83,8 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 				return false;
 			}
 		}
-		else {
-			if(!shouldAttack && (!shouldPackAttack || !this.host.isInPack())) {
-				return false;
-			}
+		if(!shouldAttack && (!shouldPackAttack || !this.host.isInPack())) {
+			return false;
 		}
     	
     	// Type Check:

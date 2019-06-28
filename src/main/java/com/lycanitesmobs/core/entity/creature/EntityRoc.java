@@ -138,6 +138,13 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 		}
         return super.getFlightOffset();
     }
+
+    @Override
+    public boolean rollWanderChance() {
+        if(this.isFlying())
+            return this.getRNG().nextDouble() <= 0.25D;
+        return this.getRNG().nextDouble() <= 0.008D;
+    }
     
     
     // ==================================================

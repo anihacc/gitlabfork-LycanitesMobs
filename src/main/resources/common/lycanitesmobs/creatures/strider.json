@@ -1,6 +1,9 @@
 {
 	"name": "strider",
 	"creatureType": "aquatic",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityStrider",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelStrider",
 	"loadDefault": true,

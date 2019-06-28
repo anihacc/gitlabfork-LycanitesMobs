@@ -1,6 +1,9 @@
 {
 	"name": "wraith",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWraith",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWraith",
 	"loadDefault": true,

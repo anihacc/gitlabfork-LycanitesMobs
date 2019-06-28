@@ -1,6 +1,9 @@
 {
 	"name": "silex",
 	"creatureType": "aquatic",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySilex",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSilex",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "water",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

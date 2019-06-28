@@ -5,7 +5,10 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.AnimalEntity;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +40,7 @@ public class CreatureGroup {
 	public List<String> ignoreGroupNames = new ArrayList<>();
 
 	enum Interaction {
-		HUNT("hunt"), PACKHUNT("pack"), WARY("wary"), FLEE("flee"), IGNORE("ignore");
+		HUNT("hunt"), PACKHUNT("pack"), WARY("wary"), FLEE("flee"), IGNORE("ignore"), RETALIATE("retaliate");
 		public final String name;
 		Interaction(String name) {
 			this.name = name;
@@ -50,8 +53,20 @@ public class CreatureGroup {
 	/** The default interaction towards a group not in any interaction lists. **/
 	public Interaction defaultInteraction = Interaction.HUNT;
 
-	/** If true, this group includes humanoids like Player, Villagers or Illagers. **/
+	/** If true, this group includes animals like Sheep, Cows and Pigs. **/
+	public boolean animals = false;
+
+	/** If true, this group includes humanoids like Players, Villagers or Pillagers. **/
 	public boolean humanoids = false;
+
+	/** If true, this group includes raiders like Pillagers and Ravagers. **/
+	public boolean raiders = false;
+
+	/** If true, this group includes Snow Golems. **/
+	public boolean frozen = false;
+
+	/** If true, this group includes Blazes and Magma Cubes. **/
+	public boolean inferno = false;
 
 	/**
 	 * Loads this creature group from json.
@@ -60,34 +75,42 @@ public class CreatureGroup {
 		this.name = json.get("name").getAsString();
 
 		// Interaction Lists:
-		if(json.has("hostile")) {
-			this.huntGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("hostile"));
+		if(json.has("hunt")) {
+			this.huntGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("hunt"));
 		}
-
 		if(json.has("pack")) {
 			this.packGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("pack"));
 		}
-
 		if(json.has("wary")) {
 			this.waryGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("wary"));
 		}
-
 		if(json.has("flee")) {
 			this.fleeGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("flee"));
 		}
-
 		if(json.has("ignore")) {
 			this.ignoreGroupNames = JSONHelper.getJsonStrings(json.getAsJsonArray("ignore"));
 		}
 
 		// Interactions:
 		if(json.has("default")) {
-			this.defaultInteraction = Interaction.valueOf(json.get("default").getAsString());
+			this.defaultInteraction = Interaction.valueOf(json.get("default").getAsString().toUpperCase());
 		}
 
 		// Special Entities:
+		if(json.has("animals")) {
+			this.animals = json.get("animals").getAsBoolean();
+		}
 		if(json.has("humanoids")) {
 			this.humanoids = json.get("humanoids").getAsBoolean();
+		}
+		if(json.has("raiders")) {
+			this.raiders = json.get("raiders").getAsBoolean();
+		}
+		if(json.has("frozen")) {
+			this.frozen = json.get("frozen").getAsBoolean();
+		}
+		if(json.has("inferno")) {
+			this.inferno = json.get("inferno").getAsBoolean();
 		}
 	}
 
@@ -161,9 +184,25 @@ public class CreatureGroup {
 	 * @param entity The entity to check for.
 	 * @return True if the entity is in this group, otherwise false.
 	 */
-	public boolean hasEntity(Entity entity) {
-		if(!(entity instanceof BaseCreatureEntity))
+	public boolean hasEntity(@Nonnull Entity entity) {
+		if(this.animals && entity instanceof AnimalEntity) {
+			return true;
+		}
+		if(this.humanoids && (entity.getType() == EntityType.PLAYER || entity.getType() == EntityType.VILLAGER || entity.getType() == EntityType.PILLAGER)) {
+			return true;
+		}
+		if(this.raiders && (entity.getType() == EntityType.PILLAGER || entity.getType() == EntityType.RAVAGER)) {
+			return true;
+		}
+		if(this.frozen && entity.getType() == EntityType.SNOW_GOLEM) {
+			return true;
+		}
+		if(this.inferno && (entity.getType() == EntityType.BLAZE || entity.getType() == EntityType.MAGMA_CUBE)) {
+			return true;
+		}
+		if(!(entity instanceof BaseCreatureEntity)) {
 			return false;
+		}
 		return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
 	}
 
@@ -185,7 +224,7 @@ public class CreatureGroup {
 			if(group.hasEntity(entity))
 				return false;
 		}
-		return this.defaultInteraction == Interaction.HUNT;
+		return this.defaultInteraction == Interaction.HUNT || this.defaultInteraction == Interaction.RETALIATE;
 	}
 
 	/**

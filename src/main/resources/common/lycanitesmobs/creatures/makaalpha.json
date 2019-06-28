@@ -1,6 +1,9 @@
 {
 	"name": "makaalpha",
 	"creatureType": "beast",
+	"groups": [
+		"alpha"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityMakaAlpha",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMakaAlpha",
 	"loadDefault": true,

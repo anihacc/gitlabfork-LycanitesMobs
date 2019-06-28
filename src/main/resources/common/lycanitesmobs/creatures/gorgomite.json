@@ -1,6 +1,11 @@
 {
 	"name": "gorgomite",
 	"creatureType": "arthropod",
+	"groups": [
+		"monster",
+		"critter",
+		"hardy"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGorgomite",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGorgomite",
 	"loadDefault": true,

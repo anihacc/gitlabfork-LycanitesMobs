@@ -1,6 +1,9 @@
 {
 	"name": "reaper",
 	"creatureType": "undead",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityReaper",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelReaper",
 	"loadDefault": true,

@@ -1,6 +1,9 @@
 {
 	"name": "triffid",
 	"creatureType": "plant",
+	"groups": [
+		"nature"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTriffid",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTriffid",
 	"loadDefault": true,

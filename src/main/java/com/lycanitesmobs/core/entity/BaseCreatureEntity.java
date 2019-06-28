@@ -215,7 +215,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // Targets:
 	/** A list of Entity Types that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
-	protected List<EntityType> hostileTargets;
+	protected List<EntityType> hostileTargets = new ArrayList<>();
     /** A target used for alpha creatures or connected mobs such as following concapede segements. **/
     private LivingEntity masterTarget;
     /** A target used usually for child mobs or connected mobs such as leading concapede segments. **/
@@ -1817,8 +1817,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 	/** Can be overridden to add a random chance of wandering around. **/
 	public boolean rollWanderChance() {
-		if(this.isFlying())
-			return true;
 		return this.getRNG().nextDouble() <= 0.008D;
 	}
     
@@ -2247,7 +2245,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return The attack range.
 	 */
 	public double getMeleeAttackRange() {
-		double range = this.getSize(Pose.STANDING).width + 1;
+		double range = this.getSize(Pose.STANDING).width + 1.5D;
 		if(this.isFlying()) {
 			range += this.getFlightOffset();
 		}
@@ -2655,11 +2653,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean isHostileTo(Entity target) {
     	if(this.hostileTargets.contains(target.getType()))
     		return true;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if(group.shouldHunt(target) || group.shouldPackHunt(target)) {
+				return true;
+			}
+		}
     	return false;
 	}
 
 	/** Marks this creature as hostile towards the provided entity. **/
 	public void setHostileTo(EntityType targetType) {
+		if(this.hostileTargets == null)
+			this.hostileTargets = new ArrayList<>();
 		if(this.hostileTargets.contains(targetType))
 			return;
 		this.hostileTargets.add(targetType);

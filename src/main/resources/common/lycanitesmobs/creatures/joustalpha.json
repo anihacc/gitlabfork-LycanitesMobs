@@ -1,6 +1,9 @@
 {
 	"name": "joustalpha",
 	"creatureType": "arthropod",
+	"groups": [
+		"alpha"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityJoustAlpha",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoustAlpha",
 	"loadDefault": true,

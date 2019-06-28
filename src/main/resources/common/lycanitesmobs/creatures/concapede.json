@@ -1,6 +1,9 @@
 {
 	"name": "concapede",
 	"creatureType": "arthropod",
+	"groups": [
+		"alpha"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConcapedeHead",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConcapedeHead",
 	"loadDefault": true,
@@ -55,6 +58,7 @@
 	],
 	"element": "arbour",
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,

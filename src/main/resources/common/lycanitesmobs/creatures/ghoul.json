@@ -1,6 +1,9 @@
 {
 	"name": "ghoul",
 	"creatureType": "undead",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGhoul",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGhoul",
 	"loadDefault": true,

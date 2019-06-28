@@ -157,6 +157,13 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob {
         }
         return 0;
     }
+
+    @Override
+    public boolean rollWanderChance() {
+        if(this.isFlying())
+            return this.getRNG().nextDouble() <= 0.25D;
+        return this.getRNG().nextDouble() <= 0.008D;
+    }
     
     
     // ==================================================

@@ -1,6 +1,9 @@
 {
 	"name": "spriggan",
 	"creatureType": "elemental",
+	"groups": [
+		"nature"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySpriggan",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSpriggan",
 	"loadDefault": true,

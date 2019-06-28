@@ -37,7 +37,7 @@ public class PaddleGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean shouldExecute() {
-    	if(this.host.isStrongSwimmer())
+    	if(this.host.isStrongSwimmer() || this.host.isFlying())
     		return false;
         if(this.host.getControllingPassenger() != null && this.host.getControllingPassenger() instanceof PlayerEntity && this.host.canBeSteered())
             return false;

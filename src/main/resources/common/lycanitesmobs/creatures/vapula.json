@@ -1,6 +1,9 @@
 {
 	"name": "vapula",
 	"creatureType": "elemental",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityVapula",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelVapula",
 	"loadDefault": true,

@@ -1,6 +1,9 @@
 {
 	"name": "wraamon",
 	"creatureType": "beast",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWraamon",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWraamon",
 	"loadDefault": true,

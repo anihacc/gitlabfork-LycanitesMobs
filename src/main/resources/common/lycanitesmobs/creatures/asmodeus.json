@@ -1,6 +1,9 @@
 {
 	"name": "asmodeus",
 	"creatureType": "demon",
+	"groups": [
+		"boss"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAsmodeus",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAsmodeus",
 	"loadDefault": true,

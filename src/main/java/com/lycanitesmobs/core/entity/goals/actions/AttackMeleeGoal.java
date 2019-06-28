@@ -243,8 +243,8 @@ public class AttackMeleeGoal extends Goal {
 	 * @return The maximum attack range.
 	 */
 	protected double getAttackRange(LivingEntity attackTarget) {
-		double range = this.host.getMeleeAttackRange();
-		range += this.attackRange + attackTarget.getSize(Pose.STANDING).width;
-		return range;
+		double creatureRange = this.host.getMeleeAttackRange();
+		double targetSize = (attackTarget.getSize(Pose.STANDING).width + 1) * (attackTarget.getSize(Pose.STANDING).width + 1);
+		return creatureRange + targetSize + this.attackRange;
 	}
 }

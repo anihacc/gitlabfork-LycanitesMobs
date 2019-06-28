@@ -107,11 +107,6 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
         }
         return 0;
     }
-
-    @Override
-    public boolean rollWanderChance() {
-        return this.getRNG().nextDouble() <= 0.008D;
-    }
     
     
     // ==================================================

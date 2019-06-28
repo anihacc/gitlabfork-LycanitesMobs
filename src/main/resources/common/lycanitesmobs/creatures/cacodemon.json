@@ -1,6 +1,9 @@
 {
 	"name": "cacodemon",
 	"creatureType": "demon",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCacodemon",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCacodemon",
 	"loadDefault": true,
