@@ -3,9 +3,9 @@ package com.lycanitesmobs.core.gui.beastiary;
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureFilterList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiPetTypeList;
+import com.lycanitesmobs.core.gui.beastiary.lists.CreatureFilterList;
+import com.lycanitesmobs.core.gui.beastiary.lists.CreatureList;
+import com.lycanitesmobs.core.gui.beastiary.lists.PetTypeList;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -16,8 +16,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class PetsBeastiaryScreen extends BeastiaryScreen {
-	public GuiCreatureFilterList petTypeList;
-	public GuiCreatureList petList;
+	public CreatureFilterList petTypeList;
+	public CreatureList petList;
 	private int petCommandIdStart = 200;
 	private int releaseConfirmId = 300;
 	private int releaseCancelId = 301;
@@ -33,11 +33,13 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 		int petTypeListHeight = Math.round((float)this.colLeftHeight * 0.225F);
 		int petTypeListY = this.colLeftY;
-		this.petTypeList = new GuiPetTypeList(this, this.colLeftWidth, petTypeListHeight, petTypeListY, petTypeListY + petTypeListHeight, this.colLeftX);
+		this.petTypeList = new PetTypeList(this, this.colLeftWidth, petTypeListHeight, petTypeListY, petTypeListY + petTypeListHeight, this.colLeftX);
+		this.children.add(this.petTypeList);
 
 		int petListHeight = Math.round((float)this.colLeftHeight * 0.7F);
 		int petListY = petTypeListY + petTypeListHeight + Math.round((float)this.colLeftHeight * 0.025F);
-		this.petList = new GuiCreatureList(GuiCreatureList.Type.PET, this, this.petTypeList, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
+		this.petList = new CreatureList(CreatureList.Type.PET, this, this.petTypeList, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
+		this.children.add(this.petList);
 
 		int buttonWidth = 80;
 		int buttonHeight = 20;
@@ -98,16 +100,23 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		buttonX = this.colRightX + Math.round((float)this.colRightWidth / 2) - (buttonWidth + buttonSpacing);
 		buttonY = this.colRightY + Math.round((float)this.colRightHeight / 2) - Math.round((float)buttonHeight / 2);
 		button = new ButtonBase(this.releaseConfirmId, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.yes").getFormattedText(), this);
+		button.visible = false;
 		this.addButton(button);
 
 		buttonX += buttonSpacing;
 		button = new ButtonBase(this.releaseCancelId, buttonX + buttonWidth, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.no").getFormattedText(), this);
+		button.visible = false;
 		this.addButton(button);
 	}
 
 	@Override
 	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		super.renderBackground(mouseX, mouseY, partialTicks);
+
+		// Model:
+		if(this.playerExt.selectedPet != null) {
+			this.renderCreature(this.playerExt.selectedPet.getCreatureInfo(), this.colRightX + (this.colRightWidth / 2), this.colRightY + Math.round((float) this.colRightHeight / 2), mouseX, mouseY, partialTicks);
+		}
 	}
 
 	@Override
@@ -129,8 +138,8 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 			// Pet Controls:
 			if(button.buttonId >= this.petCommandIdStart && button.buttonId < this.releaseConfirmId) {
+				button.visible = !empty && this.playerExt.selectedPet != null;
 				if (this.playerExt.selectedPet != null && !this.playerExt.selectedPet.releaseEntity) {
-					button.visible = !empty;
 
 					// Actions:
 					if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart) {
@@ -203,13 +212,8 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			return;
 		}
 
-		// Model:
-		if(this.playerExt.selectedPet != null) {
-			this.renderCreature(this.playerExt.selectedPet.getCreatureInfo(), this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + Math.round((float) this.colRightHeight / 2), mouseX, mouseY, partialTicks);
-		}
-
 		// Player Spirit:
-		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.spirit") + ": ";
+		String text = "\u00A7l" + new TranslationTextComponent("gui.beastiary.player.spirit").getFormattedText() + ": ";
 		this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 		int barX = nextX + this.getFontRenderer().getStringWidth(text);
 		int spiritMax = Math.round((float)this.playerExt.spiritMax / this.playerExt.spiritCharge);
@@ -227,17 +231,17 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		if(this.playerExt.selectedPet != null) {
 			// Spirit:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = "\u00A7l" + new TranslationTextComponent("creature.stat.spirit") + ": ";
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.spirit").getFormattedText() + ": ";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			this.drawLevel(this.playerExt.selectedPet.getCreatureInfo(), AssetManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Health:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			if(this.playerExt.selectedPet.respawnTime <= 0) {
-				text = "\u00A7l" + new TranslationTextComponent("creature.stat.health") + ": ";
+				text = "\u00A7l" + new TranslationTextComponent("creature.stat.health").getFormattedText() + ": ";
 			}
 			else {
-				text = "\u00A7l" + new TranslationTextComponent("creature.stat.respawning") + ": ";
+				text = "\u00A7l" + new TranslationTextComponent("creature.stat.respawning").getFormattedText() + ": ";
 			}
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
 			barX = nextX + this.getFontRenderer().getStringWidth(text);
@@ -267,11 +271,11 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int buttonSpacing = 2;
 		int buttonY = this.colRightY + this.colRightHeight - ((buttonHeight + buttonSpacing) * 3);
 		if(this.playerExt.selectedPet != null && !this.playerExt.selectedPet.releaseEntity) {
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.actions"), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.actions").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.stance"), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.stance").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 			buttonY += buttonHeight + buttonSpacing;
-			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.movement"), this.colRightX, buttonY + 6, 0xFFFFFF);
+			this.getFontRenderer().drawString("\u00A7l" + new TranslationTextComponent("gui.pet.movement").getFormattedText(), this.colRightX, buttonY + 6, 0xFFFFFF);
 		}
 
 		// Release Confirmation:

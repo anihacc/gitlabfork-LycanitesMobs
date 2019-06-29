@@ -1,0 +1,49 @@
+package com.lycanitesmobs.core.gui.beastiary.lists;
+
+import com.lycanitesmobs.core.VersionChecker;
+import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+
+public class BeastiaryIndexList extends BaseList {
+	protected VersionChecker.VersionInfo versionInfo;
+
+	/**
+	 * Constructor
+	 * @param width The width of the list.
+	 * @param height The height of the list.
+	 * @param top The y position that the list starts at.
+	 * @param bottom The y position that the list stops at.
+	 * @param x The x position of the list.
+	 */
+	public BeastiaryIndexList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x, VersionChecker.VersionInfo versionInfo) {
+		super(parentGui, width, height, top, bottom, x, versionInfo.getUpdateNotesHeight(width - 20));
+		this.versionInfo = versionInfo;
+	}
+
+	@Override
+	public void createEntries() {
+		this.addEntry(new Entry(this));
+	}
+
+	/**
+	 * List Entry
+	 */
+	public static class Entry extends BaseListEntry {
+		private BeastiaryIndexList parentList;
+		
+		public Entry(BeastiaryIndexList parentList) {
+			this.parentList = parentList;
+		}
+
+		@Override
+		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+			if(index == 0 && this.parentList.versionInfo != null) {
+				this.drawSplitString(this.parentList.versionInfo.getUpdateNotes(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+			}
+		}
+
+		@Override
+		protected void onClicked() {}
+	}
+}

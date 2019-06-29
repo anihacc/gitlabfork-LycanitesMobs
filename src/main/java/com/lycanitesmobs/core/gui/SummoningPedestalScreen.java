@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.gui.buttons.MainTab;
+import com.lycanitesmobs.core.gui.widgets.SummoningPedestalList;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.Minecraft;
@@ -62,18 +63,6 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         this.windowY = (this.height / 2) - (this.windowHeight / 2);
         this.centerX = this.windowX + (this.windowWidth / 2);
         this.centerY = this.windowY + (this.windowHeight / 2);
-
-        // List:
-        if(this.hasPets() && this.summoningPedestal.summonSet != null) {
-            this.selectMinion(this.summoningPedestal.summonSet.summonType);
-        }
-        int buttonSpacing = 2;
-        int listWidth = (this.windowWidth / 2) - (buttonSpacing * 4);
-        int listHeight = this.windowHeight - (39 + buttonSpacing) - 16; // 39 = Title Height + Spirit Height, 24 = Excess
-        int listTop = this.windowY + 39 + buttonSpacing; // 39 = Title Height + Spirit Height
-        int listBottom = listTop + listHeight;
-        int listX = this.windowX + (buttonSpacing * 2);
-        this.list = new GuiSummoningPedestalList(this, this.playerExt, listWidth, listHeight, listTop, listBottom, listX);
     }
 
     @Override
@@ -103,6 +92,18 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
         this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+
+        // List:
+        if(this.hasPets() && this.summoningPedestal.summonSet != null) {
+            this.selectMinion(this.summoningPedestal.summonSet.summonType);
+        }
+        int listWidth = (this.windowWidth / 2) - (buttonSpacing * 4);
+        int listHeight = this.windowHeight - (39 + buttonSpacing) - 16; // 39 = Title Height + Spirit Height, 24 = Excess
+        int listTop = this.windowY + 39 + buttonSpacing; // 39 = Title Height + Spirit Height
+        int listBottom = listTop + listHeight;
+        int listX = this.windowX + (buttonSpacing * 2);
+        this.list = new SummoningPedestalList(this, this.playerExt, listWidth, listHeight, listTop, listBottom, listX);
+        this.children.add(this.list);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Pet List:
         if(this.hasPets()) {
-            //this.list.render(mouseX, mouseY, partialTicks); TODO lists
+            this.list.render(mouseX, mouseY, partialTicks);
         }
 
         super.renderWidgets(mouseX, mouseY, partialTicks);
@@ -300,7 +301,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         this.sendCommandsToServer();
     }
 
-    public String getSelectedMinion() {
+    public String getSelectedMinionName() {
         if(this.summonSet == null)
             return null;
         return this.summonSet.summonType;

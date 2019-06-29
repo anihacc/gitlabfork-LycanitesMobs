@@ -3,7 +3,9 @@ package com.lycanitesmobs.core;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
+import net.minecraft.util.text.TranslationTextComponent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -69,6 +71,29 @@ public class VersionChecker {
 					return;
 				}
 			}
+		}
+
+		public String getUpdateNotes() {
+			String content = "\u00A7l\u00A7n" + new TranslationTextComponent("gui.beastiary.index.changes").getFormattedText() + "\u00A7r";
+			content += "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.name").getFormattedText() + ":\u00A7r " + this.name;
+			if(this.newFeatures.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.new").getFormattedText() + ":\u00A7r\n" + this.newFeatures;
+			if(this.configChanges.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.config").getFormattedText() + ":\u00A7r\n" + this.configChanges;
+			if(this.majorFixes.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.major").getFormattedText() + ":\u00A7r\n" + this.majorFixes;
+			if(this.changes.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.gameplay").getFormattedText() + ":\u00A7r\n" + this.changes;
+			if(this.balancing.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.balancing").getFormattedText() + ":\u00A7r\n" + this.balancing;
+			if(this.minorFixes.length() > 0)
+				content += "\n\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.changes.minor").getFormattedText() + ":\u00A7r\n" + this.minorFixes;
+
+			return content;
+		}
+
+		public int getUpdateNotesHeight(int displayWidth) {
+			return ClientManager.getInstance().getFontRenderer().getWordWrappedHeight(this.getUpdateNotes(), displayWidth) + 10;
 		}
 	}
 

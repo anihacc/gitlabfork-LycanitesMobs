@@ -76,23 +76,22 @@ public abstract class BeastiaryScreen extends BaseScreen {
 		this.playerExt = ExtendedPlayer.getForPlayer(player);
 
 		this.mc = Minecraft.getInstance();
-		if(this.mc.gameSettings.guiScale != 2 || GUI_ACTIVE) {
+		/*if(this.mc.gameSettings.guiScale != 2 || GUI_ACTIVE) {
 			OPENED_GUI_SCALE = this.mc.gameSettings.guiScale;
-			this.mc.gameSettings.guiScale = 2 - OPENED_GUI_SCALE;
-			//this.mc.gameSettings.set(GameSettings.Options.GUI_SCALE, 2 - OPENED_GUI_SCALE);
+			this.mc.mainWindow.func_216521_a(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
 		}
 		else {
 			GUI_ACTIVE = true;
-		}
+		}*/
 	}
 
 	@Override
 	public void onClose() {
-		if(this.mc.gameSettings.guiScale == 2 && !GUI_ACTIVE) {
-			//this.mc.gameSettings.setOptionValue(GameSettings.Options.GUI_SCALE, OPENED_GUI_SCALE - 2);
-			this.mc.gameSettings.guiScale = 2 - OPENED_GUI_SCALE;
+		/*if(this.mc.gameSettings.guiScale == 2 && !GUI_ACTIVE) {
+			this.mc.gameSettings.guiScale = OPENED_GUI_SCALE;
+			this.mc.mainWindow.func_216521_a(this.mc.gameSettings.guiScale, this.mc.getForceUnicodeFont());
 		}
-		GUI_ACTIVE = false;
+		GUI_ACTIVE = false;*/
 		super.onClose();
 	}
 
@@ -174,7 +173,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public void renderForeground(int mouseX, int mouseY, float partialTicks) {
 		ITextComponent title = new StringTextComponent("\u00A7l\u00A7n").appendSibling(this.getTitle());
 		float width = this.getFontRenderer().getStringWidth(title.getFormattedText());
-		this.getFontRenderer().drawString(title.getFormattedText(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
+		this.getFontRenderer().drawStringWithShadow(title.getFormattedText(), this.colRightCenterX - Math.round(width / 2), this.colRightY, 0xFFFFFF);
 	}
 
 	/**
@@ -249,7 +248,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 			// Create New:
 			if(this.creaturePreviewEntity == null || this.creaturePreviewEntity.getClass() != creatureInfo.entityClass || !subspeciesMatch) {
-				this.creaturePreviewEntity = creatureInfo.entityClass.getConstructor(new Class[]{World.class}).newInstance(this.player.getEntityWorld());
+				this.creaturePreviewEntity = creatureInfo.createEntity(this.player.getEntityWorld());
 				this.creaturePreviewEntity.onGround = true;
 				if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
 					((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
@@ -277,7 +276,9 @@ public abstract class BeastiaryScreen extends BaseScreen {
 					previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
 				}
 
-				GlStateManager.enableColorMaterial();
+				//GlStateManager.enableDepthTest();
+				//GlStateManager.enableColorMaterial();
+
 				GlStateManager.pushMatrix();
 				GlStateManager.translatef((float)posX, (float)posY, -500.0F);
 				GlStateManager.scalef((float)(-scale), (float)scale, (float)scale);
@@ -308,6 +309,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 				this.creaturePreviewEntity.prevRotationYawHead = f3;
 				this.creaturePreviewEntity.rotationYawHead = f4;
 				GlStateManager.popMatrix();
+
 				RenderHelper.disableStandardItemLighting();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.activeTexture(GLX.GL_TEXTURE1);

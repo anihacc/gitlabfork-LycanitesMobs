@@ -1,17 +1,16 @@
 package com.lycanitesmobs.core.gui.beastiary;
 
-import com.lycanitesmobs.core.gui.beastiary.list.GuiElementDescriptionList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiElementList;
+import com.lycanitesmobs.core.gui.beastiary.lists.ElementDescriptionList;
+import com.lycanitesmobs.core.gui.beastiary.lists.ElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class ElementsBeastiaryScreen extends BeastiaryScreen {
 	public ElementInfo elementInfo;
-	protected GuiElementList elementList;
-	protected GuiElementDescriptionList descriptionList;
+	protected ElementList elementList;
+	protected ElementDescriptionList descriptionList;
 
 	public ElementsBeastiaryScreen(PlayerEntity player) {
 		super(player);
@@ -21,10 +20,12 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 	public void initWidgets() {
 		super.initWidgets();
 
-		this.elementList = new GuiElementList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
+		this.elementList = new ElementList(this, this.colLeftWidth, this.colLeftHeight, this.colLeftY,this.colLeftY + this.colLeftHeight, this.colLeftX);
+		this.children.add(this.elementList);
 
 		int descriptionListY = this.colRightY;
-		this.descriptionList = new GuiElementDescriptionList(this, this.colRightWidth, this.colRightHeight, descriptionListY, this.colRightY + this.colRightHeight, this.colRightX);
+		this.descriptionList = new ElementDescriptionList(this, this.colRightWidth, this.colRightHeight, descriptionListY, this.colRightY + this.colRightHeight, this.colRightX);
+		this.children.add(this.descriptionList);
 	}
 
 	@Override

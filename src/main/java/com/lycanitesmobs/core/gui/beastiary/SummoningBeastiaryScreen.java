@@ -4,8 +4,8 @@ import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
+import com.lycanitesmobs.core.gui.beastiary.lists.CreatureList;
+import com.lycanitesmobs.core.gui.beastiary.lists.SubspeciesList;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -18,8 +18,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class SummoningBeastiaryScreen extends BeastiaryScreen {
-	public GuiCreatureList petList;
-	public GuiSubspeciesList subspeciesList;
+	public CreatureList petList;
+	public SubspeciesList subspeciesList;
 
 	private int summoningSlotIdStart = 200;
 	private int petCommandIdStart = 300;
@@ -34,11 +34,13 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 		int petListHeight = this.colLeftHeight;
 		int petListY = this.colLeftY;
-		this.petList = new GuiCreatureList(GuiCreatureList.Type.SUMMONABLE, this, null, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
+		this.petList = new CreatureList(CreatureList.Type.SUMMONABLE, this, null, this.colLeftWidth, petListHeight, petListY, petListY + petListHeight, this.colLeftX);
+		this.children.add(this.petList);
 
 		int subspeciesListHeight = 80;
 		int subspeciesListY = this.colRightY + 70;
-		this.subspeciesList = new GuiSubspeciesList(this, true, 90, subspeciesListHeight, subspeciesListY, subspeciesListY + subspeciesListHeight, this.colRightX);
+		this.subspeciesList = new SubspeciesList(this, true, 90, subspeciesListHeight, subspeciesListY, subspeciesListY + subspeciesListHeight, this.colRightX);
+		this.children.add(this.subspeciesList);
 
 		int summoningSlots = this.playerExt.summonSetMax;
 		int buttonSpacing = 2;

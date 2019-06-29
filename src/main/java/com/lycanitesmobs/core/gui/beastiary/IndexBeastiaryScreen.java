@@ -3,8 +3,7 @@ package com.lycanitesmobs.core.gui.beastiary;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.gui.buttons.ButtonBase;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.core.gui.beastiary.lists.BeastiaryIndexList;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -13,10 +12,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class IndexBeastiaryScreen extends BeastiaryScreen {
-	public GuiIndexList indexList;
+	public BeastiaryIndexList indexList;
+	VersionChecker.VersionInfo versionInfo;
 
 	public IndexBeastiaryScreen(PlayerEntity player) {
 		super(player);
+		this.versionInfo = VersionChecker.getLatestVersion(false);
 	}
 
 	@Override
@@ -41,12 +42,22 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		this.addButton(button);
 
 		// Lists:
-		this.indexList = new GuiIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2);
+		if(this.versionInfo != null) {
+			this.indexList = new BeastiaryIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2, this.versionInfo);
+			this.children.add(this.indexList);
+		}
 	}
 
 	@Override
 	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		super.renderBackground(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+		super.renderWidgets(mouseX, mouseY, partialTicks);
+		if(this.indexList != null)
+			this.indexList.render(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
@@ -58,31 +69,23 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		this.drawSplitString(info, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
 		yOffset += this.getFontRenderer().getWordWrappedHeight(info, this.colRightWidth);
 
-		// Get Latest Version:
-		VersionChecker.VersionInfo latestVersion = VersionChecker.getLatestVersion(false);
-		if(latestVersion == null) {
+		if(this.versionInfo == null)
 			return;
-		}
 
 		// Check Mod Version:
 		String version = "\n\u00A7l" + new TranslationTextComponent("gui.beastiary.index.version").getFormattedText() + ": \u00A7r";
-		if(latestVersion.isNewer) {
+		if(this.versionInfo.isNewer) {
 			version += "\u00A74";
 		}
 		version += LycanitesMobs.versionNumber + "\u00A7r";
-		if(latestVersion.isNewer) {
-			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getFormattedText() + ": \u00A7r\u00A72" + latestVersion.versionNumber + "\u00A7r";
+		if(this.versionInfo.isNewer) {
+			version += " \u00A7l" + new TranslationTextComponent("gui.beastiary.index.version.newer").getFormattedText() + ": \u00A7r\u00A72" + this.versionInfo.versionNumber + "\u00A7r";
 		}
 		this.drawSplitString(version, this.colRightX + 1, yOffset, this.colRightWidth, 0xFFFFFF, true);
-
-		// Latest Changes:
-		this.indexList.versionInfo = latestVersion;
-		//this.indexList.render(mouseX, mouseY, partialTicks); TODO Lists
 	}
 
 	@Override
 	public void actionPerformed(byte buttonId) {
-		LycanitesMobs.logDebug("", "Button pressed: " + buttonId);
 		if(buttonId == 100) {
 			try {
 				this.openURI(new URI(LycanitesMobs.website));

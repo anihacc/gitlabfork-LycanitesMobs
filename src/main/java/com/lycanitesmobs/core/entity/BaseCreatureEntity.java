@@ -460,7 +460,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	@Override
 	protected void registerGoals() {
 		// Greater Targeting:
-		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
+		if(this instanceof IFusable)
+			this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
 

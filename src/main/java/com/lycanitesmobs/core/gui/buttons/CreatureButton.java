@@ -1,7 +1,10 @@
 package com.lycanitesmobs.core.gui.buttons;
 
+import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
+import org.lwjgl.opengl.GL11;
 
 public class CreatureButton extends ButtonBase {
 	public CreatureInfo creatureInfo;
@@ -24,15 +27,13 @@ public class CreatureButton extends ButtonBase {
 		}
         super.renderButton(mouseX, mouseY, partialTicks);
 
-		/*GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 
-		int buttonW = this.width;
-		int buttonH = this.height;
 		int buttonX = this.x;
 		int buttonY = this.y;
 		Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
-		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 - (hoverState * 32), this.width, this.height);
+		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 - (this.isHovered() ? 32 : 0), this.width, this.height);
 		if(this.creatureInfo != null) {
 			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
 			this.drawTexturedModalRect(buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
@@ -48,6 +49,6 @@ public class CreatureButton extends ButtonBase {
 			textColor = 16777120;
 		}
 
-		this.drawCenteredString(this.fontRenderer, this.displayString, buttonX + 5, buttonY + 2, textColor);*/
+		this.drawCenteredString(this.fontRenderer, this.getMessage(), buttonX + 5, buttonY + 2, textColor);
     }
 }

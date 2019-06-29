@@ -1,7 +1,8 @@
-package com.lycanitesmobs.core.gui.beastiary.list;
+package com.lycanitesmobs.core.gui.beastiary.lists;
 
 import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.core.gui.widgets.BaseList;
+import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.util.text.ITextComponent;
@@ -9,7 +10,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
-public class GuiCreatureDescriptionList extends BaseList {
+public class CreatureDescriptionList extends BaseList {
 	public CreatureKnowledge creatureKnowledge;
 
 	/**
@@ -20,51 +21,35 @@ public class GuiCreatureDescriptionList extends BaseList {
 	 * @param bottom The y position that the list stops at.
 	 * @param x The x position of the list.
 	 */
-	public GuiCreatureDescriptionList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
-		super(parentGui, width, height, top, bottom, x, 10800);
+	public CreatureDescriptionList(BeastiaryScreen parentGui, int width, int height, int top, int bottom, int x) {
+		super(parentGui, width, height, top, bottom, x, 500);
 	}
 
 	@Override
 	public void createEntries() {
-
+		this.addEntry(new Entry(this));
 	}
 
+	/**
+	 * List Entry
+	 */
+	public static class Entry extends BaseListEntry {
+		private CreatureDescriptionList parentList;
 
-	@Override
-	protected int getItemCount() {
-		return 1;
-	}
-
-
-	/*@Override
-	protected void elementClicked(int index, boolean doubleClick) {
-		this.selectedIndex = index;
-	}
-
-
-	@Override
-	protected boolean isSelected(int index) {
-		return false;
-	}
-
-
-	@Override
-	protected void drawBackground() {}
-
-
-	@Override
-	protected int getContentHeight() {
-		return this.parentGui.getFontRenderer().getWordWrappedHeight(this.getContent(), this.listWidth) + 10;
-	}
-
-
-	@Override
-	protected void drawSlot(int index, int boxRight, int boxTop, int boxBottom, Tessellator tessellator) {
-		if(index == 0 && this.creatureKnowledge != null) {
-			this.parentGui.drawSplitString(this.getContent(), this.left + 6, boxTop, this.listWidth - 20, 0xFFFFFF, true);
+		public Entry(CreatureDescriptionList parentList) {
+			this.parentList = parentList;
 		}
-	}*/
 
+		@Override
+		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
+			if(index == 0) {
+				this.drawSplitString(this.parentList.getContent(), left + 6, top, this.parentList.getWidth() - 20, 0xFFFFFF, true);
+			}
+		}
+
+		@Override
+		protected void onClicked() {}
+	}
 
 	public String getContent() {
 		if(this.creatureKnowledge == null) {
@@ -172,12 +157,5 @@ public class GuiCreatureDescriptionList extends BaseList {
 		}
 
 		return text.getFormattedText();
-	}
-
-	/** Overridden to change the background gradient without copying over an entire function. **/
-	protected void drawGradientRect(int left, int top, int right, int bottom, int color1, int color2) {
-		color1 = 0x33101010;
-		color2 = color1;
-		GuiUtils.drawGradientRect(0, left, top, right, bottom, color1, color2);
 	}
 }

@@ -51,7 +51,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 			buttonText = new TranslationTextComponent("gui.equipmentforge.deconstruct").getFormattedText();
 		}
 		buttonY += buttonSpacing;
-		this.addButton(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
+		//this.addButton(new ButtonBase(1, buttonX + buttonSpacing, buttonY, buttonWidth, buttonHeight, buttonText, this));
 	}
 
 	@Override
