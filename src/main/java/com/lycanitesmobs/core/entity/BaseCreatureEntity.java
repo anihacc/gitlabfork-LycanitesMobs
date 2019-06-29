@@ -495,7 +495,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         // Stats:
         this.stepHeight = 0.5F;
         this.experienceValue = this.creatureInfo.experience;
-        this.inventory = new InventoryCreature(this.getName().toString(), this);
+        this.inventory = new InventoryCreature(this.getName().getFormattedText(), this);
 
         // Drops:
         this.loadItemDrops();
@@ -786,10 +786,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	// ========== Collision Spawn Check ==========
 	/** Returns true if there is no collision stopping this mob from spawning. **/
 	public boolean checkSpawnCollision(World world, BlockPos pos) {
-		/*if(!this.getEntityWorld().checkNoEntityCollision(this.getBoundingBox())) {
-			return false;
-		}*/
-		if(!this.spawnsInBlock && !this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(this.getBoundingBox()))) {
+		double radius = this.creatureInfo.width;
+		double height = this.creatureInfo.height;
+		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
+		if(!this.spawnsInBlock && !this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
 			return false;
 		}
 		return true;

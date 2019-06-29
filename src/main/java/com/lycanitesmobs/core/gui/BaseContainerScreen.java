@@ -51,8 +51,8 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(mouseX, mouseY, partialTicks);
-        this.renderWidgets(mouseX, mouseY, partialTicks);
-        super.render(mouseX, mouseY, partialTicks);
+        this.renderWidgets(mouseX, mouseY, partialTicks); // Renders buttons.
+        super.render(mouseX, mouseY, partialTicks); // Renders slots.
         this.renderForeground(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
@@ -72,7 +72,11 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param mouseY The y position of the mouse cursor.
      * @param partialTicks Ticks for animation.
      */
-    protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {}
+    protected void renderWidgets(int mouseX, int mouseY, float partialTicks) {
+        for(int i = 0; i < this.buttons.size(); ++i) {
+            this.buttons.get(i).render(mouseX, mouseY, partialTicks);
+        }
+    }
 
     /**
      * Draws foreground elements.
