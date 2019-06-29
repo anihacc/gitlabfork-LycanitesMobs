@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -41,7 +41,7 @@ public class ModelShade extends ModelTemplateBiped {
 	//             Add Custom Render Layers
 	// ==================================================
 	@Override
-	public void addCustomLayers(RenderCreature renderer) {
+	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "eyes", true, LayerCreatureEffect.BLEND.ADD.id, true));
 	}

@@ -154,15 +154,15 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 		// Top Menu:
 		button = new ButtonBase(Page.INDEX.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.index.title").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 		button = new ButtonBase(Page.CREATURES.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.creatures").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 		button = new ButtonBase(Page.PETS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.pets").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 		button = new ButtonBase(Page.SUMMONING.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.summoning").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 		button = new ButtonBase(Page.ELEMENTS.id, buttonX + (buttonWidthPadded * this.buttons.size()), menuY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.beastiary.elements").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 	}
 
 	@Override

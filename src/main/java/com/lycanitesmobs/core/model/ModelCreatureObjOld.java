@@ -98,7 +98,10 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
    	// ==================================================
     @Override
 	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
-		boolean isChild = false; // TODO Baby heads!
+		boolean isChild = false;
+		if(entity != null) {
+			isChild = entity.isChild();
+		}
 
         // Assess Scale and Check if Trophy:
 		boolean trophyModel = false;

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,7 +12,7 @@ public class LayerCreatureAttack extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureAttack(RenderCreature renderer) {
+    public LayerCreatureAttack(CreatureRenderer renderer) {
         super(renderer);
     }
 

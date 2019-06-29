@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.model.animation;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.renderer.RenderProjectileModel;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerItem;
@@ -84,7 +84,7 @@ public class TextureLayerAnimation {
 	 * @param renderer The creature renderer to use for the layer.
 	 * @return A new Layer Renderer.
 	 */
-	public LayerCreatureEffect createCreatureLayer(RenderCreature renderer) {
+	public LayerCreatureEffect createCreatureLayer(CreatureRenderer renderer) {
 		int blendingId = LayerCreatureEffect.BLEND.NORMAL.id;
 		if("add".equals(this.blending)) {
 			blendingId = LayerCreatureEffect.BLEND.ADD.id;

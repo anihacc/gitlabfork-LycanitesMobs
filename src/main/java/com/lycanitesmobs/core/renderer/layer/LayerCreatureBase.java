@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureBase;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
@@ -15,13 +15,13 @@ import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCreatureBase> {
-    public RenderCreature renderer;
+    public CreatureRenderer renderer;
     public String name;
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureBase(RenderCreature renderer) {
+    public LayerCreatureBase(CreatureRenderer renderer) {
         super(renderer);
         this.renderer = renderer;
         this.name = "Layer";

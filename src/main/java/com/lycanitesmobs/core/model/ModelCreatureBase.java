@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.model;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerEquipment;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureSaddle;
@@ -34,7 +34,7 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
     // ==================================================
     //             Add Custom Render Layers
     // ==================================================
-    public void addCustomLayers(RenderCreature renderer) {
+    public void addCustomLayers(CreatureRenderer renderer) {
         renderer.addLayer(new LayerEquipment(renderer, "chest"));
         renderer.addLayer(new LayerCreatureSaddle(renderer));
     }

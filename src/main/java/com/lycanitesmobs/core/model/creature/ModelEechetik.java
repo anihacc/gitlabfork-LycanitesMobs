@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -34,7 +34,7 @@ public class ModelEechetik extends ModelTemplateElemental {
 	//             Add Custom Render Layers
 	// ==================================================
 	@Override
-	public void addCustomLayers(RenderCreature renderer) {
+	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 	}
 

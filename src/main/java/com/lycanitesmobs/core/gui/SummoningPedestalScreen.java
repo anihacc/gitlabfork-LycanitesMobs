@@ -85,7 +85,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         int buttonX = this.windowX + 6;
         int buttonY = this.windowY;
 
-        this.buttons.add(new MainTab(TAB_BUTTON_ID, buttonX, buttonY - 24, this));
+        this.addButton(new MainTab(TAB_BUTTON_ID, buttonX, buttonY - 24, this));
 
         buttonX = this.centerX + buttonSpacing;
         int buttonXRight = buttonX + buttonWidth + buttonSpacing;
@@ -93,16 +93,16 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
-        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "...", this));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttons.add(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
+        this.addButton(new ButtonBase(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "...", this));
     }
 
     @Override

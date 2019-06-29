@@ -80,6 +80,8 @@ public class DonationFamiliars {
                 	continue;
 				}
                 String familiar_species = familiarJson.get("familiar_species").getAsString();
+                if("phantom".equalsIgnoreCase(familiar_species))
+					familiar_species = "reaper";
                 int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
                 String familiar_name = familiarJson.get("familiar_name").getAsString();
                 String familiar_color = familiarJson.get("familiar_color").getAsString();

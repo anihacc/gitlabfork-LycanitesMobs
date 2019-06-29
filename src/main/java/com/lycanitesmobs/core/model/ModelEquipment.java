@@ -112,6 +112,10 @@ public class ModelEquipment implements IItemModelRenderer {
 
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)partStack.getItem();
 		ModelItemBase modelItemBase = AssetManager.getItemModel(itemEquipmentPart.itemName);
+		if(modelItemBase == null) {
+			modelItemBase = new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo);
+			AssetManager.addItemModel(itemEquipmentPart.itemName, modelItemBase);
+		}
 
 		if(modelItemBase.animationParts.containsKey("base")) {
 			modelItemBase.animationParts.get("base").setOffset(offsetPart);

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.model.ModelCreatureObjOld;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureAttack;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureShield;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import net.minecraft.entity.Entity;
@@ -60,7 +60,7 @@ public class ModelAsmodeus extends ModelCreatureObjOld {
     //             Add Custom Render Layers
     // ==================================================
     @Override
-    public void addCustomLayers(RenderCreature renderer) {
+    public void addCustomLayers(CreatureRenderer renderer) {
         super.addCustomLayers(renderer);
         renderer.addLayer(new LayerCreatureAttack(renderer));
         renderer.addLayer(new LayerCreatureShield(renderer));

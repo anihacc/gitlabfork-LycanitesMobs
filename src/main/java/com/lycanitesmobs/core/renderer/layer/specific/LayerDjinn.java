@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer.layer.specific;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ public class LayerDjinn extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerDjinn(RenderCreature renderer) {
+    public LayerDjinn(CreatureRenderer renderer) {
         super(renderer);
     }
 

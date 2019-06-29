@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -16,7 +16,7 @@ public class LayerCreatureShield extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureShield(RenderCreature renderer) {
+    public LayerCreatureShield(CreatureRenderer renderer) {
         super(renderer);
     }
 

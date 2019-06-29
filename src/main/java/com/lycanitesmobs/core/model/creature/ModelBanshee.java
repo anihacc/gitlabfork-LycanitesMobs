@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureScrolling;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +40,7 @@ public class ModelBanshee extends ModelTemplateElemental {
 	//             Add Custom Render Layers
 	// ==================================================
 	@Override
-	public void addCustomLayers(RenderCreature renderer) {
+	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "eye", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", false, LayerCreatureEffect.BLEND.NORMAL.id, true, new Vector2f(0, -16)));

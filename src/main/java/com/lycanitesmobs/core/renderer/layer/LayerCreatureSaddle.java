@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +13,7 @@ public class LayerCreatureSaddle extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureSaddle(RenderCreature renderer) {
+    public LayerCreatureSaddle(CreatureRenderer renderer) {
         super(renderer);
     }
 

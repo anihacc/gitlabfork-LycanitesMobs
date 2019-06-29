@@ -8,7 +8,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.modelloader.obj.ObjObject;
 import com.lycanitesmobs.core.modelloader.obj.TessellatorModel;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
@@ -193,7 +193,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 	//             Add Custom Render Layers
 	// ==================================================
 	@Override
-	public void addCustomLayers(RenderCreature renderer) {
+	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		if(this.animation != null) {
 			this.animation.addCreatureLayers(renderer);
@@ -208,7 +208,10 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		boolean isChild = false; // TODO Baby heads!
+		boolean isChild = false;
+		if(entity != null) {
+			isChild = entity.isChild();
+		}
 		if(scale < 0) {
             renderAsTrophy = true;
 			scale = -scale;

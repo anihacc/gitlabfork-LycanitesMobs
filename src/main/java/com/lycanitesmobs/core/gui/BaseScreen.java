@@ -14,9 +14,12 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.io.IOException;
 import java.net.URI;
 
 public abstract class BaseScreen extends Screen implements Button.IPressable {
@@ -30,14 +33,14 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
     @Override
 	public void init(Minecraft minecraft, int width, int height) {
     	this.minecraft = minecraft;
-    	this.buttons.clear();
-		this.initWidgets();
     	super.init(minecraft, width, height);
+		this.initWidgets();
 	}
 
 	/**
 	 * Secondary init method called by main init method.
 	 */
+	@Override
 	protected void init() {
 		super.init();
 	}
@@ -153,12 +156,10 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	protected void openURI(URI uri) {
 		try {
-			Class oclass = Class.forName("java.awt.Desktop");
-			Object object = oclass.getMethod("getDesktop", new Class[0]).invoke(null);
-			oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, uri);
-		}
-		catch (Throwable throwable) {
+			Util.getOSType().openURI(uri);
+		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "Unable to open link: " + uri.toString());
+			e.printStackTrace();
 		}
 	}
 

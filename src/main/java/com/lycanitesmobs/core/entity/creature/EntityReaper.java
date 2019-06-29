@@ -114,7 +114,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     				return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
     	}
         if(this.isTamed() && this.getOwner() != null) {
-            if("jbams".equalsIgnoreCase(this.getOwnerName()))
+            if("jbams".equalsIgnoreCase(this.getOwnerName().getFormattedText()))
                 return ObjectManager.getSound(this.creatureInfo.getName() + "_say_jon");
         }
     	return super.getAmbientSound();

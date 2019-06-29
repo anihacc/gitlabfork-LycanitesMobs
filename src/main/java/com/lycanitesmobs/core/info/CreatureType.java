@@ -135,6 +135,7 @@ public class CreatureType {
 			return;
 		}
 		Item.Properties treatProperties = new Item.Properties();
+		treatProperties.group(ItemManager.getInstance().itemsGroup);
 		treatProperties.maxStackSize(16);
 		this.treat = new ItemTreat(treatProperties, this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);

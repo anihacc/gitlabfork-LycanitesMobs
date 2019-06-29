@@ -48,61 +48,61 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 		// Actions:
 		ButtonBase button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ACTIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.active").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.TELEPORT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.teleport").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.pvp").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.RELEASE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.release").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		// Stance:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.PASSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.passive").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.DEFENSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.defensive").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.ASSIST.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.assist").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.AGGRESSIVE.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.aggressive").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		// Movement:
 		buttonX = this.colRightX + buttonMarginX;
 		buttonY += buttonHeight + 2;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.FOLLOW.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.follow").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.WANDER.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.wander").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonWidth + buttonSpacing;
 		button = new ButtonBase(BaseCreatureEntity.PET_COMMAND_ID.SIT.id + this.petCommandIdStart, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("gui.pet.sit").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		// Release Confirmation:
 		buttonX = this.colRightX + Math.round((float)this.colRightWidth / 2) - (buttonWidth + buttonSpacing);
 		buttonY = this.colRightY + Math.round((float)this.colRightHeight / 2) - Math.round((float)buttonHeight / 2);
 		button = new ButtonBase(this.releaseConfirmId, buttonX, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.yes").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		buttonX += buttonSpacing;
 		button = new ButtonBase(this.releaseCancelId, buttonX + buttonWidth, buttonY, buttonWidth, buttonHeight, new TranslationTextComponent("common.no").getFormattedText(), this);
-		this.buttons.add(button);
+		this.addButton(button);
 	}
 
 	@Override

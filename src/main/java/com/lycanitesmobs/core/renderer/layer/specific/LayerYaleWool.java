@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer.layer.specific;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityYale;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,7 +16,7 @@ public class LayerYaleWool extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerYaleWool(RenderCreature renderer) {
+    public LayerYaleWool(CreatureRenderer renderer) {
         super(renderer);
     }
 

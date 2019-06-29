@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -35,13 +35,13 @@ public class LayerCreatureEffect extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureEffect(RenderCreature renderer, String textureSuffix) {
+    public LayerCreatureEffect(CreatureRenderer renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;
         this.textureSuffix = textureSuffix;
     }
 
-	public LayerCreatureEffect(RenderCreature renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+	public LayerCreatureEffect(CreatureRenderer renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
 		super(renderer);
 		this.name = textureSuffix;
 		this.textureSuffix = textureSuffix;

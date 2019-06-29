@@ -37,7 +37,7 @@ public class SpawnerManager extends JSONLoader {
 		LycanitesMobs.logDebug("Spawner", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
 
 		// Mob Event Spawners:
-		this.loadAllJson(modInfo, "Spawner", "mobevents", "name", true, "spawner", FileLoader.SERVER, StreamLoader.SERVER);
+		this.loadAllJson(modInfo, "Spawner", "mobevents", "name", true, "spawner", FileLoader.COMMON, StreamLoader.COMMON);
 		LycanitesMobs.logDebug("Spawner", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
 
 		// Load Global Spawn Conditions:

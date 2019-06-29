@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +17,7 @@ public class LayerCreatureGlow extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerCreatureGlow(RenderCreature renderer) {
+    public LayerCreatureGlow(CreatureRenderer renderer) {
         super(renderer);
     }
 

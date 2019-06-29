@@ -32,7 +32,6 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		if(modelItemBase == null) {
 			modelItemBase = new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo);
 			AssetManager.addItemModel(itemEquipmentPart.itemName, modelItemBase);
-			return;
 		}
 		this.renderLayers.clear();
 		modelItemBase.addCustomLayers(this);

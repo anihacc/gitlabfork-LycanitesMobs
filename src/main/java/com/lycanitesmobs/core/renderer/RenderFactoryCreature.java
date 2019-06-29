@@ -17,7 +17,7 @@ public class RenderFactoryCreature<T extends BaseCreatureEntity> implements IRen
     @Override
     public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
         try {
-            return new RenderCreature(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
+            return new CreatureRenderer(this.creatureInfo.getName(), manager, (float) this.creatureInfo.width / 2);
         }
         catch (Exception e) {
             LycanitesMobs.logWarning("", "An exception occurred rendering a creature model:");

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer.specific;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
 import com.lycanitesmobs.core.renderer.layer.LayerCreatureBase;
 import net.minecraft.entity.Entity;
@@ -17,7 +17,7 @@ public class LayerRoa extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerRoa(RenderCreature renderer) {
+    public LayerRoa(CreatureRenderer renderer) {
         super(renderer);
     }
 

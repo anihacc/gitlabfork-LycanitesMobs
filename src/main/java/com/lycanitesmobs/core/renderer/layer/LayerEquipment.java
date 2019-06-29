@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.RenderCreature;
+import com.lycanitesmobs.core.renderer.CreatureRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +13,7 @@ public class LayerEquipment extends LayerCreatureBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerEquipment(RenderCreature renderer, String equipmentSlot) {
+    public LayerEquipment(CreatureRenderer renderer, String equipmentSlot) {
         super(renderer);
         this.equipmentSlot = equipmentSlot;
     }

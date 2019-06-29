@@ -36,9 +36,9 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		// Links:
 		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website", this);
-		this.buttons.add(button);
+		this.addButton(button);
 		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon", this);
-		this.buttons.add(button);
+		this.addButton(button);
 
 		// Lists:
 		this.indexList = new GuiIndexList(this, this.colRightWidth, this.colRightHeight, this.colRightY + 93, buttonY - buttonPadding, this.colRightX + 2);

@@ -30,6 +30,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -107,21 +108,24 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Name ==========
     @Override
     public ITextComponent getName() {
-    	if(!this.isTamed() || !CreatureManager.getInstance().config.ownerTags)
-    		return super.getName();
-    	
-    	String ownerName = this.getOwnerName();
+    	if(!this.isTamed() || !CreatureManager.getInstance().config.ownerTags) {
+			return super.getName();
+		}
+		if(this.hasCustomName()) {
+			return super.getName();
+		}
+
+		ITextComponent ownerName = this.getOwnerName();
     	String ownerSuffix = "'s ";
-        if(ownerName != null && ownerName.length() > 0) {
-            if ("s".equals(ownerName.substring(ownerName.length() - 1)) || "S".equals(ownerName.substring(ownerName.length() - 1)))
+    	String ownerFormatted = ownerName.getFormattedText();
+        if(ownerFormatted.length() > 0) {
+            if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-    	String ownedName = ownerName + ownerSuffix + this.getTitle();
-    	
-    	if(this.hasCustomName())
-    		return super.getName();// + " (" + ownedName + ")";
-    	else
-    		return new TranslationTextComponent(ownedName);
+		ITextComponent ownedName = ownerName
+				.appendText(ownerSuffix)
+				.appendSibling(this.getTitle());
+    	return ownedName;
     }
 
 	/**
@@ -592,17 +596,17 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * Gets the display name of the entity that owns this entity or an empty string if none. TODO Maybe this hack is no longer needed now.
 	 * @return The owner display name.
 	 */
-	public String getOwnerName() {
+	public ITextComponent getOwnerName() {
 		Entity owner = this.getOwner();
 		if(owner != null) {
 			if(owner instanceof PlayerEntity) {
-				return owner.getDisplayName().toString();
+				return owner.getDisplayName();
 			}
 			else {
-				return owner.getDisplayName().toString();
+				return owner.getDisplayName();
 			}
 		}
-		return "";
+		return new StringTextComponent("");
 	}
     
     
