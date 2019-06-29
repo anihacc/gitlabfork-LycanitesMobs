@@ -33,7 +33,7 @@ public class EquipmentPartManager extends JSONLoader {
 	}
 
 	/** Loads all JSON Equipment Parts. **/
-	public void loadAllFromJSON(ModInfo modInfo) {
+	public void loadAllFromJson(ModInfo modInfo) {
 		if(!this.loadedGroups.contains(modInfo)) {
 			this.loadedGroups.add(modInfo);
 		}
@@ -64,7 +64,7 @@ public class EquipmentPartManager extends JSONLoader {
 	public void reload() {
 		this.equipmentParts.clear();
 		for(ModInfo group : this.loadedGroups) {
-			this.loadAllFromJSON(group);
+			this.loadAllFromJson(group);
 		}
 	}
 }

@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
+import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -127,10 +128,10 @@ public class LycanitesMobs {
 		ItemManager.getInstance().startup(modInfo);
 
 		// Equipment Parts:
-		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
+		EquipmentPartManager.getInstance().loadAllFromJson(modInfo);
 
 		// Elements:
-		ElementManager.getInstance().loadAllFromJSON(modInfo);
+		ElementManager.getInstance().loadAllFromJson(modInfo);
 
 		// Creatures:
 		CreatureManager.getInstance().startup(modInfo);
@@ -139,16 +140,16 @@ public class LycanitesMobs {
 		ProjectileManager.getInstance().startup(modInfo);
 
 		// Spawners:
-		SpawnerManager.getInstance().loadAllFromJSON();
+		SpawnerManager.getInstance().loadAllFromJson(modInfo);
 
 		// Altars:
 		AltarInfo.createAltars();
 
 		// Mob Events:
-		MobEventManager.getInstance().loadAllFromJSON(modInfo);
+		MobEventManager.getInstance().loadAllFromJson(modInfo);
 
 		// Dungeons:
-		//DungeonManager.getInstance().loadAllFromJSON();
+		DungeonManager.getInstance().loadAllFromJson(modInfo);
 
 		// Treat Lists:
 		ItemHalloweenTreat.createObjectLists();
@@ -163,9 +164,6 @@ public class LycanitesMobs {
 		// Capabilities:
 		CapabilityManager.INSTANCE.register(IExtendedPlayer.class, new ExtendedPlayerStorage(), ExtendedPlayer::new);
 		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
-
-		// GUI:
-		//ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
 
 		// Change Health Limit:
 		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, 1); // maximumValue

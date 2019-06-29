@@ -3,10 +3,10 @@ package com.lycanitesmobs.core.dungeon;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
+import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
 import com.lycanitesmobs.core.dungeon.definition.DungeonSector;
 import com.lycanitesmobs.core.dungeon.definition.DungeonStructure;
@@ -28,7 +28,6 @@ public class DungeonManager extends JSONLoader {
 	public Map<String, DungeonSector> sectors = new HashMap<>();
 	public Map<String, DungeonSchematic> schematics = new HashMap<>();
 
-
 	/** Returns the main DungeonManager INSTANCE or creates it and returns it. **/
 	public static DungeonManager getInstance() {
 		if(INSTANCE == null) {
@@ -37,110 +36,66 @@ public class DungeonManager extends JSONLoader {
 		return INSTANCE;
 	}
 
-
 	/** Loads all JSON Dungeons. **/
-	public void loadAllFromJSON() {
+	public void loadAllFromJson(ModInfo modInfo) {
 		// Themes:
-		Map<String, JsonObject> themeJSONs = this.loadDungeonsFromJSON("themes");
-		LycanitesMobs.logDebug("", "Loading " + themeJSONs.size() + " JSON Dungeon Themes...");
-		for(String jsonName : themeJSONs.keySet()) {
-			try {
-				JsonObject json = themeJSONs.get(jsonName);
-				LycanitesMobs.logDebug("Dungeon", "Loading Dungeon Themes JSON: " + json);
-				DungeonTheme theme = new DungeonTheme();
-				theme.loadFromJSON(json);
-				this.addTheme(theme);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Dungeon Theme: " + jsonName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Dungeon Theme: " + jsonName);
-				e.printStackTrace();
-			}
-		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Themes Loaded In Total.");
-
+		LycanitesMobs.logDebug("", "Loading Dungeon Themes...");
+		this.loadAllJson(modInfo, "Dungeon Theme", "dungeons/themes", "name", true, null, FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " Dungeon Themes Loaded In Total.");
 
 		// Structures:
-		Map<String, JsonObject> structureJSONs = this.loadDungeonsFromJSON("structures");
-		LycanitesMobs.logDebug("", "Loading " + structureJSONs.size() + " JSON Dungeon Structures...");
-		for(String jsonName : structureJSONs.keySet()) {
-			try {
-				JsonObject json = structureJSONs.get(jsonName);
-				LycanitesMobs.logDebug("Dungeon", "Loading Dungeon Structures JSON: " + json);
-				DungeonStructure structure = new DungeonStructure();
-				structure.loadFromJSON(json);
-				this.addStructure(structure);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Dungeon Structure: " + jsonName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Dungeon Structure: " + jsonName);
-				e.printStackTrace();
-			}
-		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Structures Loaded In Total.");
-
+		LycanitesMobs.logDebug("", "Loading Dungeon Structures...");
+		this.loadAllJson(modInfo, "Dungeon Structure", "dungeons/structures", "name", true, null, FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("", "Complete! " + this.structures.size() + " Dungeon Structures Loaded In Total.");
 
 		// Sectors:
-		Map<String, JsonObject> sectorJSONs = this.loadDungeonsFromJSON("sectors");
-		LycanitesMobs.logDebug("", "Loading " + sectorJSONs.size() + " JSON Dungeon Sectors...");
-		for(String jsonName : sectorJSONs.keySet()) {
-			try {
-				JsonObject json = sectorJSONs.get(jsonName);
-				LycanitesMobs.logDebug("Dungeon", "Loading Dungeon Sectors JSON: " + json);
-				DungeonSector sector = new DungeonSector();
-				sector.loadFromJSON(json);
-				this.addSector(sector);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Dungeon Sector: " + jsonName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Dungeon Sector: " + jsonName);
-				e.printStackTrace();
-			}
-		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Sectors Loaded In Total.");
-
+		LycanitesMobs.logDebug("", "Loading Dungeon Sectors...");
+		this.loadAllJson(modInfo, "Dungeon Sector", "dungeons/sectors", "name", true, null, FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("", "Complete! " + this.sectors.size() + " Dungeon Sectors Loaded In Total.");
 
 		// Schematics:
-		Map<String, JsonObject> schematicJSONs = this.loadDungeonsFromJSON("schematics");
-		LycanitesMobs.logDebug("", "Loading " + schematicJSONs.size() + " JSON Dungeon Schematics...");
-		for(String jsonName : schematicJSONs.keySet()) {
-			try {
-				JsonObject json = schematicJSONs.get(jsonName);
-				LycanitesMobs.logDebug("Dungeon", "Loading Dungeon Schematics JSON: " + json);
-				DungeonSchematic schematic = new DungeonSchematic();
-				schematic.loadFromJSON(json);
-				this.addSchematic(schematic);
-			}
-			catch (JsonParseException e) {
-				LycanitesMobs.logWarning("", "Parsing error loading JSON Dungeon Schematics: " + jsonName);
-				e.printStackTrace();
-			}
-			catch(Exception e) {
-				LycanitesMobs.logWarning("", "There was a problem loading JSON Dungeon Schematics: " + jsonName);
-				e.printStackTrace();
-			}
-		}
-		LycanitesMobs.logDebug("", "Complete! " + this.themes.size() + " JSON Dungeon Schematics Loaded In Total.");
+		LycanitesMobs.logDebug("", "Loading Dungeon Schematics...");
+		this.loadAllJson(modInfo, "Dungeon Schematic", "dungeons/schematics", "name", true, null, FileLoader.SERVER, StreamLoader.SERVER);
+		LycanitesMobs.logDebug("", "Complete! " + this.schematics.size() + " Dungeon Schematics Loaded In Total.");
 	}
-
 
 	@Override
 	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
+		// Themes:
+		if("Dungeon Theme".equals(loadGroup)) {
+			DungeonTheme theme = new DungeonTheme();
+			theme.loadFromJSON(json);
+			this.addTheme(theme);
+			return;
+		}
 
+		// Structures:
+		if("Dungeon Structure".equals(loadGroup)) {
+			DungeonStructure structure = new DungeonStructure();
+			structure.loadFromJSON(json);
+			this.addStructure(structure);
+			return;
+		}
+
+		// Sectors:
+		if("Dungeon Sector".equals(loadGroup)) {
+			DungeonSector sector = new DungeonSector();
+			sector.loadFromJSON(json);
+			this.addSector(sector);
+			return;
+		}
+
+		// Schematics:
+		if("Dungeon Schematic".equals(loadGroup)) {
+			DungeonSchematic schematic = new DungeonSchematic();
+			schematic.loadFromJSON(json);
+			this.addSchematic(schematic);
+			return;
+		}
 	}
 
-
 	/** Loads all JSON Dungeons. **/
-	public Map<String, JsonObject> loadDungeonsFromJSON(String type) {
+	public Map<String, JsonObject> loadDungeonsFromJSON(String type, ModInfo modInfo) {
 		LycanitesMobs.logDebug("Dungeon", "Loading JSON Dungeons " + type + "!");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> spawnerJSONs = new HashMap<>();
@@ -164,18 +119,16 @@ public class DungeonManager extends JSONLoader {
 		return spawnerJSONs;
 	}
 
-
 	/** Reloads all JSON Dungeons. **/
 	public void reload() {
-		LycanitesMobs.logDebug("Dungeon", "Destroying JSON Dungeons!");
+		LycanitesMobs.logDebug("Dungeon", "Destroying Dungeons for reload!");
 		this.themes.clear();
 		this.structures.clear();
 		this.sectors.clear();
 		this.schematics.clear();
 
-		this.loadAllFromJSON();
+		this.loadAllFromJson(LycanitesMobs.modInfo);
 	}
-
 
 	/** Adds a new Dungeon Theme to this Manager. **/
 	public void addTheme(DungeonTheme theme) {
@@ -190,7 +143,6 @@ public class DungeonManager extends JSONLoader {
 		this.themes.put(theme.name, theme);
 	}
 
-
 	/** Removes a Dungeon Theme from this Manager. **/
 	public void removeTheme(DungeonTheme theme) {
 		if(!this.themes.containsKey(theme.name)) {
@@ -200,7 +152,6 @@ public class DungeonManager extends JSONLoader {
 		this.themes.remove(theme.name);
 	}
 
-
 	/** Gets a Theme by name or null if none can be found. **/
 	public DungeonTheme getTheme(String name) {
 		if(!this.themes.containsKey(name)) {
@@ -209,7 +160,6 @@ public class DungeonManager extends JSONLoader {
 		}
 		return this.themes.get(name);
 	}
-
 
 	/** Adds a new Dungeon Structure to this Manager. **/
 	public void addStructure(DungeonStructure structure) {
@@ -224,7 +174,6 @@ public class DungeonManager extends JSONLoader {
 		this.structures.put(structure.name, structure);
 	}
 
-
 	/** Removes a Dungeon Structure from this Manager. **/
 	public void removeStructure(DungeonStructure structure) {
 		if(!this.structures.containsKey(structure.name)) {
@@ -234,7 +183,6 @@ public class DungeonManager extends JSONLoader {
 		this.structures.remove(structure.name);
 	}
 
-
 	/** Gets a Structure by name or null if none can be found. **/
 	public DungeonStructure getStructure(String name) {
 		if(!this.structures.containsKey(name)) {
@@ -242,7 +190,6 @@ public class DungeonManager extends JSONLoader {
 		}
 		return this.structures.get(name);
 	}
-
 
 	/** Adds a new Dungeon Sector to this Manager. **/
 	public void addSector(DungeonSector sector) {
@@ -257,7 +204,6 @@ public class DungeonManager extends JSONLoader {
 		this.sectors.put(sector.name, sector);
 	}
 
-
 	/** Removes a Dungeon Sector from this Manager. **/
 	public void removeSector(DungeonSector sector) {
 		if(!this.sectors.containsKey(sector.name)) {
@@ -267,7 +213,6 @@ public class DungeonManager extends JSONLoader {
 		this.sectors.remove(sector.name);
 	}
 
-
 	/** Gets a Sector by name or null if none can be found. **/
 	public DungeonSector getSector(String name) {
 		if(!this.sectors.containsKey(name)) {
@@ -276,7 +221,6 @@ public class DungeonManager extends JSONLoader {
 		}
 		return this.sectors.get(name);
 	}
-
 
 	/** Adds a new Dungeon Schematic to this Manager. **/
 	public void addSchematic(DungeonSchematic schematic) {
@@ -291,7 +235,6 @@ public class DungeonManager extends JSONLoader {
 		this.schematics.put(schematic.name, schematic);
 	}
 
-
 	/** Removes a Dungeon Schematic from this Manager. **/
 	public void removeSchematic(DungeonSchematic schematic) {
 		if(!this.schematics.containsKey(schematic.name)) {
@@ -300,7 +243,6 @@ public class DungeonManager extends JSONLoader {
 		}
 		this.schematics.remove(schematic.name);
 	}
-
 
 	/** Gets a Schematic by name or null if none can be found. **/
 	public DungeonSchematic getSchematic(String name) {

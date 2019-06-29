@@ -31,9 +31,7 @@ public class SpawnerManager extends JSONLoader {
 
 
 	/** Loads all JSON Spawners. **/
-	public void loadAllFromJSON() {
-		ModInfo modInfo = LycanitesMobs.modInfo;
-
+	public void loadAllFromJson(ModInfo modInfo) {
 		// Spawners:
 		this.loadAllJson(modInfo, "Spawner", "spawners", "name", true, "spawner", FileLoader.SERVER, StreamLoader.SERVER);
 		LycanitesMobs.logDebug("Spawner", "Complete! " + this.spawners.size() + " JSON Spawners Loaded In Total.");
@@ -98,7 +96,7 @@ public class SpawnerManager extends JSONLoader {
 			spawner.destroy();
 		}
 
-		this.loadAllFromJSON();
+		this.loadAllFromJson(LycanitesMobs.modInfo);
 	}
 
 

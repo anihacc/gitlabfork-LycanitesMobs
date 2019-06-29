@@ -60,7 +60,7 @@ public class MobEventManager extends JSONLoader {
 
 
 	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
-	public void loadAllFromJSON(ModInfo groupInfo) {
+	public void loadAllFromJson(ModInfo groupInfo) {
 		try {
 			this.loadAllJson(groupInfo, "Mob Event", "mobevents", "name", true, "event", FileLoader.COMMON, StreamLoader.COMMON);
 			LycanitesMobs.logDebug("MobEvents", "Complete! " + this.mobEvents.size() + " JSON Mob Events Loaded In Total.");
@@ -118,7 +118,7 @@ public class MobEventManager extends JSONLoader {
 			mobEvent.destroy();
 		}
 
-		this.loadAllFromJSON(LycanitesMobs.modInfo);
+		this.loadAllFromJson(LycanitesMobs.modInfo);
 	}
 
 
