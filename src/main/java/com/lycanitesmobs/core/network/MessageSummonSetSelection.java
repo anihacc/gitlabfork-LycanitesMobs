@@ -21,8 +21,9 @@ public class MessageSummonSetSelection {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageSummonSetSelection message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().setPacketHandled(true);
 		// Server Side:
-		if(ctx.get().getDirection() == NetworkDirection.LOGIN_TO_SERVER) {
+		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
 			ctx.get().enqueueWork(() -> {
 				PlayerEntity player = ctx.get().getSender();
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);

@@ -26,7 +26,8 @@ public class MessageEntityPickedUp {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageEntityPickedUp message, Supplier<NetworkEvent.Context> ctx) {
-		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
+		ctx.get().setPacketHandled(true);
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();

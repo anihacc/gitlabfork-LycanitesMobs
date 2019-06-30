@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.Entity;
@@ -17,6 +17,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class PortalEntity extends BaseProjectileEntity {
 	// Summoning Portal:
 	private double targetX;
@@ -30,13 +33,14 @@ public class PortalEntity extends BaseProjectileEntity {
 	
 	// Properties:
 	public PlayerEntity shootingEntity;
-	public Class summonClass;
+	public EntityType summonType;
+	public CreatureInfo creatureInfo;
 	public ItemStaffSummoning portalItem;
-    public String ownerName;
+    public UUID ownerUUID;
     public TileEntitySummoningPedestal summoningPedestal;
 
     // Datawatcher:
-    protected static final DataParameter<String> OWNER_NAME = EntityDataManager.createKey(PortalEntity.class, DataSerializers.STRING);
+    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(PortalEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	
     // ==================================================
  	//                   Constructors
@@ -46,13 +50,22 @@ public class PortalEntity extends BaseProjectileEntity {
         this.setStats();
     }
 
-    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, Class summonClass, ItemStaffSummoning portalItem) {
+    public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, EntityType summonType, ItemStaffSummoning portalItem) {
         super(entityType, world, shooter);
         this.shootingEntity = shooter;
-        this.summonClass = summonClass;
+        this.summonType = summonType;
         this.portalItem = portalItem;
         this.setStats();
     }
+
+	public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, PlayerEntity shooter, CreatureInfo creatureInfo, ItemStaffSummoning portalItem) {
+		super(entityType, world, shooter);
+		this.shootingEntity = shooter;
+		this.creatureInfo = creatureInfo;
+		this.summonType = creatureInfo.getEntityType();
+		this.portalItem = portalItem;
+		this.setStats();
+	}
 
     public PortalEntity(EntityType<? extends PortalEntity> entityType, World world, TileEntitySummoningPedestal summoningPedestal) {
         super(entityType, world);
@@ -75,7 +88,7 @@ public class PortalEntity extends BaseProjectileEntity {
         this.waterProof = true;
         this.lavaProof = true;
 
-        this.dataManager.register(OWNER_NAME, "");
+        this.dataManager.register(OWNER_UUID, Optional.empty());
     }
     
     
@@ -94,31 +107,35 @@ public class PortalEntity extends BaseProjectileEntity {
         if(!this.getEntityWorld().isRemote) {
             if(this.summoningPedestal != null) {
                 this.shootingEntity = this.summoningPedestal.getPlayer();
-                this.summonClass = this.summoningPedestal.getSummonClass();
+                this.summonType = this.summoningPedestal.getSummonType();
+                this.creatureInfo = this.summoningPedestal.getCreatureInfo();
             }
         }
 
         // ==========Sync Shooter Name ==========
         if(!this.getEntityWorld().isRemote) {
-            // Summoning Staff or Summoning Pedestal (with active player): TODO Change to UUID!
-            if(this.shootingEntity != null)
-                this.dataManager.set(OWNER_NAME, this.shootingEntity.getName().toString());
+            // Summoning Staff or Summoning Pedestal (with active player):
+            if(this.shootingEntity != null) {
+				this.dataManager.set(OWNER_UUID, Optional.of(this.shootingEntity.getUniqueID()));
+			}
             // Summoning Pedestal:
-            else if(this.summoningPedestal != null)
-                this.dataManager.set(OWNER_NAME, this.summoningPedestal.getOwnerName());
+            else if(this.summoningPedestal != null && this.summoningPedestal.getOwnerUUID() != null) {
+				this.dataManager.set(OWNER_UUID, Optional.of(this.summoningPedestal.getOwnerUUID()));
+			}
             // Wild:
-            else
-                this.dataManager.set(OWNER_NAME, "");
+            else {
+				this.dataManager.set(OWNER_UUID, Optional.empty());
+			}
         }
         else {
-            this.ownerName = this.dataManager.get(OWNER_NAME);
+            this.ownerUUID = this.dataManager.get(OWNER_UUID).orElse(null);
         }
 
     	// ========== Check for Despawn ==========
     	if(!this.getEntityWorld().isRemote && this.isAlive()) {
             // Summoning Pedestal:
             if(this.summoningPedestal != null) {
-                if(this.summonClass == null) {
+                if(this.summonType == null) {
                     this.remove();
                     return;
                 }
@@ -148,10 +165,15 @@ public class PortalEntity extends BaseProjectileEntity {
             if(playerExt != null && this.portalItem != null) {
                 if(++this.summonTick >= this.portalItem.getRapidTime(null)) {
                     this.summonDuration = this.portalItem.getSummonDuration();
-                    if(this.shootingEntity.abilities.isCreativeMode)
-                        this.summonAmount += this.portalItem.getSummonAmount();
+                    if(this.shootingEntity.abilities.isCreativeMode) {
+						this.summonAmount += this.portalItem.getSummonAmount();
+					}
                     else {
-                        float summonMultiplier = (float) (CreatureManager.getInstance().getCreature(this.summonClass).summonCost + this.portalItem.getSummonCostBoost()) * this.portalItem.getSummonCostMod();
+                    	int creatureSummonCost = 4;
+                    	if(this.creatureInfo != null) {
+							creatureSummonCost = this.creatureInfo.summonCost;
+						}
+                        float summonMultiplier = (float) (creatureSummonCost + this.portalItem.getSummonCostBoost()) * this.portalItem.getSummonCostMod();
                         int summonCost = Math.round((float) playerExt.summonFocusCharge * summonMultiplier);
                         if(playerExt.summonFocus >= summonCost) {
                             if(this.portalItem.getAdditionalCosts(this.shootingEntity)) {
@@ -166,7 +188,7 @@ public class PortalEntity extends BaseProjectileEntity {
         }
 
         // Summoning Pedestal:
-        else if(this.summonClass != null) {
+        else if(this.summonType != null) {
             if (++this.summonTick >= this.summonTime) {
                 this.summonAmount = this.summoningPedestal.summonAmount;
                 this.summonTick = 0;
@@ -198,18 +220,12 @@ public class PortalEntity extends BaseProjectileEntity {
     	if(this.getEntityWorld().isRemote) {
 			return 1;
 		}
-        if(this.summonClass == null) {
+        if(this.summonType == null) {
 			return 0;
 		}
 
     	for(int i = 0; i < this.summonAmount; i++) {
-	    	Entity entity = null;
-			try {
-				entity = (Entity)this.summonClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.getEntityWorld()});
-			} catch (Exception e) {
-				LycanitesMobs.logWarning("", "A none Entity class type was passed to an EntityPortal, only entities can be summoned from portals!");
-				e.printStackTrace();
-			}
+	    	Entity entity = this.summonType.create(this.getEntityWorld());
 	    	if(entity == null) {
 				return 0;
 			}
@@ -315,18 +331,23 @@ public class PortalEntity extends BaseProjectileEntity {
  	// ==================================================
     @Override
     public ResourceLocation getTexture() {
-    	if(AssetManager.getTexture(this.entityName) == null)
-     		AssetManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
-        if(AssetManager.getTexture(this.entityName + "_client") == null)
-            AssetManager.addTexture(this.entityName + "_client", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
-        if(AssetManager.getTexture(this.entityName + "_player") == null)
-            AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
+    	if(AssetManager.getTexture(this.entityName) == null) {
+			AssetManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
+		}
+        if(AssetManager.getTexture(this.entityName + "_client") == null) {
+			AssetManager.addTexture(this.entityName + "_client", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
+		}
+        if(AssetManager.getTexture(this.entityName + "_player") == null) {
+			AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
+		}
 
-        if(this.ownerName != null) {
-            //if(this.ownerName.equalsIgnoreCase(ClientManager.getInstance().getClientPlayer().getName())) TODO Check if owned by client player on client side. Maybe make a new proxy?
-                //return AssetManager.getTexture(this.entityName + "_client");
-            if(!this.ownerName.equalsIgnoreCase(""))
-                return AssetManager.getTexture(this.entityName + "_player");
+        if(this.ownerUUID != null) {
+            if(this.ownerUUID.equals(ClientManager.getInstance().getClientPlayer().getUniqueID())) {
+				return AssetManager.getTexture(this.entityName + "_client");
+			}
+            else {
+				return AssetManager.getTexture(this.entityName + "_player");
+			}
         }
      	return AssetManager.getTexture(this.entityName);
     }

@@ -22,6 +22,7 @@ public class MessagePlayerAttack {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessagePlayerAttack message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().setPacketHandled(true);
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
 			return;
 

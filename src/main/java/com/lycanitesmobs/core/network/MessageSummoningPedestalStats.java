@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -35,7 +36,8 @@ public class MessageSummoningPedestalStats {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageSummoningPedestalStats message, Supplier<NetworkEvent.Context> ctx) {
-		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
+		ctx.get().setPacketHandled(true);
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();

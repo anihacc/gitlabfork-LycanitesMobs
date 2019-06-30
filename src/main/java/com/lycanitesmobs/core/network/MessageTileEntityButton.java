@@ -24,6 +24,7 @@ public class MessageTileEntityButton {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageTileEntityButton message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().setPacketHandled(true);
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
 			return;
 

@@ -24,6 +24,7 @@ public class MessageEntityGUICommand {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageEntityGUICommand message, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().setPacketHandled(true);
 		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_SERVER)
 			return;
 

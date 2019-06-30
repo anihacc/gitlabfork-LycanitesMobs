@@ -364,10 +364,10 @@ public class PetEntry {
         if(this.entity != null || this.host == null)
             return;
         try {
-            this.entity = (Entity)this.summonSet.getCreatureClass().getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.host.getEntityWorld()});
+            this.entity = this.summonSet.getCreatureType().create(this.host.getEntityWorld());
         }
         catch (Exception e) {
-            LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureClass() + " Name: " + this.name);
+            LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureType() + " Name: " + this.name);
             //e.printStackTrace();
         }
 

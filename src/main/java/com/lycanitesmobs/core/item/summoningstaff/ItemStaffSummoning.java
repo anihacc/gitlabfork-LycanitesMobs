@@ -80,7 +80,7 @@ public class ItemStaffSummoning extends BaseItem {
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
 				if(!player.getEntityWorld().isRemote) {
-					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureClass(), this);
+					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureType(), this);
 					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 					world.addEntity(playerExt.staffPortal);
 				}
@@ -101,12 +101,12 @@ public class ItemStaffSummoning extends BaseItem {
 	// ========== Using ==========
 	@Override
 	public void onUsingTick(ItemStack itemStack, LivingEntity entity, int useRemaining) {
-		if(itemStack == null || entity == null || entity.getEntityWorld() == null)
+		if(itemStack == null || entity == null)
 			return;
 		int useTime = this.getUseDuration(itemStack) - useRemaining;
 		if(useTime >= this.getRapidTime(itemStack)) {
 			int rapidRemainder = useTime % this.getRapidTime(itemStack);
-			if(rapidRemainder == 0 && entity.getEntityWorld() != null) {
+			if(rapidRemainder == 0) {
 				if(this.rapidAttack(itemStack, entity.getEntityWorld(), entity)) {
 					this.weaponFlash = Math.max(20, this.getRapidTime(itemStack));
 				}

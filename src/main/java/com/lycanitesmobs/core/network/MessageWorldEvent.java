@@ -27,7 +27,8 @@ public class MessageWorldEvent {
 	 * Called when this message is received.
 	 */
 	public static void handle(MessageWorldEvent message, Supplier<NetworkEvent.Context> ctx) {
-		if(ctx.get().getDirection() != NetworkDirection.LOGIN_TO_CLIENT)
+		ctx.get().setPacketHandled(true);
+		if(ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT)
 			return;
 
 		PlayerEntity player = ClientManager.getInstance().getClientPlayer();

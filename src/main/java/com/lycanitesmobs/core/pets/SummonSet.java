@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
 public class SummonSet {
@@ -158,12 +159,12 @@ public class SummonSet {
 	}
 	
 	/** Returns the class of the creature to summon. **/
-	public Class getCreatureClass() {
+	public EntityType getCreatureType() {
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(this.summonType);
 		if(creatureInfo == null) {
 			return null;
 		}
-		return creatureInfo.entityClass;
+		return creatureInfo.getEntityType();
 	}
 	
 	

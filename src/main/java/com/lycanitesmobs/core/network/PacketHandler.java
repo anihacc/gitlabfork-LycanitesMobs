@@ -12,11 +12,12 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class PacketHandler {
 	private static final String PROTOCOL_VERSION = "1";
-	private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
-			.named(new ResourceLocation(LycanitesMobs.MODID, "main_channel"))
-			.clientAcceptedVersions(PROTOCOL_VERSION::equals).serverAcceptedVersions(PROTOCOL_VERSION::equals)
-			.networkProtocolVersion(() -> PROTOCOL_VERSION)
-			.simpleChannel();
+	private static final SimpleChannel HANDLER = NetworkRegistry.newSimpleChannel(
+			new ResourceLocation(LycanitesMobs.MODID, "main"),
+			() -> PROTOCOL_VERSION,
+			PROTOCOL_VERSION::equals,
+			PROTOCOL_VERSION::equals
+	);
 	
 	
 	// ==================================================
@@ -73,9 +74,9 @@ public class PacketHandler {
 	 */
 	public <MSG> void sendToAllAround(MSG message, World world, Vec3d pos, double range) {
 		for(PlayerEntity player : world.getPlayers()) {
-			if(player instanceof ServerPlayerEntity && player.getDistanceSq(pos) <= range) {
+			if(player instanceof ServerPlayerEntity && player.getDistanceSq(pos) <= (range * range)) {
 				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
-				HANDLER.sendTo(message, serverPlayer.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+				this.sendToPlayer(message, serverPlayer);
 			}
 		}
 	}
