@@ -105,7 +105,7 @@ public class DungeonTheme {
 		}
 		else {
 			ThemeBlock themeBlock = new ThemeBlock();
-			themeBlock.block = Blocks.AIR;
+			themeBlock.block = Blocks.CAVE_AIR;
 			this.torchBlocks.add(themeBlock);
 		}
 
@@ -215,7 +215,7 @@ public class DungeonTheme {
 	public BlockState getBlockState(SectorInstance sectorInstance, char patternChar, Random random, List<ThemeBlock> blockList) {
 		// Nothing:
 		if(patternChar == '0') {
-			return Blocks.AIR.getDefaultState();
+			return Blocks.CAVE_AIR.getDefaultState();
 		}
 
 		// Sector Instantiated:
@@ -253,7 +253,7 @@ public class DungeonTheme {
 
 		// List Check:
 		if(blockList.isEmpty()) {
-			return Blocks.AIR.getDefaultState();
+			return Blocks.CAVE_AIR.getDefaultState();
 		}
 		if(blockList.size() == 1) {
 			return blockList.get(0).getBlockState();

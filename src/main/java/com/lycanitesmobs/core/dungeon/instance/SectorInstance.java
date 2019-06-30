@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -495,19 +496,19 @@ public class SectorInstance {
 
 	/**
 	 * Places a block state in the world from this sector.
-	 * @param world The world to place a block in.
+	 * @param worldWriter The world to place a block in. Cannot be the actual World during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param blockPos The position to place the block at.
 	 * @param blockState The block state to place.
 	 * @param random The instance of random, used for random mob spawns or loot on applicable blocks, etc.
 	 */
-	public void placeBlock(World world, ChunkPos chunkPos, BlockPos blockPos, BlockState blockState, Direction facing, Random random) {
+	public void placeBlock(IWorld worldWriter, ChunkPos chunkPos, BlockPos blockPos, BlockState blockState, Direction facing, Random random) {
 		// Restrict To Chunk Position:
-		int chunkOffset = 8;
+		int chunkOffset = 0;
 		if(blockPos.getX() < chunkPos.getXStart() + chunkOffset || blockPos.getX() > chunkPos.getXEnd() + chunkOffset) {
 			return;
 		}
-		if(blockPos.getY() <= 0 || blockPos.getY() >= world.getActualHeight()) {
+		if(blockPos.getY() <= 0 || blockPos.getY() >= worldWriter.getHeight()) {
 			return;
 		}
 		if(blockPos.getZ() < chunkPos.getZStart() + chunkOffset || blockPos.getZ() > chunkPos.getZEnd() + chunkOffset) {
@@ -516,7 +517,7 @@ public class SectorInstance {
 
 
 		// Block State and Flags:
-		int flags = 3;
+		int flags = 2;
 
 		// Torch:
 		if(blockState.getBlock() == Blocks.TORCH) {
@@ -525,20 +526,20 @@ public class SectorInstance {
 		}
 
 		// Don't Update:
-		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() instanceof FlowingFluidBlock || blockState.getBlock() instanceof FireBlock || blockState.getBlock() instanceof BlockFireBase) {
+		if(blockState.getBlock() == Blocks.AIR || blockState.getBlock() == Blocks.CAVE_AIR || blockState.getBlock() instanceof FlowingFluidBlock || blockState.getBlock() instanceof FireBlock || blockState.getBlock() instanceof BlockFireBase) {
 			flags = 0;
 		}
 
 
 		// Set The Block:
-		world.setBlockState(blockPos, blockState, flags);
+		worldWriter.setBlockState(blockPos, blockState, flags);
 
 
 		// Tile Entities:
 
 		// Spawner:
 		if(blockState.getBlock() == Blocks.SPAWNER) {
-			TileEntity tileEntity = world.getTileEntity(blockPos);
+			TileEntity tileEntity = worldWriter.getTileEntity(blockPos);
 			if(tileEntity instanceof MobSpawnerTileEntity) {
 				MobSpawnerTileEntity spawner = (MobSpawnerTileEntity)tileEntity;
 				MobSpawn mobSpawn = this.layout.dungeonInstance.schematic.getRandomMobSpawn(this.parentConnector.level, false, random);
@@ -551,7 +552,7 @@ public class SectorInstance {
 
 		// Chest:
 		if(blockState.getBlock() == Blocks.CHEST) {
-			TileEntity tileEntity = world.getTileEntity(blockPos);
+			TileEntity tileEntity = worldWriter.getTileEntity(blockPos);
 			if(tileEntity instanceof ChestTileEntity) {
 
 				// Apply Loot Table:
@@ -574,21 +575,21 @@ public class SectorInstance {
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void build(World world, ChunkPos chunkPos, Random random) {
-		this.clearArea(world, chunkPos, random);
-		this.buildFloor(world, chunkPos, random, 0);
-		this.buildWalls(world, chunkPos, random);
-		this.buildCeiling(world, chunkPos, random);
+	public void build(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
+		this.clearArea(worldWriter, world, chunkPos, random);
+		this.buildFloor(worldWriter, world, chunkPos, random, 0);
+		this.buildWalls(worldWriter, world, chunkPos, random);
+		this.buildCeiling(worldWriter, world, chunkPos, random);
 		if("stairs".equalsIgnoreCase(this.dungeonSector.type)) {
-			this.buildStairs(world, chunkPos, random);
-			this.buildFloor(world, chunkPos, random, -(this.getRoomSize().getY() * 2));
+			this.buildStairs(worldWriter, world, chunkPos, random);
+			this.buildFloor(worldWriter, world, chunkPos, random, -(this.getRoomSize().getY() * 2));
 		}
-		this.buildEntrances(world, chunkPos, random);
+		this.buildEntrances(worldWriter, world, chunkPos, random);
 		this.chunksBuilt++;
 		if("bossRoom".equalsIgnoreCase(this.dungeonSector.type)) {
 			MobSpawn mobSpawn = this.layout.dungeonInstance.schematic.getRandomMobSpawn(this.parentConnector.level, true, random);
 			if(mobSpawn != null) {
-				this.spawnMob(world, chunkPos, this.getCenter().add(0, 1, 0), mobSpawn, random);
+				this.spawnMob(worldWriter, world, chunkPos, this.getCenter().add(0, 1, 0), mobSpawn, random);
 			}
 		}
 	}
@@ -596,11 +597,12 @@ public class SectorInstance {
 
 	/**
 	 * Sets the area of this sector to air for building in from within the chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void clearArea(World world, ChunkPos chunkPos, Random random) {
+	public void clearArea(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		// Get Start and Stop Positions:
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
@@ -618,7 +620,7 @@ public class SectorInstance {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					this.placeBlock(world, chunkPos, new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), Direction.SOUTH, random);
+					this.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.getDefaultState(), Direction.SOUTH, random);
 				}
 			}
 		}
@@ -627,12 +629,13 @@ public class SectorInstance {
 
 	/**
 	 * Builds the floor of this sector from within the chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 * @param offsetY The Y offset to build the floor at, useful for multiple floor sectors.
 	 */
-	public void buildFloor(World world, ChunkPos chunkPos, Random random, int offsetY) {
+	public void buildFloor(IWorld worldWriter, World world, ChunkPos chunkPos, Random random, int offsetY) {
 		// Get Start and Stop Positions:
 		BlockPos startPos = this.getRoomBoundsMin().add(0, offsetY, 0);
 		BlockPos stopPos = this.getRoomBoundsMax().add(0, offsetY, 0);
@@ -655,8 +658,8 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
 					BlockPos buildPos = new BlockPos(x, y, z);
 					BlockState blockState = this.theme.getFloor(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR)
-						this.placeBlock(world, chunkPos, buildPos, blockState, Direction.UP, random);
+					if(blockState.getBlock() != Blocks.CAVE_AIR)
+						this.placeBlock(worldWriter, chunkPos, buildPos, blockState, Direction.UP, random);
 				}
 			}
 		}
@@ -665,11 +668,12 @@ public class SectorInstance {
 
 	/**
 	 * Builds the walls of this sector from within the chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void buildWalls(World world, ChunkPos chunkPos, Random random) {
+	public void buildWalls(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		// Get Start and Stop Positions:
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
@@ -703,9 +707,9 @@ public class SectorInstance {
 				for(int x = startX; x <= stopX; x++) {
 					char buildChar = layer.getColumn(progressY, fullY, x - startX, stopX - startX, row);
 					BlockState blockState = this.theme.getWall(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR) {
-						this.placeBlock(world, chunkPos, new BlockPos(x, y, startZ + layerIndex), blockState, Direction.SOUTH, random);
-						this.placeBlock(world, chunkPos, new BlockPos(x, y, stopZ - layerIndex), blockState, Direction.NORTH, random);
+					if(blockState.getBlock() != Blocks.CAVE_AIR) {
+						this.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, startZ + layerIndex), blockState, Direction.SOUTH, random);
+						this.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, stopZ - layerIndex), blockState, Direction.NORTH, random);
 					}
 				}
 
@@ -713,9 +717,9 @@ public class SectorInstance {
 				for(int z = startZ; z <= stopZ; z++) {
 					char buildChar = layer.getColumn(progressY, fullY, z - startZ, stopZ - startZ, row);
 					BlockState blockState = this.theme.getWall(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR) {
-						this.placeBlock(world, chunkPos, new BlockPos(startX + layerIndex, y, z), blockState, Direction.EAST, random);
-						this.placeBlock(world, chunkPos, new BlockPos(stopX - layerIndex, y, z), blockState, Direction.WEST, random);
+					if(blockState.getBlock() != Blocks.CAVE_AIR) {
+						this.placeBlock(worldWriter, chunkPos, new BlockPos(startX + layerIndex, y, z), blockState, Direction.EAST, random);
+						this.placeBlock(worldWriter, chunkPos, new BlockPos(stopX - layerIndex, y, z), blockState, Direction.WEST, random);
 					}
 				}
 			}
@@ -725,11 +729,12 @@ public class SectorInstance {
 
 	/**
 	 * Builds the ceiling of this sector from within the chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void buildCeiling(World world, ChunkPos chunkPos, Random random) {
+	public void buildCeiling(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		// Get Start and Stop Positions:
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
@@ -752,8 +757,8 @@ public class SectorInstance {
 					char buildChar = layer.getColumn(x - startX, stopX - startX, z - startZ, stopZ - startZ, row);
 					BlockPos buildPos = new BlockPos(x, y, z);
 					BlockState blockState = this.theme.getCeiling(this, buildChar, random);
-					if(blockState.getBlock() != Blocks.AIR)
-						this.placeBlock(world, chunkPos, buildPos, blockState, Direction.DOWN, random);
+					if(blockState.getBlock() != Blocks.CAVE_AIR)
+						this.placeBlock(worldWriter, chunkPos, buildPos, blockState, Direction.DOWN, random);
 				}
 			}
 		}
@@ -762,22 +767,24 @@ public class SectorInstance {
 
 	/**
 	 * Builds the entrances of this sector from within the chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void buildEntrances(World world, ChunkPos chunkPos, Random random) {
-		this.parentConnector.buildEntrance(world, chunkPos, random);
+	public void buildEntrances(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
+		this.parentConnector.buildEntrance(worldWriter, world, chunkPos, random);
 	}
 
 
 	/**
 	 * Builds a set of stairs leading down to a lower room to start the next level.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random, used for characters that are random.
 	 */
-	public void buildStairs(World world, ChunkPos chunkPos, Random random) {
+	public void buildStairs(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		// Get Start and Stop Positions:
 		BlockPos startPos = this.getRoomBoundsMin();
 		BlockPos stopPos = this.getRoomBoundsMax();
@@ -800,7 +807,7 @@ public class SectorInstance {
 		for(int y = startY; y >= stopY; y--) {
 			for(int x = startX; x <= stopX; x++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					BlockState blockState = Blocks.AIR.getDefaultState();
+					BlockState blockState = Blocks.CAVE_AIR.getDefaultState();
 
 					// Center:
 					if(x == centerX && z == centerZ) {
@@ -845,7 +852,7 @@ public class SectorInstance {
 					}
 
 					BlockPos buildPos = new BlockPos(x, y, z);
-					this.placeBlock(world, chunkPos, buildPos, blockState, Direction.UP, random);
+					this.placeBlock(worldWriter, chunkPos, buildPos, blockState, Direction.UP, random);
 				}
 			}
 		}
@@ -854,13 +861,14 @@ public class SectorInstance {
 
 	/**
 	 * Spawns a mob in this sector.
-	 * @param world The world to spawn a mob in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to spawn within.
 	 * @param blockPos The position to spawn the mob at.
 	 * @param mobSpawn The Mob Spawn entry to use.
 	 * @param random The instance of random, used for mob vacations where applicable.
 	 */
-	public void spawnMob(World world, ChunkPos chunkPos, BlockPos blockPos, MobSpawn mobSpawn, Random random) {
+	public void spawnMob(IWorld worldWriter, World world, ChunkPos chunkPos, BlockPos blockPos, MobSpawn mobSpawn, Random random) {
 		// Restrict To Chunk Position:
 		int chunkOffset = 8;
 		if(blockPos.getX() < chunkPos.getXStart() + chunkOffset || blockPos.getX() > chunkPos.getXEnd() + chunkOffset) {

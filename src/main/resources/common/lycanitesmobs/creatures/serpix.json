@@ -1,6 +1,6 @@
 {
 	"name": "serpix",
-	"creatureType": "arthropod",
+	"creatureType": "worm",
 	"groups": [
 		"predator",
 		"frozen"

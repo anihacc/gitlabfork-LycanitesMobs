@@ -5,6 +5,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -90,7 +91,7 @@ public class SectorConnector {
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random to use.
 	 */
-	public void buildEntrance(World world, ChunkPos chunkPos, Random random) {
+	public void buildEntrance(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		SectorInstance sectorInstance = this.parentSector;
 		if(sectorInstance == null) {
 			sectorInstance = this.childSector;
@@ -139,7 +140,7 @@ public class SectorConnector {
 		for(int x = startX; x <= stopX; x++) {
 			for(int y = startY; y <= stopY; y++) {
 				for(int z = startZ; z <= stopZ; z++) {
-					sectorInstance.placeBlock(world, chunkPos, new BlockPos(x, y, z), Blocks.AIR.getDefaultState(), this.facing, random);
+					sectorInstance.placeBlock(worldWriter, chunkPos, new BlockPos(x, y, z), Blocks.CAVE_AIR.getDefaultState(), this.facing, random);
 				}
 			}
 		}
@@ -148,11 +149,12 @@ public class SectorConnector {
 
 	/**
 	 * Builds a test marker showing where this connector is and its facing.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 * @param random The instance of random to use.
 	 */
-	public void buildTest(World world, ChunkPos chunkPos, Random random) {
+	public void buildTest(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		SectorInstance sectorInstance = this.parentSector;
 		if(sectorInstance == null) {
 			sectorInstance = this.childSector;
@@ -162,24 +164,24 @@ public class SectorConnector {
 		}
 
 		// Build Center Block Marker:
-		sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, 0), Blocks.GOLD_BLOCK.getDefaultState(), Direction.SOUTH, random);
+		sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, 0), Blocks.GOLD_BLOCK.getDefaultState(), Direction.SOUTH, random);
 
 		// Build Rotation Block Markers:
 		if(this.facing == Direction.SOUTH) {
 			for(int z = 1; z <= 3; z++)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 		else if(this.facing == Direction.EAST) {
 			for(int x = 1; x <= 3; x++)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 		else if(this.facing == Direction.NORTH) {
 			for(int z = -1; z >= -3; z--)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(0, 1, z), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 		else {
 			for(int x = -1; x >= -3; x--)
-				sectorInstance.placeBlock(world, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
+				sectorInstance.placeBlock(worldWriter, chunkPos, this.position.add(x, 1, 0), Blocks.REDSTONE_BLOCK.getDefaultState(), Direction.SOUTH, random);
 		}
 	}
 }

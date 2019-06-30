@@ -39,7 +39,7 @@ public class ThemeBlock {
 		if(this.block == null)
 			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockId));
 		if(this.block == null)
-			return Blocks.AIR;
+			return Blocks.CAVE_AIR;
 		return this.block;
 	}
 

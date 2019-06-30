@@ -110,7 +110,7 @@ public class MessagePetEntry {
 		message.subspecies = packet.readInt();
         message.behaviour = packet.readByte();
         message.petEntryEntityID = packet.readInt();
-		message.petEntryEntityName = packet.readString(256);
+		message.petEntryEntityName = packet.readString(1024);
         message.respawnTime = packet.readInt();
         message.respawnTimeMax = packet.readInt();
         message.isRespawning = packet.readBoolean();

@@ -21,6 +21,7 @@ import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
+import com.lycanitesmobs.core.worldgen.WorldGenManager;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraftforge.common.MinecraftForge;
@@ -32,10 +33,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -101,6 +99,7 @@ public class LycanitesMobs {
 		FMLJavaModLoadingContext.get().getModEventBus().register(ItemManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);
@@ -170,6 +169,9 @@ public class LycanitesMobs {
 
 		// Mod Support:
 		DLDungeons.init();
+
+		// World Gen:
+		WorldGenManager.getInstance().addToBiomes();
 	}
 
 	@SubscribeEvent

@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -19,6 +20,7 @@ import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -280,22 +282,21 @@ public class SpawnerEventListener {
 	/** Set to true when chunk spawn triggers are active and back to false when they have completed. This stops a cascading trigger loop! **/
 	public boolean chunkSpawnTriggersActive = false;
 
-	/** Called every time a new chunk is generated. **/
-	// TODO Looks like this event has been removed, might be a good idea to add this to worldgen instead somehow.
-	/*public void onChunkPopulate(PopulateChunkEvent.Post event) {
+	/** Called by the ChunkSpawn Feature every time a new chunk is generated. **/
+	public void onChunkPopulate(World world, ChunkPos chunkPos) {
 		if(this.chunkSpawnTriggersActive) {
 			return;
 		}
 
 		// Call Triggers:
 		for(ChunkSpawnTrigger spawnTrigger : this.chunkSpawnTriggers) {
-			if(spawnTrigger.onChunkPopulate(event.getWorld(), new ChunkPos(event.getChunkX(), event.getChunkZ()))) {
+			if(spawnTrigger.onChunkPopulate(world, chunkPos)) {
 				this.chunkSpawnTriggersActive = true;
 			}
 		}
 
 		this.chunkSpawnTriggersActive = false;
-	}*/
+	}
 
 	
 	// ==================================================

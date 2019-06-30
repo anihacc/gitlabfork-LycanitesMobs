@@ -7,6 +7,7 @@ import com.lycanitesmobs.core.dungeon.definition.DungeonSchematic;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class DungeonInstance {
 			return true;
 		}
 		if(this.world == null || this.originPos == null) {
-			LycanitesMobs.logWarning("Dungeon", "Tried to initialise a dungeon with a missing world or origin. " + this);
+			LycanitesMobs.logWarning("", "Tried to initialise a dungeon with a missing world or origin. " + this);
 			return false;
 		}
 
@@ -138,16 +139,18 @@ public class DungeonInstance {
 
 	/**
 	 * Builds blocks from every sector within the provided chunk position.
-	 * @param world The world to build in.
+	 * @param worldWriter The world to create blocks in.
+	 * @param world The world being built in. This cannot be used for placement during WorldGen.
 	 * @param chunkPos The chunk position to build within.
 	 */
-	public void buildChunk(World world, ChunkPos chunkPos) {
+	public void buildChunk(IWorld worldWriter, World world, ChunkPos chunkPos, Random random) {
 		if(this.complete || this.layout == null || !this.layout.sectorChunkMap.containsKey(chunkPos)) {
 			return;
 		}
 		for(SectorInstance sectorInstance : this.layout.sectorChunkMap.get(chunkPos)) {
 			// The world random is used when building as it can be volatile unlike layouts which must be done by seed in order.
-			sectorInstance.build(world, chunkPos, world.rand);
+			//LycanitesMobs.logInfo("", "Building In Chunk: " + chunkPos);
+			sectorInstance.build(worldWriter, world, chunkPos, random);
 		}
 
 		// Update Chunks Built:

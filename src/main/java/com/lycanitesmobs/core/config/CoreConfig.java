@@ -13,6 +13,7 @@ public class CoreConfig {
 		ConfigDebug.INSTANCE = new ConfigDebug(BUILDER);
 		ConfigAdmin.INSTANCE = new ConfigAdmin(BUILDER);
 		ConfigClient.INSTANCE = new ConfigClient(BUILDER);
+		ConfigDungeons.INSTANCE = new ConfigDungeons(BUILDER);
 		ConfigCreatures.INSTANCE = new ConfigCreatures(BUILDER);
 		ConfigCreatureSpawning.INSTANCE = new ConfigCreatureSpawning(BUILDER);
 		ConfigCreatureSubspecies.INSTANCE = new ConfigCreatureSubspecies(BUILDER);

@@ -1,6 +1,6 @@
 {
 	"name": "gorger",
-	"creatureType": "arthropod",
+	"creatureType": "worm",
 	"groups": [
 		"predator"
 	],
