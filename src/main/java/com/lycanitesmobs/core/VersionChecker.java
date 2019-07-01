@@ -103,7 +103,7 @@ public class VersionChecker {
 		}
 
 		try {
-			URL url = new URL(LycanitesMobs.websiteAPI + "/latest");
+			URL url = new URL(LycanitesMobs.websiteAPI + "/latest/" + LycanitesMobs.versionMC);
 			URLConnection urlConnection = url.openConnection();
 			urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.89 Safari/537.36");
 			InputStream inputStream = urlConnection.getInputStream();
