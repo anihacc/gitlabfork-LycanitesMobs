@@ -1,6 +1,6 @@
 {
 	"name": "crusk",
-	"creatureType": "arthropod",
+	"creatureType": "worm",
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCrusk",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCrusk",
 	"loadDefault": true,
