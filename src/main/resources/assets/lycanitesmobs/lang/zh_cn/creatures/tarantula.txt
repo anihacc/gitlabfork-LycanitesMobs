@@ -1,4 +1,0 @@
-entity.lycanitesmobs.tarantula.name=狼蛛
-entity.lycanitesmobs.tarantula.description=一种会在途径暂时留下绿色织网物的剧毒跳珠。
-entity.lycanitesmobs.tarantula.habitat=狼蛛可以在丛林和沼泽中找到。
-entity.lycanitesmobs.tarantula.combat=这些蜘蛛经常会毒咬和跳跃，注意它们粘乎乎的绿色织网物很重要。

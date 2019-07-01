@@ -1,4 +1,0 @@
-entity.lycanitesmobs.cockatrice.name=鸡蛇
-entity.lycanitesmobs.cockatrice.description=像双足飞龙一样的致命巨型鸡，非常危险，离我远点！
-entity.lycanitesmobs.cockatrice.habitat=这些双足飞龙通常出现在热带地区，比如丛林，因为它们喜欢吃水果和吞食大型昆虫，当然，任何移动的东西都在菜单上！
-entity.lycanitesmobs.cockatrice.combat=鸡蛇用喙啄食，嘴上滴着麻痹和厌恶的毒素，据说这些毒素会让受害者感觉自己变成石头。

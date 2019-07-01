@@ -1,4 +1,0 @@
-entity.lycanitesmobs.morock.name=双足飞龙
-entity.lycanitesmobs.morock.description=凶猛的双足飞龙，虽然它们不能吐出火焰，但它们仍然会使用毁灭性的撕咬！
-entity.lycanitesmobs.morock.habitat=双足飞龙被发现在开阔的天空中，有许多美味的猎物，如草原，幸运的是它们相当罕见。
-entity.lycanitesmobs.morock.combat=双足飞龙速度快，撕咬有力，最好用它们的大块头来对付它们。

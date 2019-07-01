@@ -1,4 +1,0 @@
-entity.lycanitesmobs.wraith.name=地狱游魂
-entity.lycanitesmobs.wraith.description=邪恶的下界元素，是痛苦和苦难的象征。幻灵和阿格斯元素可以融合，创造出一个强大的幽灵。
-entity.lycanitesmobs.wraith.habitat=作为下界元素，地狱游魂显现在集中的邪恶区域，如下界的天空。
-entity.lycanitesmobs.wraith.combat=地狱游魂速度很快，会不顾一切地飞到它们的受害者身上，并在受到冲击时攻击，它们相当虚弱，但在被摧毁后会爆炸。

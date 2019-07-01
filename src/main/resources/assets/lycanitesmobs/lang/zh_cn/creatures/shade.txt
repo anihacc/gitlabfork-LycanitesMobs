@@ -1,4 +1,0 @@
-entity.lycanitesmobs.shade.name=阴暗
-entity.lycanitesmobs.shade.description=巨大的陈旧的蛇形畸变是由阴影本身产生的。有四个强大的蛇骑士骑这些野兽进入战斗的传说：D'sparil、Korax、Eidelon 和 Lycanite。
-entity.lycanitesmobs.shade.habitat=这些畸变可以在最黑暗的地下深处发现。
-entity.lycanitesmobs.shade.combat=阴暗在攻击时会消耗一点生命，它们会发出可怕的嚎叫，让所有反对它们的人都在恐惧中奔跑！

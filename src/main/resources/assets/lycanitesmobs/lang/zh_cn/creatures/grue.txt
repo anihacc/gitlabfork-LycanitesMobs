@@ -1,4 +1,0 @@
-entity.lycanitesmobs.grue.name=蛴螬
-entity.lycanitesmobs.grue.description=当一片漆黑之时，你要小心被蛴螬吃掉！在完全黑暗中看不到这些影子元素。火元素和阿格斯元素可以融合在一起形成强大的蛴螬。
-entity.lycanitesmobs.grue.habitat=作为阴影元素，在黑暗的地下深处生成。
-entity.lycanitesmobs.grue.combat=蛴螬使用危险的近战攻击，还会造成失明，除此之外，它们还会偶尔在传送到受害者身后。而且，如果它们的受害者有任何正面效果，蛴螬会吞食这些效果并治愈！

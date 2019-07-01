@@ -22,8 +22,8 @@ public class ChunkSpawnFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean func_212245_a(IWorld world, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
-		//SpawnerEventListener.getInstance().onChunkPopulate(world.getWorld(), new ChunkPos(pos));
+	public boolean func_212245_a(IWorld worldWriter, ChunkGenerator<? extends GenerationSettings> generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+		SpawnerEventListener.getInstance().onChunkGenerate(worldWriter.getWorld(), new ChunkPos(pos));
 		return false;
 	}
 

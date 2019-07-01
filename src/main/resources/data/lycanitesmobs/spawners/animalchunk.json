@@ -18,17 +18,20 @@
 	"triggers": [
 		{
 			"type": "chunk",
-			"chance": 0.03
+			"chance": 0.125
 		}
 	],
 	"locations": [
 		{
 			"type": "random",
 			"rangeMin": [0, 0, 0],
-			"rangeMax": [14, 128, 14],
+			"rangeMax": [7, 128, 7],
 			"sorting": "random",
 			"limit": 32,
-			"solidGround": true
+			"solidGround": true,
+			"easyDifficultyRangeScale": 1,
+			"normalDifficultyRangeScale": 1,
+			"hardDifficultyRangeScale": 1
 		}
 	]
 }

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.arix.name=雪精灵
-entity.lycanitesmobs.arix.description=不断寻找食物的顽皮冰小鬼。
-entity.lycanitesmobs.arix.habitat=雪精灵在寒冷的温度下茁壮成长，经常在寒冷的生物群系以及在冰冷的胶状冰中沐浴。
-entity.lycanitesmobs.arix.combat=这些小鬼们挥舞着冰火，这是一种冰霜魔法，看起来和行为就像是火，但效果却是冻结而不是烧伤。

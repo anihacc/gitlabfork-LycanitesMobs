@@ -1,4 +1,0 @@
-entity.lycanitesmobs.calpod.name=树蚁
-entity.lycanitesmobs.calpod.description=像白蚁一样的昆虫，它们成群地捕食！
-entity.lycanitesmobs.calpod.habitat=这些昆虫可以在森林的灌木丛中找到，晚上出来活动。
-entity.lycanitesmobs.calpod.combat=树蚁有一个讨厌的撕咬，但必须尽快被杀死，因为它们会迅速呼叫更多的树蚁加入它们。

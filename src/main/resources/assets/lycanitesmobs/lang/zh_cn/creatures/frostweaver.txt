@@ -1,4 +1,0 @@
-entity.lycanitesmobs.frostweaver.name=霜语者
-entity.lycanitesmobs.frostweaver.description=在寒冷的环境中茁壮成长的吐冰蜘蛛。
-entity.lycanitesmobs.frostweaver.habitat=这些蜘蛛可以在针叶林或冰原等寒冷地区找到。
-entity.lycanitesmobs.frostweaver.combat=霜语者会吐出一种存在时间短暂的霜网，这种网会导致速度变慢。

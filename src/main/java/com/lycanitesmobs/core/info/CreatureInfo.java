@@ -183,10 +183,11 @@ public class CreatureInfo {
 			return;
 
 		// Model Class:
+
 		try {
 			ClientManager.getInstance().loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
-			LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for Creature: " + this.getTitle());
+			//LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for Creature: " + this.getTitle());
 		}
 
 		// Creature Type:
@@ -450,7 +451,7 @@ public class CreatureInfo {
 	 * @return The display name of this creature.
 	 */
 	public ITextComponent getTitle() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".name");
+		return new TranslationTextComponent("entity." + this.getLocalisationKey());
 	}
 
 

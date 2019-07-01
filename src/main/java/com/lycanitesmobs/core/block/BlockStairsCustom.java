@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.client.util.ITooltipFlag;
@@ -38,6 +37,6 @@ public class BlockStairsCustom extends StairsBlock {
 	}
 
 	public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-		return new TranslationTextComponent("block." + this.blockName + ".description");
+		return new TranslationTextComponent(this.getTranslationKey() + ".description");
 	}
 }

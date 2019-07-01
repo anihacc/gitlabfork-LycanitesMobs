@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
@@ -49,7 +48,7 @@ public class BlockSlabCustom extends SlabBlock {
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent("block." + this.blockName + ".description");
+        return new TranslationTextComponent(this.getTranslationKey() + ".description");
     }
 
 

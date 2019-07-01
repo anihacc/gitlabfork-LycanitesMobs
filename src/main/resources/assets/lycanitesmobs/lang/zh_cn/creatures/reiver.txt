@@ -1,4 +1,0 @@
-entity.lycanitesmobs.reiver.name=雪元素
-entity.lycanitesmobs.reiver.description=冰霜元素，雪元素试图冻结它们周围的一切。水元素和幻灵元素可以融合，创造强大的雪元素。
-entity.lycanitesmobs.reiver.habitat=雪元素有时在寒冷地区的夜空中漫游，也会从其他生物传播的霜火中显现出来。
-entity.lycanitesmobs.reiver.combat=这些元素会发射冰冻的冰霜闪电，使受害者的攻击速度减慢。

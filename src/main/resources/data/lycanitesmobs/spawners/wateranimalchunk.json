@@ -32,7 +32,10 @@
 				"minecraft:water"
 			],
 			"listType": "whitelist",
-			"solidGround": false
+			"solidGround": false,
+			"easyDifficultyRangeScale": 1,
+			"normalDifficultyRangeScale": 1,
+			"hardDifficultyRangeScale": 1
 		}
 	]
 }

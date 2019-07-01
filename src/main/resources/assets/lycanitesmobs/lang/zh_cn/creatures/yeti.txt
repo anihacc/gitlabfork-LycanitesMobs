@@ -1,4 +1,0 @@
-entity.lycanitesmobs.yeti.name=雪怪
-entity.lycanitesmobs.yeti.description=一种大型哺乳动物，喜好是吃冰雪覆盖下的植被。它们可以用蔬菜繁殖，但要注意它们的霜云。雪怪奶是一种美味的佳肴！
-entity.lycanitesmobs.yeti.habitat=这些动物经常在寒冷和下雪的地区漫步，如针叶林。
-entity.lycanitesmobs.yeti.combat=雪怪通常是被动的。

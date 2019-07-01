@@ -1,4 +1,0 @@
-entity.lycanitesmobs.gorgomite.name=魔鬼螨
-entity.lycanitesmobs.gorgomite.description=小型岩石甲虫，它们是众所周知的非常好斗，但害怕狮蝎。
-entity.lycanitesmobs.gorgomite.habitat=魔鬼螨通常出现在沙漠中，它们在夜间出没。
-entity.lycanitesmobs.gorgomite.combat=这些甲虫一开始只是一个简单轻微叮咬的讨厌鬼，但它们会迅速召唤其他的甲虫，并开始成群结队，因此快速消灭它们至关重要。

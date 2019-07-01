@@ -1,4 +1,0 @@
-entity.lycanitesmobs.makaalpha.name=初代克莱
-entity.lycanitesmobs.makaalpha.description=更大的克莱变体，初代克莱通常是和平的，但有时会攻击，它们也会彼此争吵很多。初代克莱将保护其余的克莱，因此它们有时使繁殖克莱变得棘手。
-entity.lycanitesmobs.makaalpha.habitat=初代克莱可在草原和热带草原中找到。
-entity.lycanitesmobs.makaalpha.combat=当被激怒时，初代克莱使用强大的撕咬和尖刺的尾巴以造成很高的近战伤害。

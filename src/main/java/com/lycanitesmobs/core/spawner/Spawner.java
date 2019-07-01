@@ -398,14 +398,13 @@ public class Spawner {
 		// Restrict To Chunk On Chunk Spawn Trigger:
 		if(spawnTrigger instanceof ChunkSpawnTrigger) {
 			for(BlockPos spawnPos : spawnPositions.toArray(new BlockPos[spawnPositions.size()])) {
-				int chunkOffset = 8;
-				if(spawnPos.getX() < triggerPos.getX() + chunkOffset || spawnPos.getX() > triggerPos.getX() + chunkOffset) {
-					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk x boundaries and will not be used for worldgen triggered spawning.");
+				if(spawnPos.getX() < triggerPos.getX() - 8 || spawnPos.getX() > triggerPos.getX() + 8) {
+					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk x boundaries and will not be used for worldgen triggered spawning. Trigger Pos: " + triggerPos + " Spawn Pos: " + spawnPos);
 					spawnPositions.remove(spawnPos);
 					continue;
 				}
-				if(spawnPos.getZ() < triggerPos.getZ() + chunkOffset || spawnPos.getZ() > triggerPos.getZ() + chunkOffset) {
-					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk z boundaries and will not be used for worldgen triggered spawning.");
+				if(spawnPos.getZ() < triggerPos.getZ() - 8 || spawnPos.getZ() > triggerPos.getZ() + 8) {
+					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk z boundaries and will not be used for worldgen triggered spawning. Trigger Pos: " + triggerPos + " Spawn Pos: " + spawnPos);
 					spawnPositions.remove(spawnPos);
 				}
 			}
@@ -722,6 +721,7 @@ public class Spawner {
 		}
 
 		// Spawn:
+		LycanitesMobs.logDebug("JSONSpawner", "Adding Entity To World: " + world + " - " + entityLiving);
 		world.addEntity(entityLiving);
 
 		// After Spawn:

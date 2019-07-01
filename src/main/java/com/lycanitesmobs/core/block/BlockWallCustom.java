@@ -38,6 +38,6 @@ public class BlockWallCustom extends WallBlock {
 	}
 
 	public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-		return new TranslationTextComponent("block." + this.blockName + ".description");
+		return new TranslationTextComponent(this.getTranslationKey() + ".description");
 	}
 }

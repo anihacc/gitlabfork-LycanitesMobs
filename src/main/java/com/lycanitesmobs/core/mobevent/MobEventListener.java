@@ -69,8 +69,9 @@ public class MobEventListener {
 	@SubscribeEvent
 	public void onWorldUpdate(WorldTickEvent event) {
 		World world = event.world;
-		if(world.isRemote)
+		if(world.isRemote) {
 			return;
+		}
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null)
 			return;

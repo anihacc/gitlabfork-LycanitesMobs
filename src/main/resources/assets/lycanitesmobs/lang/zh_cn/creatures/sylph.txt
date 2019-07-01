@@ -1,4 +1,0 @@
-entity.lycanitesmobs.sylph.name=西尔芙
-entity.lycanitesmobs.sylph.description=神圣的以太元素，诅咒那些侵入圣地的人。幻灵和宙斯盾可以融合，创造出强大的西尔芙。
-entity.lycanitesmobs.sylph.habitat=作为以太元素，西尔芙在金字塔或寺庙等崇拜区域显现。
-entity.lycanitesmobs.sylph.combat=西尔芙将释放一个巨大的以太魔法波，打击那些在阳光下燃烧的目标！

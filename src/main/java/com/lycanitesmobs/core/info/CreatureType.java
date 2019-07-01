@@ -78,7 +78,7 @@ public class CreatureType {
 	 * @return The display name of this creature type.
 	 */
 	public ITextComponent getTitle() {
-		return new TranslationTextComponent("creaturetype." + this.getName() + ".name");
+		return new TranslationTextComponent("creaturetype." + this.getName());
 	}
 
 

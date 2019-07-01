@@ -1,4 +1,0 @@
-entity.lycanitesmobs.skylus.name=盾斗鱼
-entity.lycanitesmobs.skylus.description=一种类似鱿鱼一样的生物，有着坚硬的外壳。如果伤害足够，就可以破坏它们的壳。
-entity.lycanitesmobs.skylus.habitat=这些生物可以在海水中找到。
-entity.lycanitesmobs.skylus.combat=盾斗鱼抓住猎物并把它们拖到水下深处，它们会用带有失明效果的墨汁攻击。当它们的外壳被摧毁时，它们会变得更快，但也更容易受到伤害。

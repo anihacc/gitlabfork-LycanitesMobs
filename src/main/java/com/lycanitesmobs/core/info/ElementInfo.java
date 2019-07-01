@@ -113,7 +113,7 @@ public class ElementInfo {
 	 * @return The title text.
 	 */
 	public ITextComponent getTitle() {
-		return new TranslationTextComponent("element." + this.name + ".name");
+		return new TranslationTextComponent("element." + this.name);
 	}
 
 

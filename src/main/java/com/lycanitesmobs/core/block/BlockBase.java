@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.block;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
@@ -72,7 +73,7 @@ public class BlockBase extends Block {
 	@Override
 	@Nonnull
 	public String getTranslationKey() {
-		return this.blockName;
+		return "block." + LycanitesMobs.modInfo.modid + "." + this.blockName;
 	}
 
 	@Override
@@ -87,7 +88,7 @@ public class BlockBase extends Block {
     }
 
     public ITextComponent getDescription(ItemStack itemStack, @Nullable IBlockReader world) {
-        return new TranslationTextComponent("block." + this.blockName + ".description");
+        return new TranslationTextComponent(this.getTranslationKey() + ".description");
     }
 	
 	

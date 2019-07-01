@@ -1,4 +1,0 @@
-entity.lycanitesmobs.djinn.name=幻灵
-entity.lycanitesmobs.djinn.description=骄傲的风元素，保护天空远离那些它们认为不应该出现在那里的人！
-entity.lycanitesmobs.djinn.habitat=作为风元素，这些生物通常出现在高空。
-entity.lycanitesmobs.djinn.combat=幻灵释放致命的旋风环，在命中时造成飘浮的负面效果。

@@ -110,7 +110,7 @@ public class ItemEquipmentPart extends BaseItem {
 	// ==================================================
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
-		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack) + ".name");
+		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
 		displayName.appendText(" ")
 			.appendSibling(new TranslationTextComponent("equipment.level"))
 			.appendText(" " + this.getLevel(itemStack));

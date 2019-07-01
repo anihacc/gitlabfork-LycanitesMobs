@@ -1,4 +1,0 @@
-entity.lycanitesmobs.lacedon.name=水鬼
-entity.lycanitesmobs.lacedon.description=奇怪的类人水生生物，它们能够在一小段时间内登陆，如果下雨的话，也可以无限期地登陆。
-entity.lycanitesmobs.lacedon.habitat=水鬼可以在咸水海洋中找到。
-entity.lycanitesmobs.lacedon.combat=水鬼在攻击时造成沉重效果，通常以受害者被拖到海底结束。

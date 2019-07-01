@@ -1,4 +1,0 @@
-entity.lycanitesmobs.geken.name=哥肯
-entity.lycanitesmobs.geken.description=有着卓越跳跃能力的剧毒爬虫。
-entity.lycanitesmobs.geken.habitat=这些生物喜欢在热带地区，如丛林，但也可以在沼泽中找到。
-entity.lycanitesmobs.geken.combat=哥肯不断地跳跃，使它们更难被击中，它们的爪子很锋利，会导致流血。

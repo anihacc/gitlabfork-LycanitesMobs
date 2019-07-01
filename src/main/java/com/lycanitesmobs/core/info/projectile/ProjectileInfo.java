@@ -150,7 +150,7 @@ public class ProjectileInfo {
 			try {
 				this.modelClass = (Class<? extends ModelProjectileBase>) Class.forName(json.get("modelClass").getAsString());
 			} catch (Exception e) {
-				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+				//LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 			}
 		}
 

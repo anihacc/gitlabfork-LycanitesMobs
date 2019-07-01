@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.spawner;
 
 import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,10 +19,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.*;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -31,20 +30,22 @@ import java.util.List;
 import java.util.Map;
 
 public class SpawnerEventListener {
-    protected static SpawnerEventListener INSTANCE;
-    public static boolean testOnCreative = false;
+	private static SpawnerEventListener INSTANCE;
+	private static boolean testOnCreative = false;
 
-	public List<WorldSpawnTrigger> worldSpawnTriggers = new ArrayList<>();
-	public List<PlayerSpawnTrigger> playerSpawnTriggers = new ArrayList<>();
-	public List<KillSpawnTrigger> killSpawnTriggers = new ArrayList<>();
-	public List<EntitySpawnedSpawnTrigger> entitySpawnedSpawnTriggers = new ArrayList<>();
-	public List<ChunkSpawnTrigger> chunkSpawnTriggers = new ArrayList<>();
-	public List<BlockSpawnTrigger> blockSpawnTriggers = new ArrayList<>();
-	public List<SleepSpawnTrigger> sleepSpawnTriggers = new ArrayList<>();
-	public List<FishingSpawnTrigger> fishingSpawnTriggers = new ArrayList<>();
-	public List<ExplosionSpawnTrigger> explosionSpawnTriggers = new ArrayList<>();
-	public List<MobEventSpawnTrigger> mobEventSpawnTriggers = new ArrayList<>();
-	public List<MixBlockSpawnTrigger> mixBlockSpawnTriggers = new ArrayList<>();
+	private List<WorldSpawnTrigger> worldSpawnTriggers = new ArrayList<>();
+	private List<PlayerSpawnTrigger> playerSpawnTriggers = new ArrayList<>();
+	private List<KillSpawnTrigger> killSpawnTriggers = new ArrayList<>();
+	private List<EntitySpawnedSpawnTrigger> entitySpawnedSpawnTriggers = new ArrayList<>();
+	private List<ChunkSpawnTrigger> chunkSpawnTriggers = new ArrayList<>();
+	private List<BlockSpawnTrigger> blockSpawnTriggers = new ArrayList<>();
+	private List<SleepSpawnTrigger> sleepSpawnTriggers = new ArrayList<>();
+	private List<FishingSpawnTrigger> fishingSpawnTriggers = new ArrayList<>();
+	private List<ExplosionSpawnTrigger> explosionSpawnTriggers = new ArrayList<>();
+	private List<MobEventSpawnTrigger> mobEventSpawnTriggers = new ArrayList<>();
+	private List<MixBlockSpawnTrigger> mixBlockSpawnTriggers = new ArrayList<>();
+
+	private Map<World, List<ChunkPos>> freshChunks = new HashMap<>();
 
 
 	/** Returns the main Mob Event Listener instance. **/
@@ -192,6 +193,7 @@ public class SpawnerEventListener {
 				spawnTrigger.onTick(world, triggerPosition, worldExt.lastSpawnerTime);
 			}
 		}
+		this.checkFreshChunks(world);
 
 		// Mob Events:
 		if(worldExt.getWorldEvent() != null) {
@@ -240,7 +242,7 @@ public class SpawnerEventListener {
 	public void onEntityDeath(LivingDeathEvent event) {
 		// Get Killed:
 		LivingEntity killedEntity = event.getEntityLiving();
-		if(killedEntity == null || killedEntity.getEntityWorld() == null || killedEntity.getEntityWorld().isRemote || event.isCanceled()) {
+		if(killedEntity == null || killedEntity.getEntityWorld().isRemote || event.isCanceled()) {
 			return;
 		}
 		
@@ -282,20 +284,47 @@ public class SpawnerEventListener {
 	/** Set to true when chunk spawn triggers are active and back to false when they have completed. This stops a cascading trigger loop! **/
 	public boolean chunkSpawnTriggersActive = false;
 
-	/** Called by the ChunkSpawn Feature every time a new chunk is generated. **/
-	public void onChunkPopulate(World world, ChunkPos chunkPos) {
-		if(this.chunkSpawnTriggersActive) {
+	/** Called by the ChunkSpawn Feature every time a new chunk is generated. Adds the chunk to a list for spawning in later when ready. **/
+	public void onChunkGenerate(World world, ChunkPos chunkPos) {
+		// Add To Fresh Chunks Map:
+		if(!this.freshChunks.containsKey(world)) {
+			this.freshChunks.put(world, new ArrayList<>());
+		}
+		if(this.freshChunks.get(world).contains(chunkPos)) {
+			return;
+		}
+		this.freshChunks.get(world).add(chunkPos);
+	}
+
+	/** Called on World Tick, checks for any fresh chunks to spawn in. **/
+	public void checkFreshChunks(World world) {
+		if (!this.freshChunks.containsKey(world)) {
+			this.freshChunks.put(world, new ArrayList<>());
 			return;
 		}
 
-		// Call Triggers:
-		for(ChunkSpawnTrigger spawnTrigger : this.chunkSpawnTriggers) {
-			if(spawnTrigger.onChunkPopulate(world, chunkPos)) {
-				this.chunkSpawnTriggersActive = true;
+		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(world));
+		for(ChunkPos chunkPos : freshChunks) {
+			// Check If Loaded:
+			if(!world.func_72863_F().isChunkLoaded(chunkPos)) {
+				continue;
 			}
+			this.freshChunks.get(world).remove(chunkPos);
+
+			// Call Triggers:
+			//if (this.chunkSpawnTriggersActive) {}
+			for (ChunkSpawnTrigger spawnTrigger : this.chunkSpawnTriggers) {
+				if (spawnTrigger.onChunkPopulate(world, chunkPos)) {
+					//this.chunkSpawnTriggersActive = true;
+				}
+			}
+			//this.chunkSpawnTriggersActive = false;
 		}
 
-		this.chunkSpawnTriggersActive = false;
+		// Clear If Too Many:
+		if(this.freshChunks.get(world).size() > 100) {
+			this.freshChunks.get(world).clear();
+		}
 	}
 
 	
@@ -469,6 +498,19 @@ public class SpawnerEventListener {
 			return;
 		boolean trigger = false;
 		World world = (World)event.getWorld();
+
+		// Only If Players Are Nearby (Big Performance Saving):
+		boolean playerNearby = false;
+		Vec3d posVec = new Vec3d(event.getPos());
+		for(PlayerEntity playerEntity : world.getPlayers()) {
+			if(playerEntity.getDistanceSq(posVec) <= 20 * 20) {
+				playerNearby = true;
+				break;
+			}
+		}
+		if(!playerNearby) {
+			return;
+		}
 
 		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
 			for(Direction side : event.getNotifiedSides()) {

@@ -32,8 +32,6 @@ public class ChunkSpawnTrigger extends SpawnTrigger {
 
 	/** Called every time a new chunk is generated. **/
 	public boolean onChunkPopulate(World world, ChunkPos chunkPos) {
-		if(true) return false; // TODO Disabled until stable.
-
 		// Chance:
 		if(this.chance < 1 && world.rand.nextDouble() > this.chance) {
 			return false;

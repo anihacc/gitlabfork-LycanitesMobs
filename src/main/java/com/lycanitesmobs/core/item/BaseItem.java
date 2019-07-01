@@ -47,7 +47,7 @@ public class BaseItem extends Item {
     @Override
 	@Nonnull
 	public String getTranslationKey() {
-    	return this.itemName;
+    	return "item." + this.modInfo.modid + "." + this.itemName;
 	}
     
     
@@ -56,7 +56,7 @@ public class BaseItem extends Item {
 	// ==================================================
 	@Override
 	public ITextComponent getDisplayName(ItemStack stack) {
-		return new TranslationTextComponent(this.getTranslationKey(stack) + ".name");
+		return new TranslationTextComponent(this.getTranslationKey(stack));
 	}
 
     @Override

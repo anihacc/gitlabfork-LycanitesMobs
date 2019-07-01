@@ -1,4 +1,0 @@
-entity.lycanitesmobs.warg.name=座狼
-entity.lycanitesmobs.warg.description=像狼一样凶猛的大型野兽！众所周知，它们成群结队地狩猎。驯服后，它们会成为理想的坐骑！
-entity.lycanitesmobs.warg.habitat=这些野兽经常在森林里游荡。
-entity.lycanitesmobs.warg.combat=座狼使用致命的跳跃，它会使任何靠近它们着陆位置的东西暂时麻痹。

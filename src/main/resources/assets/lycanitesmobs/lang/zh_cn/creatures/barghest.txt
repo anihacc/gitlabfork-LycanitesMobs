@@ -1,4 +1,0 @@
-entity.lycanitesmobs.barghest.name=犬鬼
-entity.lycanitesmobs.barghest.description=致命的山间掠食者，能跳得很高。犬鬼也是非常能干的登山者，使它们成为山脉的特殊坐骑。
-entity.lycanitesmobs.barghest.habitat=这些动物通常出现在山区和热带草原。
-entity.lycanitesmobs.barghest.combat=众所周知，犬鬼会扑向猎物并将其撕碎，造成流血。

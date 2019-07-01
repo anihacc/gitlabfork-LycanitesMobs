@@ -892,7 +892,7 @@ public class SectorInstance {
 		}
 
 		mobSpawn.onSpawned(entityLiving, null);
-		world.addEntity(entityLiving);
+		worldWriter.addEntity(entityLiving);
 	}
 
 

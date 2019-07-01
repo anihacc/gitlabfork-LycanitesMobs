@@ -58,8 +58,8 @@ public class VersionChecker {
 		/** Sets isNewer to true if this VersionInfo is newer than compareVersion. **/
 		public void checkIfNewer(VersionInfo compareVersion) {
 			this.isNewer = false;
-			String[] versions = this.versionNumber.split("\\.");
-			String[] compareVersions = compareVersion.versionNumber.split("\\.");
+			String[] versions = this.versionNumber.split("-")[0].split("\\.");
+			String[] compareVersions = compareVersion.versionNumber.split("-")[0].split("\\.");
 			for (int i = 0; i < 4; i++) {
 				int versionNumber = NumberUtils.isCreatable(versions[i].replaceAll("[^\\d.]", "")) ? Integer.parseInt(versions[i].replaceAll("[^\\d.]", "")) : 0;
 				int compareVersionNumber = NumberUtils.isCreatable(compareVersions[i].replaceAll("[^\\d.]", "")) ? Integer.parseInt(compareVersions[i].replaceAll("[^\\d.]", "")) : 0;

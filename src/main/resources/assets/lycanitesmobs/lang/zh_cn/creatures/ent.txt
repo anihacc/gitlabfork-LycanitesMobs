@@ -1,4 +1,0 @@
-entity.lycanitesmobs.ent.name=树人
-entity.lycanitesmobs.ent.description=森林保护者，它们会攻击任何它们认为对森林构成威胁的东西。
-entity.lycanitesmobs.ent.habitat=树人可以在夜间发现游荡的森林，但也会合并到树中，所以砍树时要小心！
-entity.lycanitesmobs.ent.combat=树人使用毒害攻击，在水中恢复生命，攻击时也会消耗生命。斧和类似的工具非常有效。

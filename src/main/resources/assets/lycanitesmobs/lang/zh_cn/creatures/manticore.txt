@@ -1,4 +1,0 @@
-entity.lycanitesmobs.manticore.name=狮蝎
-entity.lycanitesmobs.manticore.description=像蝙蝠一样凶恶的野兽，尾巴像蝎子。它们喜欢捕杀魔鬼螨和其他小猎物。
-entity.lycanitesmobs.manticore.habitat=在夜间，狮蝎在沙漠上空飞行。
-entity.lycanitesmobs.manticore.combat=狮蝎的刺会让你感到非常虚弱和饥饿！

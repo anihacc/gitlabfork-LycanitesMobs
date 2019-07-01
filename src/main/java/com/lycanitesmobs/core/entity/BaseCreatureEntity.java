@@ -480,7 +480,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
 
 		// Lesser Actions:
-		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setSpeed(1.0D));
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(8.0D));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WanderGoal(this));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(PlayerEntity.class));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new LookIdleGoal(this));

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.kobold.name=地精
-entity.lycanitesmobs.kobold.description=小型啮齿动物总忍不住会偷东西，包括火把！杀死它们会掉落它们偷的物品。
-entity.lycanitesmobs.kobold.habitat=这些啮齿动物通常在夜间在平原上发现。
-entity.lycanitesmobs.kobold.combat=地精通常逃离其他生物，但已知会攻击低生命值的人。

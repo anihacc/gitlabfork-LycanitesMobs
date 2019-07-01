@@ -1,4 +1,0 @@
-entity.lycanitesmobs.belph.name=贝尔菲
-entity.lycanitesmobs.belph.description=小而危险的恶魔，一心只想杀戮和进食。
-entity.lycanitesmobs.belph.habitat=这些恶魔可以在下界中找到，并且会通过传送门入侵。
-entity.lycanitesmobs.belph.combat=贝尔菲投掷毁灭之火的球，这是一种由下界魔法制造的火焰，燃烧着一种不自然的红色。
