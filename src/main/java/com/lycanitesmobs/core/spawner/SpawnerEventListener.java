@@ -417,7 +417,7 @@ public class SpawnerEventListener {
 		
 		// Get Coords:
 		World world = player.getEntityWorld();
-        BlockPos spawnPos = event.getPos().add(0, 0, 1);
+        BlockPos spawnPos = player.getPosition().add(0, 0, 1);
 		
 		if(world.isRemote || world.isDaytime())
 			return;
@@ -425,7 +425,7 @@ public class SpawnerEventListener {
 		// Run Spawners:
 		boolean interrupted = false;
 		for(SleepSpawnTrigger spawnTrigger : this.sleepSpawnTriggers) {
-			if(spawnTrigger.onSleep(world, player, spawnPos, world.getBlockState(event.getPos()))) {
+			if(spawnTrigger.onSleep(world, player, spawnPos, world.getBlockState(player.getPosition()))) {
 				interrupted = true;
 			}
 		}
