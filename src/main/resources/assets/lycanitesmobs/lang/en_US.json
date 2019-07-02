@@ -1151,6 +1151,7 @@
     "creaturetype.angel": "Angel",
     "creaturetype.elemental": "Elemental",
     "creaturetype.dragon": "Dragon",
+    "creaturetype.worm": "Worm",
     "_comment": "#############################",
     "death.attack.ooze": "%1$s was frozen in the icy ooze!",
     "_comment": "#############################",

@@ -1148,6 +1148,7 @@
     "creaturetype.angel": "天使",
     "creaturetype.elemental": "元素生物",
     "creaturetype.dragon": "龙",
+    "creaturetype.worm": "虫",
     "_comment": "#############################",
     "death.attack.ooze": "%1$s被冻死于胶状冰中！",
     "_comment": "#############################",
