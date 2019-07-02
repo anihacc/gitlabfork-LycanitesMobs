@@ -21,13 +21,13 @@ public class VersionChecker {
 	public static class VersionInfo {
 		public String versionNumber;
 		public String mcVersion;
-		public String name;
-		public String newFeatures;
-		public String configChanges;
-		public String majorFixes;
-		public String changes;
-		public String balancing;
-		public String minorFixes;
+		public String name = "";
+		public String newFeatures = "";
+		public String configChanges = "";
+		public String majorFixes = "";
+		public String changes = "";
+		public String balancing = "";
+		public String minorFixes = "";
 
 		public boolean isNewer = false;
 
@@ -95,6 +95,9 @@ public class VersionChecker {
 			JsonParser jsonParser = new JsonParser();
 			JsonElement jsonElement = jsonParser.parse(jsonString);
 			JsonObject versionJson = jsonElement.getAsJsonObject();
+			if(!versionJson.has("version") && !versionJson.has("mcversion")) {
+				return currentVersion;
+			}
 			String versionNumber = versionJson.get("version").getAsString();
 			String mcVersion = versionJson.get("mcversion").getAsString();
 			latestVersion = new VersionInfo(versionNumber, mcVersion);

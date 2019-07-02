@@ -207,24 +207,14 @@ public class JSONHelper {
 		return biomeList;
 	}
 
-	public static List<Biome> getJsonBiomes(JsonObject json) {
+	public static List<Biome> getBiomes(List<String> biomeIds) {
 		List<Biome> biomes = new ArrayList<>();
-		if(json.has("biomeIds")) {
-			biomes = getJsonBiomes(json.get("biomeIds").getAsJsonArray());
-		}
-		return biomes;
-	}
-
-	public static List<Biome> getJsonBiomes(JsonArray jsonArray) {
-		List<Biome> biomes = new ArrayList<>();
-		Iterator<JsonElement> jsonIterator = jsonArray.iterator();
-		while (jsonIterator.hasNext()) {
-			Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(jsonIterator.next().getAsString()));
+		for(String biomeId : biomeIds) {
+			Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(biomeId));
 			if(biome != null) {
 				biomes.add(biome);
 			}
 		}
-
 		return biomes;
 	}
 

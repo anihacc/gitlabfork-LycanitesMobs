@@ -51,8 +51,11 @@ public class CreatureSpawn {
 	/** The list of biomes generated from the list of biome tags. **/
 	public List<Biome> biomesFromTags = null;
 
+	/** The list of specific biome ids that this creature spawns in. **/
+	public List<String> biomeIds = new ArrayList<>();
+
 	/** The list of specific biomes that this creature spawns in. **/
-	public List<Biome> biomes = new ArrayList<>();
+	public List<Biome> biomes = null;
 
 	/** If true, the biome check will be ignored completely by this creature. **/
 	public boolean ignoreBiome = false;
@@ -147,7 +150,11 @@ public class CreatureSpawn {
 			this.biomesFromTags = null;
 			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray());
 		}
-		this.biomes = JSONHelper.getJsonBiomes(json);
+		if(json.has("biomeIds")) {
+			this.biomeIds.clear();
+			this.biomes = null;
+			this.biomeIds = JSONHelper.getJsonStrings(json.get("biomeIds").getAsJsonArray());
+		}
 
 		if(json.has("spawnWeight"))
 			this.spawnWeight = json.get("spawnWeight").getAsInt();
@@ -253,19 +260,26 @@ public class CreatureSpawn {
 		}
 
 		// Biome Tags:
-		if(this.biomesFromTags == null) {
-			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
-		}
-		for(Biome validBiome : this.biomesFromTags) {
-			if(biomes.contains(validBiome)) {
-				return true;
+		if(!this.biomeTags.isEmpty()) {
+			if (this.biomesFromTags == null) {
+				this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
+			}
+			for (Biome validBiome : this.biomesFromTags) {
+				if (biomes.contains(validBiome)) {
+					return true;
+				}
 			}
 		}
 
 		// Biome IDs:
-		for(Biome validBiome : this.biomes) {
-			if(biomes.contains(validBiome)) {
-				return true;
+		if(!this.biomeIds.isEmpty()) {
+			if (this.biomes == null) {
+				this.biomes = JSONHelper.getBiomes(this.biomeIds);
+			}
+			for (Biome validBiome : this.biomes) {
+				if (biomes.contains(validBiome)) {
+					return true;
+				}
 			}
 		}
 
