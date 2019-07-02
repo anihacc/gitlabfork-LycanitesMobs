@@ -3277,7 +3277,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     // ========== Destroy Blocks ==========
     public void destroyArea(int x, int y, int z, float strength, boolean drop) {
-    	destroyArea(x, y, z, strength, drop, 0);
+    	this.destroyArea(x, y, z, strength, drop, 0);
     }
     public void destroyArea(int x, int y, int z, float strength, boolean drop, int range) {
     	this.destroyArea(x, y, z, strength, drop, range, null, 0);

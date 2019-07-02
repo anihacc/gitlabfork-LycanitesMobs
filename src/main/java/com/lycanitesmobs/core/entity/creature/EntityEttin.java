@@ -60,7 +60,7 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.ettinGreifing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
 		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
-		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);
+		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);
 	        }
         
         super.livingTick();
