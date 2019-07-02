@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeonach",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeonach",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelGeonach",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

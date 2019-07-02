@@ -5,7 +5,7 @@
 		"boss"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAsmodeus",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAsmodeus",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAsmodeus",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

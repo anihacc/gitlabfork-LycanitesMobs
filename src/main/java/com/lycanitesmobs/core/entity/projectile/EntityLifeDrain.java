@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -90,9 +90,9 @@ public class EntityLifeDrain extends LaserProjectileEntity {
  	// ==================================================
     @Override
     public ResourceLocation getBeamTexture() {
-    	if(AssetManager.getTexture(this.entityName + "Beam") == null)
-    		AssetManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
-    	return AssetManager.getTexture(this.entityName + "Beam");
+    	if(TextureManager.getTexture(this.entityName + "Beam") == null)
+    		TextureManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    	return TextureManager.getTexture(this.entityName + "Beam");
     }
     
     

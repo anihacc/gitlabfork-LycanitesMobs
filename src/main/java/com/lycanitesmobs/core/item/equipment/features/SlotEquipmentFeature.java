@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 

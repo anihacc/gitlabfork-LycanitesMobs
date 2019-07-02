@@ -4,9 +4,9 @@ import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
@@ -20,7 +20,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -101,7 +100,7 @@ public class ItemEquipmentPart extends BaseItem {
 
 		this.setup();
 
-		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
+		TextureManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}
 
 
@@ -261,17 +260,5 @@ public class ItemEquipmentPart extends BaseItem {
 			this.setLevel(itemStack, level);
 			items.add(itemStack);
 		}
-	}
-
-
-	// ==================================================
-	//                      Visuals
-	// ==================================================
-	/** Returns the texture to use for the provided ItemStack. **/
-	public ResourceLocation getTexture(ItemStack itemStack, String suffix) {
-		String textureName = this.itemName.toLowerCase().replace("equipmentpart_", "") + suffix;
-		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, this.modInfo, "textures/equipment/" + textureName + ".png");
-		return AssetManager.getTexture(textureName);
 	}
 }

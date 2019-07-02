@@ -1,5 +1,8 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.ModelManager;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.Effects;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
@@ -9,6 +12,8 @@ import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -179,9 +184,10 @@ public class LycanitesMobs {
 		MinecraftForge.EVENT_BUS.register(ClientManager.getInstance());
 
 		ClientManager.getInstance().initLanguageManager();
-		ClientManager.getInstance().registerGUIs();
+		ClientManager.getInstance().registerScreens();
 		ClientManager.getInstance().registerEvents();
-		ClientManager.getInstance().registerTextures();
+		TextureManager.getInstance().createTextures(modInfo);
+		ModelManager.getInstance().createModels();
 		ClientManager.getInstance().initRenderRegister();
 	}
 

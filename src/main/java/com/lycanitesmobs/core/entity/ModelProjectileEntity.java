@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -33,8 +33,8 @@ public class ModelProjectileEntity extends BaseProjectileEntity {
 	}
 
 	public ResourceLocation getTexture() {
-		if(AssetManager.getTexture(this.getTextureName()) == null)
-			AssetManager.addTexture(this.getTextureName(), this.modInfo, "textures/projectile/" + this.getTextureName() + ".png");
-		return AssetManager.getTexture(this.getTextureName());
+		if(TextureManager.getTexture(this.getTextureName()) == null)
+			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/projectile/" + this.getTextureName() + ".png");
+		return TextureManager.getTexture(this.getTextureName());
 	}
 }

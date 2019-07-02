@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.container.CreatureContainerProvider;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainerProvider;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
@@ -13,7 +12,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;

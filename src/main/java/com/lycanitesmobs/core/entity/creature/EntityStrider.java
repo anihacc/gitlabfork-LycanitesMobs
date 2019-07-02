@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;

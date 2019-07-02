@@ -6,7 +6,7 @@
 		"inferno"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySalamander",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSalamander",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelSalamander",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

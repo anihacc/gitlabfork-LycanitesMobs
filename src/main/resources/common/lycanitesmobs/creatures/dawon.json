@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityDawon",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelDawon",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelDawon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

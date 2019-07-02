@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelChupacabra",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelChupacabra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

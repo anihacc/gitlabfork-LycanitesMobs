@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.BaseProjectileDispenseBehaviour;
-import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
@@ -16,7 +16,6 @@ import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
 import com.lycanitesmobs.core.item.ItemCharge;
-import com.lycanitesmobs.core.model.ModelProjectileBase;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -50,8 +49,8 @@ public class ProjectileInfo {
 	/** The constructor used by this creature to create entity instances. **/
 	public Constructor<? extends BaseProjectileEntity> entityConstructor;
 
-	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
-	public Class<? extends ModelProjectileBase> modelClass;
+	/** The class of the model this subspecies should use, loaded client side only. **/
+	public String modelClassName;
 
 	/** The group that this projectile belongs to. **/
 	public ModInfo modInfo;
@@ -147,11 +146,7 @@ public class ProjectileInfo {
 		}
 
 		if(json.has("modelClass")) {
-			try {
-				this.modelClass = (Class<? extends ModelProjectileBase>) Class.forName(json.get("modelClass").getAsString());
-			} catch (Exception e) {
-				//LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
-			}
+			this.modelClassName = json.get("modelClass").getAsString();
 		}
 
 		// Size:

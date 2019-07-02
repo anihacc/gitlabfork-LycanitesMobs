@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;

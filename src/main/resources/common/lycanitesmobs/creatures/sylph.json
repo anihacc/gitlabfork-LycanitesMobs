@@ -5,7 +5,7 @@
 		"guardian"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySylph",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSylph",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelSylph",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.summoningstaff;
 
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.PortalEntity;

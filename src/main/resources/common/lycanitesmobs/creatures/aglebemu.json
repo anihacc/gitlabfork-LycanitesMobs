@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAglebemu",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAglebemu",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAglebemu",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

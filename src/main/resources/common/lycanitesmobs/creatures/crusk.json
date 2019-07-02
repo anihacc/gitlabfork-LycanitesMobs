@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCrusk",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCrusk",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCrusk",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

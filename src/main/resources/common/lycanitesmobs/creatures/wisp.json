@@ -3,7 +3,7 @@
 	"creatureType": "elemental",
 	"groups": [],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWisp",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelWisp",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelWisp",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCacodemon",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCacodemon",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCacodemon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;

@@ -76,7 +76,6 @@ public class ProjectileManager extends JSONLoader {
 		LycanitesMobs.logDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
 	}
 
-
 	@Override
 	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
 		ProjectileInfo projectileInfo = new ProjectileInfo(modInfo);
@@ -95,16 +94,6 @@ public class ProjectileManager extends JSONLoader {
 		this.projectiles.put(projectileInfo.name, projectileInfo);
 		return;
 	}
-
-
-	/**
-	 * Generates the next available projectile network id to register with.
-	 * @return The next projectile network id.
-	 */
-	public int getNextProjectileNetworkId() {
-		return this.nextProjectileNetworkId++;
-	}
-
 
 	/**
 	 * Registers all creatures added to this creature manager, called from the registry event.
@@ -154,7 +143,6 @@ public class ProjectileManager extends JSONLoader {
 		}
 	}
 
-
 	/**
 	 * Gets a projectile by name.
 	 * @param projectileName The name of the projectile to get.
@@ -162,11 +150,11 @@ public class ProjectileManager extends JSONLoader {
 	 */
 	@Nullable
 	public ProjectileInfo getProjectile(String projectileName) {
-		if(!this.projectiles.containsKey(projectileName))
+		if(!this.projectiles.containsKey(projectileName)) {
 			return null;
+		}
 		return this.projectiles.get(projectileName);
 	}
-
 
 	/**
 	 * Gets a Projectile Entity Type by name.
@@ -180,7 +168,6 @@ public class ProjectileManager extends JSONLoader {
 			return null;
 		return projectileInfo.getEntityType();
 	}
-
 
 	/** Called during early start up, loads all items. **/
 	public void loadOldProjectiles() {

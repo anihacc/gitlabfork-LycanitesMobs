@@ -7,7 +7,6 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;

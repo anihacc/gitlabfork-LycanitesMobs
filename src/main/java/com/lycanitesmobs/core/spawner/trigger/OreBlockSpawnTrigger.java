@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SilverfishBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ServerWorld;
@@ -69,7 +70,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 
 					if(world instanceof ServerWorld) {
 						for(ItemStack dropStack : block.getDrops(blockState, (ServerWorld)world, blockPos, null)) {
-							if(dropStack.getItem() == block.getPickBlock(blockState, null, world, blockPos, null).getItem()) {
+							if(dropStack.getItem() instanceof BlockItem) {
 								return this.ores;
 							}
 							else {

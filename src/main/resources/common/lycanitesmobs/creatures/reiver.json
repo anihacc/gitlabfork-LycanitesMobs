@@ -5,7 +5,7 @@
 		"frozen"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityReiver",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelReiver",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelReiver",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

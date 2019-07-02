@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.client.util.ITooltipFlag;

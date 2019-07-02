@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityEpion",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEpion",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelEpion",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

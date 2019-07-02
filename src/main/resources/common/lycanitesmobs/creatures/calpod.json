@@ -7,7 +7,7 @@
 		"hardy"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCalpod",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCalpod",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

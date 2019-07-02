@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeken",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeken",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelGeken",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

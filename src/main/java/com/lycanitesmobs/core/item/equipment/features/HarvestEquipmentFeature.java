@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

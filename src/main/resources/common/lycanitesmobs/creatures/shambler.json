@@ -5,7 +5,7 @@
 		"nature"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityShambler",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelShambler",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelShambler",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

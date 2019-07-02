@@ -6,6 +6,7 @@ import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.api.Targeting;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
@@ -4261,9 +4262,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(!"".equals(suffix)) {
 			textureName += "_" + suffix;
 		}
-		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-		return AssetManager.getTexture(textureName);
+		if(TextureManager.getTexture(textureName) == null)
+			TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+		return TextureManager.getTexture(textureName);
 	}
 
     /** Returns this creature's equipment texture. **/
@@ -4278,9 +4279,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         subName = subName.toLowerCase();
         String textureName = this.getTextureName();
         textureName += "_" + subName;
-        if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-        return AssetManager.getTexture(textureName);
+        if(TextureManager.getTexture(textureName) == null)
+            TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+        return TextureManager.getTexture(textureName);
     }
 
     /** Gets the name of this creature's texture, normally links to it's code name but can be overridden by subspecies and alpha creatures. **/

@@ -1,5 +1,6 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.core.EffectBase;
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;

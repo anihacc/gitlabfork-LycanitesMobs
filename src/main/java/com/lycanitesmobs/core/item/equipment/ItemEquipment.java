@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.BaseItem;
@@ -446,6 +446,6 @@ public class ItemEquipment extends BaseItem {
 	// ==================================================
 	/** Returns the texture to use for the provided ItemStack. **/
 	public ResourceLocation getTexture(ItemStack itemStack) {
-		return AssetManager.getTexture(this.itemName);
+		return TextureManager.getTexture(this.itemName);
 	}
 }

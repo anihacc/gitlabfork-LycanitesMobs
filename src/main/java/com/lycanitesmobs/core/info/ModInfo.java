@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.biome.Biome;

@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.info;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;

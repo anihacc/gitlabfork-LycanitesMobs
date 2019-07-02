@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -67,9 +67,9 @@ public class EntityArcaneLaser extends LaserProjectileEntity {
  	// ==================================================
     @Override
     public ResourceLocation getBeamTexture() {
-    	if(AssetManager.getTexture(this.entityName + "beam") == null)
-    		AssetManager.addTexture(this.entityName + "beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
-    	return AssetManager.getTexture(this.entityName + "beam");
+    	if(TextureManager.getTexture(this.entityName + "beam") == null)
+    		TextureManager.addTexture(this.entityName + "beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    	return TextureManager.getTexture(this.entityName + "beam");
     }
     
     

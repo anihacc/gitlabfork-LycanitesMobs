@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;

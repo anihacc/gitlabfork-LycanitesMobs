@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityUvaraptor",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelUvaraptor",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelUvaraptor",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

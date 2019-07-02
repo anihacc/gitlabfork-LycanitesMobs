@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;

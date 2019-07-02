@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityReaper",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelReaper",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelReaper",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

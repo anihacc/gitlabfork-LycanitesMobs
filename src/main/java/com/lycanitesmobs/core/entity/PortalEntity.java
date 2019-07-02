@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.*;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
@@ -331,25 +332,25 @@ public class PortalEntity extends BaseProjectileEntity {
  	// ==================================================
     @Override
     public ResourceLocation getTexture() {
-    	if(AssetManager.getTexture(this.entityName) == null) {
-			AssetManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
+    	if(TextureManager.getTexture(this.entityName) == null) {
+			TextureManager.addTexture(this.entityName, LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + ".png");
 		}
-        if(AssetManager.getTexture(this.entityName + "_client") == null) {
-			AssetManager.addTexture(this.entityName + "_client", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
+        if(TextureManager.getTexture(this.entityName + "_client") == null) {
+			TextureManager.addTexture(this.entityName + "_client", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_client.png");
 		}
-        if(AssetManager.getTexture(this.entityName + "_player") == null) {
-			AssetManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
+        if(TextureManager.getTexture(this.entityName + "_player") == null) {
+			TextureManager.addTexture(this.entityName + "_player", LycanitesMobs.modInfo, "textures/particles/" + this.entityName.toLowerCase() + "_player.png");
 		}
 
         if(this.ownerUUID != null) {
             if(this.ownerUUID.equals(ClientManager.getInstance().getClientPlayer().getUniqueID())) {
-				return AssetManager.getTexture(this.entityName + "_client");
+				return TextureManager.getTexture(this.entityName + "_client");
 			}
             else {
-				return AssetManager.getTexture(this.entityName + "_player");
+				return TextureManager.getTexture(this.entityName + "_player");
 			}
         }
-     	return AssetManager.getTexture(this.entityName);
+     	return TextureManager.getTexture(this.entityName);
     }
 
     @Override

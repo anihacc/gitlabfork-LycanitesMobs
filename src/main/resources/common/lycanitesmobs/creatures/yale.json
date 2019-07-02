@@ -5,7 +5,7 @@
 		"animal"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYale",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYale",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelYale",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

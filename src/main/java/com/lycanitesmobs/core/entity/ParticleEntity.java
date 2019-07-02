@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -93,8 +93,8 @@ public class ParticleEntity extends ThrowableEntity {
     //                      Visuals
     // ==================================================
     public ResourceLocation getTexture() {
-    	if(AssetManager.getTexture(this.texture) == null)
-    		AssetManager.addTexture(this.texture, this.group, "textures/particles/" + this.texture.toLowerCase() + ".png");
-    	return AssetManager.getTexture(this.texture);
+    	if(TextureManager.getTexture(this.texture) == null)
+    		TextureManager.addTexture(this.texture, this.group, "textures/particles/" + this.texture.toLowerCase() + ".png");
+    	return TextureManager.getTexture(this.texture);
     }
 }

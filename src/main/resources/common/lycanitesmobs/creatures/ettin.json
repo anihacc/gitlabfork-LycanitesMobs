@@ -5,7 +5,7 @@
 		"raider"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityEttin",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelEttin",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelEttin",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

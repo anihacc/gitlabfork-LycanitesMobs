@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.mobevent;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.MobEventSound;
-import com.lycanitesmobs.core.gui.overlays.BaseOverlay;
+import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
@@ -136,8 +136,8 @@ public class MobEventPlayerClient {
 
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTexture() {
-        if(AssetManager.getTexture("guimobevent" + this.mobEvent.title) == null)
-            AssetManager.addTexture("guimobevent" + this.mobEvent.title, LycanitesMobs.modInfo, "textures/mobevents/" + this.mobEvent.title.toLowerCase() + ".png");
-        return AssetManager.getTexture("guimobevent" + this.mobEvent.title);
+        if(TextureManager.getTexture("guimobevent" + this.mobEvent.title) == null)
+            TextureManager.addTexture("guimobevent" + this.mobEvent.title, LycanitesMobs.modInfo, "textures/mobevents/" + this.mobEvent.title.toLowerCase() + ".png");
+        return TextureManager.getTexture("guimobevent" + this.mobEvent.title);
     }
 }

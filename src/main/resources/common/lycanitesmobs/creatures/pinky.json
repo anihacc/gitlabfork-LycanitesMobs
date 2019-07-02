@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityPinky",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelPinky",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelPinky",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

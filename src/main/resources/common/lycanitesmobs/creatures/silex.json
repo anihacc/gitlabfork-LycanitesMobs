@@ -5,7 +5,7 @@
 		"animal"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntitySilex",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelSilex",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelSilex",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

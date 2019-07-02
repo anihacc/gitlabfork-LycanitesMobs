@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityStrider",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelStrider",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelStrider",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

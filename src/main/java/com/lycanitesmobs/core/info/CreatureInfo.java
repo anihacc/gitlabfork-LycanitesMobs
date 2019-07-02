@@ -3,13 +3,11 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import com.lycanitesmobs.core.model.ModelCreatureBase;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -18,8 +16,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,9 +43,8 @@ public class CreatureInfo {
 	/** The constructor used by this creature to create entity instances. **/
 	public Constructor<? extends BaseCreatureEntity> entityConstructor;
 
-	/** The model class used by this creature. **/
-	@OnlyIn(Dist.CLIENT)
-	public Class<? extends ModelCreatureBase> modelClass;
+	/** The class of the model this creature should use, loaded client side only. **/
+	public String modelClassName;
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;
@@ -183,12 +178,7 @@ public class CreatureInfo {
 			return;
 
 		// Model Class:
-
-		try {
-			ClientManager.getInstance().loadCreatureModel(this, json.get("modelClass").getAsString());
-		} catch (Exception e) {
-			//LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for Creature: " + this.getTitle());
-		}
+		this.modelClassName = json.get("modelClass").getAsString();
 
 		// Creature Type:
 		if(json.has("creatureType")) {
@@ -508,10 +498,10 @@ public class CreatureInfo {
 	 * @return Creature icon resource location.
 	 */
 	public ResourceLocation getIcon() {
-		ResourceLocation texture = AssetManager.getTexture(this.getName() + "_icon");
+		ResourceLocation texture = TextureManager.getTexture(this.getName() + "_icon");
 		if(texture == null) {
-			AssetManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/" + this.getName() + "_icon.png");
-			texture = AssetManager.getTexture(this.getName() + "_icon");
+			TextureManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/creatures/" + this.getName() + "_icon.png");
+			texture = TextureManager.getTexture(this.getName() + "_icon");
 		}
 		return texture;
 	}

@@ -5,7 +5,7 @@
 		"animal"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCephignis",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCephignis",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCephignis",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

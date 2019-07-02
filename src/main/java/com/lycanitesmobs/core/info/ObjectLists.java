@@ -176,6 +176,8 @@ public class ObjectLists {
 		
 		// Mushrooms: (Fungi treats!)
         ObjectLists.addItem("mushrooms", Items.MUSHROOM_STEW);
+        ObjectLists.addItem("mushrooms", Items.RED_MUSHROOM);
+        ObjectLists.addItem("mushrooms", Items.BROWN_MUSHROOM);
         ObjectLists.addItem("mushrooms", Blocks.RED_MUSHROOM);
 		ObjectLists.addItem("mushrooms", Blocks.BROWN_MUSHROOM);
 		ObjectLists.addItem("mushrooms", Blocks.RED_MUSHROOM);

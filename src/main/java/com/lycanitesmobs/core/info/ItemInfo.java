@@ -5,19 +5,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.item.GenericItem;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import com.lycanitesmobs.core.model.ModelItemBase;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.Iterator;
 

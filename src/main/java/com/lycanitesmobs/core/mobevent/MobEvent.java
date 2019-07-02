@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;

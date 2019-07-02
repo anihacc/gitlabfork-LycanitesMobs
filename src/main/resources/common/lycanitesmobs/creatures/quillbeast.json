@@ -6,7 +6,7 @@
 		"hardy"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityQuillbeast",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelQuillbeast",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelQuillbeast",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -48,9 +48,9 @@ public class EntityWaterJetEnd extends LaserEndProjectileEntity {
  	// ==================================================
     @Override
     public ResourceLocation getTexture() {
-    	if(AssetManager.getTexture(this.entityName + "End") == null)
-    		AssetManager.addTexture(this.entityName + "End", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_end.png");
-    	return AssetManager.getTexture(this.entityName + "End");
+    	if(TextureManager.getTexture(this.entityName + "End") == null)
+    		TextureManager.addTexture(this.entityName + "End", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_end.png");
+    	return TextureManager.getTexture(this.entityName + "End");
     }
     
     

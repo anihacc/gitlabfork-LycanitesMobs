@@ -5,7 +5,7 @@
 		"inferno"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAfrit",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAfrit",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAfrit",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

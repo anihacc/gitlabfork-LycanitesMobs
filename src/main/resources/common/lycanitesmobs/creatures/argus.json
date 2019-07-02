@@ -5,7 +5,7 @@
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityArgus",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelArgus",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelArgus",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

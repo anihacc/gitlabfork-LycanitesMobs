@@ -4,20 +4,14 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-import com.lycanitesmobs.core.model.ModelCreatureBase;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -77,9 +71,9 @@ public class Subspecies {
     /** The rarity of this subspecies. **/
     public String rarity;
 
-	/** The model class used by this subspecies. If null a hardcoded default model is searched for. **/
-	@OnlyIn(Dist.CLIENT)
-	public Class<? extends ModelCreatureBase> modelClass;
+	/** The class name of the model this subspecies should use, loaded client side only. If null, the default Creature model is used instead. **/
+	@Nullable
+	public String modelClassName;
 
     /** The weight of this subspecies, used when randomly determining the subspecies of a mob. A base species uses the static baseSpeciesWeight value. **/
     public int weight;
@@ -160,11 +154,7 @@ public class Subspecies {
 
 		// Model Class:
 		if (json.has("modelClass")) {
-			try {
-				ClientManager.getInstance().loadSubspeciesModel(subspecies, json.get("modelClass").getAsString());
-			} catch (Exception e) {
-				LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for subspecies: " + subspecies.getTitle() + " entity: " + creatureInfo.getTitle());
-			}
+			subspecies.modelClassName = json.get("modelClass").getAsString();
 		}
 
 		// Priority:

@@ -5,7 +5,7 @@
 		"animal"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityMaka",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelMaka",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelMaka",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

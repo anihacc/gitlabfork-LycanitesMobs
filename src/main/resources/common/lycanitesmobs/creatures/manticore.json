@@ -5,7 +5,7 @@
 		"predator"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityManticore",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelManticore",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelManticore",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

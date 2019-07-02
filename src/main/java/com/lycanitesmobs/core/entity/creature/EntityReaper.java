@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
@@ -130,8 +130,8 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_satanclaws";
-        if(AssetManager.getTexture(textureName) == null)
-            AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-        return AssetManager.getTexture(textureName);
+        if(TextureManager.getTexture(textureName) == null)
+            TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+        return TextureManager.getTexture(textureName);
     }
 }

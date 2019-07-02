@@ -5,7 +5,7 @@
 		"frozen"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityFrostweaver",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelFrostweaver",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelFrostweaver",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {

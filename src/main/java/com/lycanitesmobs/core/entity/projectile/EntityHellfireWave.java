@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -154,8 +154,8 @@ public class EntityHellfireWave extends BaseProjectileEntity {
     //                      Visuals
     // ==================================================
     public ResourceLocation getTexture() {
-        if(AssetManager.getTexture("hellfirewall") == null)
-            AssetManager.addTexture("hellfirewall", this.modInfo, "textures/items/hellfirewall" + ".png");
-        return AssetManager.getTexture("hellfirewall");
+        if(TextureManager.getTexture("hellfirewall") == null)
+            TextureManager.addTexture("hellfirewall", this.modInfo, "textures/items/hellfirewall" + ".png");
+        return TextureManager.getTexture("hellfirewall");
     }
 }

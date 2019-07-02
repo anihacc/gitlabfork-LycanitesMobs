@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

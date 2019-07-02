@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -142,16 +142,16 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 	public ResourceLocation getTexture() {
 		if("Wicked Treant".equals(this.getCustomName())) {
 			String textureName = this.getTextureName() + "_wicked";
-			if (AssetManager.getTexture(textureName) == null)
-				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-			return AssetManager.getTexture(textureName);
+			if (TextureManager.getTexture(textureName) == null)
+				TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+			return TextureManager.getTexture(textureName);
 		}
 
 		if("Salty Tree".equals(this.getCustomName())) {
 			String textureName = this.getTextureName() + "_saltytree";
-			if (AssetManager.getTexture(textureName) == null)
-				AssetManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-			return AssetManager.getTexture(textureName);
+			if (TextureManager.getTexture(textureName) == null)
+				TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+			return TextureManager.getTexture(textureName);
 		}
 
 		return super.getTexture();
