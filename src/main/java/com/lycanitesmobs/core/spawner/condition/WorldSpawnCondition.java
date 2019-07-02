@@ -245,7 +245,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 			}
 		}
 
-		if(this.biomes.isEmpty() && this.biomeTags.isEmpty()) {
+		if(this.biomeIds.isEmpty() && this.biomeTags.isEmpty()) {
 			return true;
 		}
 

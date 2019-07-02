@@ -20,7 +20,7 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 	/** The time (in ticks) that this feature adds to the weapon attack cooldown on use. **/
 	public int effectDuration = 0;
 
-	/** The range (in blocks) that this feature adds to the weapon attack. **/
+	/** The strength of the effect, 1 = amplifier 0, 2 = amplifier 1, etc. **/
 	public int effectStrength = 0;
 
 
@@ -87,8 +87,8 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 
 		// Potion Effects:
 		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
-		if(effect != null) {
-			effectTarget.addPotionEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength));
+		if(effect != null && this.effectStrength > 0) {
+			effectTarget.addPotionEffect(new EffectInstance(effect, this.effectDuration, this.effectStrength - 1));
 		}
 	}
 }

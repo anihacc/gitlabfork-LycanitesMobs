@@ -441,7 +441,7 @@ public class Effects {
                 if(attackingEntity.isPotionActive(leech)) {
                     float damage = event.getAmount();
                     float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier();
-                    attackingEntity.heal(damage * multiplier);
+                    attackingEntity.heal(Math.max(damage * multiplier * 0.25F, 1));
                 }
             }
         }

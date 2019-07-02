@@ -220,11 +220,11 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }*/
 
     public ITextComponent getTitle() {
-        return new TranslationTextComponent("gui." + "summoningpedestal.name");
+        return new TranslationTextComponent("gui." + "summoningpedestal");
     }
 
     public ITextComponent getEnergyTitle() {
-        return new TranslationTextComponent("stat.portal.name");
+        return new TranslationTextComponent("stat.portal");
     }
 
     public void drawFuel() {
@@ -249,40 +249,21 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
         int energyBarHeight = 9;
         int energyBarX = this.windowX + 16;
         int energyBarY = this.windowY + 40 - energyBarHeight;
-        int energyBarU = 256 - energyBarWidth;
-        int energyBarV = 256 - energyBarHeight;
-
-        for(int energyBarEnergyN = 1; energyBarEnergyN <= 10; energyBarEnergyN++) {
-            // Empty:
-            this.drawTexturedModalRect(energyBarX - energyBarWidth + (energyBarWidth * energyBarEnergyN), energyBarY, energyBarU, energyBarV, energyBarWidth, energyBarHeight);
-            // Full:
-            if(this.summoningPedestal.capacity >= energyBarEnergyN * this.summoningPedestal.capacityCharge) {
-                this.drawTexturedModalRect(energyBarX - energyBarWidth + (energyBarWidth * energyBarEnergyN), energyBarY, energyBarU - (energyBarWidth * 2), energyBarV, energyBarWidth, energyBarHeight);
-            }
-            // Partial:
-            else if(this.summoningPedestal.capacity + this.summoningPedestal.capacityCharge > energyBarEnergyN * this.summoningPedestal.capacityCharge) {
-                float spiritChargeScale = (float)(this.summoningPedestal.capacity % this.summoningPedestal.capacityCharge) / (float)this.summoningPedestal.capacityCharge;
-                this.drawTexturedModalRect(energyBarX - energyBarWidth + (energyBarWidth * energyBarEnergyN), energyBarY, energyBarU - (energyBarWidth * 2), energyBarV, Math.round((float)energyBarWidth * spiritChargeScale), energyBarHeight);
-            }
-        }
+        this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, 10, 10);
+        this.drawBar(TextureManager.getTexture("GUIPetSpirit"), energyBarX, energyBarY, 0, energyBarWidth, energyBarHeight, this.summoningPedestal.capacity / this.summoningPedestal.capacityCharge, 10);
     }
 
     public void drawProgressBar() {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
 
-        int barWidth = 80;
-        int barHeight = 11;
+        int barWidth = (256 / 4) + 16;
+        int barHeight = (32 / 4) + 2;
         int barX = this.centerX + 2;
         int barY = this.windowY + 26;
-        int barU = 144;
-        int barV = 256 - (barHeight * 2);
-        this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
+        this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 
-        barWidth = Math.round((float)barWidth * ((float)this.summoningPedestal.summonProgress / this.summoningPedestal.summonProgressMax));
-        barV = barV + barHeight;
-
-        this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
+        float respawnNormal = ((float)this.summoningPedestal.summonProgress / this.summoningPedestal.summonProgressMax);
+        this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
     }
 
     public void sendCommandsToServer() {

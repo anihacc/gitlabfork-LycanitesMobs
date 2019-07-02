@@ -48,27 +48,21 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 		}
 
 		@Override
-		public void render(int index, int p_render_2_, int boxRight, int p_render_4_, int boxTop, int boxBottom, int p_render_7_, boolean p_render_8_, float p_render_9_) {
+		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(this.minionName);
 
-			int boxLeft = this.parentGUI.getLeft();
+			// Summon Level:
 			int levelBarWidth = 9;
 			int levelBarHeight = 9;
-			int levelBarX = boxLeft + 20;
-			int levelBarY = boxTop + boxBottom - levelBarHeight - 4;
-			int levelBarU = 256 - (levelBarWidth * 2);
-			int levelBarV = 256 - levelBarHeight;
+			int levelBarX = left + 20;
+			int levelBarY = top - levelBarHeight - 6;
 			int level = creatureInfo.summonCost;
-
-			// Summon Level:
-			Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIBeastiary"));
-			for(int currentLevel = 0; currentLevel < level; currentLevel++) {
-				this.parentGUI.screen.drawTexturedModalRect(levelBarX + (levelBarWidth * currentLevel), levelBarY, levelBarU, levelBarV, levelBarWidth, levelBarHeight);
+			if(level <= 10) {
+				this.parentGUI.screen.drawBar(TextureManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
 			}
 
-			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle().getFormattedText(), this.parentGUI.getLeft() + 20 , boxTop + 4, 0xFFFFFF);
-			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
-			this.parentGUI.screen.drawTexturedModalRect(this.parentGUI.getLeft() + 2, boxTop + 4, 0, 0, 16, 16, 16);
+			this.parentGUI.screen.getFontRenderer().drawString(creatureInfo.getTitle().getFormattedText(), left + 20 , top + 4, 0xFFFFFF);
+			this.parentGUI.screen.drawTexture(creatureInfo.getIcon(), left + 2, top + 4, 0, 1, 1, 16, 16);
 		}
 
 		@Override

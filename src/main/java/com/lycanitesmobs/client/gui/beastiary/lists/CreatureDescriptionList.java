@@ -114,7 +114,8 @@ public class CreatureDescriptionList extends BaseList {
 				effectText = new TranslationTextComponent("common.none");
 			text.appendText("\n")
 					.appendSibling(new TranslationTextComponent("creature.stat.effect"))
-					.appendText(": " + effectText);
+					.appendText(": ")
+					.appendSibling(effectText);
 		}
 		else {
 			text.appendText("\n")

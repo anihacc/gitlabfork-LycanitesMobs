@@ -309,7 +309,7 @@
     "creature.stat.effect": "Melee Effect",
     "_comment": "#############################",
     "block.lycanitesmobs.summoningpedestal": "Summoning Pedestal",
-    "block.lycanitesmobs.summoningpedestal.description": "This pedestal is able to create a constant summoning portal that will summon the selected minion. Some pedestals can be player owned and some not.",
+    "block.lycanitesmobs.summoningpedestal.description": "This pedestal is able to create a constant summoning portal that will summon the selected minion, it requires Redstone Dust or Blocks as fuel.",
     "_comment": "",
     "_comment": "",
     "_comment": "========== Equipment Forges ==========",

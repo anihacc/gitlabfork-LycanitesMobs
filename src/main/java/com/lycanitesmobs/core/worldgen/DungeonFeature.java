@@ -56,8 +56,8 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 						int yPos = worldWriter.getSeaLevel();
 						BlockPos dungeonPos = new ChunkPos(chunkPos.x + (dungeonSizeMax * x), chunkPos.z + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
 						dungeonInstance.setOrigin(dungeonPos);
-						extendedWorld.addDungeonInstance(dungeonInstance, new UUID(random.nextLong(), random.nextLong()));
 						dungeonInstance.init(world);
+						extendedWorld.addDungeonInstance(dungeonInstance, new UUID(random.nextLong(), random.nextLong()));
 						LycanitesMobs.logDebug("Dungeon", "Dungeon (Feature) Created: " + dungeonInstance.toString());
 					}
 				}
