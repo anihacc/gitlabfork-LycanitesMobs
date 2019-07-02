@@ -34,8 +34,11 @@ public class WorldSpawnCondition extends SpawnCondition {
 	/** How the biomes from the biome ids list works. Can be whitelist or blacklist. **/
 	public String biomeIdListType = "whitelist";
 
+	/** The list of specific biome ids that this creature spawns in. **/
+	public List<String> biomeIds = new ArrayList<>();
+
 	/** The list of specific biomes that this creature spawns in. **/
-	public List<Biome> biomes = new ArrayList<>();
+	public List<Biome> biomes = null;
 
     /** The minimum world days that must have gone by, can accept fractions such as 5.25 for 5 and a quarter days. **/
     public double worldDayMin = -1;
@@ -90,7 +93,11 @@ public class WorldSpawnCondition extends SpawnCondition {
 		if(json.has("biomeTagListType"))
 			this.biomeTagListType = json.get("biomeTagListType").getAsString();
 
-		this.biomes = JSONHelper.getJsonBiomes(json);
+		if(json.has("biomeIds")) {
+			this.biomeIds.clear();
+			this.biomes = null;
+			this.biomeIds = JSONHelper.getJsonStrings(json.get("biomeIds").getAsJsonArray());
+		}
 
 		if(json.has("biomeIdListType"))
 			this.biomeIdListType = json.get("biomeIdListType").getAsString();
@@ -218,7 +225,10 @@ public class WorldSpawnCondition extends SpawnCondition {
 			Biome biome = world.getBiome(position);
 
 			// Biome IDs:
-			if (!this.biomes.isEmpty()) {
+			if (!this.biomeIds.isEmpty()) {
+				if (this.biomes == null) {
+					this.biomes = JSONHelper.getBiomes(this.biomeIds);
+				}
 				if (this.biomes.contains(biome)) {
 					return !"blacklist".equalsIgnoreCase(this.biomeIdListType);
 				}

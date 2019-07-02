@@ -49,8 +49,11 @@ public class CreatureSpawn {
 	/** The list of biomes generated from the list of biome tags. **/
 	public List<Biome> biomesFromTags = null;
 
+	/** The list of specific biome ids that this creature spawns in. **/
+	public List<String> biomeIds = new ArrayList<>();
+
 	/** The list of specific biomes that this creature spawns in. **/
-	public List<Biome> biomes = new ArrayList<>();
+	public List<Biome> biomes = null;
 
 	/** If true, the biome check will be ignored completely by this creature. **/
 	public boolean ignoreBiome = false;
@@ -145,7 +148,11 @@ public class CreatureSpawn {
 			this.biomesFromTags = null;
 			this.biomeTags = JSONHelper.getJsonStrings(json.get("biomes").getAsJsonArray());
 		}
-		this.biomes = JSONHelper.getJsonBiomes(json);
+		if(json.has("biomeIds")) {
+			this.biomeIds.clear();
+			this.biomes = null;
+			this.biomeIds = JSONHelper.getJsonStrings(json.get("biomeIds").getAsJsonArray());
+		}
 
 		if(json.has("spawnWeight"))
 			this.spawnWeight = json.get("spawnWeight").getAsInt();
@@ -241,28 +248,31 @@ public class CreatureSpawn {
 
 
 	/**
-	 * Returns if any of the provided biomes are valid for this creature to spawn in.
-	 * @param biomes A list of biomes to find a match in.
-	 * @return True if at least one biome in the provided list is a valid biome.
+	 * Returns if the provided biome is valid for this creature to spawn in.
+	 * @param biome The biome to check.
+	 * @return True if a valid biome.
 	 */
-	public boolean isValidBiome(List<Biome> biomes) {
+	public boolean isValidBiome(Biome biome) {
 		if(this.ignoreBiome) {
 			return true;
 		}
 
 		// Biome Tags:
-		if(this.biomesFromTags == null) {
-			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
-		}
-		for(Biome validBiome : this.biomesFromTags) {
-			if(biomes.contains(validBiome)) {
+		if(!this.biomeTags.isEmpty()) {
+			if (this.biomesFromTags == null) {
+				this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
+			}
+			if (this.biomesFromTags.contains(biome)) {
 				return true;
 			}
 		}
 
 		// Biome IDs:
-		for(Biome validBiome : this.biomes) {
-			if(biomes.contains(validBiome)) {
+		if(!this.biomeIds.isEmpty()) {
+			if (this.biomes == null) {
+				this.biomes = JSONHelper.getBiomes(this.biomeIds);
+			}
+			if (this.biomes.contains(biome)) {
 				return true;
 			}
 		}

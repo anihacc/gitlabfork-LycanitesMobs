@@ -30,16 +30,19 @@ public class ThemeBlock {
 			LycanitesMobs.logWarning("", "Error adding Dungeon Theme Block: JSON value 'blockId' has not been set.");
 		}
 
-		if(json.has("weight"))
+		if(json.has("weight")) {
 			this.weight = json.get("weight").getAsInt();
+		}
 	}
 
 
 	public Block getBlock() {
-		if(this.block == null)
+		if(this.block == null) {
 			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockId));
-		if(this.block == null)
+		}
+		if(this.block == null) {
 			return Blocks.CAVE_AIR;
+		}
 		return this.block;
 	}
 
