@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.renderer.BufferBuilder;

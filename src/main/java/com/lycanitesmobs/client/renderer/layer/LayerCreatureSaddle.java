@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

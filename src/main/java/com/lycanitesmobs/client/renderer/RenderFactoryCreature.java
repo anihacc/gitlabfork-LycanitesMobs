@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;

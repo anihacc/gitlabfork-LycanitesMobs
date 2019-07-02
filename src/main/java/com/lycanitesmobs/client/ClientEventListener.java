@@ -1,4 +1,4 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.client;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.potion.Effects;

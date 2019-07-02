@@ -1,14 +1,13 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,8 +17,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.text.ITextComponent;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-import java.io.IOException;
 import java.net.URI;
 
 public abstract class BaseScreen extends Screen implements Button.IPressable {

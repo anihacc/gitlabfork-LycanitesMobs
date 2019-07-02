@@ -1,11 +1,10 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
 import com.lycanitesmobs.core.container.EquipmentSlot;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,7 +56,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	@Override
 	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 		this.xSize = 176;
 		this.ySize = 166;
 		int backX = (this.width - this.xSize) / 2;
@@ -74,7 +73,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	 */
 	protected void drawSlots(int backX, int backY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIEquipmentForge"));
+		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
 
 		BaseContainer container = this.getContainer();
 		List<Slot> forgeSlots = container.inventorySlots.subList(container.inventoryStart, container.inventoryFinish);

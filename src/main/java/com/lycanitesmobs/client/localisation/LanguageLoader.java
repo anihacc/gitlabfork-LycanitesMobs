@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.localisation;
+package com.lycanitesmobs.client.localisation;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IResourceManager;

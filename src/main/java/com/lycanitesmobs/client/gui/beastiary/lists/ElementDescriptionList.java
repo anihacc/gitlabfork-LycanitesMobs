@@ -1,16 +1,14 @@
-package com.lycanitesmobs.core.gui.beastiary.lists;
+package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.core.gui.widgets.BaseList;
-import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
-import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+import com.lycanitesmobs.client.gui.widgets.BaseList;
+import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ElementDescriptionList extends BaseList {

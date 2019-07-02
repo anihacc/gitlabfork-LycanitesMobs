@@ -1,6 +1,5 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -8,26 +7,14 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.model.EquipmentPartModelLoader;
-import com.lycanitesmobs.core.model.projectile.ModelAetherwave;
-import com.lycanitesmobs.core.model.projectile.ModelChaosOrb;
-import com.lycanitesmobs.core.model.projectile.ModelCrystalShard;
-import com.lycanitesmobs.core.model.projectile.ModelLightBall;
+import com.lycanitesmobs.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class RenderRegister {
 
-    public void registerModels() {
-        // Old Model Projectiles:
-        AssetManager.registerOldProjectileModel("lightball", ModelLightBall.class);
-        AssetManager.registerOldProjectileModel("crystalshard", ModelCrystalShard.class);
-        AssetManager.registerOldProjectileModel("aetherwave", ModelAetherwave.class);
-        AssetManager.registerOldProjectileModel("chaosorb", ModelChaosOrb.class);
-    }
-
     public void registerModelLoaders() {
-        ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader());
+        ModelLoaderRegistry.registerLoader(new ModelLoader());
     }
 
     public void registerRenderFactories() {

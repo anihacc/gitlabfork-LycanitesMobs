@@ -1,8 +1,9 @@
 package com.lycanitesmobs.client.model;
 
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -15,8 +16,8 @@ public class ModelEquipmentPart extends ModelItemBase {
 	// ==================================================
 	//                    Constructor
 	// ==================================================
-	public ModelEquipmentPart(String name, ModInfo groupInfo) {
-		this.initModel(name, groupInfo, "equipment/" + name.replace("equipmentpart_", ""));
+	public ModelEquipmentPart(ItemEquipmentPart equipmentPart) {
+		this.initModel(equipmentPart.itemName, equipmentPart.modInfo, "equipment/" + equipmentPart.itemName.replace("equipmentpart_", ""));
 	}
 
 
@@ -34,7 +35,11 @@ public class ModelEquipmentPart extends ModelItemBase {
 		if(layer != null && layer.textureSuffix != null && !layer.textureSuffix.isEmpty()) {
 			suffix = "_" + layer.textureSuffix;
 		}
-		return itemEquipmentPart.getTexture(itemStack, suffix);
+
+		String textureName = itemEquipmentPart.itemName.toLowerCase().replace("equipmentpart_", "") + suffix;
+		if(TextureManager.getTexture(textureName) == null)
+			TextureManager.addTexture(textureName, itemEquipmentPart.modInfo, "textures/equipment/" + textureName + ".png");
+		return TextureManager.getTexture(textureName);
 	}
 
 

@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.gui.beastiary.lists;
+package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.core.gui.beastiary.ElementsBeastiaryScreen;
-import com.lycanitesmobs.core.gui.widgets.BaseList;
-import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+import com.lycanitesmobs.client.gui.beastiary.ElementsBeastiaryScreen;
+import com.lycanitesmobs.client.gui.widgets.BaseList;
+import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 

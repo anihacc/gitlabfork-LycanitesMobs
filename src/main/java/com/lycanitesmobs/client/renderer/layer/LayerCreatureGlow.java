@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -37,9 +37,9 @@ public class LayerCreatureGlow extends LayerCreatureBase {
 			textureName += "_" + entity.getSubspecies().color;
 		}
 		textureName += "_glow";
-		if(AssetManager.getTexture(textureName) == null)
-			AssetManager.addTexture(textureName, entity.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
-		return AssetManager.getTexture(textureName);
+		if(TextureManager.getTexture(textureName) == null)
+			TextureManager.addTexture(textureName, entity.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
+		return TextureManager.getTexture(textureName);
     }
 
     @Override

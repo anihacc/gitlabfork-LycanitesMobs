@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.gui.buttons;
+package com.lycanitesmobs.client.gui.buttons;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -32,7 +32,7 @@ public class CreatureButton extends ButtonBase {
 
 		int buttonX = this.x;
 		int buttonY = this.y;
-		Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+		Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
 		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 - (this.isHovered() ? 32 : 0), this.width, this.height);
 		if(this.creatureInfo != null) {
 			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());

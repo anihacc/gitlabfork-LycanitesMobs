@@ -1,12 +1,12 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureFilterList;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureList;
-import com.lycanitesmobs.core.gui.beastiary.lists.PetTypeList;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureFilterList;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureList;
+import com.lycanitesmobs.client.gui.beastiary.lists.PetTypeList;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.gui.widget.Widget;
@@ -220,12 +220,12 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int spiritReserved = (int)Math.floor((double)this.playerExt.spiritReserved / this.playerExt.spiritCharge);
 		int spiritAvailable = (int)Math.floor((double)this.playerExt.spirit / this.playerExt.spiritCharge);
 		float spiritFilling = ((float)this.playerExt.spirit / this.playerExt.spiritCharge) - spiritAvailable;
-		this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), barX, nextY, 0, 9, 9, spiritMax, 10);
-		this.drawBar(AssetManager.getTexture("GUIPetSpirit"), barX, nextY, 0, 9, 9, spiritAvailable, 10);
+		this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), barX, nextY, 0, 9, 9, spiritMax, 10);
+		this.drawBar(TextureManager.getTexture("GUIPetSpirit"), barX, nextY, 0, 9, 9, spiritAvailable, 10);
 		if(spiritFilling > 0) {
-			this.drawTexture(AssetManager.getTexture("GUIPetSpiritFilling"), barX + (9 * spiritAvailable), nextY, 0, spiritFilling, 1, spiritFilling * 9, 9);
+			this.drawTexture(TextureManager.getTexture("GUIPetSpiritFilling"), barX + (9 * spiritAvailable), nextY, 0, spiritFilling, 1, spiritFilling * 9, 9);
 		}
-		this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), barX, nextY, 0, 9, 9, spiritReserved, -10);
+		this.drawBar(TextureManager.getTexture("GUIPetSpiritUsed"), barX, nextY, 0, 9, 9, spiritReserved, -10);
 
 		// Creature Display:
 		if(this.playerExt.selectedPet != null) {
@@ -233,7 +233,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.spirit").getFormattedText() + ": ";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
-			this.drawLevel(this.playerExt.selectedPet.getCreatureInfo(), AssetManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
+			this.drawLevel(this.playerExt.selectedPet.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Health:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
@@ -248,14 +248,14 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			int barY = nextY - 1;
 			int barWidth = (256 / 4) + 16;
 			int barHeight = (32 / 4) + 2;
-			this.drawTexture(AssetManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+			this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 			if(this.playerExt.selectedPet.respawnTime <= 0) {
 				float healthNormal = this.playerExt.selectedPet.getHealth() / this.playerExt.selectedPet.getMaxHealth();
-				this.drawTexture(AssetManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
+				this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 			}
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
-				this.drawTexture(AssetManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
+				this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
 			}
 		}
 

@@ -1,11 +1,11 @@
-package com.lycanitesmobs.core.gui.overlays;
+package com.lycanitesmobs.client.gui.overlays;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.gui.BaseGui;
+import com.lycanitesmobs.client.gui.BaseGui;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -78,7 +78,7 @@ public class BaseOverlay extends BaseGui {
                 || (this.mc.player.getHeldItem(Hand.OFF_HAND).getItem() instanceof ItemStaffSummoning)
                 )) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+			this.mc.getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
 			
 			int barYSpace = 10;
 			int barXSpace = -1;

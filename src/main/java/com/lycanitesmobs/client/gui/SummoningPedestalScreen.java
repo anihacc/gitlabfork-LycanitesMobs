@@ -1,12 +1,12 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
-import com.lycanitesmobs.core.gui.buttons.MainTab;
-import com.lycanitesmobs.core.gui.widgets.SummoningPedestalList;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.buttons.MainTab;
+import com.lycanitesmobs.client.gui.widgets.SummoningPedestalList;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.Minecraft;
@@ -269,7 +269,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
 
     public void drawProgressBar() {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
 
         int barWidth = 80;
         int barHeight = 11;
@@ -316,6 +316,6 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     protected ResourceLocation getTexture() {
-        return AssetManager.getTexture("GUIMinionLg");
+        return TextureManager.getTexture("GUISummoningPedestal");
     }
 }

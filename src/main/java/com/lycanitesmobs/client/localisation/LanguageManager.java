@@ -1,19 +1,15 @@
-package com.lycanitesmobs.core.localisation;
+package com.lycanitesmobs.client.localisation;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.FileLoader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;

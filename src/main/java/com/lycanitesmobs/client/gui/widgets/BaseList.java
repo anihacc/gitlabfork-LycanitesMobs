@@ -1,6 +1,5 @@
-package com.lycanitesmobs.core.gui.widgets;
+package com.lycanitesmobs.client.gui.widgets;
 
-import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.list.ExtendedList;

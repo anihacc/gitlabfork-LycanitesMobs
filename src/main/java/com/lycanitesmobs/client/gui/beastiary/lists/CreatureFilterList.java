@@ -1,11 +1,9 @@
-package com.lycanitesmobs.core.gui.beastiary.lists;
+package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.core.gui.widgets.BaseList;
-import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
-import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+import com.lycanitesmobs.client.gui.widgets.BaseList;
+import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureType;
-import net.minecraft.client.renderer.Tessellator;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

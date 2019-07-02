@@ -1,10 +1,10 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureDescriptionList;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureList;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureTypeList;
-import com.lycanitesmobs.core.gui.beastiary.lists.SubspeciesList;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureDescriptionList;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureList;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureTypeList;
+import com.lycanitesmobs.client.gui.beastiary.lists.SubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.entity.player.PlayerEntity;
@@ -109,14 +109,14 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.cost").getFormattedText() + ": " + "\u00A7r";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
-			this.drawLevel(creatureInfo, AssetManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
+			this.drawLevel(creatureInfo, TextureManager.getTexture("GUIPetLevel"),nextX + this.getFontRenderer().getStringWidth(text), nextY);
 
 			// Knowledge Rank:
 			nextY += 2 + this.getFontRenderer().getWordWrappedHeight(text, width);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getFormattedText() + ": " + "\u00A7r";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
-			this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
-			this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+			this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
+			this.drawBar(TextureManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
 		}
 
 		// Creature Type Display:

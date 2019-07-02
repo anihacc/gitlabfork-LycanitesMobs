@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

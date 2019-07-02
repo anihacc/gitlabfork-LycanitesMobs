@@ -1,5 +1,7 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.core;
 
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.DisplayEffectsScreen;
@@ -20,7 +22,7 @@ public class EffectBase extends Effect {
 		super(badEffect ? EffectType.HARMFUL : EffectType.BENEFICIAL, color);
 		this.name = name;
 		this.setRegistryName(LycanitesMobs.MODID, name);
-		AssetManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/mob_effect/" + name + ".png");
+		TextureManager.addTexture("effect." + name, LycanitesMobs.modInfo, "textures/mob_effect/" + name + ".png");
 	}
 	
 	
@@ -39,7 +41,7 @@ public class EffectBase extends Effect {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, int x, int y, float z) {
-		ResourceLocation texture = AssetManager.getTexture("effect." + this.name);
+		ResourceLocation texture = TextureManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}
@@ -51,7 +53,7 @@ public class EffectBase extends Effect {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHUDEffect(EffectInstance effect, AbstractGui gui, int x, int y, float z, float alpha) {
-		ResourceLocation texture = AssetManager.getTexture("effect." + this.name);
+		ResourceLocation texture = TextureManager.getTexture("effect." + this.name);
 		if(texture == null) {
 			return;
 		}

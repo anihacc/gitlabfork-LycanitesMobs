@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

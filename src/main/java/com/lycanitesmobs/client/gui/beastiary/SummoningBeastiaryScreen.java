@@ -1,13 +1,13 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.gui.beastiary.lists.CreatureList;
-import com.lycanitesmobs.core.gui.beastiary.lists.SubspeciesList;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
-import com.lycanitesmobs.core.gui.buttons.CreatureButton;
+import com.lycanitesmobs.client.gui.beastiary.lists.CreatureList;
+import com.lycanitesmobs.client.gui.beastiary.lists.SubspeciesList;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -214,10 +214,10 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		int focusMax = Math.round((float)this.playerExt.summonFocusMax / this.playerExt.summonFocusCharge);
 		int focusAvailable = (int)Math.floor((double)this.playerExt.summonFocus / this.playerExt.summonFocusCharge);
 		float focusFilling = ((float)this.playerExt.summonFocus / this.playerExt.summonFocusCharge) - focusAvailable;
-		this.drawBar(AssetManager.getTexture("GUIPetSpiritEmpty"), barX, nextY, 0, 9, 9, focusMax, 10);
-		this.drawBar(AssetManager.getTexture("GUIPetSpiritUsed"), barX, nextY, 0, 9, 9, focusAvailable, 10);
+		this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), barX, nextY, 0, 9, 9, focusMax, 10);
+		this.drawBar(TextureManager.getTexture("GUIPetSpiritUsed"), barX, nextY, 0, 9, 9, focusAvailable, 10);
 		if(focusFilling > 0) {
-			this.drawTexture(AssetManager.getTexture("GUIPetSpiritFilling"), barX + (9 * focusAvailable), nextY, 0, focusFilling, 1, focusFilling * 9, 9);
+			this.drawTexture(TextureManager.getTexture("GUIPetSpiritFilling"), barX + (9 * focusAvailable), nextY, 0, focusFilling, 1, focusFilling * 9, 9);
 		}
 
 		// Creature Display:
@@ -226,7 +226,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.focus").getFormattedText() + ": ";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
-			this.drawLevel(selectedCreature, AssetManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
+			this.drawLevel(selectedCreature, TextureManager.getTexture("GUIPetLevel"), nextX + this.getFontRenderer().getStringWidth(text), nextY);
 		}
 
 		// Base Display:

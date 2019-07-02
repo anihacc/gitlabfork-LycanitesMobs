@@ -1,14 +1,13 @@
-package com.lycanitesmobs.core.gui.beastiary.lists;
+package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
-import com.lycanitesmobs.core.gui.widgets.BaseList;
-import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.client.gui.widgets.BaseList;
+import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.config.GuiUtils;
 
 public class CreatureDescriptionList extends BaseList {
 	public CreatureKnowledge creatureKnowledge;

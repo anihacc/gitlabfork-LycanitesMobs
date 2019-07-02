@@ -1,13 +1,13 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.gui.BaseScreen;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.BaseScreen;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -21,7 +21,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 
 public abstract class BeastiaryScreen extends BaseScreen {
 	public enum Page {
@@ -166,7 +165,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 	@Override
 	public void renderBackground(int mouseX, int mouseY, float partialTicks) {
-		this.drawTexture(AssetManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
+		this.drawTexture(TextureManager.getTexture("GUIBeastiaryBackground"), this.windowX, this.windowY, this.zLevel, 1, 1, this.windowWidth, this.windowHeight);
 	}
 
 	@Override

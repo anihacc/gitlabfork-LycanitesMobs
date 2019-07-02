@@ -1,12 +1,12 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.model.ModelCreatureBase;
+import com.lycanitesmobs.client.model.ModelCreatureBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,7 +23,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
   	//                    Constructor
   	// ==================================================
     public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-    	super(renderManager, AssetManager.getCreatureModel(CreatureManager.getInstance().getCreature(entityID)), shadowSize);
+    	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
 		
     	this.defaultModel = this.field_77045_g;
 		ModelCreatureBase modelCreatureBase = this.field_77045_g;
@@ -51,7 +51,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	@Override //doRender
 	public void func_76986_a(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
-			this.field_77045_g = AssetManager.getCreatureModel(entity);
+			this.field_77045_g = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

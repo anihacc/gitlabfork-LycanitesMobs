@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
@@ -24,7 +24,7 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 		// Old Projectile Obj Models:
 		if(this.oldModel) {
 			try {
-				return new RenderProjectileModel(this.oldProjectileName, manager);
+				return new RenderProjectileModel(manager, this.oldProjectileName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.core.renderer.layer.LayerItem;
+import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;

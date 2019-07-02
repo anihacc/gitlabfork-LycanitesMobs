@@ -1,7 +1,7 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.RenderProjectileModel;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.entity.Entity;

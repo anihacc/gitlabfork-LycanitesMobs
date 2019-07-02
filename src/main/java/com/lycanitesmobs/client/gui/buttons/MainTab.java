@@ -1,7 +1,7 @@
-package com.lycanitesmobs.core.gui.buttons;
+package com.lycanitesmobs.client.gui.buttons;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.beastiary.IndexBeastiaryScreen;
+import com.lycanitesmobs.client.gui.beastiary.IndexBeastiaryScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

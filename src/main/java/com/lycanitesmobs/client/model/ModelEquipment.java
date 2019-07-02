@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.model;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.ModelManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.renderer.EquipmentRenderer;
@@ -111,7 +112,7 @@ public class ModelEquipment implements IItemModelRenderer {
 		}
 
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)partStack.getItem();
-		ModelItemBase modelItemBase = AssetManager.getItemModel(itemEquipmentPart.itemName);
+		ModelItemBase modelItemBase = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
 		if(modelItemBase == null) {
 			return null;
 		}

@@ -6,7 +6,7 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 
-public class EquipmentPartModelLoader implements ICustomModelLoader {
+public class ModelLoader implements ICustomModelLoader {
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
 		// Loaded by ModelManager instead.
@@ -14,15 +14,12 @@ public class EquipmentPartModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		if(LycanitesMobs.MODID.equals(modelLocation.getNamespace()) && "equipmentpart".equals(modelLocation.getPath())) {
-			return true;
-		}
-		return false;
+		return LycanitesMobs.MODID.equals(modelLocation.getNamespace());
 	}
 
 	@Override
 	public IUnbakedModel loadModel(ResourceLocation modelLocation) {
-		LycanitesMobs.logDebug("", "Equipment Part Loader: " + modelLocation);
+		LycanitesMobs.logDebug("", "Model Loader Loading: " + modelLocation);
 		return null;
 	}
 }

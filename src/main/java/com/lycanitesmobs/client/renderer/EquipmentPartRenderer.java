@@ -1,11 +1,10 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.ModelManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.core.model.ModelEquipmentPart;
-import com.lycanitesmobs.core.model.ModelItemBase;
-import com.lycanitesmobs.core.renderer.layer.LayerItem;
+import com.lycanitesmobs.client.model.ModelItemBase;
+import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -28,10 +27,9 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		Hand hand = null;
 
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)itemStack.getItem();
-		ModelItemBase modelItemBase = AssetManager.getItemModel(itemEquipmentPart.itemName);
+		ModelItemBase modelItemBase = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
 		if(modelItemBase == null) {
-			modelItemBase = new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo);
-			AssetManager.addItemModel(itemEquipmentPart.itemName, modelItemBase);
+			return;
 		}
 		this.renderLayers.clear();
 		modelItemBase.addCustomLayers(this);

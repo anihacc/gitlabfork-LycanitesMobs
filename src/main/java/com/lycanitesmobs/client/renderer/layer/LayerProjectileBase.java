@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.renderer.layer;
+package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.model.ModelProjectileBase;
-import com.lycanitesmobs.core.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.model.ModelProjectileBase;
+import com.lycanitesmobs.client.renderer.RenderProjectileModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;

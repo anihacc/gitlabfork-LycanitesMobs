@@ -1,8 +1,9 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.model.ModelEquipment;
-import com.lycanitesmobs.core.renderer.layer.LayerItem;
+import com.lycanitesmobs.client.model.ModelEquipment;
+import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
@@ -29,7 +30,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		GlStateManager.rotatef(90, 1, 0, 0);
 		GlStateManager.rotatef(-100, 0, 0, 1);
 		GlStateManager.translatef(0F, -1.5F, 0F);
-		ModelEquipment modelEquipment = new ModelEquipment();
+		ModelEquipment modelEquipment = ModelManager.getInstance().getEquipmentModel();
 
 		float loop = 0;
 		if(Minecraft.getInstance().player != null) {

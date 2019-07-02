@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.gui.buttons;
+package com.lycanitesmobs.client.gui.buttons;
 
 import net.minecraft.util.ResourceLocation;
 

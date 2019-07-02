@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.gui.widgets;
+package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.ClientManager;
 import com.mojang.blaze3d.platform.GlStateManager;

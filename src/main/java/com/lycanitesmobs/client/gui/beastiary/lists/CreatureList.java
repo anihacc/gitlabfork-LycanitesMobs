@@ -1,10 +1,10 @@
-package com.lycanitesmobs.core.gui.beastiary.lists;
+package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.beastiary.BeastiaryScreen;
-import com.lycanitesmobs.core.gui.widgets.BaseList;
-import com.lycanitesmobs.core.gui.widgets.BaseListEntry;
+import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
+import com.lycanitesmobs.client.gui.widgets.BaseList;
+import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
@@ -191,7 +191,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 
 				// Level:
 				if (this.parentList.listType == Type.SUMMONABLE) {
-					this.parentList.screen.drawLevel(this.creatureInfo, AssetManager.getTexture("GUIPetLevel"), left + 18, top + 10);
+					this.parentList.screen.drawLevel(this.creatureInfo, TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
 				}
 
 				// Icon:
@@ -215,7 +215,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 
 				// Level:
 				if (this.parentList.listType == Type.PET || this.parentList.listType == Type.MOUNT) {
-					this.parentList.screen.drawLevel(this.petEntry.getCreatureInfo(), AssetManager.getTexture("GUIPetLevel"), left + 18, top + 10);
+					this.parentList.screen.drawLevel(this.petEntry.getCreatureInfo(), TextureManager.getTexture("GUIPetLevel"), left + 18, top + 10);
 				}
 
 				// Icon:

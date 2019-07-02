@@ -1,7 +1,7 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.core.gui.beastiary.lists.ElementDescriptionList;
-import com.lycanitesmobs.core.gui.beastiary.lists.ElementList;
+import com.lycanitesmobs.client.gui.beastiary.lists.ElementDescriptionList;
+import com.lycanitesmobs.client.gui.beastiary.lists.ElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;

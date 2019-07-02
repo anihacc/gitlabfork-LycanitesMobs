@@ -1,13 +1,14 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
 import com.google.common.collect.Lists;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.ModelManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.model.ModelProjectileBase;
-import com.lycanitesmobs.core.model.ModelProjectileObj;
-import com.lycanitesmobs.core.renderer.layer.LayerProjectileBase;
+import com.lycanitesmobs.client.model.ModelProjectileBase;
+import com.lycanitesmobs.client.model.ModelProjectileObj;
+import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -31,14 +32,14 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public RenderProjectileModel(String entityID, EntityRendererManager renderManager) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public RenderProjectileModel(EntityRendererManager renderManager, String projectileName) {
     	super(renderManager);
-		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(entityID);
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo != null) {
-			this.renderModel = AssetManager.getProjectileModel(projectileInfo);
+			this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
 		}
     	else {
-			this.renderModel = AssetManager.getOldProjectileModel(entityID);
+			this.renderModel = ModelManager.getInstance().getOldProjectileModel(projectileName);
 		}
     	if(renderModel == null) {
     		return;

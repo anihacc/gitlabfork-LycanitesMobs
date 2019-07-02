@@ -1,12 +1,12 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.gui.buttons.ButtonBase;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
@@ -126,7 +126,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	@Override
 	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         this.xSize = 176;
         this.ySize = 166;
         int backX = (this.width - this.xSize) / 2;
@@ -140,7 +140,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawFrames(int backX, int backY, int mouseX, int mouseY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         
         // Status Frame:
         int statusWidth = 90;
@@ -156,7 +156,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawHealth(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         
         // Empty:
         int barWidth = 80;
@@ -175,7 +175,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	protected void drawSlots(int backX, int backY) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIInventoryCreature"));
+        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
         
 		BaseContainer container = this.getContainer();
 		List<Slot> creatureSlots = container.inventorySlots.subList(container.specialStart, container.inventoryFinish + 1);

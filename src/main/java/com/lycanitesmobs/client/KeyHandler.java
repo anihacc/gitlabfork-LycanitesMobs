@@ -1,11 +1,13 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.client;
 
-import com.lycanitesmobs.core.gui.MinionSelectionOverlay;
-import com.lycanitesmobs.core.gui.buttons.TabManager;
-import com.lycanitesmobs.core.gui.beastiary.CreaturesBeastiaryScreen;
-import com.lycanitesmobs.core.gui.beastiary.IndexBeastiaryScreen;
-import com.lycanitesmobs.core.gui.beastiary.PetsBeastiaryScreen;
-import com.lycanitesmobs.core.gui.beastiary.SummoningBeastiaryScreen;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.gui.MinionSelectionOverlay;
+import com.lycanitesmobs.client.gui.buttons.TabManager;
+import com.lycanitesmobs.client.gui.beastiary.CreaturesBeastiaryScreen;
+import com.lycanitesmobs.client.gui.beastiary.IndexBeastiaryScreen;
+import com.lycanitesmobs.client.gui.beastiary.PetsBeastiaryScreen;
+import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.network.MessagePlayerAttack;
 import com.lycanitesmobs.core.network.MessagePlayerControl;
 import net.minecraft.client.Minecraft;

@@ -1,6 +1,9 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.core;
 
 import com.google.common.base.Predicate;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.FearEntity;

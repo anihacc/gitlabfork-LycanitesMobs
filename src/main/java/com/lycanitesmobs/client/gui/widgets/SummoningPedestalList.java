@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.gui.widgets;
+package com.lycanitesmobs.client.gui.widgets;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.gui.SummoningPedestalScreen;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.client.gui.SummoningPedestalScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.client.Minecraft;
@@ -61,7 +61,7 @@ public class SummoningPedestalList extends BaseList<SummoningPedestalScreen> {
 			int level = creatureInfo.summonCost;
 
 			// Summon Level:
-			Minecraft.getInstance().getTextureManager().bindTexture(AssetManager.getTexture("GUIBeastiary"));
+			Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIBeastiary"));
 			for(int currentLevel = 0; currentLevel < level; currentLevel++) {
 				this.parentGUI.screen.drawTexturedModalRect(levelBarX + (levelBarWidth * currentLevel), levelBarY, levelBarU, levelBarV, levelBarWidth, levelBarHeight);
 			}
