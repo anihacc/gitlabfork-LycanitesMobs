@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class ButtonBase extends Button {
-    public byte buttonId;
+    public int buttonId;
     public int zLevel = 0;
     public FontRenderer fontRenderer;
 
@@ -17,7 +17,7 @@ public class ButtonBase extends Button {
     // ==================================================
     public ButtonBase(int buttonId, int x, int y, int width, int height, String text, Button.IPressable pressable) {
         super(x, y, width, height, text, pressable);
-        this.buttonId = (byte)buttonId;
+        this.buttonId = buttonId;
         this.fontRenderer = Minecraft.getInstance().fontRenderer;
     }
 

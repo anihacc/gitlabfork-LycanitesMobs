@@ -3587,7 +3587,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     // ========== Perform GUI Command ==========
-    public void performGUICommand(PlayerEntity player, byte guiCommandID) {
+    public void performGUICommand(PlayerEntity player, int guiCommandID) {
     	scheduleGUIRefresh();
     }
     

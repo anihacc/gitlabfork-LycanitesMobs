@@ -323,7 +323,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     
     // ========== Perform GUI Command ==========
     @Override
-    public void performGUICommand(PlayerEntity player, byte guiCommandID) {
+    public void performGUICommand(PlayerEntity player, int guiCommandID) {
     	if(!this.petControlsEnabled())
     		return;
     	if(player != this.getOwner())

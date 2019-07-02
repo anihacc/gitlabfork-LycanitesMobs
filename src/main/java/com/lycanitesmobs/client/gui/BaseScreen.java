@@ -97,7 +97,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * Called when a Button Base is pressed providing the press button's id.
 	 * @param buttonId The id of the button pressed.
 	 */
-	public abstract void actionPerformed(byte buttonId);
+	public abstract void actionPerformed(int buttonId);
 
 	/**
 	 * Returns the font renderer.

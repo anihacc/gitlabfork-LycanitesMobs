@@ -41,8 +41,10 @@ public class CreatureTypeList extends CreatureFilterList {
 
 	@Override
 	public void setSelected(@Nullable BaseListEntry entry) {
-		if(entry instanceof Entry)
-			this.screen.playerExt.selectedCreatureType = ((Entry)entry).creatureType;
+		if(entry instanceof Entry) {
+			this.screen.playerExt.selectedCreatureType = ((Entry) entry).creatureType;
+			this.screen.playerExt.selectedCreature = null;
+		}
 		super.setSelected(entry);
 	}
 

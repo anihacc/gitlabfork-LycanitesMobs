@@ -85,7 +85,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void actionPerformed(byte buttonId) {
+	public void actionPerformed(int buttonId) {
 		if(buttonId == 100) {
 			try {
 				this.openURI(new URI(LycanitesMobs.website));

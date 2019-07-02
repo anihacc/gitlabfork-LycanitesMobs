@@ -189,7 +189,7 @@ public class SummoningPedestalScreen extends BaseContainerScreen<SummoningPedest
     }
 
     @Override
-    public void actionPerformed(byte buttonId) {
+    public void actionPerformed(int buttonId) {
         // Inactive:
         if(!this.hasSelectedPet()) {
             return;

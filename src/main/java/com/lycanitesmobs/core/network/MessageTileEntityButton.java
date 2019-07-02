@@ -11,11 +11,11 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class MessageTileEntityButton {
-	public byte buttonId;
+	public int buttonId;
 	public BlockPos tileEntityPos;
 
 	public MessageTileEntityButton() {}
-	public MessageTileEntityButton(byte buttonId, BlockPos tileEntityPos) {
+	public MessageTileEntityButton(int buttonId, BlockPos tileEntityPos) {
 		this.buttonId = buttonId;
 		this.tileEntityPos = tileEntityPos;
 	}
@@ -44,7 +44,7 @@ public class MessageTileEntityButton {
 	 */
 	public static MessageTileEntityButton decode(PacketBuffer packet) {
 		MessageTileEntityButton message = new MessageTileEntityButton();
-		message.buttonId = packet.readByte();
+		message.buttonId = packet.readInt();
 		message.tileEntityPos = new BlockPos(packet.readInt(), packet.readInt(), packet.readInt());
 		return message;
 	}
@@ -53,7 +53,7 @@ public class MessageTileEntityButton {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessageTileEntityButton message, PacketBuffer packet) {
-		packet.writeByte(message.buttonId);
+		packet.writeInt(message.buttonId);
 		packet.writeInt(message.tileEntityPos.getX());
 		packet.writeInt(message.tileEntityPos.getY());
 		packet.writeInt(message.tileEntityPos.getZ());

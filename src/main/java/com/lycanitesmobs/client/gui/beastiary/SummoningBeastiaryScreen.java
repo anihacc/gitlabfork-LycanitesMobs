@@ -145,10 +145,10 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 					// Actions:
 					if (button.buttonId == BaseCreatureEntity.PET_COMMAND_ID.PVP.id + this.petCommandIdStart) {
 						if (this.playerExt.getSelectedSummonSet().getPVP()) {
-							button.setMessage(new TranslationTextComponent("gui.pet.pvp") + ": " + new TranslationTextComponent("common.yes"));
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getFormattedText() + ": " + new TranslationTextComponent("common.yes").getFormattedText());
 						}
 						else {
-							button.setMessage(new TranslationTextComponent("gui.pet.pvp") + ": " + new TranslationTextComponent("common.no"));
+							button.setMessage(new TranslationTextComponent("gui.pet.pvp").getFormattedText() + ": " + new TranslationTextComponent("common.no").getFormattedText());
 						}
 					}
 
@@ -248,7 +248,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 	}
 
 	@Override
-	public void actionPerformed(byte buttonId) {
+	public void actionPerformed(int buttonId) {
 		// Summoning Slots:
 		if(buttonId >= this.summoningSlotIdStart && buttonId < this.petCommandIdStart) {
 			this.playerExt.setSelectedSummonSet(buttonId - this.summoningSlotIdStart);

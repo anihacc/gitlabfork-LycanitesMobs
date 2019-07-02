@@ -74,7 +74,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
      * Called when a GUI opened by this Tile Entity has a button pressed.
      * @param buttonId The ID of the button pressed.
      */
-    public void onGuiButton(byte buttonId) {}
+    public void onGuiButton(int buttonId) {}
 
     /**
      * Reads from saved NBT data.

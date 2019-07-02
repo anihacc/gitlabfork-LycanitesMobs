@@ -102,7 +102,7 @@ public class MinionSelectionOverlay extends BaseScreen {
 	}
 	
 	@Override
-	public void actionPerformed(byte buttonId) {
+	public void actionPerformed(int buttonId) {
 		this.playerExt.setSelectedSummonSet(buttonId);
 		MessageSummonSetSelection message = new MessageSummonSetSelection(this.playerExt);
 		LycanitesMobs.packetHandler.sendToServer(message);

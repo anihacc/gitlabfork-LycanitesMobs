@@ -201,7 +201,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	}
 
 	@Override
-	public void actionPerformed(byte buttonId) {
+	public void actionPerformed(int buttonId) {
 		MessageEntityGUICommand message = new MessageEntityGUICommand(buttonId, this.creature);
 		LycanitesMobs.packetHandler.sendToServer(message);
 	}

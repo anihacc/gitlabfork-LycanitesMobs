@@ -122,6 +122,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		// Creature Type Display:
 		else if(this.playerExt.selectedCreatureType != null) {
 			// Description:
+			nextY += this.getFontRenderer().getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth) + 2;
 			String text = this.playerExt.selectedCreatureType.getTitle().getFormattedText();
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 
@@ -130,11 +131,12 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			text = new TranslationTextComponent("gui.beastiary.creatures.descovered").getFormattedText() + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawStringWithShadow(text, nextX, nextY, 0xFFFFFF);
 		}
 
 		// Base Display:
 		else {
+			nextY += this.getFontRenderer().getWordWrappedHeight("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA", this.colRightWidth) + 2;
 			String text = new TranslationTextComponent("gui.beastiary.creatures.select").getFormattedText();
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}

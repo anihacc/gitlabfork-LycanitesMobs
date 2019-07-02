@@ -12,10 +12,10 @@ import java.util.function.Supplier;
 
 public class MessageEntityGUICommand {
 	int entityID;
-	public byte guiCommandID;
+	public int guiCommandID;
 	
 	public MessageEntityGUICommand() {}
-	public MessageEntityGUICommand(byte guiCommandID, Entity entity) {
+	public MessageEntityGUICommand(int guiCommandID, Entity entity) {
 		this.entityID = entity.getEntityId();
 		this.guiCommandID = guiCommandID;
 	}
@@ -45,7 +45,7 @@ public class MessageEntityGUICommand {
 	public static MessageEntityGUICommand decode(PacketBuffer packet) {
 		MessageEntityGUICommand message = new MessageEntityGUICommand();
 		message.entityID = packet.readInt();
-		message.guiCommandID = packet.readByte();
+		message.guiCommandID = packet.readInt();
 		return message;
 	}
 	
@@ -54,7 +54,7 @@ public class MessageEntityGUICommand {
 	 */
 	public static void encode(MessageEntityGUICommand message, PacketBuffer packet) {
 		packet.writeInt(message.entityID);
-		packet.writeByte(message.guiCommandID);
+		packet.writeInt(message.guiCommandID);
 	}
 	
 }

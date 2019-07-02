@@ -209,13 +209,13 @@ public class Subspecies {
 	public ITextComponent getTitle() {
 		ITextComponent subspeciesName = new StringTextComponent("");
 		if(this.color != null) {
-			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.color + ".name"));
+			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.color));
 		}
 		if(this.skin != null) {
 			if(!subspeciesName.getFormattedText().equals("")) {
 				subspeciesName.appendText(" ");
 			}
-			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.skin + ".name"));
+			subspeciesName.appendSibling(new TranslationTextComponent("subspecies." + this.skin));
 		}
         return subspeciesName;
     }

@@ -172,7 +172,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	}
 
 	@Override
-	public void onGuiButton(byte buttonId) {
+	public void onGuiButton(int buttonId) {
 		LycanitesMobs.logDebug("", "Received button packet id: " + buttonId);
 	}
 

@@ -125,7 +125,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
     }
     
 	@Override
-	public void actionPerformed(byte buttonid) {
+	public void actionPerformed(int buttonid) {
 		MessageTileEntityButton message = new MessageTileEntityButton(buttonid, this.equipmentForge.getPos());
 		LycanitesMobs.packetHandler.sendToServer(message);
 	}

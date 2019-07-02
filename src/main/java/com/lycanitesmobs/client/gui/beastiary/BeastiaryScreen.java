@@ -180,7 +180,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	 * @param buttonId The button that was interacted with.
 	 */
 	@Override
-	public void actionPerformed(byte buttonId) {
+	public void actionPerformed(int buttonId) {
 		if(buttonId == Page.INDEX.id) {
 			this.mc.displayGuiScreen(new IndexBeastiaryScreen(Minecraft.getInstance().player));
 		}
