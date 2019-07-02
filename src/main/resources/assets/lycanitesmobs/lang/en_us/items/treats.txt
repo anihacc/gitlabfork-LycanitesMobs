@@ -36,3 +36,6 @@ item.planttreat.description=Made from fresh vegetables and sugar cane, some plan
 #
 item.undeadtreat.name=Undead Treat
 item.undeadtreat.description=Made from the finest rotten flesh, but can any undead creature be swayed by this?
+#
+item.lycanitesmobs.wormtreat=Worm Treat
+item.lycanitesmobs.wormtreat.description=Made from very gamey meat, those worm creatures seem to like that.

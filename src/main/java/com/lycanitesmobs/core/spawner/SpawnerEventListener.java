@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -465,6 +466,13 @@ public class SpawnerEventListener {
 	@SubscribeEvent
 	public void onLavaMix(BlockEvent.NeighborNotifyEvent event) {
 		boolean trigger = false;
+
+		// Only If Players Are Nearby (Big Performance Saving):
+		Vec3d posVec = new Vec3d(event.getPos());
+		EntityPlayer closestPlayer = event.getWorld().getClosestPlayer(posVec.x, posVec.y, posVec.z, 20, false);
+		if(closestPlayer == null) {
+			return;
+		}
 
 		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
 			for(EnumFacing side : event.getNotifiedSides()) {

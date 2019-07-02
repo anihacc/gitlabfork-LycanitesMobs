@@ -12,7 +12,10 @@ public class ThemeBlock {
 	/** Dungeon Theme Blocks define a block to be used in the theme along with other information. **/
 
 	/** The block to use. **/
-	public Block block = Blocks.STONE;
+	protected Block block = null;
+
+	/** The block id to use. **/
+	public String blockId;
 
 	/** The metadata of the block. **/
 	public int metadata = 0;
@@ -24,20 +27,16 @@ public class ThemeBlock {
 	/** Loads this Dungeon Theme from the provided JSON data. **/
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("blockId")) {
-			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(json.get("blockId").getAsString().toLowerCase()));
-			if (this.block == null) {
-				LycanitesMobs.printWarning("", "Error adding Dungeon Theme Block: Unable to find a block with the id: " + json.get("blockId").getAsString());
-			}
-		}
-		else {
-			LycanitesMobs.printWarning("", "Error adding Dungeon Theme Block: JSON value 'blockId' has not been set.");
+			this.blockId = json.get("blockId").getAsString();
 		}
 
-		if(json.has("metadata"))
+		if(json.has("metadata")) {
 			this.metadata = json.get("metadata").getAsInt();
+		}
 
-		if(json.has("weight"))
+		if(json.has("weight")) {
 			this.weight = json.get("weight").getAsInt();
+		}
 	}
 
 
@@ -46,6 +45,10 @@ public class ThemeBlock {
 	 * @return A new block state.
 	 */
 	public IBlockState getBlockState() {
+		if(this.block == null)
+			this.block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockId));
+		if(this.block == null)
+			return Blocks.AIR.getDefaultState();
 		if(this.metadata <= 0) {
 			return this.block.getDefaultState();
 		}

@@ -12,3 +12,4 @@ creaturetype.demon.name=Demon
 creaturetype.angel.name=Angel
 creaturetype.elemental.name=Elemental
 creaturetype.dragon.name=Dragon
+creaturetype.dragon.worm=Worm

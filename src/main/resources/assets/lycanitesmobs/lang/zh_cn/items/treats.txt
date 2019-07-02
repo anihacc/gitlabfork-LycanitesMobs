@@ -36,3 +36,6 @@ item.planttreat.description=由新鲜蔬菜和甘蔗制成，一些植物生物�
 #
 item.undeadtreat.name=亡灵生物的款待
 item.undeadtreat.description=由最好的腐肉制成，但任何亡灵生物都能被它动摇吗？
+#
+item.lycanitesmobs.wormtreat=蠕虫的热情好客
+item.lycanitesmobs.wormtreat.description=丰富的肉，蠕虫喜欢它

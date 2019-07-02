@@ -12,3 +12,4 @@ creaturetype.demon.name=恶魔
 creaturetype.angel.name=天使
 creaturetype.elemental.name=元素生物
 creaturetype.dragon.name=龙
+creaturetype.worm.name=虫
