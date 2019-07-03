@@ -1,15 +1,14 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.ClientProxy;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.Effects;
-import com.lycanitesmobs.core.FileLoader;
-import com.lycanitesmobs.core.StatManager;
-import com.lycanitesmobs.core.StreamLoader;
+import com.lycanitesmobs.core.*;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
+import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
@@ -23,7 +22,6 @@ import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
-import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
@@ -36,10 +34,14 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.*;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -64,6 +66,9 @@ public class LycanitesMobs {
 
 	public static boolean configReady = false;
 	public static boolean earlyDebug = false;
+
+	// Proxy:
+	public static IProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	// Capabilities:
 	@CapabilityInject(IExtendedEntity.class)
@@ -103,8 +108,8 @@ public class LycanitesMobs {
 		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
-		//FMLJavaModLoadingContext.get().getModEventBus().register(StatManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(ClientManager.getInstance());
+		//FMLJavaModLoadingContext.get().getModEventBus().register(StatManager.getInstance()); TODO Stats
+		PROXY.registerEvents();
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);

@@ -145,8 +145,9 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Despawning ==========
     @Override
     protected boolean canDespawnNaturally() {
-    	if(this.isTamed())
-    		return false;
+    	if(this.isTamed()) {
+			return false;
+		}
         return super.canDespawnNaturally();
     }
     

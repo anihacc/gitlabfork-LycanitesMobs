@@ -97,7 +97,7 @@ public class Beastiary {
 		}
 
 		// Success:
-		//this.extendedPlayer.player.addStat(StatManager.getInstance().getStat("learn", creatureInfo.name), 1);
+		//this.extendedPlayer.player.addStat(StatManager.getInstance().getStat("learn", creatureInfo.name), 1); TODO Stats
 		this.sendAddedMessage(newKnowledge);
 		this.sendToClient(newKnowledge);
 		if(this.extendedPlayer.player.getEntityWorld().isRemote) {

@@ -883,8 +883,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Despawning ==========
 	@Override
 	public boolean isNoDespawnRequired() {
-    	if(!this.canDespawnNaturally())
-    		return false;
+    	if(!this.canDespawnNaturally()) {
+			return true;
+		}
 		return super.isNoDespawnRequired();
 	}
 
@@ -4081,7 +4082,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
     	
     	if(nbtTagCompound.contains("ForceNoDespawn")) {
-    		this.forceNoDespawn = nbtTagCompound.getBoolean("ForceNoDespawn");
+    		if(nbtTagCompound.getBoolean("ForceNoDespawn")) {
+				this.enablePersistence();
+			}
     	}
     	
     	if(nbtTagCompound.contains("Color")) {

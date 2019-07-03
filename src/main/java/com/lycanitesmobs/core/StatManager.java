@@ -60,6 +60,7 @@ public class StatManager {
 
 	@SubscribeEvent
 	public void registerStats(RegistryEvent.Register<StatType<?>> event) {
+		this.createStatTypes();
 		for(StatType statType : this.statTypes.values()) {
 			event.getRegistry().register(statType);
 		}
