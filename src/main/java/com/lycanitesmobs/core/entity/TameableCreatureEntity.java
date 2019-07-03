@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
+import net.minecraft.entity.item.LeashKnotEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -768,6 +769,8 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Following ==========
     public boolean isFollowing() {
     	if(!this.isTamed())
+    		return false;
+    	if(this.getLeashHolder() instanceof LeashKnotEntity)
     		return false;
         return (this.getByteFromDataManager(TAMED) & TAMED_ID.MOVE_FOLLOW.id) != 0;
     }
