@@ -102,6 +102,7 @@ public class LycanitesMobs {
 		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(ClientManager.getInstance());
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);
@@ -178,8 +179,6 @@ public class LycanitesMobs {
 
 	@SubscribeEvent
 	public void clientSetup(final FMLClientSetupEvent event) {
-		MinecraftForge.EVENT_BUS.register(ClientManager.getInstance());
-
 		ClientManager.getInstance().initLanguageManager();
 		ClientManager.getInstance().registerScreens();
 		ClientManager.getInstance().registerEvents();

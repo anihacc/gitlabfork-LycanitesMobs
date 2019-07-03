@@ -19,6 +19,8 @@ public class LMEquipmentPartsGroup extends ItemGroup {
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack createIcon() {
 		this.fallbackIcon = false;
+		if(ObjectManager.getItem("equipmentpart_eechetikarm") != null)
+			return new ItemStack(ObjectManager.getItem("equipmentpart_eechetikarm"));
 		if(ObjectManager.getItem("equipmentpart_darklingskull") != null)
 			return new ItemStack(ObjectManager.getItem("equipmentpart_darklingskull"));
 		if(ObjectManager.getItem("equipmentpart_grueclaw") != null)

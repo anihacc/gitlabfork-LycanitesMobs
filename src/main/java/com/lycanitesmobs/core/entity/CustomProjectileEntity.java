@@ -55,6 +55,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 	@Override
 	public EntityType getType() {
+		if(this.projectileInfo == null) {
+			LycanitesMobs.logWarning("", "Get Type Accessed Too Early Custom Projectile!");
+			return super.getType();
+		}
 		return this.projectileInfo.getEntityType();
 	}
 

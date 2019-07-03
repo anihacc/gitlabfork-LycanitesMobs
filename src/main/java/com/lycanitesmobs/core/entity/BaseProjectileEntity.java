@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -75,7 +76,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
 	   this(entityType, world);
-		this.setPosition(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+	   this.setPosition(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
 	   this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
 	   this.setup();
     }
@@ -88,6 +89,10 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
     @Override
 	public EntityType getType() {
+		if(ProjectileManager.getInstance().oldProjectileTypes.get(this.getClass()) == null) {
+			LycanitesMobs.logWarning("", "Missing Base Projectile Type! " + this.getClass());
+			return super.getType();
+		}
     	return ProjectileManager.getInstance().oldProjectileTypes.get(this.getClass());
 	}
     

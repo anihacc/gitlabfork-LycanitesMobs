@@ -23,6 +23,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +42,6 @@ public class ProjectileManager extends JSONLoader {
 	/** A map of old projectile classes to types for creating enw instances. **/
 	public Map<Class<? extends Entity>, EntityType<? extends BaseProjectileEntity>> oldProjectileTypes = new HashMap<>();
 
-	/** The next available network id for projectiles to register by. **/
-	protected int nextProjectileNetworkId = 1000;
-
 	/** Returns the main Projectile Manager instance or creates it and returns it. **/
 	public static ProjectileManager getInstance() {
 		if(INSTANCE == null) {
@@ -60,12 +58,6 @@ public class ProjectileManager extends JSONLoader {
 		this.loadAllFromJSON(modInfo);
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
 			projectileInfo.load();
-		}
-		try {
-			ObjectManager.addSpecialEntity("rapidfire", RapidFireProjectileEntity.class, RapidFireProjectileEntity.class.getConstructor(EntityType.class, World.class));
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
 		}
 		this.loadOldProjectiles();
 	}
@@ -102,45 +94,46 @@ public class ProjectileManager extends JSONLoader {
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles...");
 
+		// New JSON Projectiles:
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
 			event.getRegistry().register(projectileInfo.getEntityType());
 		}
 
+		// Old Sprite Projectiles:
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
-			entityTypeBuilder.setTrackingRange(40);
-			entityTypeBuilder.setUpdateInterval(3);
-			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-
-			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
-			try {
-				EntityFactory.getInstance().addEntityType(entityType, this.oldSpriteProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			this.oldProjectileTypes.put(this.oldSpriteProjectiles.get(entityName), entityType);
-			event.getRegistry().register(entityType);
+			event.getRegistry().register(this.createEntityType(entityName, this.oldSpriteProjectiles.get(entityName)));
 		}
 
+		// Old Model Projectiles:
 		for(String entityName : this.oldModelProjectiles.keySet()) {
-			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
-			entityTypeBuilder.setTrackingRange(40);
-			entityTypeBuilder.setUpdateInterval(3);
-			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
-
-			EntityType entityType = entityTypeBuilder.build(entityName);
-			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
-			try {
-				EntityFactory.getInstance().addEntityType(entityType, this.oldModelProjectiles.get(entityName).getConstructor(EntityType.class, World.class));
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			this.oldProjectileTypes.put(this.oldModelProjectiles.get(entityName), entityType);
-			event.getRegistry().register(entityType);
+			event.getRegistry().register(this.createEntityType(entityName, this.oldModelProjectiles.get(entityName)));
 		}
+	}
+
+	/**
+	 * Creates an Entity Type for older projectiles.
+	 * @param entityName The projectile name to register with.
+	 * @param entityClass The projectile entity class to register.
+	 * @return The projectile's Entity Type.
+	 */
+	public EntityType createEntityType(String entityName, Class<? extends Entity> entityClass) {
+		EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
+		entityTypeBuilder.setTrackingRange(40);
+		entityTypeBuilder.setUpdateInterval(3);
+		entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
+
+		EntityType entityType = entityTypeBuilder.build(entityName);
+		entityType.setRegistryName(LycanitesMobs.MODID, entityName);
+		try {
+			EntityFactory.getInstance().addEntityType(entityType, entityClass.getConstructor(EntityType.class, World.class));
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		LycanitesMobs.logDebug("", "Added Entity Type: " + entityName + " Type: " + entityType);
+		this.oldProjectileTypes.put(entityClass, entityType);
+		return entityType;
 	}
 
 	/**
@@ -172,6 +165,8 @@ public class ProjectileManager extends JSONLoader {
 	/** Called during early start up, loads all items. **/
 	public void loadOldProjectiles() {
 		this.addOldProjectile("summoningportal", PortalEntity.class);
+		this.addOldProjectile("rapidfire", RapidFireProjectileEntity.class);
+
 		this.addOldProjectile("frostweb", EntityFrostweb.class, true, true);
 		this.addOldProjectile("tundra", EntityTundra.class, true, true);
 		this.addOldProjectile("icefireball", EntityIcefireball.class, true, true);
@@ -257,7 +252,7 @@ public class ProjectileManager extends JSONLoader {
 	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, LivingEntity entity) {
 		try {
 			return projectileClass.getConstructor(EntityType.class, World.class, LivingEntity.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, entity);
-		} catch (Exception e) {
+		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -266,7 +261,7 @@ public class ProjectileManager extends JSONLoader {
 	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, double x, double y, double z) {
 		try {
 			return projectileClass.getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
-		} catch (Exception e) {
+		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}

@@ -12,6 +12,9 @@ public class ItemColorCustomSpawnEgg implements IItemColor {
 
 		ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
 		CreatureInfo creatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
-		return creatureInfo != null ? (tintIndex == 0 ? creatureInfo.eggBackColor : creatureInfo.eggForeColor) : 16777215;
+		if(creatureInfo != null) {
+			return tintIndex == 0 ? creatureInfo.eggBackColor : creatureInfo.eggForeColor;
+		}
+		return  tintIndex == 0 ? 0x227744 : 0x11EE44;
 	}
 }

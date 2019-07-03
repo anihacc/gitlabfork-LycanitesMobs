@@ -20,7 +20,7 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 		return INSTANCE;
 	}
 
-	public Map<EntityType, Constructor<? extends Entity>> entityTypeConstrcutorMap = new HashMap<>();
+	public Map<EntityType, Constructor<? extends Entity>> entityTypeConstructorMap = new HashMap<>();
 	public Map<Constructor<? extends Entity>, EntityType> entityConstructorTypeMap = new HashMap<>();
 
 	/**
@@ -29,8 +29,8 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 * @param entityClass The Entity Class to instantiate for the type.
 	 */
 	public void addEntityType(EntityType entityType, Constructor<? extends Entity> entityClass) {
-		LycanitesMobs.logDebug("Creature", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification());
-		this.entityTypeConstrcutorMap.put(entityType, entityClass);
+		LycanitesMobs.logDebug("Entity", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification());
+		this.entityTypeConstructorMap.put(entityType, entityClass);
 		this.entityConstructorTypeMap.put(entityClass, entityType);
 	}
 
@@ -42,8 +42,12 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	@Override
 	public Entity create(EntityType entityType, World world) {
-		LycanitesMobs.logDebug("Entity", "Spawning entity: " + this.entityTypeConstrcutorMap.get(entityType) + " - " + entityType.getClassification());
-		Constructor<? extends Entity> constructor = this.entityTypeConstrcutorMap.get(entityType);
+		/*if(!this.entityConstructorTypeMap.containsKey(entityType)) {
+			LycanitesMobs.logWarning("", "Unable to create entity for Entity Type: " + entityType);
+			return null;
+		}*/
+		LycanitesMobs.logDebug("Entity", "Spawning entity: " + this.entityTypeConstructorMap.get(entityType) + " - " + entityType.getClassification());
+		Constructor<? extends Entity> constructor = this.entityTypeConstructorMap.get(entityType);
 
 		try {
 			return constructor.newInstance(entityType, world);

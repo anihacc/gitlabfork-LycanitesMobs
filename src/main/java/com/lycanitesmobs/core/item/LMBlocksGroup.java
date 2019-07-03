@@ -19,12 +19,12 @@ public class LMBlocksGroup extends ItemGroup {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack createIcon() {
-		if(ObjectManager.getBlock("summoningpedestal") != null)
+		if(ObjectManager.getBlock("shadowcrystal") != null)
+			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("shadowcrystal")));
+		else if(ObjectManager.getBlock("summoningpedestal") != null)
 			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("summoningpedestal")));
 		else if(ObjectManager.getBlock("demoncrystal") != null)
 			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("demoncrystal")));
-		else if(ObjectManager.getBlock("shadowcrystal") != null)
-			return new ItemStack(Item.getItemFromBlock(ObjectManager.getBlock("shadowcrystal")));
 		else
 			return new ItemStack(Item.getItemFromBlock(Blocks.OBSIDIAN));
 	}
