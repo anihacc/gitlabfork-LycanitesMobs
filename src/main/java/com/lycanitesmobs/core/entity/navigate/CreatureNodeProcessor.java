@@ -78,7 +78,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         if(this.entityCreature == null) {
             return false;
         }
-        if(this.entityCreature.canSwim()) {
+        if(this.entityCreature.isInWater()) {
             return this.entityCreature.isStrongSwimmer() || (this.entityCreature.canWade() && this.entityCreature.shouldDive());
         }
         return false;
@@ -280,6 +280,25 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
             }
         }
 
+        // Surface Weak Swimming:
+        if (pathnodetype == PathNodeType.WATER && !this.getCanSwim()) {
+            if (this.getPathNodeType(this.entity, x, y - 1, z) != PathNodeType.WATER) {
+                return safePoint;
+            }
+
+            while(y > 0) {
+                --y;
+                pathnodetype = this.getPathNodeType(this.entity, x, y, z);
+                if (pathnodetype != PathNodeType.WATER) {
+                    return safePoint;
+                }
+
+                safePoint = this.openPoint(x, y, z);
+                safePoint.nodeType = pathnodetype;
+                safePoint.costMalus = Math.max(safePoint.costMalus, this.entity.getPathPriority(pathnodetype));
+            }
+        }
+
         if (pathnodetype == PathNodeType.OPEN) {
             AxisAlignedBB pathingCollision = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.entity.getSize(Pose.STANDING).height), (double)z + entityRadius + 0.5D);
 
@@ -410,9 +429,6 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     }
 
     public PathNodeType getPathNodeType(MobEntity mobEntity, int x, int y, int z) {
-        if(this.swimming())
-            return PathNodeType.WATER;
-
         return this.getPathNodeType(this.blockaccess, x, y, z, mobEntity, this.entitySizeX, this.entitySizeY, this.entitySizeZ, this.getCanOpenDoors(), this.getCanEnterDoors());
     }
 

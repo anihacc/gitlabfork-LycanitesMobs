@@ -110,7 +110,6 @@ public class FollowOwnerGoal extends FollowGoal {
 				return;
 			}
 
-    		World world = this.getTarget().getEntityWorld();
 	    	int i = MathHelper.floor(this.getTarget().posX) - 2;
 	        int j = MathHelper.floor(this.getTarget().getBoundingBox().minY);
 	        int k = MathHelper.floor(this.getTarget().posZ) - 2;

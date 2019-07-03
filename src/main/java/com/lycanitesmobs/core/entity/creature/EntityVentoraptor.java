@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -48,8 +49,8 @@ public class EntityVentoraptor extends RideableCreatureEntity {
 	@Override
     public void livingTick() {
         super.livingTick();
-        
-        // Random Leaping:
+
+		// Random Leaping:
         if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
         	if(this.hasAttackTarget()) {
         		if(this.rand.nextInt(10) == 0)
