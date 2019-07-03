@@ -140,8 +140,8 @@ public class CreaturePathNavigator extends PathNavigator {
 
     /** Starts pathing to target entity. **/
     @Override
-    public boolean tryMoveToEntityLiving(Entity entityIn, double speedIn) {
-        Path path = this.getPathToEntityLiving(entityIn);
+    public boolean tryMoveToEntityLiving(Entity targetEntity, double speedIn) {
+        Path path = this.getPathToEntityLiving(targetEntity);
 
         if (path != null) {
             return this.setPath(path, speedIn);
@@ -149,7 +149,7 @@ public class CreaturePathNavigator extends PathNavigator {
 
         // Climbing:
         else if(this.entityCreature.canClimb()) {
-            this.climbTargetPos = new BlockPos(entityIn);
+            this.climbTargetPos = new BlockPos(targetEntity);
             this.speed = speedIn;
             return true;
         }

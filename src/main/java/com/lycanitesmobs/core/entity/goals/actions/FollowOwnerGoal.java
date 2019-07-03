@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -46,14 +47,45 @@ public class FollowOwnerGoal extends FollowGoal {
  	// ==================================================
     @Override
     public Entity getTarget() {
-    	if(!this.host.isFollowing())
-    		return null;
     	return this.host.getOwner();
     }
 
 	@Override
 	public void setTarget(Entity entity) {
     	// Do nothing here.
+	}
+
+
+	// ==================================================
+	//                  Should Execute
+	// ==================================================
+	@Override
+	public boolean shouldExecute() {
+		Entity target = this.getTarget();
+		if(target == null)
+			return false;
+		if(!target.isAlive())
+			return false;
+		if(this.host.isSitting() || !this.host.isFollowing())
+			return false;
+
+		// Start straying when within the stray radius and the target.
+		double distance = this.host.getDistance(target);
+		if(distance <= this.strayDistance && this.strayDistance != 0) {
+			this.host.clearMovement();
+			return false;
+		}
+
+		return true;
+	}
+
+
+	// ==================================================
+	//                Continue Executing
+	// ==================================================
+	@Override
+	public boolean shouldContinueExecuting() {
+    	return this.shouldExecute();
 	}
     
 	
@@ -62,11 +94,9 @@ public class FollowOwnerGoal extends FollowGoal {
  	// ==================================================
 	@Override
     public void tick() {
-    	if(!this.host.isSitting()) {
-    		if(this.host.getDistance(this.getTarget()) >= this.lostDistance) {
-				this.teleportToOwner();
-			}
-    	}
+		if(this.host.getDistance(this.getTarget()) >= this.lostDistance) {
+			this.teleportToOwner();
+		}
     	super.tick();
     }
     
@@ -91,9 +121,9 @@ public class FollowOwnerGoal extends FollowGoal {
                 return;
             }
 	
-	        for(int x = 0; x <= 4; ++x) {
-	            for(int z = 0; z <= 4; ++z) {
-	                if(this.canTeleportTo(new BlockPos(x, this.getTarget().getPosition().getY(), z))) {
+	        for(int x = -2; x <= 2; ++x) {
+	            for(int z = -2; z <= 2; ++z) {
+	                if(this.canTeleportTo(this.getTarget().getPosition().add(x, 0, z))) {
                         this.host.setLocationAndAngles((double)((float)(i + x) + 0.5F), (double)j, (double)((float)(k + z) + 0.5F), this.host.rotationYaw, this.host.rotationPitch);
 	                    this.host.clearMovement();
 	                    return;
@@ -103,9 +133,9 @@ public class FollowOwnerGoal extends FollowGoal {
     	}
     }
 
-	protected boolean canTeleportTo(BlockPos p_220707_1_) {
-		BlockState lvt_2_1_ = this.host.getEntityWorld().getBlockState(p_220707_1_);
-		return lvt_2_1_.canEntitySpawn(this.host.getEntityWorld(), p_220707_1_, this.host.getType()) && this.host.getEntityWorld().isAirBlock(p_220707_1_.up()) && this.host.getEntityWorld().isAirBlock(p_220707_1_.up(2));
+	protected boolean canTeleportTo(BlockPos blockPos) {
+		BlockState blockState = this.host.getEntityWorld().getBlockState(blockPos.down());
+		return blockState.canEntitySpawn(this.host.getEntityWorld(), blockPos.down(), this.host.getType()) && this.host.getEntityWorld().isAirBlock(blockPos) && this.host.getEntityWorld().isAirBlock(blockPos.up());
 	}
     
     //TODO Wait on the ChunkUnload Chunk event, if this mob is not sitting and the unloading chunk is what it's in, then teleport this mob to it's owner away from the unloaded chunk, unless it's player has disconnected.

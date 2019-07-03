@@ -38,7 +38,7 @@
 	"effectDuration": 30,
 	"effectAmplifier": 0,
 	"pierce": 0,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#f0eab6",
 	"eggForeColor": "#fefcef",

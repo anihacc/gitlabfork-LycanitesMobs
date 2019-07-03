@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -26,7 +27,7 @@ public abstract class FollowGoal extends Goal {
     public FollowGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.targetClass = this.host.getClass();
-		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+		this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
     
 	
@@ -73,7 +74,7 @@ public abstract class FollowGoal extends Goal {
         if(!target.isAlive())
         	return false;
 
-        double distance = this.host.getDistance(target);
+		double distance = this.host.getDistance(target);
 	    if(distance > this.lostDistance && this.lostDistance != 0)
 	        return false;
 	    if(distance <= this.strayDistance && this.strayDistance != 0)
