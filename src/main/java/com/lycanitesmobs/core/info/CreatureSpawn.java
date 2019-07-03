@@ -189,21 +189,6 @@ public class CreatureSpawn {
 			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 		}
 
-		/*/ Add Vanilla Spawns: TODO Not possible anymore? Using custom spawner for everthing now anyway.
-		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
-			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
-				for(EntityClassification creatureType : this.vanillaSpawnerTypes) {
-					EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
-					for(Biome biome : this.biomesFromTags) {
-						if(biome == Biomes.NETHER) {
-							EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
-							break;
-						}
-					}
-				}
-			}
-		}*/
-
 		// Dungeon Spawn:
 		if(!CreatureManager.getInstance().spawnConfig.disableDungeonSpawners) {
 			if(this.dungeonWeight > 0) {

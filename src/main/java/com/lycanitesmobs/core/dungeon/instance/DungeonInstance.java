@@ -189,7 +189,7 @@ public class DungeonInstance {
 	 * @return The written to NBTData. Null if this Dungeon Instance cannot be saved.
 	 */
 	public CompoundNBT writeToNBT(CompoundNBT nbtTagCompound) {
-		if(this.uuid == null)
+		if(this.uuid == null || this.schematic == null)
 			return null;
 
 		nbtTagCompound.putUniqueId("Id", this.uuid);

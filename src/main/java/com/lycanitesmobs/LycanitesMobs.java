@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.Effects;
 import com.lycanitesmobs.core.FileLoader;
+import com.lycanitesmobs.core.StatManager;
 import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
@@ -102,6 +103,7 @@ public class LycanitesMobs {
 		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
+		//FMLJavaModLoadingContext.get().getModEventBus().register(StatManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(ClientManager.getInstance());
 
 		// Game Event Listeners:

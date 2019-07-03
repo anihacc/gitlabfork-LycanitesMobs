@@ -22,7 +22,6 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
-import net.minecraft.stats.Stat;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.DamageSource;
@@ -62,8 +61,6 @@ public class ObjectManager {
 
     public static Map<String, DamageSource> damageSources = new HashMap<>();
 
-    public static Map<String, Stat> stats = new HashMap<>();
-	
 	public static ModInfo currentModInfo;
 
 	/** The next available network id for special entities to register by. **/
@@ -184,14 +181,6 @@ public class ObjectManager {
 		soundEvent.setRegistryName(resourceLocation);
 		sounds.put(name, soundEvent);
 	}
-
-    // ========== Stat ==========
-    public static void addStat(String name, Stat stat) {
-        name = name.toLowerCase();
-        if(stats.containsKey(name))
-            return;
-        stats.put(name, stat);
-    }
 	
 	
     // ==================================================
@@ -239,13 +228,6 @@ public class ObjectManager {
 			return null;
 		return sounds.get(name);
 	}
-
-    // ========== Stat ==========
-    public static Stat getStat(String name) {
-        name = name.toLowerCase();
-        if(!stats.containsKey(name)) return null;
-        return stats.get(name);
-    }
 
 
     // ==================================================

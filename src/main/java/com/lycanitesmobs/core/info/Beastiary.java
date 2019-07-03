@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.info;
 
+import com.lycanitesmobs.core.StatManager;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -95,7 +97,7 @@ public class Beastiary {
 		}
 
 		// Success:
-		//this.extendedPlayer.player.addStat(ObjectManager.getStat(creatureInfo.name + ".learn"), 1); TODO Player Stats
+		//this.extendedPlayer.player.addStat(StatManager.getInstance().getStat("learn", creatureInfo.name), 1);
 		this.sendAddedMessage(newKnowledge);
 		this.sendToClient(newKnowledge);
 		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
