@@ -29,11 +29,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ItemEquipment extends BaseItem {
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
@@ -238,12 +238,12 @@ public class ItemEquipment extends BaseItem {
 	// ==================================================
 	@Override
 	public UseAction getUseAction(ItemStack itemStack) {
-		return UseAction.SPEAR;
+		return UseAction.BLOCK;
 	}
 
 	@Override
 	public int getUseDuration(ItemStack stack) {
-		return 18000;
+		return 1800;
 	}
 
 	@Override
@@ -285,9 +285,28 @@ public class ItemEquipment extends BaseItem {
 	// ==================================================
 	@Override
 	@Nonnull
-	public java.util.Set<net.minecraftforge.common.ToolType> getToolTypes(ItemStack itemStack) {
-		// TODO Get tool types for more compatibility.
-		return super.getToolTypes(itemStack);
+	public Set<ToolType> getToolTypes(ItemStack itemStack) {
+		Map<ToolType, Boolean> toolTypes = new HashMap<>();
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			ToolType toolType = harvestFeature.getToolType();
+			if(toolType != null) {
+				toolTypes.put(toolType, true);
+			}
+		}
+		return toolTypes.keySet();
+	}
+
+	@Override
+	public int getHarvestLevel(ItemStack itemStack, ToolType tool, @Nullable PlayerEntity player, @Nullable BlockState blockState) {
+		int harvestLevel = -1;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestLevel < harvestFeature.harvestLevel && tool == harvestFeature.getToolType()) {
+				harvestLevel = harvestFeature.harvestLevel;
+			}
+		}
+		return harvestLevel;
 	}
 
 	@Override
@@ -312,16 +331,14 @@ public class ItemEquipment extends BaseItem {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity entityLiving)
-	{
-		if(worldIn.isRemote) {
-			return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving) {
+		if(!world.isRemote) {
+			for (EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+				HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature) equipmentFeature;
+				harvestFeature.onBlockDestroyed(world, blockState, pos, entityLiving);
+			}
 		}
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
-			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
-			harvestFeature.onBlockDestroyed(worldIn, blockState, pos, entityLiving);
-		}
-		return super.onBlockDestroyed(itemStack, worldIn, blockState, pos, entityLiving);
+		return super.onBlockDestroyed(itemStack, world, blockState, pos, entityLiving);
 	}
 
 
@@ -423,7 +440,7 @@ public class ItemEquipment extends BaseItem {
 		}
 
 		cooldown = 2.4D * (cooldown / i);
-		return cooldown;
+		return Math.min(3.5D, cooldown);
 	}
 
 	/**

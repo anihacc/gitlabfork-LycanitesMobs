@@ -11,6 +11,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.SilverfishEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -161,24 +162,19 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.getTrueSource() != null) {
-            // Silverfish Extermination:
-            if(damageSrc.getTrueSource() instanceof SilverfishEntity) {
-                return 0F;
-            }
-
-            // Pickaxe Damage:
-    		Item heldItem = null;
-    		if(damageSrc.getTrueSource() instanceof LivingEntity) {
-                LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
-	    		}
-    		}
-    		if(ObjectLists.isPickaxe(heldItem))
-                return 4.0F;
-    	}
-    	return 1.0F;
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isPickaxe(heldItem)) {
+				return 3.0F;
+			}
+		}
+		return super.getDamageModifier(damageSrc);
     }
     
     

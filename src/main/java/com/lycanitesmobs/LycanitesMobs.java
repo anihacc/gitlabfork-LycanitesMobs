@@ -71,9 +71,6 @@ public class LycanitesMobs {
 	@CapabilityInject(IExtendedPlayer.class)
 	public static final Capability<IExtendedPlayer> EXTENDED_PLAYER = null;
 
-	// Texture Path:
-	public static String texturePath = "mods/lycanitesmobs/";
-
 	// Potion Effects:
 	public static Effects EFFECTS;
 

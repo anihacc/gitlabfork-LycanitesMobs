@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -122,28 +123,19 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
     // ========== Damage Modifier ==========
     /** A multiplier that alters how much damage this mob receives from the given DamageSource, use for resistances and weaknesses. Note: The defense multiplier is handled before this. **/
     public float getDamageModifier(DamageSource damageSrc) {
-        if("Jarno".equals(this.getCustomName()))
-            return 0;
-
-    	if(this.stoneForm) {
-    		if(damageSrc.getTrueSource() != null) {
-    			Item heldItem = null;
-        		if(damageSrc.getTrueSource() instanceof LivingEntity) {
-                    LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-    	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-    	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
-    	    		}
-        		}
-        		
-        		if(ObjectLists.isPickaxe(heldItem))
-    				return 2.0F;
-        	}
-    		return 0.25F;
-    	}
-    	
-    	if(damageSrc.isFireDamage())
-    		return 2.0F;
-    	return 1.0F;
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isPickaxe(heldItem)) {
+				return 3.0F;
+			}
+		}
+		return super.getDamageModifier(damageSrc);
     }
     
     

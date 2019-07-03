@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -99,23 +100,18 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
     public float getDamageModifier(DamageSource damageSrc) {
     	if(damageSrc.isFireDamage())
     		return 2.0F;
-    	if(damageSrc.getTrueSource() != null) {
-    		Item heldItem = null;
-    		if(damageSrc.getTrueSource() instanceof PlayerEntity) {
-    			PlayerEntity entityPlayer = (PlayerEntity)damageSrc.getTrueSource();
-	    		if(!entityPlayer.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-	    			heldItem = entityPlayer.getHeldItem(Hand.MAIN_HAND).getItem();
-	    		}
-    		}
-    		else if(damageSrc.getTrueSource() instanceof LivingEntity) {
-	    		LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
-	    		if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-	    			heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
-	    		}
-    		}
-    		if(ObjectLists.isAxe(heldItem))
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof LivingEntity) {
+				LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isAxe(heldItem)) {
 				return 2.0F;
-    	}
+			}
+		}
         return super.getDamageModifier(damageSrc);
     }
     

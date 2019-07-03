@@ -26,7 +26,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 
 		// Position:
 		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0.5F, 0.2F, 0.6F);
+		GlStateManager.translatef(0.5F, 0.35F, 0.6F);
 		GlStateManager.rotatef(90, 1, 0, 0);
 		GlStateManager.rotatef(-100, 0, 0, 1);
 		GlStateManager.translatef(0F, -1.5F, 0F);

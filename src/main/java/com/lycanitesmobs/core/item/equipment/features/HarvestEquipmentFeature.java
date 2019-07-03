@@ -4,18 +4,24 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
+import javafx.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Set;
 
 public class HarvestEquipmentFeature extends EquipmentFeature {
@@ -33,10 +39,10 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	/** How much harvest speed to add when harvesting compatible blocks. **/
 	public float harvestSpeed = 1;
 
-	/** The level of harvesting. 0 = Wood, 1 = Stone, 2 = Iron, 3 = Diamond. Currently not used as all tools are diamond level. **/
+	/** The level of harvesting. -1 = Unable, 0 = Wood, 1 = Stone, 2 = Iron, 3 = Diamond. **/
 	public int harvestLevel = 3;
 
-	/** The range of the harvest shape, the central block is not affected by this. **/
+	/** The additional block range of the harvest shape, relative to the harvesting direction, the central block is not affected by this. X = number of blocks both sides laterally (sideways). Y = Number of blocks vertically. Z = Number of blocks forwards. **/
 	public Vec3i harvestRange = new Vec3i(0, 0, 0);
 
 	/** Each extra level of the part that is using this featured increases the range by its base range times by this multiplier per level. **/
@@ -102,6 +108,16 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	// ==================================================
 	//                     Harvesting
 	// ==================================================
+
+	/**
+	 * Gets the Tool Type provided by this Harvest Feature.
+	 * @return The Tool Type of this feature, will return null if it's not a Pickaxe, Axe or Shovel.
+	 */
+	@Nullable
+	public ToolType getToolType() {
+		return ToolType.get(this.harvestType);
+	}
+
 	/**
 	 * Returns if this feature can harvest the provided block or not.
 	 * @param blockState
@@ -189,69 +205,168 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	/**
 	 * Called when a block is destroyed by Equipment with this Feature.
 	 * @param world The world where the block was destroyed.
-	 * @param blockState The block state that was destroyed.
-	 * @param pos The position of the destroyed block.
-	 * @param entityLiving The entity that destroyed the block.
+	 * @param harvestedBlockState The block state that was destroyed.
+	 * @param harvestedPos The position of the destroyed block.
+	 * @param livingEntity The entity that destroyed the block.
 	 */
-	public void onBlockDestroyed(World world, BlockState blockState, BlockPos pos, LivingEntity entityLiving)
-	{
-		LycanitesMobs.logWarning("", "Area Harvesting! " + this.harvestRange);
+	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
+		if(livingEntity == null || livingEntity.isSneaking()) {
+			return;
+		}
+
+		// Get Facing:
+		Direction facingH = livingEntity.getHorizontalFacing();
+		Direction facingLat = facingH.rotateY();
+		Direction facing = facingH;
+		if(livingEntity.rotationPitch > 45) {
+			facing = Direction.DOWN;
+		}
+		else if(livingEntity.rotationPitch < -45) {
+			facing = Direction.UP;
+		}
+		Vec3i[][] selectionRanges = new Vec3i[3][2];
+		int lon = 0;
+		int lat = 1;
+		int vert = 2;
+		int min = 0;
+		int max = 1;
+
+		// Get Longitudinal (Z):
+		selectionRanges[lon][min] = new Vec3i(
+				Math.min(0, this.harvestRange.getZ() * facing.getXOffset()),
+				Math.min(0, this.harvestRange.getZ() * facing.getYOffset()),
+				Math.min(0, this.harvestRange.getZ() * facing.getZOffset())
+		);
+		selectionRanges[lon][max] = new Vec3i(
+				Math.max(0, this.harvestRange.getZ() * facing.getXOffset()),
+				Math.max(0, this.harvestRange.getZ() * facing.getYOffset()),
+				Math.max(0, this.harvestRange.getZ() * facing.getZOffset())
+		);
+
+		// Get Lateral (X):
+		selectionRanges[lat][min] = new Vec3i(
+				this.harvestRange.getX() * -Math.abs(facingLat.getXOffset()),
+				this.harvestRange.getX() * -Math.abs(facingLat.getYOffset()),
+				this.harvestRange.getX() * -Math.abs(facingLat.getZOffset())
+		);
+		selectionRanges[lat][max] = new Vec3i(
+				this.harvestRange.getX() * Math.abs(facingLat.getXOffset()),
+				this.harvestRange.getX() * Math.abs(facingLat.getYOffset()),
+				this.harvestRange.getX() * Math.abs(facingLat.getZOffset())
+		);
+
+		// Get Vertical (Y):
+		if(facing != Direction.DOWN && facing != Direction.UP) {
+			int vertOffset = this.harvestRange.getY() != 0 ? -1 : 0;
+			selectionRanges[vert][min] = new Vec3i(0, vertOffset, 0);
+			selectionRanges[vert][max] = new Vec3i(0, this.harvestRange.getY() + vertOffset, 0);
+		}
+		else {
+			selectionRanges[vert][min] = new Vec3i(
+					this.harvestRange.getY() * -Math.abs(facingH.getXOffset()),
+					this.harvestRange.getY() * -Math.abs(facingH.getYOffset()),
+					this.harvestRange.getY() * -Math.abs(facingH.getZOffset())
+			);
+			selectionRanges[vert][max] = new Vec3i(
+					this.harvestRange.getY() * Math.abs(facingH.getXOffset()),
+					this.harvestRange.getY() * Math.abs(facingH.getYOffset()),
+					this.harvestRange.getY() * Math.abs(facingH.getZOffset())
+			);
+		}
+
 		// Block and Random Area Harvesting:
 		if(this.harvestShape.equalsIgnoreCase("block") || this.harvestShape.equalsIgnoreCase("random")) {
-			if(this.harvestRange.getX() <= 1 && this.harvestRange.getY() <= 1 && this.harvestRange.getZ() <= 1) {
-				return;
-			}
-
 			boolean random = this.harvestShape.equalsIgnoreCase("random");
 
-			for(int x = pos.getX() - (this.harvestRange.getX() - 1); x < pos.getX() + this.harvestRange.getX(); x++) {
-				for(int y = pos.getY() - (this.harvestRange.getY() - 1); y < pos.getY() + this.harvestRange.getY(); y++) {
-					for(int z = pos.getZ() - (this.harvestRange.getZ() - 1); z < pos.getZ() + this.harvestRange.getZ(); z++) {
-						BlockPos destroyPos = new BlockPos(x, y, z);
-						if(destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
-							continue;
+			// Longitude:
+			for (int longX = selectionRanges[lon][min].getX(); longX <= selectionRanges[lon][max].getX(); longX++) {
+				for (int longY = selectionRanges[lon][min].getY(); longY <= selectionRanges[lon][max].getY(); longY++) {
+					for (int longZ = selectionRanges[lon][min].getZ(); longZ <= selectionRanges[lon][max].getZ(); longZ++) {
+
+						// Latitude:
+						for (int latX = selectionRanges[lat][min].getX(); latX <= selectionRanges[lat][max].getX(); latX++) {
+							for (int latY = selectionRanges[lat][min].getY(); latY <= selectionRanges[lat][max].getY(); latY++) {
+								for (int latZ = selectionRanges[lat][min].getZ(); latZ <= selectionRanges[lat][max].getZ(); latZ++) {
+
+									// Vertical:
+									for (int vertX = selectionRanges[vert][min].getX(); vertX <= selectionRanges[vert][max].getX(); vertX++) {
+										for (int vertY = selectionRanges[vert][min].getY(); vertY <= selectionRanges[vert][max].getY(); vertY++) {
+											for (int vertZ = selectionRanges[vert][min].getZ(); vertZ <= selectionRanges[vert][max].getZ(); vertZ++) {
+
+												BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(latX, latY, latZ).add(vertX, vertY, vertZ);
+												if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos) && (!random || world.rand.nextBoolean())) {
+													world.destroyBlock(destroyPos, true);
+												}
+
+											}
+										}
+									}
+
+								}
+							}
 						}
-						if(random && world.rand.nextBoolean()) {
-							continue;
-						}
-						world.destroyBlock(destroyPos, true);
+
 					}
 				}
 			}
+
 			return;
 		}
 
 		// Cross Area Harvesting:
 		if(this.harvestShape.equalsIgnoreCase("cross")) {
-			if(this.harvestRange.getX() > 1) {
-				for (int x = pos.getX() - (this.harvestRange.getX() - 1); x < pos.getX() + this.harvestRange.getX(); x++) {
-					BlockPos destroyPos = new BlockPos(x, pos.getY(), pos.getZ());
-					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
-						continue;
-					}
-					world.destroyBlock(destroyPos, true);
-				}
-			}
 
-			if(this.harvestRange.getY() > 1) {
-				for (int y = pos.getY() - (this.harvestRange.getY() - 1); y < pos.getY() + this.harvestRange.getY(); y++) {
-					BlockPos destroyPos = new BlockPos(pos.getX(), y, pos.getZ());
-					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
-						continue;
-					}
-					world.destroyBlock(destroyPos, true);
-				}
-			}
+			// Longitude:
+			for (int longX = selectionRanges[lon][min].getX(); longX <= selectionRanges[lon][max].getX(); longX++) {
+				for (int longY = selectionRanges[lon][min].getY(); longY <= selectionRanges[lon][max].getY(); longY++) {
+					for (int longZ = selectionRanges[lon][min].getZ(); longZ <= selectionRanges[lon][max].getZ(); longZ++) {
 
-			if(this.harvestRange.getZ() > 1) {
-				for (int z = pos.getZ() - (this.harvestRange.getZ() - 1); z < pos.getZ() + this.harvestRange.getZ(); z++) {
-					BlockPos destroyPos = new BlockPos(pos.getX(), pos.getY(), z);
-					if (destroyPos.equals(pos) || !this.canHarvestBlock(world.getBlockState(destroyPos))) {
-						continue;
+						// Latitude:
+						for (int latX = selectionRanges[lat][min].getX(); latX <= selectionRanges[lat][max].getX(); latX++) {
+							for (int latY = selectionRanges[lat][min].getY(); latY <= selectionRanges[lat][max].getY(); latY++) {
+								for (int latZ = selectionRanges[lat][min].getZ(); latZ <= selectionRanges[lat][max].getZ(); latZ++) {
+									BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(latX, latY, latZ);
+									if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos)) {
+										world.destroyBlock(destroyPos, true);
+									}
+								}
+							}
+						}
+
+						// Vertical:
+						for (int vertX = selectionRanges[vert][min].getX(); vertX <= selectionRanges[vert][max].getX(); vertX++) {
+							for (int vertY = selectionRanges[vert][min].getY(); vertY <= selectionRanges[vert][max].getY(); vertY++) {
+								for (int vertZ = selectionRanges[vert][min].getZ(); vertZ <= selectionRanges[vert][max].getZ(); vertZ++) {
+									BlockPos destroyPos = harvestedPos.add(longX, longY, longZ).add(vertX, vertY, vertZ);
+									if (this.shouldHarvestBlock(world, harvestedBlockState, harvestedPos, destroyPos)) {
+										world.destroyBlock(destroyPos, true);
+									}
+								}
+							}
+						}
+
 					}
-					world.destroyBlock(destroyPos, true);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns if the target block position should be area harvested.
+	 * @param world The world to check in.
+	 * @param harvestedBlockState The initial block harvested to compare to.
+	 * @param harvestedPos The initial block position that was harvested at.
+	 * @param targetPos The target area harvesting position to check.
+	 * @return True if the block should be area harvested.
+	 */
+	public boolean shouldHarvestBlock(World world, BlockState harvestedBlockState, BlockPos harvestedPos, BlockPos targetPos) {
+		if(harvestedPos.equals(targetPos)) {
+			return false;
+		}
+		BlockState targetBlockState = world.getBlockState(targetPos);
+		if(targetBlockState.getBlock() != harvestedBlockState.getBlock()) {
+			return false;
+		}
+		return this.canHarvestBlock(world.getBlockState(targetPos));
 	}
 }

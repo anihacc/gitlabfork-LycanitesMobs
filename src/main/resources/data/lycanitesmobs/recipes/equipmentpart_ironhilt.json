@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "lycanitesmobs:equipmentpart_ironhilt"
+  },
+  "pattern": [
+    "   ",
+    "III",
+    " H "
+  ],
+  "key": {
+    "H": {
+      "item": "lycanitesmobs:equipmentpart_woodenhilt"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -88,21 +88,16 @@ public class EntityShambler extends TameableCreatureEntity implements IMob {
         if(damageSrc.isFireDamage())
             return 2.0F;
         if(damageSrc.getTrueSource() != null) {
-            Item heldItem = null;
-            if(damageSrc.getTrueSource() instanceof PlayerEntity) {
-                PlayerEntity entityPlayer = (PlayerEntity)damageSrc.getTrueSource();
-                if(!entityPlayer.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-                    heldItem = entityPlayer.getHeldItem(Hand.MAIN_HAND).getItem();
-                }
-            }
-            else if(damageSrc.getTrueSource() instanceof LivingEntity) {
+            ItemStack heldItem = ItemStack.EMPTY;
+            if(damageSrc.getTrueSource() instanceof LivingEntity) {
                 LivingEntity entityLiving = (LivingEntity)damageSrc.getTrueSource();
                 if(!entityLiving.getHeldItem(Hand.MAIN_HAND).isEmpty()) {
-                    heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND).getItem();
+                    heldItem = entityLiving.getHeldItem(Hand.MAIN_HAND);
                 }
             }
-            if(ObjectLists.isAxe(heldItem))
+            if(ObjectLists.isAxe(heldItem)) {
                 return 2.0F;
+            }
         }
         return super.getDamageModifier(damageSrc);
     }
