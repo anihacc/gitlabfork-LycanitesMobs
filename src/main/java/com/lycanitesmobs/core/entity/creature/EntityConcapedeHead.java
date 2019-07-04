@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
@@ -41,6 +42,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("vegetables"));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	

@@ -26,9 +26,9 @@ public class TemptGoal extends Goal {
     private boolean ignoreTemptMeta = false;
     private String temptList = null;
     private int retemptTime;
-    private int retemptTimeMax = 10; // Lowered from 100 because it's just annoying!
+    private int retemptTimeMax = 0; // Lowered from 100 because it's just annoying!
     private double temptDistanceMin = 1.0D;
-    private double temptDistanceMax = 10.0D;
+    private double temptDistanceMax = 16.0D;
     private boolean scaredByPlayerMovement = false;
     private boolean stopAttack = false;
     private boolean includeTreats = true;
@@ -127,8 +127,8 @@ public class TemptGoal extends Goal {
             return false;
         }
 
-        // Creature Type Treats:
-        if(this.includeTreats && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof ItemTreat) {
+        // Creature Type Treats for Tameables:
+        if(this.includeTreats && this.host.creatureInfo.isTameable() && this.host.creatureInfo.creatureType != null && itemStack.getItem() instanceof ItemTreat) {
             ItemTreat itemTreat = (ItemTreat)itemStack.getItem();
             if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
                 return true;
@@ -137,16 +137,16 @@ public class TemptGoal extends Goal {
 
         // Tempt List:
         if(this.temptList != null) {
-            if(!ObjectLists.inItemList(this.temptList, itemStack))
-                return false;
+            if(ObjectLists.inItemList(this.temptList, itemStack)) {
+                return true;
+            }
         }
 
         // Single Tempt Item:
         else if(this.temptItemStack != null) {
-            if(itemStack.getItem() != this.temptItemStack.getItem())
+            if(itemStack.getItem() != this.temptItemStack.getItem()) {
                 return false;
-            if(!this.ignoreTemptMeta && itemStack.getItem() == this.temptItemStack.getItem())
-                return false;
+            }
             return true;
         }
 
@@ -210,7 +210,7 @@ public class TemptGoal extends Goal {
         if(this.host instanceof AgeableCreatureEntity) {
             AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
             if(!ageable.isChild() && !ageable.canBreed())
-                this.retemptTime *= 10;
+                Math.max(this.retemptTime *= 10, 100);
         }
         this.isRunning = false;
         if (this.host.getNavigator() instanceof GroundPathNavigator || this.host.getNavigator() instanceof CreaturePathNavigator) {

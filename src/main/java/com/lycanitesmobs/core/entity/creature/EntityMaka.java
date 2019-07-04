@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -41,9 +42,10 @@ public class EntityMaka extends AgeableCreatureEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("vegetables"));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
     }
 
 
