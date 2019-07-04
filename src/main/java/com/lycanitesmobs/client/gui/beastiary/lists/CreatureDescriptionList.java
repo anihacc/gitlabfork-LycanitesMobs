@@ -65,7 +65,7 @@ public class CreatureDescriptionList extends BaseList {
 			text.appendText("\u00A7l")
 					.appendSibling(new TranslationTextComponent("gui.beastiary.tameable"))
 					.appendText(": " + "\u00A7r")
-					.appendSibling(new TranslationTextComponent(creatureInfo.creatureType.getTreatItem().getTranslationKey() + ".name"))
+					.appendSibling(creatureInfo.creatureType.getTreatItem().getName())
 					.appendText("\n\n");
 		}
 
