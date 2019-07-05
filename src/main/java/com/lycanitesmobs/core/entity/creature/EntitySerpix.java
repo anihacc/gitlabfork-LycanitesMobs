@@ -81,7 +81,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
         // Type:
         List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity((EntityType<? extends BaseProjectileEntity>) ObjectManager.specialEntityTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
         RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(ProjectileManager.getInstance().oldProjectileTypes.get(RapidFireProjectileEntity.class), EntityBlizzard.class, this.getEntityWorld(), this, 15, 3);
