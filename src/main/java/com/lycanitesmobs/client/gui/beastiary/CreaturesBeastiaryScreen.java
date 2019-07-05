@@ -116,7 +116,9 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 			text = "\u00A7l" + new TranslationTextComponent("creature.stat.knowledge").getFormattedText() + ": " + "\u00A7r";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
 			this.drawBar(TextureManager.getTexture("GUIPetSpiritEmpty"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, 3, 10);
-			this.drawBar(TextureManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+			if(creatureKnowledge != null) {
+				this.drawBar(TextureManager.getTexture("GUIPetSpiritUsed"), nextX + this.getFontRenderer().getStringWidth(text), nextY, 0, 9, 9, creatureKnowledge.rank, 10);
+			}
 		}
 
 		// Creature Type Display:
