@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.ModelCreatureObj;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -22,6 +23,10 @@ public class ModelTemplateBiped extends ModelCreatureObj {
         float rotX = 0F;
         float rotY = 0F;
         float rotZ = 0F;
+
+        BaseCreatureEntity creatureEntity = null;
+        if(entity instanceof BaseCreatureEntity)
+            creatureEntity = (BaseCreatureEntity)entity;
 
         // Idle:
         if(partName.equals("mouth")) {
@@ -93,17 +98,30 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
             }
             if(partName.equals("legleft"))
-                rotX += 50;
+                rotX += 20;
             if(partName.equals("legright"))
-                rotX += 50;
+                rotX -= 20;
         }
 
         // Attack:
-        if(partName.equals("mouth")) {
-            rotX += 20.0F * this.getAttackProgress();
+        if(creatureEntity != null && creatureEntity.hasAttackTarget()) {
+            if (partName.equals("mouth")) {
+                rotX += 20.0F;
+            }
+            if (partName.contains("armleft")) {
+                rotX -= 20.0F + (60.0F * this.getAttackProgress());
+            }
+            if (partName.contains("armright")) {
+                rotX -= 80.0F * this.getAttackProgress();
+            }
         }
-        if(partName.equals("armleft") || partName.equals("armright")) {
-            rotX -= 80.0F * this.getAttackProgress();
+
+        // Riding:
+        if(entity.isPassenger()) {
+            if (partName.equals("legleft"))
+                rotX -= 50;
+            if (partName.equals("legright"))
+                rotX -= 50;
         }
 
         // Apply Animations:

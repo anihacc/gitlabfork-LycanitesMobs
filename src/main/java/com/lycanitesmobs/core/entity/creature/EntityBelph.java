@@ -44,7 +44,7 @@ public class EntityBelph extends TameableCreatureEntity implements IMob {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MoveRestrictionGoal(this));
+        //this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MoveRestrictionGoal(this));
 
         super.registerGoals();
 
