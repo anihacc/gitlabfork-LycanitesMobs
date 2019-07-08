@@ -200,10 +200,13 @@ public class Effects {
 
 				// Spread:
 				if(entity.getEntityWorld().getGameTime() % 20 == 0) {
-					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 10);
+					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 6);
 					for(Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity)entityObj;
 						if(target != entity && !entity.isOnSameTeam(target)) {
+							if(target instanceof PlayerEntity && !entity.canEntityBeSeen(target)) {
+								continue;
+							}
 							int amplifier = entity.getActivePotionEffect(plague).getAmplifier();
 							int duration = entity.getActivePotionEffect(plague).getDuration();
 							if(amplifier > 0) {
