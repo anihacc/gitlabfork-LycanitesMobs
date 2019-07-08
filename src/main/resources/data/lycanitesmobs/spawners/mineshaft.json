@@ -22,13 +22,14 @@
 			"rangeMax": [32, 32, 32],
 			"sorting": "random",
 			"blocks": [
-				"minecraft:planks",
 				"minecraft:rail",
-				"minecraft:web"
+				"minecraft:cobweb"
 			],
 			"blockCost": 8,
 			"listType": "whitelist",
-			"requiredBlockTypes": 4
+			"requiredBlockTypes": 4,
+			"surface": false,
+			"underground": true
 		}
 	],
 	"mobSpawns": [
