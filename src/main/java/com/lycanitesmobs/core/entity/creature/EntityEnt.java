@@ -58,9 +58,9 @@ public class EntityEnt extends TameableCreatureEntity implements IMob {
         // Water Healing:
         if(this.getAir() >= 0) {
             if (this.isInWater())
-                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 2));
-            else if (this.isInWaterRainOrBubbleColumn())
                 this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 1));
+            else if (this.isInWaterRainOrBubbleColumn())
+                this.addPotionEffect(new EffectInstance(Effects.REGENERATION, 3 * 20, 0));
         }
     }
     

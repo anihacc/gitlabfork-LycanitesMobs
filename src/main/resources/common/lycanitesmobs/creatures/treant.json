@@ -57,8 +57,7 @@
 		}
 	],
 	"elements": [
-		"arbour",
-		"lightning"
+		"arbour"
 	],
 	"peaceful": false,
 	"summonable": false,
