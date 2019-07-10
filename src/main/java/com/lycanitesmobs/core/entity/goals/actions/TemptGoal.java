@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -110,10 +111,22 @@ public class TemptGoal extends Goal {
         
         if(this.host instanceof TameableCreatureEntity && this.host.isTamed())
         	return false;
-		
-        this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.temptDistanceMax, entity -> true);
-        if(this.player == null)
-            return false;
+
+        if(this.player == null) {
+            // Find New Player:
+            this.player = this.host.getEntityWorld().getClosestPlayer(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.temptDistanceMax, entity -> true);
+            if(this.player == null) {
+                return false;
+            }
+        }
+        else {
+            // Check Current Player:
+            if(this.host.getDistanceSq(this.player) > this.temptDistanceMax * this.temptDistanceMax) {
+                LycanitesMobs.logDebug("", "Player out of range: " + this.host.getDistanceSq(this.player) + "/" + this.temptDistanceMax);
+                this.player = null;
+                return false;
+            }
+        }
 
         if(!this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand()))
             return false;
@@ -175,7 +188,6 @@ public class TemptGoal extends Goal {
             this.targetPitch = (double)this.player.rotationPitch;
             this.targetYaw = (double)this.player.rotationYaw;
         }
-
         return this.shouldExecute();
     }
     
@@ -194,8 +206,9 @@ public class TemptGoal extends Goal {
             this.canSwim = !navigateGround.getCanSwim();
             navigateGround.setCanSwim(true);
         }
-        if(this.stopAttack)
-        	this.host.setAttackTarget(null);
+        if(this.stopAttack) {
+            this.host.setAttackTarget(null);
+        }
     }
     
     
@@ -204,6 +217,7 @@ public class TemptGoal extends Goal {
   	// ==================================================
 	@Override
     public void resetTask() {
+        LycanitesMobs.logDebug("", "Tempt RESET!");
         this.player = null;
         this.host.getNavigator().clearPath();
         this.retemptTime = this.retemptTimeMax;
@@ -225,16 +239,20 @@ public class TemptGoal extends Goal {
   	// ==================================================
 	@Override
     public void tick() {
-        if(this.stopAttack)
-        	this.host.setAttackTarget(null);
+        if(this.stopAttack) {
+            this.host.setAttackTarget(null);
+        }
         this.host.getLookController().setLookPositionWithEntity(this.player, 30.0F, (float)this.host.getVerticalFaceSpeed());
-        if(this.host.getDistance(this.player) < this.temptDistanceMin)
+        if(this.host.getDistanceSq(this.player) < this.temptDistanceMin * this.temptDistanceMin) {
             this.host.clearMovement();
+        }
         else {
-        	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().tryMoveToEntityLiving(this.player, this.speed);
-        	else
-        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.player.posX, (int)this.player.posY, (int)this.player.posZ), speed);
+        	if(!this.host.useDirectNavigator()) {
+                this.host.getNavigator().tryMoveToEntityLiving(this.player, this.speed);
+            }
+        	else {
+                this.host.directNavigator.setTargetPosition(new BlockPos((int) this.player.posX, (int) this.player.posY, (int) this.player.posZ), speed);
+            }
         }
     }
     

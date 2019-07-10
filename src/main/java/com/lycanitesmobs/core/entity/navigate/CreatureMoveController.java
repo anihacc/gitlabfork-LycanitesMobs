@@ -1,12 +1,21 @@
 package com.lycanitesmobs.core.entity.navigate;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.controller.LookController;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.pathfinding.NodeProcessor;
+import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 
 public class CreatureMoveController extends MovementController {
 
@@ -40,7 +49,72 @@ public class CreatureMoveController extends MovementController {
         }
 
         // Walking:
-        super.tick();
+        float moveZ;
+        if (this.action == MovementController.Action.STRAFE) {
+            float moveSpeed = (float)this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
+            float scaledSpeed = (float)this.speed * moveSpeed;
+            float moveForward = this.moveForward;
+            float moveStrafe = this.moveStrafe;
+            float velocity = MathHelper.sqrt(moveForward * moveForward + moveStrafe * moveStrafe);
+            if (velocity < 1.0F) {
+                velocity = 1.0F;
+            }
+
+            velocity = scaledSpeed / velocity;
+            moveForward *= velocity;
+            moveStrafe *= velocity;
+            float yawSin = MathHelper.sin(this.mob.rotationYaw * 0.017453292F);
+            float yawCos = MathHelper.cos(this.mob.rotationYaw * 0.017453292F);
+            float moveX = moveForward * yawCos - moveStrafe * yawSin;
+            moveZ = moveStrafe * yawCos + moveForward * yawSin;
+            PathNavigator pathNavigator = this.mob.getNavigator();
+            NodeProcessor nodeProcessor = pathNavigator.getNodeProcessor();
+            if (nodeProcessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.posX + (double) moveX), MathHelper.floor(this.mob.posY), MathHelper.floor(this.mob.posZ + (double) moveZ)) != PathNodeType.WALKABLE) {
+                this.moveForward = 1.0F;
+                this.moveStrafe = 0.0F;
+                scaledSpeed = moveSpeed;
+            }
+
+            this.mob.setAIMoveSpeed(scaledSpeed);
+            this.mob.setMoveForward(this.moveForward);
+            this.mob.setMoveStrafing(this.moveStrafe);
+            this.action = MovementController.Action.WAIT;
+        }
+        else if (this.action == MovementController.Action.MOVE_TO) {
+            this.action = MovementController.Action.WAIT;
+            double distanceX = this.posX - this.mob.posX;
+            double distanceZ = this.posZ - this.mob.posZ;
+            double distanceY = this.posY - this.mob.posY;
+            double distanceXZ = distanceX * distanceX + distanceZ * distanceZ;
+            double distance = distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ;
+            if (distance < 2.500000277905201E-7D) {
+                this.mob.setMoveForward(0.0F);
+                return;
+            }
+
+            moveZ = (float)(MathHelper.atan2(distanceZ, distanceX) * 57.2957763671875D) - 90.0F;
+            this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, moveZ, 90.0F);
+            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+
+            // Jumping:
+            BlockPos entityPos = new BlockPos(this.mob);
+            BlockState blockState = this.mob.world.getBlockState(entityPos);
+            VoxelShape collisionShape = blockState.getCollisionShape(this.mob.world, entityPos);
+            double jumpRange = (double)Math.max(1.0F, this.mob.getSize(Pose.STANDING).width + 0.25F);
+            if (distanceY > (double)this.mob.stepHeight && distanceXZ < jumpRange || !collisionShape.isEmpty() && this.mob.posY < collisionShape.getEnd(Direction.Axis.Y) + (double)entityPos.getY()) {
+                this.mob.getJumpController().setJumping();
+                this.action = MovementController.Action.JUMPING;
+            }
+        }
+        else if (this.action == MovementController.Action.JUMPING) {
+            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
+            if (this.mob.onGround) {
+                this.action = MovementController.Action.WAIT;
+            }
+        }
+        else {
+            this.mob.setMoveForward(0.0F);
+        }
     }
 
 

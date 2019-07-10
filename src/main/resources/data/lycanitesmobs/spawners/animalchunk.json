@@ -18,7 +18,7 @@
 	"triggers": [
 		{
 			"type": "chunk",
-			"chance": 0.5
+			"chance": 0.25
 		}
 	],
 	"locations": [
@@ -29,6 +29,7 @@
 			"sorting": "random",
 			"limit": 32,
 			"solidGround": true,
+			"underground": false,
 			"easyDifficultyRangeScale": 1,
 			"normalDifficultyRangeScale": 1,
 			"hardDifficultyRangeScale": 1

@@ -70,6 +70,9 @@ public class WanderGoal extends Goal {
    	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
+		if(this.host.hasCustomName())
+			LycanitesMobs.logDebug("", "WANDER!");
+
     	if(!this.host.useDirectNavigator()) {
     	    if(this.host.getNavigator().noPath()) {
                 return false;
