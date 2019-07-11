@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -39,9 +40,9 @@ public class EntityAspid extends AgeableCreatureEntity {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
+		super.registerGoals();
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("mushrooms"));
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	
@@ -52,6 +53,10 @@ public class EntityAspid extends AgeableCreatureEntity {
 	@Override
     public void livingTick() {
         super.livingTick();
+
+        if(!this.getEntityWorld().isRemote && this.hasCustomName()) {
+			//LycanitesMobs.logDebug("", "Distractions: " + this.nextDistractionGoalIndex);
+		}
         
         // Trail:
         if(!this.getEntityWorld().isRemote && (this.ticksExisted % 10 == 0 || this.isMoving() && this.ticksExisted % 5 == 0)) {

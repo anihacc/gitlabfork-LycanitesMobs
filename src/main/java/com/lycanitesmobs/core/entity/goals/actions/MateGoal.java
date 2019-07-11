@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -58,8 +57,9 @@ public class MateGoal extends Goal {
   	// ==================================================
 	@Override
     public boolean shouldExecute() {
-        if(!this.host.isInLove())
-            return false;
+        if(!this.host.isInLove()) {
+			return false;
+		}
         this.partner = this.getPartner();
         return this.partner != null;
     }

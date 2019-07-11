@@ -106,11 +106,13 @@ public class TemptGoal extends Goal {
             return false;
         }
         
-        if(!this.host.canBeTempted())
-        	return false;
+        if(!this.host.canBeTempted()) {
+            return false;
+        }
         
-        if(this.host instanceof TameableCreatureEntity && this.host.isTamed())
-        	return false;
+        if(this.host instanceof TameableCreatureEntity && this.host.isTamed()) {
+            return false;
+        }
 
         if(this.player == null) {
             // Find New Player:
@@ -122,15 +124,16 @@ public class TemptGoal extends Goal {
         else {
             // Check Current Player:
             if(this.host.getDistanceSq(this.player) > this.temptDistanceMax * this.temptDistanceMax) {
-                LycanitesMobs.logDebug("", "Player out of range: " + this.host.getDistanceSq(this.player) + "/" + this.temptDistanceMax);
                 this.player = null;
                 return false;
             }
         }
 
-        if(!this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand()))
+        if(!this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand())) {
+            this.player = null;
             return false;
-        
+        }
+
         this.host.setStealth(0.0F);
         return true;
     }
@@ -162,7 +165,6 @@ public class TemptGoal extends Goal {
             }
             return true;
         }
-
         return false;
     }
     
@@ -217,14 +219,14 @@ public class TemptGoal extends Goal {
   	// ==================================================
 	@Override
     public void resetTask() {
-        LycanitesMobs.logDebug("", "Tempt RESET!");
         this.player = null;
         this.host.getNavigator().clearPath();
         this.retemptTime = this.retemptTimeMax;
         if(this.host instanceof AgeableCreatureEntity) {
             AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
-            if(!ageable.isChild() && !ageable.canBreed())
+            if(!ageable.isChild() && !ageable.canBreed()) {
                 Math.max(this.retemptTime *= 10, 100);
+            }
         }
         this.isRunning = false;
         if (this.host.getNavigator() instanceof GroundPathNavigator || this.host.getNavigator() instanceof CreaturePathNavigator) {

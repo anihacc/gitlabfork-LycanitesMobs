@@ -170,15 +170,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     protected BlockPos arenaCenter = null;
 
 	// AI Goals:
-	protected int nextPriorityGoalIndex = 10;
-	protected int nextDistractionGoalIndex = 30;
-	protected int nextCombatGoalIndex = 50;
-	protected int nextTravelGoalIndex = 70;
-	protected int nextIdleGoalIndex = 90;
+	protected int nextPriorityGoalIndex;
+	protected int nextDistractionGoalIndex;
+	protected int nextCombatGoalIndex;
+	protected int nextTravelGoalIndex;
+	protected int nextIdleGoalIndex;
 
-	protected int nextReactTargetIndex = 10;
-	protected int nextSpecialTargetIndex = 30;
-	protected int nextFindTargetIndex = 50;
+	protected int nextReactTargetIndex;
+	protected int nextSpecialTargetIndex;
+	protected int nextFindTargetIndex;
 
     // Spawning:
     /** Use the onFirstSpawn() method and not this variable. True if this creature has spawned for the first time (naturally or via spawn egg, etc, not reloaded from a saved chunk). **/
@@ -187,7 +187,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean spawnsInBlock = false;
     /** Can this mob spawn where it can't see the sky above? **/
     public boolean spawnsUnderground = true;
-    /** Can this mob spawn on land (not in liquids)? Note that setting a mob to WATERCREATURE means that they will only spawn in water anyway. **/
+    /** Can this mob spawn on land (not in liquids)? **/
     public boolean spawnsOnLand = true;
     /** Does this mob spawn inside liquids? **/
     public boolean spawnsInWater = false;
@@ -426,6 +426,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.extraMobBehaviour = new ExtraMobBehaviour(this);
 		this.directNavigator = new DirectNavigator(this);
 
+		// Prepare AI Indexes:
+		this.nextPriorityGoalIndex = 10;
+		this.nextDistractionGoalIndex = 30;
+		this.nextCombatGoalIndex = 50;
+		this.nextTravelGoalIndex = 70;
+		this.nextIdleGoalIndex = 90;
+
+		this.nextReactTargetIndex = 10;
+		this.nextSpecialTargetIndex = 30;
+		this.nextFindTargetIndex = 50;
+
 		super.registerAttributes();
 		this.getAttributes().registerAttribute(DEFENSE);
 		this.getAttributes().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
@@ -474,7 +485,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new PaddleGoal(this));
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new StayByWaterGoal(this));
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
+		if(this.creatureInfo.isTameable())
+			this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
 		if(this instanceof IFusable)
 			this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new FollowFuseGoal(this).setLostDistance(16));
 

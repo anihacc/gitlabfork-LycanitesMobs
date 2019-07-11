@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -49,6 +48,25 @@ public class CreatureMoveController extends MovementController {
         }
 
         // Walking:
+        this.tickWalking();
+    }
+
+
+    // ==================== Checks ====================
+    /** Returns true if the entity is controlled by its rider. **/
+    public boolean isControlledByRider() {
+        // Mounted By Player:
+        if(this.entityCreature != null && this.entityCreature.getControllingPassenger() instanceof PlayerEntity && this.entityCreature.canBeSteered()) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // ==================== Movements ====================
+    /** Used by land entities for ground movement. **/
+    public void tickWalking() {
         float moveZ;
         if (this.action == MovementController.Action.STRAFE) {
             float moveSpeed = (float)this.mob.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue();
@@ -117,20 +135,6 @@ public class CreatureMoveController extends MovementController {
         }
     }
 
-
-    // ==================== Checks ====================
-    /** Returns true if the entity is controlled by its rider. **/
-    public boolean isControlledByRider() {
-        // Mounted By Player:
-        if(this.entityCreature != null && this.entityCreature.getControllingPassenger() instanceof PlayerEntity && this.entityCreature.canBeSteered()) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    // ==================== Movements ====================
     /** Used by strong swimmers for fast, smooth movement. **/
     public void tickSwimming() {
         if (this.action == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
