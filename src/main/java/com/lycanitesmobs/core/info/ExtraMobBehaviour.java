@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ExtraMobBehaviour {
@@ -143,6 +145,9 @@ public class ExtraMobBehaviour {
     		this.aiAttackPlayers = nbtTagCompound.getBoolean("AIAttackPlayers");
     		this.host.targetSelector.removeGoal(this.host.aiTargetPlayer);
     		if(this.aiAttackPlayers) {
+    			if(this.host.aiTargetPlayer == null) {
+    				this.host.aiTargetPlayer = new FindAttackTargetGoal(this.host).addTargets(EntityType.PLAYER);
+				}
     			this.host.targetSelector.addGoal(9, this.host.aiTargetPlayer);
     		}
     	}

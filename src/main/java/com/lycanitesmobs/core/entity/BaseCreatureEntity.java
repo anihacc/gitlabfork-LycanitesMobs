@@ -341,7 +341,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public List<ItemDrop> savedDrops = new ArrayList<>();
 
     // Override AI:
-    public FindAttackTargetGoal aiTargetPlayer = new FindAttackTargetGoal(this).addTargets(EntityType.PLAYER);
+    public FindAttackTargetGoal aiTargetPlayer = null;
     public RevengeGoal aiDefendAnimals = new RevengeGoal(this).setHelpClasses(AnimalEntity.class);
 
 	/**
@@ -2672,8 +2672,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this creature is hostile to the provided entity. **/
     public boolean isHostileTo(Entity target) {
-    	if(this.hostileTargets.contains(target.getType()))
-    		return true;
+    	if(this.hostileTargets.contains(target.getType())) {
+			return true;
+		}
 		for(CreatureGroup group : this.creatureInfo.getGroups()) {
 			if(group.shouldHunt(target) || group.shouldPackHunt(target)) {
 				return true;

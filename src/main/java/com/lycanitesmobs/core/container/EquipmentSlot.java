@@ -40,13 +40,13 @@ public class EquipmentSlot extends BaseSlot {
 			return this.type.equals(equipmentPart.slotType) && equipmentPart.levelMin <= this.containerForge.equipmentForge.getLevel();
 		}
 		else if(item instanceof ItemEquipment) {
-			if(this.containerForge.equipmentForge.getLevel() < 3) {
+			/*if(this.containerForge.equipmentForge.getLevel() < 3) {
 				ItemEquipment equipment = (ItemEquipment)item;
 				int equipmentLevel = equipment.getHighestLevel(itemStack);
 				if(equipmentLevel > this.containerForge.equipmentForge.getLevel()) {
 					return false;
 				}
-			}
+			}*/
 			return this.type.equals("piece") && !this.getHasStack();
 		}
         return false;
