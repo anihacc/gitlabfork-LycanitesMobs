@@ -6,11 +6,13 @@ import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +145,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 		}
 
 		// Check Block:
-		if(!this.isTriggerBlock(blockState, world, blockPos, fortune)) {
+		if(!this.isTriggerBlock(blockState, world, blockPos, fortune, player)) {
 			return;
 		}
 
@@ -156,7 +158,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	}
 
 	/** Returns true if the provided block is a match for this trigger. **/
-	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
 		if(this.blocks.size() > 0) {
 			Block block = blockState.getBlock();
 			if (this.blocks.contains(block)) {

@@ -6,8 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.LogBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
@@ -23,7 +26,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 
 
 	@Override
-	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
 		return this.isTreeLogBlock(blockState.getBlock(), world, blockPos) || this.isTreeLeavesBlock(blockState.getBlock(), world, blockPos);
 	}
 

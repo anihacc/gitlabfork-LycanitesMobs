@@ -25,7 +25,7 @@ public class SleepSpawnTrigger extends BlockSpawnTrigger {
 		}
 
 		// Check Block:
-		if(!this.isTriggerBlock(blockState, world, spawnPos, 0)) {
+		if(!this.isTriggerBlock(blockState, world, spawnPos, 0, player)) {
 			return false;
 		}
 

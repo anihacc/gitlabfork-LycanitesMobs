@@ -59,7 +59,7 @@ public class DefendOwnerGoal extends TargetingGoal {
     @Override
     protected boolean isValidTarget(LivingEntity target) {
     	// Owner Check:
-    	if(!this.tamedHost.isTamed())
+    	if(!this.tamedHost.isTamed() || this.getOwner() == null)
     		return false;
     	
     	// Passive Check:

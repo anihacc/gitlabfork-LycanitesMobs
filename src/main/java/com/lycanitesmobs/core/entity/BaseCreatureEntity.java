@@ -2672,6 +2672,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this creature is hostile to the provided entity. **/
     public boolean isHostileTo(Entity target) {
+    	if(target == null) {
+    		return false;
+		}
     	if(this.hostileTargets.contains(target.getType())) {
 			return true;
 		}

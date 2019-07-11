@@ -5,9 +5,12 @@ import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.VineBlock;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+
+import javax.annotation.Nullable;
 
 public class CropBlockSpawnTrigger extends BlockSpawnTrigger {
 
@@ -24,7 +27,7 @@ public class CropBlockSpawnTrigger extends BlockSpawnTrigger {
 
 
 	@Override
-	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune) {
+	public boolean isTriggerBlock(BlockState blockState, World world, BlockPos blockPos, int fortune, @Nullable LivingEntity entity) {
 		Block block = blockState.getBlock();
 		return block instanceof IPlantable || block instanceof VineBlock;
 	}

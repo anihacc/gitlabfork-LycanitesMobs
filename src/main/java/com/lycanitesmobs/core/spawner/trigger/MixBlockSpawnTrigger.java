@@ -6,6 +6,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 
 	/** Constructor **/
@@ -28,7 +30,7 @@ public class MixBlockSpawnTrigger extends BlockSpawnTrigger {
 	/** Called every time liquids mix to form a block. **/
 	public void onMix(World world, BlockState blockState, BlockPos mixPos) {
 		// Check Block:
-		if(!this.isTriggerBlock(blockState, world, mixPos, 0)) {
+		if(!this.isTriggerBlock(blockState, world, mixPos, 0, null)) {
 			return;
 		}
 
