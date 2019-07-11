@@ -40,7 +40,8 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+        this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.attackAI);
     }
 	
 	
