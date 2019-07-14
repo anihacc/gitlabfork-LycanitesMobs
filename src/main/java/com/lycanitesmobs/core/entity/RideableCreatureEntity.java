@@ -92,7 +92,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
     public void riderEffects(LivingEntity rider) {
         if(!rider.canBreatheUnderwater() && this.canBreatheUnderwater() && rider.isInWater())
             rider.setAir(300);
-        for(EffectInstance effectInstance : rider.getActivePotionEffects()) {
+        for(EffectInstance effectInstance : rider.getActivePotionEffects().toArray(new EffectInstance[rider.getActivePotionEffects().size()])) {
         	if(!this.isPotionApplicable(effectInstance) && ObjectLists.inEffectList("debuffs", effectInstance.getPotion())) {
         		rider.removePotionEffect(effectInstance.getPotion());
 			}
