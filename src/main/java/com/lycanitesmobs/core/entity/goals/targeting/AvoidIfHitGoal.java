@@ -59,7 +59,7 @@ public class AvoidIfHitGoal extends FindAvoidTargetGoal {
     		return false;
 
     	// Group Check:
-		boolean shouldFlee = true;
+		boolean shouldFlee = !this.host.creatureInfo.getGroups().isEmpty();
 		boolean shouldPackHunt = false;
 		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
 			if (group.shouldRevenge(this.host.getRevengeTarget())) {

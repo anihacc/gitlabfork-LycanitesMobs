@@ -30,7 +30,7 @@ public class EntityArcaneLaserEnd extends LaserEndProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "arcanelaser";
+    	this.entityName = "arcanelaserend";
     	this.modInfo = LycanitesMobs.modInfo;
     }
     

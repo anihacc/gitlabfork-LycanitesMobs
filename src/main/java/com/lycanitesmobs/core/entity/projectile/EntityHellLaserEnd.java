@@ -31,7 +31,7 @@ public class EntityHellLaserEnd extends LaserEndProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "helllaser";
+    	this.entityName = "helllaserend";
     	this.modInfo = LycanitesMobs.modInfo;
     }
     

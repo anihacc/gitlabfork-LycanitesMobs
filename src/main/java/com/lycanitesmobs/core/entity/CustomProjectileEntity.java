@@ -56,7 +56,6 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	@Override
 	public EntityType getType() {
 		if(this.projectileInfo == null) {
-			LycanitesMobs.logWarning("", "Get Type Accessed Too Early Custom Projectile!");
 			return super.getType();
 		}
 		return this.projectileInfo.getEntityType();
@@ -118,8 +117,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	// ==================================================
 	@Override
 	public void tick() {
-		if(this.projectileInfo == null && this.getEntityWorld().isRemote) {
-			this.loadProjectileInfo(this.getStringFromDataManager(PROJECTILE_NAME));
+		if(this.getEntityWorld().isRemote) {
+			if (this.projectileInfo == null) {
+				this.loadProjectileInfo(this.getStringFromDataManager(PROJECTILE_NAME));
+			}
 		}
 
 		super.tick();
@@ -185,9 +186,6 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	// ==================================================
 	@Override
 	public String getTextureName() {
-		if(this.projectileInfo != null) {
-			return this.projectileInfo.chargeItemName;
-		}
 		return this.entityName;
 	}
 

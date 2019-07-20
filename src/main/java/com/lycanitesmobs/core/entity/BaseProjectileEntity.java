@@ -6,6 +6,8 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import com.lycanitesmobs.core.network.MessageSpawnEntity;
+import com.lycanitesmobs.core.network.PacketHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
@@ -17,6 +19,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -76,8 +79,9 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
 	   this(entityType, world);
-	   this.setPosition(entityLiving.posX, entityLiving.posY, entityLiving.posZ);
+	   this.setPosition(entityLiving.posX, entityLiving.posY + entityLiving.getEyeHeight(), entityLiving.posZ);
 	   this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
+	   this.owner = entityLiving;
 	   this.setup();
     }
 
@@ -90,10 +94,15 @@ public class BaseProjectileEntity extends ThrowableEntity {
     @Override
 	public EntityType getType() {
 		if(ProjectileManager.getInstance().oldProjectileTypes.get(this.getClass()) == null) {
-			LycanitesMobs.logWarning("", "Missing Base Projectile Type! " + this.getClass());
 			return super.getType();
 		}
     	return ProjectileManager.getInstance().oldProjectileTypes.get(this.getClass());
+	}
+
+	@Override
+	public IPacket<?> createSpawnPacket() {
+    	LycanitesMobs.packetHandler.sendToWorld(new MessageSpawnEntity(this), this.getEntityWorld());
+    	return super.createSpawnPacket();
 	}
     
     // ========== Setup Projectile ==========
@@ -210,8 +219,11 @@ public class BaseProjectileEntity extends ThrowableEntity {
 			entityHit = ((EntityRayTraceResult)rayTraceResult).getEntity();
 		}
 		if(entityHit != null) {
-			if(this.getThrower() != null && entityHit == this.getThrower())
-				return;
+			if(this.getThrower() != null) {
+				if(entityHit == this.getThrower()) {
+					return;
+				}
+			}
 			boolean doDamage = true;
  			if(entityHit instanceof LivingEntity) {
  				doDamage = this.canDamage((LivingEntity)entityHit);
@@ -360,45 +372,47 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	
 	//========== Do Damage Check ==========
 	public boolean canDamage(LivingEntity targetEntity) {
-	    if(this.getEntityWorld().isRemote)
-		   return false;
+		if(this.getEntityWorld().isRemote)
+			return false;
 
-    	 LivingEntity owner = this.getThrower();
+		LivingEntity owner = this.getThrower();
 		if(owner != null) {
+			if(owner instanceof BaseCreatureEntity) {
+				BaseCreatureEntity ownerCreature = (BaseCreatureEntity) owner;
+				if (!ownerCreature.canAttack(targetEntity)) {
+					return false;
+				}
+			}
+		}
 
-		  if(owner instanceof BaseCreatureEntity) {
-			 BaseCreatureEntity ownerCreature = (BaseCreatureEntity)owner;
-			 if(!ownerCreature.canAttack(targetEntity))
+		// Player Damage Event:
+		if(owner instanceof PlayerEntity) {
+			if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)owner, targetEntity))) {
 				return false;
-		  }
-	    	
-	    	// Player Damage Event:
-		    if(owner instanceof PlayerEntity) {
-		    	if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)owner, targetEntity))) {
-		    		return false;
-		    	}
-		    }
-		    
-		    // Player PVP:
-		    if(!this.getEntityWorld().getServer().isPVPEnabled()) {
-		    	if(owner instanceof PlayerEntity) {
-			    	if(targetEntity instanceof PlayerEntity)
-			    		return false;
-			    	if(targetEntity instanceof TameableCreatureEntity) {
-			    		TameableCreatureEntity tamedTarget = (TameableCreatureEntity)targetEntity;
-			    		if(tamedTarget.isTamed()) {
-			    			return false;
-			    		}
-			    	}
-		    	}
-		    }
-		    
-		    // Friendly Fire:
-		    if(owner.isOnSameTeam(targetEntity) && CreatureManager.getInstance().config.friendlyFire)
-		    	return false;
-	    }
-	    
-	    return true;
+			}
+		}
+
+		// Player PVP:
+		if(!this.getEntityWorld().getServer().isPVPEnabled()) {
+			if(owner instanceof PlayerEntity) {
+				if(targetEntity instanceof PlayerEntity) {
+					return false;
+				}
+				if(targetEntity instanceof TameableCreatureEntity) {
+					TameableCreatureEntity tamedTarget = (TameableCreatureEntity)targetEntity;
+					if(tamedTarget.isTamed()) {
+						return false;
+					}
+				}
+			}
+		}
+
+		// Friendly Fire:
+		if(owner.isOnSameTeam(targetEntity) && CreatureManager.getInstance().config.friendlyFire) {
+			return false;
+		}
+
+		return true;
 	}
 	
 
@@ -577,7 +591,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	public ResourceLocation getTexture() {
 		if(TextureManager.getTexture(this.getTextureName()) == null)
-			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/items/" + this.getTextureName() + ".png");
+			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/item/" + this.getTextureName() + ".png");
 		return TextureManager.getTexture(this.getTextureName());
 	}
 	

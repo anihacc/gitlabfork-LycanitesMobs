@@ -57,7 +57,7 @@ public class CreatureInfo {
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
 
-	/** If true, this is not a true mob, for example the fear entity. It will also not be registered to spawners and will not load assets, etc. **/
+	/** If true, this is not a true mob, for example the fear entity. It will also not be register1ed to spawners and will not load assets, etc. **/
 	public boolean dummy = false;
 
 	/** The Spawn Information for this creature. **/
@@ -414,7 +414,7 @@ public class CreatureInfo {
 			entityTypeBuilder.size((float)this.width, (float)this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
-			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor);
+			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
 		}
 		return this.entityType;
 	}

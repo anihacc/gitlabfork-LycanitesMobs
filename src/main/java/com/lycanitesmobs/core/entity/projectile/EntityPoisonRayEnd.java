@@ -31,7 +31,7 @@ public class EntityPoisonRayEnd extends LaserEndProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "poisonray";
+    	this.entityName = "poisonrayend";
     	this.modInfo = LycanitesMobs.modInfo;
 		this.waterProof = true;
     }
@@ -60,6 +60,6 @@ public class EntityPoisonRayEnd extends LaserEndProjectileEntity {
  	// ==================================================
 	@Override
 	public SoundEvent getLaunchSound() {
-    	return ObjectManager.getSound(entityName);
+    	return ObjectManager.getSound("poisonray");
 	}
 }

@@ -273,13 +273,13 @@ public class ProjectileInfo {
 		if(this.entityType == null) {
 			EntityType.Builder entityTypeBuilder = EntityType.Builder.create(EntityFactory.getInstance(), EntityClassification.MISC);
 			//entityTypeBuilder.setCustomClientFactory(EntityFactory.getInstance().createOnClientFunction);
-			entityTypeBuilder.setTrackingRange(5);
-			entityTypeBuilder.setUpdateInterval(20);
+			entityTypeBuilder.setTrackingRange(40);
+			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 			entityTypeBuilder.size(this.width, this.height);
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
-			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor);
+			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());
 		}
 		return this.entityType;
 	}

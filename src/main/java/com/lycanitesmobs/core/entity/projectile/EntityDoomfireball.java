@@ -38,7 +38,7 @@ public class EntityDoomfireball extends BaseProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "doomfire";
+    	this.entityName = "doomfireball";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(2);
     	this.setProjectileScale(1F);

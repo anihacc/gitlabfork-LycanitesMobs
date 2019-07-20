@@ -288,7 +288,7 @@ public class ObjectManager {
 
 			EntityType entityType = entityTypeBuilder.build(entityName);
 			entityType.setRegistryName(LycanitesMobs.MODID, entityName);
-			EntityFactory.getInstance().addEntityType(entityType, specialEntityConstructors.get(specialEntities.get(entityName)));
+			EntityFactory.getInstance().addEntityType(entityType, specialEntityConstructors.get(specialEntities.get(entityName)), entityName);
 			specialEntityTypes.put(specialEntities.get(entityName), entityType);
 			event.getRegistry().register(entityType);
 		}

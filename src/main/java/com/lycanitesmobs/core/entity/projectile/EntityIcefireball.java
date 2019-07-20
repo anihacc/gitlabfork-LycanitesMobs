@@ -36,7 +36,7 @@ public class EntityIcefireball extends BaseProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "icefire";
+    	this.entityName = "icefireball";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(2);
     	this.setProjectileScale(2F);
