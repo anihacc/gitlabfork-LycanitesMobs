@@ -125,7 +125,7 @@ public class ProjectileManager extends JSONLoader {
 		EntityType entityType = entityTypeBuilder.build(entityName);
 		entityType.setRegistryName(LycanitesMobs.MODID, entityName);
 		try {
-			EntityFactory.getInstance().addEntityType(entityType, entityClass.getConstructor(EntityType.class, World.class));
+			EntityFactory.getInstance().addEntityType(entityType, entityClass.getConstructor(EntityType.class, World.class), entityName);
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

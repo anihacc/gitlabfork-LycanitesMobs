@@ -2238,9 +2238,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         // Creatures:
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
+
+			// Same Species, Same Owner:
+			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
+				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
+					return false;
+				}
+			}
+
+			// Master:
             if(targetCreature.getMasterTarget() == this) {
 				return false;
 			}
+
+            // Bosses and Rares:
             if(!(this instanceof IGroupBoss)) {
                 if(!this.isTamed()) {
 					if(targetEntity instanceof IGroupBoss) {
@@ -2437,7 +2448,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
 		projectile.shoot(distanceX, distanceY + distanceXZ, distanceZ, velocity, inaccuracy);
-		//this.getEntityWorld().addEntity(projectile);
+		this.getEntityWorld().addEntity(projectile);
 
 		if(projectile.getLaunchSound() != null) {
 			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

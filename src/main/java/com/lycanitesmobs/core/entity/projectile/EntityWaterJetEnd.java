@@ -31,7 +31,7 @@ public class EntityWaterJetEnd extends LaserEndProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "waterjet";
+    	this.entityName = "waterjetend";
     	this.modInfo = LycanitesMobs.modInfo;
     }
     

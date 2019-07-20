@@ -39,7 +39,7 @@ public class EntityHellfireball extends BaseProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "hellfire";
+    	this.entityName = "hellfireball";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(4);
     	this.setProjectileScale(2.5F);

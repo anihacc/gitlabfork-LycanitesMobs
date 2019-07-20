@@ -31,7 +31,7 @@ public class EntityLifeDrainEnd extends LaserEndProjectileEntity {
     
     // ========== Setup Projectile ==========
     public void setup() {
-    	this.entityName = "lifedrain";
+    	this.entityName = "lifedrainend";
     	this.modInfo = LycanitesMobs.modInfo;
 		this.waterProof = true;
     }

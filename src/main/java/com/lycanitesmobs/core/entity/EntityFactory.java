@@ -22,16 +22,18 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 
 	public Map<EntityType, Constructor<? extends Entity>> entityTypeConstructorMap = new HashMap<>();
 	public Map<Constructor<? extends Entity>, EntityType> entityConstructorTypeMap = new HashMap<>();
+	public Map<String, EntityType> entityTypeNetworkMap = new HashMap<>();
 
 	/**
 	 * Adds a new Entity Type and Entity Class mapping for this Factory to create.
 	 * @param entityType The Entity Type to create from.
 	 * @param entityClass The Entity Class to instantiate for the type.
 	 */
-	public void addEntityType(EntityType entityType, Constructor<? extends Entity> entityClass) {
+	public void addEntityType(EntityType entityType, Constructor<? extends Entity> entityClass, String networkName) {
 		LycanitesMobs.logDebug("Entity", "Adding entity: " + entityClass + " Type: " + entityType.getName() + " Classification: " + entityType.getClassification());
 		this.entityTypeConstructorMap.put(entityType, entityClass);
 		this.entityConstructorTypeMap.put(entityClass, entityType);
+		this.entityTypeNetworkMap.put(networkName, entityType);
 	}
 
 	/**
@@ -42,10 +44,10 @@ public class EntityFactory implements EntityType.IFactory<Entity> {
 	 */
 	@Override
 	public Entity create(EntityType entityType, World world) {
-		/*if(!this.entityConstructorTypeMap.containsKey(entityType)) {
-			LycanitesMobs.logWarning("", "Unable to create entity for Entity Type: " + entityType);
+		if(!this.entityTypeConstructorMap.containsKey(entityType)) {
+			LycanitesMobs.logWarning("", "Unable to find constructor for Entity Type: " + entityType);
 			return null;
-		}*/
+		}
 		LycanitesMobs.logDebug("Entity", "Spawning entity: " + this.entityTypeConstructorMap.get(entityType) + " - " + entityType.getClassification());
 		Constructor<? extends Entity> constructor = this.entityTypeConstructorMap.get(entityType);
 

@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.model;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.client.renderer.RenderProjectileModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;

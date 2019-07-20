@@ -137,6 +137,17 @@ public class EntityWisp extends TameableCreatureEntity {
 		}
     }
 
+    @Override
+	public boolean rollWanderChance() {
+		if(this.playPartner == null) {
+			return super.rollWanderChance();
+		}
+		if(this.isAttackOnCooldown()) {
+			return false;
+		}
+		return this.getRNG().nextDouble() <= 0.002D;
+	}
+
 
     // ==================================================
     //                      Attacks

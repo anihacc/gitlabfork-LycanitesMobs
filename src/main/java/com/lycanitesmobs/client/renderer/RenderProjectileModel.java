@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.google.common.collect.Lists;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -63,7 +64,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 				return;
 			}
 			GlStateManager.translatef((float)x, (float)y - 0.25F, (float)z);
-			GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+			GlStateManager.scalef(0.25F, 0.25F, 0.25F);
 			GlStateManager.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
 
 			if(!(this.renderModel instanceof ModelProjectileObj)) {
@@ -71,6 +72,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 			}
 			else {
 				((ModelProjectileObj)this.renderModel).generateAnimationFrames(entity, 0, 0, partialTicks, 0, 0, 1);
+				this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, null, false);
 				for (LayerRenderer<BaseProjectileEntity, ModelProjectileBase> renderLayer : this.renderLayers) {
 					if (renderLayer instanceof LayerProjectileBase)
 						this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, (LayerProjectileBase) renderLayer, false);
