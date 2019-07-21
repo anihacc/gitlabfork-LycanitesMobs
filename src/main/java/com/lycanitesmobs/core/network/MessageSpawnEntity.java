@@ -4,14 +4,11 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -55,13 +52,12 @@ public class MessageSpawnEntity {
 			return;
 
 		ctx.get().enqueueWork(() -> {
-			ClientWorld world = Minecraft.getInstance().world;
 			if(!EntityFactory.getInstance().entityTypeNetworkMap.containsKey(message.entityTypeName)) {
 				LycanitesMobs.logWarning("", "Unable to find entity type from packet: " + message.entityTypeName);
 				return;
 			}
 			EntityType entityType = EntityFactory.getInstance().entityTypeNetworkMap.get(message.entityTypeName);
-			Entity entity = EntityFactory.getInstance().create(entityType, world);
+			Entity entity = EntityFactory.getInstance().create(entityType, LycanitesMobs.PROXY.getWorld());
 			if(entity == null) {
 				LycanitesMobs.logWarning("", "Unable to create client entity from packet: " + message.entityTypeName);
 				return;
@@ -83,7 +79,7 @@ public class MessageSpawnEntity {
 				}
 			}
 
-			world.addEntity(message.entityId, entity);
+			LycanitesMobs.PROXY.addEntityToWorld(message.entityId, entity);
         });
 	}
 	
