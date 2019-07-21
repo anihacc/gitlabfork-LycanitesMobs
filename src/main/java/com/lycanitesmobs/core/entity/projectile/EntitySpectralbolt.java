@@ -37,6 +37,7 @@ public class EntitySpectralbolt extends BaseProjectileEntity {
     	this.entityName = "spectralbolt";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(2);
+		this.setProjectileScale(1F);
     	
     	this.waterProof = true;
     }

@@ -35,8 +35,8 @@ public class EntityBloodleech extends BaseProjectileEntity {
     	this.entityName = "bloodleech";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(2);
+		this.setProjectileScale(1F);
         this.knockbackChance = 0.5D;
-    	
     	this.waterProof = true;
     }
     

@@ -39,6 +39,7 @@ public class EntityFrostweb extends BaseProjectileEntity {
     	this.entityName = "frostweb";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(2);
+        this.setProjectileScale(1F);
         this.knockbackChance = 0D;
     }
     
