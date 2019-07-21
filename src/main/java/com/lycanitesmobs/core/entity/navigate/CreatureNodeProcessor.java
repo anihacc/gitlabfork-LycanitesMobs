@@ -11,10 +11,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Pose;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.pathfinding.NodeProcessor;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.pathfinding.PathType;
+import net.minecraft.pathfinding.*;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
@@ -101,12 +98,12 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     // ==================== Start ====================
     /** Returns a PathPoint to the given coordinates. **/
     @Override
-    public PathPoint getPathPointToCoords(double x, double y, double z) {
+    public FlaggedPathPoint func_224768_a(double x, double y, double z) { // getPathPointToCoords
         // Flying/Strong Swimming:
         if(this.flying() || this.swimming()) {
-            return this.openPoint(MathHelper.floor(x - this.getWidth()), MathHelper.floor(y + 0.5D), MathHelper.floor(z - this.getWidth()));
+            return new FlaggedPathPoint(this.openPoint(MathHelper.floor(x - this.getWidth()), MathHelper.floor(y + 0.5D), MathHelper.floor(z - this.getWidth())));
         }
-        return this.openPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+        return new FlaggedPathPoint(this.openPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)));
     }
 
     /** Returns the starting position to create a new path from. **/

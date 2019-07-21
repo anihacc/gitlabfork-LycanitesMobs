@@ -44,7 +44,7 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
    	//                  Render Model
    	// ==================================================
     @Override
-    public void func_78088_a(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 

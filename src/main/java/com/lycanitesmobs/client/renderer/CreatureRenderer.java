@@ -25,8 +25,8 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
 		
-    	this.defaultModel = this.field_77045_g;
-		ModelCreatureBase modelCreatureBase = this.field_77045_g;
+    	this.defaultModel = this.entityModel;
+		ModelCreatureBase modelCreatureBase = this.entityModel;
 		if(modelCreatureBase == null)
 			return;
 		modelCreatureBase.addCustomLayers(this);
@@ -48,20 +48,20 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 		return false; // Disabled as this doesn't have the desired effect.
 	}
 
-	@Override //doRender
-	public void func_76986_a(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	@Override
+	public void doRender(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
-			this.field_77045_g = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
+			this.entityModel = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.field_77045_g = this.defaultModel;
+		this.entityModel = this.defaultModel;
 
-		if(this.field_77045_g == null) {
+		if(this.entityModel == null) {
 			return;
 		}
 
-    	super.func_76986_a(entity, x, y, z, entityYaw, partialTicks);
+    	super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	}
 
 	public ModelCreatureBase getMainModel() {
-		return this.field_77045_g;
+		return this.entityModel;
 	}
     
     
@@ -90,15 +90,15 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     // ========== Main ==========
     @Override
     protected boolean bindEntityTexture(BaseCreatureEntity entity) {
-        ResourceLocation texture = this.func_110775_a(entity);
+        ResourceLocation texture = this.getEntityTexture(entity);
         if(texture == null)
             return false;
         this.bindTexture(texture);
         return true;
     }
     
-    @Override //getEntityTexture
-    protected ResourceLocation func_110775_a(BaseCreatureEntity entity) {
+    @Override
+    protected ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
 		return entity.getTexture();
 	}
     
@@ -117,14 +117,14 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     // ==================================================
   	//                     Effects
   	// ==================================================
-    @Override //preRenderCallback
-    protected void func_77041_b(BaseCreatureEntity entity, float particleTickTime) {
+    @Override
+    protected void preRenderCallback(BaseCreatureEntity entity, float particleTickTime) {
         // No effects.
     }
     
     /** If true, display the name of the entity above it. **/
-    @Override //canRenderName
-    protected boolean func_177070_b(BaseCreatureEntity entity) {
+    @Override
+    protected boolean canRenderName(BaseCreatureEntity entity) {
         if(!Minecraft.isGuiEnabled()) return false;
     	//if(entity == this.renderManager.pointedEntity) return false; // This was renderViewEntity not pointedEntity, perhaps for hiding name in inventory/beastiary view?
     	if(entity.isInvisibleToPlayer(Minecraft.getInstance().player)) return false;

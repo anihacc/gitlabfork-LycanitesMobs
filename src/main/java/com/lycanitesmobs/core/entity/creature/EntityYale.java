@@ -201,8 +201,8 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 		DyeColor dyeA = father.getColor();
 		DyeColor dyeB = mother.getColor();
 		CraftingInventory craftinginventory = mixColors(dyeA, dyeB);
-		return this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftinginventory, this.world).map((p_213614_1_) ->
-				p_213614_1_.func_77572_b(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
+		return this.world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, craftinginventory, this.world).map((craftingRecipe) ->
+				craftingRecipe.getCraftingResult(craftinginventory)).map(ItemStack::getItem).filter(DyeItem.class::isInstance).map(DyeItem.class::cast).map(DyeItem::getDyeColor).orElseGet(() ->
 				this.world.rand.nextBoolean() ? dyeA : dyeB);
 	}
 

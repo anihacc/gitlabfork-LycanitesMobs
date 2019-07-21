@@ -37,7 +37,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     //                     Do Render
     // ==================================================
     @Override
-	public void func_76986_a(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
     	if(this.renderTime++ > Integer.MAX_VALUE - 1)
             this.renderTime = 0;
         this.renderProjectile(entity, x, y, z, entityYaw, partialTicks);
@@ -64,7 +64,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
         GlStateManager.enableRescaleNormal();
         GlStateManager.scaled(scale, scale, scale);
 
-        this.bindTexture(this.func_110775_a(entity));
+        this.bindTexture(this.getEntityTexture(entity));
         this.renderTexture(Tessellator.getInstance(), entity);
 
         GlStateManager.disableRescaleNormal();
@@ -177,7 +177,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     // ==================================================
     // ========== Get Texture ==========
     @Override
-    protected ResourceLocation func_110775_a(BaseProjectileEntity entity) {
+    protected ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 

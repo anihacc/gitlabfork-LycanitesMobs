@@ -22,7 +22,7 @@ public class RenderNone extends EntityRenderer<Entity> {
     //                     Do Render
     // ==================================================
     @Override
-    public void func_76986_a(Entity entity, double par2, double par4, double par6, float par8, float par9) {
+    public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par9) {
     	return;
     }
     
@@ -32,7 +32,7 @@ public class RenderNone extends EntityRenderer<Entity> {
     // ==================================================
     // ========== Get Texture ==========
     @Override
-    protected ResourceLocation func_110775_a(Entity entity) {
+    protected ResourceLocation getEntityTexture(Entity entity) {
     	return null;
     }
 }

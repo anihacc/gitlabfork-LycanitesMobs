@@ -66,14 +66,14 @@ public class CreaturePathNavigator extends PathNavigator {
     // ==================== Create Path ====================
     /** Returns a new path from starting path position to the provided target position. **/
     @Override
-    public Path getPathToPos(BlockPos pos) {
-        return super.getPathToPos(this.getSuitableDestination(pos));
+    public Path getPathToPos(BlockPos pos, int i) {
+        return super.getPathToPos(this.getSuitableDestination(pos), i);
     }
 
     /** Returns the path to the given EntityLiving. **/
     @Override
-    public Path getPathToEntityLiving(Entity entity) {
-        return this.getPathToPos(new BlockPos(entity));
+    public Path getPathToEntityLiving(Entity entity, int i) {
+        return this.getPathToPos(new BlockPos(entity), i);
     }
 
 
@@ -142,7 +142,7 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Starts pathing to target entity. **/
     @Override
     public boolean tryMoveToEntityLiving(Entity targetEntity, double speedIn) {
-        Path path = this.getPathToEntityLiving(targetEntity);
+        Path path = this.getPathToEntityLiving(targetEntity, 1);
 
         if (path != null) {
             return this.setPath(path, speedIn);

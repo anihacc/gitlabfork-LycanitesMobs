@@ -282,7 +282,7 @@ public abstract class TargetingGoal extends Goal {
  	// ==================================================
     private boolean isNearby(LivingEntity target) {
         this.targetSearchDelay = 10 + this.host.getRNG().nextInt(5);
-        Path path = this.host.getNavigator().getPathToEntityLiving(target);
+        Path path = this.host.getNavigator().getPathToEntityLiving(target, 0);
 
         if(path == null)
             return false;

@@ -22,7 +22,7 @@ public class AlwaysPlacement extends Placement<FrequencyConfig> {
 
 	@Override
 	@Nonnull
-	public Stream<BlockPos> func_212848_a_(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random random, FrequencyConfig frequencyConfig, BlockPos blockPos) {
+	public Stream<BlockPos> getPositions(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random random, FrequencyConfig frequencyConfig, BlockPos blockPos) {
 		return IntStream.range(0, frequencyConfig.count).mapToObj((p_215050_3_) -> blockPos);
 	}
 }

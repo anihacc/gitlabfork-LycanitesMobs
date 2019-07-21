@@ -27,7 +27,7 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean func_212245_a(IWorld worldWriter, ChunkGenerator<? extends GenerationSettings> generator, Random random, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(IWorld worldWriter, ChunkGenerator<? extends GenerationSettings> generator, Random random, BlockPos pos, NoFeatureConfig config) {
 		boolean enabled = ConfigDungeons.INSTANCE.dungeonsEnabled.get();
 		int dungeonDistance = ConfigDungeons.INSTANCE.dungeonDistance.get();
 

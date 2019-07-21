@@ -91,13 +91,4 @@ public class EntityFaeBolt extends BaseProjectileEntity {
 	public float getDamage(Entity entity) {
 		return 0;
 	}
-
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
-    @Override
-    public String getTextureName() {
-        return this.entityName.toLowerCase() + "charge";
-    }
 }

@@ -306,7 +306,7 @@ public class SpawnerEventListener {
 		List<ChunkPos> freshChunks = new ArrayList<>(this.freshChunks.get(world));
 		for(ChunkPos chunkPos : freshChunks) {
 			// Check If Loaded:
-			if(!world.func_72863_F().isChunkLoaded(chunkPos)) {
+			if(!world.getChunkProvider().isChunkLoaded(chunkPos)) {
 				continue;
 			}
 			this.freshChunks.get(world).remove(chunkPos);

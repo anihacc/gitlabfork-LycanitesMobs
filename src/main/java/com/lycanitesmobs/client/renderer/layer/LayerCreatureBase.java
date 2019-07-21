@@ -31,8 +31,8 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCr
     // ==================================================
     //                  Render Layer
     // ==================================================
-    @Override //render
-    public void func_212842_a_(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    @Override
+    public void render(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {

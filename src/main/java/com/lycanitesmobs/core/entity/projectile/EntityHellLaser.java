@@ -27,12 +27,20 @@ public class EntityHellLaser extends LaserProjectileEntity {
 		super(entityType, world, par2, par4, par6, setTime, setDelay);
 	}
 
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6) {
+		this(entityType, world, par2, par4, par6, 25, 20);
+	}
+
 	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, double par2, double par4, double par6, int setTime, int setDelay, Entity followEntity) {
 		super(entityType, world, par2, par4, par6, setTime, setDelay, followEntity);
 	}
 
 	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay) {
 		super(entityType, world, entityShooter, setTime, setDelay);
+	}
+
+	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
+		this(entityType, world, entityLiving, 25, 20);
 	}
 
 	public EntityHellLaser(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityShooter, int setTime, int setDelay, Entity followEntity) {
@@ -84,7 +92,7 @@ public class EntityHellLaser extends LaserProjectileEntity {
     @Override
     public ResourceLocation getBeamTexture() {
     	if(TextureManager.getTexture(this.entityName + "Beam") == null)
-    		TextureManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_beam.png");
+    		TextureManager.addTexture(this.entityName + "Beam", this.modInfo, "textures/item/" + this.entityName.toLowerCase() + "beam.png");
     	return TextureManager.getTexture(this.entityName + "Beam");
     }
     

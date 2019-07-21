@@ -48,7 +48,7 @@ public class EntityArcaneLaserEnd extends LaserEndProjectileEntity {
     @Override
     public ResourceLocation getTexture() {
     	if(TextureManager.getTexture(this.entityName + "end") == null)
-    		TextureManager.addTexture(this.entityName + "end", this.modInfo, "textures/items/" + this.entityName.toLowerCase() + "_end.png");
+    		TextureManager.addTexture(this.entityName + "end", this.modInfo, "textures/item/" + this.entityName.toLowerCase() + ".png");
     	return TextureManager.getTexture(this.entityName + "end");
     }
     

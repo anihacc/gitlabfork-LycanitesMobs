@@ -383,33 +383,33 @@ public class BaseProjectileEntity extends ThrowableEntity {
 					return false;
 				}
 			}
-		}
 
-		// Player Damage Event:
-		if(owner instanceof PlayerEntity) {
-			if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)owner, targetEntity))) {
-				return false;
-			}
-		}
-
-		// Player PVP:
-		if(!this.getEntityWorld().getServer().isPVPEnabled()) {
+			// Player Damage Event:
 			if(owner instanceof PlayerEntity) {
-				if(targetEntity instanceof PlayerEntity) {
+				if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)owner, targetEntity))) {
 					return false;
 				}
-				if(targetEntity instanceof TameableCreatureEntity) {
-					TameableCreatureEntity tamedTarget = (TameableCreatureEntity)targetEntity;
-					if(tamedTarget.isTamed()) {
+			}
+
+			// Player PVP:
+			if(!this.getEntityWorld().getServer().isPVPEnabled()) {
+				if(owner instanceof PlayerEntity) {
+					if(targetEntity instanceof PlayerEntity) {
 						return false;
+					}
+					if(targetEntity instanceof TameableCreatureEntity) {
+						TameableCreatureEntity tamedTarget = (TameableCreatureEntity)targetEntity;
+						if(tamedTarget.isTamed()) {
+							return false;
+						}
 					}
 				}
 			}
-		}
 
-		// Friendly Fire:
-		if(owner.isOnSameTeam(targetEntity) && CreatureManager.getInstance().config.friendlyFire) {
-			return false;
+			// Friendly Fire:
+			if(owner.isOnSameTeam(targetEntity) && CreatureManager.getInstance().config.friendlyFire) {
+				return false;
+			}
 		}
 
 		return true;

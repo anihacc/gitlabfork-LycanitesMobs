@@ -151,7 +151,7 @@ public class PlaceBlockGoal extends Goal {
 		else if(targetState.getMaterial() != Material.AIR && !this.replaceSolid)
 			return false;
 		if(!this.host.useDirectNavigator() && this.host.getNavigator() != null) {
-			if(this.host.getNavigator().getPathToPos(pos) == null)
+			if(this.host.getNavigator().getPathToPos(pos, 0) == null)
 				return false;
 		}
 		return true;

@@ -1,9 +1,8 @@
 package com.lycanitesmobs.client.model;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.client.renderer.RenderProjectileModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -40,8 +39,8 @@ public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> {
     // ==================================================
    	//                  Render Model
    	// ==================================================
-    @Override //render
-    public void func_78088_a(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+    @Override
+    public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 

@@ -54,7 +54,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 	//                    Do Render
 	// ==================================================
 	@Override
-	public void func_76986_a(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 
@@ -68,7 +68,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 			GlStateManager.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
 
 			if(!(this.renderModel instanceof ModelProjectileObj)) {
-				this.renderModel.func_78088_a(entity, 0, 0, partialTicks, 0, 0, 1); //render
+				this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1); //render
 			}
 			else {
 				((ModelProjectileObj)this.renderModel).generateAnimationFrames(entity, 0, 0, partialTicks, 0, 0, 1);
@@ -115,7 +115,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
     // ========== Main ==========
 	@Override
     protected boolean bindEntityTexture(BaseProjectileEntity entity) {
-        ResourceLocation texture = this.func_110775_a(entity);
+        ResourceLocation texture = this.getEntityTexture(entity);
         if(texture == null)
             return false;
         this.bindTexture(texture);
@@ -124,7 +124,7 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 
 	@Nullable
 	@Override
-	protected ResourceLocation func_110775_a(BaseProjectileEntity entity) {
+	protected ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 }
