@@ -36,7 +36,7 @@ public class EntityFrostbolt extends BaseProjectileEntity {
     	this.entityName = "frostbolt";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(5);
-    	
+		this.setProjectileScale(1F);
     	this.waterProof = true;
     }
     

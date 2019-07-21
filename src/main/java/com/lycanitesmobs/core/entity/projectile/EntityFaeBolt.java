@@ -39,7 +39,7 @@ public class EntityFaeBolt extends BaseProjectileEntity {
     	this.entityName = "faebolt";
     	this.modInfo = LycanitesMobs.modInfo;
     	this.setDamage(0);
-    	this.setProjectileScale(4F);
+    	this.setProjectileScale(2F);
     	this.waterProof = true;
 	}
 

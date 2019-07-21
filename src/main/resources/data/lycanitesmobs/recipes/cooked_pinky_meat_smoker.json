@@ -1,0 +1,9 @@
+{
+	"type": "minecraft:smoking",
+	"ingredient": {
+		"item": "lycanitesmobs:raw_pinky_meat"
+	},
+	"result": "lycanitesmobs:cooked_pinky_meat",
+	"experience": 0.35,
+	"cookingtime": 100
+}

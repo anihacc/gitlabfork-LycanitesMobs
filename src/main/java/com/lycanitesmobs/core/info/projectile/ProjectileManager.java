@@ -260,7 +260,7 @@ public class ProjectileManager extends JSONLoader {
 
 	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, double x, double y, double z) {
 		try {
-			return projectileClass.getConstructor(EntityType.class, World.class, Double.class, Double.class, Double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
+			return projectileClass.getConstructor(EntityType.class, World.class, double.class, double.class, double.class).newInstance(this.oldProjectileTypes.get(projectileClass), world, x, y, z);
 		} catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
