@@ -154,7 +154,7 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     		if(this.followEntity != null)
     			entityToFollow = this.followEntity;
     		double xPos = entityToFollow.posX + this.offsetX;
-			double yPos = entityToFollow.posY -(this.getSize(Pose.STANDING).height / 2) + this.offsetY;
+			double yPos = entityToFollow.posY + (this.getSize(Pose.STANDING).height / 2) + this.offsetY;
 			double zPos = entityToFollow.posZ + this.offsetZ;
     		if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;

@@ -70,13 +70,4 @@ public class EntityWhirlwind extends BaseProjectileEntity {
     		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     	}
     }
-
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
-    @Override
-    public String getTextureName() {
-        return this.entityName.toLowerCase() + "charge";
-    }
 }

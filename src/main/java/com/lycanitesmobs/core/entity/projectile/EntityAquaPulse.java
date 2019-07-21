@@ -119,13 +119,4 @@ public class EntityAquaPulse extends BaseProjectileEntity {
     		this.getEntityWorld().addParticle(ParticleTypes.DRIPPING_WATER, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
     	}
     }
-
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
-    @Override
-    public String getTextureName() {
-        return this.entityName.toLowerCase() + "charge";
-    }
 }
