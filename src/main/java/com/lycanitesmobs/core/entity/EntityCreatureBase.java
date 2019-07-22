@@ -3124,7 +3124,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     		return false;
     	}
 
-		if(type.getCreatureClass() == IMob.class) // If checking for EnumCretureType.monster (IMob) return whether or not this creature is hostile instead.
+		if(type.getCreatureClass() == IMob.class) // If checking for EnumCreatureType.monster (IMob) return whether or not this creature is hostile instead.
 			return this.isHostile();
         return type.getCreatureClass().isAssignableFrom(this.getClass());
     }
