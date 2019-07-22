@@ -9,7 +9,7 @@
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
-		"enabled": true,
+		"enabled": false,
 		"spawners": ["creature", "animal", "portal", "nether"],
 		"disableSubspecies": false,
 		"dimensionIds": [-1],
