@@ -1241,7 +1241,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return Ranged attack cooldown ticks.
 	 */
 	public int getRangedCooldown() {
-		return Math.round((float)(1.0D / this.getAttribute(RANGED_SPEED).getValue() * 20.0D));
+		return Math.round((float)((1.0D / this.getAttribute(RANGED_SPEED).getValue()) * 20.0D));
 	}
 
     // ========= Effect ==========

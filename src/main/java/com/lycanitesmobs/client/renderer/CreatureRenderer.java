@@ -1,10 +1,9 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.ModelManager;
+import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.client.model.ModelCreatureBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -50,12 +49,12 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 
 	@Override
 	public void doRender(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.entityModel = this.defaultModel;
 		try {
 			this.entityModel = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.entityModel = this.defaultModel;
 
 		if(this.entityModel == null) {
 			return;

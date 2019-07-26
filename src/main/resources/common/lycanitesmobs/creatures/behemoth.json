@@ -9,7 +9,7 @@
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
-		"enabled": false,
+		"enabled": true,
 		"spawners": ["monster", "beast", "portal", "nether"],
 		"disableSubspecies": false,
 		"dimensionIds": [-1],
@@ -36,7 +36,7 @@
 	"speed": 24,
 	"damage": 2,
 	"attackSpeed": 1,
-	"rangedSpeed": 0.25,
+	"rangedSpeed": 0.75,
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,

@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Body",
+    "parent": "",
+    "centerX": "0.0",
+    "centerY": "1.638",
+    "centerZ": "-0.0",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "ArmRightUpper",
+    "parent": "Body",
+    "centerX": "-0.54",
+    "centerY": "2.475",
+    "centerZ": "-0.068",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "ArmRightLower",
+    "parent": "ArmRightUpper",
+    "centerX": "-0.589",
+    "centerY": "1.865",
+    "centerZ": "-0.014",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "LegRight",
+    "parent": "Body",
+    "centerX": "-0.243",
+    "centerY": "1.428",
+    "centerZ": "0.037",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "LegRightLower",
+    "parent": "LegRight",
+    "centerX": "-0.243",
+    "centerY": "0.834",
+    "centerZ": "-0.26",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "Head",
+    "parent": "Body",
+    "centerX": "0.0",
+    "centerY": "2.6",
+    "centerZ": "-0.0",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "LegLeft",
+    "parent": "Body",
+    "centerX": "0.243",
+    "centerY": "1.428",
+    "centerZ": "0.037",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "LegLeftLower",
+    "parent": "LegLeft",
+    "centerX": "0.243",
+    "centerY": "0.834",
+    "centerZ": "-0.26",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "ArmLeftUpper",
+    "parent": "Body",
+    "centerX": "0.54",
+    "centerY": "2.475",
+    "centerZ": "-0.068",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  },
+  {
+    "name": "ArmLeftLower",
+    "parent": "ArmLeftUpper",
+    "centerX": "0.589",
+    "centerY": "1.865",
+    "centerZ": "-0.014",
+    "rotationX": "0.0",
+    "rotationY": "0.0",
+    "rotationZ": "-0.0"
+  }
+]
