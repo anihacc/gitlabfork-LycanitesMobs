@@ -29,6 +29,7 @@ import java.util.Map;
 
 public class ExtendedPlayer implements IExtendedPlayer {
     public static Map<PlayerEntity, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
+	public static Map<PlayerEntity, ExtendedPlayer> serverExtendedPlayers = new HashMap<>();
 	public static Map<String, CompoundNBT> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
@@ -102,9 +103,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
         // Server Side:
         IExtendedPlayer iExtendedPlayer = player.getCapability(LycanitesMobs.EXTENDED_PLAYER, null).orElse(null);
-		if(!(iExtendedPlayer instanceof ExtendedPlayer))
-            return null;
+		if(!(iExtendedPlayer instanceof ExtendedPlayer)) {
+			if(serverExtendedPlayers.containsKey(player)) {
+				return serverExtendedPlayers.get(player);
+			}
+			return null;
+		}
         ExtendedPlayer extendedPlayer = (ExtendedPlayer)iExtendedPlayer;
+		serverExtendedPlayers.put(player, extendedPlayer);
         if(extendedPlayer.getPlayer() != player)
             extendedPlayer.setPlayer(player);
         return extendedPlayer;
@@ -173,7 +179,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
     /** Makes this player attempt to melee attack. This is typically used for when the vanilla attack range fails on big entities. **/
     public void meleeAttack(Entity targetEntity) {
-        if(!this.hasAttacked && this.player.getHeldItemMainhand() != null && this.canMeleeBigEntity(targetEntity)) {
+        if(!this.hasAttacked && !this.player.getHeldItemMainhand().isEmpty() && this.canMeleeBigEntity(targetEntity)) {
             this.player.attackTargetEntityWithCurrentItem(targetEntity);
             this.player.resetCooldown();
             this.player.swingArm(Hand.MAIN_HAND);

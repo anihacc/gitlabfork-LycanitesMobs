@@ -31,7 +31,7 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
         this.babySpawnChance = 0.1D;
         this.fleeHealthPercent = 1.0F;
         this.isAggressiveByDefault = false;
-        this.solidCollision = true;
+        //this.solidCollision = true;
         this.setupMob();
     }
 

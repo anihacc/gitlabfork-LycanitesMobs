@@ -80,7 +80,7 @@ public class GameEventListener {
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event) {
         ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(event.getOriginal());
-        if(extendedPlayer != null) {
+		if(extendedPlayer != null) {
 			extendedPlayer.backupPlayer();
 		}
     }
