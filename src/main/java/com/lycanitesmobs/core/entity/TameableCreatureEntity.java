@@ -112,8 +112,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	if(!this.isTamed() || !CreatureManager.getInstance().config.ownerTags) {
 			return super.getName();
 		}
-		if(this.hasCustomName()) {
-			return super.getName();
+
+		ITextComponent ownedName = new StringTextComponent("");
+    	boolean customName = this.hasCustomName();
+		if(customName) {
+			ownedName.appendSibling(super.getName()).appendText(" (");
 		}
 
 		ITextComponent ownerName = this.getOwnerName();
@@ -123,22 +126,14 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             if ("s".equalsIgnoreCase(ownerFormatted.substring(ownerFormatted.length() - 1)))
                 ownerSuffix = "' ";
         }
-		ITextComponent ownedName = ownerName
-				.appendText(ownerSuffix)
-				.appendSibling(this.getTitle());
+		ownedName.appendSibling(ownerName).appendText(ownerSuffix).appendSibling(this.getTitle());
+        if(customName) {
+			ownedName.appendText(")");
+		}
+
+        //LycanitesMobs.logDebug("", "Translated pet name: " + ownedName.getFormattedText());
     	return ownedName;
     }
-
-	/**
-	 * Returns true if this thing is named
-	 */
-	@Override
-	public boolean hasCustomName() {
-		if(!CreatureManager.getInstance().config.ownerTags) {
-			return false;
-		}
-		return super.hasCustomName();
-	}
     
     
     // ==================================================
@@ -601,12 +596,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	public ITextComponent getOwnerName() {
 		Entity owner = this.getOwner();
 		if(owner != null) {
-			if(owner instanceof PlayerEntity) {
-				return owner.getDisplayName();
-			}
-			else {
-				return owner.getDisplayName();
-			}
+			return owner.getDisplayName();
 		}
 		return new StringTextComponent("");
 	}

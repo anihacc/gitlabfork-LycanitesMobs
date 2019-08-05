@@ -49,25 +49,6 @@ public class BlockPoisonCloud extends BlockBase {
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(AGE);
 	}
-
-
-	// ==================================================
-	//                     Break
-	// ==================================================
-	/*@Override
-	public Item getItemDropped(BlockState blockState, Random random, int fortune) {
-		return ObjectManager.getItem("poisongland");
-	}
-	
-	@Override
-	public int damageDropped(BlockState blockState) {
-		return 0;
-	}
-    
-	@Override
-	public int quantityDropped(Random random) {
-        return 1;
-    }*/
     
     
 	// ==================================================

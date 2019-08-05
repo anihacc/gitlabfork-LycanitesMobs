@@ -15,6 +15,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
@@ -382,7 +383,7 @@ public class MobSpawn {
 	 **/
 	public void onSpawned(LivingEntity entityLiving, PlayerEntity player) {
 		if(!"".equals(this.mobNameTag)) {
-			entityLiving.setCustomName(new TranslationTextComponent(this.mobNameTag));
+			entityLiving.setCustomName(new StringTextComponent(this.mobNameTag));
 		}
 		if(!this.getNaturalDespawn() && entityLiving instanceof MobEntity) {
 			((MobEntity)entityLiving).enablePersistence();

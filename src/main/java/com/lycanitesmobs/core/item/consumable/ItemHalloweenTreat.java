@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -102,13 +103,13 @@ public class ItemHalloweenTreat extends BaseItem {
                     BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 					entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("ent"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Twisted Ent"));
+                        entityCreature.setCustomName(new StringTextComponent("Twisted Ent"));
 					else if (entityCreature.creatureInfo.getName().equals("treant"))
-						entityCreature.setCustomName(new TranslationTextComponent("Wicked Treant"));
+						entityCreature.setCustomName(new StringTextComponent("Wicked Treant"));
 					else if (entityCreature.creatureInfo.getName().equals("epion"))
-						entityCreature.setCustomName(new TranslationTextComponent("Vampire Bat"));
+						entityCreature.setCustomName(new StringTextComponent("Vampire Bat"));
 					else if (entityCreature.creatureInfo.getName().equals("grue"))
-						entityCreature.setCustomName(new TranslationTextComponent("Shadow Clown"));
+						entityCreature.setCustomName(new StringTextComponent("Shadow Clown"));
                 }
 
 	            world.addEntity(entity);

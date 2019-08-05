@@ -95,19 +95,12 @@ public class BlockBase extends Block {
 	//                      Place
 	// ==================================================
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity entity, ItemStack itemStack) {
+	public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
 		// Initial Block Ticking:
 		if(this.tickRate > 0) {
 			world.getPendingBlockTicks().scheduleTick(pos, this, this.tickRate(world));
 		}
 	}
-	
-	
-	// ==================================================
-	//                      Break
-	// ==================================================
-	//========== Drops ==========
-	// GetDrops
     
     
 	// ==================================================

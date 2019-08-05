@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -102,17 +103,17 @@ public class ItemWinterGift extends BaseItem {
                     BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 					entityCreature.addLevel(world.rand.nextInt(10));
                     if (entityCreature.creatureInfo.getName().equals("wildkin"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Gooderness"));
+                        entityCreature.setCustomName(new StringTextComponent("Gooderness"));
                     else if (entityCreature.creatureInfo.getName().equals("jabberwock"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Rudolph"));
+                        entityCreature.setCustomName(new StringTextComponent("Rudolph"));
                     else if (entityCreature.creatureInfo.getName().equals("ent"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Salty Tree"));
+                        entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("treant"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Salty Tree"));
+                        entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("phantom"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Satan Claws"));
+                        entityCreature.setCustomName(new StringTextComponent("Satan Claws"));
                     else if(entityCreature.creatureInfo.getName().equals("behemoth"))
-                        entityCreature.setCustomName(new TranslationTextComponent("Krampus"));
+                        entityCreature.setCustomName(new StringTextComponent("Krampus"));
                 }
 
 	            world.addEntity(entity);

@@ -86,7 +86,7 @@ public class PetEntry {
         String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
         PetEntry petEntry = new PetEntry(entryName, petType, player, creatureInfo.getName());
         if(entity.hasCustomName()) {
-			petEntry.setEntityName(entity.getCustomName().toString());
+			petEntry.setEntityName(entity.getCustomName().getFormattedText());
 		}
         petEntry.setEntitySubspeciesID(entity.getSubspeciesIndex());
         petEntry.setEntitySize(entity.sizeScale);
@@ -312,7 +312,7 @@ public class PetEntry {
                 }
 
                 if(entity.hasCustomName()) {
-                	this.entityName = this.entity.getCustomName().toString();
+                	this.entityName = this.entity.getCustomName().getFormattedText();
 				}
             }
         }
@@ -409,7 +409,7 @@ public class PetEntry {
 
             // Entity Name and Appearance:
             if(this.entityName != null && !"".equals(this.entityName)) {
-				entityCreature.setCustomName(new TranslationTextComponent(this.entityName));
+				entityCreature.setCustomName(new StringTextComponent(this.entityName));
 			}
             entityCreature.setSizeScale(this.entitySize);
             entityCreature.applySubspecies(this.subspeciesID);
@@ -483,7 +483,7 @@ public class PetEntry {
                 entityCreature.setTemporary(this.temporaryDuration);
 
             if(this.entityName != null && !"".equals(this.entityName))
-                entityCreature.setCustomName(new TranslationTextComponent(this.entityName));
+                entityCreature.setCustomName(new StringTextComponent(this.entityName));
             entityCreature.setSizeScale(this.entitySize);
             entityCreature.applySubspecies(this.subspeciesID);
         }
@@ -604,7 +604,7 @@ public class PetEntry {
 
         // Update Pet Name:
 		if(this.entity instanceof BaseCreatureEntity && this.entity.hasCustomName()) {
-			this.entityName = this.entity.getCustomName().toString();
+			this.entityName = this.entity.getCustomName().getFormattedText();
 		}
 		this.entity.writeWithoutTypeId(this.entityNBT);
     }
