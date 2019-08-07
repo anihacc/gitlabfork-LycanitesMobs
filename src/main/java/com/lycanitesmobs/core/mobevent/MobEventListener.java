@@ -8,8 +8,8 @@ import com.lycanitesmobs.core.mobevent.trigger.TickMobEventTrigger;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class MobEventListener {
 
 	/** Called every tick in a world and counts down to the next event then fires it! The countdown is paused during an event. **/
 	@SubscribeEvent
-	public void onWorldUpdate(WorldTickEvent event) {
+	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
 		World world = event.world;
 		if(world.isRemote) {
 			return;

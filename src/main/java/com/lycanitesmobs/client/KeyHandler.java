@@ -17,9 +17,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyHandler {
@@ -59,7 +59,7 @@ public class KeyHandler {
     //                    Handle Keys
     // ==================================================
 	@SubscribeEvent
-	public void onPlayerTick(ClientTickEvent event) {
+	public void onPlayerTick(TickEvent.ClientTickEvent event) {
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(this.mc.player);
 		if(playerExt == null)
 			return;

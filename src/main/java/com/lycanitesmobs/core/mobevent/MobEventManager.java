@@ -11,9 +11,8 @@ import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -161,7 +160,7 @@ public class MobEventManager extends JSONLoader {
 
 	/** Called every tick in a world and updates any active Server Side Mob Event players. **/
 	@SubscribeEvent
-	public void onWorldUpdate(WorldTickEvent event) {
+	public void onWorldUpdate(TickEvent.WorldTickEvent event) {
 		World world = event.world;
 		if(world.isRemote)
 			return;
@@ -197,7 +196,7 @@ public class MobEventManager extends JSONLoader {
 
 	/** Updates the client side mob event players if active in the player's current world. **/
 	@SubscribeEvent
-	public void onClientUpdate(ClientTickEvent event) {
+	public void onClientUpdate(TickEvent.ClientTickEvent event) {
 		if(ClientManager.getInstance().getClientPlayer() == null)
 			return;
 
