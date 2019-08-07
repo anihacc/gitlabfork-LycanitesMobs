@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
@@ -61,11 +62,14 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 	@Override
 	public void setSelected(@Nullable BaseListEntry entry) {
 		super.setSelected(entry);
-		if(!this.summoning && entry instanceof Entry) {
+		if(!(entry instanceof Entry)) {
+			return;
+		}
+		if(!this.summoning) {
 			this.screen.playerExt.selectedSubspecies = ((Entry)entry).subspeciesIndex;
 		}
 		else {
-			this.screen.playerExt.getSelectedSummonSet().setSubspecies(this.getSelectedIndex());
+			this.screen.playerExt.getSelectedSummonSet().setSubspecies(((Entry)entry).subspeciesIndex);
 			this.screen.playerExt.sendSummonSetToServer((byte)this.screen.playerExt.selectedSummonSet);
 		}
 	}

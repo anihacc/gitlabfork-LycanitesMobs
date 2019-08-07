@@ -114,7 +114,13 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		}
 		else if(this.listType == Type.SUMMONABLE) {
 			this.screen.playerExt.getSelectedSummonSet().setSummonType(creatureEntry.creatureInfo.getName());
-			this.screen.playerExt.getSelectedSummonSet().setSubspecies(this.screen.playerExt.getSelectedSummonSet().getSubspecies());
+
+			int subspeciesId = this.screen.playerExt.getSelectedSummonSet().getSubspecies();
+			if(!this.screen.playerExt.getBeastiary().hasKnowledgeRank(creatureEntry.creatureInfo.getName(), 2)) {
+				subspeciesId = 0;
+			}
+
+			this.screen.playerExt.getSelectedSummonSet().setSubspecies(subspeciesId);
 			this.screen.playerExt.sendSummonSetToServer((byte)this.screen.playerExt.selectedSummonSet);
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this.screen.playerExt);
 			LycanitesMobs.packetHandler.sendToServer(message);

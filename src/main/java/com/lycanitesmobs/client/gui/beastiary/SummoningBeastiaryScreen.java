@@ -55,7 +55,7 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 			String buttonText = String.valueOf(i);
 			CreatureInfo creatureInfo = this.playerExt.getSummonSet(i).getCreatureInfo();
 			buttonX += tabSpacing;
-			ButtonBase tabButton = new CreatureButton(this.summoningSlotIdStart + i, buttonX, buttonY, buttonWidth, buttonHeight, buttonText, creatureInfo, this);
+			ButtonBase tabButton = new CreatureButton(this.summoningSlotIdStart + i, buttonX, buttonY, buttonWidth, buttonHeight, buttonText, i, creatureInfo, this);
 			this.addButton(tabButton);
 			if(i == this.playerExt.selectedSummonSet) {
 				tabButton.active = false;

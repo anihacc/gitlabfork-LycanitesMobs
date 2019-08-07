@@ -61,23 +61,23 @@ public class MinionSelectionOverlay extends BaseScreen {
 		int offset = 32;
 
 		creatureInfo = this.playerExt.getSummonSet(1).getCreatureInfo();
-		button = new CreatureButton(1, buttonX, buttonY - Math.round(offset * 2), buttonWidth, buttonHeight, "" + 1, creatureInfo, this);
+		button = new CreatureButton(1, buttonX, buttonY - Math.round(offset * 2), buttonWidth, buttonHeight, "" + 1, 1, creatureInfo, this);
 		this.addButton(button);
 
 		creatureInfo = this.playerExt.getSummonSet(2).getCreatureInfo();
-		button = new CreatureButton(2, buttonX + Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 2, creatureInfo, this);
+		button = new CreatureButton(2, buttonX + Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 2, 2, creatureInfo, this);
 		this.addButton(button);
 
 		creatureInfo = this.playerExt.getSummonSet(3).getCreatureInfo();
-		button = new CreatureButton(3, buttonX + Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 3, creatureInfo, this);
+		button = new CreatureButton(3, buttonX + Math.round(offset), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 3, 3, creatureInfo, this);
 		this.addButton(button);
 
 		creatureInfo = this.playerExt.getSummonSet(4).getCreatureInfo();
-		button = new CreatureButton(4, buttonX - Math.round(offset * 1), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 4, creatureInfo, this);
+		button = new CreatureButton(4, buttonX - Math.round(offset), buttonY +  Math.round(offset * 1.75F), buttonWidth, buttonHeight, "" + 4, 4, creatureInfo, this);
 		this.addButton(button);
 
 		creatureInfo = this.playerExt.getSummonSet(5).getCreatureInfo();
-		button = new CreatureButton(5, buttonX - Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 5, creatureInfo, this);
+		button = new CreatureButton(5, buttonX - Math.round(offset * 2), buttonY - Math.round(offset * 0.5F), buttonWidth, buttonHeight, "" + 5, 5, creatureInfo, this);
 		this.addButton(button);
 	}
 
@@ -98,7 +98,6 @@ public class MinionSelectionOverlay extends BaseScreen {
 	@Override
 	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(TextureManager.getTexture("GUIMinion"));
 	}
 	
 	@Override

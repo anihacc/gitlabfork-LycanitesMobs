@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -194,6 +195,7 @@ public class CreatureManager extends JSONLoader {
 	 * Registers all creatures added to this creature manager, called from the registry event.
 	 * @param event The entity register event.
 	 */
+	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		LycanitesMobs.logDebug("Creature", "Forge registering all " + this.creatures.size() + " creatures...");
 		for(CreatureInfo creatureInfo : this.creatures.values()) {

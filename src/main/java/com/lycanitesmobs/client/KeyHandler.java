@@ -36,10 +36,8 @@ public class KeyHandler {
 	public KeyBinding pets = new KeyBinding("key.pets", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 	public KeyBinding summoning = new KeyBinding("key.summoning", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 	public KeyBinding minionSelection = new KeyBinding("key.minions", GLFW.GLFW_KEY_R, "Lycanites Mobs");
-	
-	// ==================================================
-    //                     Constructor
-    // ==================================================
+
+
 	public KeyHandler(Minecraft mc) {
 		this.mc = mc;
 		instance = this;
@@ -53,13 +51,13 @@ public class KeyHandler {
 		ClientRegistry.registerKeyBinding(this.summoning);
 		ClientRegistry.registerKeyBinding(this.minionSelection);
 	}
-	
-	
-	// ==================================================
-    //                    Handle Keys
-    // ==================================================
+
+
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.ClientTickEvent event) {
+		if(event.phase != TickEvent.Phase.START) {
+			return;
+		}
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(this.mc.player);
 		if(playerExt == null)
 			return;
@@ -100,14 +98,6 @@ public class KeyHandler {
 			this.mc.displayGuiScreen(new SummoningBeastiaryScreen(this.mc.player));
 		}
 		
-		// Minion Selection: Closes If Not Holding:
-		try {
-			if (!this.minionSelection.isPressed() && this.mc.currentScreen instanceof MinionSelectionOverlay) {
-				this.mc.player.closeScreen();
-			}
-		}
-		catch(Exception e) {}
-		
 		
 		if(this.mc.isGameFocused()) {
 			// ========== HUD Controls ==========
@@ -115,8 +105,7 @@ public class KeyHandler {
 			if(this.minionSelection.isPressed()) {
 				this.mc.displayGuiScreen(new MinionSelectionOverlay(this.mc.player));
 			}
-			
-			
+
 			// ========== Action Controls ==========
 			// Vanilla Jump: Adds to control states.
 			if(this.mc.gameSettings.keyBindJump.isKeyDown())
@@ -142,9 +131,21 @@ public class KeyHandler {
 	}
 
 
-    // ==================================================
-    //                    Mouse Events
-    // ==================================================
+	/** Player keyboard events. **/
+	@SubscribeEvent
+	public void onKeyboardEvent(InputEvent.KeyInputEvent event) {
+		if(this.mc.player == null)
+			return;
+
+		// Minion Selection - Closes If Not Holding:
+		if(event.getKey() == this.minionSelection.getKey().getKeyCode() && this.mc.currentScreen instanceof MinionSelectionOverlay) {
+			if (event.getAction() == GLFW.GLFW_RELEASE) {
+				this.mc.player.closeScreen();
+			}
+		}
+	}
+
+
     /** Player 'mouse' events, these are actually events based on attack or item use actions and are still triggered if the key binding is no longer a mouse click. **/
     @SubscribeEvent
     public void onMouseEvent(InputEvent.MouseInputEvent event) {

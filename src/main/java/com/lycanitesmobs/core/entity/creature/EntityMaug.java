@@ -61,7 +61,7 @@ public class EntityMaug extends RideableCreatureEntity {
         if(!this.isTamed() && this.onGround && !this.getEntityWorld().isRemote) {
         	if(this.hasAttackTarget()) {
         		if(this.rand.nextInt(10) == 0)
-        			this.leap(4.0F, 1D, this.getAttackTarget());
+        			this.leap(4.0F, 0.5D, this.getAttackTarget());
         	}
         }
 
@@ -210,7 +210,7 @@ public class EntityMaug extends RideableCreatureEntity {
     
     @Override
     public float getFallResistance() {
-    	return 100;
+    	return 20;
     }
 	
 	

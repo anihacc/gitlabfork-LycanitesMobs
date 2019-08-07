@@ -292,9 +292,6 @@ public class ObjectManager {
 			specialEntityTypes.put(specialEntities.get(entityName), entityType);
 			event.getRegistry().register(entityType);
 		}
-
-		CreatureManager.getInstance().registerEntities(event);
-		ProjectileManager.getInstance().registerEntities(event);
 	}
 
 	// ========== Sounds ==========

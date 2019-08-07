@@ -91,6 +91,7 @@ public class ProjectileManager extends JSONLoader {
 	 * Registers all creatures added to this creature manager, called from the registry event.
 	 * @param event The entity register event.
 	 */
+	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
 		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles...");
 

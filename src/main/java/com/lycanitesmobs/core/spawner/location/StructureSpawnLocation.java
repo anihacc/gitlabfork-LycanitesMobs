@@ -15,8 +15,8 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 	/** The name of the Structure Type. Vanilla offers: Stronghold, Monument, Village, Mansion, EndCity, Fortress, Temple and Mineshaft, though Mineshaft is buggy, see the mineshaft.json spawner for a better way. Default: Stronghold. **/
 	public String structureType = "Stronghold";
 
-	/** How close to the player (in blocks) Structures must be. Default: 128. **/
-	public int structureRange = 128;
+	/** How close to the player (in blocks) Structures must be. Default: 100. **/
+	public int structureRange = 100;
 
 
 	@Override

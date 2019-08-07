@@ -105,8 +105,8 @@ public class LycanitesMobs {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
 		FMLJavaModLoadingContext.get().getModEventBus().register(ObjectManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(ItemManager.getInstance());
-		//FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
-		//FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
+		FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
 		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
 		//FMLJavaModLoadingContext.get().getModEventBus().register(StatManager.getInstance()); TODO Stats
 		PROXY.registerEvents();

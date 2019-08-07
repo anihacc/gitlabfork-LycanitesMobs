@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.gui.buttons;
 
 import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -8,14 +9,11 @@ import org.lwjgl.opengl.GL11;
 
 public class CreatureButton extends ButtonBase {
 	public CreatureInfo creatureInfo;
-
-	public CreatureButton(int buttonID, int x, int y, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
-        super(buttonID, x, y, 32, 32, text, pressable);
-        this.creatureInfo = creatureInfo;
-    }
+	public int summonSetId = 0;
 	
-	public CreatureButton(int buttonID, int x, int y, int w, int h, String text, CreatureInfo creatureInfo, Button.IPressable pressable) {
+	public CreatureButton(int buttonID, int x, int y, int w, int h, String text, int summonSetId, CreatureInfo creatureInfo, Button.IPressable pressable) {
         super(buttonID, x, y, w, h, text, pressable);
+        this.summonSetId = summonSetId;
         this.creatureInfo = creatureInfo;
     }
 	
@@ -33,7 +31,15 @@ public class CreatureButton extends ButtonBase {
 		int buttonX = this.x;
 		int buttonY = this.y;
 		Minecraft.getInstance().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
-		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 - (this.isHovered() ? 32 : 0), this.width, this.height);
+		int stateVOffset = 0;
+		if(this.isHovered()) {
+			stateVOffset = 64;
+		}
+		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(Minecraft.getInstance().player);
+		if(playerExt != null && playerExt.selectedSummonSet == this.summonSetId) {
+			stateVOffset = 32;
+		}
+		this.drawTexturedModalRect(buttonX, buttonY, 193, 187 -stateVOffset, this.width, this.height);
 		if(this.creatureInfo != null) {
 			Minecraft.getInstance().getTextureManager().bindTexture(creatureInfo.getIcon());
 			this.drawTexturedModalRect(buttonX + 8, buttonY + 8, 0, 0, 16, 16, 16);
