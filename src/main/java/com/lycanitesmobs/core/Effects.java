@@ -49,7 +49,7 @@ public class Effects {
 		ObjectManager.addPotionEffect("recklessness", true, 0xFF0044, false); // TODO Implement
 		ObjectManager.addPotionEffect("rage", true, 0xFF4400, false); // TODO Implement
 		ObjectManager.addPotionEffect("weight", true, 0x000022, false);
-		ObjectManager.addPotionEffect("fear", false, 0x220022, false);
+		ObjectManager.addPotionEffect("fear", true, 0x220022, false);
 		ObjectManager.addPotionEffect("decay", true, 0x110033, false);
 		ObjectManager.addPotionEffect("insomnia", true, 0x002222, false);
 		ObjectManager.addPotionEffect("instability", true, 0x004422, false);
