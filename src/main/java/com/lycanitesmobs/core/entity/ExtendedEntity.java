@@ -206,9 +206,6 @@ public class ExtendedEntity implements IExtendedEntity {
 			return;
 		}
 
-		if(this.entity.getRidingEntity() != null) {
-			this.entity.dismountEntity(this.pickedUpByEntity);
-		}
 		this.pickedUpByEntity = pickedUpByEntity;
 
         // Server Side:
