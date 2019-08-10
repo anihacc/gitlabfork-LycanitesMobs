@@ -60,6 +60,14 @@
 		"gravity",
 		"void"
 	],
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore",
+		"fungivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

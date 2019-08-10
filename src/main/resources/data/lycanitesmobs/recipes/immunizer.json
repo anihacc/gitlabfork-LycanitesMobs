@@ -7,7 +7,7 @@
       "item": "minecraft:quartz"
     },
     {
-      "item": "minecraft:blaze_powder"
+      "item": "lycanitesmobs:poisongland"
     }
   ],
   "type": "minecraft:crafting_shapeless"

@@ -274,12 +274,6 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
 		return null;
 	}
-    
-    // ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("Vegetables", testStack);
-    }
 	
 	// ========== Breed ==========
 	public boolean breed() {

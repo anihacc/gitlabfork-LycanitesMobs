@@ -60,6 +60,10 @@
 		"frost",
 		"gravity"
 	],
+	"diets": [
+		"carnivore",
+		"piscivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

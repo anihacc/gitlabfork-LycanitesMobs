@@ -77,16 +77,6 @@ public class EntityWildkin extends TameableCreatureEntity implements IMob {
 
 
     // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack);
-    }
-
-
-    // ==================================================
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/

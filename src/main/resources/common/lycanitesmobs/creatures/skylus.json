@@ -57,6 +57,11 @@
 		}
 	],
 	"element": "shadow",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

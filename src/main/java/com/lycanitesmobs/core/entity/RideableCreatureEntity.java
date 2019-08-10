@@ -17,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 
 public class RideableCreatureEntity extends TameableCreatureEntity {
@@ -357,7 +358,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<Integer, String>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
     	
@@ -381,6 +382,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             this.clearMovement();
             this.setAttackTarget(null);
             this.mount(player);
+            return;
     	}
     	
     	super.performCommand(command, player, itemStack);

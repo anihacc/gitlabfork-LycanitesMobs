@@ -58,6 +58,11 @@
 		}
 	],
 	"element": "nether",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

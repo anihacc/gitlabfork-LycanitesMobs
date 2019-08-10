@@ -20,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 
 public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
@@ -180,12 +181,12 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	// ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
-    	HashMap<Integer, String> commands = new HashMap<Integer, String>();
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
+    	HashMap<Integer, String> commands = new HashMap<>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
     	
     	// Item Commands:
-    	if(itemStack != null) {
+    	if(!itemStack.isEmpty()) {
     		
     		// Spawn Egg:
     		if(itemStack.getItem() instanceof ItemCustomSpawnEgg) {
@@ -209,7 +210,6 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     	// Spawn Baby:
     	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && itemStack.getItem() instanceof ItemCustomSpawnEgg) {
             ItemCustomSpawnEgg itemCustomSpawnEgg = (ItemCustomSpawnEgg)itemStack.getItem();
-
 			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
 			if(spawnEggCreatureInfo != null) {
 				if (spawnEggCreatureInfo.entityClass != null && spawnEggCreatureInfo.entityClass.isAssignableFrom(this.getClass())) {
@@ -226,12 +226,15 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 					}
 				}
 			}
+			return;
     	}
     	
     	// Breed:
     	if(command.equals("Breed")) {
-    		if(this.breed())
-    			this.consumePlayersItem(player, itemStack);
+    		if(this.breed()) {
+				this.consumePlayersItem(player, itemStack);
+				return;
+			}
     	}
     	
     	super.performCommand(command, player, itemStack);
@@ -299,7 +302,10 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	// ========== Breeding Item ==========
 	public boolean isBreedingItem(ItemStack itemStack) {
-		return false;
+		if(!this.creatureInfo.isFarmable() || this.getAir() <= -100) {
+			return false;
+		}
+		return this.creatureInfo.canEat(itemStack);
     }
 	
 	// ========== Valid Partner ==========

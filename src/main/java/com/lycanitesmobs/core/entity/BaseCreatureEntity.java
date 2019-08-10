@@ -22,6 +22,7 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.block.Block;
@@ -56,7 +57,6 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -3518,11 +3518,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     
     // ========== Get Interact Commands ==========
     /** Gets a map of all possible interact events with the key being the priority, lower is better. **/
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
     	
     	// Item Commands:
-    	if(itemStack != null) {
+    	if(!itemStack.isEmpty()) {
     		// Leash:
     		if(itemStack.getItem() == Items.LEAD && this.canBeLeashedTo(player))
     			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Leash");
@@ -3536,9 +3536,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		}
     		
     		// Coloring:
-    		if(this.canBeColored(player) && itemStack.getItem() instanceof DyeItem)
-    			commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Color");
-    				
+    		if(this.canBeColored(player) && itemStack.getItem() instanceof DyeItem) {
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Color");
+			}
+
+			// Soulgazer:
+			if(itemStack.getItem() instanceof ItemSoulgazer) {
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Soulgazer");
+			}
     	}
     	
     	return commands;
@@ -3553,9 +3558,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		this.setLeashHolder(player, true);
     		this.consumePlayersItem(player, itemStack);
     	}
-    	
-    	// Name Tag:
-    	// Vanilla takes care of this, it is in getInteractCommands so that other commands don't override it.
     	
     	// Color:
     	if("Color".equals(command) && itemStack.getItem() instanceof DyeItem) {

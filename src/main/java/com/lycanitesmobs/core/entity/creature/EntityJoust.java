@@ -117,16 +117,6 @@ public class EntityJoust extends AgeableCreatureEntity {
     
     
     // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("cactusfood", testStack);
-    }
-    
-    
-    // ==================================================
     //                     Growing
     // ==================================================
 	@Override

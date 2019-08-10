@@ -57,6 +57,9 @@
 		}
 	],
 	"element": "lightning",
+	"diets": [
+		"carnivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

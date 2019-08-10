@@ -285,12 +285,6 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
         baby.setColor(color);
 		return baby;
 	}
-	
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("vegetables", testStack);
-    }
     
 	
     // ==================================================

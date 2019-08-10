@@ -101,14 +101,4 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
     // ==================================================
     public int getNoBagSize() { return 0; }
     public int getBagSize() { return 5; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("vegetables", testStack);
-    }
 }

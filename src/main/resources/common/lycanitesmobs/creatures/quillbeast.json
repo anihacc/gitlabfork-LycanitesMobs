@@ -58,6 +58,10 @@
 		}
 	],
 	"element": "order",
+	"diets": [
+		"herbivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

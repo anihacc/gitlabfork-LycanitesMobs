@@ -126,14 +126,4 @@ public class EntityHerma extends TameableCreatureEntity implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("CookedFish", testStack) || ObjectLists.inItemList("RawFish", testStack);
-    }
 }

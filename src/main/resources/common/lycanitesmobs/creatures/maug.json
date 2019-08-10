@@ -57,6 +57,10 @@
 		}
 	],
 	"element": "frost",
+	"diets": [
+		"carnivore",
+		"piscivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

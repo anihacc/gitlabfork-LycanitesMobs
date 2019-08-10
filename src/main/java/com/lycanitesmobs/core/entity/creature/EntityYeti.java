@@ -116,16 +116,6 @@ public class EntityYeti extends AgeableCreatureEntity {
         if(potionEffect.getPotion() == Effects.HUNGER) return false;
         return super.isPotionApplicable(potionEffect);
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("Vegetables", testStack);
-    }
 	
     
 	// ==================================================

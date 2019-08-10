@@ -57,6 +57,12 @@
 		}
 	],
 	"element": "order",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

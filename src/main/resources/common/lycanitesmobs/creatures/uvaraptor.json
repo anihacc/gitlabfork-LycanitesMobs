@@ -57,6 +57,12 @@
 		}
 	],
 	"element": "arbour",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

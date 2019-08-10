@@ -205,16 +205,6 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 
 
     // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack) || ObjectLists.inItemList("cookedfish", testStack);
-    }
-
-
-    // ==================================================
     //                     Pet Control
     // ==================================================
     @Override

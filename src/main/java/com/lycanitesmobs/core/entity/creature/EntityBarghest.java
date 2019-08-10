@@ -205,24 +205,4 @@ public class EntityBarghest extends RideableCreatureEntity {
     public float getFallResistance() {
     	return 20;
     }
-	
-	
-	// ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack itemStack) {
-		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

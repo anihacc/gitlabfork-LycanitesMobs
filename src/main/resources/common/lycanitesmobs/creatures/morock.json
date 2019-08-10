@@ -2,7 +2,7 @@
 	"name": "morock",
 	"creatureType": "dragon",
 	"groups": [
-		"predator"
+		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityMorock",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelMorock",
@@ -57,6 +57,11 @@
 		}
 	],
 	"element": "order",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

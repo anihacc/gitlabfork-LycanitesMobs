@@ -188,24 +188,4 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy 
             return 0F;
         else return super.getDamageModifier(damageSrc);
     }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack par1ItemStack) {
-        return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

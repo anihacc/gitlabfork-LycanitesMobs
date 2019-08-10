@@ -12,12 +12,17 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stat;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -106,6 +111,9 @@ public class CreatureInfo {
 
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
+
+	/** The diets that this creature has, this controls what food it can eat for being healed, breeding, etc. Diets will search for a tag group lycanitesmobs:diet_dietname.json for items. Creature Types will also provide what diet they are suited for. **/
+	public List<String> diets = new ArrayList<>();
 
 
 	// Creature Difficulty:
@@ -285,6 +293,10 @@ public class CreatureInfo {
 			}
 			this.elements.add(element);
 		}
+
+		// Diets:
+		if(json.has("diets"))
+			this.diets = JSONHelper.getJsonStrings(json.get("diets").getAsJsonArray());
 
 		// Flags:
 		if(json.has("boss"))
@@ -496,6 +508,27 @@ public class CreatureInfo {
 
 
 	/**
+	 * Returns a comma separated list of Diets used by this Creature.
+	 * @return The Diets used by this Creature.
+	 */
+	public ITextComponent getDietNames() {
+		if(this.diets.isEmpty()) {
+			return new TranslationTextComponent("common.none");
+		}
+		ITextComponent dietNames = new StringTextComponent("");
+		boolean firstDiet = true;
+		for(String diet : this.diets) {
+			if(!firstDiet) {
+				dietNames.appendText(", ");
+			}
+			firstDiet = false;
+			dietNames.appendSibling(new TranslationTextComponent("diet." + diet));
+		}
+		return dietNames;
+	}
+
+
+	/**
 	 * Returns the resource location for the GUI icon of this creature.
 	 * @return Creature icon resource location.
 	 */
@@ -672,6 +705,29 @@ public class CreatureInfo {
 		if(roll > hostWeight)
 			return partnerSubspecies;
 		return hostSubspecies;
+	}
+
+	/**
+	 * Returns if this creature can eat the provided item as food for healing, breeding, etc.
+	 * @param itemStack The item to eat.
+	 * @return True if the item can be eaten.
+	 */
+	public boolean canEat(ItemStack itemStack) {
+		if(this.diets.isEmpty()) {
+			return false;
+		}
+		for(String diet : this.diets) {
+			ResourceLocation dietTagId = new ResourceLocation(LycanitesMobs.MODID, "diet_" + diet);
+			Tag<Item> dietTag = ItemTags.getCollection().get(dietTagId);
+			if(dietTag == null) {
+				LycanitesMobs.logWarning("", "[Creature] Cannot find diet: " + dietTagId);
+				return false;
+			}
+			if(itemStack.getItem().isIn(dietTag)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

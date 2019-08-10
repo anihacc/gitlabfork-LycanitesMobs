@@ -65,14 +65,4 @@ public class EntityArisaur extends AgeableCreatureEntity implements IGroupHeavy 
     public boolean canBeLeashedTo(PlayerEntity player) {
 	    return true;
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("vegetables", testStack);
-    }
 }

@@ -166,14 +166,4 @@ public class EntityEyewig extends RideableCreatureEntity {
 	//                     Pet Control
 	// ==================================================
 	public boolean petControlsEnabled() { return true; }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
-    }
 }

@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:aquatictreat",
+    "item": "lycanitesmobs:imptreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "M": {
-      "item": "minecraft:cooked_cod"
+      "tag": "lycanitesmobs:cooked_mutton"
     }
   }
 }

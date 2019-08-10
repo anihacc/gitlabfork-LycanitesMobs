@@ -107,16 +107,6 @@ public class EntityMaka extends AgeableCreatureEntity {
     
     
     // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("vegetables", testStack);
-    }
-    
-    
-    // ==================================================
     //                     Growing
     // ==================================================
 	@Override

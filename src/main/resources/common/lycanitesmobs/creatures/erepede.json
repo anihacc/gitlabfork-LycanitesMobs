@@ -57,6 +57,9 @@
 		}
 	],
 	"element": "gravity",
+	"diets": [
+		"geovore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

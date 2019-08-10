@@ -134,16 +134,6 @@ public class EntityLurker extends TameableCreatureEntity {
     
     
     // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
-    }
-    
-    
-    // ==================================================
     //                       Visuals
     // ==================================================
     @OnlyIn(Dist.CLIENT)

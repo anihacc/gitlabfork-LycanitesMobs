@@ -59,6 +59,9 @@
 	"elements": [
 		"arbour"
 	],
+	"diets": [
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

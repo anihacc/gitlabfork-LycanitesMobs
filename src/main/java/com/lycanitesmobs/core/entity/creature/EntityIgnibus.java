@@ -256,16 +256,6 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             return 0F;
         else return super.getDamageModifier(damageSrc);
     }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
-    }
 
 
     // ==================================================

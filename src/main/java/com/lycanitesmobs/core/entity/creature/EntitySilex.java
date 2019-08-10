@@ -97,16 +97,4 @@ public class EntitySilex extends AgeableCreatureEntity {
 
     @Override
     public boolean canBurn() { return false; }
-
-
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack testStack) {
-        if(testStack == null || !this.isInWater())
-            return false;
-        return testStack.getItem() == Items.LAPIS_LAZULI;
-    }
 }

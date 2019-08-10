@@ -1,5 +1,6 @@
 {
 	"name": "avian",
 	"loadDefault": true,
-	"spawnEggName": "avianspawn"
+	"spawnEggName": "avianspawn",
+	"dietProvided": "carnivore"
 }

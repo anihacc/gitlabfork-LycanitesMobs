@@ -147,18 +147,6 @@ public class EntityCephignis extends AgeableCreatureEntity {
     public void applyDropEffects(CustomItemEntity entityitem) {
     	entityitem.setCanBurn(false);
     }
-
-
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack testStack) {
-        if(this.getAir() <= -100)
-            return false;
-        return ObjectLists.inItemList("Fuel", testStack);
-    }
     
     
     // ==================================================

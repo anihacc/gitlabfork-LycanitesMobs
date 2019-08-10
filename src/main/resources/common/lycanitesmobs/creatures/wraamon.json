@@ -57,6 +57,14 @@
 		}
 	],
 	"element": "chaos",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore",
+		"fungivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

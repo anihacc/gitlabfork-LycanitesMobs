@@ -95,24 +95,4 @@ public class EntityCrusk extends TameableCreatureEntity implements IGroupHeavy {
     	if(type.equals("inWall")) return false;
     	return super.isInvulnerableTo(type, source, damage);
     }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack par1ItemStack) {
-		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

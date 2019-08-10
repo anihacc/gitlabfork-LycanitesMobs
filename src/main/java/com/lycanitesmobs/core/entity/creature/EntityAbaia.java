@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;

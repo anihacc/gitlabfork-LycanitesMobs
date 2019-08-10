@@ -169,14 +169,4 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
     public float getFallResistance() {
         return 100;
     }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("CookedMeat", testStack);
-    }
 }

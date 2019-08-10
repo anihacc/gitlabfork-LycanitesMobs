@@ -60,6 +60,11 @@
 		"order",
 		"quake"
 	],
+	"diets": [
+		"carnivore",
+		"insectivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

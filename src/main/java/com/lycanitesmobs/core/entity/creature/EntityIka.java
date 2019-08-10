@@ -132,16 +132,4 @@ public class EntityIka extends AgeableCreatureEntity {
     		return 0.25F;
     	return 1.0F;
     }
-
-
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack testStack) {
-        if(this.getAir() <= -100)
-            return false;
-        return ObjectLists.inItemList("Vegetables", testStack);
-    }
 }

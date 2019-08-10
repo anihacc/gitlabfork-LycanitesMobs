@@ -86,14 +86,4 @@ public class EntityChupacabra extends TameableCreatureEntity {
 	public boolean isBreedingItem(ItemStack itemStack) {
         return false; // Breeding is triggered by attacking specific mobs instead!
     }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

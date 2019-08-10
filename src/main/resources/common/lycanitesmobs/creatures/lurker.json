@@ -1,6 +1,6 @@
 {
 	"name": "lurker",
-	"creatureType": "beast",
+	"creatureType": "arthropod",
 	"groups": [
 		"predator"
 	],
@@ -59,6 +59,13 @@
 	"elements": [
 		"poison",
 		"shadow"
+	],
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"frugivore",
+		"fungivore"
 	],
 	"peaceful": false,
 	"summonable": false,

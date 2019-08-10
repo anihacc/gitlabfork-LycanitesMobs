@@ -136,10 +136,4 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
 		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("maka").createEntity(this.getEntityWorld());
 	}
-	
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return false;
-    }
 }

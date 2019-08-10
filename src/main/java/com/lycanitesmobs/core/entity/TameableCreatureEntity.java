@@ -11,6 +11,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -37,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
@@ -217,24 +219,27 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
-    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, ItemStack itemStack) {
-    	HashMap<Integer, String> commands = new HashMap<Integer, String>();
+    public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
+    	HashMap<Integer, String> commands = new HashMap<>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
 		
 		// Open GUI:
-		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player == this.getPlayerOwner())
+		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
+		}
     	
     	// Server Item Commands:
-    	if(!this.getEntityWorld().isRemote && itemStack != null && !player.isSneaking()) {
+    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isSneaking()) {
     		
     		// Taming:
-    		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled)
-    			commands.put(COMMAND_PIORITIES.IMPORTANT.id, "Tame");
+    		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled) {
+				commands.put(COMMAND_PIORITIES.IMPORTANT.id, "Tame");
+			}
     		
     		// Feeding:
-    		if(this.isTamed() && this.isHealingItem(itemStack) && this.getHealth() < this.getMaxHealth())
-                commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Feed");
+    		if(this.isTamed() && this.isHealingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Feed");
+			}
     		
     		// Equipment:
     		if(this.isTamed() && !this.isChild() && this.canEquip() && player == this.getPlayerOwner()) {
@@ -242,6 +247,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	    		if(equipSlot != null && (this.inventory.getEquipmentStack(equipSlot) == null || this.inventory.getEquipmentStack(equipSlot).getItem() != itemStack.getItem()))
 	    			commands.put(COMMAND_PIORITIES.EQUIPPING.id, "Equip Item");
     		}
+
+			// Soulstone:
+			if(itemStack.getItem() instanceof ItemSoulstone && this.isTamed()) {
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Soulstone");
+			}
     	}
 		
 		// Sit:
@@ -259,12 +269,14 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	if(command.equals("GUI")) {
     		this.playTameSound();
     		this.openGUI(player);
+			return;
     	}
     	
     	// Tame:
     	if(command.equals("Tame")) {
     		this.tame(player);
     		this.consumePlayersItem(player, itemStack);
+			return;
     	}
     	
     	// Feed:
@@ -284,6 +296,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
                 	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
+            return;
     	}
     	
     	// Equip Armor:
@@ -295,6 +308,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     		equipStack.setCount(1);
     		this.inventory.setEquipmentStack(equipStack.copy());
     		this.consumePlayersItem(player, itemStack);
+			return;
     	}
     	
     	// Sit:
@@ -304,6 +318,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
+			return;
     	}
     	
     	super.performCommand(command, player, itemStack);
@@ -725,9 +740,23 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     }
     
     // ========== Feeding Food ==========
-    public boolean isHealingItem(ItemStack testStack) {
-    	return false;
+    public boolean isHealingItem(ItemStack itemStack) {
+    	return this.creatureInfo.canEat(itemStack);
     }
+
+
+	// ==================================================
+	//                      Breeding
+	// ==================================================
+	@Override
+	public boolean isBreedingItem(ItemStack itemStack) {
+		if(!this.creatureInfo.isFarmable()) {
+			if (!this.isTamed() || this.isPetType("minion") || this.isPetType("familiar") || this.getHealth() < this.getMaxHealth()) {
+				return false;
+			}
+		}
+		return super.isBreedingItem(itemStack);
+	}
     
     
     // ==================================================

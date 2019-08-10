@@ -146,26 +146,35 @@ public class ObjectLists {
 		ObjectLists.addItem("rawmeat", Items.BEEF);
 		ObjectLists.addItem("rawmeat", Items.PORKCHOP);
 		ObjectLists.addItem("rawmeat", Items.CHICKEN);
-		
+		ObjectLists.addItem("rawmeat", Items.MUTTON);
+		ObjectLists.addItem("rawmeat", Items.RABBIT);
+
 		// Cooked Meat: (Meaty goodness for carnivorous pets!)
 		ObjectLists.addItem("cookedmeat", Items.COOKED_BEEF);
 		ObjectLists.addItem("cookedmeat", Items.COOKED_PORKCHOP);
 		ObjectLists.addItem("cookedmeat", Items.COOKED_CHICKEN);
-		
+		ObjectLists.addItem("cookedmeat", Items.COOKED_MUTTON);
+		ObjectLists.addItem("cookedmeat", Items.COOKED_RABBIT);
+
 		// Prepared Vegetables: (For most vegetarian pets.)
 		ObjectLists.addItem("vegetables", Items.WHEAT);
 		ObjectLists.addItem("vegetables", Items.CARROT);
 		ObjectLists.addItem("vegetables", Items.POTATO);
+		ObjectLists.addItem("vegetables", Items.BEETROOT);
+		ObjectLists.addItem("vegetables", Items.DRIED_KELP);
 		
 		// Fruit: (For exotic pets!)
 		ObjectLists.addItem("fruit", Items.APPLE);
 		ObjectLists.addItem("fruit", Items.MELON_SLICE);
 		ObjectLists.addItem("fruit", Blocks.PUMPKIN);
 		ObjectLists.addItem("fruit", Items.PUMPKIN_PIE);
+		ObjectLists.addItem("fruit", Items.SWEET_BERRIES);
 
 		// Raw Fish: (Very smelly!)
 		ObjectLists.addItem("rawfish", Items.COD);
 		ObjectLists.addItem("rawfish", Items.SALMON);
+		ObjectLists.addItem("rawfish", Items.TROPICAL_FISH);
+		ObjectLists.addItem("rawfish", Items.PUFFERFISH);
 
 		// Cooked Fish: (For those fish fiends!)
 		ObjectLists.addItem("cookedfish", Items.COOKED_COD);

@@ -59,6 +59,10 @@
 		}
 	],
 	"element": "quake",
+	"diets": [
+		"carnivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

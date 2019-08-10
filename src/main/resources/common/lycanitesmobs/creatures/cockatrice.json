@@ -60,6 +60,13 @@
 		"gravity",
 		"lightning"
 	],
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

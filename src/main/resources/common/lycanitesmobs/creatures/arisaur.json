@@ -57,6 +57,10 @@
 		}
 	],
 	"element": "arbour",
+	"diets": [
+		"herbivore",
+		"frugivore"
+	],
 	"peaceful": true,
 	"farmable": true,
 	"summonable": false,

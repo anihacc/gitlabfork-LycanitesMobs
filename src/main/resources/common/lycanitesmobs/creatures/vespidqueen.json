@@ -60,6 +60,11 @@
 		"acid",
 		"poison"
 	],
+	"diets": [
+		"carnivore",
+		"insectivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

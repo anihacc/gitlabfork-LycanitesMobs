@@ -2,7 +2,7 @@
 	"name": "roc",
 	"creatureType": "avian",
 	"groups": [
-		"predator"
+		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityRoc",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelRoc",
@@ -57,6 +57,11 @@
 		}
 	],
 	"element": "order",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

@@ -207,7 +207,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		// Spirit Stat Update:
 		this.spirit = Math.min(Math.max(this.spirit, 0), this.spiritMax - this.spiritReserved);
 		if(this.spirit < this.spiritMax - this.spiritReserved) {
-			this.spirit++;
+			this.spirit += 10;
 			if(!this.player.getEntityWorld().isRemote && this.currentTick % 20 == 0 || this.spirit == this.spiritMax - this.spiritReserved) {
 				sync = true;
 			}
@@ -216,7 +216,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		// Summoning Focus Stat Update:
 		this.summonFocus = Math.min(Math.max(this.summonFocus, 0), this.summonFocusMax);
 		if(this.summonFocus < this.summonFocusMax) {
-			this.summonFocus++;
+			this.summonFocus += 10;
 			if(!this.player.getEntityWorld().isRemote && !creative && this.currentTick % 20 == 0
 					|| this.summonFocus < this.summonFocusMax
 					|| this.player.getHeldItemMainhand().getItem() instanceof ItemStaffSummoning

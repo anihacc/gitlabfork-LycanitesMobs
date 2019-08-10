@@ -65,6 +65,9 @@
 	"elements": [
 		"lava"
 	],
+	"diets": [
+		"geovore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

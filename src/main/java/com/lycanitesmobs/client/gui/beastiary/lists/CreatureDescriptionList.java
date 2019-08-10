@@ -76,8 +76,14 @@ public class CreatureDescriptionList extends BaseList {
 					.appendText("\u00A7r\n\n");
 		}
 
+		// Diet:
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.diet"))
+				.appendText(": " + "\u00A7r")
+				.appendText("\n").appendSibling(creatureInfo.getDietNames());
+
 		// Summary:
-		text.appendText("\u00A7l")
+		text.appendText("\n\n\u00A7l")
 				.appendSibling(new TranslationTextComponent("gui.beastiary.summary"))
 				.appendText(": " + "\u00A7r")
 				.appendText("\n")

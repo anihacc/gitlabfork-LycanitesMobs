@@ -58,6 +58,9 @@
 		}
 	],
 	"element": "quake",
+	"diets": [
+		"exudativore"
+	],
 	"peaceful": true,
 	"farmable": true,
 	"summonable": false,

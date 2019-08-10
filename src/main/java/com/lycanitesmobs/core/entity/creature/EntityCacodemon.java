@@ -146,16 +146,6 @@ public class EntityCacodemon extends RideableCreatureEntity {
     
     @Override
     public boolean canBurn() { return false; }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
-    }
 
 
     // ==================================================

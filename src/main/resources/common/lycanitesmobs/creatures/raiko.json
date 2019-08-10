@@ -2,7 +2,7 @@
 	"name": "raiko",
 	"creatureType": "avian",
 	"groups": [
-		"predator"
+		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityRaiko",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelRaiko",
@@ -57,6 +57,11 @@
 		}
 	],
 	"element": "earth",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

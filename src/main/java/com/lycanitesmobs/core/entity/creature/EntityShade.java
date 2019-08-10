@@ -176,24 +176,4 @@ public class EntityShade extends RideableCreatureEntity {
     public float getFallResistance() {
         return 10;
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack itemStack) {
-        return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

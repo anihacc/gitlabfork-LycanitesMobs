@@ -60,6 +60,12 @@
 		"arbour",
 		"shadow"
 	],
+	"diets": [
+		"carnivore",
+		"insectivore",
+		"frugivore",
+		"fungivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

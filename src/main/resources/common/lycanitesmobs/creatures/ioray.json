@@ -57,6 +57,9 @@
 		}
 	],
 	"element": "acid",
+	"diets": [
+		"piscivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

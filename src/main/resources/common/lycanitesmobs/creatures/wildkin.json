@@ -57,6 +57,13 @@
 		}
 	],
 	"element": "earth",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

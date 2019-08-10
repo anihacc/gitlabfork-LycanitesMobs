@@ -57,6 +57,9 @@
 		}
 	],
 	"element": "water",
+	"diets": [
+		"geovore"
+	],
 	"peaceful": true,
 	"farmable": true,
 	"summonable": false,
@@ -66,8 +69,7 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "minecraft:dye",
-			"metadata": 4,
+			"item": "minecraft:lapis_lazuli",
 			"minAmount": 2,
 			"maxAmount": 4,
 			"chance": 1

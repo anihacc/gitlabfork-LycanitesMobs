@@ -300,14 +300,4 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

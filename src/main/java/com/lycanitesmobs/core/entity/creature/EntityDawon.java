@@ -76,14 +76,4 @@ public class EntityDawon extends TameableCreatureEntity {
     public float getFallResistance() {
         return 100;
     }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

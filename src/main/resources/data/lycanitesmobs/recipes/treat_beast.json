@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:brutetreat",
+    "item": "lycanitesmobs:beasttreat",
     "count": 4
   },
   "pattern": [
@@ -14,7 +14,7 @@
       "item": "minecraft:bone"
     },
     "M": {
-      "item": "minecraft:cooked_porkchop"
+      "tag": "lycanitesmobs:cooked_beef"
     }
   }
 }

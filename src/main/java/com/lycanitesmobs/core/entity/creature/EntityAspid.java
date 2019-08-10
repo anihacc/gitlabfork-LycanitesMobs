@@ -95,14 +95,4 @@ public class EntityAspid extends AgeableCreatureEntity {
 	        return true;
 	    return super.canBeLeashedTo(player);
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("Mushrooms", testStack);
-    }
 }

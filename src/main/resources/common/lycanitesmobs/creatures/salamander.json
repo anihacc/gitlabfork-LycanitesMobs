@@ -58,6 +58,12 @@
 		}
 	],
 	"element": "lava",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"geovore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

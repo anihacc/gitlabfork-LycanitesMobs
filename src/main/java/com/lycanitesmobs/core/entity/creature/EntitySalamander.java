@@ -262,16 +262,6 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public int getBrightnessForRender() {
         return 15728880;
     }
-	
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack);
-    }
     
     
     // ==================================================

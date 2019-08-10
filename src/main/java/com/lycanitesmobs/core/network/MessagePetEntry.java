@@ -101,12 +101,12 @@ public class MessagePetEntry {
 	 */
 	public static MessagePetEntry decode(PacketBuffer packet) {
 		MessagePetEntry message = new MessagePetEntry();
-        message.petEntryName = packet.readString(256);
+        message.petEntryName = packet.readString(512);
         message.petEntryID = packet.readInt();
-        message.petEntryType = packet.readString(256);
+        message.petEntryType = packet.readString(512);
         message.spawningActive = packet.readBoolean();
         message.teleportEntity = packet.readBoolean();
-        message.summonType = packet.readString(256);
+        message.summonType = packet.readString(512);
 		message.subspecies = packet.readInt();
         message.behaviour = packet.readByte();
         message.petEntryEntityID = packet.readInt();

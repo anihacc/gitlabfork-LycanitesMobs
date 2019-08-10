@@ -4,7 +4,7 @@
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 8,
+	"mobCountMin": 6,
 	"ignoreBiomes": false,
 	"ignoreLightLevel": true,
 	"groupLimitRange": 32,

@@ -201,24 +201,4 @@ public class EntityFeradon extends RideableCreatureEntity {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-	
-	
-	// ==================================================
-    //                     Breeding
-    // ==================================================
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack itemStack) {
-		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

@@ -39,6 +39,9 @@ public class CreatureType {
 	/** The spawn egg item this type uses. **/
 	public Item spawnEgg;
 
+	/** The die type this Creature Type provides as food for predators. "none" by default. **/
+	public String dietProvided = "none";
+
 
 	/**
 	 * Constructor
@@ -52,6 +55,9 @@ public class CreatureType {
 	/** Loads this creature type from a JSON object. **/
 	public void loadFromJson(JsonObject json) {
 		this.name = json.get("name").getAsString();
+
+		if(json.has("dietProvided"))
+			this.dietProvided = json.get("dietProvided").getAsString();
 	}
 
 	/**
