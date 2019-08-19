@@ -1,5 +1,6 @@
 {
     "lycanitesmobs": "Lycanites Mobs",
+    "death.attack.magic": "was killed using magic.",
     "_comment": "========== Entites ==========",
     "entity.level": "Lvl",
     "entity.lycanitesmobs.summoningportal": "Summoning Portal",
