@@ -263,20 +263,20 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Open GUI:
     	if(command.equals("GUI")) {
     		this.playTameSound();
     		this.openGUI(player);
-			return;
+			return true;
     	}
     	
     	// Tame:
     	if(command.equals("Tame")) {
     		this.tame(player);
     		this.consumePlayersItem(player, itemStack);
-			return;
+			return true;
     	}
     	
     	// Feed:
@@ -296,7 +296,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
                 	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
-            return;
+            return true;
     	}
     	
     	// Equip Armor:
@@ -308,8 +308,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     		equipStack.setCount(1);
     		this.inventory.setEquipmentStack(equipStack.copy());
     		this.consumePlayersItem(player, itemStack);
-			return;
+			return true;
     	}
+
+		// Soulstone:
+		if(command.equals("Soulstone")) {
+			return false; // Allow the soulstone item to activate.
+		}
     	
     	// Sit:
     	if(command.equals("Sit")) {
@@ -318,10 +323,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
-			return;
+			return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
     
     // ========== Can Name Tag ==========

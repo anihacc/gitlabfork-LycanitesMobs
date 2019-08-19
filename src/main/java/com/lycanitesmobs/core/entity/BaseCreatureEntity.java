@@ -3512,8 +3512,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     			priority = testPriority;
     	if(!commands.containsKey(priority))
     		return false;
-    	performCommand(commands.get(priority), player, itemStack);
-    	return true;
+    	return performCommand(commands.get(priority), player, itemStack);
     }
     
     // ========== Get Interact Commands ==========
@@ -3550,13 +3549,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
     
     // ========== Perform Command ==========
-    /** Performs the given interact command. Could be used outside of the interact method if needed. **/
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
-    	
+    /**
+	 * Performs the given interact command. Could be used outside of the interact method if needed.
+	 * @param command The command to perform.
+	 * @param player The player that triggered the command.
+	 * @param itemStack The item the player is holding.
+	 * @return True if the player's item should not activate, false if it should.
+	 */
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	// Leash:
     	if("Leash".equals(command)) {
     		this.setLeashHolder(player, true);
     		this.consumePlayersItem(player, itemStack);
+    		return true;
     	}
     	
     	// Color:
@@ -3566,8 +3571,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             if(color != this.getColor()) {
                 this.setColor(color);
         		this.consumePlayersItem(player, itemStack);
+				return true;
             }
     	}
+
+    	return false;
     }
     
     // ========== Can Name Tag ==========

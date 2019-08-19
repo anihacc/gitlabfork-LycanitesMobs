@@ -138,13 +138,14 @@ public class EntityYeti extends AgeableCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Milk:
     	if(command.equals("Milk")) {
     		this.replacePlayersItem(player, itemStack, new ItemStack(Items.MILK_BUCKET));
+    		return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
 }

@@ -374,7 +374,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Mount:
     	if(command.equals("Mount")) {
@@ -382,10 +382,10 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             this.clearMovement();
             this.setAttackTarget(null);
             this.mount(player);
-            return;
+            return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
     
     

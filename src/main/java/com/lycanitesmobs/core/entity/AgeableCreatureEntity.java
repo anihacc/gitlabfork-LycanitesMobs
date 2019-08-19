@@ -205,7 +205,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
     	
     	// Spawn Baby:
     	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote && itemStack.getItem() instanceof ItemCustomSpawnEgg) {
@@ -226,18 +226,18 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 					}
 				}
 			}
-			return;
+			return true;
     	}
     	
     	// Breed:
     	if(command.equals("Breed")) {
     		if(this.breed()) {
 				this.consumePlayersItem(player, itemStack);
-				return;
+				return true;
 			}
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
 	
 	

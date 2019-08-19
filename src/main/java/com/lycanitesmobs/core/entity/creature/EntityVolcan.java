@@ -128,14 +128,15 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
 	// ========== Perform Command ==========
 	@Override
-	public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+	public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
 
 		// Water:
 		if(command.equals("Water")) {
 			this.replacePlayersItem(player, itemStack, new ItemStack(Items.LAVA_BUCKET));
+			return true;
 		}
 
-		super.performCommand(command, player, itemStack);
+		return super.performCommand(command, player, itemStack);
 	}
     
     

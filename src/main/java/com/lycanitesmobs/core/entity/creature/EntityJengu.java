@@ -124,14 +124,15 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
 
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, PlayerEntity player, ItemStack itemStack) {
+    public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
 
         // Water:
         if(command.equals("Water")) {
             this.replacePlayersItem(player, itemStack, new ItemStack(Items.WATER_BUCKET));
+            return true;
         }
 
-        super.performCommand(command, player, itemStack);
+        return super.performCommand(command, player, itemStack);
     }
 
 
