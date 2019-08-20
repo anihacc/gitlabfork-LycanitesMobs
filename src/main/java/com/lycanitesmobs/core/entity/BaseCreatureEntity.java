@@ -883,7 +883,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		CreatureGroup bossGroup = CreatureManager.getInstance().getCreatureGroup("boss");
 		if(bossGroup == null)
 			return true;
-		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, entity -> bossGroup.hasEntity(entity), CreatureManager.getInstance().spawnConfig.spawnLimitRange);
+		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, bossGroup::hasEntity, CreatureManager.getInstance().spawnConfig.spawnLimitRange);
 		return bosses.size() == 0;
 	}
 

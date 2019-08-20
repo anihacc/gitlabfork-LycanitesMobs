@@ -24,11 +24,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -338,6 +335,23 @@ public class GameEventListener {
 			return;
 		}
 		extendedPlayer.setJustBrokenBlock(event.getState());
+	}
+
+
+	// ==================================================
+	//                   Check Spawn
+	// ==================================================
+	@SubscribeEvent
+	public void onCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
+		if(event.isSpawner()) {
+			LivingEntity entity = event.getEntityLiving();
+			if(entity instanceof BaseCreatureEntity) {
+				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
+				if(!baseCreatureEntity.checkSpawnGroupLimit(event.getWorld().getWorld(), event.getSpawner().getSpawnerPosition(), 16)) {
+					event.setResult(Event.Result.DENY);
+				}
+			}
+		}
 	}
 
 
