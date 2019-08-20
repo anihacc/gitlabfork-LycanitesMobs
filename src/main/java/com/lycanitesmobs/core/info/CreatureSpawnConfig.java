@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CreatureSpawnConfig {
 	public int typeSpawnLimit = 64;
-	public double spawnLimitRange = 32D;
+	public double spawnLimitRange = 16D;
 	public boolean disableAllSpawning = false;
 	public boolean disableDungeonSpawners = false;
 	public boolean enforceBlockCost = true;
