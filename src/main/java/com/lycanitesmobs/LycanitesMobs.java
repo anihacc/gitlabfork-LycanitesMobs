@@ -67,7 +67,7 @@ public class LycanitesMobs {
 	public static boolean configReady = false;
 	public static boolean earlyDebug = false;
 
-	// Proxy:A
+	// Proxy:
 	public static IProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	// Capabilities:
