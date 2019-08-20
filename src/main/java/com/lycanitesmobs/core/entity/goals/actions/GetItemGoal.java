@@ -80,7 +80,7 @@ public class GetItemGoal extends Goal {
 
     	if(!this.tamedLooting) {
     		if(this.host instanceof TameableCreatureEntity)
-    			if(((TameableCreatureEntity)this.host).isTamed())
+    			if(this.host.isTamed())
     				return false;
     	}
     	
