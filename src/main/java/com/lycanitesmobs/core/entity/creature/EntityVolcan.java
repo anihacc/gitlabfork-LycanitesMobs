@@ -74,10 +74,8 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
 					for (int h = -((int) Math.ceil(this.getSize(Pose.STANDING).height) + range); h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {
 						Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
-						if (block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
+						if (block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
 							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
-							if (block == Blocks.OBSIDIAN)
-								blockState = Blocks.LAVA.getDefaultState();
 							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
 						}
 						/*else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER || block == Blocks.ICE || block == Blocks.SNOW) {

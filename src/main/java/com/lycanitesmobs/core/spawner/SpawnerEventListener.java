@@ -530,7 +530,7 @@ public class SpawnerEventListener {
 			}
 		}
 
-		else if(event.getState().getBlock() == Blocks.COBBLESTONE) {
+		/*else if(event.getState().getBlock() == Blocks.COBBLESTONE) {
 			boolean water = false;
 			boolean lava = false;
 			for(Direction side : event.getNotifiedSides()) {
@@ -545,7 +545,7 @@ public class SpawnerEventListener {
 			if(water && lava) {
 				trigger = true;
 			}
-		}
+		}*/
 
 		if(trigger) {
 			if(this.lastMixPos != null && this.lastMixPos.equals(event.getPos())) {
