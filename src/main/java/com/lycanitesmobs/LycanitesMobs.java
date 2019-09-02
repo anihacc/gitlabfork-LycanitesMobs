@@ -33,7 +33,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -79,11 +78,6 @@ public class LycanitesMobs {
 
 	// Potion Effects:
 	public static Effects EFFECTS;
-
-	// Universal Bucket:
-	static {
-		FluidRegistry.enableUniversalBucket();
-	}
 
 	/**
 	 * Constructor
