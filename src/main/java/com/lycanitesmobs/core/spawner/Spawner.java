@@ -483,7 +483,7 @@ public class Spawner {
 			// Forge Can Spawn Event:
 			Event.Result canSpawn = Event.Result.ALLOW;
 			if(entityLiving instanceof MobEntity) {
-				canSpawn = ForgeEventFactory.canEntitySpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null);
+				canSpawn = ForgeEventFactory.canEntitySpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null, SpawnReason.NATURAL);
 				if (canSpawn == Event.Result.DENY && !this.ignoreForgeCanSpawnEvent && !mobSpawn.ignoreForgeCanSpawnEvent) {
 					LycanitesMobs.logDebug("JSONSpawner", "Spawn Check Failed! Spawning blocked by Forge Can Spawn Event, this is caused by another mod.");
 					continue;
@@ -501,7 +501,7 @@ public class Spawner {
 
 			// Call Entity's Initial Spawn:
 			if (entityLiving instanceof MobEntity) {
-				if (!ForgeEventFactory.doSpecialSpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null)) {
+				if (!ForgeEventFactory.doSpecialSpawn((MobEntity)entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, null, SpawnReason.NATURAL)) {
 					((MobEntity)entityLiving).onInitialSpawn(world, world.getDifficultyForLocation(spawnPos), SpawnReason.NATURAL, null, null);
 				}
 			}

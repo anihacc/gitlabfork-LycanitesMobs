@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
@@ -29,7 +30,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public class DungeonStructure extends Structure<NoFeatureConfig> {
-	public static IStructurePieceType PIECE_TYPE = IStructurePieceType.register(Piece::new, "LMDungeonPiece");
+	public static IStructurePieceType PIECE_TYPE = IStructurePieceType.register(Piece::new, "lmdungeonpiece");
 
 	public DungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactory) {
 		super(configFactory);
@@ -37,18 +38,22 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 
 	@Override
 	public boolean hasStartAt(@Nonnull ChunkGenerator<?> chunkGenerator, @Nonnull Random random, int chunkX, int chunkZ) {
-		//LycanitesMobs.logDebug("", "Has Start At: " + chunkX + " " + chunkZ);
 		return true;
 	}
 
 	@Override
 	public String getStructureName() {
-		return "Lycanites Mobs Dungeon";
+		return "lmdungeon";
 	}
 
 	@Override
 	public int getSize() {
-		return 20;
+		return ConfigDungeons.INSTANCE.dungeonDistance.get();
+	}
+
+	@Override
+	public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> chunkGenerator, Random random, BlockPos blockPos, NoFeatureConfig config) {
+		return super.place(world, chunkGenerator, random, blockPos, config);
 	}
 
 	@Override
@@ -87,11 +92,11 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 
 		public Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int reference, long seed) {
 			super(structure, chunkX, chunkZ, biome, boundingBox, reference, seed);
-			//LycanitesMobs.logDebug("", "Starting At: " + chunkX + " " + chunkZ);
 		}
 
 		@Override
 		public void init(@Nonnull ChunkGenerator<?> generator, @Nonnull TemplateManager templateManager, int chunkX, int chunkZ, Biome biome) {
+			//LycanitesMobs.logDebug("", "Dungeon - Init At: " + chunkX + " " + chunkZ);
 			this.components.add(new Piece(this.rand, chunkX * 16, chunkZ * 16));
 		}
 	}
@@ -121,7 +126,7 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 		@Override
 		public boolean addComponentParts(IWorld worldWriter, @Nonnull Random random, @Nonnull MutableBoundingBox structureBoundingBoxIn, @Nonnull ChunkPos chunkPos) {
 			boolean enabled = ConfigDungeons.INSTANCE.dungeonsEnabled.get();
-			int dungeonDistance = ConfigDungeons.INSTANCE.dungeonDistance.get();
+			LycanitesMobs.logDebug("", "Dungeon Component At Chunk: X" + chunkPos.x + " Z" + chunkPos.z);
 
 			World world = worldWriter.getWorld();
 			ExtendedWorld extendedWorld = ExtendedWorld.getForWorld(world);
@@ -129,7 +134,7 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 				return false;
 			}
 			try {
-				int dungeonSizeMax = dungeonDistance;
+				int dungeonSizeMax = ConfigDungeons.INSTANCE.dungeonDistance.get();
 				List<DungeonInstance> nearbyDungeons = extendedWorld.getNearbyDungeonInstances(chunkPos, dungeonSizeMax * 2);
 
 				// Create New Instances:
@@ -142,14 +147,14 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 							if (x != 0 && z != 0) {
 								continue;
 							}
-							LycanitesMobs.logDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkPos.x + (dungeonSizeMax * x)) + " Z" + (chunkPos.z + (dungeonSizeMax * z)));
+							LycanitesMobs.logDebug("", "Creating A New Dungeon At Chunk: X" + (chunkPos.x + (dungeonSizeMax * x)) + " Z" + (chunkPos.z + (dungeonSizeMax * z)));
 							DungeonInstance dungeonInstance = new DungeonInstance();
-							int yPos = worldWriter.getSeaLevel();
+							int yPos = world.getSeaLevel();
 							BlockPos dungeonPos = new ChunkPos(chunkPos.x + (dungeonSizeMax * x), chunkPos.z + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
 							dungeonInstance.setOrigin(dungeonPos);
-							dungeonInstance.init(world);
+							dungeonInstance.init(world.getWorld());
 							extendedWorld.addDungeonInstance(dungeonInstance, new UUID(random.nextLong(), random.nextLong()));
-							LycanitesMobs.logDebug("Dungeon", "Dungeon (Structure) Created: " + dungeonInstance.toString());
+							LycanitesMobs.logDebug("", "Dungeon (Structure) Created: " + dungeonInstance.toString());
 						}
 					}
 				}

@@ -20,7 +20,7 @@ public class ConfigDungeons {
 		this.dungeonDistance = builder
 				.comment("The average distance in chunks that dungeons are spaced apart from each other.")
 				.translation(CoreConfig.CONFIG_PREFIX + "dungeons.distance")
-				.define("distance", 80);
+				.define("distance", 40);
 
 		builder.pop();
 	}

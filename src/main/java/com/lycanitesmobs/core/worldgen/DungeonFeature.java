@@ -58,7 +58,7 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 						dungeonInstance.setOrigin(dungeonPos);
 						dungeonInstance.init(world);
 						extendedWorld.addDungeonInstance(dungeonInstance, new UUID(random.nextLong(), random.nextLong()));
-						LycanitesMobs.logDebug("Dungeon", "Dungeon (Feature) Created: " + dungeonInstance.toString());
+						LycanitesMobs.logDebug("", "Dungeon (Feature) Created: " + dungeonInstance.toString());
 					}
 				}
 			}
@@ -66,6 +66,7 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 			// Build Dungeons:
 			nearbyDungeons = extendedWorld.getNearbyDungeonInstances(chunkPos, 0);
 			for(DungeonInstance dungeonInstance : nearbyDungeons) {
+				//LycanitesMobs.logDebug("", "Building At: " + pos);
 				dungeonInstance.buildChunk(worldWriter, world, chunkPos, random);
 			}
 		}

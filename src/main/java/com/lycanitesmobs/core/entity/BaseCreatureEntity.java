@@ -3989,10 +3989,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         else
             pos = new BlockPos(pos.getX(), this.getGroundY(pos), pos.getZ());
 
-        int light = this.getEntityWorld().getLight(pos);
-        // TODO Thundering Light Level?*/
-		float light = 14 * this.getBrightness();
+        int light = this.getEntityWorld().getLight(pos);*/
 
+		float light = 15 * this.getBrightness();
         if(light == 0) return 0;
         if(light <= 7) return 1;
         if(light <= 14) return 2;
