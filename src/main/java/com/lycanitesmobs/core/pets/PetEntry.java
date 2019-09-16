@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
@@ -267,7 +268,7 @@ public class PetEntry {
         // Active Spawning:
         if(this.spawningActive) {
             // Dead Check:
-            if(this.entity != null && !this.entity.isAlive()) {
+            if(this.entity != null && !this.entity.isAlive() && this.entity instanceof MobEntity && ((MobEntity)this.entity).getHealth() <= 0) {
                 this.saveEntityNBT();
                 this.entity = null;
                 this.isRespawning = true;

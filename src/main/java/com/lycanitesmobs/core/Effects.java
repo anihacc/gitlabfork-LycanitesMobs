@@ -200,7 +200,7 @@ public class Effects {
 
 				// Spread:
 				if(entity.getEntityWorld().getGameTime() % 20 == 0) {
-					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 6);
+					List aoeTargets = this.getNearbyEntities(entity, LivingEntity.class, null, 2);
 					for(Object entityObj : aoeTargets) {
 						LivingEntity target = (LivingEntity)entityObj;
 						if(target != entity && !entity.isOnSameTeam(target)) {

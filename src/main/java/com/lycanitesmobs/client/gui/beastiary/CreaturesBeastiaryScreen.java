@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class CreaturesBeastiaryScreen extends BeastiaryScreen {
@@ -147,7 +148,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 	@Override
 	public ITextComponent getTitle() {
 		if(this.creatureList != null && this.playerExt.selectedCreature != null) {
-			return new TranslationTextComponent("");
+			return new StringTextComponent("");
 			//return this.playerExt.selectedCreature.getTitle();
 		}
 		if(this.creatureTypeList != null && this.playerExt.selectedCreatureType != null) {

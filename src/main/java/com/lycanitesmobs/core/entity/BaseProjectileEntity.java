@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.network.MessageSpawnEntity;
-import com.lycanitesmobs.core.network.PacketHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;

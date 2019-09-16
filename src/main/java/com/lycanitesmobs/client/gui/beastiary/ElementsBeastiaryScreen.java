@@ -5,6 +5,7 @@ import com.lycanitesmobs.client.gui.beastiary.lists.ElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class ElementsBeastiaryScreen extends BeastiaryScreen {
@@ -56,7 +57,7 @@ public class ElementsBeastiaryScreen extends BeastiaryScreen {
 	@Override
 	public ITextComponent getTitle() {
 		if(this.elementInfo != null) {
-			return new TranslationTextComponent("");
+			return new StringTextComponent("");
 		}
 		return new TranslationTextComponent("gui.beastiary.elements");
 	}
