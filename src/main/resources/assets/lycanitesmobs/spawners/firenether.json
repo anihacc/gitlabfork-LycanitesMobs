@@ -1,15 +1,17 @@
 {
-	"name": "end",
+	"name": "fire",
+	"sharedName": "fire",
 	"type": "spawner",
 	"enabled": true,
 	"loadDefault": true,
-	"mobCountMin": 4,
+	"mobCountMin": 2,
+	"ignoreDimensions": true,
 	"ignoreBiomes": true,
 	"ignoreLightLevel": true,
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [1],
+			"dimensionIds": [-1],
 			"dimensionListType": "whitelist"
 		}
 	],
@@ -17,17 +19,26 @@
 		{
 			"type": "world",
 			"chance": 0.25,
-			"tickRate": 800
+			"tickRate": 1600
 		}
 	],
 	"locations": [
 		{
-			"type": "random",
+			"type": "block",
 			"rangeMin": [16, 0, 16],
 			"rangeMax": [32, 32, 32],
 			"sorting": "random",
-			"limit": 32,
-			"solidGround": true
+			"blocks": [
+				"minecraft:fire"
+			],
+			"blockCost": 8,
+			"listType": "whitelist"
+		}
+	],
+	"mobSpawns": [
+		{
+			"mobId": "lycanitesmobs:cinder",
+			"weight": 8
 		}
 	]
 }

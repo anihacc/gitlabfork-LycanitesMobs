@@ -492,23 +492,6 @@ public class SpawnerEventListener {
 			}
 		}
 
-		else if(event.getState().getBlock() == Blocks.COBBLESTONE) {
-			boolean water = false;
-			boolean lava = false;
-			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
-					water = true;
-				}
-				else if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.FLOWING_LAVA) {
-					lava = true;
-				}
-			}
-			if(water && lava) {
-				trigger = true;
-			}
-		}
-
 		if(trigger) {
 			if(this.lastMixPos != null && this.lastMixPos.equals(event.getPos())) {
 				return;

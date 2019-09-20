@@ -117,10 +117,8 @@ public class EntityVolcan extends EntityCreatureTameable implements IMob, IGroup
 				for (int d = -((int) Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++) {
 					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {
 						Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
-						if (block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
+						if (block == Blocks.COBBLESTONE || block == Blocks.GRAVEL) {
 							IBlockState blockState = Blocks.FLOWING_LAVA.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
-							if (block == Blocks.OBSIDIAN)
-								blockState = Blocks.LAVA.getDefaultState();
 							this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
 						}
 						/*else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER || block == Blocks.ICE || block == Blocks.SNOW_LAYER) {
