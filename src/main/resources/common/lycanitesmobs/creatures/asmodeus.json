@@ -1,6 +1,6 @@
 {
 	"name": "asmodeus",
-	"creatureType": "demon",
+	"creatureType": "aberration",
 	"groups": [
 		"boss"
 	],

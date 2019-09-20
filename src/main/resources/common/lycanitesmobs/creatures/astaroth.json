@@ -1,6 +1,6 @@
 {
 	"name": "astaroth",
-	"creatureType": "demon",
+	"creatureType": "aberration",
 	"groups": [
 		"monster"
 	],

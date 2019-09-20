@@ -1,6 +1,6 @@
 {
 	"name": "trite",
-	"creatureType": "demon",
+	"creatureType": "aberration",
 	"groups": [
 		"monster"
 	],
