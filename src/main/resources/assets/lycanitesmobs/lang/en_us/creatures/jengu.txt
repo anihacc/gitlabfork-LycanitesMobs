@@ -1,4 +1,0 @@
-entity.lycanitesmobs.jengu.name=Jengu
-entity.lycanitesmobs.jengu.description=Water Elementals known as the protectors of pure water, they will attack anything they see as a threat to their water's purity.
-entity.lycanitesmobs.jengu.habitat=Being Water Elementals, Jengu manifest from large bodies of water in the dark.
-entity.lycanitesmobs.jengu.combat=Jengu attack be throwing large blasts of water, on impact these create a temporary pool of water.

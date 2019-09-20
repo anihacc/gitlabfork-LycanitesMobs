@@ -1,4 +1,0 @@
-entity.lycanitesmobs.chupacabra.name=卓柏卡布拉
-entity.lycanitesmobs.chupacabra.description=可怕的生物，它们对肉体的永不满足的渴望，可以用来操纵和耕种它们。
-entity.lycanitesmobs.chupacabra.habitat=卓柏卡布拉通常生活在黑暗洞穴的地下。
-entity.lycanitesmobs.chupacabra.combat=这些野兽以致命的撕咬和锋利的利爪具有难以置信的攻击性，但是它们的贪婪可以用来对付它们，因为它们会优先考虑大型猎物。它们的攻击也会治愈它们。

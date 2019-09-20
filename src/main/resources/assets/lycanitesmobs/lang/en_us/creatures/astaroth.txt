@@ -1,4 +1,0 @@
-entity.lycanitesmobs.astaroth.name=Astaroth
-entity.lycanitesmobs.astaroth.description=Demonic brain-like beings mounted on a mechanical platforms made from demonic redstone technology maintained by Trite minions. If you manage to get past their rapid fire weapons and destroy them, all resident Trites will crawl out and attack!
-entity.lycanitesmobs.astaroth.habitat=These demons are said to originate from the endless Hell plane of flesh called Purgatory and that they were once mere Trites, they can often be found stalking the Nether.
-entity.lycanitesmobs.astaroth.combat=Astaroth use powerful rapid weapons that extract their demonic energizes into powerful projectiles called Devil Stars, on impact these can cause wither. Should an Astaroth fall, a small force of Trites will come out of their corpse and proceed to attack!

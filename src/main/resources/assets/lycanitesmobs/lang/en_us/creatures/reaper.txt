@@ -1,4 +1,0 @@
-entity.lycanitesmobs.reaper.name=Reaper
-entity.lycanitesmobs.reaper.description=Twisted spirits that feed on death, Reapers are attracted to death and sometimes mistake people who are asleep as dead!
-entity.lycanitesmobs.reaper.habitat=These spirits sometimes appear when a creature dies and sometimes when someone is attempting to sleep.
-entity.lycanitesmobs.reaper.combat=Reapers have ranged attacks cause their victims to run around fear!

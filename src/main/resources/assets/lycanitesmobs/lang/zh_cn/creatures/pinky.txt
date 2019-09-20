@@ -1,4 +1,0 @@
-entity.lycanitesmobs.pinky.name=牛鬼
-entity.lycanitesmobs.pinky.description=特别喜欢吃活动物的贪吃的动物。可以用活的大型动物饲养和繁殖。幼年的牛鬼可以被驯服，成熟后可以作为战斗坐骑。
-entity.lycanitesmobs.pinky.habitat=牛鬼在下界中游荡，寻找食物。
-entity.lycanitesmobs.pinky.combat=这些恶魔具有难以置信的攻击性，但会优先考虑更多汁的猎物，而这些猎物可以用来净化它们。

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.concapedesegment.name=贝状百足虫分节
-entity.lycanitesmobs.concapedesegment.description=互相连接的奇怪甲虫。分节通常与头部相连并由头部生长。如果与前面的头部或其他分节分离，它将成长为头部。只有部分是无法防御的。
-entity.lycanitesmobs.concapedesegment.habitat=分节生长的部分，可在热带地区如丛林中找到。
-entity.lycanitesmobs.concapedesegment.combat=分节没有防御能力，但将由头部保护，除非这些头部忙于进食。

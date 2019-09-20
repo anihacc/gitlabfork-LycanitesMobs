@@ -1,4 +1,0 @@
-entity.lycanitesmobs.arisaur.name=Arisaur
-entity.lycanitesmobs.arisaur.description=Large plant covered sauropods, Arisaurs are peaceful and normally graze from trees or from their own backs sharing a symbiotic relationship.
-entity.lycanitesmobs.arisaur.habitat=Arisaurs are usually found in dense forests but can also be seen migrating through plains.
-entity.lycanitesmobs.arisaur.combat=Arisaurs are usually peaceful.

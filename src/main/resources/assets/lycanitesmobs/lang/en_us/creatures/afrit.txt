@@ -1,4 +1,0 @@
-entity.lycanitesmobs.afrit.name=Afrit
-entity.lycanitesmobs.afrit.description=Wicked flame imps that are bent on destruction, they will aggressively burn the world around them.
-entity.lycanitesmobs.afrit.habitat=These imps are usually found bathing in pools of lava.
-entity.lycanitesmobs.afrit.combat=Afrits usually attack from a distance by throwing balls of Scorchfire, a deadly combination of hot fire and a strong acid that weakens the defenses of anything that is hit.

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.feradon.name=费雷德
-entity.lycanitesmobs.feradon.description=像狮子一样的掠食者是优秀的猎手。
-entity.lycanitesmobs.feradon.habitat=这些野兽在平原和草原上茁壮成长。
-entity.lycanitesmobs.feradon.combat=费雷德用强力的撕咬攻击以攻破受害者防御。

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.darkling.name=嗜血虱虫
-entity.lycanitesmobs.darkling.description=肮脏的小阴影昆虫喜欢抓住它们的受害者，慢慢地吸干它们的血液！你最好快点把这些害虫赶走！
-entity.lycanitesmobs.darkling.habitat=这些昆虫可以在黑暗的地下区域找到。
-entity.lycanitesmobs.darkling.combat=嗜血虱虫会跳到受害者身上，抓住它们开始快速吸血的地方，这将治愈它们，快速杀死它们至关重要。

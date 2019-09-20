@@ -1,4 +1,0 @@
-entity.lycanitesmobs.makaalpha.name=Maka Alpha
-entity.lycanitesmobs.makaalpha.description=Larger Makas, alphas are usually peaceful but will sometimes attack, they also spar with each other a lot. Alphas Makas will protect the rest of the herd, thus they making farming Makas tricky at times.
-entity.lycanitesmobs.makaalpha.habitat=Maka Alphas can be found in plans and savannas.
-entity.lycanitesmobs.makaalpha.combat=When aggravated, Alpha Makas have a powerful bite and spiked tail causing high melee damage.

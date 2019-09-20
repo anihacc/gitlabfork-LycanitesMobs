@@ -1,4 +1,0 @@
-entity.lycanitesmobs.yale.name=耶鲁
-entity.lycanitesmobs.yale.description=奇怪的、毛绒绒的、像公羊一样的野兽，然而在羊毛的外衣下，却不是它们看起来的样子。耶鲁提供羊毛，羊毛可以用剪刀获得，也可以用蔬菜繁殖。它们的角实际上是奇怪的四肢，它们有着细小的钩状手臂，用来在草地上筛。
-entity.lycanitesmobs.yale.habitat=这些野兽可以在山上漫步。
-entity.lycanitesmobs.yale.combat=耶鲁通常是被动的。

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.erepede.name=Erepede
-entity.lycanitesmobs.erepede.description=Wild rock covered insectsthat like to hunt Jousts and will attack Crusks on sight too.
-entity.lycanitesmobs.erepede.habitat=These insects can be found roaming hot, dry terrains like deserts and mesas.
-entity.lycanitesmobs.erepede.combat=Erepedes spit out a dangerous mud shots that weakens the target.

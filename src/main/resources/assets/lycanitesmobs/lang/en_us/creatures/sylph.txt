@@ -1,4 +1,0 @@
-entity.lycanitesmobs.sylph.name=Sylph
-entity.lycanitesmobs.sylph.description=Holy Aether Elementals that curse those who trespass upon holy ground. Djinn and Aegis can fuse to create powerful Sylphs.
-entity.lycanitesmobs.sylph.habitat=Being Aether Elementals, Sylphs manifest in areas of worship such as Pyramids or Temples.
-entity.lycanitesmobs.sylph.combat=Sylphs will release a large wave of Aether Magic smiting those hit where they will burn in the sunlight!

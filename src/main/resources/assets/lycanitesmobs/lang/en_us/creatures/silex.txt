@@ -1,4 +1,0 @@
-entity.lycanitesmobs.silex.name=Silex
-entity.lycanitesmobs.silex.description=Beautiful fish with scales encrusted with Lapis Lazuli. Silex are known to eat the Lapis off of each other's scales as well as natural formations from rocks.
-entity.lycanitesmobs.silex.habitat=These fish are often found in freshwater lakes and rivers.
-entity.lycanitesmobs.silex.combat=Silex are peaceful creatures.

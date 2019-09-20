@@ -1,1 +1,0 @@
-death.attack.ooze=%1$s被冻死于胶状冰中！

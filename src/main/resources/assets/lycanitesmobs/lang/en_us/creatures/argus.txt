@@ -1,4 +1,0 @@
-entity.lycanitesmobs.argus.name=Argus
-entity.lycanitesmobs.argus.description=Disruptive Chaos elementals, Argi (plural) spread havoc in their wake.
-entity.lycanitesmobs.argus.habitat=Being Chaos Elementals, Argi are formed when there is a large concentration of Chaos in the area, this can be caused by several things but usually destroying other Elementals causes a high concentration of Chaos.
-entity.lycanitesmobs.argus.combat=These Elementals attack by launching an orb of concentrated Chaos energy, the trajectory of these orbs can be unpredictable and on impact, these orbs disrupt the very fabric of reality causing instability.

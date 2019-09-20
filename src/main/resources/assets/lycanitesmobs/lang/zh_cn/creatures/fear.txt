@@ -1,4 +1,0 @@
-entity.lycanitesmobs.fear.name=恐惧
-entity.lycanitesmobs.fear.description=这是一个用于恐惧效果的虚拟实体，如果它在生物图鉴内或有刷怪蛋，那么这是一个漏洞，请报告它！
-entity.lycanitesmobs.fear.habitat=虚拟实体。
-entity.lycanitesmobs.fear.combat=虚拟实体。

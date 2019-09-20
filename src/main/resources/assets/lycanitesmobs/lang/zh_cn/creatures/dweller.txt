@@ -1,4 +1,0 @@
-entity.lycanitesmobs.dweller.name=居住者
-entity.lycanitesmobs.dweller.description=水陆两栖动物可以在陆地上生活一段时间，它们必须在太干的时候回到水里，因为如果在陆地上生活太久，它们可能会死去。它们在水中快速而致命，在雨中能在陆地上生存。
-entity.lycanitesmobs.dweller.habitat=这些生物可以在沼泽、黑暗森林和丛林中找到。
-entity.lycanitesmobs.dweller.combat=居住者使用一种有毒的爪子划伤目标，并且在水里十分擅长，而在陆地上它们却很容易被打败，除非下雨。

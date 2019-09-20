@@ -1,4 +1,0 @@
-entity.lycanitesmobs.cinder.name=火元素
-entity.lycanitesmobs.cinder.description=暴力的火元素，只寻求燃烧周围的其他生物。
-entity.lycanitesmobs.cinder.habitat=作为火的元素，火元素是从纯火中显现出来的，因此它们会在有大量火的地方频繁生成。然而，它们不会出现在不洁的火焰周围，如炽焰或死焰。
-entity.lycanitesmobs.cinder.combat=火元素释放出一种强大的痛风，可以燃烧敌人，但是这些火焰太弱，无法传播更多的火。

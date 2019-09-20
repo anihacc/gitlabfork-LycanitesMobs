@@ -1,4 +1,0 @@
-entity.lycanitesmobs.wisp.name=Wisp
-entity.lycanitesmobs.wisp.description=Bright Light Elementals, Wisps can sometimes be seen playing catch with each other throwing a deadly ball of radiation. While they're friendly, it is not wise to provoke a Wisp. Cinder and Aegis Elementals can fuse to create powerful Wisps.
-entity.lycanitesmobs.wisp.habitat=being Light Elementals, Wisps manifest out in direct sunlight.
-entity.lycanitesmobs.wisp.combat=Wisps will throw a ball of light radiation at their victims, on impact this will cause them to glow revealing them to any nearby potential predators. Wisps also have a light aura that cause anything near them to glow but also grants night vision, they will also burn nearby undead.

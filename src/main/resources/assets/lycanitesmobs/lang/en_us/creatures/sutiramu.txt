@@ -1,4 +1,0 @@
-entity.lycanitesmobs.sutiramu.name=Sutiramu
-entity.lycanitesmobs.sutiramu.description=Aggressive giant scorpions.
-entity.lycanitesmobs.sutiramu.habitat=These creatures can be found roaming the desert and mesa.
-entity.lycanitesmobs.sutiramu.combat=Sutiramu attack with a venom that induce hunger.

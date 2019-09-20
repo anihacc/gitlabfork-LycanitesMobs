@@ -1,4 +1,0 @@
-entity.lycanitesmobs.maug.name=冰河熊
-entity.lycanitesmobs.maug.description=一种体型巨大的酷似狼的北极熊。
-entity.lycanitesmobs.maug.habitat=这些动物可以在寒冷地区找到，如雪山或针叶林。
-entity.lycanitesmobs.maug.combat=冰河熊使用强大的猛烈攻击，它会使人残废，导致行动缓慢。

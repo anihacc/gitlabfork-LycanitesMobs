@@ -1,4 +1,0 @@
-entity.lycanitesmobs.asmodeus.name=阿斯摩蒂尔斯
-entity.lycanitesmobs.asmodeus.description=阿斯摩蒂尔斯被认为是恶魔入侵的幕后主导，有时甚至可以和拉赫凡特相提并论。
-entity.lycanitesmobs.asmodeus.habitat=据说阿斯摩蒂尔斯起源于无尽肉体的巨大地狱层面，称为炼狱，它们原本是强大的阿斯塔罗特，意思是一旦它们存在，它们只是陈腐的！
-entity.lycanitesmobs.asmodeus.combat=这个巨大的恶魔，或者说魔鬼，有着广泛的攻击，并且能够用它的恶魔机械跳到很高的高度。它会周期性地使用巨大的加特林机枪对目标进行火力攻击，同时也会大量携带护卫它的小武器。\n第一阶段：阿斯摩蒂尔斯将向外释放炮弹环。\n第二阶段：阿斯摩蒂尔斯将召唤大型阿斯塔罗斯，它们将在他周围投射一个盾牌，直到它们被摧毁。\n第三阶段：阿斯塔罗特将代替治疗阿斯摩蒂尔斯，以及巨脑魔也被召唤。

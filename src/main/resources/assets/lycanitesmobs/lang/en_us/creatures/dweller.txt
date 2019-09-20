@@ -1,4 +1,0 @@
-entity.lycanitesmobs.dweller.name=Dweller
-entity.lycanitesmobs.dweller.description=Water bound amphibians that can sliver onto land for a small period of time, they must return to the water when they get too dry as they can die if on land for too long. They are fast and deadly in the water and can survive on land during rain.
-entity.lycanitesmobs.dweller.habitat=These creatures can be found in the waters of swamps, dark forests and jungles.
-entity.lycanitesmobs.dweller.combat=Dwellers have a poisonous scratch and excel when in water, on land they can be defeated easily unless it is raining.

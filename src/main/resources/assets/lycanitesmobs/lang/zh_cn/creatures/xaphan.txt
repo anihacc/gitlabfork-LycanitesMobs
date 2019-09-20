@@ -1,4 +1,0 @@
-entity.lycanitesmobs.xaphan.name=萨凡
-entity.lycanitesmobs.xaphan.description=腐蚀性酸元素，体现分解和溶解的方面。火元素和水元素可以融合，创造出强大的萨凡。
-entity.lycanitesmobs.xaphan.habitat=作为酸性元素，萨凡从混合物中显现，例如水遇到熔岩时。
-entity.lycanitesmobs.xaphan.combat=萨凡不断地在其下方滴酸，攻击时会在其周围释放一圈酸液。它们的酸性物质具有破坏性，会造成穿透力，增加任何进入的伤害。

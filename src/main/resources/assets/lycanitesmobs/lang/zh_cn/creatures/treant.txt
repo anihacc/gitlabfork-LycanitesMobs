@@ -1,4 +1,0 @@
-entity.lycanitesmobs.treant.name=高树人
-entity.lycanitesmobs.treant.description=巨型森林的守护者，比起树人它们更加高大而强壮。
-entity.lycanitesmobs.treant.habitat=虽然很罕见，但在密林中也能发现高树人。
-entity.lycanitesmobs.treant.combat=高树人会造成麻痹，攻击时消耗生命并从水中再生。斧和类似的工具对其非常有效。

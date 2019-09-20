@@ -1,2 +1,0 @@
-entity.lycanitesmobs.ember.name=Ember
-entity.lycanitesmobs.venomshot.name=Venomshot

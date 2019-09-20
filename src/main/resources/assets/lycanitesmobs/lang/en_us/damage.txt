@@ -1,1 +1,0 @@
-death.attack.ooze=%1$s was frozen in the icy ooze!

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.thresher.name=Thresher
-entity.lycanitesmobs.thresher.description=Giant majestic water creatures with a massive appetite and powerful fins capable of creating huge whirlpools to pull in their prey! Very dangerous!
-entity.lycanitesmobs.thresher.habitat=These aquatic creatures can be found in both freshwater lakes and large rivers as well as saltwater oceans.
-entity.lycanitesmobs.thresher.combat=Threshers create large whirlpools that pull in their prey from all around, it is even unsafe on land as they will also pull their prey up into the air towards them.

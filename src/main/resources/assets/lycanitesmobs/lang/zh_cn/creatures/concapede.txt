@@ -1,4 +1,0 @@
-entity.lycanitesmobs.concapede.name=贝状百足虫
-entity.lycanitesmobs.concapede.description=互相连接的奇怪甲虫。头在前面，从后面长出额外的分节，如果喂食蔬菜就会全神贯注，让它们的分节受到攻击，这种技术被农民使用。
-entity.lycanitesmobs.concapede.habitat=这些昆虫可以在热带地区如丛林中找到。
-entity.lycanitesmobs.concapede.combat=贝状百足虫有毒，但只在夜间有敌意。

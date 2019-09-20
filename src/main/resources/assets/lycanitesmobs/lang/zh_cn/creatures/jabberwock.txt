@@ -1,4 +1,0 @@
-entity.lycanitesmobs.jabberwock.name=啰嗦怪
-entity.lycanitesmobs.jabberwock.description=像鹿一样凶残的动物，把猎物撕成碎片。
-entity.lycanitesmobs.jabberwock.habitat=晚上可以在山上发现啰嗦怪。
-entity.lycanitesmobs.jabberwock.combat=啰嗦怪有钩爪，会造成沉重效果，将受害者拉下来，这可以防止任何跳跃，增加坠落伤害，使啰嗦怪在山上是致命的。

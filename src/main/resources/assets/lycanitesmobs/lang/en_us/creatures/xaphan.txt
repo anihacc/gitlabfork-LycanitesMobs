@@ -1,4 +1,0 @@
-entity.lycanitesmobs.xaphan.name=Xaphan
-entity.lycanitesmobs.xaphan.description=Corrosive Acid Elementals that embody the aspect of breaking down and dissolving away. Cinders and Jengu Elementals can fuse to create a powerful Xaphan.
-entity.lycanitesmobs.xaphan.habitat=Being Acid Elementals, Xaphan manifest from mixtures such as when water meets lava.
-entity.lycanitesmobs.xaphan.combat=Xaphan are constantly dripping acid beneath them and will release a ring of acid splashes all around them when attacking. Their acid is damaging and inflicts penetration increasing any incoming damage.

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.geonach.name=地魔
-entity.lycanitesmobs.geonach.description=地魔由残酷的大地元素生物幻化而成，一般它们都会待在地下，有些不知情的矿工将会惊醒它们。
-entity.lycanitesmobs.geonach.habitat=作为大地元素，地魔表现为大地很强大，通常藏在矿石中，破坏这些矿石会激怒它们。
-entity.lycanitesmobs.geonach.combat=地魔会用它们的长矛臂快速攻击，偶尔也会用它们更重的拳头攻击以获得更多的伤害。它们的攻击会获得沉重负面效果，这通常会困住受害者。镐和类似工具非常有效。

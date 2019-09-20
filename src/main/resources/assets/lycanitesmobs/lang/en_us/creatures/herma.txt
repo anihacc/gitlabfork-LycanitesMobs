@@ -1,4 +1,0 @@
-entity.lycanitesmobs.herma.name=Herma
-entity.lycanitesmobs.herma.description=Giant crabs that usually keep to themselves unless something gets too close!
-entity.lycanitesmobs.herma.habitat=These creatures are found in saltwater oceans and on beaches.
-entity.lycanitesmobs.herma.combat=Herma attack with their strong claws.

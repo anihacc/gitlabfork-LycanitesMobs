@@ -1,4 +1,0 @@
-entity.lycanitesmobs.dawon.name=Dawon
-entity.lycanitesmobs.dawon.description=Crystaline felines, sometimes rare crystals can be found on their body.
-entity.lycanitesmobs.dawon.habitat=These beasts can be found in jungles.
-entity.lycanitesmobs.dawon.combat=Dawon will pounce at their target, crippling their prey reducing movement speed.

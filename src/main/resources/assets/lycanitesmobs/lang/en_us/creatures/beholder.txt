@@ -1,4 +1,0 @@
-entity.lycanitesmobs.beholder.name=Beholder
-entity.lycanitesmobs.beholder.description=Large hostile masses of eyes and tentacles with an eternal hunger for magic energy!
-entity.lycanitesmobs.beholder.habitat=Beholders can be found in the mountains as they like high up places and dwell in large caves and ruins and come out at night.
-entity.lycanitesmobs.beholder.combat=These Aberrations bend gravity and void magic to create powerful Arcane Storms, that they blast from their mouths, these attacks then release deadly lasers in all directions and can be explosive on impact.

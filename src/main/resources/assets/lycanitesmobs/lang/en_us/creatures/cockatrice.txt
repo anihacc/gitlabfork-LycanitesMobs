@@ -1,4 +1,0 @@
-entity.lycanitesmobs.cockatrice.name=Cockatrice
-entity.lycanitesmobs.cockatrice.description=Deadly giant chicken-like wyverns, very dangerous, stay away!
-entity.lycanitesmobs.cockatrice.habitat=These wyvern dragons are usually found in tropical areas such as jungles as they like to consume fruit as well as devour large insects, of course, anything that moves is on the menu!
-entity.lycanitesmobs.cockatrice.combat=Cockatrice peck with beaks that drip with paralysing and aphagia inducing toxins that are said make their victims feel like they're turned into stone.

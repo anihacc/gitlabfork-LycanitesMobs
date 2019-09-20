@@ -1,4 +1,0 @@
-entity.lycanitesmobs.vapula.name=瓦布拉
-entity.lycanitesmobs.vapula.description=强大的重力元素，体现了结构本身的本质。地魔和宙斯盾元素可以融合形成强大的瓦布拉。
-entity.lycanitesmobs.vapula.habitat=作为重力元素，瓦布拉从压缩源和结构中显现出来，它们通常被镶嵌在宝石中，如钻石。
-entity.lycanitesmobs.vapula.combat=瓦布拉从它们的背部快速发射一团锋利的水晶弹，一旦子弹被发射，它们必须重新充能，使它们变得脆弱。镐和类似工具非常有效。

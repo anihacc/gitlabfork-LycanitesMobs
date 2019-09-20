@@ -1,4 +1,0 @@
-entity.lycanitesmobs.triffid.name=巨型三裂植物
-entity.lycanitesmobs.triffid.description=大型食肉植物，缓慢但极其有毒和致命！
-entity.lycanitesmobs.triffid.habitat==这些植物生物经常潜伏在沼泽中，因为沼泽潮湿，不太冷，而且充满猎物，它们无法吞食。
-entity.lycanitesmobs.triffid.combat=这些生物速度非常慢，但应该小心对付，因为它们的攻击非常强大，并且传播瘟疫。斧头对它们是非常有效的，但要注意它们会在水中进行自我再生！

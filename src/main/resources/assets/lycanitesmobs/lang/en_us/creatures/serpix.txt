@@ -1,4 +1,0 @@
-entity.lycanitesmobs.serpix.name=Serpix
-entity.lycanitesmobs.serpix.description=Notorious ice worms that burrow through the frozen earth.
-entity.lycanitesmobs.serpix.habitat=These worms can be found in large pools of icy ooze and cold areas like ice plains.
-entity.lycanitesmobs.serpix.combat=Serpix attack by roaring a deadly blizzard, casting Frostfire upon the ground which both damages and slows.

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.zephyr.name=Zephyr
-entity.lycanitesmobs.zephyr.description=Fierce Electric Elementals with a powerful electric field around them. Cinders and Djinn Elementals can fuse to create powerful Zephyr.
-entity.lycanitesmobs.zephyr.habitat=Being Electric Elementals, Zephyr manifest from electric weather such as thunderstorms, they can also rarely manifest during regular rainstorms as well.
-entity.lycanitesmobs.zephyr.combat=Zephyrs will shock any foe close to them and direct attacks from them cause paralysis.

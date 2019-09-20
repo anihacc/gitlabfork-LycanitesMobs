@@ -1,4 +1,0 @@
-entity.lycanitesmobs.shade.name=Shade
-entity.lycanitesmobs.shade.description=Large decrepit serpentine aberrations spawned from the very shadows themselves. There are legends of the four mighty Serpent Riders who rode these beasts into battle: D'sparil, Korax, Eidelon and Lycanite.
-entity.lycanitesmobs.shade.habitat=These aberrations can be found in the darkest of places, deep underground.
-entity.lycanitesmobs.shade.combat=Shades drain a bit of health when attacking and they have a horrific howl sending all that oppose them running in fear!

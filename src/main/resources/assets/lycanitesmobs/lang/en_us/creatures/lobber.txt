@@ -1,4 +1,0 @@
-entity.lycanitesmobs.lobber.name=Lobber
-entity.lycanitesmobs.lobber.description=Large lava brutes, Lobbers are incredibly powerful creatures.
-entity.lycanitesmobs.lobber.habitat=These brutes are found in lava lakes.
-entity.lycanitesmobs.lobber.combat=Lobbers are named for their attacks where they lob large balls of magma at their victims, this very quickly begins to flood the area with temporary lava.

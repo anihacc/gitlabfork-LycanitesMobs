@@ -1,4 +1,0 @@
-entity.lycanitesmobs.clink.name=Clink
-entity.lycanitesmobs.clink.description=Strange imps that rapidly grow metallic blades on their arms that can then be easily detached.
-entity.lycanitesmobs.clink.habitat=These imps are often found in deserts as they thrive on consuming minerals as well as flesh, they are wingless so aren't found in mountainous areas.
-entity.lycanitesmobs.clink.combat=Clinks detach the blades they grow and throw them at their enemies.

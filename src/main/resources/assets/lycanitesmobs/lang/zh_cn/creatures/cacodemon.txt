@@ -1,4 +1,0 @@
-entity.lycanitesmobs.cacodemon.name=巨脑魔
-entity.lycanitesmobs.cacodemon.description=一种大型浮游敌对生物，它们会释放出致命的恶魔电光从而发生爆炸。另外，巨脑魔还喜欢攻击恶魂以获取它们可口的眼泪。
-entity.lycanitesmobs.cacodemon.habitat=这些恶魔在下界炽热天空中飞来飞去。
-entity.lycanitesmobs.cacodemon.combat=巨脑魔吐出巨大的恶魔闪电球，虽然实际上不是电的，但它们是爆炸性的下界能量球，在击中时会凋零，并向四面八方释放较小的恶魔火花。

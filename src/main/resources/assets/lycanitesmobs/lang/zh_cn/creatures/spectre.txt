@@ -1,4 +1,0 @@
-entity.lycanitesmobs.spectre.name=通灵
-entity.lycanitesmobs.spectre.description=神秘的虚空元素，它们试图将现实本身分解为虚无。宙斯盾和阿格斯元素可以融合在一起形成一个强大的幽灵。
-entity.lycanitesmobs.spectre.habitat=作为虚空元素，通灵显现在靠近虚空的地下深处和末地的天空中。
-entity.lycanitesmobs.spectre.combat=通灵会试图吸食猎物并近距离攻击。

@@ -43,11 +43,7 @@ public class LanguageManager {
 	 * @return
 	 */
 	public static String translate(String key) {
-		if(!getInstance().map.containsKey(key)) {
-			//LycanitesMobs.printInfo("", "Translating " + key + " to " + I18n.translateToLocal(key));
-			return I18n.translateToLocal(key);
-		}
-		return getInstance().map.get(key).replace("\\n", "\n");
+		return I18n.translateToLocal(key);
 	}
 
 

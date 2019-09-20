@@ -1,4 +1,0 @@
-entity.lycanitesmobs.roc.name=大鹏
-entity.lycanitesmobs.roc.description=大鹏在夜空中飞翔，寻找猎物。
-entity.lycanitesmobs.roc.habitat=这些鸟通常飞越草原和热带草原。
-entity.lycanitesmobs.roc.combat=大鹏长有奇怪的尾巴，充当巨大的爪子，它们用这些来来抓住受害者。然而，大鹏只在夜间或黑暗中有敌意。

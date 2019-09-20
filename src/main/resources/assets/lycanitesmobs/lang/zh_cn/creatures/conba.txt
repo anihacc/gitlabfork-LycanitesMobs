@@ -1,4 +1,0 @@
-entity.lycanitesmobs.conba.name=棕毛兽
-entity.lycanitesmobs.conba.description=顽皮的猿类，对翔充满了热情！
-entity.lycanitesmobs.conba.habitat=这些猿类可以在热带生物群落中找到，如丛林。
-entity.lycanitesmobs.conba.combat=喜欢把它们粘粘的翔扔到人身上，造成缓慢和反胃，同时制造翔云以扩大这些效果。这些野兽也会努力保持距离。

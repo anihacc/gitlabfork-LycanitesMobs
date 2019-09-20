@@ -1,4 +1,0 @@
-entity.lycanitesmobs.wisp.name=妖精
-entity.lycanitesmobs.wisp.description=明亮的光元素，有时可以看到一束小树枝在相互追逐，投掷致命的辐射球。虽然它们很友好，但激怒一只妖精是不明智的。火元素和宙斯盾元素可以融合在一起形成强大的妖精。
-entity.lycanitesmobs.wisp.habitat=作为光元素，妖精在阳光直射下显现。
-entity.lycanitesmobs.wisp.combat=妖精将向受害者投掷一个光辐射球，受到影响后，会使它们发光，向附近潜在的捕食者暴露。妖精也有一个光之光环，可以使它们附近的任何东西发光，但也可以提供夜视能力，它们也会燃烧附近的亡灵生物。

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.uvaraptor.name=Uvaraptor
-entity.lycanitesmobs.uvaraptor.description=Colorful raptors with extreme jumping and gliding abilities. Can be tamed as useful high jumping mounts, can almost sustain flight.
-entity.lycanitesmobs.uvaraptor.habitat=These raptors are commonly found in jungles.
-entity.lycanitesmobs.uvaraptor.combat=Uvaraptors leap into the air and attack their prey making them trickier to hit but also vulnerable to ranged attacks.

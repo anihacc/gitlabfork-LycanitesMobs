@@ -1,4 +1,0 @@
-entity.lycanitesmobs.aegis.name=宙斯盾
-entity.lycanitesmobs.aegis.description=执法秩序元素，众所周知，宙斯盾是在村庄周围执法的，即使是小偷也会被无情地追捕。
-entity.lycanitesmobs.aegis.habitat=作为秩序元素，宙斯盾出现在秩序元素丰富的地区，因此村庄通常会创造这些生物。
-entity.lycanitesmobs.aegis.combat=宙斯盾有两种模式可以转换，一种是防御盾模式，两个大旋转盾可以阻挡大部分的伤害，另一种是进攻剑模式，用四个旋转刀刃撕碎目标。

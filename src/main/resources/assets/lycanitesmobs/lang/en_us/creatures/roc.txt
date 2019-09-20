@@ -1,4 +1,0 @@
-entity.lycanitesmobs.roc.name=Roc
-entity.lycanitesmobs.roc.description=Rocs fly in the sky searching for prey at night.
-entity.lycanitesmobs.roc.habitat=These birds usually fly over plains and savanna.
-entity.lycanitesmobs.roc.combat=Rocs have strange tails that act as giant claws, they use these to pickup their vitims. Rocs are only hostile at night or in the dark however.

@@ -1,4 +1,0 @@
-entity.lycanitesmobs.salamander.name=Salamander
-entity.lycanitesmobs.salamander.description=Deadly amphibians that have adapted to incredible temperatures. Tamed Salamanders make great mounts and even protect their rider from fire!
-entity.lycanitesmobs.salamander.habitat=These creatures live in lakes of lava.
-entity.lycanitesmobs.salamander.combat=Salamanders have a fiery bite that inflict smouldering.
