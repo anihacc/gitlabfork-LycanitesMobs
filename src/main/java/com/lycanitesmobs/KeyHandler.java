@@ -67,7 +67,7 @@ public class KeyHandler {
 		// ========== GUI Keys ==========
 		// Player Inventory: Adds extra buttons to the GUI.
 		if(!this.inventoryOpen && mc.currentScreen != null && mc.currentScreen.getClass() == GuiInventory.class) {
-			TabManager.addTabsToInventory((GuiContainer)mc.currentScreen);
+			TabManager.addTabsToInventory(mc.currentScreen);
 			this.inventoryOpen = true;
 		}
 		if(this.inventoryOpen && (mc.currentScreen == null || mc.currentScreen.getClass() != GuiInventory.class)) {

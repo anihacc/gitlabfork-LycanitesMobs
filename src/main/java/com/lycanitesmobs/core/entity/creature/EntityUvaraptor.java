@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
@@ -132,8 +131,10 @@ public class EntityUvaraptor extends EntityCreatureRideable implements IGroupPre
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
-    		return;
+		if(this.getEntityWorld().isRemote) {
+			this.leap(1.0D, 1.5D);
+			return;
+		}
     	
     	if(this.abilityToggled)
     		return;

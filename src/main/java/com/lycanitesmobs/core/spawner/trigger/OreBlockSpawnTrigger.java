@@ -67,7 +67,7 @@ public class OreBlockSpawnTrigger extends BlockSpawnTrigger {
 						return true;
 					}
 					Item dropItem = block.getItemDropped(blockState, world.rand, fortune);
-					if(dropItem instanceof ItemBlock && ((ItemBlock)dropItem).getBlock() == block) {
+					if(dropItem instanceof ItemBlock) {// && ((ItemBlock)dropItem).getBlock() == block) {
 						return this.ores;
 					}
 					else {

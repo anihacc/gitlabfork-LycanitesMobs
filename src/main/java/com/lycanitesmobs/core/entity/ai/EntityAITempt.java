@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -132,8 +133,7 @@ public class EntityAITempt extends EntityAIBase {
 
         // Tempt List:
         if(this.temptList != null) {
-            if(!ObjectLists.inItemList(this.temptList, itemStack))
-                return false;
+            return ObjectLists.inItemList(this.temptList, itemStack);
         }
 
         // Single Tempt Item:

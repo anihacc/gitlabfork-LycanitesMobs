@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
@@ -170,7 +171,7 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
     public void leap(double distance, double leapHeight) {
         super.leap(distance, leapHeight);
         if(!this.getEntityWorld().isRemote)
-            this.leapedAbilityQueued = true;
+			this.leapedAbilityQueued = true;
     }
 
     // ========== Leap to Target ==========
@@ -186,20 +187,22 @@ public class EntityMaug extends EntityCreatureRideable implements IGroupPredator
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
-    		return;
+		if(this.getEntityWorld().isRemote) {
+			this.leap(4.0D, 0.5D);
+			return;
+		}
 
-        if(!this.onGround)
-            return;
-    	if(this.abilityToggled)
-    		return;
-    	if(this.getStamina() < this.getStaminaCost())
-    		return;
-    	
-    	this.playJumpSound();
-    	this.leap(2.0D, 1.5D);
-    	
-    	this.applyStaminaCost();
+		if(!this.onGround)
+			return;
+		if(this.abilityToggled)
+			return;
+		if(this.getStamina() < this.getStaminaCost())
+			return;
+
+		this.playJumpSound();
+		this.leap(4.0D, 0.5D);
+
+		this.applyStaminaCost();
     }
     
     public float getStaminaCost() {

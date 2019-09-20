@@ -47,7 +47,7 @@ public class PotionEffects {
 			ObjectManager.addPotionEffect("recklessness", config, true, 0xFF0044, false); // TODO Implement
 			ObjectManager.addPotionEffect("rage", config, true, 0xFF4400, false); // TODO Implement
 			ObjectManager.addPotionEffect("weight", config, true, 0x000022, false);
-			ObjectManager.addPotionEffect("fear", config, false, 0x220022, false);
+			ObjectManager.addPotionEffect("fear", config, true, 0x220022, false);
 			ObjectManager.addPotionEffect("decay", config, true, 0x110033, false);
 			ObjectManager.addPotionEffect("insomnia", config, true, 0x002222, false);
 			ObjectManager.addPotionEffect("instability", config, true, 0x004422, false);
