@@ -1200,7 +1200,7 @@ creaturetype.demon.name=Demon
 creaturetype.angel.name=Angel
 creaturetype.elemental.name=Elemental
 creaturetype.dragon.name=Dragon
-creaturetype.dragon.worm=Worm
+creaturetype.worm.name=Worm
 # ========================================================================
 death.attack.ooze=%1$s was frozen in the icy ooze!
 # ========================================================================
@@ -1504,6 +1504,11 @@ item.equipmentpart.description=This item can be used to create powerful equipmen
 item.woodenrod.name=Wooden Rod
 item.woodenhilt.name=Wooden Hilt
 item.woodenpaxel.name=Wooden Paxel
+item.ironrod.name=Iron Rod
+item.ironhilt.name=Iron Hilt
+item.ironpaxel.name=Iron Paxel
+item.ironpikejoint.name=Iron Pike Joint
+item.ironaxehead.name=Iron Axe Head
 item.bansheeeye.name=Banshee Eye
 item.sylphwing.name=Sylph Wing
 item.grueclaw.name=Grue Claw

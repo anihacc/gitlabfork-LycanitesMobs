@@ -11,9 +11,9 @@
 			"featureType": "harvest",
 			"levelMax": 1,
 			"harvestType": "pickaxe",
-			"harvestStrength": 6,
+			"harvestSpeed": 6,
 			"harvestShape": "block",
-			"harvestRange": [2, 2, 2],
+			"harvestRange": [1, 1, 2],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
@@ -21,18 +21,18 @@
 			"levelMin": 2,
 			"levelMax": 2,
 			"harvestType": "pickaxe",
-			"harvestStrength": 7,
+			"harvestSpeed": 7,
 			"harvestShape": "block",
-			"harvestRange": [3, 3, 3],
+			"harvestRange": [1, 2, 2],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{
 			"featureType": "harvest",
 			"harvestType": "pickaxe",
 			"levelMin": 3,
-			"harvestStrength": 8,
+			"harvestSpeed": 8,
 			"harvestShape": "block",
-			"harvestRange": [4, 4, 4],
+			"harvestRange": [2, 4, 4],
 			"harvestRangeLevelMultiplier": 1
 		},
 		{

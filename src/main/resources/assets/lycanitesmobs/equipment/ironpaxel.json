@@ -1,5 +1,5 @@
 {
-	"itemName": "woodenpaxel",
+	"itemName": "ironpaxel",
 	"loadDefault": true,
 	"slotType": "blade",
 	"dropMobId": "",
@@ -10,30 +10,26 @@
 		{
 			"featureType": "harvest",
 			"harvestType": "pickaxe",
-			"harvestSpeed": 3,
-			"harvestLevel": 1
+			"harvestSpeed": 7
 		},
 		{
 			"featureType": "harvest",
 			"harvestType": "axe",
-			"harvestSpeed": 3,
-			"harvestLevel": 1
+			"harvestSpeed": 7
 		},
 		{
 			"featureType": "harvest",
 			"harvestType": "shovel",
-			"harvestSpeed": 3,
-			"harvestLevel": 1
+			"harvestSpeed": 7
 		},
 		{
 			"featureType": "harvest",
 			"harvestType": "hoe",
-			"harvestSpeed": 3,
-			"harvestLevel": 1
+			"harvestSpeed": 7
 		},
 		{
 			"featureType": "damage",
-			"damageAmount": 3,
+			"damageAmount": 4,
 			"damageKnockback": 0,
 			"damageCooldown": 1,
 			"damageRange": 1,

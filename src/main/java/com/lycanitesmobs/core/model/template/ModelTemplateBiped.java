@@ -92,10 +92,6 @@ public class ModelTemplateBiped extends ModelObj {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
             }
-            if(partName.equals("legleft"))
-                rotX += 50;
-            if(partName.equals("legright"))
-                rotX += 50;
         }
 
         // Attack:

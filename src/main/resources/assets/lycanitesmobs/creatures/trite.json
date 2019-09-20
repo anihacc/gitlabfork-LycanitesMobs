@@ -1,6 +1,6 @@
 {
 	"name": "trite",
-	"creatureType": "demon",
+	"creatureType": "aberration",
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTrite",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTrite",
 	"loadDefault": true,
