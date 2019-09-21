@@ -26,7 +26,7 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 
 		int menuWidth = this.colRightWidth;
 
-		int buttonCount = 2;
+		int buttonCount = 3;
 		int buttonPadding = 2;
 		int buttonWidth = Math.round((float)(menuWidth / buttonCount)) - buttonPadding;
 		int buttonWidthPadded = buttonWidth + buttonPadding;
@@ -39,6 +39,8 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		button = new ButtonBase(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website", this);
 		this.addButton(button);
 		button = new ButtonBase(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon", this);
+		this.addButton(button);
+		button = new ButtonBase(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, "Discord", this);
 		this.addButton(button);
 
 		// Lists:
@@ -94,6 +96,11 @@ public class IndexBeastiaryScreen extends BeastiaryScreen {
 		if(buttonId == 101) {
 			try {
 				this.openURI(new URI(LycanitesMobs.websitePatreon));
+			} catch (URISyntaxException e) {}
+		}
+		if(buttonId == 102) {
+			try {
+				this.openURI(new URI(LycanitesMobs.discord));
 			} catch (URISyntaxException e) {}
 		}
 		super.actionPerformed(buttonId);
