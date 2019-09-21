@@ -29,10 +29,6 @@
 		{
 			"mobId": "lycanitesmobs:spriggan",
 			"weight": 8
-		},
-		{
-			"mobId": "lycanitesmobs:triffid",
-			"weight": 2
 		}
 	]
 }
