@@ -71,6 +71,7 @@ public class LycanitesMobs {
 	public static final String website = "http://lycanitesmobs.com";
 	public static final String websiteAPI = "http://api.lycanitesmobs.com";
 	public static final String websitePatreon = "https://www.patreon.com/lycanite";
+	public static final String discord = "https://discord.gg/bFpV3z4";
 	public static final String acceptedMinecraftVersions = "[1.12,1.13)";
 	
 	public static final PacketHandler packetHandler = new PacketHandler();
