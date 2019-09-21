@@ -96,8 +96,8 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
 			PotionBase plague = ObjectManager.getPotionEffect("plague");
 			if(plague != null) {
-				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(5), 1);
-				List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(2), 1);
+				List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 2);
 				for(Object entityObj : aoeTargets) {
 					EntityLivingBase target = (EntityLivingBase) entityObj;
 					if (target != this && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isPotionApplicable(potionEffect)) {

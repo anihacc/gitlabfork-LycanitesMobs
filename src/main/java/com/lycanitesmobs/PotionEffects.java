@@ -201,7 +201,7 @@ public class PotionEffects {
 
 				// Spread:
 				if(entity.getEntityWorld().getTotalWorldTime() % 20 == 0) {
-					List aoeTargets = this.getNearbyEntities(entity, EntityLivingBase.class, null, 10);
+					List aoeTargets = this.getNearbyEntities(entity, EntityLivingBase.class, null, 2);
 					for(Object entityObj : aoeTargets) {
 						EntityLivingBase target = (EntityLivingBase)entityObj;
 						if(target != entity && !entity.isOnSameTeam(target)) {

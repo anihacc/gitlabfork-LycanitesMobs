@@ -13,6 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -479,6 +480,16 @@ public class EntityProjectileBase extends EntityThrowable {
 			if((this.getThrower() instanceof EntityPlayer  || this.getThrower().getControllingPassenger() instanceof EntityPlayer) && !(entity instanceof EntityPlayer))
 				damage *= 1.2f;
 		}
+
+		// Player Shielding:
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer targetPlayer = (EntityPlayer)entity;
+			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
+			if(!playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer)) {
+				return 0;
+			}
+		}
+
 		return damage;
 	}
 
