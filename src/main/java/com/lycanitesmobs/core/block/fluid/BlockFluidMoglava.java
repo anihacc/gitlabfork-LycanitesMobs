@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFluidBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.FlowingFluid;
@@ -15,17 +16,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
-public class BlockFluidPureLava extends BlockFluidBase {
+public class BlockFluidMoglava extends FlowingFluidBlock {
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFluidPureLava(FlowingFluid fluid, Block.Properties properties) {
-		super(fluid, properties, LycanitesMobs.modInfo, "purelava");
-
-        //this.setLightOpacity(1);
-        //this.setLightLevel(1.0F);
+	public BlockFluidMoglava(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
+		super(fluidSupplier, properties);
+		this.setRegistryName(LycanitesMobs.MODID, name);
 	}
     
     

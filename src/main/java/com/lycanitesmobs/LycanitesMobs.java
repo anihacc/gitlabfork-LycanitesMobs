@@ -32,6 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -52,7 +53,7 @@ public class LycanitesMobs {
 
 	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.1.0.0";
+	public static final String versionNumber = "2.1.0.1";
 	public static final String versionMC = "1.14.4";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -93,18 +94,20 @@ public class LycanitesMobs {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
 
 		// Setup Event Listeners:
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::serverStarting);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-		FMLJavaModLoadingContext.get().getModEventBus().register(ObjectManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(ItemManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(CreatureManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(ProjectileManager.getInstance());
-		FMLJavaModLoadingContext.get().getModEventBus().register(WorldGenManager.getInstance());
-		//FMLJavaModLoadingContext.get().getModEventBus().register(StatManager.getInstance()); TODO Stats
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::commonSetup);
+		modEventBus.addListener(this::clientSetup);
+		modEventBus.addListener(this::serverStarting);
+		modEventBus.addListener(this::enqueueIMC);
+		modEventBus.addListener(this::processIMC);
+		modEventBus.register(ObjectManager.getInstance());
+		modEventBus.register(ItemManager.getInstance());
+		modEventBus.register(CreatureManager.getInstance());
+		modEventBus.register(ProjectileManager.getInstance());
+		modEventBus.register(WorldGenManager.getInstance());
+		//modEventBus.register(StatManager.getInstance()); TODO Stats
 		PROXY.registerEvents();
+		ItemManager.FLUIDS.register(modEventBus);
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);

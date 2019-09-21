@@ -12,6 +12,10 @@ import com.lycanitesmobs.core.block.BlockMaker;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
+import com.lycanitesmobs.core.block.fluid.BlockFluidAcid;
+import com.lycanitesmobs.core.block.fluid.BlockFluidMoglava;
+import com.lycanitesmobs.core.block.fluid.BlockFluidOoze;
+import com.lycanitesmobs.core.block.fluid.BlockFluidPoison;
 import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
@@ -21,21 +25,34 @@ import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.item.summoningstaff.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class ItemManager extends JSONLoader {
 	public static ItemManager INSTANCE;
+	public static final DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, LycanitesMobs.MODID);
 
 	public Map<String, ItemInfo> items = new HashMap<>();
 
@@ -189,17 +206,46 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("frostweb", new BlockFrostweb(webProperties));
 
 
-		/*/ Fluids: TODO New fluids
-		Fluid fluidOoze = ObjectManager.addFluid("ooze");
-		fluidOoze.setLuminosity(10).setDensity(3000).setViscosity(5000).setTemperature(0);
-		ObjectManager.addBlock("ooze", new BlockFluidOoze(fluidOoze));
-		ObjectManager.addItem("bucketooze", new ItemBucketOoze(fluidOoze).setContainerItem(Items.BUCKET));
-		AssetManager.addSound("ooze", group, "block.ooze");
+		// Fluids:
+		Block.Properties waterBlockProperties = Block.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
+		Block.Properties lavaBlockProperties = Block.Properties.create(Material.LAVA).doesNotBlockMovement().hardnessAndResistance(100).noDrops();
+
+		this.addFluid("ooze", 0x03A9F, 3000, 3000, 0, 5, true);
+		ObjectManager.addBlock("ooze", new BlockFluidOoze(() -> ObjectManager.getFluid("ooze").get(), waterBlockProperties, "ooze"));
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 
-		Fluid fluidPureLava = ObjectManager.addFluid("purelava");
-		fluidPureLava.setLuminosity(15).setDensity(3000).setViscosity(5000).setTemperature(1100);
-		ObjectManager.addBlock("purelava", new BlockFluidPureLava(fluidPureLava));
-		ObjectManager.addItem("bucketpurelava", new ItemBucketPureLava(fluidPureLava).setContainerItem(Items.BUCKET));*/
+		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true);
+		ObjectManager.addBlock("moglava", new BlockFluidMoglava(() -> ObjectManager.getFluid("moglava").get(), waterBlockProperties, "moglava"));
+
+		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, true);
+		ObjectManager.addBlock("acid", new BlockFluidAcid(() -> ObjectManager.getFluid("acid").get(), waterBlockProperties, "acid"));
+		ObjectManager.addDamageSource("acid", new DamageSource("acid"));
+
+		this.addFluid("poison", 0x9C27B0, 1000, 8, 20, 0, true);
+		ObjectManager.addBlock("poison", new BlockFluidPoison(() -> ObjectManager.getFluid("poison").get(), waterBlockProperties, "poison"));
+	}
+
+	public void addFluid(String fluidName, int fluidColor, int density, int viscosity, int temperature, int luminosity, boolean multiply) {
+		FluidAttributes.Builder fluidBuilder = FluidAttributes.builder(new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_still"), new ResourceLocation(LycanitesMobs.MODID, "block/" + fluidName + "_flowing"));
+		fluidBuilder.color(fluidColor);
+		fluidBuilder.density(density);
+		fluidBuilder.viscosity(viscosity);
+		fluidBuilder.temperature(temperature);
+		fluidBuilder.luminosity(luminosity);
+
+		Supplier<FlowingFluid> flowingFluidSupplier = () -> ObjectManager.getFluid(fluidName).get();
+		ForgeFlowingFluid.Properties fluidProperties = new ForgeFlowingFluid.Properties(flowingFluidSupplier, () -> ObjectManager.getFluid(fluidName + "_flowing").get(), fluidBuilder);
+		if(multiply)
+			fluidProperties.canMultiply();
+		fluidProperties.bucket(() -> ObjectManager.getItem("bucket" + fluidName));
+		fluidProperties.block(() -> (FlowingFluidBlock)ObjectManager.getBlock(fluidName));
+
+		ObjectManager.addFluid(fluidName, FLUIDS.register(fluidName, () -> new ForgeFlowingFluid.Source(fluidProperties)));
+		ObjectManager.addFluid(fluidName + "_flowing", FLUIDS.register(fluidName + "_flowing", () -> new ForgeFlowingFluid.Flowing(fluidProperties)));
+
+		ObjectManager.addSound(fluidName, LycanitesMobs.modInfo, "block." + fluidName);
+
+		Item.Properties bucketProperties = new Item.Properties().group(this.itemsGroup).containerItem(Items.BUCKET).maxStackSize(1);
+		ObjectManager.addItem("bucket" + fluidName, new BucketItem(flowingFluidSupplier, bucketProperties).setRegistryName(LycanitesMobs.MODID, "bucket" + fluidName));
 	}
 }

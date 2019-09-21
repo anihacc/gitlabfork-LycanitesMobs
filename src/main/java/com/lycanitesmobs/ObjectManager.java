@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.BlockItem;
@@ -29,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -47,7 +49,7 @@ public class ObjectManager {
 	public static Map<String, Block> blocks = new HashMap<>();
     public static Map<String, Item> items = new HashMap<>();
     public static Map<Item, ModInfo> itemGroups = new HashMap<>();
-	public static Map<String, Fluid> fluids = new HashMap<>();
+	public static Map<String, RegistryObject<FlowingFluid>> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
 	public static Map<String, EffectBase> effects = new HashMap<>();
@@ -90,57 +92,19 @@ public class ObjectManager {
 	// ========== Block ==========
 	public static Block addBlock(String name, Block block) {
 		blocks.put(name, block);
-        if(block instanceof BlockSlabCustom) {
-            BlockSlabCustom blockSlab = (BlockSlabCustom)block;
-            //ItemSlabCustom itemSlabCustom = new ItemSlabCustom(blockSlab, blockSlab, blockSlab.getDoubleBlock());
-            //items.put(name, itemSlabCustom);
-            //itemGroups.put(itemSlabCustom, currentModInfo);
-        }
-        else {
-            //BlockItem itemBlock = new ItemBlockBase(block);
-            //itemBlock.setRegistryName(block.getRegistryName());
-            //items.put(name, itemBlock);
-            //itemGroups.put(itemBlock, currentModInfo);
-        }
         return block;
 	}
 
 	// ========== Fluid ==========
-	public static Fluid addFluid(String fluidName) {
-        ModInfo group = currentModInfo;
-        //Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
-		//fluids.put(fluidName, fluid);
-		//if(!FluidRegistry.registerFluid(fluid)) {
-		//    LycanitesMobs.logWarning("", "Another fluid was registered as " + fluidName);
-        //}
-        return null;
-	}
-
-	// ========== Bucket ==========
-	public static Item addBucket(Item bucket, Block block, Fluid fluid) {
-		buckets.put(block, bucket);
-        return bucket;
+	public static RegistryObject<FlowingFluid> addFluid(String name, RegistryObject<FlowingFluid> fluid) {
+        fluids.put(name, fluid);
+        return fluid;
 	}
 
 	// ========== Item ==========
 	public static Item addItem(String name, Item item) {
 		items.put(name, item);
         itemGroups.put(item, currentModInfo);
-
-        /*/ Fluid Dispenser:
-        if(item instanceof BucketItem) {
-            IBehaviorDispenseItem ibehaviordispenseitem = new BehaviorDefaultDispenseItem() {
-                private final BehaviorDefaultDispenseItem dispenseBehavior = new BehaviorDefaultDispenseItem();
-
-                public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
-                    ItemBucket itembucket = (ItemBucket)stack.getItem();
-                    BlockPos blockpos = source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
-                    return itembucket.tryPlaceContainedLiquid(null, source.getWorld(), blockpos) ? new ItemStack(Items.BUCKET) : this.dispenseBehavior.dispense(source, stack);
-                }
-            };
-            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(item, ibehaviordispenseitem);
-        }*/
-
         return item;
 	}
 
@@ -189,15 +153,25 @@ public class ObjectManager {
 	// ========== Block ==========
 	public static Block getBlock(String name) {
 		name = name.toLowerCase();
-		if(!blocks.containsKey(name)) return null;
+		if(!blocks.containsKey(name))
+			return null;
 		return blocks.get(name);
 	}
 	
 	// ========== Item ==========
 	public static Item getItem(String name) {
 		name = name.toLowerCase();
-		if(!items.containsKey(name)) return null;
+		if(!items.containsKey(name))
+			return null;
 		return items.get(name);
+	}
+
+	// ========== Fluid ==========
+	public static RegistryObject<FlowingFluid> getFluid(String name) {
+		name = name.toLowerCase();
+		if(!fluids.containsKey(name))
+			return null;
+		return fluids.get(name);
 	}
 
     // ========== Tile Entity ==========

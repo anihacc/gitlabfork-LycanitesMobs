@@ -2,8 +2,6 @@ package com.lycanitesmobs.core.block.fluid;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
@@ -12,6 +10,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
@@ -22,12 +21,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockFluidOoze extends FlowingFluidBlock {
+public class BlockFluidAcid extends FlowingFluidBlock {
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-	public BlockFluidOoze(Supplier<? extends FlowingFluid> fluidSupplier, Block.Properties properties, String name) {
+	public BlockFluidAcid(Supplier<? extends FlowingFluid> fluidSupplier, Properties properties, String name) {
         super(fluidSupplier, properties);
         this.setRegistryName(LycanitesMobs.MODID, name);
 	}
@@ -80,28 +79,18 @@ public class BlockFluidOoze extends FlowingFluidBlock {
     public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
         // Damage:
         if (!(entity instanceof ItemEntity) && !(entity instanceof ExperienceOrbEntity)) {
-            entity.attackEntityFrom(ObjectManager.getDamageSource("ooze"), 1F);
+            entity.attackEntityFrom(ObjectManager.getDamageSource("acid"), 1F);
         }
-
-        // Extinguish:
-        if(entity.isBurning())
-            entity.extinguish();
 
         // Effects:
         if(entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 5 * 20, 0));
+            Effect effect = ObjectManager.getEffect("penetration");
+            if(effect != null) {
+                ((LivingEntity) entity).addPotionEffect(new EffectInstance(effect, 5 * 20, 0));
+            }
         }
 
         super.onEntityCollision(blockState, world, pos, entity);
-    }
-
-
-    // ==================================================
-    //                    Render Type
-    // ==================================================
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
     }
     
     

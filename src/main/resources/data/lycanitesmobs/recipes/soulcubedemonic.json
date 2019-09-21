@@ -10,7 +10,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
-      "item": "lycanitesmobs:demon_soulstone"
+      "item": "minecraft:nether_star"
     },
     "D": {
       "item": "minecraft:diamond"
