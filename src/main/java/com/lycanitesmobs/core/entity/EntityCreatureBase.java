@@ -2914,6 +2914,15 @@ public abstract class EntityCreatureBase extends EntityLiving {
         if(this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityCreatureBase)
             ((EntityCreatureBase)this.getMasterTarget()).onMinionDeath(this);
     }
+
+
+    @Override
+	protected int getExperiencePoints(EntityPlayer player) {
+    	if(this.isTamed() || this.isMinion()) {
+    		return 0;
+		}
+    	return super.getExperiencePoints(player);
+	}
     
     
     // ==================================================

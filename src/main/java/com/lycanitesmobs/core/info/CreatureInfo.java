@@ -318,10 +318,14 @@ public class CreatureInfo {
 			subspecies.load(this);
 		}
 
+		LycanitesMobs.printDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+	}
+
+
+	public void lateLoad() {
 		// Vanilla Spawning:
 		this.creatureSpawn.registerVanillaSpawns(this);
-
-		LycanitesMobs.printDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+		LycanitesMobs.printDebug("Creature", "Creature Late Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 

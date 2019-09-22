@@ -86,6 +86,16 @@ public class CreatureManager extends JSONLoader {
 		}
 	}
 
+	/**
+	 * Called during post init, loads vanilla spawns.
+	 * @param modInfo The mod loading this manager.
+	 */
+	public void lateStartup(ModInfo modInfo) {
+		for(CreatureInfo creatureInfo : this.creatures.values()) {
+			creatureInfo.lateLoad();
+		}
+	}
+
 
 	/** Called during early start up, loads all global configs into this manager. **/
 	public void loadConfig() {
