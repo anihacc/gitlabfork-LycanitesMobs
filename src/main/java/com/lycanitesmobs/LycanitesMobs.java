@@ -65,7 +65,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.0.7";
+	public static final String versionNumber = "2.0.0.8";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -131,6 +131,7 @@ public class LycanitesMobs {
 		config = ConfigBase.getConfig(modInfo, "general");
 		config.setCategoryComment("Debug", "Set debug options to true to show extra debugging information in the console.");
 		config.setCategoryComment("Extras", "Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+		config.setCategoryComment("Player", "Settings for player related stats and features.");
 
 		// Event Listeners:
 		MinecraftForge.EVENT_BUS.register(new EventListener());

@@ -66,12 +66,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int spiritMax = (this.spiritCharge * 10);
 	public int spirit = this.spiritMax;
 	public int spiritReserved = 0;
+	public int spiritRecharge = 10;
 	
 	// Summoning:
 	public int selectedSummonSet = 1;
 	public int summonFocusCharge = 600;
 	public int summonFocusMax = (this.summonFocusCharge * 10);
 	public int summonFocus = this.summonFocusMax;
+	public int summonFocusRecharge = 10;
 	public Map<Integer, SummonSet> summonSets = new HashMap<>();
 	public int summonSetMax = 5;
 	public EntityPortal staffPortal;
@@ -117,6 +119,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
     public ExtendedPlayer() {
         this.beastiary = new Beastiary(this);
         this.petManager = new PetManager(this.player);
+
+        this.spiritRecharge = LycanitesMobs.config.getInt("Player", "Spirit Recharge", this.spiritRecharge, "How much spirit a player regains per second. Default is 10, was 1 in earlier versions.");
+		this.summonFocusRecharge = LycanitesMobs.config.getInt("Player", "Summoning Focus Recharge", this.summonFocusRecharge, "How much summoning focus a player regains per second. Default is 10, was 1 in earlier versions.");
     }
 	
 	
@@ -200,7 +205,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		// Spirit Stat Update:
 		this.spirit = Math.min(Math.max(this.spirit, 0), this.spiritMax - this.spiritReserved);
 		if(this.spirit < this.spiritMax - this.spiritReserved) {
-			this.spirit += 10;
+			this.spirit += this.spiritRecharge;
 			if(!this.player.getEntityWorld().isRemote && this.currentTick % 20 == 0 || this.spirit == this.spiritMax - this.spiritReserved) {
 				sync = true;
 			}
@@ -209,7 +214,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		// Summoning Focus Stat Update:
 		this.summonFocus = Math.min(Math.max(this.summonFocus, 0), this.summonFocusMax);
 		if(this.summonFocus < this.summonFocusMax) {
-			this.summonFocus += 10;
+			this.summonFocus += this.summonFocusRecharge;
 			if(!this.player.getEntityWorld().isRemote && !creative && this.currentTick % 20 == 0
 					|| this.summonFocus < this.summonFocusMax
 					|| (!this.player.getHeldItemMainhand().isEmpty() && this.player.getHeldItemMainhand().getItem() instanceof ItemStaffSummoning)
