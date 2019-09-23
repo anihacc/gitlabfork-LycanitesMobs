@@ -10,7 +10,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [-1],
+			"dimensionIds": ["minecraft:the_nether"],
 			"dimensionListType": "blacklist"
 		}
 	],

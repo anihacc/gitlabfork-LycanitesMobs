@@ -1,7 +1,5 @@
 package com.lycanitesmobs.core.spawner.condition;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.core.helpers.JSONHelper;
@@ -9,18 +7,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class WorldSpawnCondition extends SpawnCondition {
 
-	/** The dimension IDs that the world must or must not match depending on the list type. **/
-	public int[] dimensionIds;
-
 	/** How the dimension ID list works. Can be whitelist or blacklist. **/
 	public String dimensionListType = "whitelist";
+
+	/** The dimension IDs that the world must or must not match depending on the list type. **/
+	public List<String> dimensionIds = new ArrayList<>();
+
+	/** The dimensions that the world must or must not match depending on the list type. **/
+	public List<DimensionType> dimensions = null;
 
 	/** How the biomes from the biome tags list works. Can be whitelist or blacklist. **/
 	public String biomeTagListType = "whitelist";
@@ -71,14 +72,9 @@ public class WorldSpawnCondition extends SpawnCondition {
 	@Override
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("dimensionIds")) {
-			JsonArray jsonArray = json.get("dimensionIds").getAsJsonArray();
-			this.dimensionIds = new int[jsonArray.size()];
-			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
-			int i = 0;
-			while (jsonIterator.hasNext()) {
-				this.dimensionIds[i] = jsonIterator.next().getAsInt();
-				i++;
-			}
+			this.dimensionIds.clear();
+			this.dimensions = null;
+			this.dimensionIds = JSONHelper.getJsonStrings(json.get("dimensionIds").getAsJsonArray());
 		}
 
 		if(json.has("dimensionListType"))
@@ -139,23 +135,6 @@ public class WorldSpawnCondition extends SpawnCondition {
 		int time = (int)Math.floor(world.getDayTime() % 24000D);
 		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getGameTime() : world.getDayTime()) / 23999D);
 
-		// Check Dimension:
-		if(this.dimensionIds != null) {
-			boolean dimensionIdFound = false;
-			for(int dimensionId : this.dimensionIds) {
-				if(world.getDimension().getType().getId() == dimensionId) {
-					dimensionIdFound = true;
-					break;
-				}
-			}
-			if("whitelist".equalsIgnoreCase(this.dimensionListType) && !dimensionIdFound) {
-				return false;
-			}
-			if("blacklist".equalsIgnoreCase(this.dimensionListType) && dimensionIdFound) {
-				return false;
-			}
-		}
-
 		// Check Day:
 		if(this.worldDayMin >= 0 && day < this.worldDayMin) {
 			return false;
@@ -205,6 +184,11 @@ public class WorldSpawnCondition extends SpawnCondition {
 			return false;
 		}
 
+		// Check Dimensions:
+		if(!this.isAllowedDimension(world)) {
+			return false;
+		}
+
 		// Check Biomes:
 		if(!this.isAllowedBiome(world, position)) {
 			return false;
@@ -212,6 +196,34 @@ public class WorldSpawnCondition extends SpawnCondition {
 
         return super.isMet(world, player, position);
     }
+
+
+	/**
+	 * Returns if the dimension of the provided world passes this condition.
+	 * @param world The world to get the biome from.
+	 * @return True if the biome is allowed, false if not.
+	 */
+	public boolean isAllowedDimension(World world) {
+		DimensionType dimension = world.getDimension().getType();
+
+		// Dimension IDs:
+		if (!this.dimensionIds.isEmpty()) {
+			for(String dimensionId : this.dimensionIds) {
+				if(dimensionId.equals(dimension.getRegistryName())) {
+					return !"blacklist".equalsIgnoreCase(this.dimensionListType);
+				}
+			}
+			// Cannot get forge Dimension Type registry for some reason, so temp workaround above for now.
+			/*if (this.dimensions == null) {
+				this.dimensions = JSONHelper.getDimensions(this.dimensionIds);
+			}
+			if (this.dimensions.contains(dimension)) {
+				return !"blacklist".equalsIgnoreCase(this.dimensionListType);
+			}*/
+		}
+
+		return "blacklist".equalsIgnoreCase(this.dimensionListType);
+	}
 
 
 	/**

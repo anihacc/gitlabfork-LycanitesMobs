@@ -12,7 +12,7 @@
 		"enabled": false,
 		"spawners": ["creature", "animal", "portal", "nether"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1],
+		"dimensionIds": ["minecraft:the_nether"],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
 		"biomes": ["nether"],

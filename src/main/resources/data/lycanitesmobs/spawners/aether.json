@@ -10,7 +10,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [4],
+			"dimensionIds": ["aether:aether"],
 			"dimensionListType": "whitelist"
 		}
 	],

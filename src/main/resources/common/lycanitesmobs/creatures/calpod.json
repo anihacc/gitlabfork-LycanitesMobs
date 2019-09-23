@@ -14,7 +14,7 @@
 		"enabled": true,
 		"spawners": ["monster", "beast"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1, 1],
+		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end"],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
 		"biomes": ["forest", "-mountain"],

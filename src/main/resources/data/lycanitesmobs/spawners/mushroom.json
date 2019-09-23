@@ -10,7 +10,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [0, 7],
+			"dimensionIds": ["minecraft:overworld", "twilightforest:twilightforest"],
 			"dayTimeMin": 14000
 		}
 	],

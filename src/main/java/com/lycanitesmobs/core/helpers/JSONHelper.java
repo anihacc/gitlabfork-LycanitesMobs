@@ -10,8 +10,11 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -210,6 +213,24 @@ public class JSONHelper {
 		}
 
 		return biomeList;
+	}
+
+	public static List<DimensionType> getDimensions(List<String> dimensionIds) {
+		List<DimensionType> dimensions = new ArrayList<>();
+		IForgeRegistry<DimensionType> dimensionTypeRegistry = GameRegistry.findRegistry(DimensionType.class);
+		if(dimensionTypeRegistry == null) {
+			LycanitesMobs.logError("Unable to get the Dimension Type registry!");
+			return dimensions;
+		}
+		for(String dimensionId : dimensionIds) {
+			DimensionType dimension = dimensionTypeRegistry.getValue(new ResourceLocation(dimensionId));
+			if(dimension != null) {
+				dimensions.add(dimension);
+			}
+			else
+				LycanitesMobs.logWarning("", "Unknown dimension: " + dimensionId);
+		}
+		return dimensions;
 	}
 
 	public static List<Biome> getBiomes(List<String> biomeIds) {

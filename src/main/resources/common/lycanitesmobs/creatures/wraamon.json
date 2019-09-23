@@ -12,7 +12,7 @@
 		"enabled": true,
 		"spawners": ["underground", "end"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1],
+		"dimensionIds": ["minecraft:the_nether"],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": true,
 		"biomes": [],

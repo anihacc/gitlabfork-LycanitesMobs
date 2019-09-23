@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.spawner.SpawnerMobRegistry;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DungeonHooks;
 
 import java.util.ArrayList;
@@ -35,11 +36,14 @@ public class CreatureSpawn {
 
 
 	// Dimensions:
-	/** The dimension IDs that the world must or must not match depending on the list type. **/
-	public int[] dimensionIds;
-
 	/** How the dimension ID list works. Can be whitelist or blacklist. **/
 	public String dimensionListType = "whitelist";
+
+	/** The dimension IDs that the world must or must not match depending on the list type. **/
+	public List<String> dimensionIds = new ArrayList<>();
+
+	/** The dimensions that the world must or must not match depending on the list type. **/
+	public List<DimensionType> dimensions = null;
 
 
 	// Biomes:
@@ -128,14 +132,9 @@ public class CreatureSpawn {
 
 		// Dimensions:
 		if(json.has("dimensionIds")) {
-			JsonArray jsonArray = json.get("dimensionIds").getAsJsonArray();
-			this.dimensionIds = new int[jsonArray.size()];
-			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
-			int i = 0;
-			while (jsonIterator.hasNext()) {
-				this.dimensionIds[i] = jsonIterator.next().getAsInt();
-				i++;
-			}
+			this.dimensionIds.clear();
+			this.dimensions = null;
+			this.dimensionIds = JSONHelper.getJsonStrings(json.get("dimensionIds").getAsJsonArray());
 		}
 		if(json.has("dimensionListType"))
 			this.dimensionListType = json.get("dimensionListType").getAsString();
@@ -216,18 +215,19 @@ public class CreatureSpawn {
 		}
 
 		// Default:
-		if(this.dimensionIds.length == 0) {
+		if(this.dimensionIds.isEmpty()) {
 			return true;
 		}
 
 		// Check IDs:
-		for(int dimensionId : this.dimensionIds) {
-			if(world.getDimension().getType().getId() == dimensionId) {
-				LycanitesMobs.logDebug("MobSpawns", "Dimension is in " + this.dimensionListType + ".");
+		String targetDimensionId = world.getDimension().getType().getRegistryName().toString();
+		for(String dimensionId : this.dimensionIds) {
+			if(dimensionId.equals(targetDimensionId)) {
+				LycanitesMobs.logDebug("MobSpawns", "Dimension " + targetDimensionId + " in " + this.dimensionListType + ".");
 				return this.dimensionListType.equalsIgnoreCase("whitelist");
 			}
 		}
-		LycanitesMobs.logDebug("MobSpawns", "Dimension was not in " + this.dimensionListType + ".");
+		LycanitesMobs.logDebug("MobSpawns", "Dimension " + targetDimensionId + " was not in " + this.dimensionListType + ".");
 		return this.dimensionListType.equalsIgnoreCase("blacklist");
 	}
 

@@ -57,7 +57,7 @@
 				},
 				{
 					"type": "world",
-					"dimensionIds": [0, 7],
+					"dimensionIds": ["minecraft:overworld", "twilightforest:twilightforest"],
 					"dayTimeMin": 10000,
 					"moonPhase": 0
 				}

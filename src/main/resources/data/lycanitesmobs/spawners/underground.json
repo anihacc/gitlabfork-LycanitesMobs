@@ -9,7 +9,7 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": [4],
+			"dimensionIds": ["twilightforest:twilightforest"],
 			"dimensionListType": "blacklist"
 		}
 	],

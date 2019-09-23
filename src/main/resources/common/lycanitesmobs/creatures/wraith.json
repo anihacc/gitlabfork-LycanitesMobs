@@ -12,7 +12,7 @@
 		"enabled": true,
 		"spawners": ["nethersky"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1],
+		"dimensionIds": ["minecraft:the_nether"],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
 		"biomes": [],

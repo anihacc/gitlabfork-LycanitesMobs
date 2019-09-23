@@ -58,6 +58,12 @@ public class DungeonInstance {
 	 */
 	public void setOrigin(BlockPos blockPos) {
 		this.originPos = blockPos;
+		if(this.chunkMin == null) {
+			this.chunkMin = new ChunkPos(blockPos);
+		}
+		if(this.chunkMax == null) {
+			this.chunkMax = new ChunkPos(blockPos);
+		}
 	}
 
 
