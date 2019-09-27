@@ -24,6 +24,8 @@ public class ConfigCreatureSubspecies {
 	public final ForgeConfigSpec.ConfigValue<Integer> uncommonSpawnDayMin;
 	public final ForgeConfigSpec.ConfigValue<Integer> rareSpawnDayMin;
 
+	public final ForgeConfigSpec.ConfigValue<Boolean> rareDespawning;
+
 	public final ForgeConfigSpec.ConfigValue<Boolean> rareHealthBars;
 
 	public ConfigCreatureSubspecies(ForgeConfigSpec.Builder builder) {
@@ -93,6 +95,10 @@ public class ConfigCreatureSubspecies {
 		rareSpawnDayMin = builder.comment("The minimum amount of days before rare species start to spawn.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creature.subspecies.rareSpawnDayMin")
 				.define("rareSpawnDayMin", 0);
+
+		rareDespawning = builder.comment("If set to true, rare subspecies will despawn naturally over time.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creature.subspecies.rareDespawning")
+				.define("rareDespawning", false);
 
 		rareHealthBars = builder.comment("If set to true, rare subspecies such as the Lunar Grue or Celestial Geonach will display boss health bars.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creature.subspecies.rareHealthBars")

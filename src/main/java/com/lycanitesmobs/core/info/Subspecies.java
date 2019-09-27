@@ -52,6 +52,9 @@ public class Subspecies {
 	/** The minimum amount of days before rare species start to spawn. **/
 	public static int rareSpawnDayMin = 0;
 
+	/** If true, rare subspecies are able to despawn. **/
+	public static boolean rareDespawning = false;
+
     /** Whether rare subspecies should show boss health bars or not. **/
     public static boolean rareHealthBars = false;
 
@@ -109,6 +112,8 @@ public class Subspecies {
 
 		uncommonSpawnDayMin = ConfigCreatureSubspecies.INSTANCE.uncommonSpawnDayMin.get();
 		rareSpawnDayMin = ConfigCreatureSubspecies.INSTANCE.rareSpawnDayMin.get();
+
+		rareDespawning = ConfigCreatureSubspecies.INSTANCE.rareDespawning.get();
 
 		rareHealthBars = ConfigCreatureSubspecies.INSTANCE.rareHealthBars.get();
     }

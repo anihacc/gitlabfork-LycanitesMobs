@@ -342,6 +342,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public List<ItemDrop> drops = new ArrayList<>();
 	/** A collection of drops to be stored in NBT data. **/
 	public List<ItemDrop> savedDrops = new ArrayList<>();
+	/** A forced fix to prevent mobs from endlessly dropping loot when they are unable to die correctly due to their health being altered. **/
+	public boolean hasDropped = false;
 
     // Override AI:
     public FindAttackTargetGoal aiTargetPlayer = null;
@@ -910,7 +912,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		return true;
     	if(!this.creatureInfo.creatureSpawn.despawnNatural)
     		return false;
-        if(this.creatureInfo.boss || this.isRareSubspecies())
+        if(this.creatureInfo.boss || (this.isRareSubspecies() && !Subspecies.rareDespawning))
             return false;
     	if(this.isPersistant() || this.getLeashed() || (this.hasCustomName() && "".equals(this.spawnEventType)))
     		return false;
@@ -3387,7 +3389,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
     protected void spawnDrops(DamageSource damageSource) {
-    	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet()) return;
+    	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet() || this.hasDropped)
+    		return;
+		this.hasDropped = true;
+
     	int subspeciesScale = 1;
     	if(this.getSubspeciesIndex() > 2)
     		subspeciesScale = Subspecies.rareDropScale;

@@ -99,6 +99,16 @@ public class FindFuseTargetGoal extends TargetingGoal {
 		if(!(this.host instanceof IFusable) || ((IFusable)this.host).getFusionType((IFusable)target) == null)
 			return false;
 
+		// Subspecies Check:
+		if(this.host.isRareSubspecies()) {
+			if(!(target instanceof BaseCreatureEntity)) {
+				return false;
+			}
+			if(!((BaseCreatureEntity)target).isRareSubspecies()) {
+				return false;
+			}
+		}
+
 		// Owner Check:
 		if(this.host instanceof TameableCreatureEntity && target instanceof TameableCreatureEntity) {
 			if(((TameableCreatureEntity)this.host).getPlayerOwner() != ((TameableCreatureEntity)target).getPlayerOwner()) {

@@ -7,7 +7,13 @@
 	"ignoreBiomes": true,
 	"ignoreLightLevel": true,
 	"groupLimitRange": 64,
-	"conditions": [],
+	"conditions": [
+		{
+			"type": "world",
+			"dimensionIds": ["minecraft:overworld"],
+			"dimensionListType": "whitelist"
+		}
+	],
 	"triggers": [
 		{
 			"type": "world",
