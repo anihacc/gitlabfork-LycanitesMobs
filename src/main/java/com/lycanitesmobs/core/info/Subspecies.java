@@ -51,6 +51,9 @@ public class Subspecies {
 	/** The minimum amount of days before rare species start to spawn. **/
 	public static int rareSpawnDayMin = 0;
 
+	/** If true, rare subspecies will despawn naturally over time. **/
+	public static boolean rareDespawning = false;
+
     /** Whether rare subspecies should show boss health bars or not. **/
     public static boolean rareHealthBars = false;
 
@@ -129,6 +132,8 @@ public class Subspecies {
 
 		uncommonSpawnDayMin = config.getInt("Mob Variations", "Subspecies Uncommon Spawn Day Min", uncommonSpawnDayMin, "The minimum amount of days before uncommon species start to spawn.");
 		rareSpawnDayMin = config.getInt("Mob Variations", "Subspecies Rare Spawn Day Min", rareSpawnDayMin, "The minimum amount of days before rare species start to spawn.");
+
+		rareDespawning = config.getBool("Mob Variations", "Subspecies Rare Despawning", rareDespawning, "If set to true, rare subspecies such as the Lunar Grue will despawn naturally over time.");
 
 		rareHealthBars = config.getBool("Mob Variations", "Subspecies Rare Health Bars", rareHealthBars, "If set to true, rare subspecies such as the Lunar Grue or Celestial Geonach will display boss health bars.");
     }

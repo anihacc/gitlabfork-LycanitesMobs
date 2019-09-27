@@ -41,7 +41,7 @@ public class DonationFamiliars {
 				inputStream.close();
 			}
 			LycanitesMobs.printInfo("", "Online donations file read successfully.");
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			LycanitesMobs.printInfo("", "Unable to access the online donations file, using local copy instead, this might be out of date.");
 			e.printStackTrace();
 //            try {

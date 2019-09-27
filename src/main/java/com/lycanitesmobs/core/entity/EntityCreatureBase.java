@@ -858,7 +858,7 @@ public abstract class EntityCreatureBase extends EntityLiving {
     		return true;
     	if(!this.creatureInfo.creatureSpawn.despawnNatural)
     		return false;
-        if(this.creatureInfo.boss || this.isRareSubspecies())
+        if(this.creatureInfo.boss || (this.isRareSubspecies() && !Subspecies.rareDespawning))
             return false;
     	if(this.isPersistant() || this.getLeashed() || (this.hasCustomName() && "".equals(this.spawnEventType)))
     		return false;

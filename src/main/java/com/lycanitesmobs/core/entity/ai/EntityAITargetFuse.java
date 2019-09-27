@@ -97,6 +97,16 @@ public class EntityAITargetFuse extends EntityAITarget {
 		if(!(this.host instanceof IFusable) || ((IFusable)this.host).getFusionClass((IFusable)target) == null)
 			return false;
 
+		// Subspecies Check:
+		if(this.host.isRareSubspecies()) {
+			if(!(target instanceof EntityCreatureBase)) {
+				return false;
+			}
+			if(!((EntityCreatureBase)target).isRareSubspecies()) {
+				return false;
+			}
+		}
+
 		// Owner Check:
 		if(this.host instanceof EntityCreatureTameable && target instanceof EntityCreatureTameable) {
 			if(((EntityCreatureTameable)this.host).getPlayerOwner() != ((EntityCreatureTameable)target).getPlayerOwner()) {
