@@ -199,7 +199,7 @@ public class GameEventListener {
 				event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
-				((MobEntity)event.getEntityLiving()).setAttackTarget(null);
+				//((MobEntity)event.getEntityLiving()).setAttackTarget(null);
 			}
 		}
 	}
