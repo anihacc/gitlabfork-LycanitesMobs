@@ -293,7 +293,7 @@ public class EventListener {
 				event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
-				((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
+				//((EntityLiving) event.getEntityLiving()).setAttackTarget(null);
 			}
 		}
 	}
