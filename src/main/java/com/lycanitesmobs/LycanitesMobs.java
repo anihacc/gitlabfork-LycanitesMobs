@@ -53,7 +53,7 @@ public class LycanitesMobs {
 
 	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.1.0.2";
+	public static final String versionNumber = "2.1.0.3";
 	public static final String versionMC = "1.14.4";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -83,25 +83,25 @@ public class LycanitesMobs {
 
 	/**
 	 * Constructor
-	 */
+				*/
 	public LycanitesMobs() {
-		modInfo = new ModInfo(this, name, 1000);
-		FileLoader.initAll(modInfo.modid);
-		StreamLoader.initAll(modInfo.modid);
+			modInfo = new ModInfo(this, name, 1000);
+			FileLoader.initAll(modInfo.modid);
+			StreamLoader.initAll(modInfo.modid);
 
-		// Config:
-		CoreConfig.buildSpec();
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
+			// Config:
+			CoreConfig.buildSpec();
+			ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
 
-		// Setup Event Listeners:
-		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modEventBus.addListener(this::commonSetup);
-		modEventBus.addListener(this::clientSetup);
-		modEventBus.addListener(this::serverStarting);
-		modEventBus.addListener(this::enqueueIMC);
-		modEventBus.addListener(this::processIMC);
-		modEventBus.register(ObjectManager.getInstance());
-		modEventBus.register(ItemManager.getInstance());
+			// Setup Event Listeners:
+			IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+			modEventBus.addListener(this::commonSetup);
+			modEventBus.addListener(this::clientSetup);
+			modEventBus.addListener(this::serverStarting);
+			modEventBus.addListener(this::enqueueIMC);
+			modEventBus.addListener(this::processIMC);
+			modEventBus.register(ObjectManager.getInstance());
+			modEventBus.register(ItemManager.getInstance());
 		modEventBus.register(CreatureManager.getInstance());
 		modEventBus.register(ProjectileManager.getInstance());
 		modEventBus.register(WorldGenManager.getInstance());

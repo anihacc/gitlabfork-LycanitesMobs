@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.tileentity;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
+import com.lycanitesmobs.core.config.ConfigExtra;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.PortalEntity;
@@ -59,7 +60,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public String inventoryName = "";
     public NonNullList<ItemStack> itemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
     public int summoningFuel = 0;
-    public int summoningFuelMax = 10 * 60 * 20;
+    public int summoningFuelMax;
     public int summoningFuelAmount = 10 * 60 * 20; // 10 minutes per Redstone Dust
 
     // Summoned Minions:
@@ -68,6 +69,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     // Block:
     protected boolean blockStateSet = false;
+
+    /** Constructor **/
+    public TileEntitySummoningPedestal() {
+        super();
+        this.summoningFuelMax = ConfigExtra.INSTANCE.summoningPedestalRedstoneTime.get();
+    }
 
     @Override
     public TileEntityType<?> getType() {

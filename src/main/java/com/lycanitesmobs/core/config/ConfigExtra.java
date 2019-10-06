@@ -8,6 +8,7 @@ import java.util.List;
 public class ConfigExtra {
 	public static ConfigExtra INSTANCE;
 
+	public final ForgeConfigSpec.ConfigValue<Integer> summoningPedestalRedstoneTime;
 	public final ForgeConfigSpec.ConfigValue<Boolean> versionCheckerEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> disableNausea;
 	public final ForgeConfigSpec.ConfigValue<List<? extends String>> familiarBlacklist;
@@ -15,6 +16,11 @@ public class ConfigExtra {
 	public ConfigExtra(ForgeConfigSpec.Builder builder) {
 		builder.push("Extra");
 		builder.comment("Other extra config settings, some of the aren't necessarily specific to Lycanites Mobs.");
+
+		this.summoningPedestalRedstoneTime = builder
+				.comment("How much summoning time (in ticks) 1 redstone dust provides. 20 ticks = 1 second, default is 12000 (10 minutes).")
+				.translation(CoreConfig.CONFIG_PREFIX + "summoningpedestal.redstonetime")
+				.define("summoningpedestal.redstonetime", 10 * 60 * 20);
 
 		this.versionCheckerEnabled = builder
 				.comment("Set to false to disable the version checker.")

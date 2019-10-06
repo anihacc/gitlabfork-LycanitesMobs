@@ -21,10 +21,12 @@ import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
+import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -87,6 +89,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public ExtraMobBehaviour extraMobBehaviour;
 
 	// Info:
+	/** The living update tick. **/
+	public long updateTick = 0;
 	/** The name of the event that spawned this mob if any, an empty string ("") if none. **/
 	public String spawnEventType = "";
 	/** The number of the event that spawned this mob. Used for despawning this mob when a new event starts. Ignored if the spawnEventType is blank or the count is less than 0. **/
@@ -97,8 +101,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean altarSummoned = false;
     /** If true, this mob will show a boss health bar, regardless of other properties, unless overridden by a subclass. **/
     public boolean forceBossHealthBar = false;
-    /** The living update tick. **/
-    public long updateTick = 0;
+	/** The Summoning Pedestal that summoned this creature, null if not summoned via a pedestal. **/
+	public TileEntitySummoningPedestal summoningPedestal;
 
 	// Size:
 	/** The main size of this creature, used to override vanilla sizing. **/
@@ -522,9 +526,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         // Drops:
         this.loadItemDrops();
-		ItemEquipmentPart itemEquipmentPart = ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId());
-		if(itemEquipmentPart != null) {
-			this.drops.add(new ItemDrop(itemEquipmentPart.getRegistryName().toString(), itemEquipmentPart.dropChance).setMaxAmount(1));
+		if(ItemEquipmentPart.MOB_PART_DROPS.containsKey(this.creatureInfo.getEntityId())) {
+			for(ItemEquipmentPart itemEquipmentPart : ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId())) {
+				this.drops.add(new ItemDrop(itemEquipmentPart.getRegistryName().toString(), itemEquipmentPart.dropChance).setMaxAmount(1));
+			}
 		}
 
 		// Attack Animation Cooldown:
@@ -1056,7 +1061,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Minion ==========
     /** Set whether this mob is a minion or not, this should be used if this mob is summoned. **/
-    public void setMinion(boolean minion) { this.isMinion = minion; }
+    public void setMinion(boolean minion) {
+    	this.isMinion = minion;
+    }
     /** Returns whether or not this mob is a minion. **/
     public boolean isMinion() {
         return this.isMinion;
@@ -2955,6 +2962,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
 				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
 				transformedCreature.setSizeScale(this.sizeScale + partnerCreature.sizeScale);
+
+				// Summoning Pedestal:
+				if(partnerCreature.summoningPedestal != null) {
+					partnerCreature.summoningPedestal.minions.add(transformedCreature);
+					transformedCreature.summoningPedestal = partnerCreature.summoningPedestal;
+				}
+				if(this.summoningPedestal != null) {
+					this.summoningPedestal.minions.add(transformedCreature);
+					transformedCreature.summoningPedestal = this.summoningPedestal;
+				}
 
 				// Level:
 				int transformedLevel = this.getLevel();
