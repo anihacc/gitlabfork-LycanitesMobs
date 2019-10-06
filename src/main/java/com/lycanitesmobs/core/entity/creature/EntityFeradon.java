@@ -183,11 +183,6 @@ public class EntityFeradon extends EntityCreatureRideable implements IGroupPreda
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote) {
-            this.leap(4.0D, 0.5D);
-            return;
-        }
-
         if(!this.onGround)
             return;
         if(this.abilityToggled)

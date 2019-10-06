@@ -211,11 +211,6 @@ public class EntityMorock extends EntityCreatureRideable implements IMob, IGroup
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote) {
-            this.leap(4.0D, 0D);
-            return;
-        }
-
         if(this.abilityToggled)
             return;
         if(this.getStamina() < this.getStaminaCost())

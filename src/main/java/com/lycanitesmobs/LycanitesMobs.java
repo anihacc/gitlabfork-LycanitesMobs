@@ -65,7 +65,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.0.10";
+	public static final String versionNumber = "2.0.0.11";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -163,6 +163,10 @@ public class LycanitesMobs {
         }
         ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
 
+		// Potion Effects:
+		this.potionEffects = new PotionEffects();
+		this.potionEffects.init(config);
+
 		// Blocks and Items:
 		ItemManager.getInstance().loadConfig();
 		ItemManager.getInstance().loadItems();
@@ -174,11 +178,7 @@ public class LycanitesMobs {
 		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
 
-        // Potion Effects:
-		this.potionEffects = new PotionEffects();
-		this.potionEffects.init(config);
-
-		// Elements:
+        // Elements:
 		ElementManager.getInstance().loadConfig();
 		ElementManager.getInstance().loadAllFromJSON(modInfo);
 
