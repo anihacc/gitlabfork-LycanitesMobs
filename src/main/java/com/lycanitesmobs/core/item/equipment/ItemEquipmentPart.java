@@ -34,7 +34,7 @@ public class ItemEquipmentPart extends ItemBase {
 	public static ItemStack ITEMSTACK_TO_RENDER;
 
 	/** A map of mob classes and parts that they drop. **/
-	public static Map<String, ItemEquipmentPart> MOB_PART_DROPS = new HashMap<>();
+	public static Map<String, List<ItemEquipmentPart>> MOB_PART_DROPS = new HashMap<>();
 
 	/** A list of all features this part has. **/
 	public List<EquipmentFeature> features = new ArrayList<>();
@@ -75,7 +75,10 @@ public class ItemEquipmentPart extends ItemBase {
 		if(json.has("dropMobId")) {
 			this.dropMobId = json.get("dropMobId").getAsString();
 			if(!"".equals(this.dropMobId)) {
-				MOB_PART_DROPS.put(this.dropMobId, this);
+				if(!MOB_PART_DROPS.containsKey(this.dropMobId)) {
+					MOB_PART_DROPS.put(this.dropMobId, new ArrayList<>());
+				}
+				MOB_PART_DROPS.get(this.dropMobId).add(this);
 			}
 		}
 

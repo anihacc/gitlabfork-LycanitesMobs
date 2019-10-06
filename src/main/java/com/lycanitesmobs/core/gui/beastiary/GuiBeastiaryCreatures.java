@@ -107,6 +107,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 		int width = this.colRightWidth - marginX;
 
 		if(this.playerExt.getBeastiary().creatureKnowledgeList.isEmpty()) {
+			nextY += 20;
 			String text = LanguageManager.translate("gui.beastiary.creatures.empty.info");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 			return;
@@ -144,13 +145,9 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 		// Creature Type Display:
 		else if(this.playerExt.selectedCreatureType != null) {
-			// Description:
-			String text = this.playerExt.selectedCreatureType.getTitle();
-			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
-
 			// Descovered:
-			nextY += 12 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
-			text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
+			nextY += 20;
+			String text = LanguageManager.translate("gui.beastiary.creatures.descovered") + ": ";
 			text += this.playerExt.getBeastiary().getCreaturesDescovered(this.playerExt.selectedCreatureType);
 			text += "/" + this.playerExt.selectedCreatureType.creatures.size();
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
@@ -158,6 +155,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 		// Base Display:
 		else {
+			nextY += 20;
 			String text = LanguageManager.translate("gui.beastiary.creatures.select");
 			this.drawSplitString(text, this.colRightX, nextY, this.colRightWidth, 0xFFFFFF, true);
 		}

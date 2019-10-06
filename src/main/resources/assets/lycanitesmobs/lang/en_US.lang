@@ -745,6 +745,7 @@ entity.lycanitesmobs.conba.name=Conba
 entity.lycanitesmobs.conba.description=Mischievous apes with a passion for poop!
 entity.lycanitesmobs.conba.habitat=These apes can be found in tropical biomes like jungles.
 entity.lycanitesmobs.conba.combat=Comba like to throw their sticky poop at people causing slowness and nausea as well as creating a poop cloud which extends these effects. These beast will also try to keep their distance.
+entity.lycanitesmobs.conba.infected=Infected Conba
 # ========================================================================
 entity.lycanitesmobs.concapede.name=Concapede
 entity.lycanitesmobs.concapede.description=Strange beetles that connect to each other. Heads lead the way and grow extra segments from behind and if fed vegetables, will become preoccupied allowing their segments to be attacked, this technique is used by farmers.

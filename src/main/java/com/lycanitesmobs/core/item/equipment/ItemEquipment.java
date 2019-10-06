@@ -289,6 +289,18 @@ public class ItemEquipment extends ItemBase {
 	//                     Harvesting
 	// ==================================================
 	@Override
+	public int getHarvestLevel(ItemStack itemStack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
+		int harvestLevel = -1;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestLevel < harvestFeature.harvestLevel && toolClass.equals(harvestFeature.getToolType())) {
+				harvestLevel = harvestFeature.harvestLevel;
+			}
+		}
+		return harvestLevel;
+	}
+
+	@Override
 	public boolean canHarvestBlock(IBlockState blockState, ItemStack itemStack) {
 		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
 			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;

@@ -17,6 +17,7 @@ import net.minecraft.util.math.Vec3i;
 import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public class HarvestEquipmentFeature extends EquipmentFeature {
@@ -34,7 +35,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	/** How much harvest speed to add when harvesting compatible blocks. **/
 	public float harvestSpeed = 1;
 
-	/** The level of harvesting. 0 = Wood, 1 = Stone, 2 = Iron, 3 = Diamond. Currently not used as all tools are diamond level. **/
+	/** The level of harvesting. 0 = Wood, 1 = Stone, 2 = Iron, 3 = Diamond. **/
 	public int harvestLevel = 3;
 
 	/** The additional block range of the harvest shape, relative to the harvesting direction, the central block is not affected by this. X = number of blocks both sides laterally (sideways). Y = Number of blocks vertically. Z = Number of blocks forwards. **/
@@ -95,6 +96,15 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	// ==================================================
 	//                     Harvesting
 	// ==================================================
+	/**
+	 * Gets the Tool Type provided by this Harvest Feature.
+	 * @return The Tool Type of this feature, will return null if it's not a Pickaxe, Axe or Shovel.
+	 */
+	@Nullable
+	public String getToolType() {
+		return this.harvestType;
+	}
+
 	/**
 	 * Returns if this feature can harvest the provided block or not.
 	 * @param blockState

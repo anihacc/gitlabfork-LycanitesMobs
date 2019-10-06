@@ -24,6 +24,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
@@ -63,6 +64,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     // Block:
     protected boolean blockStateSet = false;
+
+
+    public TileEntitySummoningPedestal() {
+        super();
+        this.summoningFuelMax = LycanitesMobs.config.getInt("Player", "Summoning Pedestal Redstone Time", this.summoningFuelMax, "How much summoning time (in ticks) 1 redstone dust provides. 20 ticks = 1 second, default is 12000 (10 minutes).");
+    }
 
 
     // ========================================
@@ -157,7 +164,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
                         if(fuelStack.getItem() == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK)) {
 							refuel = this.summoningFuelAmount * 9;
                         }
-			            fuelStack.splitStack(1);
+			            fuelStack.shrink(1);
                         this.summoningFuel = refuel;
                         this.summoningFuelMax = refuel;
                     }
