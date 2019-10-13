@@ -1,7 +1,8 @@
 package com.lycanitesmobs.core.network;
 
-import io.netty.buffer.ByteBuf;
 import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.LycanitesMobs;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;
@@ -11,17 +12,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRequest, IMessage> {
-	public byte guiID;
-	
-	
+public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSyncRequest, IMessage> {
+
 	// ==================================================
 	//                    Constructors
 	// ==================================================
-	public MessageGUIRequest() {}
-	public MessageGUIRequest(byte guiID) {
-		this.guiID = guiID;
-	}
+	public MessageSyncRequest() {}
 	
 	
 	// ==================================================
@@ -31,13 +27,15 @@ public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRe
 	 * Called when this message is received.
 	 */
 	@Override
-	public IMessage onMessage(final MessageGUIRequest message, final MessageContext ctx) {
-		if(ctx.side != Side.SERVER) return null;
+	public IMessage onMessage(final MessageSyncRequest message, final MessageContext ctx) {
+		if(ctx.side != Side.SERVER)
+			return null;
         IThreadListener mainThread = (WorldServer)ctx.getServerHandler().player.getEntityWorld();
         mainThread.addScheduledTask(() -> {
 			EntityPlayer player = ctx.getServerHandler().player;
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-			playerExt.requestGUI(message.guiID);
+			playerExt.needsFullSync = true;
+			LycanitesMobs.printDebug("Packets", "Requested full player sync.");
 		});
 		return null;
 	}
@@ -52,7 +50,6 @@ public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRe
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
-		this.guiID = packet.readByte();
 	}
 	
 	
@@ -65,7 +62,6 @@ public class MessageGUIRequest implements IMessage, IMessageHandler<MessageGUIRe
 	@Override
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
-		packet.writeByte(this.guiID);
 	}
 	
 }
