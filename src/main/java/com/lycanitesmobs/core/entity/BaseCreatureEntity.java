@@ -394,7 +394,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
 	public EntityType getType() {
 		if(this.creatureInfo == null) {
-			LycanitesMobs.logWarning("", "Get Type Accessed Too Early!");
 			return super.getType();
 		}
     	return this.creatureInfo.getEntityType();

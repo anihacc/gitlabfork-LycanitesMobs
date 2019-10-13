@@ -28,7 +28,7 @@
 			"rangeMax": [32, 32, 32],
 			"sorting": "random",
 			"blocks": [
-				"minecraft:portal"
+				"minecraft:nether_portal"
 			],
 			"listType": "whitelist"
 		}

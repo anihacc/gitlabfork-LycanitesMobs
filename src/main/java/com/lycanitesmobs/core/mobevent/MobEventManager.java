@@ -10,6 +10,7 @@ import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
 import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.ModInfo;
+import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +27,7 @@ public class MobEventManager extends JSONLoader {
     // Mob Events:
     public Map<String, MobEvent> mobEvents = new HashMap<>();
 	public List<MobEventSchedule> mobEventSchedules = new ArrayList<>();
+	public List<SpawnCondition> globalEventConditions = new ArrayList<>();
 
     // Properties:
     public boolean mobEventsEnabled = true;
@@ -66,7 +68,50 @@ public class MobEventManager extends JSONLoader {
 		}
 		catch(Exception e) {}
 
-		// Load Scheduled Events:
+		this.loadGlobalEventConditions();
+		this.loadScheduledEvents();
+	}
+
+	public void loadGlobalEventConditions() {
+		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
+		this.globalEventConditions.clear();
+
+		JsonObject defaultGlobalJson;
+		if(FileLoader.SERVER.ready) {
+			Path defaultGlobalPath = FileLoader.SERVER.getPath("globalmobevent.json");
+			LycanitesMobs.logDebug("", "Global Spawner JSON Path:" + defaultGlobalPath);
+			defaultGlobalJson = this.loadJsonObject(gson, defaultGlobalPath);
+		}
+		else {
+			defaultGlobalJson = this.loadJsonObject(gson, StreamLoader.SERVER.getStream("globalmobevent.json"));
+		}
+		if(defaultGlobalJson == null) {
+			LycanitesMobs.logWarning("", "Could not find Global Mob Event JSON.");
+		}
+
+		File customGlobalFile = new File(configPath + "globalmobevent.json");
+		JsonObject customGlobalJson = null;
+		if(customGlobalFile.exists()) {
+			customGlobalJson = this.loadJsonObject(gson, customGlobalFile.toPath());
+		}
+
+		JsonObject globalJson = this.writeDefaultJSONObject(gson, "globalmobevent", defaultGlobalJson, customGlobalJson);
+		if(globalJson.has("conditions")) {
+			JsonArray jsonArray = globalJson.get("conditions").getAsJsonArray();
+			Iterator<JsonElement> jsonIterator = jsonArray.iterator();
+			while (jsonIterator.hasNext()) {
+				JsonObject spawnConditionJson = jsonIterator.next().getAsJsonObject();
+				SpawnCondition spawnCondition = SpawnCondition.createFromJSON(spawnConditionJson);
+				this.globalEventConditions.add(spawnCondition);
+			}
+		}
+		if(this.globalEventConditions.size() > 0) {
+			LycanitesMobs.logDebug("JSONSpawner", "Loaded " + this.globalEventConditions.size() + " Global Mob Event Conditions.");
+		}
+	}
+
+	public void loadScheduledEvents() {
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		String configPath = new File(".") + "/config/" + LycanitesMobs.MODID + "/";
 		this.mobEventSchedules.clear();

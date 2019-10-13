@@ -188,7 +188,7 @@ public class GameEventListener {
 			if(targetEntity.isInvisible()) {
 				if(event.isCancelable())
 					event.setCanceled(true);
-				event.getEntityLiving().setRevengeTarget(null);
+				//event.getEntityLiving().setRevengeTarget(null);
 				return;
 			}
 		}
@@ -196,7 +196,7 @@ public class GameEventListener {
 		// Can Be Targeted:
 		if(event.getEntityLiving() instanceof MobEntity && targetEntity instanceof BaseCreatureEntity) {
 			if(!((BaseCreatureEntity)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
-				event.getEntityLiving().setRevengeTarget(null);
+				//event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
 				//((MobEntity)event.getEntityLiving()).setAttackTarget(null);

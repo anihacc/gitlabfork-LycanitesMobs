@@ -171,6 +171,23 @@ public class MobEvent {
 			return false;
 		}
 
+		BlockPos position = null;
+		if(player != null) {
+			position = player.getPosition();
+		}
+
+		// Global Conditions:
+		if(!MobEventManager.getInstance().globalEventConditions.isEmpty()) {
+			LycanitesMobs.logDebug("MobEvents", "Global Conditions Required: " + MobEventManager.getInstance().globalEventConditions.size());
+			for(SpawnCondition condition : MobEventManager.getInstance().globalEventConditions) {
+				if(!condition.isMet(world, player, position)) {
+					LycanitesMobs.logDebug("MobEvents", "Global Condition: " + condition + "Failed");
+					return false;
+				}
+			}
+		}
+
+		// Conditions:
 		if(this.conditions.isEmpty()) {
 			LycanitesMobs.logDebug("MobEvents", "No Conditions");
 			return true;
@@ -180,10 +197,6 @@ public class MobEvent {
 		int conditionsMet = 0;
 		int conditionsRequired = this.conditionsRequired > 0 ? this.conditionsRequired : this.conditions.size();
 		for(SpawnCondition condition : this.conditions) {
-			BlockPos position = null;
-			if(player != null) {
-				position = player.getPosition();
-			}
 			boolean met = condition.isMet(world, player, position);
 			LycanitesMobs.logDebug("MobEvents", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
 			if(met) {
