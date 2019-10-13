@@ -7,7 +7,6 @@ import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.network.*;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
@@ -46,7 +45,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public PetEntry selectedPet;
 
 	public long currentTick = 0;
-	public boolean needsFirstSync = true;
+	public boolean needsFullSync = true;
 	/** Set for a few seconds after a player breaks a block. **/
 	public IBlockState justBrokenBlock;
 	/** How many ticks left until the justBrokenBlock should be cleared. **/
@@ -100,6 +99,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
             ExtendedPlayer extendedPlayer = new ExtendedPlayer();
             extendedPlayer.setPlayer(player);
             clientExtendedPlayers.put(player, extendedPlayer);
+            LycanitesMobs.packetHandler.sendToServer(new MessageSyncRequest());
         }
 
         // Server Side:
@@ -262,7 +262,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
 		
 		// Initial Network Sync:
-		if(!this.player.getEntityWorld().isRemote && this.needsFirstSync) {
+		if(!this.player.getEntityWorld().isRemote && this.needsFullSync) {
 			this.beastiary.sendAllToClient();
 			this.sendAllSummonSetsToPlayer();
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this);
@@ -273,7 +273,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
         this.petManager.onUpdate(this.player.getEntityWorld());
 		
 		this.currentTick++;
-		this.needsFirstSync = false;
+		this.needsFullSync = false;
 	}
 
 	/**
@@ -347,6 +347,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
 	public void sendPetEntriesToPlayer(String entryType) {
 		if(this.player.getEntityWorld().isRemote) return;
+		LycanitesMobs.printDebug("Packets", "Sending all pet entries to client.");
 		for(PetEntry petEntry : this.petManager.allEntries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
@@ -376,6 +377,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
     public void sendAllSummonSetsToPlayer() {
         if(this.player.getEntityWorld().isRemote) return;
+		LycanitesMobs.printDebug("Packets", "Sending all summoning sets to client.");
         for(byte setID = 1; setID <= this.summonSetMax; setID++) {
             MessageSummonSet message = new MessageSummonSet(this, setID);
             LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);

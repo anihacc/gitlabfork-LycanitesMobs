@@ -1,6 +1,6 @@
 {
 	"name": "gorger",
-	"creatureType": "gorger",
+	"creatureType": "worm",
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGorger",
 	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGorger",
 	"loadDefault": true,

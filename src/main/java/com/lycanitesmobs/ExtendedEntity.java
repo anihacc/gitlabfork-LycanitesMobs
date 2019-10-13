@@ -197,7 +197,7 @@ public class ExtendedEntity implements IExtendedEntity {
 			this.entity.fallDistance = 0;
 			if (!this.entity.getEntityWorld().isRemote && this.entity instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) this.entity;
-				player.capabilities.allowFlying = true;
+				player.capabilities.isFlying = true;
 				this.entity.noClip = true;
 			}
 		}
@@ -223,7 +223,7 @@ public class ExtendedEntity implements IExtendedEntity {
                     this.playerIsFlyingSnapshot = ((EntityPlayer)this.entity).capabilities.isFlying;
                 }
 				else {
-                    ((EntityPlayer)this.entity).capabilities.allowFlying = this.playerAllowFlyingSnapshot;
+                    //((EntityPlayer)this.entity).capabilities.allowFlying = this.playerAllowFlyingSnapshot;
                     ((EntityPlayer)this.entity).capabilities.isFlying = this.playerIsFlyingSnapshot;
                     this.entity.noClip = false;
                 }

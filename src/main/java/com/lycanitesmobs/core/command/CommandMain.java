@@ -300,6 +300,13 @@ public class CommandMain implements ICommand {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
+
+			// Packet:
+			if("packet".equalsIgnoreCase(args[1])) {
+				beastiary.sendAllToClient();
+				commandSender.sendMessage(new TextComponentString("Force sent a full Beastiary update packet."));
+				return;
+			}
 		}
 		
 		// Mob Event:

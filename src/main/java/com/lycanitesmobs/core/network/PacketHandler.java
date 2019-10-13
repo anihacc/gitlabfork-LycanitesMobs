@@ -36,6 +36,7 @@ public class PacketHandler {
 		
 		// Client to Server:
 		this.network.registerMessage(MessageEntityGUICommand.class, MessageEntityGUICommand.class, messageID++, Side.SERVER);
+		this.network.registerMessage(MessageSyncRequest.class, MessageSyncRequest.class, messageID++, Side.SERVER);
 		this.network.registerMessage(MessageGUIRequest.class, MessageGUIRequest.class, messageID++, Side.SERVER);
 		this.network.registerMessage(MessagePlayerControl.class, MessagePlayerControl.class, messageID++, Side.SERVER);
         this.network.registerMessage(MessagePlayerAttack.class, MessagePlayerAttack.class, messageID++, Side.SERVER);

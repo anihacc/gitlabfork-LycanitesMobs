@@ -10,7 +10,6 @@ import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.EntityHitArea;
-import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -65,7 +64,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.0.11";
+	public static final String versionNumber = "2.0.0.12";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -134,7 +133,7 @@ public class LycanitesMobs {
 		config.setCategoryComment("Player", "Settings for player related stats and features.");
 
 		// Event Listeners:
-		MinecraftForge.EVENT_BUS.register(new EventListener());
+		MinecraftForge.EVENT_BUS.register(new GameEventListener());
 		MinecraftForge.EVENT_BUS.register(CreatureManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(ProjectileManager.getInstance());
 
