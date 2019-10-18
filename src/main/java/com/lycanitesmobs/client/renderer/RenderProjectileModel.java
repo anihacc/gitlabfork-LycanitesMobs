@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.client.model.ModelCustom;
 import net.minecraft.client.model.ModelBase;

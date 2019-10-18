@@ -1,8 +1,8 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityFear;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
 import net.minecraft.entity.Entity;
@@ -37,7 +37,7 @@ public class ExtendedEntity implements IExtendedEntity {
 	private int pickedUpByEntityID;
 
     // Fear:
-	public EntityFear fearEntity;
+	public FearEntity fearEntity;
 
     // Force Remove:
     boolean forceRemoveChecked = false;
@@ -267,7 +267,7 @@ public class ExtendedEntity implements IExtendedEntity {
     }
 	
 	public boolean isFeared() {
-		return this.pickedUpByEntity instanceof EntityFear;
+		return this.pickedUpByEntity instanceof FearEntity;
 	}
 
 

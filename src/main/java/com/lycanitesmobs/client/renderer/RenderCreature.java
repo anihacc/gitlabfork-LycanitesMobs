@@ -1,11 +1,11 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.client.model.ModelCustom;
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.lang.reflect.InvocationTargetException;
 
 @SideOnly(Side.CLIENT)
-public class RenderCreature extends RenderLiving<EntityCreatureBase> {
+public class RenderCreature extends RenderLiving<BaseCreatureEntity> {
 	public boolean multipass = true;
 	protected ModelBase defaultModel;
 
@@ -59,7 +59,7 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 	}
 
 	@Override
-	public void doRender(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		try {
 			this.mainModel = AssetManager.getCreatureModel(entity);
 		} catch (Exception e) {
@@ -75,17 +75,17 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
 	}
 
 	@Override
-	public void renderMultipass(EntityCreatureBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void renderMultipass(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		//super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	@Override
-	protected void renderModel(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
 	@Override
-	protected void renderLayers(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderLayers(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderLayers(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
     
@@ -95,7 +95,7 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
  	// ==================================================
     // ========== Main ==========
     @Override
-    protected boolean bindEntityTexture(EntityCreatureBase entity) {
+    protected boolean bindEntityTexture(BaseCreatureEntity entity) {
         ResourceLocation texture = this.getEntityTexture(entity);
         if(texture == null)
             return false;
@@ -104,8 +104,8 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
     }
     
     @Override
-    protected ResourceLocation getEntityTexture(EntityCreatureBase entity) {
-    	if(entity instanceof EntityCreatureBase)
+    protected ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
+    	if(entity instanceof BaseCreatureEntity)
     		return entity.getTexture();
         return null;
     }
@@ -116,8 +116,8 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
     }
     
     protected ResourceLocation getEquipmentTexture(Entity entity, String equipmentName) {
-    	if(entity instanceof EntityCreatureBase)
-    		return ((EntityCreatureBase)entity).getEquipmentTexture(equipmentName);
+    	if(entity instanceof BaseCreatureEntity)
+    		return ((BaseCreatureEntity)entity).getEquipmentTexture(equipmentName);
         return null;
     }
     
@@ -126,21 +126,21 @@ public class RenderCreature extends RenderLiving<EntityCreatureBase> {
   	//                     Effects
   	// ==================================================
     @Override
-    protected void preRenderCallback(EntityCreatureBase entity, float particleTickTime) {
+    protected void preRenderCallback(BaseCreatureEntity entity, float particleTickTime) {
         // No effects.
     }
     
     /** If true, display the name of the entity above it. **/
     @Override
-    protected boolean canRenderName(EntityCreatureBase entity) {
+    protected boolean canRenderName(BaseCreatureEntity entity) {
         if(!Minecraft.isGuiEnabled()) return false;
     	if(entity == this.renderManager.renderViewEntity) return false;
     	if(entity.isInvisibleToPlayer(Minecraft.getMinecraft().player)) return false;
     	if(entity.getControllingPassenger() != null) return false;
     	
     	if(entity.getAlwaysRenderNameTagForRender()) {
-    		if(entity instanceof EntityCreatureTameable)
-    			if(((EntityCreatureTameable)entity).isTamed())
+    		if(entity instanceof TameableCreatureEntity)
+    			if(((TameableCreatureEntity)entity).isTamed())
     				return entity == this.renderManager.pointedEntity;
     		return true;
     	}

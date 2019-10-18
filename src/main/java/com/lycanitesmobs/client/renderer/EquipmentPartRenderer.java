@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.model.ModelItemBase;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;

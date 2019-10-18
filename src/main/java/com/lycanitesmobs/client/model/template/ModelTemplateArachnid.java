@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.model.template;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -66,8 +66,8 @@ public class ModelTemplateArachnid extends ModelObj {
 
         // Flying:
         if(entity != null && !entity.onGround && !entity.isInWater()) {
-            if(entity instanceof EntityCreatureBase) {
-                EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+            if(entity instanceof BaseCreatureEntity) {
+                BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
                 if(entityCreature.isFlying()) {
                     float bob = -MathHelper.sin(loop * 0.2F) * 0.3F;
                     if(bob < 0)

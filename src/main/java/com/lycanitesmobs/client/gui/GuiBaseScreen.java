@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.gui.FontRenderer;

@@ -1,15 +1,16 @@
-package com.lycanitesmobs.core.entity.ai;
+package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ai.EntityAITargetAttack;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.Village;
 
-public class EntityAIDefendVillage extends EntityAITargetAttack {
+public class DefendVillageGoal extends EntityAITargetAttack {
 
 	protected Village village;
 
-	public EntityAIDefendVillage(EntityCreatureBase setHost)
+	public DefendVillageGoal(BaseCreatureEntity setHost)
 	{
 		super(setHost);
 		this.setMutexBits(1);

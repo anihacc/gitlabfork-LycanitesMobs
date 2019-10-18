@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -32,7 +32,7 @@ public class AssetManager {
 	// ========== Texture ==========
 	public static void addTexture(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		textures.put(name, new ResourceLocation(modInfo.filename, path));
+		textures.put(name, new ResourceLocation(modInfo.modid, path));
 	}
 	
 	// ========== Texture Group ==========
@@ -40,14 +40,14 @@ public class AssetManager {
 		name = name.toLowerCase();
         ResourceLocation[] textureGroup = new ResourceLocation[paths.length];
 		for(int i = 0; i < paths.length; i++)
-            textureGroup[i] = new ResourceLocation(modInfo.filename, paths[i]);
+            textureGroup[i] = new ResourceLocation(modInfo.modid, paths[i]);
         textureGroups.put(name, textureGroup);
 	}
 	
 	// ========== Sound ==========
 	public static void addSound(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-        ResourceLocation resourceLocation = new ResourceLocation(modInfo.filename, path);
+        ResourceLocation resourceLocation = new ResourceLocation(modInfo.modid, path);
         SoundEvent soundEvent = new SoundEvent(resourceLocation);
         soundEvent.setRegistryName(resourceLocation);
 		sounds.put(name, soundEvent);
@@ -63,7 +63,7 @@ public class AssetManager {
 	// ========== Obj Model ==========
 	public static void addObjModel(String name, ModInfo modInfo, String path) {
 		name = name.toLowerCase();
-		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(modInfo.filename, "models/" + path + ".obj")));
+		objModels.put(name, ModelObjOld.loadModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj")));
 	}
 
 	// ========== Item Model ==========
@@ -112,7 +112,7 @@ public class AssetManager {
 		return models.get(name);
 	}
 
-	public static ModelBase getCreatureModel(EntityCreatureBase entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	public static ModelBase getCreatureModel(BaseCreatureEntity entityCreature) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (entityCreature.creatureInfo == null) {
 			return null;
 		}

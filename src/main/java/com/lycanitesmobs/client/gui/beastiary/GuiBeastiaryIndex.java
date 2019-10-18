@@ -1,10 +1,10 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiIndexList;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiIndexList;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 

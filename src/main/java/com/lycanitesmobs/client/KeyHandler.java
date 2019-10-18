@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.*;
 import com.lycanitesmobs.client.gui.beastiary.GuiBeastiaryCreatures;

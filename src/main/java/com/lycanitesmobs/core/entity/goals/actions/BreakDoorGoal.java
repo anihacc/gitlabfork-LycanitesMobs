@@ -1,19 +1,19 @@
-package com.lycanitesmobs.core.entity.ai;
+package com.lycanitesmobs.core.entity.goals.actions;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 
-public class EntityAIBreakDoor extends EntityAIDoorInteract {
+public class BreakDoorGoal extends DoorInteractGoal {
 	//Properties:
     private int breakingTime;
     private int lastBreakTime = -1;
 
-	
+
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIBreakDoor(EntityLiving setHost) {
+    public BreakDoorGoal(EntityLiving setHost) {
         super(setHost);
     }
 

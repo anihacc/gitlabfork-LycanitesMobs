@@ -1,13 +1,13 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiElementDescriptionList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiElementList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiElementDescriptionList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiElementList;
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 
 import java.io.IOException;
 

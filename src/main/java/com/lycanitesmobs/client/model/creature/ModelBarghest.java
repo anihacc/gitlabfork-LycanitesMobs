@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.creature;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -99,7 +99,7 @@ public class ModelBarghest extends ModelObjOld {
         }
 
         // Attack:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
             if(partName.equals("mouth")) {
                 rotX -= 15.0F;
             }

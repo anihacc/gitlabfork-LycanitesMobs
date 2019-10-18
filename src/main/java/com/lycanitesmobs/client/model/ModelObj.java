@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -113,7 +113,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 		}
 
         // Load Obj Model:
-        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
+        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
@@ -122,7 +122,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 		this.animator = new Animator();
 
         // Load Model Parts:
-        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_parts.json");
+        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
             InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(modelPartsLocation).getInputStream();
@@ -152,7 +152,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
         }
 
 		// Load Animations:
-		ResourceLocation animationLocation = new ResourceLocation(groupInfo.filename, "models/" + path + "_animation.json");
+		ResourceLocation animationLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 			InputStream in = Minecraft.getMinecraft().getResourceManager().getResource(animationLocation).getInputStream();
@@ -227,9 +227,9 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 			scale = -scale;
 		}
 		else {
-			if(entity instanceof EntityCreatureBase) {
+			if(entity instanceof BaseCreatureEntity) {
 				scale *= 16;
-                scale *= ((EntityCreatureBase)entity).getRenderScale();
+                scale *= ((BaseCreatureEntity)entity).getRenderScale();
             }
 			else if(entity instanceof EntityProjectileBase) {
 				scale *= 4;
@@ -238,8 +238,8 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 		}
 
 		// GUI Render:
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase creature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creature = (BaseCreatureEntity)entity;
 			if(creature.onlyRenderTicks >= 0) {
 				loop = creature.onlyRenderTicks;
 			}
@@ -465,9 +465,9 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
     //                   Attack Frame
     // ==================================================
     public void updateAttackProgress(Entity entity) {
-        if(this.currentModelState == null || !(entity instanceof EntityCreatureBase))
+        if(this.currentModelState == null || !(entity instanceof BaseCreatureEntity))
             return;
-        EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+        BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 
         if(this.currentModelState.attackAnimationPlaying) {
             if (this.currentModelState.attackAnimationIncreasing) {

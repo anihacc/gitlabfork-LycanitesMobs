@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelCustom;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
@@ -14,7 +14,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class LayerBase implements LayerRenderer<EntityCreatureBase> {
+public class LayerBase implements LayerRenderer<BaseCreatureEntity> {
     public RenderCreature renderer;
     public String name;
 
@@ -31,7 +31,7 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     //                  Render Layer
     // ==================================================
     @Override
-    public void doRenderLayer(EntityCreatureBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void doRenderLayer(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() instanceof ModelCustom) {
@@ -42,7 +42,7 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
         }
     }
 
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity == null)
             return false;
         if(entity.isInvisible() && entity.isInvisibleToPlayer(Minecraft.getMinecraft().player))
@@ -54,22 +54,22 @@ public class LayerBase implements LayerRenderer<EntityCreatureBase> {
     // ==================================================
     //                      Visuals
     // ==================================================
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return null;
     }
 
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         if(this.renderer.getMainModel() instanceof ModelCustom) {
             ((ModelCustom)this.renderer.getMainModel()).canBaseRenderPart(partName, entity, trophy);
         }
         return true;
     }
 
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+    public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
         return new Vector2f(0, 0);
     }
 

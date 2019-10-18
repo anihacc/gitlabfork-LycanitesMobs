@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
@@ -50,8 +50,8 @@ public class ModelArgus extends ModelTemplateElemental {
 	// ==================================================
 	@Override
 	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
-		if(layer instanceof LayerEffect && entity instanceof EntityCreatureBase) {
-			return ((EntityCreatureBase)entity).isAttackOnCooldown();
+		if(layer instanceof LayerEffect && entity instanceof BaseCreatureEntity) {
+			return ((BaseCreatureEntity)entity).isAttackOnCooldown();
 		}
 		return true;
 	}

@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.gui.beastiary.list;
+package com.lycanitesmobs.client.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiaryElements;
+import com.lycanitesmobs.client.gui.beastiary.GuiBeastiaryElements;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 import net.minecraft.client.Minecraft;

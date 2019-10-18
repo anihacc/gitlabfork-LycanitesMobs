@@ -1,15 +1,15 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureDescriptionList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiCreatureTypeList;
-import com.lycanitesmobs.core.gui.beastiary.list.GuiSubspeciesList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiCreatureDescriptionList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiCreatureList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiCreatureTypeList;
+import com.lycanitesmobs.client.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 

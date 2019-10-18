@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.layer.LayerEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerSaddle;
 import com.lycanitesmobs.client.renderer.RenderCreature;
@@ -70,8 +70,8 @@ public class ModelCustom extends ModelBase {
 
     public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
         float sizeScale = 1F;
-		if(entity instanceof EntityCreatureBase) {
-            sizeScale *= ((EntityCreatureBase) entity).getRenderScale();
+		if(entity instanceof BaseCreatureEntity) {
+            sizeScale *= ((BaseCreatureEntity) entity).getRenderScale();
         }
     	GL11.glScalef(sizeScale, sizeScale, sizeScale);
     	GL11.glTranslatef(0, 0.5f - sizeScale / 2, 0);
@@ -88,8 +88,8 @@ public class ModelCustom extends ModelBase {
     public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
         if(layer == null)
             return this.canBaseRenderPart(partName, entity, trophy);
-        if(entity instanceof EntityCreatureBase)
-            return layer.canRenderPart(partName, (EntityCreatureBase)entity, trophy);
+        if(entity instanceof BaseCreatureEntity)
+            return layer.canRenderPart(partName, (BaseCreatureEntity)entity, trophy);
         return false;
     }
 
@@ -104,9 +104,9 @@ public class ModelCustom extends ModelBase {
     // ==================================================
     /** Returns the coloring to be used for this part and layer. **/
     public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
-        if(layer == null || !(entity instanceof EntityCreatureBase))
+        if(layer == null || !(entity instanceof BaseCreatureEntity))
             return this.getBasePartColor(partName, entity, trophy, loop);
-        return layer.getPartColor(partName, (EntityCreatureBase)entity, trophy);
+        return layer.getPartColor(partName, (BaseCreatureEntity)entity, trophy);
     }
 
     /** Returns the coloring to be used for this part on the base layer. **/
@@ -120,9 +120,9 @@ public class ModelCustom extends ModelBase {
 	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
 	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
-		if(layer == null || !(entity instanceof EntityCreatureBase))
+		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
-		return layer.getTextureOffset(partName, (EntityCreatureBase)entity, trophy, loop);
+		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/

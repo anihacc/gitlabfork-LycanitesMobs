@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.creature;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -97,7 +97,7 @@ public class ModelSerpix extends ModelObjOld {
         }
 
         // Attack:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
             if(partName.equals("mouthleft"))
                 rotY -= 15F;
             if(partName.equals("mouthright"))
@@ -108,7 +108,7 @@ public class ModelSerpix extends ModelObjOld {
     	
     	// Walking:
     	float walkSwing = 0.8F;
-    	if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).getStealth() > 0 && ((EntityCreatureBase)entity).getStealth() < 1)
+    	if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).getStealth() > 0 && ((BaseCreatureEntity)entity).getStealth() < 1)
     		time = loop;
     	time /= 2;
     	if(partName.equals("head") || partName.contains("mouth")) {
@@ -166,8 +166,8 @@ public class ModelSerpix extends ModelObjOld {
     	}
     	
     	// Stealth:
-    	if(entity instanceof EntityCreatureBase)
-    		posY -= (2 * ((EntityCreatureBase)entity).getStealth());
+    	if(entity instanceof BaseCreatureEntity)
+    		posY -= (2 * ((BaseCreatureEntity)entity).getStealth());
     	
     	// Apply Animations:
     	translate(posX, posY, posZ);

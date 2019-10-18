@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -94,7 +94,7 @@ public class ModelObjOld extends ModelCustom {
 			return this;
 		}
 
-		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.filename, "models/" + path + ".obj"));
+		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
         this.wavefrontParts = this.wavefrontObject.objObjects;
         if(this.wavefrontParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
@@ -127,14 +127,14 @@ public class ModelObjOld extends ModelCustom {
 		}
 		else {
 			scale *= 16;
-			if(entity instanceof EntityCreatureBase) {
-                scale *= ((EntityCreatureBase)entity).getRenderScale();
+			if(entity instanceof BaseCreatureEntity) {
+                scale *= ((BaseCreatureEntity)entity).getRenderScale();
             }
 		}
 
 		// GUI Render:
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase creature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creature = (BaseCreatureEntity)entity;
 			if(creature.onlyRenderTicks >= 0) {
 				loop = creature.onlyRenderTicks;
 			}

@@ -239,7 +239,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     // Targets:
 	/** A list of Entity Classes that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
-	protected List<Class<Entity>> hostileTargets = new ArrayList<>();
+	protected List<Class<? extends Entity>> hostileTargets = new ArrayList<>();
     /** A target used for alpha creatures or connected mobs such as following concapede segements. **/
     private EntityLivingBase masterTarget;
     /** A target used usually for child mobs or connected mobs such as leading concapede segments. **/
@@ -259,7 +259,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	/** The amount of ticks to wait before a GUI refresh. **/
 	public int guiRefreshTime = 2;
     /** The cooldown between basic attacks in ticks. Set server side based on AI with an initial value. Used client side to perform attack animations and for cooldown states, etc. **/
-	private int attackCooldownMax = 5;
+	protected int attackCooldownMax = 5;
 	/** The current cooldown time remaining until the next basic attack is ready. Used client side for attack animations. **/
 	private int attackCooldown = 0;
     /** True if this mob should play a sound when attacking. Ranged mobs usually don't use this as their projectiles makes an attack sound instead. **/
@@ -3025,7 +3025,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
 
 	/** Marks this creature as hostile towards the provided entity. **/
-	public void setHostileTo(Class<Entity> targetClass) {
+	public void setHostileTo(Class<? extends Entity> targetClass) {
 		if(this.hostileTargets == null)
 			this.hostileTargets = new ArrayList<>();
 		if(this.hostileTargets.contains(targetClass))
@@ -3434,10 +3434,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			return false;
 		if((entity.getRidingEntity() != null && !(entity.getRidingEntity() instanceof EntityBoat) && !(entity.getRidingEntity() instanceof EntityMinecart)) || entity.getControllingPassenger() != null)
 			return false;
-        if(ObjectManager.getPotionEffect("weight") != null)
-            if((entity).isPotionActive(ObjectManager.getPotionEffect("weight")))
+        if(ObjectManager.getEffect("weight") != null)
+            if((entity).isPotionActive(ObjectManager.getEffect("weight")))
                 return false;
-		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof EntityFear;
+		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof FearEntity;
     }
     
     public void pickupEntity(EntityLivingBase entity) {
@@ -3726,12 +3726,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     
     // ========== Perform Command ==========
     /** Performs the given interact command. Could be used outside of the interact method if needed. **/
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Leash:
     	if("Leash".equals(command)) {
     		this.setLeashHolder(player, true);
     		this.consumePlayersItem(player, itemStack);
+			return true;
     	}
     	
     	// Name Tag:
@@ -3743,8 +3744,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             if(colorID != this.getColor()) {
                 this.setColor(colorID);
         		this.consumePlayersItem(player, itemStack);
+				return true;
             }
     	}
+
+		return false;
     }
     
     // ========== Can Name Tag ==========
@@ -4002,6 +4006,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public void setInWeb() { if(!webProof()) super.setInWeb(); }
     
     // Breathing:
+	/** If false, this mob will lose air when above water or lava if isLavaCreature is true. **/
+	public boolean canBreatheAir() {
+		return true;
+	}
+
     /** If true, this mob wont lose air when underwater. **/
     @Override
     public boolean canBreatheUnderwater() {
@@ -4010,8 +4019,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     			return true;
     	return false;
     }
-    /** If false, this mob will lose air when above water or lava if isLavaCreature is true. **/
-    public boolean canBreatheAir() { return true; }
+
+	/** If true, this creature will gain air when in contact with lava. **/
+	public boolean canBreatheUnderlava() {
+		return true;
+	}
+
     /** Sets the current amount of air this mob has. **/
 	@Override
 	public void setAir(int air) {

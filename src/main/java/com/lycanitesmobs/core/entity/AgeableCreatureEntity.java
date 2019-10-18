@@ -13,18 +13,19 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
+public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	// Size:
     private float scaledWidth = -1.0F;
     private float scaledHeight;
     
     // Targets:
-    private EntityCreatureAgeable breedingTarget;
+    private AgeableCreatureEntity breedingTarget;
     
     // Growth:
     public int growthTime = -24000;
@@ -45,7 +46,7 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureAgeable(World world) {
+	public AgeableCreatureEntity(World world) {
 		super(world);
 	}
     
@@ -195,7 +196,7 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Spawn Baby:
     	if(command.equals("Spawn Baby") && !this.getEntityWorld().isRemote) {
@@ -203,7 +204,7 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
 			CreatureInfo spawnEggCreatureInfo = itemCustomSpawnEgg.getCreatureInfo(itemStack);
 			if(spawnEggCreatureInfo != null) {
 				if (spawnEggCreatureInfo.entityClass != null && spawnEggCreatureInfo.entityClass.isAssignableFrom(this.getClass())) {
-					EntityCreatureAgeable baby = this.createChild(this);
+					AgeableCreatureEntity baby = this.createChild(this);
 					if (baby != null) {
 						baby.setGrowingAge(baby.growthTime);
 						baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
@@ -216,15 +217,18 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
 					}
 				}
 			}
+			return true;
     	}
     	
     	// Breed:
     	if(command.equals("Breed")) {
-    		if(this.breed())
-    			this.consumePlayersItem(player, itemStack);
+    		if(this.breed()) {
+				this.consumePlayersItem(player, itemStack);
+				return true;
+			}
     	}
-    	
-    	super.performCommand(command, player, itemStack);
+
+		return super.performCommand(command, player, itemStack);
     }
 	
 	
@@ -298,23 +302,24 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
     public boolean canBeTempted() { return !this.isInLove(); }
 
 	// ========== Targets ==========
-	public EntityCreatureAgeable getBreedingTarget() { return this.breedingTarget; }
-	public void setBreedingTarget(EntityCreatureAgeable target) { this.breedingTarget = target; }
+	public AgeableCreatureEntity getBreedingTarget() { return this.breedingTarget; }
+	public void setBreedingTarget(AgeableCreatureEntity target) { this.breedingTarget = target; }
 	
     // ========== Create Child ==========
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable partener) {
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partener) {
 		return null;
 	}
 	
 	// ========== Breeding Item ==========
 	public boolean isBreedingItem(ItemStack itemStack) {
-		return itemStack != null
-				&& itemStack.getItem() == null
-				&& itemStack.getItemDamage() == -1;
+		if(!this.creatureInfo.isFarmable() || this.getAir() <= -100) {
+			return false;
+		}
+		return this.creatureInfo.canEat(itemStack);
     }
 	
 	// ========== Valid Partner ==========
-	public boolean canBreedWith(EntityCreatureAgeable partner) {
+	public boolean canBreedWith(AgeableCreatureEntity partner) {
 		if(partner == this) return false;
 		if(partner.getClass() != this.getClass()) return false;
 		return this.isInLove() && partner.isInLove();
@@ -338,8 +343,8 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
     }
 	
 	// ========== Procreate ==========
-	public void procreate(EntityCreatureAgeable partner) {
-		EntityCreatureAgeable baby = this.createChild(partner);
+	public void procreate(AgeableCreatureEntity partner) {
+		AgeableCreatureEntity baby = this.createChild(partner);
 
         if(baby != null) {
             this.finishBreeding();
@@ -362,7 +367,7 @@ public abstract class EntityCreatureAgeable extends BaseCreatureEntity {
         }
     }
 
-	public void onCreateBaby(EntityCreatureAgeable partner, EntityCreatureAgeable baby) {
+	public void onCreateBaby(AgeableCreatureEntity partner, AgeableCreatureEntity baby) {
 
 	}
 	

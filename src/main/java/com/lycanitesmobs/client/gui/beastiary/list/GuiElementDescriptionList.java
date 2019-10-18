@@ -1,18 +1,13 @@
-package com.lycanitesmobs.core.gui.beastiary.list;
+package com.lycanitesmobs.client.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureKnowledge;
+import com.lycanitesmobs.client.gui.beastiary.GuiBeastiary;
 import com.lycanitesmobs.core.info.ElementInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.GuiScrollingList;
 import net.minecraftforge.fml.client.config.GuiUtils;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class GuiElementDescriptionList extends GuiScrollingList {
 	protected GuiBeastiary parentGui;

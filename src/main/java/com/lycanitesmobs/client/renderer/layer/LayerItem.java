@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -78,7 +78,7 @@ public class LayerItem {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		return entity.getTexture(this.textureSuffix);
     }
 

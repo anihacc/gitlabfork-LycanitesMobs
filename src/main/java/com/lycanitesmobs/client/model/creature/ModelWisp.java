@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
@@ -97,7 +97,7 @@ public class ModelWisp extends ModelTemplateElemental {
 		else if(partName.equals("armright")) {
 			this.rotate(0, 0, -(float)Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F));
 		}
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 			if (partName.equals("armleft"))
 				rotate(0F, 25.0F, 25.0F);
 			if (partName.equals("armright"))
@@ -111,7 +111,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	// ==================================================
 	@Override
 	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
-		if(partName.contains("ball") && entity instanceof EntityCreatureBase && ((EntityCreatureBase) entity).isAttackOnCooldown()) {
+		if(partName.contains("ball") && entity instanceof BaseCreatureEntity && ((BaseCreatureEntity) entity).isAttackOnCooldown()) {
 			return false;
 		}
 		if(partName.equals("ball01")) {

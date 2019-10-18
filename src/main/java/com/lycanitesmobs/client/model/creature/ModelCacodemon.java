@@ -1,9 +1,9 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 
 import net.minecraft.entity.EntityLiving;
@@ -79,8 +79,8 @@ public class ModelCacodemon extends ModelObjOld {
 		}
     	
 		// Attack:
-    	if((entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown())
-    			|| (entity instanceof EntityCreatureAgeable && ((EntityCreatureAgeable)entity).isInLove())) {
+    	if((entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
+    			|| (entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isInLove())) {
 			if(partName.equals("topmouth"))
 				rotate(-25F, rotY, rotZ);
 			if(partName.equals("bottommouth"))
@@ -89,7 +89,7 @@ public class ModelCacodemon extends ModelObjOld {
 		}
 		
 		// Sit:
-    	if((entity instanceof EntityCreatureTameable && ((EntityCreatureTameable)entity).isSitting())) {
+    	if((entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting())) {
 			if(partName.equals("topmouth"))
 				rotate(5F, rotY, rotZ);
 			if(partName.equals("bottommouth"))

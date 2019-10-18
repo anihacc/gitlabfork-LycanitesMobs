@@ -1,12 +1,12 @@
-package com.lycanitesmobs.core.gui.beastiary;
+package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.GuiBaseScreen;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.client.gui.GuiBaseScreen;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -20,7 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.io.IOException;
@@ -365,20 +365,20 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 		try {
 			// Subspecies:
 			boolean subspeciesMatch = true;
-			if(this.creaturePreviewEntity instanceof EntityCreatureBase) {
-				subspeciesMatch = ((EntityCreatureBase)this.creaturePreviewEntity).getSubspeciesIndex() == this.getDisplaySubspecies(creatureInfo);
+			if(this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+				subspeciesMatch = ((BaseCreatureEntity)this.creaturePreviewEntity).getSubspeciesIndex() == this.getDisplaySubspecies(creatureInfo);
 			}
 
 			// Create New:
 			if(this.creaturePreviewEntity == null || this.creaturePreviewEntity.getClass() != creatureInfo.entityClass || !subspeciesMatch) {
 				this.creaturePreviewEntity = creatureInfo.entityClass.getConstructor(new Class[]{World.class}).newInstance(this.player.getEntityWorld());
 				this.creaturePreviewEntity.onGround = true;
-				if (this.creaturePreviewEntity instanceof EntityCreatureBase) {
-					((EntityCreatureBase) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
-					((EntityCreatureBase) this.creaturePreviewEntity).updateSize();
+				if (this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+					((BaseCreatureEntity) this.creaturePreviewEntity).setSubspecies(this.getDisplaySubspecies(creatureInfo));
+					((BaseCreatureEntity) this.creaturePreviewEntity).updateSize();
 				}
-				if (this.creaturePreviewEntity instanceof EntityCreatureAgeable) {
-					((EntityCreatureAgeable) this.creaturePreviewEntity).setGrowingAge(0);
+				if (this.creaturePreviewEntity instanceof AgeableCreatureEntity) {
+					((AgeableCreatureEntity) this.creaturePreviewEntity).setGrowingAge(0);
 				}
 				this.onCreateDisplayEntity(creatureInfo, this.creaturePreviewEntity);
 				this.playCreatureSelectSound(creatureInfo);
@@ -395,8 +395,8 @@ public abstract class GuiBeastiary extends GuiBaseScreen {
 				float lookX = (float)posX - mouseX;
 				float lookY = (float)posY - mouseY;
 				this.creaturePreviewTicks += partialTicks;
-				if(this.creaturePreviewEntity instanceof EntityCreatureBase) {
-					EntityCreatureBase previewCreatureBase = (EntityCreatureBase)this.creaturePreviewEntity;
+				if(this.creaturePreviewEntity instanceof BaseCreatureEntity) {
+					BaseCreatureEntity previewCreatureBase = (BaseCreatureEntity)this.creaturePreviewEntity;
 					previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
 				}
 

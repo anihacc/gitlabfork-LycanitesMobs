@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.model.template;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -58,12 +58,12 @@ public class ModelTemplateElemental extends ModelObj {
         }
 
         // Attack:
-        if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
-            EntityCreatureBase entityCreatureBase = (EntityCreatureBase)entity;
-            if(entityCreatureBase.attackPhaseMax > 0) {
-				if (partName.equals("armleft") && entityCreatureBase.getAttackPhase() == 2)
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
+            BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)entity;
+            if(baseCreatureEntity.attackPhaseMax > 0) {
+				if (partName.equals("armleft") && baseCreatureEntity.getAttackPhase() == 2)
 					rotate(0.0F, -25.0F, 0.0F);
-				if (partName.equals("armright") && entityCreatureBase.getAttackPhase() != 2)
+				if (partName.equals("armright") && baseCreatureEntity.getAttackPhase() != 2)
 					rotate(0.0F, 25.0F, 0.0F);
 			}
 			else {

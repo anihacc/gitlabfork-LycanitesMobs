@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.entity;
+package com.lycanitesmobs.core.entity.damagesources;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

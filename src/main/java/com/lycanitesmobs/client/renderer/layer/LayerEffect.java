@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -55,12 +55,12 @@ public class LayerEffect extends LayerBase {
     //                      Visuals
     // ==================================================
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 1);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		return entity.getTexture(this.textureSuffix);
     }
 
@@ -93,7 +93,7 @@ public class LayerEffect extends LayerBase {
 	}
 
 	@Override
-	public Vector2f getTextureOffset(String partName, EntityCreatureBase entity, boolean trophy, float loop) {
+	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
     	if(this.scrollSpeed == null) {
 			this.scrollSpeed = new Vector2f(0, 0);
 		}

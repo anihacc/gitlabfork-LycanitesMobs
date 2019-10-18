@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.client.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyRiderAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeRiderGoal;
@@ -22,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityCreatureRideable extends EntityCreatureTameable {
+public class RideableCreatureEntity extends TameableCreatureEntity {
 
     public Entity lastRiddenByEntity = null;
 
@@ -36,7 +35,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureRideable(World world) {
+	public RideableCreatureEntity(World world) {
 		super(world);
 		this.hasJumpSound = true;
 	}
@@ -382,7 +381,7 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Mount:
     	if(command.equals("Mount")) {
@@ -390,9 +389,10 @@ public class EntityCreatureRideable extends EntityCreatureTameable {
             this.clearMovement();
             this.setAttackTarget(null);
             this.mount(player);
+            return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
     
     

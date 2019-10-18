@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.KeyHandler;
+import com.lycanitesmobs.client.KeyHandler;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 

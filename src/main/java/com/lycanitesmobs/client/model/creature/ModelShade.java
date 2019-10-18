@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
@@ -52,7 +52,7 @@ public class ModelShade extends ModelTemplateBiped {
    	// ==================================================
     @Override
     public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-    	if(entity instanceof EntityCreatureBase && entity.getControllingPassenger() != null) {
+    	if(entity instanceof BaseCreatureEntity && entity.getControllingPassenger() != null) {
 			time = time * 0.25F;
 			distance = distance * 0.8F;
 		}

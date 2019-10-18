@@ -1,16 +1,16 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraftforge.fml.client.GuiScrollingList;
 import org.lwjgl.opengl.GL11;
 
@@ -110,16 +110,16 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
 
         // Sitting and Following:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
+        this.buttonList.add(new GuiButton(BaseCreatureEntity.GUI_COMMAND.SITTING.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
 
         // Passive and Stance:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "..."));
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "..."));
+        this.buttonList.add(new GuiButton(BaseCreatureEntity.GUI_COMMAND.PASSIVE.id, buttonX, buttonY, buttonWidth, buttonHeight, "..."));
+        this.buttonList.add(new GuiButton(BaseCreatureEntity.GUI_COMMAND.STANCE.id, buttonXRight, buttonY, buttonWidth, buttonHeight, "..."));
 
         // PVP:
         buttonY += buttonHeight + (buttonSpacing * 2);
-        this.buttonList.add(new GuiButton(EntityCreatureBase.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
+        this.buttonList.add(new GuiButton(BaseCreatureEntity.GUI_COMMAND.PVP.id, buttonX, buttonY, buttonWidth * 2, buttonHeight, "..."));
     }
 
 
@@ -279,16 +279,16 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
 
     public void updateButtons(GuiButton button) {
         // Behaviour Buttons:
-        if (button.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
+        if (button.id == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
             button.displayString = LanguageManager.translate("gui.pet.sit") + ": " + (this.summonSet.getSitting() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
+        if (button.id == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
             button.displayString = LanguageManager.translate("gui.pet.passive") + ": " + (this.summonSet.getPassive() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
+        if (button.id == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
             button.displayString = (this.summonSet.getAggressive() ? LanguageManager.translate("gui.pet.aggressive") : LanguageManager.translate("gui.pet.defensive"));
 
-        if (button.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
+        if (button.id == BaseCreatureEntity.GUI_COMMAND.PVP.id)
             button.displayString = LanguageManager.translate("gui.pet.pvp") + ": " + (this.summonSet.getPVP() ? LanguageManager.translate("common.yes") : LanguageManager.translate("common.no"));
     }
 
@@ -309,15 +309,15 @@ public class GuiSummoningPedestal extends GuiBaseContainer {
         }
 
         // Behaviour Button:
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.SITTING.id)
+        if(guiButton.id == BaseCreatureEntity.GUI_COMMAND.SITTING.id)
             this.summonSet.sitting = !this.summonSet.sitting;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.FOLLOWING.id)
+        if(guiButton.id == BaseCreatureEntity.GUI_COMMAND.FOLLOWING.id)
             this.summonSet.following = !this.summonSet.following;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.PASSIVE.id)
+        if(guiButton.id == BaseCreatureEntity.GUI_COMMAND.PASSIVE.id)
             this.summonSet.passive = !this.summonSet.passive;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.STANCE.id)
+        if(guiButton.id == BaseCreatureEntity.GUI_COMMAND.STANCE.id)
             this.summonSet.aggressive = !this.summonSet.aggressive;
-        if(guiButton.id == EntityCreatureBase.GUI_COMMAND.PVP.id)
+        if(guiButton.id == BaseCreatureEntity.GUI_COMMAND.PVP.id)
             this.summonSet.pvp = !this.summonSet.pvp;
 
         if(guiButton.id < 100) {

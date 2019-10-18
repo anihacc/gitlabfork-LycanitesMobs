@@ -1,8 +1,8 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 
 import net.minecraft.entity.EntityLiving;
@@ -105,7 +105,7 @@ public class ModelLurker extends ModelObjOld {
 		posY += bob;
     	
     	// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 			if(partName.equals("topmiddlemouth") || partName.equals("topleftmouth") || partName.equals("toprightmouth"))
 				rotX -= 30F;
 			if(partName.equals("leftmouth"))
@@ -117,7 +117,7 @@ public class ModelLurker extends ModelObjOld {
 		}
     	
     	// Sit:
-		if(entity instanceof EntityCreatureTameable && ((EntityCreatureTameable)entity).isSitting()) {
+		if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting()) {
 			if(partName.equals("topmiddlemouth") || partName.equals("topleftmouth") || partName.equals("toprightmouth"))
 				rotX += 30F;
 			if(partName.equals("leftmouth"))

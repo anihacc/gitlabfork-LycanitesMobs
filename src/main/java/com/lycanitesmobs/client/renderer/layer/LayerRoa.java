@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import com.lycanitesmobs.core.entity.creature.EntityRoa;
 import net.minecraft.entity.Entity;
@@ -25,7 +25,7 @@ public class LayerRoa extends LayerBase {
     //                  Render Layer
     // ==================================================
     @Override
-    public boolean canRenderLayer(EntityCreatureBase entity, float scale) {
+    public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(entity instanceof EntityRoa) {
             EntityRoa entityRoa = (EntityRoa)entity;
             return entityRoa.canWhirlpool();
@@ -38,17 +38,17 @@ public class LayerRoa extends LayerBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, EntityCreatureBase entity, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
         return "effect".equals(partName);
     }
 
     @Override
-    public Vector4f getPartColor(String partName, EntityCreatureBase entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
         return new Vector4f(1, 1, 1, 0.5f);
     }
 
     @Override
-    public ResourceLocation getLayerTexture(EntityCreatureBase entity) {
+    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getSubTexture("effect");
     }
 

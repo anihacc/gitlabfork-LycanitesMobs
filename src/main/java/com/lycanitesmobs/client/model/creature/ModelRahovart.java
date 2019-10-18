@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 
 import net.minecraft.entity.EntityLiving;
@@ -100,7 +100,7 @@ public class ModelRahovart extends ModelObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * distance);
 				
 		// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("armleft"))
 	    		rotate(-40.0F, 0.0F, 0.0F);
 		}

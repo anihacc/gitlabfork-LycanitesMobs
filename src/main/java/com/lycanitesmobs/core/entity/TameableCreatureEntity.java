@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
 import com.lycanitesmobs.client.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
+import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
 import com.lycanitesmobs.core.entity.goals.actions.FollowOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.actions.StayGoal;
@@ -39,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class EntityCreatureTameable extends EntityCreatureAgeable implements IEntityOwnable {
+public class TameableCreatureEntity extends AgeableCreatureEntity implements IEntityOwnable {
 	
 	// Stats:
 	public float hunger = this.getCreatureHungerMax();
@@ -54,10 +54,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	public EntityAISit aiSit;
 
     // Datawatcher:
-    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.BYTE);
-    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(EntityCreatureBase.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
+    protected static final DataParameter<Optional<UUID>> OWNER_ID = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Float> HUNGER = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.FLOAT);
+    protected static final DataParameter<Float> STAMINA = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.FLOAT);
 
     /** Used for the TAMED WATCHER_ID, this holds a series of booleans that describe the tamed status as well as instructed behaviour. **/
 	public static enum TAMED_ID {
@@ -71,7 +71,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public EntityCreatureTameable(World world) {
+	public TameableCreatureEntity(World world) {
 		super(world);
 	}
 	
@@ -253,18 +253,20 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Open GUI:
     	if(command.equals("GUI")) {
     		this.playTameSound();
     		this.openGUI(player);
+			return true;
     	}
     	
     	// Tame:
     	if(command.equals("Tame")) {
     		this.tame(player);
     		this.consumePlayersItem(player, itemStack);
+			return true;
     	}
     	
     	// Feed:
@@ -285,6 +287,7 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 	this.getEntityWorld().spawnParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
+			return true;
     	}
     	
     	// Equip Armor:
@@ -296,7 +299,13 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     		equipStack.setCount(1);
     		this.inventory.setEquipmentStack(equipStack.copy());
     		this.consumePlayersItem(player, itemStack);
+			return true;
     	}
+
+		// Soulstone:
+		if(command.equals("Soulstone")) {
+			return false; // Allow the soulstone item to activate.
+		}
     	
     	// Sit:
     	if(command.equals("Sit")) {
@@ -305,9 +314,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
             this.clearMovement();
         	this.setSitting(!this.isSitting());
             this.isJumping = false;
+			return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
     
     // ========== Can Name Tag ==========
@@ -410,8 +420,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 			}
 
 			// Check If Tameable:
-            if(target instanceof EntityCreatureTameable) {
-            	EntityCreatureTameable tamedTarget = (EntityCreatureTameable)target;
+            if(target instanceof TameableCreatureEntity) {
+            	TameableCreatureEntity tamedTarget = (TameableCreatureEntity)target;
             	if(tamedTarget.isTamed()) {
             		if(!this.getEntityWorld().getMinecraftServer().isPVPEnabled() || !this.isPVP() || tamedTarget.getPlayerOwner() == this.getPlayerOwner()) {
 						return true;
@@ -469,8 +479,8 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
                 boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();
                 if(targetEntity instanceof EntityPlayer && !canPVP)
                     return false;
-                if(targetEntity instanceof EntityCreatureTameable) {
-                    EntityCreatureTameable targetTameable = (EntityCreatureTameable)targetEntity;
+                if(targetEntity instanceof TameableCreatureEntity) {
+                    TameableCreatureEntity targetTameable = (TameableCreatureEntity)targetEntity;
                     if(targetTameable.isTamed()) {
                         if(!canPVP)
                             return false;
@@ -699,10 +709,10 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
 	}
 
 	@Override
-	public void onCreateBaby(EntityCreatureAgeable partner, EntityCreatureAgeable baby) {
-		if(this.isTamed() && this.getOwner() instanceof EntityPlayer && partner instanceof EntityCreatureTameable && baby instanceof EntityCreatureTameable) {
-			EntityCreatureTameable partnerTameable = (EntityCreatureTameable)partner;
-			EntityCreatureTameable babyTameable = (EntityCreatureTameable)baby;
+	public void onCreateBaby(AgeableCreatureEntity partner, AgeableCreatureEntity baby) {
+		if(this.isTamed() && this.getOwner() instanceof EntityPlayer && partner instanceof TameableCreatureEntity && baby instanceof TameableCreatureEntity) {
+			TameableCreatureEntity partnerTameable = (TameableCreatureEntity)partner;
+			TameableCreatureEntity babyTameable = (TameableCreatureEntity)baby;
 			if(partnerTameable.getPlayerOwner() == this.getPlayerOwner()) {
 				babyTameable.setPlayerOwner((EntityPlayer)this.getOwner());
 			}
@@ -725,9 +735,23 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     }
     
     // ========== Feeding Food ==========
-    public boolean isHealingItem(ItemStack testStack) {
-    	return false;
+    public boolean isHealingItem(ItemStack itemStack) {
+		return this.creatureInfo.canEat(itemStack);
     }
+
+
+	// ==================================================
+	//                      Breeding
+	// ==================================================
+	@Override
+	public boolean isBreedingItem(ItemStack itemStack) {
+		if(!this.creatureInfo.isFarmable()) {
+			if (!this.isTamed() || this.isPetType("minion") || this.isPetType("familiar") || this.getHealth() < this.getMaxHealth()) {
+				return false;
+			}
+		}
+		return super.isBreedingItem(itemStack);
+	}
     
     
     // ==================================================
@@ -933,11 +957,11 @@ public class EntityCreatureTameable extends EntityCreatureAgeable implements IEn
     // ==================================================
     // ========== Create Child ==========
     @Override
- 	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-    	EntityCreatureAgeable spawnedBaby = super.createChild(baby);
+ 	public AgeableCreatureEntity createChild(AgeableCreatureEntity baby) {
+    	AgeableCreatureEntity spawnedBaby = super.createChild(baby);
     	UUID ownerId = this.getOwnerId();
-    	if(ownerId != null && spawnedBaby != null && spawnedBaby instanceof EntityCreatureTameable) {
-    		EntityCreatureTameable tamedBaby = (EntityCreatureTameable)spawnedBaby;
+    	if(ownerId != null && spawnedBaby != null && spawnedBaby instanceof TameableCreatureEntity) {
+    		TameableCreatureEntity tamedBaby = (TameableCreatureEntity)spawnedBaby;
     		tamedBaby.setOwnerId(ownerId);
     	}
     	return spawnedBaby;

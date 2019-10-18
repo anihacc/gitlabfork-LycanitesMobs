@@ -1,6 +1,5 @@
-package com.lycanitesmobs.core.localisation;
+package com.lycanitesmobs.client.localisation;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraftforge.fml.relauncher.Side;

@@ -1,8 +1,8 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.client.gui.beastiary.GuiBeastiarySummoning;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
@@ -61,8 +61,8 @@ public class ModelAegis extends ModelTemplateElemental {
 		}
 
 		// Sword Mode:
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 			if(!entityCreature.isBlocking()) {
 
 				if(partName.equals("core")) {

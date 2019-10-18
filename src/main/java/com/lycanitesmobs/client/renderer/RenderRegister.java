@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -23,7 +23,7 @@ public class RenderRegister {
             if(creatureInfo.dummy) {
                 RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryNone<EntityProjectileBase>(creatureInfo.entityClass));
             }
-            RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryCreature<EntityCreatureBase>(creatureInfo));
+            RenderingRegistry.registerEntityRenderingHandler(creatureInfo.entityClass, new RenderFactoryCreature<BaseCreatureEntity>(creatureInfo));
         }
 
         // Projectiles:

@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.localisation;
+package com.lycanitesmobs.client.localisation;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -89,7 +89,7 @@ public class LanguageManager {
 		int laodedLangFiles = 0;
 		for (String language : languageList) {
 			String languageDir = String.format("lang/%s/", language);
-			Path languageWalkPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.filename, "lang/en_us/"); // Always walk en_us files.
+			Path languageWalkPath = Utilities.getAssetPath(LycanitesMobs.modInfo.getClass(), LycanitesMobs.modInfo.modid, "lang/en_us/"); // Always walk en_us files.
 			try {
 				// Iterate Language Directories:
 				Iterator<Path> languageDirIter = Files.walk(languageWalkPath).iterator();
@@ -105,7 +105,7 @@ public class LanguageManager {
 							}
 							String languagePath = languageDir + languageSubdir + subdirPath.getFileName();
 							LycanitesMobs.logDebug("Language", "Reading translations from lang: " + languagePath + " Subdir Path:" + subdirPath.toString().replace("en_us", language));
-							ResourceLocation langLocation = new ResourceLocation(LycanitesMobs.modInfo.filename, languagePath);
+							ResourceLocation langLocation = new ResourceLocation(LycanitesMobs.modInfo.modid, languagePath);
 							getInstance().loadLocaleData(resourceManager.getResource(langLocation).getInputStream());
 							//getInstance().loadLocaleData(Files.newInputStream(subdirPath));
 						}

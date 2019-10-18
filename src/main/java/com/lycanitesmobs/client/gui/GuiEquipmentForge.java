@@ -1,6 +1,6 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
 import com.lycanitesmobs.core.inventory.ContainerBase;
@@ -10,7 +10,7 @@ import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;

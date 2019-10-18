@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 
 import net.minecraft.entity.EntityLiving;
@@ -134,14 +134,14 @@ public class ModelZoataur extends ModelObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 		
 		// Attack:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
 	    		rotate(30.0F, 0.0F, 0.0F);
 	    	}
 		}
 		
 		// Blocking:
-		if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isBlocking()) {
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isBlocking()) {
 	    	if(partName.equals("leftarm")) {
 	    		rotX += 45;
 	    		rotY += -45;

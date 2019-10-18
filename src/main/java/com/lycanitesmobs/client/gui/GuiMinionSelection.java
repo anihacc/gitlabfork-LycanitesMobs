@@ -1,7 +1,7 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureInfo;

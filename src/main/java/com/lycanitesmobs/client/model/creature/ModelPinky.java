@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.model.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelBipedCustom;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -264,10 +264,10 @@ public class ModelPinky extends ModelBipedCustom {
     	float pi = (float)Math.PI;
 
         // Custom Mob Check:
-        if(!(entity instanceof EntityCreatureBase)) return;
+        if(!(entity instanceof BaseCreatureEntity)) return;
         
         // Attack Target:
-        if(((EntityCreatureBase)entity).isAttackOnCooldown()) {
+        if(((BaseCreatureEntity)entity).isAttackOnCooldown()) {
         	bottomjaw.rotateAngleX -= (float)Math.toRadians(18);
         }
     }

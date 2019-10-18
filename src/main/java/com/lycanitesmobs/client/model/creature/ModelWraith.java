@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
@@ -59,8 +59,8 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
 		// Idle:
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 			if (entityCreature.hasAttackTarget() && partName.equals("mouth")) {
 				this.rotate(20 + (float)-Math.toDegrees(MathHelper.cos(loop) * 0.1F), 0.0F, 0.0F);
 			}

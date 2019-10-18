@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.entity.ai;
+package com.lycanitesmobs.core.entity.goals;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;

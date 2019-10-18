@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.entity.ai;
+package com.lycanitesmobs.core.entity.goals.actions;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
@@ -7,12 +7,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public abstract class EntityAIDoorInteract extends EntityAIBase {
+public abstract class DoorInteractGoal extends EntityAIBase {
 	// Targets:
     protected EntityLiving host;
     protected BlockDoor targetDoor;
@@ -25,11 +24,11 @@ public abstract class EntityAIDoorInteract extends EntityAIBase {
     float entityPositionX;
     float entityPositionZ;
 
-	
+
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIDoorInteract(EntityLiving par1EntityLiving)
+    public DoorInteractGoal(EntityLiving par1EntityLiving)
     {
         this.host = par1EntityLiving;
     }
@@ -104,8 +103,8 @@ public abstract class EntityAIDoorInteract extends EntityAIBase {
  	//                    Find Door
  	// ==================================================
     private BlockDoor findUsableDoor(BlockPos pos) {
-        IBlockState iblockstate = this.host.getEntityWorld().getBlockState(pos);
-        Block block = iblockstate.getBlock();
-        return block instanceof BlockDoor && iblockstate.getMaterial() == Material.WOOD ? (BlockDoor)block : null;
+        IBlockState IBlockState = this.host.getEntityWorld().getBlockState(pos);
+        Block block = IBlockState.getBlock();
+        return block instanceof BlockDoor && IBlockState.getMaterial() == Material.WOOD ? (BlockDoor)block : null;
     }
 }

@@ -1,14 +1,13 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.client.GuiScrollingList;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GuiSummoningPedestalList extends GuiScrollingList {

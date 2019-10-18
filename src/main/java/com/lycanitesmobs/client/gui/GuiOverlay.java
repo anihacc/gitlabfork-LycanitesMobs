@@ -1,7 +1,10 @@
-package com.lycanitesmobs.core.gui;
+package com.lycanitesmobs.client.gui;
 
 import com.lycanitesmobs.*;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.client.KeyHandler;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import net.minecraft.block.material.Material;
@@ -11,7 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -105,8 +108,8 @@ public class GuiOverlay extends GuiBase {
 		}
 		
 		// ========== Mount Stamina Bar ==========
-		if(this.mc.player.getRidingEntity() != null && this.mc.player.getRidingEntity() instanceof EntityCreatureRideable) {
-			EntityCreatureRideable mount = (EntityCreatureRideable)this.mc.player.getRidingEntity();
+		if(this.mc.player.getRidingEntity() != null && this.mc.player.getRidingEntity() instanceof RideableCreatureEntity) {
+			RideableCreatureEntity mount = (RideableCreatureEntity)this.mc.player.getRidingEntity();
             float mountStamina = mount.getStaminaPercent();
             
             // Mount Controls Message:

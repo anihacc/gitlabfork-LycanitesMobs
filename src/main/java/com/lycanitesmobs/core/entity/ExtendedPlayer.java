@@ -1,9 +1,9 @@
-package com.lycanitesmobs;
+package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.GuiHandler;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.VersionChecker;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureType;

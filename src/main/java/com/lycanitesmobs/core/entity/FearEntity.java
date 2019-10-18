@@ -16,13 +16,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityFear extends BaseCreatureEntity {
+public class FearEntity extends BaseCreatureEntity {
     public Entity fearedEntity;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityFear(World world) {
+    public FearEntity(World world) {
         super(world);
         
         // Setup:
@@ -39,7 +39,7 @@ public class EntityFear extends BaseCreatureEntity {
         this.tasks.addTask(1, new EntityAIWander(this).setPauseRate(0));
     }
 
-    public EntityFear(World world, Entity feared) {
+    public FearEntity(World world, Entity feared) {
         this(world);
         this.setFearedEntity(feared);
     }

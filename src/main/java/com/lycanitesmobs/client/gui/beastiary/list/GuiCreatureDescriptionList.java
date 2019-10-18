@@ -1,9 +1,10 @@
-package com.lycanitesmobs.core.gui.beastiary.list;
+package com.lycanitesmobs.client.gui.beastiary.list;
 
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.client.gui.beastiary.GuiBeastiary;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.client.GuiScrollingList;
@@ -75,13 +76,23 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 
 		// Taming:
 		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
+			text += "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
 		}
 
 		// Summoning:
 		if(creatureInfo.creatureType != null && creatureInfo.isSummonable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text = "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
+			text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
 		}
+
+		// Diet:
+		text += "\u00A7l" + LanguageManager.translate("gui.beastiary.diet") + ": " + "\u00A7r" + creatureInfo.getDietNames() + "\n\n";
+
+		/*/ Groups:
+		text += "\u00A7l" + LanguageManager.translate("gui.beastiary.groups") + ": " + "\u00A7r";
+		for (CreatureGroup creatureGroup : creatureInfo.getGroups()) {
+			text += creatureGroup.getName() + " ";
+		}
+		text += "\n\n";*/
 
 		// Summary:
 		text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summary") + ": " + "\u00A7r";

@@ -1,10 +1,10 @@
-package com.lycanitesmobs.core.entity.ai;
+package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ai.RandomPositionGenerator;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -15,21 +15,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class EntityAIMoveVillage extends EntityAIBase {
+public class MoveVillageGoal extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
-    
+    private BaseCreatureEntity host;
+
     // Properties:
     private double speed;
     private boolean isNocturnal = true;
     private Path entityPathNavigate;
     private VillageDoorInfo doorInfo;
     private List doorList = new ArrayList();
-	
+
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIMoveVillage(EntityCreatureBase setHost) {
+    public MoveVillageGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }
@@ -38,11 +38,11 @@ public class EntityAIMoveVillage extends EntityAIBase {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public EntityAIMoveVillage setSpeed(double setSpeed) {
+    public MoveVillageGoal setSpeed(double setSpeed) {
     	this.speed = setSpeed;
     	return this;
     }
-    public EntityAIMoveVillage setNocturnal(boolean flag) {
+    public MoveVillageGoal setNocturnal(boolean flag) {
     	this.isNocturnal = flag;
     	return this;
     }

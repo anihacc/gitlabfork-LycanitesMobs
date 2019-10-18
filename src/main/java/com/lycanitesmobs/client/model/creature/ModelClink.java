@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 
 import net.minecraft.entity.EntityLiving;
@@ -100,7 +100,7 @@ public class ModelClink extends ModelObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
     	
     	// Attacks:
-    	if(entity instanceof EntityCreatureBase && ((EntityCreatureBase)entity).isAttackOnCooldown()) {
+    	if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
 	    		subCenterPart("mouth");
 	    		rotate(30.0F, 0.0F, 0.0F);
@@ -109,11 +109,11 @@ public class ModelClink extends ModelObjOld {
 	    	if(partName.equals("rightarm")) {
     			angleX = -0.2F;
     			angleZ = 0F;
-	    		if(((EntityCreatureBase)entity).getAttackPhase() == 2) {
+	    		if(((BaseCreatureEntity)entity).getAttackPhase() == 2) {
 	    			angleY = 0.2F;
 	    			rotation = 85;
 	    		}
-	    		else if(((EntityCreatureBase)entity).getAttackPhase() == 3) {
+	    		else if(((BaseCreatureEntity)entity).getAttackPhase() == 3) {
 	    			angleY = 0.7F;
 	    			angleZ = -0.1F;
 	    			rotation = 40;
