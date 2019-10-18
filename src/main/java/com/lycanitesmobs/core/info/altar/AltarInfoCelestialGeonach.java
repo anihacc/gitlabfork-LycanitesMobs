@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.info.altar;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.entity.creature.EntityGeonach;
 import net.minecraft.block.Block;
@@ -151,7 +151,7 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityGeonach = new EntityGeonach(world);
+        BaseCreatureEntity entityGeonach = new EntityGeonach(world);
         if(checkDimensions && !entityGeonach.isNativeDimension(world))
             return false;
 

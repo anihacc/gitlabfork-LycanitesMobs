@@ -29,8 +29,8 @@ public class ItemFoodBattleBurrito extends ItemCustomFood {
         super.onFoodEaten(itemStack, world, player);
         player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, this.getEffectDuration(), 3));
 		player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, this.getEffectDuration(), 3));
-		if(ObjectManager.getPotionEffect("rejuvenation") != null)
-			player.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("rejuvenation"), this.getEffectDuration(), 1));
+		if(ObjectManager.getEffect("rejuvenation") != null)
+			player.addPotionEffect(new PotionEffect(ObjectManager.getEffect("rejuvenation"), this.getEffectDuration(), 1));
         player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, this.getEffectDuration(), 3));
         player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, this.getEffectDuration(), 1));
     }

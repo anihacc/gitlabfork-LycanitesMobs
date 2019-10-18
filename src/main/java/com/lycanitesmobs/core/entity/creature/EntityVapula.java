@@ -1,29 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityCrystalShard;
+import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityVapula extends EntityCreatureTameable implements IMob, IGroupRock {
+public class EntityVapula extends TameableCreatureEntity implements IMob {
 
-	public int vapulaBlockBreakRadius = 0;
+	public int vapulaBlockBreakRadius = 0; // TODO Creature flags.
 	public float fireDamageAbsorbed = 0;
 
     // ==================================================
@@ -36,7 +33,6 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.vapulaBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Rare Vapula Block Break Radius", this.vapulaBlockBreakRadius, "Controls how large the Royal Vapula's block breaking radius is when it is charging towards its target. Set to -1 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -48,40 +44,8 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(3.0F));
-		this.tasks.addTask(3, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(18.0F).setMinChaseDistance(10.0F).setCheckSight(false));
-        this.tasks.addTask(4, this.aiSit);
-        this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntitySilverfish.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(3.0F));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(18.0F).setMinChaseDistance(10.0F).setCheckSight(false));
     }
 	
 	
@@ -110,8 +74,8 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
 			}
 		}
 
-        // Particles:
-        if(this.getEntityWorld().isRemote) {
+		// Particles:
+		if(this.getEntityWorld().isRemote) {
 			for (int i = 0; i < 2; ++i) {
 				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
 						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
@@ -188,24 +152,19 @@ public class EntityVapula extends EntityCreatureTameable implements IMob, IGroup
     // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.getTrueSource() != null) {
-            // Silverfish Extermination:
-            if(damageSrc.getTrueSource() instanceof EntitySilverfish) {
-                return 0F;
-            }
-
-            // Pickaxe Damage:
-    		Item heldItem = null;
-    		if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
-                EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
-	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
-	    		}
-    		}
-    		if(ObjectLists.isPickaxe(heldItem))
-                return 4.0F;
-    	}
-    	return 1.0F;
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
+				EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isPickaxe(heldItem.getItem())) {
+				return 3.0F;
+			}
+		}
+    	return super.getDamageModifier(damageSrc);
     }
     
     

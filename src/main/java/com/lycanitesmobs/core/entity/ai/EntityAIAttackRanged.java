@@ -1,16 +1,15 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
 public class EntityAIAttackRanged extends EntityAIBase {
     // Targets:
-	private final EntityCreatureBase host;
+	private final BaseCreatureEntity host;
     private EntityLivingBase attackTarget;
 
     // Properties
@@ -41,7 +40,7 @@ public class EntityAIAttackRanged extends EntityAIBase {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAIAttackRanged(EntityCreatureBase setHost) {
+    public EntityAIAttackRanged(BaseCreatureEntity setHost) {
     	this.host = setHost;
         this.setMutexBits(3);
     }
@@ -121,8 +120,8 @@ public class EntityAIAttackRanged extends EntityAIBase {
         // Should Execute:
     	if(!this.enabled)
     		return false;
-        if(!this.mountedAttacking && this.host instanceof EntityCreatureRideable) {
-            EntityCreatureRideable rideableHost = (EntityCreatureRideable)this.host;
+        if(!this.mountedAttacking && this.host instanceof RideableCreatureEntity) {
+            RideableCreatureEntity rideableHost = (RideableCreatureEntity)this.host;
             if(rideableHost.getControllingPassenger() instanceof EntityPlayer)
                 return false;
         }

@@ -306,7 +306,7 @@ public class DungeonSchematic {
 			}
 		}
 		if(sectors.isEmpty()) {
-			LycanitesMobs.printWarning("Dungeon", "Unable to find any " + type + " sectors for the dungeon: " + this.name);
+			LycanitesMobs.logWarning("Dungeon", "Unable to find any " + type + " sectors for the dungeon: " + this.name);
 			return null;
 		}
 		if(sectors.size() == 1) {
@@ -360,7 +360,7 @@ public class DungeonSchematic {
 		}
 
 		if(themes.isEmpty()) {
-			LycanitesMobs.printWarning("Dungeon", "No Dungeon Themes Found For " + this.name);
+			LycanitesMobs.logWarning("Dungeon", "No Dungeon Themes Found For " + this.name);
 			return null;
 		}
 

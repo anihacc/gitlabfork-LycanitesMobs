@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.core.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.client.gui.beastiary.GuiBeastiarySummoning;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -97,14 +97,14 @@ public class ItemStaffSummoning extends ItemScepter {
     }
     
     // ========== Minion Behaviour ==========
-    public void applyMinionBehaviour(EntityCreatureTameable minion, EntityPlayer player) {
+    public void applyMinionBehaviour(TameableCreatureEntity minion, EntityPlayer player) {
     	SummonSet summonSet = ExtendedPlayer.getForPlayer(player).getSelectedSummonSet();
         summonSet.applyBehaviour(minion);
         minion.applySubspecies(summonSet.subspecies);
     }
     
     // ========== Minion Effects ==========
-    public void applyMinionEffects(EntityCreatureBase minion) {}
+    public void applyMinionEffects(BaseCreatureEntity minion) {}
     
     // ========== On Stop Using ==========
     @Override

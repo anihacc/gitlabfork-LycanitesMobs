@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.config.ConfigBase;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -62,8 +62,8 @@ public class BlockScorchfire extends BlockFireBase {
     		if(((EntityItem)entity).getItem().getItem() == ObjectManager.getItem("scorchfirecharge"))
     			return;
 
-        /**if(ObjectManager.getPotionEffect("penetration") != null) {
-            PotionEffect effectPenetration = new PotionEffect(ObjectManager.getPotionEffect("penetration"), 5 * 20, 0);
+        /**if(ObjectManager.getEffect("penetration") != null) {
+            PotionEffect effectPenetration = new PotionEffect(ObjectManager.getEffect("penetration"), 5 * 20, 0);
             if(entity instanceof EntityLivingBase) {
                 EntityLivingBase entityLiving = (EntityLivingBase)entity;
                 if(!entityLiving.isPotionApplicable(effectPenetration))

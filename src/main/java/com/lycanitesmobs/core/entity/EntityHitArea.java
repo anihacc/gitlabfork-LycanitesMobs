@@ -80,8 +80,8 @@ public class EntityHitArea extends Entity {
             return false;
         if(this.owner == null)
             return true;
-        if(this.owner instanceof EntityCreatureBase)
-            return ((EntityCreatureBase)this.owner).attackEntityFromArea(this, damageSource, damageAmount);
+        if(this.owner instanceof BaseCreatureEntity)
+            return ((BaseCreatureEntity)this.owner).attackEntityFromArea(this, damageSource, damageAmount);
         return this.owner.attackEntityFrom(damageSource, damageAmount);
     }
 

@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityFear;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.FearEntity;
 import com.lycanitesmobs.core.network.MessageBeastiary;
 import com.lycanitesmobs.core.network.MessageCreatureKnowledge;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -73,17 +73,17 @@ public class Beastiary {
 	 */
 	public boolean discoverCreature(Entity entity, int rank, boolean knownMessage) {
 		// Invalid Entity:
-		if(!(entity instanceof EntityCreatureBase)) {
+		if(!(entity instanceof BaseCreatureEntity)) {
 			if (!this.extendedPlayer.player.getEntityWorld().isRemote) {
 				this.extendedPlayer.player.sendMessage(new TextComponentString(LanguageManager.translate("message.beastiary.unknown")));
 			}
 			return false;
 		}
-		if(entity instanceof EntityFear) {
+		if(entity instanceof FearEntity) {
 			return false;
 		}
 
-		CreatureInfo creatureInfo = ((EntityCreatureBase)entity).creatureInfo;
+		CreatureInfo creatureInfo = ((BaseCreatureEntity)entity).creatureInfo;
 		CreatureKnowledge newKnowledge = new CreatureKnowledge(this.extendedPlayer.getBeastiary(), creatureInfo.getName(), rank);
 		int rankChange = this.extendedPlayer.getBeastiary().addCreatureKnowledge(newKnowledge);
 
@@ -236,7 +236,7 @@ public class Beastiary {
 	
 	/** Sends the whole Beastiary progress to the client, use sparingly! **/
 	public void sendAllToClient() {
-		LycanitesMobs.printDebug("Packets", "Sending all beastiary to client.");
+		LycanitesMobs.logDebug("Packets", "Sending all beastiary to client.");
 		MessageBeastiary message = new MessageBeastiary(this);
 		LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.extendedPlayer.getPlayer());
 	}

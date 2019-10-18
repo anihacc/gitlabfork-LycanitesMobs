@@ -2,19 +2,17 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;

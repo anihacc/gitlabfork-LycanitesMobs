@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.pets;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,7 +65,7 @@ public class PetManager {
     /** Adds a new PetEntry and executes onAdd() methods. The provided entry should have set whether it's a pet, mount, minion, etc. This will also set a specific ID for the entry to use which should only really be done client side. **/
     public void addEntry(PetEntry petEntry, int entryID) {
         if(this.allEntries.containsValue(petEntry)) {
-            LycanitesMobs.printWarning("", "[Pet Manager] Tried to add a Pet Entry that is already added!");
+            LycanitesMobs.logWarning("", "[Pet Manager] Tried to add a Pet Entry that is already added!");
             return;
         }
 
@@ -103,7 +103,7 @@ public class PetManager {
      * If an entry is finished, it is best to call onRemove() on the entry itself, this method will then be called automatically. **/
     public void removeEntry(PetEntry petEntry) {
         if(!this.allEntries.containsValue(petEntry)) {
-            LycanitesMobs.printWarning("", "[Pet Manager] Tried to remove a pet entry that isn't added!");
+            LycanitesMobs.logWarning("", "[Pet Manager] Tried to remove a pet entry that isn't added!");
             return;
         }
 

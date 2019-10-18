@@ -1,8 +1,11 @@
 {
 	"name": "cacodemon",
 	"creatureType": "demon",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCacodemon",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCacodemon",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCacodemon",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -55,10 +58,16 @@
 		{
 			"index": 3,
 			"name": "ebon",
+			"scale": 2,
 			"type": "rare"
 		}
 	],
 	"element": "nether",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": true,

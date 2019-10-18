@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.mobevent;
 
 import com.google.gson.*;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
@@ -64,12 +64,12 @@ public class MobEventManager extends JSONLoader {
 
 	/** Loads all JSON Mob Events. **/
 	public void loadAllFromJSON(ModInfo groupInfo) {
-		LycanitesMobs.printDebug("MobEvents", "Loading JSON Mob Events!");
+		LycanitesMobs.logDebug("MobEvents", "Loading JSON Mob Events!");
 		Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 		Map<String, JsonObject> mobEventJSONs = new HashMap<>();
 
 		// Load Default Mob Events:
-		Path path = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.filename, "mobevents");
+		Path path = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.modid, "mobevents");
 		Map<String, JsonObject> defaultMobEventJSONs = new HashMap<>();
 		this.loadJsonObjects(gson, path, defaultMobEventJSONs, "name", "event");
 
@@ -87,30 +87,30 @@ public class MobEventManager extends JSONLoader {
 
 
 		// Create Mob Events:
-		LycanitesMobs.printDebug("MobEvents", "Loading " + mobEventJSONs.size() + " Mob Events...");
+		LycanitesMobs.logDebug("MobEvents", "Loading " + mobEventJSONs.size() + " Mob Events...");
 		for(String spawnerJSONName : mobEventJSONs.keySet()) {
 			try {
 				JsonObject spawnerJSON = mobEventJSONs.get(spawnerJSONName);
-				LycanitesMobs.printDebug("MobEvents", "Loading Mob Event JSON: " + spawnerJSON);
+				LycanitesMobs.logDebug("MobEvents", "Loading Mob Event JSON: " + spawnerJSON);
 				MobEvent mobEvent = new MobEvent();
 				mobEvent.loadFromJSON(spawnerJSON);
 				this.addMobEvent(mobEvent);
 			}
 			catch (JsonParseException e) {
-				LycanitesMobs.printWarning("", "Parsing error loading JSON Mob Event: " + spawnerJSONName);
+				LycanitesMobs.logWarning("", "Parsing error loading JSON Mob Event: " + spawnerJSONName);
 				e.printStackTrace();
 			}
 			catch(Exception e) {
-				LycanitesMobs.printWarning("", "There was a problem loading JSON Mob Event: " + spawnerJSONName);
+				LycanitesMobs.logWarning("", "There was a problem loading JSON Mob Event: " + spawnerJSONName);
 				e.printStackTrace();
 			}
 		}
-		LycanitesMobs.printDebug("MobEvents", "Complete! " + this.mobEvents.size() + " JSON Mob Events Loaded In Total.");
+		LycanitesMobs.logDebug("MobEvents", "Complete! " + this.mobEvents.size() + " JSON Mob Events Loaded In Total.");
 
 
 		// Load Scheduled Events:
 		this.mobEventSchedules.clear();
-		Path defaultSchedulePath = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.filename, "mobeventschedule.json");
+		Path defaultSchedulePath = Utilities.getAssetPath(groupInfo.getClass(), groupInfo.modid, "mobeventschedule.json");
 		JsonObject defaultScheduleJson = this.loadJsonObject(gson, defaultSchedulePath);
 
 		File customScheduleFile = new File(configPath + "mobeventschedule.json");
@@ -130,7 +130,7 @@ public class MobEventManager extends JSONLoader {
 			}
 		}
 		if(this.mobEventSchedules.size() > 0) {
-			LycanitesMobs.printDebug("MobEvents", "Loaded " + this.mobEventSchedules.size() + " Mob Event Schedules.");
+			LycanitesMobs.logDebug("MobEvents", "Loaded " + this.mobEventSchedules.size() + " Mob Event Schedules.");
 		}
 	}
 
@@ -143,7 +143,7 @@ public class MobEventManager extends JSONLoader {
 
 	/** Reloads all JSON Mob Events. **/
 	public void reload() {
-		LycanitesMobs.printDebug("MobEvents", "Destroying JSON Mob Events!");
+		LycanitesMobs.logDebug("MobEvents", "Destroying JSON Mob Events!");
 		for(MobEvent mobEvent : this.mobEvents.values().toArray(new MobEvent[this.mobEvents.size()])) {
 			mobEvent.destroy();
 		}
@@ -170,7 +170,7 @@ public class MobEventManager extends JSONLoader {
 	/** Removes a Mob Event from this Manager. **/
 	public void removeMobEvent(MobEvent mobEvent) {
 		if(!this.mobEvents.containsKey(mobEvent.name)) {
-			LycanitesMobs.printWarning("", "[MobEvents] Tried to remove a Mob Event that hasn't been added: " + mobEvent.name);
+			LycanitesMobs.logWarning("", "[MobEvents] Tried to remove a Mob Event that hasn't been added: " + mobEvent.name);
 			return;
 		}
 		this.mobEvents.remove(mobEvent.name);

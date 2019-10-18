@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.info.projectile;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.dispenser.projectile.*;
 import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -21,9 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProjectileManager extends JSONLoader {
@@ -65,10 +62,10 @@ public class ProjectileManager extends JSONLoader {
 	public void loadAllFromJSON(ModInfo groupInfo) {
 		try {
 			this.loadAllJson(groupInfo, "Projectile", "projectiles", "name", true);
-			LycanitesMobs.printDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
+			LycanitesMobs.logDebug("Projectile", "Complete! " + this.projectiles.size() + " JSON Projectile Info Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Projectiles loaded for: " + groupInfo.name);
+			LycanitesMobs.logWarning("", "No Projectiles loaded for: " + groupInfo.name);
 		}
 	}
 
@@ -78,7 +75,7 @@ public class ProjectileManager extends JSONLoader {
 		ProjectileInfo projectileInfo = new ProjectileInfo(modInfo);
 		projectileInfo.loadFromJSON(json);
 		if (projectileInfo.name == null) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
+			LycanitesMobs.logWarning("", "[Projectile] Unable to load " + name + " json due to missing name.");
 			return;
 		}
 
@@ -110,7 +107,7 @@ public class ProjectileManager extends JSONLoader {
 	@SubscribeEvent
 	public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
 		ModInfo modInfo = LycanitesMobs.modInfo;
-		LycanitesMobs.printDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
+		LycanitesMobs.logDebug("Projectile", "Forge registering all " + this.projectiles.size() + " projectiles from the mod: " + modInfo.name + "...");
 
 		for(ProjectileInfo projectileInfo : this.projectiles.values()) {
 			if(projectileInfo.modInfo != modInfo) {
@@ -126,7 +123,7 @@ public class ProjectileManager extends JSONLoader {
 		}
 
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(this.oldSpriteProjectiles.get(entityName))
 					.id(registryName, this.getNextProjectileNetworkId())
@@ -137,7 +134,7 @@ public class ProjectileManager extends JSONLoader {
 		}
 
 		for(String entityName : this.oldModelProjectiles.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(this.oldModelProjectiles.get(entityName))
 					.id(registryName, this.getNextProjectileNetworkId())

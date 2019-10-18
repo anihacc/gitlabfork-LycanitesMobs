@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.inventory;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -48,7 +48,7 @@ public class InventoryCreature implements IInventory {
     }
 	
 	// Properties:
-	public EntityCreatureBase creature;
+	public BaseCreatureEntity creature;
 	public String inventoryName = "Creature Inventory";
 	protected NonNullList<ItemStack> inventoryContents;
     protected boolean basicArmor = true;
@@ -63,17 +63,17 @@ public class InventoryCreature implements IInventory {
     // ==================================================
     public static DataParameter<ItemStack> getEquipmentDataParameter(String type) {
         if(type.equals("head"))
-            return EntityCreatureBase.EQUIPMENT_HEAD;
+            return BaseCreatureEntity.EQUIPMENT_HEAD;
         if(type.equals("chest"))
-            return EntityCreatureBase.EQUIPMENT_CHEST;
+            return BaseCreatureEntity.EQUIPMENT_CHEST;
         if(type.equals("legs"))
-            return EntityCreatureBase.EQUIPMENT_LEGS;
+            return BaseCreatureEntity.EQUIPMENT_LEGS;
         if(type.equals("feet"))
-            return EntityCreatureBase.EQUIPMENT_FEET;
+            return BaseCreatureEntity.EQUIPMENT_FEET;
         if(type.equals("saddle"))
-            return EntityCreatureBase.EQUIPMENT_SADDLE;
+            return BaseCreatureEntity.EQUIPMENT_SADDLE;
         if(type.equals("bag"))
-            return EntityCreatureBase.EQUIPMENT_BAG;
+            return BaseCreatureEntity.EQUIPMENT_BAG;
         return null;
     }
 
@@ -87,7 +87,7 @@ public class InventoryCreature implements IInventory {
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public InventoryCreature(String inventoryName, EntityCreatureBase creature) {
+	public InventoryCreature(String inventoryName, BaseCreatureEntity creature) {
 		this.inventoryName = inventoryName;
 		this.creature = creature;
 		this.addEquipmentSlot("chest");
@@ -463,7 +463,7 @@ public class InventoryCreature implements IInventory {
 		}
 		
 		// Saddle:
-		if(itemStack.getItem() instanceof ItemSaddle && this.creature instanceof EntityCreatureRideable)
+		if(itemStack.getItem() instanceof ItemSaddle && this.creature instanceof RideableCreatureEntity)
 			return "saddle";
 		
 		// Bag:

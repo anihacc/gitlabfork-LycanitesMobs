@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;

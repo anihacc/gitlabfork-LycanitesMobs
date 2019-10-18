@@ -1,28 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDemon {
+public class EntityAstaroth extends BaseCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAstaroth(World par1World) {
-        super(par1World);
+    public EntityAstaroth(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
@@ -38,14 +36,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
-        this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityTrite.class));
-        this.targetTasks.addTask(1, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(40.0F).setMinChaseDistance(16.0F).setChaseTime(-1));
     }
 
 
@@ -59,7 +50,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 
         // Asmodeus Master:
         if(this.updateTick % 20 == 0) {
-            if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((EntityCreatureBase)this.getMasterTarget()).getBattlePhase() > 0) {
+            if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((BaseCreatureEntity)this.getMasterTarget()).getBattlePhase() > 0) {
                 EntityHellShield projectile = new EntityHellShield(this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
                 projectile.posY -= this.height * 0.35D;
@@ -78,12 +69,11 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
 	// ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityTrite.class) || targetClass.isAssignableFrom(EntityCacodemon.class) || targetClass.isAssignableFrom(EntityAsmodeus.class))
-    		return false;
-        return super.canAttackClass(targetClass);
+    public boolean canAttackEntity(EntityLivingBase target) {
+        if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAsmodeus)
+            return false;
+        return super.canAttackEntity(target);
     }
     
     // ========== Ranged Attack ==========
@@ -104,7 +94,7 @@ public class EntityAstaroth extends EntityCreatureBase implements IMob, IGroupDe
             for(int k = 0; k < j; ++k) {
                 float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
                 float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
-                EntityTrite trite = new EntityTrite(this.getEntityWorld());
+                EntityTrite trite =(EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());

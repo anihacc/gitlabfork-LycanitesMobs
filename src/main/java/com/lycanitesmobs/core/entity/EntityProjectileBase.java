@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.BlockTallGrass;
@@ -229,8 +228,8 @@ public class EntityProjectileBase extends EntityThrowable {
 							}
 
 							// Deal Damage:
-							if (this.getThrower() instanceof EntityCreatureBase) {
-								EntityCreatureBase creatureThrower = (EntityCreatureBase) this.getThrower();
+							if (this.getThrower() instanceof BaseCreatureEntity) {
+								BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
 								attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 							}
 							else {
@@ -354,8 +353,8 @@ public class EntityProjectileBase extends EntityThrowable {
     	 EntityLivingBase owner = this.getThrower();
 	     if(owner != null) {
 
-            if(owner instanceof EntityCreatureBase) {
-                EntityCreatureBase ownerCreature = (EntityCreatureBase)owner;
+            if(owner instanceof BaseCreatureEntity) {
+                BaseCreatureEntity ownerCreature = (BaseCreatureEntity)owner;
                 if(!ownerCreature.canAttackEntity(targetEntity))
                     return false;
             }
@@ -372,8 +371,8 @@ public class EntityProjectileBase extends EntityThrowable {
 		    	if(owner instanceof EntityPlayer) {
 			    	if(targetEntity instanceof EntityPlayer)
 			    		return false;
-			    	if(targetEntity instanceof EntityCreatureTameable) {
-			    		EntityCreatureTameable tamedTarget = (EntityCreatureTameable)targetEntity;
+			    	if(targetEntity instanceof TameableCreatureEntity) {
+			    		TameableCreatureEntity tamedTarget = (TameableCreatureEntity)targetEntity;
 			    		if(tamedTarget.isTamed()) {
 			    			return false;
 			    		}
@@ -452,8 +451,8 @@ public class EntityProjectileBase extends EntityThrowable {
          this.setSize(scale, scale);
          if(this.getEntityWorld().isRemote && !this.clientOnly)
              return;
-         if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
-             this.projectileScale *= ((EntityCreatureBase)this.getThrower()).sizeScale;
+         if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
+             this.projectileScale *= ((BaseCreatureEntity)this.getThrower()).sizeScale;
          this.dataManager.set(SCALE, this.projectileScale);
      }
      
@@ -505,8 +504,8 @@ public class EntityProjectileBase extends EntityThrowable {
       * seconds - The base duration in seconds that this effect should last for.
      **/
      public int getEffectDuration(int seconds) {
-    	 if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
-    		 return Math.round((float)((EntityCreatureBase)this.getThrower()).getEffectDuration(seconds) / 5);
+    	 if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
+    		 return Math.round((float)((BaseCreatureEntity)this.getThrower()).getEffectDuration(seconds) / 5);
     	 return seconds * 20;
      }
 
@@ -514,8 +513,8 @@ public class EntityProjectileBase extends EntityThrowable {
      * value - The base effect strength.
      **/
     public float getEffectStrength(float value) {
-        if(this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase)
-            return ((EntityCreatureBase)this.getThrower()).getEffectStrength(value);
+        if(this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity)
+            return ((BaseCreatureEntity)this.getThrower()).getEffectStrength(value);
         return value;
     }
 

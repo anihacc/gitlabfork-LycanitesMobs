@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

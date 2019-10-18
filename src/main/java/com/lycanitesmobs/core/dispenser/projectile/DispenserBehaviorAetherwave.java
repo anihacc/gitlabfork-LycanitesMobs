@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityCrystalShard;
 import net.minecraft.dispenser.IPosition;

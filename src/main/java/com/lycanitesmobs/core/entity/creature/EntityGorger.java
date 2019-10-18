@@ -1,29 +1,24 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
-import net.minecraft.block.material.Material;
+import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityGorger extends EntityCreatureTameable implements IGroupPredator, IGroupFire, IGroupHeavy {
+public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
@@ -47,30 +42,8 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(60));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(60));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
 
 
@@ -199,7 +172,7 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
     }
 
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
 
@@ -212,31 +185,5 @@ public class EntityGorger extends EntityCreatureTameable implements IGroupPredat
         if(damageSrc.isFireDamage())
             return 0F;
         else return super.getDamageModifier(damageSrc);
-    }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityGorger(this.getEntityWorld());
-    }
-
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack par1ItemStack) {
-        return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("cookedmeat", testStack);
     }
 }

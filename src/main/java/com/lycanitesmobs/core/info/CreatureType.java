@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.item.Item;
 
 import java.util.HashMap;
@@ -57,7 +57,7 @@ public class CreatureType {
 	public void load() {
 		this.createItems();
 
-		LycanitesMobs.printDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
+		LycanitesMobs.logDebug("Creature Type", "Loaded Creature Type: " + this.getTitle());
 	}
 
 

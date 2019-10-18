@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 
@@ -63,7 +63,7 @@ public class BlockDoomfire extends BlockFireBase {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
 
         if(entity instanceof EntityLivingBase) {
-			Potion decay = ObjectManager.getPotionEffect("decay");
+			Potion decay = ObjectManager.getEffect("decay");
             if(decay != null) {
                 PotionEffect effect = new PotionEffect(decay, 5 * 20, 0);
                 EntityLivingBase entityLiving = (EntityLivingBase) entity;

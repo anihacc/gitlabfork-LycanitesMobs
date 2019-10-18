@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.item.soulstone;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityShade;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.entity.creature.EntityChupacabra;
 import net.minecraft.entity.Entity;
@@ -34,7 +34,7 @@ public class ItemSoulstoneShadow extends ItemSoulstone {
     	if(playerExt == null)
             return new ActionResult(EnumActionResult.SUCCESS, itemStack);
 
-        EntityCreatureTameable entity;
+        TameableCreatureEntity entity;
         if(player.getRNG().nextBoolean())
             entity = new EntityChupacabra(world);
         else

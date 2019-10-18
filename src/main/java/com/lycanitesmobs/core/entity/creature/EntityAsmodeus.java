@@ -1,24 +1,22 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupBoss;
-import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -38,25 +36,25 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDemon, IGroupHeavy, IGroupBoss {
+public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
 
     // Data Manager:
-    protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.<Byte>createKey(EntityCreatureBase.class, DataSerializers.BYTE);
+    protected static final DataParameter<Byte> ANIMATION_STATES = EntityDataManager.createKey(EntityAsmodeus.class, DataSerializers.BYTE);
     public enum ANIMATION_STATES_ID {
         SNAP_TO_ARENA((byte)1), COOLDOWN((byte)2);
         public final byte id;
         ANIMATION_STATES_ID(byte value) { this.id = value; }
-        public byte getValue() { return id; }
+        public byte getAttributeValue() { return id; }
     }
 
     // AI:
-    public EntityAIAttackRanged aiRangedAttack;
+    public AttackRangedGoal aiRangedAttack;
 
-    public List<EntityPlayer> playerTargets = new ArrayList<EntityPlayer>();
+    public List<EntityPlayer> playerTargets = new ArrayList<>();
     public boolean firstPlayerTargetCheck = false;
-    public List<EntityTrite> triteMinions = new ArrayList<EntityTrite>();
-    public List<EntityAstaroth> astarothMinions = new ArrayList<EntityAstaroth>();
-    public List<EntityCacodemon> cacodemonMinions = new ArrayList<EntityCacodemon>();
+    public List<EntityTrite> triteMinions = new ArrayList<>();
+    public List<EntityAstaroth> astarothMinions = new ArrayList<>();
+    public List<EntityCacodemon> cacodemonMinions = new ArrayList<>();
 
     // First Phase:
     public int devilstarStreamTime = 0;
@@ -106,17 +104,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.aiRangedAttack = new EntityAIAttackRanged(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
-        this.tasks.addTask(2, this.aiRangedAttack);
-        //this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        //this.tasks.addTask(7, new EntityAIStayByHome(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-		this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityTrite.class, EntityAstaroth.class, EntityCacodemon.class, CreatureManager.getInstance().getCreature("wraith").entityClass));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.aiRangedAttack = new AttackRangedGoal(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
+        this.tasks.addTask(this.nextCombatGoalIndex++, this.aiRangedAttack);
     }
 
     // ========== Init ==========
@@ -196,11 +185,11 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         if(!this.getEntityWorld().isRemote && this.updateTick % 20 == 0) {
             // Flying Player Wraith Attack:
             for(EntityPlayer target : this.playerTargets) {
-                if(target.capabilities.isCreativeMode || target.isSpectator())
+                if(target.capabilities.disableDamage || target.isSpectator())
                     continue;
                 if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
                     for(int i = 0; i < 3; i++) {
-                        EntityWraith minion = new EntityWraith(this.getEntityWorld());
+                        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
                         minion.setAttackTarget(target);
                     }
@@ -349,7 +338,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             // Summon Trites:
             if(this.triteMinions.size() < playerCount * 3 && this.updateTick % 10 * 20 == 0) {
                 for (int i = 0; i < 3 * playerCount; i++) {
-                    EntityTrite minion = new EntityTrite(this.getEntityWorld());
+                    EntityTrite minion = (EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
                     this.triteMinions.add(minion);
                 }
@@ -362,7 +351,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             // Summon Astaroth:
             if(this.astarothMinions.isEmpty() && this.hellshieldAstarothRespawnTime-- <= 0) {
                 for (int i = 0; i < 2 * playerCount; i++) {
-                    EntityAstaroth minion = new EntityAstaroth(this.getEntityWorld());
+                    EntityAstaroth minion = (EntityAstaroth)CreatureManager.getInstance().getCreature("astaroth").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 0);
                     minion.setSizeScale(2.5D);
                     this.astarothMinions.add(minion);
@@ -378,7 +367,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
                 // Summon Astaroth:
                 if (this.rebuildAstarothRespawnTime-- <= 0) {
                     for (int i = 0; i < playerCount; i++) {
-                        EntityAstaroth minion = new EntityAstaroth(this.getEntityWorld());
+                        EntityAstaroth minion = (EntityAstaroth)CreatureManager.getInstance().getCreature("astaroth").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 0);
                         minion.setSizeScale(2.5D);
                         this.astarothMinions.add(minion);
@@ -390,7 +379,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             // Summon Cacodemon:
             if(this.cacodemonMinions.size() < playerCount * 6 && this.updateTick % 10 * 20 == 0) {
                 for (int i = 0; i < 5 * playerCount; i++) {
-                    EntityCacodemon minion = new EntityCacodemon(this.getEntityWorld());
+                    EntityCacodemon minion = (EntityCacodemon)CreatureManager.getInstance().getCreature("cacodemon").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
                     minion.posY += 10 + this.getRNG().nextInt(20);
                     this.cacodemonMinions.add(minion);
@@ -430,10 +419,10 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityTrite.class) || targetClass.isAssignableFrom(EntityCacodemon.class) ||  targetClass.isAssignableFrom(EntityAstaroth.class))
+    public boolean canAttackEntity(EntityLivingBase target) {
+    	if(target instanceof EntityTrite || target instanceof EntityCacodemon ||  target instanceof EntityAstaroth)
     		return false;
-        return super.canAttackClass(targetClass);
+        return super.canAttackEntity(target);
     }
     
     // ========== Ranged Attack ==========
@@ -481,7 +470,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
             for(int k = 0; k < j; ++k) {
                 float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
                 float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
-                EntityTrite trite = new EntityTrite(this.getEntityWorld());
+                EntityTrite trite = (EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
                 trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());
@@ -513,10 +502,10 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Damage ==========
     @Override
-    public boolean isEntityInvulnerable(DamageSource source) {
+    public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
         if(this.isBlocking())
             return true;
-        return super.isEntityInvulnerable(source);
+        return super.isDamageTypeApplicable(type, source, damage);
     }
     
     @Override
@@ -546,7 +535,7 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
         }
         if(entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)entity;
-            if (!player.capabilities.isCreativeMode && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.capabilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }
@@ -574,8 +563,8 @@ public class EntityAsmodeus extends EntityCreatureBase implements IMob, IGroupDe
     // ==================================================
     // ========== Read ===========
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-        super.readEntityFromNBT(nbtTagCompound);
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+        super.readFromNBT(nbtTagCompound);
         if(nbtTagCompound.hasKey("DevilstarStreamCharge")) {
             this.devilstarStreamCharge = nbtTagCompound.getInteger("DevilstarStreamCharge");
         }

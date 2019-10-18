@@ -1,13 +1,14 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupHunter;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityPoop;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
@@ -17,21 +18,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
-import com.lycanitesmobs.core.localisation.LanguageManager;
 import net.minecraft.world.World;
 
-public class EntityConba extends EntityCreatureTameable implements IMob {
-	EntityAIAttackRanged aiAttackRanged;
-	EntityAIAttackMelee aiAttackMelee;
-	EntityAIAvoid aiAvoid;
+public class EntityConba extends TameableCreatureEntity implements IMob {
+	AttackRangedGoal aiAttackRanged;
+	AttackMeleeGoal aiAttackMelee;
+	AvoidGoal aiAvoid;
 	public boolean vespidInfection = false;
 	public int vespidInfectionTime = 0;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityConba(World par1World) {
-        super(par1World);
+    public EntityConba(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -42,35 +42,19 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-        super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
+		this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
+		this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAttackMelee); // Melee is a priority as it is used when infected.
 
-        this.aiAttackMelee = new EntityAIAttackMelee(this).setLongMemory(true).setEnabled(false);
-        this.tasks.addTask(2, this.aiAttackMelee);
+		super.initEntityAI();
 
-        this.aiAttackRanged = new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
-        this.tasks.addTask(2, this.aiAttackRanged);
+		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
+		this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
 
-        this.aiAvoid = new EntityAIAvoid(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
-        this.tasks.addTask(3, this.aiAvoid);
+		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
+		this.tasks.addTask(this.nextCombatGoalIndex++, this.aiAttackRanged);
 
-        this.tasks.addTask(4, this.aiSit);
-        this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-		this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupHunter.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
-        this.targetTasks.addTask(4, new EntityAITargetAvoid(this).setTargetClass(IGroupAlpha.class));
-        this.targetTasks.addTask(5, new EntityAITargetAvoid(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityPlayer.class));
+        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityVillager.class));
     }
     
     
@@ -82,11 +66,12 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     public String getSpeciesName() {
 		String infection = "";
 		if(this.vespidInfection) {
-			String entityName = EntityList.getEntityString(this);
-	    	if(entityName != null)
-	    		infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.filename + "." + entityName + ".infected") + " ";
+			String entityName = this.creatureInfo.getName();
+	    	if(entityName != null) {
+				infection = LanguageManager.translate("entity." + this.creatureInfo.modInfo.modid + "." + entityName + ".infected") + " ";
+			}
 		}
-    	return infection + super.getSpeciesName();
+    	return super.getSpeciesName();
     }
     
     public String getTextureName() {
@@ -163,13 +148,12 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Can Attack Class ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(this.vespidInfection && (targetClass.isAssignableFrom(EntityVespid.class) || targetClass.isAssignableFrom(EntityVespidQueen.class)))
-        	return false;
-    	return super.canAttackClass(targetClass);
-    }
+	@Override
+	public boolean canAttackEntity(EntityLivingBase target) {
+		if(target instanceof EntityVespid || target instanceof EntityVespidQueen)
+			return false;
+		return super.canAttackEntity(target);
+	}
     
     // ========== Ranged Attack ==========
 	@Override
@@ -177,14 +161,6 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
 		this.fireProjectile(EntityPoop.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
-
-    // ========== Can Attack Entity ==========
-    @Override
-    public boolean canAttackEntity(EntityLivingBase targetEntity) {
-        if(targetEntity instanceof EntityVespid || targetEntity instanceof EntityVespidQueen)
-            return false;
-        return super.canAttackEntity(targetEntity);
-    }
     
     
     // ==================================================
@@ -202,7 +178,7 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
         for(int k = 0; k < j; ++k) {
             float f = ((float)(k % 2) - 0.5F) * this.width / 4.0F;
             float f1 = ((float)(k / 2) - 0.5F) * this.width / 4.0F;
-            EntityVespid vespid = new EntityVespid(this.getEntityWorld());
+            EntityVespid vespid = (EntityVespid)CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
             vespid.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
             vespid.applySubspecies(this.getSubspeciesIndex());
             vespid.setGrowingAge(vespid.growthTime);
@@ -248,8 +224,8 @@ public class EntityConba extends EntityCreatureTameable implements IMob {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-    	super.readEntityFromNBT(nbtTagCompound);
+    public void readFromNBT(NBTTagCompound nbtTagCompound) {
+    	super.readFromNBT(nbtTagCompound);
         
         if(nbtTagCompound.hasKey("VespidInfection")) {
         	this.vespidInfection = nbtTagCompound.getBoolean("VespidInfection");

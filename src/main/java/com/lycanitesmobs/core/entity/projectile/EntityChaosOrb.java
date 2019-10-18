@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
@@ -77,8 +77,8 @@ public class EntityChaosOrb extends EntityProjectileModel {
 	//========== Entity Living Collision ==========
 	@Override
 	public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
-		if(ObjectManager.getPotionEffect("instability") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("instability"), this.getEffectDuration(5), 0));
+		if(ObjectManager.getEffect("instability") != null) {
+			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("instability"), this.getEffectDuration(5), 0));
 		}
 		return true;
 	}

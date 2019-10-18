@@ -1,8 +1,11 @@
 {
 	"name": "chupacabra",
 	"creatureType": "beast",
+	"groups": [
+		"predator"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityChupacabra",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelChupacabra",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelChupacabra",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": -1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#36251b",
 	"eggForeColor": "#aa8c63",
@@ -54,7 +57,13 @@
 		}
 	],
 	"element": "chaos",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": true,
 	"mountable": false,
@@ -62,8 +71,8 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "lycanitesmobs:chupacabrameatraw",
-			"burningItem": "lycanitesmobs:chupacabrameatcooked",
+			"item": "lycanitesmobs:raw_chupacabra_meat",
+			"burningItem": "lycanitesmobs:cooked_chupacabra_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.Targeting;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,12 +13,12 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class EntityAITargetOwnerThreats extends EntityAITarget {
 	// Properties:
-	private EntityCreatureTameable tamedHost;
+	private TameableCreatureEntity tamedHost;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetOwnerThreats(EntityCreatureTameable setHost) {
+    public EntityAITargetOwnerThreats(TameableCreatureEntity setHost) {
         super(setHost);
     	this.tamedHost = setHost;
         this.setMutexBits(1);
@@ -91,10 +90,10 @@ public class EntityAITargetOwnerThreats extends EntityAITarget {
 		}
 
         // Threat Check:
-        if(target instanceof IMob && !(target instanceof IEntityOwnable) && !(target instanceof EntityCreatureBase)) {
+        if(target instanceof IMob && !(target instanceof IEntityOwnable) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof EntityCreatureBase && ((EntityCreatureBase)target).isHostile() && !(target instanceof IGroupAnimal)) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostile() && !(target instanceof IGroupAnimal)) {
             return true;
         }
         else if(target instanceof EntityLiving && ((EntityLiving)target).getAttackTarget() == this.getOwner()) {

@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAIStealth extends EntityAIBase {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	
 	// Properties:
 	private int stealthTimeMax = 20;
@@ -20,7 +20,7 @@ public class EntityAIStealth extends EntityAIBase {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-	public EntityAIStealth(EntityCreatureBase setHost) {
+	public EntityAIStealth(BaseCreatureEntity setHost) {
 		this.host = setHost;
         this.setMutexBits(0);
 	}

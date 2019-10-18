@@ -11,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class ItemSoulkey extends ItemBase {
         // Get Possible Altars:
         List<AltarInfo> possibleAltars = new ArrayList<>();
         if(AltarInfo.altars.isEmpty())
-            LycanitesMobs.printWarning("", "No altars have been registered, Soulkeys will not work at all.");
+            LycanitesMobs.logWarning("", "No altars have been registered, Soulkeys will not work at all.");
         for(AltarInfo altarInfo : AltarInfo.altars.values()) {
             if(altarInfo.checkBlockEvent(player, world, pos) && altarInfo.quickCheck(player, world, pos)) {
                 possibleAltars.add(altarInfo);

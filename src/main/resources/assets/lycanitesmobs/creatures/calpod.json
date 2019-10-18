@@ -1,8 +1,13 @@
 {
 	"name": "calpod",
 	"creatureType": "arthropod",
+	"groups": [
+		"monster",
+		"critter",
+		"hardy"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCalpod",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCalpod",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCalpod",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +42,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": -1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#996436",
 	"eggForeColor": "#3d2013",
@@ -54,6 +59,10 @@
 		}
 	],
 	"element": "arbour",
+	"diets": [
+		"carnivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

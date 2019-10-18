@@ -1,30 +1,23 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupElectric;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.info.ElementManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.DamageSource;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupPredator, IGroupElectric {
+public class EntityAbaia extends TameableCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
     protected short aoeAttackTick = 0;
 
     // ==================================================
@@ -48,37 +41,8 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(7, wanderAI.setPauseRate(0));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 3);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
 
 
     // ==================================================
@@ -90,26 +54,26 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
         super.onLivingUpdate();
 
         // Static Aura Attack:
-        if(!this.getEntityWorld().isRemote && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
+        if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && ++this.aoeAttackTick == (this.isPetType("familiar") ? 100 : 40)) {
             this.aoeAttackTick = 0;
             List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 EntityLivingBase target = (EntityLivingBase)entityObj;
-                if(target != this && !(target instanceof IGroupElectric) && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isInWater()) {
-                    target.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage(1));
+                if(target != this && this.canAttackClass(target.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isInWater()) {
+                    target.attackEntityFrom(ElementDamageSource.causeElementDamage(this, ElementManager.getInstance().getElement("lightning")), this.getAttackDamage(1));
                 }
             }
         }
 
         // Particles:
-        if(this.getEntityWorld().isRemote) {
-            this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
+        if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
+            this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width, this.posY + this.rand.nextDouble() * (double) this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, 0.0D, 0.0D, 0.0D);
 
             List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 EntityLivingBase target = (EntityLivingBase)entityObj;
-                if(this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
-                    this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, target.posX + (this.rand.nextDouble() - 0.5D) * (double) target.width, target.posY + this.rand.nextDouble() * (double) target.height, target.posZ + (this.rand.nextDouble() - 0.5D) * (double) target.width, 0.0D, 0.0D, 0.0D);
+                if(this.canAttackClass(target.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target)) {
+                    this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT, target.posX + (this.rand.nextDouble() - 0.5D) * (double) target.width, target.posY + this.rand.nextDouble() * (double) target.height, target.posZ + (this.rand.nextDouble() - 0.5D) * (double) target.width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -127,8 +91,6 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -170,7 +132,7 @@ public class EntityAbaia extends EntityCreatureTameable implements IMob, IGroupP
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 }

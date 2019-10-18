@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +17,7 @@ public class EntityAITargetRevenge extends EntityAITargetAttack {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITargetRevenge(EntityCreatureBase setHost) {
+    public EntityAITargetRevenge(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexBits(1);
     }
@@ -79,22 +79,22 @@ public class EntityAITargetRevenge extends EntityAITargetAttack {
                 List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getEntityBoundingBox().grow(d0, 4.0D, d0), this.targetSelector);
                 if (this.helpClasses != null)
                     for (Class helpClass : this.helpClasses) {
-                        if (helpClass != null && EntityCreatureBase.class.isAssignableFrom(helpClass) && !this.target.getClass().isAssignableFrom(helpClass)) {
+                        if (helpClass != null && BaseCreatureEntity.class.isAssignableFrom(helpClass) && !this.target.getClass().isAssignableFrom(helpClass)) {
                             allies.addAll(this.host.getEntityWorld().getEntitiesWithinAABB(helpClass, this.host.getEntityBoundingBox().grow(d0, 4.0D, d0), this.targetSelector));
                         }
                     }
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {
-                    EntityCreatureBase possibleAlly = (EntityCreatureBase) possibleAllies.next();
+                    BaseCreatureEntity possibleAlly = (BaseCreatureEntity) possibleAllies.next();
                     if (possibleAlly != this.host && possibleAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleAlly.isProtective(this.host))
-                        if (!(possibleAlly instanceof EntityCreatureTameable) || (possibleAlly instanceof EntityCreatureTameable && !((EntityCreatureTameable) possibleAlly).isTamed()))
+                        if (!(possibleAlly instanceof TameableCreatureEntity) || (possibleAlly instanceof TameableCreatureEntity && !((TameableCreatureEntity) possibleAlly).isTamed()))
                             possibleAlly.setAttackTarget(this.target);
                 }
             }
         }
         catch (Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred when selecting help targets in revenge, this has been skipped to prevent a crash.");
+            LycanitesMobs.logWarning("", "An exception occurred when selecting help targets in revenge, this has been skipped to prevent a crash.");
             e.printStackTrace();
         }
 

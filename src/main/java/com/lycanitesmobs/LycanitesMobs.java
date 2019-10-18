@@ -10,6 +10,8 @@ import com.lycanitesmobs.core.compatibility.Thaumcraft;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.dungeon.DungeonManager;
 import com.lycanitesmobs.core.entity.EntityHitArea;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -64,7 +66,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.0.12";
+	public static final String versionNumber = "2.0.1.0";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -83,7 +85,7 @@ public class LycanitesMobs {
 	public static LycanitesMobs instance;
 	
 	// Proxy:
-	@SidedProxy(clientSide="com.lycanitesmobs.ClientProxy", serverSide="com.lycanitesmobs.CommonProxy")
+	@SidedProxy(clientSide="com.lycanitesmobs.client.ClientProxy", serverSide="com.lycanitesmobs.CommonProxy")
 	public static CommonProxy proxy;
 
     // Capabilities:
@@ -156,9 +158,9 @@ public class LycanitesMobs {
         config.setCategoryComment("Admin", "Special tools for server admins.");
         ExtendedEntity.FORCE_REMOVE_ENTITY_IDS = config.getStringList("Admin", "Force Remove Entity Names", new String[0], "Here you can add a list of entity IDs for entity that you want to be forcefully removed.");
         if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
-            printInfo("", "Lycanites Mobs will forcefully remove the following entities based on their registered IDs:");
+            logInfo("", "Lycanites Mobs will forcefully remove the following entities based on their registered IDs:");
             for (String removeEntityID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS)
-                printInfo("", removeEntityID);
+                logInfo("", removeEntityID);
         }
         ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
 
@@ -266,7 +268,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-    public static void printInfo(String key, String message) {
+    public static void logInfo(String key, String message) {
         if("".equals(key) || config.getBool("Debug", key, false)) {
             System.out.println("[LycanitesMobs] [Info] [" + key + "] " + message);
         }
@@ -278,7 +280,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-	public static void printDebug(String key, String message) {
+	public static void logDebug(String key, String message) {
         if("".equals(key) || config.getBool("Debug", key, false)) {
             System.out.println("[LycanitesMobs] [Debug] [" + key + "] " + message);
         }
@@ -290,7 +292,7 @@ public class LycanitesMobs {
 	 * @param key The debug config key to use, if empty, the message is always printed.
 	 * @param message The message to print.
 	 */
-	public static void printWarning(String key, String message) {
+	public static void logWarning(String key, String message) {
 		if("".equals(key) || config.getBool("Debug", key, false)) {
 			System.err.println("[LycanitesMobs] [WARNING] [" + key + "] " + message);
 		}

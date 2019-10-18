@@ -1,8 +1,7 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -10,12 +9,12 @@ import net.minecraft.world.World;
 
 public class EntityAIFollowOwner extends EntityAIFollow {
 	// Targets:
-	EntityCreatureTameable host;
+	TameableCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIFollowOwner(EntityCreatureTameable setHost) {
+    public EntityAIFollowOwner(TameableCreatureEntity setHost) {
     	super(setHost);
         this.setMutexBits(1);
         this.host = setHost;
@@ -75,7 +74,7 @@ public class EntityAIFollowOwner extends EntityAIFollow {
     // ========== Teleport to Owner ==========
     public void teleportToOwner() {
     	if(this.getTarget() != null) {
-			if(!this.host.canBreatheAboveWater() && ((!this.host.isLavaCreature && !this.getTarget().isInWater()) || (this.host.isLavaCreature && !this.getTarget().isInLava()))) {
+			if(!this.host.canBreatheAir() && ((!this.host.isLavaCreature && !this.getTarget().isInWater()) || (this.host.isLavaCreature && !this.getTarget().isInLava()))) {
 				return;
 			}
 			if(!this.host.canBreatheUnderwater() && this.getTarget().isInWater()) {

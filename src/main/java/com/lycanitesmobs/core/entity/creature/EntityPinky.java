@@ -1,31 +1,28 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.PlayerControlGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.init.MobEffects;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 import java.util.List;
 
-public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGroupAnimal, IGroupAlpha, IGroupPredator, IGroupHunter, IGroupDemon {
+public class EntityPinky extends RideableCreatureEntity {
 	
-	EntityAIPlayerControl playerControlAI;
+	PlayerControlGoal playerControlAI;
 	
 	// ==================================================
  	//                    Constructor
@@ -39,7 +36,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         this.spreadFire = true;
         this.setupMob();
         
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.stepHeight = 1.0F;
     }
 
@@ -47,39 +44,10 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIMate(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
-        this.tasks.addTask(6, new EntityAIAttackMelee(this).setSpeed(1.5D));
-        this.tasks.addTask(7, this.aiSit);
-        this.tasks.addTask(8, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.playerControlAI = new EntityAIPlayerControl(this);
-        this.tasks.addTask(9, playerControlAI);
-        this.tasks.addTask(10, new EntityAIWander(this).setSpeed(1.0D));
-        this.tasks.addTask(11, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(12, new EntityAILookIdle(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPigZombie.class).setSpeed(1.5D).setDamage(8.0D).setRange(2.5D));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
 
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityCow.class).setTameTargetting(true));
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPig.class).setTameTargetting(true));
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntitySheep.class).setTameTargetting(true));
-        }
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPigZombie.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
+        this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityPigZombie.class));
     }
 	
 	
@@ -92,7 +60,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         super.onLivingUpdate();
         
         // Become a farmed animal if removed from the Nether to another dimension, prevents natural despawning.
-        if(this.getEntityWorld().provider.getDimension() != -1)
+        if(this.getEntityWorld().getWorldType().getId() != -1)
         	this.setFarmed();
     }
     
@@ -152,7 +120,7 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
         	return false;
         
     	// Breed:
-    	if(target instanceof EntityCow || target instanceof EntityPig || target instanceof EntitySheep || target instanceof EntityHorse || target instanceof EntityLlama)
+        if((target instanceof EntityAnimal || (target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).creatureInfo.isFarmable())) && target.height >= 1F)
     		this.breed();
     	
         return true;
@@ -162,18 +130,15 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     public void specialAttack() {
         // Withering Roar:
         double distance = 5.0D;
-        List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), new Predicate<EntityLivingBase>() {
-            @Override
-            public boolean apply(EntityLivingBase possibleTarget) {
-                if(!possibleTarget.isEntityAlive()
-                        || possibleTarget == EntityPinky.this
-                        || EntityPinky.this.isRidingOrBeingRiddenBy(possibleTarget)
-                        || EntityPinky.this.isOnSameTeam(possibleTarget)
-                        || !EntityPinky.this.canAttackClass(possibleTarget.getClass())
-                        || !EntityPinky.this.canAttackEntity(possibleTarget))
-                    return false;
-                return true;
-            }
+        List<EntityLivingBase> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(distance, distance, distance), (Predicate<EntityLivingBase>) possibleTarget -> {
+            if(!possibleTarget.isEntityAlive()
+                    || possibleTarget == EntityPinky.this
+                    || EntityPinky.this.isRidingOrBeingRiddenBy(possibleTarget)
+                    || EntityPinky.this.isOnSameTeam(possibleTarget)
+                    || !EntityPinky.this.canAttackClass(possibleTarget.getClass())
+                    || !EntityPinky.this.canAttackEntity(possibleTarget))
+                return false;
+            return true;
         });
         if(!possibleTargets.isEmpty()) {
             for(EntityLivingBase possibleTarget : possibleTargets) {
@@ -231,27 +196,9 @@ public class EntityPinky extends EntityCreatureRideable implements IAnimals, IGr
     // ==================================================
     //                     Breeding
     // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityPinky(this.getEntityWorld());
-	}
-	
 	// ========== Breeding Item ==========
 	@Override
 	public boolean isBreedingItem(ItemStack itemStack) {
-        if(!CreatureManager.getInstance().config.predatorsAttackAnimals)
-            return ObjectLists.inItemList("rawmeat", itemStack) || ObjectLists.inItemList("cookedmeat", itemStack);
         return false; // Breeding is triggered by attacking specific mobs instead!
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
     }
 }

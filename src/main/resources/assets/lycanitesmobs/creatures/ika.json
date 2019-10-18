@@ -1,8 +1,11 @@
 {
 	"name": "ika",
 	"creatureType": "aquatic",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityIka",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelIka",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelIka",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0.5,
 	"eggBackColor": "#99FFBB",
 	"eggForeColor": "#229944",
@@ -54,7 +57,12 @@
 		}
 	],
 	"element": "earth",
+	"diets": [
+		"herbivore",
+		"frugivore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,
@@ -62,8 +70,8 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:ikameatraw",
-			"burningItem": "lycanitesmobs:ikameatcooked",
+			"item": "lycanitesmobs:raw_ika_meat",
+			"burningItem": "lycanitesmobs:cooked_ika_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

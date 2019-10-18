@@ -58,7 +58,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 						if (x != 0 && z != 0) {
 							continue;
 						}
-						LycanitesMobs.printDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkX + (dungeonSizeMax * x)) + " Z" + (chunkZ + (dungeonSizeMax * z)));
+						LycanitesMobs.logDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkX + (dungeonSizeMax * x)) + " Z" + (chunkZ + (dungeonSizeMax * z)));
 						DungeonInstance dungeonInstance = new DungeonInstance();
 						int yPos = world.getSeaLevel();
 						BlockPos dungeonPos = new ChunkPos(chunkX + (dungeonSizeMax * x), chunkZ + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
@@ -77,7 +77,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 			}
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("Dungeon", "An exception occurred when trying to generate a dungeon.");
+			LycanitesMobs.logWarning("Dungeon", "An exception occurred when trying to generate a dungeon.");
 			if(LycanitesMobs.config.getBool("Debug", "Dungeon", false)) {
 				e.printStackTrace();
 			}

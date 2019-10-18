@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.creature.EntityBeholder;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -155,19 +155,19 @@ public class EntityArcaneLaserStorm extends EntityProjectileBase {
 		}
 		if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
 			int explosionRadius = 2;
-			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
-				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
-				if(entityCreatureBase instanceof EntityBeholder && !((EntityBeholder)entityCreatureBase).beholderGreifing) {
+			if (this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity) {
+				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) this.getThrower();
+				if(baseCreatureEntity instanceof EntityBeholder && !((EntityBeholder) baseCreatureEntity).beholderGreifing) {
 					return;
 				}
-				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
+				if(baseCreatureEntity.getOwner() == entity || baseCreatureEntity.getControllingPassenger() == entity) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 0) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 0) {
 					explosionRadius += 2;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 2) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 2) {
 					explosionRadius += 2;
 				}
 			}

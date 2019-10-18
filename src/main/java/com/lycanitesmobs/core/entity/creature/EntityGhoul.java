@@ -1,8 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
+import com.lycanitesmobs.core.entity.goals.actions.MoveVillageGoal;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityZombieVillager;
@@ -13,7 +15,7 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityGhoul extends EntityCreatureAgeable implements IMob {
+public class EntityGhoul extends AgeableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
@@ -34,24 +36,19 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
+        this.tasks.addTask(this.nextTravelGoalIndex++, new MoveVillageGoal(this));
+
         super.initEntityAI();
+
+        this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
+
         if(this.getNavigator() instanceof PathNavigateGround) {
             PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBreakDoor(this));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this));
-        this.tasks.addTask(6, new EntityAIMoveVillage(this));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setCheckSight(false));
     }
     
     
@@ -70,7 +67,7 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
             EntityZombieVillager entityzombievillager = new EntityZombieVillager(this.getEntityWorld());
             entityzombievillager.copyLocationAndAnglesFrom(entityvillager);
             this.getEntityWorld().removeEntity(entityvillager);
-            entityzombievillager.onInitialSpawn(this.getEntityWorld().getDifficultyForLocation(new BlockPos(entityzombievillager)), new EntityCreatureBase.GroupData(false));
+            entityzombievillager.onInitialSpawn(this.getEntityWorld().getDifficultyForLocation(new BlockPos(entityzombievillager)), new BaseCreatureEntity.GroupData(false));
             entityzombievillager.setProfession(entityvillager.getProfession());
             entityzombievillager.setChild(entityvillager.isChild());
             entityzombievillager.setNoAI(entityvillager.isAIDisabled());
@@ -91,14 +88,4 @@ public class EntityGhoul extends EntityCreatureAgeable implements IMob {
    	// ==================================================
     @Override
     public boolean daylightBurns() { return !this.isChild(); }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityGhoul(this.getEntityWorld());
-	}
 }

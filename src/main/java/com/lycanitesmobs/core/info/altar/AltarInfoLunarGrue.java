@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.info.altar;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.entity.creature.EntityGrue;
 import net.minecraft.block.Block;
@@ -123,7 +123,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityGrue = new EntityGrue(world);
+        BaseCreatureEntity entityGrue = new EntityGrue(world);
         if (checkDimensions && !entityGrue.isNativeDimension(world))
             return false;
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.dispenser.projectile;
 
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
 import net.minecraft.block.BlockDispenser;

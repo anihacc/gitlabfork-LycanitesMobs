@@ -19,15 +19,15 @@ public class ConfigSpawning extends ConfigBase {
 	// Get Config:
      public static ConfigSpawning getConfig(ModInfo group, String configName) {
 		 String configFileName = configName.toLowerCase();
-		 if(!"lycanitesmobs".equalsIgnoreCase(group.filename)) {
-			 configFileName = group.filename + "-" + configFileName;
+		 if(!"lycanitesmobs".equalsIgnoreCase(group.modid)) {
+			 configFileName = group.modid + "-" + configFileName;
 		 }
          if(!configs.containsKey(configFileName))
              registerConfig(new ConfigSpawning(group, configName, configFileName));
          ConfigBase config = ConfigBase.configs.get(configFileName);
          if(config instanceof ConfigSpawning)
          	return (ConfigSpawning)config;
-     	LycanitesMobs.printWarning("", "[Config] Tried to access the Base Config: " + configName + " as a Spawning Config from group: " + group.name + "!");
+     	LycanitesMobs.logWarning("", "[Config] Tried to access the Base Config: " + configName + " as a Spawning Config from group: " + group.name + "!");
      	return null;
      }
     
@@ -223,7 +223,7 @@ public class ConfigSpawning extends ConfigBase {
                 }
                 catch(Exception e) {
                     biomeType = null;
-                    LycanitesMobs.printWarning("", "[Config] Unknown biome type " + biomeEntry + " specified for " + defaultValue + "this will be ignored and treated as NONE.");
+                    LycanitesMobs.logWarning("", "[Config] Unknown biome type " + biomeEntry + " specified for " + defaultValue + "this will be ignored and treated as NONE.");
                 }
                 if(biomeType != null) {
                     Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
@@ -290,7 +290,7 @@ public class ConfigSpawning extends ConfigBase {
                 }
                 catch(Exception e) {
                     biomeType = null;
-                    LycanitesMobs.printWarning("", "[Config] Unknown biome type " + biomeEntry + " specified for " + defaultValue + "this will be ignored and treated as NONE.");
+                    LycanitesMobs.logWarning("", "[Config] Unknown biome type " + biomeEntry + " specified for " + defaultValue + "this will be ignored and treated as NONE.");
                 }
                 if(biomeType != null) {
                     biomeTypeList.add(biomeType);

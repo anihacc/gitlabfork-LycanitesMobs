@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 
@@ -92,8 +92,8 @@ public class BlockShadowfire extends BlockFireBase {
             return;
         PotionEffect effectBlindness = new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0);
         PotionEffect effectDecay = null;
-        if(ObjectManager.getPotionEffect("decay") != null)
-            effectDecay = new PotionEffect(ObjectManager.getPotionEffect("decay"), 5 * 20, 0);
+        if(ObjectManager.getEffect("decay") != null)
+            effectDecay = new PotionEffect(ObjectManager.getEffect("decay"), 5 * 20, 0);
         if(entity instanceof EntityLivingBase) {
             EntityLivingBase entityLiving = (EntityLivingBase)entity;
             if(!entityLiving.isPotionApplicable(effectBlindness) || (effectDecay != null && !entityLiving.isPotionApplicable(effectDecay)))

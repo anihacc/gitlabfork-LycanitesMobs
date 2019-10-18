@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 
 public class EntityAITargetOwnerAttack extends EntityAITarget {
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
 	private int lastAttackTime;
@@ -13,7 +13,7 @@ public class EntityAITargetOwnerAttack extends EntityAITarget {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetOwnerAttack(EntityCreatureTameable setHost) {
+    public EntityAITargetOwnerAttack(TameableCreatureEntity setHost) {
     	super(setHost);
         this.host = setHost;
         this.checkSight = false;

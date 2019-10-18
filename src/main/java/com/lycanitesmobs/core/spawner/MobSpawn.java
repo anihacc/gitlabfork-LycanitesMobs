@@ -5,11 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ItemDrop;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -116,7 +115,7 @@ public class MobSpawn {
 				mobSpawn.loadFromJSON(json);
 			}
 			else {
-				LycanitesMobs.printWarning("", "[JSONSpawner] Unable to find a Lycanites Mob from the mob id: " + mobId + " Mob Spawn entry ignored.");
+				LycanitesMobs.logWarning("", "[JSONSpawner] Unable to find a Lycanites Mob from the mob id: " + mobId + " Mob Spawn entry ignored.");
 			}
 		}
 		return mobSpawn;
@@ -382,8 +381,8 @@ public class MobSpawn {
 			entityLiving.enablePersistence();
 		}
 
-		if(entityLiving instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
+		if(entityLiving instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
 			boolean firstSpawn = true;
 			if(this.mobSizeScale > -1) {
 				entityCreature.setSizeScale(this.mobSizeScale);

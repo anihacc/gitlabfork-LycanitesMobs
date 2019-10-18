@@ -1,20 +1,19 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityWhirlwind;
-import net.minecraft.entity.Entity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusable {
+public class EntityDjinn extends TameableCreatureEntity implements IMob, IFusable {
 
 	public float fireDamageAbsorbed = 0;
 
@@ -36,22 +35,7 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIFollowFuse(this).setLostDistance(16));
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(7, new EntityAITargetFuse(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
 	
 	
@@ -68,7 +52,7 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
 			// Environmental Transformation:
 			if(!this.isTamed()) {
 				if (this.fireDamageAbsorbed >= 10) {
-					this.transform(EntityZephyr.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityClass("zephyr"), null, false);
 				}
 			}
 		}
@@ -82,12 +66,6 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
@@ -134,7 +112,7 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
             return false;
         }
         if(type.equals("lightningBolt") && !this.isTamed()) {
-        	this.transform(EntityZephyr.class, null, false);
+        	this.transform(CreatureManager.getInstance().getEntityClass("zephyr"), null, false);
         	return false;
 		}
         return super.isDamageTypeApplicable(type, source, damage);
@@ -165,21 +143,21 @@ public class EntityDjinn extends EntityCreatureTameable implements IMob, IFusabl
     }
 
     @Override
-    public Class getFusionClass(IFusable fusable) {
+	public Class getFusionClass(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityZephyr.class;
+			return CreatureManager.getInstance().getEntityClass("zephyr");
 		}
         if(fusable instanceof EntityJengu) {
-            return EntityReiver.class;
+			return CreatureManager.getInstance().getEntityClass("reiver");
         }
         if(fusable instanceof EntityGeonach) {
-            return EntityBanshee.class;
+			return CreatureManager.getInstance().getEntityClass("banshee");
         }
         if(fusable instanceof EntityAegis) {
-            return EntitySylph.class;
+			return CreatureManager.getInstance().getEntityClass("sylph");
         }
 		if(fusable instanceof EntityArgus) {
-			return EntityWraith.class;
+			return CreatureManager.getInstance().getEntityClass("wraith");
 		}
         return null;
     }

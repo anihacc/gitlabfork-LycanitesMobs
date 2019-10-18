@@ -1,20 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.PlaceBlockGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
@@ -23,9 +18,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupPredator {
-    public EntityAIPlaceBlock aiPlaceBlock;
-	private boolean vespidHiveBuilding = true;
+public class EntityVespid extends AgeableCreatureEntity implements IMob {
+    public PlaceBlockGoal aiPlaceBlock;
+	private boolean vespidHiveBuilding = true; // TODO Creature Flags.
 	
     // ==================================================
  	//                    Constructor
@@ -43,31 +38,17 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
 
         this.stepHeight = 1.0F;
         this.setAttackCooldownMax(10);
-        
-        this.vespidHiveBuilding = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Vespid Hive Building", this.vespidHiveBuilding, "Set to false to stop Vespids from building hives all together.");
-    }
+     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.aiPlaceBlock = new EntityAIPlaceBlock(this).setMaxDistance(128D).setSpeed(3D);
-        this.tasks.addTask(4, this.aiPlaceBlock);
-        this.tasks.addTask(5, new EntityAIFollowMaster(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(20));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
+		this.aiPlaceBlock = new PlaceBlockGoal(this).setMaxDistance(128D).setSpeed(3D);
+		this.tasks.addTask(this.nextIdleGoalIndex++, this.aiPlaceBlock);
 
-        this.targetTasks.addTask(1, new EntityAITargetMasterAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true).setHelpClasses(EntityVespidQueen.class));
-        this.targetTasks.addTask(3, new EntityAITargetMaster(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
     }
 	
 	// ==================================================
@@ -101,7 +82,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
         }
         
         // Building AI:
-        if(!this.getEntityWorld().isRemote && this.vespidHiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.block == null) {
+        if(!this.getEntityWorld().isRemote && this.vespidHiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
         	EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
         	
         	// Build Hive Foundations:
@@ -146,7 +127,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endX >= hivePos.getX() + hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(5); // East Block Facing WEST
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax"), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
             		}
             	}
             	
@@ -159,7 +140,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endX <= hivePos.getX() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(4); // West Block Facing EAST
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax"), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(endX, hivePos.getY(), hivePos.getZ()));
             		}
             	}
         		
@@ -172,7 +153,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endY >= ((int) hivePos.getY() + hiveMin)) {
 	            		this.aiPlaceBlock.setMetadata(0); // Top Block Facing DOWN
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis"), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").getDefaultState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
             		}
             	}
             	
@@ -185,7 +166,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endY <= hivePos.getY() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(1); // Bottom Block Facing UP
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis"), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("propolis").getDefaultState(), new BlockPos(hivePos.getX(), endY, hivePos.getZ()));
             		}
             	}
         		
@@ -198,7 +179,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endZ >= hivePos.getZ() + hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(2); // South Block Facing NORTH
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax"), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
             		}
             	}
             	
@@ -211,7 +192,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
             		}
             		if(endZ <= hivePos.getZ() - hiveMin) {
 	            		this.aiPlaceBlock.setMetadata(3); // North Block Facing SOUTH
-	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax"), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
+	            		this.aiPlaceBlock.setBlockPlacement(ObjectManager.getBlock("veswax").getDefaultState(), new BlockPos(hivePos.getX(), hivePos.getY(), endZ));
             		}
             	}
         	}
@@ -226,7 +207,7 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
         			else
         				hiveExposedCoords = hiveExposedCoordsList.get(0);
         			this.aiPlaceBlock.setMetadata(hiveExposedCoords.orientationMeta);
-	        		this.aiPlaceBlock.setBlockPlacement(hiveExposedCoords.block, hiveExposedCoords.pos);
+	        		this.aiPlaceBlock.setBlockPlacement(hiveExposedCoords.block.getDefaultState(), hiveExposedCoords.pos);
         		}
         	}
         }
@@ -249,18 +230,16 @@ public class EntityVespid extends EntityCreatureAgeable implements IMob, IGroupP
     public boolean isHiveWall(BlockPos searchPos) {
         IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
-        if(searchBlock != null)
-            if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)
-                return true;
+		if(searchBlock == ObjectManager.getBlock("veswax"))
+			return true;
         return false;
     }
 
     public boolean isHiveFloor(BlockPos searchPos) {
         IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
-        if(searchBlock != null)
-            if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)
-                return true;
+		if(searchBlock == ObjectManager.getBlock("veswax"))
+			return true;
         return false;
     }
     

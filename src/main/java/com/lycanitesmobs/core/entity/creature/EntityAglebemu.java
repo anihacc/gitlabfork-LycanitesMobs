@@ -1,19 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAglebemu extends EntityCreatureTameable implements IMob {
+public class EntityAglebemu extends TameableCreatureEntity implements IMob {
 
     // ==================================================
  	//                    Constructor
@@ -39,20 +36,7 @@ public class EntityAglebemu extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setRange(3));
-        this.tasks.addTask(5, this.aiSit);
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setRange(3));
     }
 	
 	
@@ -99,8 +83,6 @@ public class EntityAglebemu extends EntityCreatureTameable implements IMob {
         IBlockState blockState = this.getEntityWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(blockState.getBlock() == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -133,7 +115,7 @@ public class EntityAglebemu extends EntityCreatureTameable implements IMob {
     }
 
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
 
@@ -146,17 +128,7 @@ public class EntityAglebemu extends EntityCreatureTameable implements IMob {
     @Override
     public int getBagSize() { return 5; }
 	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityAglebemu(this.getEntityWorld());
-	}
-    
-    
+
     // ==================================================
     //                     Pet Control
     // ==================================================

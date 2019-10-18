@@ -1,14 +1,13 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigateGround;
 
 public class EntityAISwimming extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private boolean sink = false;
@@ -16,7 +15,7 @@ public class EntityAISwimming extends EntityAIBase {
     // ==================================================
    	//                    Constructor
    	// ==================================================
-    public EntityAISwimming(EntityCreatureBase setEntity) {
+    public EntityAISwimming(BaseCreatureEntity setEntity) {
         this.host = setEntity;
         this.setMutexBits(4);
         if(setEntity.getNavigator() instanceof PathNavigateGround)

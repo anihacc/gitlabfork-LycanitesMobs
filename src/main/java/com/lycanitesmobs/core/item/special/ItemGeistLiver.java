@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.special;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 
 import net.minecraft.block.Block;

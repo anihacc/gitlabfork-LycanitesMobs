@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -131,8 +131,8 @@ public class EntityHellfireWall extends EntityProjectileBase {
         else if(target instanceof EntityTameable) {
             obliterate = !(((EntityTameable)target).getOwner() instanceof EntityPlayer);
         }
-        else if(target instanceof EntityCreatureTameable) {
-            obliterate = !(((EntityCreatureTameable)target).getOwner() instanceof EntityPlayer);
+        else if(target instanceof TameableCreatureEntity) {
+            obliterate = !(((TameableCreatureEntity)target).getOwner() instanceof EntityPlayer);
         }
         if(target instanceof IGroupBoss)
             obliterate = false;

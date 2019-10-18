@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -73,7 +73,7 @@ public class BlockBase extends Block {
 	
 	/** Should be called by a child class once the blockName and other important variables are set, kind of a late construct. **/
 	public void setup() {
-        this.setRegistryName(this.group.filename, this.blockName.toLowerCase());
+        this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
 		this.setUnlocalizedName(this.blockName);
 	}
 

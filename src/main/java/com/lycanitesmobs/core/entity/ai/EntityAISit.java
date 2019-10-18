@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityAISit extends EntityAIBase {
 	// Targets:
-    private EntityCreatureTameable host;
+    private TameableCreatureEntity host;
     
     // Properties:
     private boolean enabled = true;
@@ -17,7 +17,7 @@ public class EntityAISit extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAISit(EntityCreatureTameable setHost) {
+    public EntityAISit(TameableCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }

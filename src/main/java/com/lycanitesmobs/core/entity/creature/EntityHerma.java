@@ -1,25 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityHerma extends EntityCreatureTameable implements IMob {
+public class EntityHerma extends TameableCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
+	WanderGoal wanderAI;
 
     // ==================================================
  	//                    Constructor
@@ -42,22 +37,7 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(2.0D));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(5, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(6, wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class).setRange(6D));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setRange(8D));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
     
     
@@ -82,8 +62,6 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
         IBlockState blockState = this.getEntityWorld().getBlockState(pos);
         if(blockState.getBlock() == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(blockState.getBlock() == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(pos))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -131,7 +109,7 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
 
@@ -147,14 +125,4 @@ public class EntityHerma extends EntityCreatureTameable implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("CookedFish", testStack) || ObjectLists.inItemList("RawFish", testStack);
-    }
 }

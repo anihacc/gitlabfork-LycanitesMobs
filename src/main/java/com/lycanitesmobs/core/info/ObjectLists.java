@@ -115,7 +115,7 @@ public class ObjectLists {
     // ==================================================
 	public static boolean inItemList(String list, ItemStack testStack) {
 		list = list.toLowerCase();
-        if(testStack == null) {
+        if(testStack.isEmpty()) {
 			return false;
 		}
 		else {
@@ -181,54 +181,66 @@ public class ObjectLists {
     // ==================================================
 	public static void createLists() {
 		// ========== Item Lists ==========
-		// Raw Meat: (A bit cold...)
-		ObjectLists.addItem("rawmeat", Items.BEEF);
-		ObjectLists.addItem("rawmeat", Items.PORKCHOP);
-		ObjectLists.addItem("rawmeat", Items.CHICKEN);
-		
-		// Cooked Meat: (Meaty goodness for carnivorous pets!)
-		ObjectLists.addItem("cookedmeat", Items.COOKED_BEEF);
-		ObjectLists.addItem("cookedmeat", Items.COOKED_PORKCHOP);
-		ObjectLists.addItem("cookedmeat", Items.COOKED_CHICKEN);
-		
-		// Prepared Vegetables: (For most vegetarian pets.)
-		ObjectLists.addItem("vegetables", Items.WHEAT);
-		ObjectLists.addItem("vegetables", Items.CARROT);
-		ObjectLists.addItem("vegetables", Items.POTATO);
-		
-		// Fruit: (For exotic pets!)
-		ObjectLists.addItem("fruit", Items.APPLE);
-		ObjectLists.addItem("fruit", Items.MELON);
-		ObjectLists.addItem("fruit", Blocks.PUMPKIN);
-		ObjectLists.addItem("fruit", Items.PUMPKIN_PIE);
+		// Raw Meat:
+		ObjectLists.addItem("diet_carnivore", Items.BEEF);
+		ObjectLists.addItem("diet_carnivore", Items.PORKCHOP);
+		ObjectLists.addItem("diet_carnivore", Items.CHICKEN);
+		ObjectLists.addItem("diet_carnivore", Items.RABBIT);
+		ObjectLists.addItem("diet_carnivore", Items.MUTTON);
 
-		// Raw Fish: (Very smelly!)
-		ObjectLists.addItem("rawfish", Items.FISH);
+		// Cooked Meat:
+		ObjectLists.addItem("diet_carnivore", Items.COOKED_BEEF);
+		ObjectLists.addItem("diet_carnivore", Items.COOKED_PORKCHOP);
+		ObjectLists.addItem("diet_carnivore", Items.COOKED_CHICKEN);
+		ObjectLists.addItem("diet_carnivore", Items.COOKED_RABBIT);
+		ObjectLists.addItem("diet_carnivore", Items.COOKED_MUTTON);
 
-		// Cooked Fish: (For those fish fiends!)
-		ObjectLists.addItem("cookedfish", Items.COOKED_FISH);
+		// Raw Fish:
+		ObjectLists.addItem("diet_piscivore", Items.FISH);
+
+		// Cooked Fish:
+		ObjectLists.addItem("diet_piscivore", Items.COOKED_FISH);
+
+		// Vegetables:
+		ObjectLists.addItem("diet_herbivore", Items.WHEAT);
+		ObjectLists.addItem("diet_herbivore", Items.CARROT);
+		ObjectLists.addItem("diet_herbivore", Items.POTATO);
 		
-		// Cactus Food: (Jousts love these!)
-		ObjectLists.addItem("cactusfood", new ItemStack(Items.DYE, 1, 2)); // Cactus Green
+		// Fruit:
+		ObjectLists.addItem("diet_frugivore", Items.APPLE);
+		ObjectLists.addItem("diet_frugivore", Items.MELON);
+		ObjectLists.addItem("diet_frugivore", Blocks.PUMPKIN);
+
+		// Sweets:
+		ObjectLists.addItem("diet_frugivore", Items.SUGAR);
+		ObjectLists.addItem("diet_frugivore", new ItemStack(Items.DYE, 1, 15)); // Cocoa Beans
+		ObjectLists.addItem("diet_frugivore", Items.COOKIE);
+		ObjectLists.addItem("diet_frugivore", Blocks.CAKE);
+		ObjectLists.addItem("diet_frugivore", Items.PUMPKIN_PIE);
 		
-		// Mushrooms: (Fungi treats!)
-        ObjectLists.addItem("mushrooms", Items.MUSHROOM_STEW);
-        ObjectLists.addItem("mushrooms", Blocks.RED_MUSHROOM);
-		ObjectLists.addItem("mushrooms", Blocks.BROWN_MUSHROOM);
-		ObjectLists.addItem("mushrooms", Blocks.RED_MUSHROOM);
-		ObjectLists.addItem("mushrooms", Blocks.BROWN_MUSHROOM_BLOCK);
-		ObjectLists.addItem("mushrooms", Blocks.RED_MUSHROOM_BLOCK);
+		// Extracts:
+		ObjectLists.addItem("diet_exudativore", new ItemStack(Items.DYE, 1, 2)); // Cactus Green
 		
-		// Sweets: (Sweet sugary goodness!)
-		ObjectLists.addItem("sweets", Items.SUGAR);
-		ObjectLists.addItem("sweets", new ItemStack(Items.DYE, 1, 15)); // Cocoa Beans
-		ObjectLists.addItem("sweets", Items.COOKIE);
-		ObjectLists.addItem("sweets", Blocks.CAKE);
-		ObjectLists.addItem("sweets", Items.PUMPKIN_PIE);
-		
-		// Fuel: (Fiery awesomeness!)
-		ObjectLists.addItem("fuel", Items.COAL);
-		
+		// Mushrooms:
+        ObjectLists.addItem("diet_fungivore", Items.MUSHROOM_STEW);
+        ObjectLists.addItem("diet_fungivore", Blocks.RED_MUSHROOM);
+		ObjectLists.addItem("diet_fungivore", Blocks.BROWN_MUSHROOM);
+		ObjectLists.addItem("diet_fungivore", Blocks.NETHER_WART);
+
+		// Rotten:
+		ObjectLists.addItem("diet_detritivore", Items.ROTTEN_FLESH);
+		ObjectLists.addItem("diet_detritivore", Items.FERMENTED_SPIDER_EYE);
+
+		// Minerals:
+		ObjectLists.addItem("diet_geovore", Items.COAL);
+		ObjectLists.addItem("diet_geovore", new ItemStack(Items.DYE, 1, 4)); // Lapis Lazuli
+		ObjectLists.addItem("diet_geovore", Items.DIAMOND);
+		ObjectLists.addItem("diet_geovore", Items.EMERALD);
+
+		// Insectoid:
+		ObjectLists.addItem("diet_insectivore", Items.SPIDER_EYE);
+		ObjectLists.addItem("diet_insectivore", Items.FERMENTED_SPIDER_EYE);
+
 		// Custom Entries:
 		for(String itemListName : itemListNames) {
 			addFromConfig(itemListName.toLowerCase());
@@ -272,10 +284,10 @@ public class ObjectLists {
 		ConfigBase config = ConfigBase.getConfig(LycanitesMobs.modInfo, "itemlists");
 		config.setCategoryComment("item lists", "Here you can add items from vanilla Minecraft or other mods to various lists used by this mod. These are mostly food items that can be fed to farmable/tameable mobs. Format is: mod:itemname,metadata Multiple entries should be semicolon separated, be sure to use a colon and semicolon in the correct place.");
 		String customDropsString = config.getString("Item Lists", listName).replace(" ", "");
-		LycanitesMobs.printDebug("ItemSetup", "~O========== Custom " + listName + " ==========O~");
+		LycanitesMobs.logDebug("ItemSetup", "~O========== Custom " + listName + " ==========O~");
 		if(customDropsString != null && customDropsString.length() > 0) {
 			for (String customDropEntryString : customDropsString.replace(" ", "").split(";")) {
-				LycanitesMobs.printDebug("ItemSetup", "Adding: " + customDropEntryString);
+				LycanitesMobs.logDebug("ItemSetup", "Adding: " + customDropEntryString);
 				String[] customDropValues = customDropEntryString.split(",");
 				String dropName = customDropValues[0];
 				int dropMeta = 0;
@@ -284,12 +296,12 @@ public class ObjectLists {
 				if (Item.getByNameOrId(dropName) != null) {
 					Item customItem = Item.getByNameOrId(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customItem, 1, dropMeta));
-					LycanitesMobs.printDebug("ItemSetup", "As Item: " + customItem);
+					LycanitesMobs.logDebug("ItemSetup", "As Item: " + customItem);
 				}
 				else if (Block.getBlockFromName(dropName) != null) {
 					Block customBlock = Block.getBlockFromName(dropName);
 					ObjectLists.addItem(listName, new ItemStack(customBlock, 1, dropMeta));
-					LycanitesMobs.printDebug("ItemSetup", "As Block: " + customBlock);
+					LycanitesMobs.logDebug("ItemSetup", "As Block: " + customBlock);
 				}
 			}
 		}

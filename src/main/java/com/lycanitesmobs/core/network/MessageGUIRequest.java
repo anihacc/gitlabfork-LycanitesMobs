@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.network;
 
 import io.netty.buffer.ByteBuf;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IThreadListener;

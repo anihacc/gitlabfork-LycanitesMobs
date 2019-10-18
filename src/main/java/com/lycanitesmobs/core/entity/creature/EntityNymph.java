@@ -1,31 +1,27 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
+public class EntityNymph extends TameableCreatureEntity {
 
-	public int healingRate = 20;
+	public int healingRate = 20; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityNymph(World par1World) {
-        super(par1World);
+    public EntityNymph(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -36,25 +32,12 @@ public class EntityNymph extends EntityCreatureTameable implements IGroupPlant {
         this.setupMob();
 
         this.stepHeight = 1.0F;
-        this.healingRate = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Nymph Healing Rate", this.healingRate, "Sets the rate in ticks (20 ticks = 1 second) that a Nymph heals surrounding entities.");
     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-		this.tasks.addTask(5, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 

@@ -2,13 +2,13 @@ package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.gui.GuiSummoningPedestal;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.client.gui.GuiSummoningPedestal;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +24,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
@@ -59,7 +58,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public int summoningFuelAmount = 10 * 60 * 20; // 10 minutes per Redstone Dust
 
     // Summoned Minions:
-    public List<EntityCreatureBase> minions = new ArrayList<>();
+    public List<BaseCreatureEntity> minions = new ArrayList<>();
     protected String[] loadMinionIDs; // Temporary array for initially populating from NBT data in update.
 
     // Block:
@@ -107,12 +106,12 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
         // Load Minion IDs:
         if(this.loadMinionIDs != null) {
             int range = 20;
-            List nearbyEntities = this.getWorld().getEntitiesWithinAABB(EntityCreatureBase.class,
+            List nearbyEntities = this.getWorld().getEntitiesWithinAABB(BaseCreatureEntity.class,
                     new AxisAlignedBB(this.getPos().getX() - range, this.getPos().getY() - range, this.getPos().getZ() - range,
                             this.getPos().getX() + range, this.getPos().getY() + range, this.getPos().getZ() + range));
             Iterator possibleEntities = nearbyEntities.iterator();
             while(possibleEntities.hasNext()) {
-                EntityCreatureBase possibleEntity = (EntityCreatureBase)possibleEntities.next();
+                BaseCreatureEntity possibleEntity = (BaseCreatureEntity)possibleEntities.next();
                 for(String loadMinionID : this.loadMinionIDs) {
                     UUID uuid = null;
                     try { uuid = UUID.fromString(loadMinionID); } catch (Exception e) {}
@@ -141,7 +140,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			// Update Minions:
 			if (this.updateTick % 100 == 0) {
 				this.capacity = 0;
-				for (EntityCreatureBase minion : this.minions.toArray(new EntityCreatureBase[this.minions.size()])) {
+				for (BaseCreatureEntity minion : this.minions.toArray(new BaseCreatureEntity[this.minions.size()])) {
 					if (minion == null || minion.isDead)
 						this.minions.remove(minion);
 					else {
@@ -260,7 +259,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
     // ========== Minion Behaviour ==========
     /** Applies the minion behaviour to the summoned player owned minion. **/
-    public void applyMinionBehaviour(EntityCreatureTameable minion) {
+    public void applyMinionBehaviour(TameableCreatureEntity minion) {
         if(this.summonSet != null) {
             this.summonSet.applyBehaviour(minion);
             minion.applySubspecies(this.summonSet.subspecies);

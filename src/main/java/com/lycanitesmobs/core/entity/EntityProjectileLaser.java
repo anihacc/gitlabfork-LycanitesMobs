@@ -9,7 +9,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -157,8 +156,8 @@ public class EntityProjectileLaser extends EntityProjectileBase {
     		double xPos = entityToFollow.posX + this.offsetX;
 			double yPos = entityToFollow.posY -(this.height / 2) + this.offsetY;
 			double zPos = entityToFollow.posZ + this.offsetZ;
-    		if(entityToFollow instanceof EntityCreatureBase) {
-				EntityCreatureBase creatureToFollow = (EntityCreatureBase)entityToFollow;
+    		if(entityToFollow instanceof BaseCreatureEntity) {
+				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
 				xPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetX, creatureToFollow.rotationYaw + 90F).getX();
 				zPos = creatureToFollow.getFacingPosition(creatureToFollow, this.offsetZ, creatureToFollow.rotationYaw).getZ();
 			}
@@ -258,8 +257,8 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 			// Entity Aiming:
 			boolean lockedLaser = false;
 			if(this.shootingEntity != null && this.useEntityAttackTarget) {
-				if(this.shootingEntity instanceof EntityCreatureBase && ((EntityCreatureBase)this.shootingEntity).getAttackTarget() != null) {
-					EntityLivingBase attackTarget = ((EntityCreatureBase)this.shootingEntity).getAttackTarget();
+				if(this.shootingEntity instanceof BaseCreatureEntity && ((BaseCreatureEntity)this.shootingEntity).getAttackTarget() != null) {
+					EntityLivingBase attackTarget = ((BaseCreatureEntity)this.shootingEntity).getAttackTarget();
 					this.targetX = attackTarget.posX;
 					this.targetY = attackTarget.posY + (attackTarget.height / 2);
 					this.targetZ = attackTarget.posZ;
@@ -455,8 +454,8 @@ public class EntityProjectileLaser extends EntityProjectileBase {
 		}
 
 		// Deal Damage:
-		if(this.getThrower() instanceof EntityCreatureBase) {
-			EntityCreatureBase creatureThrower = (EntityCreatureBase)this.getThrower();
+		if(this.getThrower() instanceof BaseCreatureEntity) {
+			BaseCreatureEntity creatureThrower = (BaseCreatureEntity)this.getThrower();
 			attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
 		}
         else {

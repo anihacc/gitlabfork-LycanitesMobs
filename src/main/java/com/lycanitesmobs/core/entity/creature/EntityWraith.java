@@ -1,14 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -16,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityWraith extends EntityCreatureTameable implements IMob, IGroupDemon {
+public class EntityWraith extends TameableCreatureEntity implements IMob {
 
     protected int detonateTimer = -1;
     
@@ -27,7 +23,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+		this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
 
@@ -38,14 +34,7 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setSpeed(2.0D).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D).setPauseRate(0));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(2.0D).setLongMemory(false));
     }
     
     
@@ -71,8 +60,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
                     for (EntityLivingBase entity : this.getNearbyEntities(EntityLivingBase.class, null, 1)) {
                         if (this.getPlayerOwner() != null && entity == this.getPlayerOwner())
                             continue;
-                        if (entity instanceof EntityCreatureTameable) {
-                            EntityCreatureTameable entityCreature = (EntityCreatureTameable) entity;
+                        if (entity instanceof TameableCreatureEntity) {
+                            TameableCreatureEntity entityCreature = (TameableCreatureEntity) entity;
                             if (entityCreature.getPlayerOwner() != null && entityCreature.getPlayerOwner() == this.getPlayerOwner())
                                 continue;
                         }
@@ -102,14 +91,6 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
         this.leap(5, this.rotationPitch);
         this.detonateTimer = 10;
     }
-
-	// ========== Set Attack Target ==========
-	@Override
-	public boolean canAttackClass(Class targetClass) {
-		if(targetClass.isAssignableFrom(IGroupDemon.class))
-			return false;
-		return super.canAttackClass(targetClass);
-	}
 	
 	
 	// ==================================================
@@ -163,8 +144,8 @@ public class EntityWraith extends EntityCreatureTameable implements IMob, IGroup
 	// ==================================================
 	// ========== Read ===========
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
-		super.readEntityFromNBT(nbtTagCompound);
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
 		if(nbtTagCompound.hasKey("DetonateTimer")) {
 			this.detonateTimer = nbtTagCompound.getInteger("DetonateTimer");
 		}

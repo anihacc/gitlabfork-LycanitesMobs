@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNodeProcessor {
 
-    public EntityCreatureBase entityCreature;
+    public BaseCreatureEntity entityCreature;
     protected float avoidsWater;
 
     // ==================== Setup ====================
@@ -32,8 +32,8 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     public void init(IBlockAccess sourceIn, EntityLiving mob) {
         super.init(sourceIn, mob);
         this.avoidsWater = mob.getPathPriority(PathNodeType.WATER);
-        if(mob instanceof EntityCreatureBase)
-            this.entityCreature = (EntityCreatureBase)mob;
+        if(mob instanceof BaseCreatureEntity)
+            this.entityCreature = (BaseCreatureEntity)mob;
     }
 
     @Override

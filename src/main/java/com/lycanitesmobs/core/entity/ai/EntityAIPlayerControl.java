@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAIPlayerControl extends EntityAIBase {
     // Targets:
-    private EntityCreatureRideable host;
+    private RideableCreatureEntity host;
     
     // Properties:
     private double speed = 1.0D;
@@ -18,7 +17,7 @@ public class EntityAIPlayerControl extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIPlayerControl(EntityCreatureRideable setHost) {
+    public EntityAIPlayerControl(RideableCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }

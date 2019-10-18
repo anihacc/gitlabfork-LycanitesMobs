@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.entity.Entity;
@@ -59,7 +58,7 @@ public class EntityFaeBolt extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
-		Potion bleed = ObjectManager.getPotionEffect("bleed");
+		Potion bleed = ObjectManager.getEffect("bleed");
 		if (bleed != null)
 			entityLiving.addPotionEffect(new PotionEffect(bleed, this.getEffectDuration(5), 0));
         return true;

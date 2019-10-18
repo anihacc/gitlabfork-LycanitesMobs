@@ -1,8 +1,11 @@
 {
 	"name": "troll",
 	"creatureType": "brute",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTroll",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTroll",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelTroll",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 1,
 	"eggBackColor": "#007711",
 	"eggForeColor": "#EEEEEE",
@@ -54,6 +57,14 @@
 		}
 	],
 	"element": "order",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore",
+		"fungivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

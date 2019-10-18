@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAIWander extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private double speed = 1.0D;
@@ -20,7 +20,7 @@ public class EntityAIWander extends EntityAIBase {
     // ==================================================
    	//                     Constructor
    	// ==================================================
-    public EntityAIWander(EntityCreatureBase setHost) {
+    public EntityAIWander(BaseCreatureEntity setHost) {
     	this.host = setHost;
         this.setMutexBits(1);
     }

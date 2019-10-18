@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.soulstone;
 
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityAfrit;
@@ -33,7 +33,7 @@ public class ItemSoulstoneInferno extends ItemSoulstone {
     	if(playerExt == null)
     		return new ActionResult(EnumActionResult.SUCCESS, itemStack);
 
-        EntityCreatureTameable entity = new EntityAfrit(world);
+        TameableCreatureEntity entity = new EntityAfrit(world);
         if(!player.getEntityWorld().isRemote) {
             entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
             world.spawnEntity(entity);

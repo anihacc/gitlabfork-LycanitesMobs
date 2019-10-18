@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -10,13 +10,13 @@ import net.minecraft.util.math.MathHelper;
 
 public class CreatureMoveHelper extends EntityMoveHelper {
 
-    protected EntityCreatureBase entityCreature;
+    protected BaseCreatureEntity entityCreature;
     /** Used by flight movement for changing course, makes for smoother movement. **/
     protected int courseChangeCooldown;
 
-    public CreatureMoveHelper(EntityCreatureBase entityCreatureBase) {
-        super(entityCreatureBase);
-        this.entityCreature = entityCreatureBase;
+    public CreatureMoveHelper(BaseCreatureEntity baseCreatureEntity) {
+        super(baseCreatureEntity);
+        this.entityCreature = baseCreatureEntity;
     }
 
     /** Called on update to move the entity. **/

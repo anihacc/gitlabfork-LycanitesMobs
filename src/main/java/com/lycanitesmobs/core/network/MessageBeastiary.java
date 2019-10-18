@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.Beastiary;
 import io.netty.buffer.ByteBuf;
@@ -11,9 +11,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeastiary, IMessage> {
 	public int entryAmount = 0;
@@ -50,14 +47,14 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 	public IMessage onMessage(MessageBeastiary message, MessageContext ctx) {
 		if(ctx.side != Side.CLIENT)
 			return null;
-		LycanitesMobs.printDebug("Packets", "Received Beastiary packet from server.");
+		LycanitesMobs.logDebug("Packets", "Received Beastiary packet from server.");
 		EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
 		ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 		if(playerExt == null) {
-			LycanitesMobs.printDebug("Packets", "Unable to find extended player for client player: " + player);
+			LycanitesMobs.logDebug("Packets", "Unable to find extended player for client player: " + player);
 			return null;
 		}
-		LycanitesMobs.printDebug("Packets", "Beastiary packet is valid.");
+		LycanitesMobs.logDebug("Packets", "Beastiary packet is valid.");
 
 		playerExt.getBeastiary().creatureKnowledgeList.clear();
 		for(int i = 0; i < message.entryAmount; i++) {
@@ -66,7 +63,7 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 			CreatureKnowledge creatureKnowledge = new CreatureKnowledge(playerExt.getBeastiary(), creatureName, rank);
 			playerExt.getBeastiary().creatureKnowledgeList.put(creatureKnowledge.creatureName, creatureKnowledge);
 		}
-		LycanitesMobs.printDebug("Packets", "Added " + message.entryAmount + " entries from the Beastairy Packet.");
+		LycanitesMobs.logDebug("Packets", "Added " + message.entryAmount + " entries from the Beastairy Packet.");
 		return null;
 	}
 	
@@ -82,7 +79,7 @@ public class MessageBeastiary implements IMessage, IMessageHandler<MessageBeasti
 		PacketBuffer packet = new PacketBuffer(buf);
         this.entryAmount = Math.min(200, packet.readInt());
         if(this.entryAmount == 200) {
-        	LycanitesMobs.printWarning("", "Received 200 or more creature entries, something went wrong with the Beastiary packet! Additional entries will be skipped to prevent OOM!");
+        	LycanitesMobs.logWarning("", "Received 200 or more creature entries, something went wrong with the Beastiary packet! Additional entries will be skipped to prevent OOM!");
 		}
         if(this.entryAmount > 0) {
             this.creatureNames = new String[this.entryAmount];

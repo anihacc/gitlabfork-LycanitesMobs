@@ -56,7 +56,7 @@ public class RandomSpawnLocation extends BlockSpawnLocation {
     @Override
     public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
         List<BlockPos> spawnPositions = new ArrayList<>();
-		LycanitesMobs.printDebug("JSONSpawner", "Getting " + this.limit + " Random Spawn Positions");
+		LycanitesMobs.logDebug("JSONSpawner", "Getting " + this.limit + " Random Spawn Positions");
 
 		for(int i = 0; i < this.limit; i++) {
 			BlockPos randomPos = this.getRandomPosition(world, player, triggerPos);

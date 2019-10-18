@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,7 +18,7 @@ public class BlockFenceCustom extends BlockFence {
 	// ==================================================
 	public BlockFenceCustom(BlockBase block) {
 		super(block.getDefaultState().getMaterial(), MapColor.STONE);
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_fence"));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_fence"));
         this.setUnlocalizedName(block.blockName + "_fence");
         block.copyAttributesTo(this);
         this.setSoundType(block.getSoundType());

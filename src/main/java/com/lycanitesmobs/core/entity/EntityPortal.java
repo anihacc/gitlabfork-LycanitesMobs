@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.*;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.temp.ItemStaffSummoning;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
@@ -206,7 +207,7 @@ public class EntityPortal extends EntityProjectileBase {
 			try {
 				entity = (Entity)this.summonClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.getEntityWorld()});
 			} catch (Exception e) {
-				LycanitesMobs.printWarning("", "A none Entity class type was passed to an EntityPortal, only entities can be summoned from portals!");
+				LycanitesMobs.logWarning("", "A none Entity class type was passed to an EntityPortal, only entities can be summoned from portals!");
 				e.printStackTrace();
 			}
 	    	if(entity == null) {
@@ -214,16 +215,16 @@ public class EntityPortal extends EntityProjectileBase {
 			}
 	    	entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rand.nextFloat() * 360.0F, 0.0F);
 
-	    	if(entity instanceof EntityCreatureBase) {
-                EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
+	    	if(entity instanceof BaseCreatureEntity) {
+                BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 
                 // Summoning Staff:
                 if (this.shootingEntity != null && this.summoningPedestal == null) {
                     entityCreature.setMinion(true);
-                    if (entityCreature instanceof EntityCreatureTameable) {
-                        ((EntityCreatureTameable) entityCreature).setPlayerOwner(this.shootingEntity);
+                    if (entityCreature instanceof TameableCreatureEntity) {
+                        ((TameableCreatureEntity) entityCreature).setPlayerOwner(this.shootingEntity);
                         if (this.portalItem != null) {
-                            this.portalItem.applyMinionBehaviour((EntityCreatureTameable) entityCreature, this.shootingEntity);
+                            this.portalItem.applyMinionBehaviour((TameableCreatureEntity) entityCreature, this.shootingEntity);
                             this.portalItem.applyMinionEffects(entityCreature);
                         }
                     }
@@ -233,9 +234,9 @@ public class EntityPortal extends EntityProjectileBase {
                 else if (this.summoningPedestal != null && this.summoningPedestal.getOwnerUUID() != null) {
                     entityCreature.setMinion(true);
                     entityCreature.summoningPedestal = this.summoningPedestal;
-                    if (entityCreature instanceof EntityCreatureTameable) {
-                        ((EntityCreatureTameable) entityCreature).setOwnerId(this.summoningPedestal.getOwnerUUID());
-                        this.summoningPedestal.applyMinionBehaviour((EntityCreatureTameable) entityCreature);
+                    if (entityCreature instanceof TameableCreatureEntity) {
+                        ((TameableCreatureEntity) entityCreature).setOwnerId(this.summoningPedestal.getOwnerUUID());
+                        this.summoningPedestal.applyMinionBehaviour((TameableCreatureEntity) entityCreature);
                     }
                 }
 

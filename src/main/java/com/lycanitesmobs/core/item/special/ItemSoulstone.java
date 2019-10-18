@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.special;
 
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class ItemSoulstone extends ItemBase {
@@ -45,13 +45,13 @@ public class ItemSoulstone extends ItemBase {
     	ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
     	if(playerExt == null)
     		return false;
-    	if(!(entity instanceof EntityCreatureTameable)) {
+    	if(!(entity instanceof TameableCreatureEntity)) {
     		if(!player.getEntityWorld().isRemote)
     			player.sendMessage(new TextComponentString(LanguageManager.translate("message.soulstone.invalid")));
     		return false;
     	}
 
-		EntityCreatureTameable entityTameable = (EntityCreatureTameable)entity;
+		TameableCreatureEntity entityTameable = (TameableCreatureEntity)entity;
 		CreatureInfo creatureInfo = entityTameable.creatureInfo;
 	 	if(!creatureInfo.isTameable() || entityTameable.getOwner() != player) {
 			if(!player.getEntityWorld().isRemote)

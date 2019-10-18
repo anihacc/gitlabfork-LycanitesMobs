@@ -242,7 +242,7 @@ public class Utilities {
 			}
 			else {
 				if (!"jar".equals(uri.getScheme())) {
-					LycanitesMobs.printWarning("", "Unsupported file scheme: " + uri.getScheme());
+					LycanitesMobs.logWarning("", "Unsupported file scheme: " + uri.getScheme());
 					return null;
 				}
 				FileSystem filesystem;
@@ -256,7 +256,7 @@ public class Utilities {
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "No data found in: " + assetDir);
+			LycanitesMobs.logWarning("", "No data found in: " + assetDir);
 			//e.printStackTrace();
 		}
 
@@ -285,7 +285,7 @@ public class Utilities {
 			}
 		}
 		catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem getting ResourceLocations for: " + path + ", " + fileType + ", " + " \n" + e.toString());
+			LycanitesMobs.logWarning("", "There was a problem getting ResourceLocations for: " + path + ", " + fileType + ", " + " \n" + e.toString());
 		}
 
 		return resourceLocations;

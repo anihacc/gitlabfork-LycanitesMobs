@@ -1,9 +1,9 @@
 package com.lycanitesmobs;
 
-import com.lycanitesmobs.core.gui.*;
-import com.lycanitesmobs.core.gui.beastiary.*;
+import com.lycanitesmobs.client.gui.*;
+import com.lycanitesmobs.client.gui.beastiary.*;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.inventory.ContainerCreature;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,8 +59,8 @@ public class GuiHandler implements IGuiHandler {
 		// ========== Entity ==========
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
-			if(entity instanceof EntityCreatureBase)
-				return new ContainerCreature((EntityCreatureBase)entity, player.inventory);
+			if(entity instanceof BaseCreatureEntity)
+				return new ContainerCreature((BaseCreatureEntity)entity, player.inventory);
 		}
 		
 		// ========== Item ==========
@@ -87,8 +87,8 @@ public class GuiHandler implements IGuiHandler {
 		// ========== Entity ==========
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
-			if(entity instanceof EntityCreatureBase)
-				return new GuiCreature((EntityCreatureBase)entity, player.inventory);
+			if(entity instanceof BaseCreatureEntity)
+				return new GuiCreature((BaseCreatureEntity)entity, player.inventory);
 		}
 		
 		// ========== Item ==========

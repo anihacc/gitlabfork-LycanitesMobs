@@ -2,7 +2,8 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public abstract class EntityAITarget extends EntityAIBase {
     // Targets:
-    protected EntityCreatureBase host;
+    protected BaseCreatureEntity host;
     protected EntityLivingBase target;
     
     // Targeting:
@@ -40,7 +41,7 @@ public abstract class EntityAITarget extends EntityAIBase {
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITarget(EntityCreatureBase setHost) {
+    public EntityAITarget(BaseCreatureEntity setHost) {
         this.host = setHost;
 
         this.targetSelector = entity -> {
@@ -129,7 +130,7 @@ public abstract class EntityAITarget extends EntityAIBase {
             newTarget = possibleTargets.get(0);
         }
         catch (Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred when target selecting, this has been skipped to prevent a crash.");
+            LycanitesMobs.logWarning("", "An exception occurred when target selecting, this has been skipped to prevent a crash.");
             e.printStackTrace();
         }
         return newTarget;
@@ -168,8 +169,8 @@ public abstract class EntityAITarget extends EntityAIBase {
 
             while (possibleAllies.hasNext()) {
                 EntityLivingBase possibleAlly = (EntityLivingBase)possibleAllies.next();
-                if(possibleAlly instanceof EntityCreatureBase) {
-                    EntityCreatureBase possibleCreatureAlly = (EntityCreatureBase)possibleAlly;
+                if(possibleAlly instanceof BaseCreatureEntity) {
+                    BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity)possibleAlly;
                     if (possibleCreatureAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleCreatureAlly.canAttackClass(this.target.getClass()) && possibleCreatureAlly.canAttackEntity(this.target))
                         possibleCreatureAlly.setAttackTarget(this.target);
                 }
@@ -180,7 +181,7 @@ public abstract class EntityAITarget extends EntityAIBase {
             }
         }
         catch (Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred when calling for help, this has been skipped to prevent a crash.");
+            LycanitesMobs.logWarning("", "An exception occurred when calling for help, this has been skipped to prevent a crash.");
             e.printStackTrace();
         }
     }

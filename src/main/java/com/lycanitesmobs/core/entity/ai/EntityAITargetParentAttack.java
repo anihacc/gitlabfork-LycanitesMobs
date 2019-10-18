@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAITargetParentAttack extends EntityAIBase {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	
 	// Properties:
     private boolean tameTargeting = true;
@@ -14,7 +14,7 @@ public class EntityAITargetParentAttack extends EntityAIBase {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetParentAttack(EntityCreatureBase setHost) {
+    public EntityAITargetParentAttack(BaseCreatureEntity setHost) {
         host = setHost;
         this.setMutexBits(1);
     }

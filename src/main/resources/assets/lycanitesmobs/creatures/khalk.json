@@ -1,8 +1,11 @@
 {
 	"name": "khalk",
 	"creatureType": "beast",
+	"groups": [
+		"inferno"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityKhalk",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelKhalk",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelKhalk",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -54,6 +57,9 @@
 		}
 	],
 	"element": "lava",
+	"diets": [
+		"geovore"
+	],
 	"peaceful": false,
 	"summonable": false,
 	"tameable": false,

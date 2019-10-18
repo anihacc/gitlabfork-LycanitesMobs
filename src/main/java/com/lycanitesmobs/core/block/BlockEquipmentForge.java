@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.block;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.block.BlockHorizontal;

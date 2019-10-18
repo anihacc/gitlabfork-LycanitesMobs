@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class BlockStairsCustom extends BlockStairs {
 	// ==================================================
 	public BlockStairsCustom(BlockBase block) {
 		super(block.getDefaultState());
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_stairs"));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_stairs"));
         this.setUnlocalizedName(block.blockName + "_stairs");
 	}
 

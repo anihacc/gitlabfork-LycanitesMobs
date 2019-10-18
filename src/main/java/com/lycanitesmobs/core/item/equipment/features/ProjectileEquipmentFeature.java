@@ -1,12 +1,11 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedEntity;
-import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

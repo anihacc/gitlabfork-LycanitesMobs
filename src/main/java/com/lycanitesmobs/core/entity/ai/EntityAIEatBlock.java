@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class EntityAIEatBlock extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private Block[] blocks = new Block[0];
@@ -23,7 +23,7 @@ public class EntityAIEatBlock extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIEatBlock(EntityCreatureBase setHost) {
+    public EntityAIEatBlock(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(7);
     }

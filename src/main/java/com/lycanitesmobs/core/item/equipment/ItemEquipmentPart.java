@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -98,13 +98,13 @@ public class ItemEquipmentPart extends ItemBase {
 			while (jsonIterator.hasNext()) {
 				JsonObject featureJson = jsonIterator.next().getAsJsonObject();
 				if(!this.addFeature(EquipmentFeature.createFromJSON(featureJson))) {
-					LycanitesMobs.printWarning("", "[Equipment] The feature " + featureJson.toString() + " was unable to be added, check the JSON format.");
+					LycanitesMobs.logWarning("", "[Equipment] The feature " + featureJson.toString() + " was unable to be added, check the JSON format.");
 				}
 			}
 		}
 		this.sortFeatures();
 
-		this.setRegistryName(this.modInfo.filename, this.itemName);
+		this.setRegistryName(this.modInfo.modid, this.itemName);
 		this.setUnlocalizedName(this.itemName);
 
 		AssetManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
@@ -200,11 +200,11 @@ public class ItemEquipmentPart extends ItemBase {
 	 **/
 	public boolean addFeature(EquipmentFeature feature) {
 		if(feature == null) {
-			LycanitesMobs.printWarning("", "[Equipment] Unable to add a null feature to " + this);
+			LycanitesMobs.logWarning("", "[Equipment] Unable to add a null feature to " + this);
 			return false;
 		}
 		if(feature.featureType == null) {
-			LycanitesMobs.printWarning("", "[Equipment] Feature type not set for part " + this);
+			LycanitesMobs.logWarning("", "[Equipment] Feature type not set for part " + this);
 			return false;
 		}
 		this.features.add(feature);

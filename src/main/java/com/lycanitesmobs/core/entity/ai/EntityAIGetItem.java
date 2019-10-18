@@ -1,8 +1,9 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class EntityAIGetItem extends EntityAIBase {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
 	private EntityItem target;
 	
 	// Properties:
@@ -30,7 +31,7 @@ public class EntityAIGetItem extends EntityAIBase {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAIGetItem(EntityCreatureBase setHost) {
+    public EntityAIGetItem(BaseCreatureEntity setHost) {
         super();
         this.setMutexBits(1);
         this.host = setHost;
@@ -76,8 +77,8 @@ public class EntityAIGetItem extends EntityAIBase {
 		this.recheckTime = 0;
 
     	if(!this.tamedLooting) {
-    		if(this.host instanceof EntityCreatureTameable)
-    			if(((EntityCreatureTameable)this.host).isTamed())
+    		if(this.host instanceof TameableCreatureEntity)
+    			if(((TameableCreatureEntity)this.host).isTamed())
     				return false;
     	}
     	

@@ -1,24 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.api.IGroupHeavy;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
+import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
 import com.lycanitesmobs.core.info.ObjectLists;
-import net.minecraft.block.material.Material;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +24,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntitySerpix extends EntityCreatureTameable implements IGroupPredator, IGroupIce, IGroupHeavy {
+public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy {
 
     // ==================================================
  	//                    Constructor
@@ -51,30 +47,8 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(60));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(60));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.5D).setStaminaTime(100).setRange(12.0F).setMinChaseDistance(8.0F));
     }
 
 
@@ -218,31 +192,5 @@ public class EntitySerpix extends EntityCreatureTameable implements IGroupPredat
     	if(type.equals("cactus")) return false;
     	if(type.equals("inWall")) return false;
     	return super.isDamageTypeApplicable(type, source, damage);
-    }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntitySerpix(this.getEntityWorld());
-	}
-	
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack par1ItemStack) {
-		return false;
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
     }
 }

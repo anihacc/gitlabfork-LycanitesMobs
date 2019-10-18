@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.info.altar;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityLobber;
 import com.lycanitesmobs.core.info.AltarInfo;
 import net.minecraft.block.Block;
@@ -149,7 +149,7 @@ public class AltarInfoUmberLobber extends AltarInfo {
         int z = pos.getZ();
 
         // Create Mini Boss:
-        EntityCreatureBase entityLobber = new EntityLobber(world);
+        BaseCreatureEntity entityLobber = new EntityLobber(world);
         if(checkDimensions && !entityLobber.isNativeDimension(world))
             return false;
 

@@ -2,17 +2,13 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.PotionBase;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import net.minecraft.block.BlockDirt;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -22,11 +18,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class EntityEechetik extends EntityCreatureTameable implements IMob {
+public class EntityEechetik extends TameableCreatureEntity implements IMob {
 
-	private EntityAIAttackMelee meleeAttackAI;
-
-	public int eechetikMyceliumRadius = 2;
+	public int eechetikMyceliumRadius = 2; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -38,7 +32,6 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
         this.attribute = EnumCreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         
-        this.eechetikMyceliumRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Eechetik Mycelium Radius", this.eechetikMyceliumRadius, "Controls how far Volcans melt blocks, set to 0 to disable.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -48,39 +41,7 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.meleeAttackAI = new EntityAIAttackMelee(this).setLongMemory(true);
-        this.tasks.addTask(2, meleeAttackAI);
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 	
 	
@@ -94,13 +55,13 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 
 		// Plague Aura Attack:
 		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.hasAttackTarget()) {
-			PotionBase plague = ObjectManager.getPotionEffect("plague");
+			PotionBase plague = ObjectManager.getEffect("plague");
 			if(plague != null) {
 				PotionEffect potionEffect = new PotionEffect(plague, this.getEffectDuration(2), 1);
 				List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 2);
 				for(Object entityObj : aoeTargets) {
 					EntityLivingBase target = (EntityLivingBase) entityObj;
-					if (target != this && this.canAttackClass(entityObj.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isPotionApplicable(potionEffect)) {
+					if (target != this && this.canAttackClass(target.getClass()) && this.canAttackEntity(target) && this.getEntitySenses().canSee(target) && target.isPotionApplicable(potionEffect)) {
 						target.addPotionEffect(potionEffect);
 					}
 				}
@@ -115,8 +76,8 @@ public class EntityEechetik extends EntityCreatureTameable implements IMob {
 					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {
 						BlockPos blockPos = this.getPosition().add(w, h, d);
 						IBlockState blockState = this.getEntityWorld().getBlockState(blockPos);
-						IBlockState upperBlockState = this.getEntityWorld().getBlockState(blockPos.up());
-						if (upperBlockState.getBlock() == Blocks.AIR && blockState.getBlock() == Blocks.DIRT && blockState.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.DIRT) {
+						IBlockState upperIBlockState = this.getEntityWorld().getBlockState(blockPos.up());
+						if (upperIBlockState.getBlock() == Blocks.AIR && blockState.getBlock() == Blocks.DIRT) {
 							this.getEntityWorld().setBlockState(blockPos, Blocks.MYCELIUM.getDefaultState());
 						}
 					}

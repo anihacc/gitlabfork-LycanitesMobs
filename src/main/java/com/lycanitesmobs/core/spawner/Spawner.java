@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
@@ -17,7 +17,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -274,35 +274,35 @@ public class Spawner {
     /** Returns true if Triggers are allowed to operate for this Spawner. **/
     public boolean canSpawn(World world, EntityPlayer player, BlockPos triggerPos) {
     	if(!SpawnerManager.getInstance().globalSpawnConditions.isEmpty()) {
-			LycanitesMobs.printDebug("JSONSpawner", "Global Conditions Required: " + SpawnerManager.getInstance().globalSpawnConditions.size());
+			LycanitesMobs.logDebug("JSONSpawner", "Global Conditions Required: " + SpawnerManager.getInstance().globalSpawnConditions.size());
 			for(SpawnCondition condition : SpawnerManager.getInstance().globalSpawnConditions) {
 				if(!condition.isMet(world, player, triggerPos)) {
-					LycanitesMobs.printDebug("JSONSpawner", "Global Condition: " + condition + "Failed");
+					LycanitesMobs.logDebug("JSONSpawner", "Global Condition: " + condition + "Failed");
 					return false;
 				}
 			}
 		}
 
         if(this.conditions.isEmpty()) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Conditions");
+			LycanitesMobs.logDebug("JSONSpawner", "No Conditions");
         	return true;
 		}
 
-		LycanitesMobs.printDebug("JSONSpawner", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
+		LycanitesMobs.logDebug("JSONSpawner", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
         int conditionsMet = 0;
         int conditionsRequired = this.conditionsRequired > 0 ? this.conditionsRequired : this.conditions.size();
         for(SpawnCondition condition : this.conditions) {
         	boolean met = condition.isMet(world, player, triggerPos);
-			LycanitesMobs.printDebug("JSONSpawner", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
+			LycanitesMobs.logDebug("JSONSpawner", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
             if(met) {
                 if(++conditionsMet >= conditionsRequired) {
-					LycanitesMobs.printDebug("JSONSpawner", "Sufficient Conditions Met");
+					LycanitesMobs.logDebug("JSONSpawner", "Sufficient Conditions Met");
                     return true;
                 }
             }
         }
 
-		LycanitesMobs.printDebug("JSONSpawner", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
+		LycanitesMobs.logDebug("JSONSpawner", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
         return false;
     }
 
@@ -322,15 +322,15 @@ public class Spawner {
 			return false;
 		}
 
-		LycanitesMobs.printDebug("JSONSpawner", "~O==================== Spawner Triggered: " + this.name + " ====================O~");
+		LycanitesMobs.logDebug("JSONSpawner", "~O==================== Spawner Triggered: " + this.name + " ====================O~");
 		if(!this.canSpawn(world, player, triggerPos)) {
-			LycanitesMobs.printDebug("JSONSpawner", "This Spawner Cannot Spawn");
+			LycanitesMobs.logDebug("JSONSpawner", "This Spawner Cannot Spawn");
 			return false;
 		}
 
 		// Only One Trigger Required:
 		if(this.triggersRequired <= 1 || player == null) {
-			LycanitesMobs.printDebug("JSONSpawner", "Only one trigger required.");
+			LycanitesMobs.logDebug("JSONSpawner", "Only one trigger required.");
 			return this.doSpawn(world, player, spawnTrigger, triggerPos, level, chain);
 		}
 
@@ -356,7 +356,7 @@ public class Spawner {
 		}
 
 		// Required Count Met:
-		LycanitesMobs.printDebug("JSONSpawner", "Trigger " + currentCount + "/" + this.triggersRequired);
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger " + currentCount + "/" + this.triggersRequired);
 		if(currentCount >= this.triggersRequired) {
 			this.triggerCounts.put(player, 0);
 			return this.doSpawn(world, player, spawnTrigger, triggerPos, level, chain);
@@ -384,10 +384,10 @@ public class Spawner {
 		}
 
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
-		LycanitesMobs.printDebug("JSONSpawner", "Spawning Wave: " + mobCount + " Mob(s)");
-		LycanitesMobs.printDebug("JSONSpawner", "Trigger World: " + world);
-		LycanitesMobs.printDebug("JSONSpawner", "Trigger Player: " + player);
-		LycanitesMobs.printDebug("JSONSpawner", "Trigger Position: " + triggerPos);
+		LycanitesMobs.logDebug("JSONSpawner", "Spawning Wave: " + mobCount + " Mob(s)");
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger World: " + world);
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger Player: " + player);
+		LycanitesMobs.logDebug("JSONSpawner", "Trigger Position: " + triggerPos);
 
     	// Get Positions:
 		List<BlockPos> spawnPositions = this.getSpawnPos(world, player, triggerPos);
@@ -396,22 +396,22 @@ public class Spawner {
 			for(BlockPos spawnPos : spawnPositions.toArray(new BlockPos[spawnPositions.size()])) {
 				int chunkOffset = 8;
 				if(spawnPos.getX() < triggerPos.getX() + chunkOffset || spawnPos.getX() > triggerPos.getX() + chunkOffset) {
-					LycanitesMobs.printDebug("JSONSpawner", "A spawn position exceeds chunk x boundaries and will not be used for worldgen triggered spawning.");
+					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk x boundaries and will not be used for worldgen triggered spawning.");
 					spawnPositions.remove(spawnPos);
 					continue;
 				}
 				if(spawnPos.getZ() < triggerPos.getZ() + chunkOffset || spawnPos.getZ() > triggerPos.getZ() + chunkOffset) {
-					LycanitesMobs.printDebug("JSONSpawner", "A spawn position exceeds chunk z boundaries and will not be used for worldgen triggered spawning.");
+					LycanitesMobs.logDebug("JSONSpawner", "A spawn position exceeds chunk z boundaries and will not be used for worldgen triggered spawning.");
 					spawnPositions.remove(spawnPos);
 				}
 			}
 		}
 		if(spawnPositions.isEmpty()) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Spawn Positions Found From Spawn Location");
+			LycanitesMobs.logDebug("JSONSpawner", "No Spawn Positions Found From Spawn Location");
 			return false;
 		}
 		Collections.shuffle(spawnPositions);
-		LycanitesMobs.printDebug("JSONSpawner", "Positions Found: " + spawnPositions.size());
+		LycanitesMobs.logDebug("JSONSpawner", "Positions Found: " + spawnPositions.size());
 
 		// Get Biomes:
 		List<Biome> biomes = null;
@@ -422,15 +422,15 @@ public class Spawner {
 				if(!biomes.contains(biome))
 					biomes.add(biome);
 			}
-			LycanitesMobs.printDebug("JSONSpawner", "Biomes Found: " + biomes.size());
+			LycanitesMobs.logDebug("JSONSpawner", "Biomes Found: " + biomes.size());
 		}
 		else {
-			LycanitesMobs.printDebug("JSONSpawner", "All biome checks are ignored by this Spawner.");
+			LycanitesMobs.logDebug("JSONSpawner", "All biome checks are ignored by this Spawner.");
 		}
 
 		// Get Mobs:
 		List<MobSpawn> mobSpawns = this.getMobSpawns(world, player, spawnPositions.size(), biomes);
-		LycanitesMobs.printDebug("JSONSpawner", "Spawnable Mobs Found: " + mobSpawns.size());
+		LycanitesMobs.logDebug("JSONSpawner", "Spawnable Mobs Found: " + mobSpawns.size());
 		if(mobSpawns.size() == 0) {
 			return false;
 		}
@@ -440,46 +440,46 @@ public class Spawner {
 			if(mobsSpawned >= mobCount) {
 				break;
 			}
-			LycanitesMobs.printDebug("JSONSpawner", "---------- Spawn Iteration: " + mobsSpawned + " ----------");
-			LycanitesMobs.printDebug("JSONSpawner", "Spawn Position: " + spawnPos);
+			LycanitesMobs.logDebug("JSONSpawner", "---------- Spawn Iteration: " + mobsSpawned + " ----------");
+			LycanitesMobs.logDebug("JSONSpawner", "Spawn Position: " + spawnPos);
 
 			// Choose Mob To Spawn:
 			MobSpawn mobSpawn = this.chooseMobToSpawn(world, mobSpawns);
 			if(mobSpawn == null) {
-				LycanitesMobs.printDebug("JSONSpawner", "No Mob Spawn Chosen");
+				LycanitesMobs.logDebug("JSONSpawner", "No Mob Spawn Chosen");
 				continue;
 			}
-			LycanitesMobs.printDebug("JSONSpawner", "Spawn Mob: " + mobSpawn);
+			LycanitesMobs.logDebug("JSONSpawner", "Spawn Mob: " + mobSpawn);
 
 			// Create Entity:
 			EntityLiving entityLiving = mobSpawn.createEntity(world);
 			if (entityLiving == null) {
-				LycanitesMobs.printWarning("JSONSpawner", "Unable to instantiate an entity. Class: " + mobSpawn.entityClass);
+				LycanitesMobs.logWarning("JSONSpawner", "Unable to instantiate an entity. Class: " + mobSpawn.entityClass);
 				continue;
 			}
-			EntityCreatureBase entityCreature = null;
-			if (entityLiving instanceof EntityCreatureBase) {
-				entityCreature = (EntityCreatureBase)entityLiving;
-				LycanitesMobs.printDebug("JSONSpawner", "Mob is a Lycanites Mob");
+			BaseCreatureEntity entityCreature = null;
+			if (entityLiving instanceof BaseCreatureEntity) {
+				entityCreature = (BaseCreatureEntity)entityLiving;
+				LycanitesMobs.logDebug("JSONSpawner", "Mob is a Lycanites Mob");
 			}
 			else {
-				LycanitesMobs.printDebug("JSONSpawner", "Mob is not a Lycanites Mob");
+				LycanitesMobs.logDebug("JSONSpawner", "Mob is not a Lycanites Mob");
 			}
 
 			// Attempt To Spawn EntityLiving:
-			LycanitesMobs.printDebug("JSONSpawner", "Attempting to spawn " + entityLiving + "...");
+			LycanitesMobs.logDebug("JSONSpawner", "Attempting to spawn " + entityLiving + "...");
 			entityLiving.setLocationAndAngles((double) spawnPos.getX() + 0.5D, (double) spawnPos.getY(), (double) spawnPos.getZ() + 0.5D, world.rand.nextFloat() * 360.0F, 0.0F);
 
 			// Forge Can Spawn Event:
 			Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(entityLiving, world, (float) spawnPos.getX() + 0.5F, (float) spawnPos.getY(), (float) spawnPos.getZ() + 0.5F, false);
 			if (canSpawn == Event.Result.DENY && !this.ignoreForgeCanSpawnEvent && !mobSpawn.ignoreForgeCanSpawnEvent) {
-				LycanitesMobs.printDebug("JSONSpawner", "Spawn Check Failed! Spawning blocked by Forge Can Spawn Event, this is caused another mod.");
+				LycanitesMobs.logDebug("JSONSpawner", "Spawn Check Failed! Spawning blocked by Forge Can Spawn Event, this is caused another mod.");
 				continue;
 			}
 
 			// Mob Instance Spawn Check:
 			if(!this.mobInstanceSpawnCheck(entityLiving, mobSpawn, world, player, spawnPos, level, canSpawn == Event.Result.ALLOW)) {
-				LycanitesMobs.printDebug("JSONSpawner", "Mob Instance Spawn Check Failed!");
+				LycanitesMobs.logDebug("JSONSpawner", "Mob Instance Spawn Check Failed!");
 				continue;
 			}
 
@@ -493,7 +493,7 @@ public class Spawner {
 				}
 			}
 
-			LycanitesMobs.printDebug("JSONSpawner", "Spawn Checks Passed! Mob Spawned!");
+			LycanitesMobs.logDebug("JSONSpawner", "Spawn Checks Passed! Mob Spawned!");
 			mobsSpawned++;
 		}
 
@@ -509,20 +509,20 @@ public class Spawner {
 		 * @return True on a successful spawn and false on failure.
 		 **/
 	public List<BlockPos> getSpawnPos(World world, EntityPlayer player, BlockPos triggerPos) {
-		LycanitesMobs.printDebug("JSONSpawner", "Searching for Spawn Positions...");
+		LycanitesMobs.logDebug("JSONSpawner", "Searching for Spawn Positions...");
 		List<BlockPos> spawnPositions = new ArrayList<>();
 
 		if(this.locations.isEmpty()) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Spawn Locations, Using Trigger Position");
+			LycanitesMobs.logDebug("JSONSpawner", "No Spawn Locations, Using Trigger Position");
 			spawnPositions.add(triggerPos);
 			return spawnPositions;
 		}
 		if(this.locations.size() == 1) {
-			LycanitesMobs.printDebug("JSONSpawner", "Only One Spawn Location");
+			LycanitesMobs.logDebug("JSONSpawner", "Only One Spawn Location");
 			return this.locations.get(0).getSpawnPositions(world, player, triggerPos);
 		}
 
-		LycanitesMobs.printDebug("JSONSpawner", "Multiple Spawn Locations, Mode: " + this.multipleLocations);
+		LycanitesMobs.logDebug("JSONSpawner", "Multiple Spawn Locations, Mode: " + this.multipleLocations);
 		if("order".equals(this.multipleLocations)) {
 			for(SpawnLocation location : this.locations) {
 				spawnPositions = location.getSpawnPositions(world, player, triggerPos);
@@ -638,33 +638,33 @@ public class Spawner {
 	 **/
 	public boolean mobInstanceSpawnCheck(EntityLiving entityLiving, MobSpawn mobSpawn, World world, EntityPlayer player, BlockPos spawnPos, int level, boolean forgeForced) {
 		// Lycanites Mobs:
-		if (entityLiving instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entityLiving;
+		if (entityLiving instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entityLiving;
 
-			LycanitesMobs.printDebug("JSONSpawner", "Checking Mob Collision...");
+			LycanitesMobs.logDebug("JSONSpawner", "Checking Mob Collision...");
 			if(!this.ignoreCollision && !entityCreature.checkSpawnCollision(world, spawnPos)) {
 				return false;
 			}
 
-			LycanitesMobs.printDebug("JSONSpawner", "Checking For Nearby Boss...");
+			LycanitesMobs.logDebug("JSONSpawner", "Checking For Nearby Boss...");
 			if(!entityCreature.checkSpawnBoss(world, spawnPos)) {
 				return false;
 			}
 
 			if(mobSpawn.ignoreMobInstanceConditions) {
-				LycanitesMobs.printDebug("JSONSpawner", "All Mob Instance Checks Ignored");
+				LycanitesMobs.logDebug("JSONSpawner", "All Mob Instance Checks Ignored");
 				return true;
 			}
 
 			if(!this.ignoreLightLevel && !mobSpawn.ignoreLightLevel) {
-				LycanitesMobs.printDebug("JSONSpawner", "Checking Light Level...");
+				LycanitesMobs.logDebug("JSONSpawner", "Checking Light Level...");
 				if(!entityCreature.checkSpawnLightLevel(world, spawnPos)) {
 					return false;
 				}
 			}
 
 			if(!this.ignoreGroupLimit && !mobSpawn.ignoreGroupLimit) {
-				LycanitesMobs.printDebug("JSONSpawner", "Checking Group Limit...");
+				LycanitesMobs.logDebug("JSONSpawner", "Checking Group Limit...");
 				if(!entityCreature.checkSpawnGroupLimit(world, spawnPos, this.groupLimitRange)) {
 					return false;
 				}
@@ -675,10 +675,10 @@ public class Spawner {
 
 		// Vanilla or Other Mod Mob:
 		if(!mobSpawn.ignoreMobInstanceConditions) {
-			LycanitesMobs.printDebug("JSONSpawner", "None Lycanites Mobs Checks...");
+			LycanitesMobs.logDebug("JSONSpawner", "None Lycanites Mobs Checks...");
 			return entityLiving.getCanSpawnHere();
 		}
-		LycanitesMobs.printDebug("JSONSpawner", "All Mob Instance Checks Ignored");
+		LycanitesMobs.logDebug("JSONSpawner", "All Mob Instance Checks Ignored");
 		return true;
 	}
 
@@ -691,9 +691,9 @@ public class Spawner {
 		// Before Spawn:
 		entityLiving.timeUntilPortal = entityLiving.getPortalCooldown();
 
-		EntityCreatureBase entityCreature;
-		if(entityLiving instanceof EntityCreatureBase) {
-			entityCreature = (EntityCreatureBase)entityLiving;
+		BaseCreatureEntity entityCreature;
+		if(entityLiving instanceof BaseCreatureEntity) {
+			entityCreature = (BaseCreatureEntity)entityLiving;
 			entityCreature.forceNoDespawn = this.forceNoDespawn;
 			entityCreature.spawnedRare = level > 0;
 			if (this.blockBreakRadius > -1 && chain == 0) {

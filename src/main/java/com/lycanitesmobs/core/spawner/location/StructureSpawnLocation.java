@@ -33,9 +33,9 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 
 	@Override
 	public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
-		LycanitesMobs.printDebug("JSONSpawner", "Getting Nearest Structures Within Range");
+		LycanitesMobs.logDebug("JSONSpawner", "Getting Nearest Structures Within Range");
 		if(!(world instanceof WorldServer)) {
-			LycanitesMobs.printWarning("", "[JSONSpawner] Structure spawn location was called with a non ServerWorld World instance.");
+			LycanitesMobs.logWarning("", "[JSONSpawner] Structure spawn location was called with a non ServerWorld World instance.");
 			return new ArrayList<>();
 		}
 
@@ -47,19 +47,19 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 
 		// No Structure:
 		if(structurePos == null) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Structures found.");
+			LycanitesMobs.logDebug("JSONSpawner", "No Structures found.");
 			return new ArrayList<>();
 		}
 
 		// Too Far:
 		double structureDistance = Math.sqrt(structurePos.distanceSq(triggerPos));
 		if(structureDistance > this.structureRange) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Structures within range, nearest was: " + structureDistance + " at: " + structurePos);
+			LycanitesMobs.logDebug("JSONSpawner", "No Structures within range, nearest was: " + structureDistance + " at: " + structurePos);
 			return new ArrayList<>();
 		}
 
 		// Village Found:
-		LycanitesMobs.printDebug("JSONSpawner", "Found a Structures within range, at: " + structurePos);
+		LycanitesMobs.logDebug("JSONSpawner", "Found a Structures within range, at: " + structurePos);
 		return super.getSpawnPositions(world, player, structurePos);
 	}
 

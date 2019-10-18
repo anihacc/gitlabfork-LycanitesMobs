@@ -1,18 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
-public class EntityEttin extends EntityCreatureAgeable implements IMob {
-	public boolean ettinGreifing = true;
+public class EntityEttin extends AgeableCreatureEntity implements IMob {
+	public boolean ettinGreifing = true; // TODO Creature flags.
     
     // ==================================================
  	//                    Constructor
@@ -27,7 +25,6 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
         this.canGrow = true;
         this.babySpawnChance = 0.1D;
         
-        this.ettinGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Ettin Griefing", this.ettinGreifing, "Set to false to disable Ettin block destruction.");
         this.solidCollision = true;
         this.setupMob();
         
@@ -38,21 +35,14 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-        super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
-        }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBreakDoor(this));
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+		super.initEntityAI();
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+		if(this.getNavigator() instanceof PathNavigateGround) {
+			PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+			pathNavigateGround.setBreakDoors(true);
+		}
     }
 	
 	
@@ -67,7 +57,7 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.ettinGreifing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
 		    		if(distance <= this.width + 4.0F)
-		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);
+		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);
 	        }
         
         super.onLivingUpdate();
@@ -85,14 +75,4 @@ public class EntityEttin extends EntityCreatureAgeable implements IMob {
     		this.nextAttackPhase();
     	return success;
     }
-	
-	
-	// ==================================================
-  	//                      Breeding
-  	// ==================================================
-    // ========== Create Child ==========
-    @Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityEttin(this.getEntityWorld());
-	}
 }

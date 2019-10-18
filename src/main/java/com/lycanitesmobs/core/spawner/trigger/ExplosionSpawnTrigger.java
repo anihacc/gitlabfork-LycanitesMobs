@@ -1,15 +1,11 @@
 package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExplosionSpawnTrigger extends EntitySpawnTrigger {
 

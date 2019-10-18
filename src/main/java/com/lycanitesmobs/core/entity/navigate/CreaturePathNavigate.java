@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,10 +16,10 @@ import net.minecraft.world.World;
 
 public class CreaturePathNavigate extends PathNavigate {
 
-    public EntityCreatureBase entityCreature;
+    public BaseCreatureEntity entityCreature;
     protected BlockPos targetPosition;
 
-    public CreaturePathNavigate(EntityCreatureBase entityCreature, World world) {
+    public CreaturePathNavigate(BaseCreatureEntity entityCreature, World world) {
         super(entityCreature, world);
         this.entityCreature = entityCreature;
     }

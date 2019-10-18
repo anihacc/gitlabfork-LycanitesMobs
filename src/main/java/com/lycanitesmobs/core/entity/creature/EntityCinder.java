@@ -1,20 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCinder extends EntityCreatureTameable implements IMob, IGroupFire, IFusable {
+public class EntityCinder extends TameableCreatureEntity implements IMob, IFusable {
 
 	public float inWallDamageAbsorbed = 0;
     
@@ -46,25 +44,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-		this.tasks.addTask(1, new EntityAIFollowFuse(this).setLostDistance(16));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
-        this.tasks.addTask(6, this.aiSit);
-        this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-		this.targetTasks.addTask(7, new EntityAITargetFuse(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(5.0F).setMinChaseDistance(2.0F));
     }
     
     
@@ -79,7 +59,7 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
         // Suffocation Transform:
 		if(!this.getEntityWorld().isRemote) {
 			if(this.inWallDamageAbsorbed >= 10) {
-				this.transform(EntityVolcan.class, null, false);
+				this.transform(CreatureManager.getInstance().getEntityClass("volcan"), null, false);
 			}
 		}
         
@@ -96,14 +76,6 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(IGroupFire.class))
-    		return false;
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
@@ -257,19 +229,19 @@ public class EntityCinder extends EntityCreatureTameable implements IMob, IGroup
 	@Override
 	public Class getFusionClass(IFusable fusable) {
 		if(fusable instanceof EntityJengu) {
-			return EntityXaphan.class;
+			return CreatureManager.getInstance().getEntityClass("xaphan");
 		}
 		if(fusable instanceof EntityGeonach) {
-			return EntityVolcan.class;
+			return CreatureManager.getInstance().getEntityClass("volcan");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntityZephyr.class;
+			return CreatureManager.getInstance().getEntityClass("zephyr");
 		}
 		if(fusable instanceof EntityAegis) {
-			return EntityWisp.class;
+			return CreatureManager.getInstance().getEntityClass("aegis");
 		}
 		if(fusable instanceof EntityArgus) {
-			return EntityGrue.class;
+			return CreatureManager.getInstance().getEntityClass("argus");
 		}
 		return null;
 	}

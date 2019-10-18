@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import io.netty.buffer.ByteBuf;
@@ -59,7 +59,7 @@ public class MessageCreatureKnowledge implements IMessage, IMessageHandler<Messa
 			this.rank = packet.readInt();
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 	}

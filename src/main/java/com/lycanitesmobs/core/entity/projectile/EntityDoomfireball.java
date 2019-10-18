@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
@@ -56,8 +56,8 @@ public class EntityDoomfireball extends EntityProjectileBase {
     	if(!entityLiving.isImmuneToFire()) {
             entityLiving.setFire(this.getEffectDuration(5) / 20);
         }
-        if(ObjectManager.getPotionEffect("decay") != null) {
-            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("decay"), this.getEffectDuration(60), 0));
+        if(ObjectManager.getEffect("decay") != null) {
+            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
         }
     	return true;
     }

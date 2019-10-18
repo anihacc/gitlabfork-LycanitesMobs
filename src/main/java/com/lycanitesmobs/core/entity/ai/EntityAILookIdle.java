@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 public class EntityAILookIdle extends EntityAIBase {
     // Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
 
     // Properties:
     private int idleTime;
@@ -17,7 +17,7 @@ public class EntityAILookIdle extends EntityAIBase {
     // ==================================================
    	//                    Constructor
    	// ==================================================
-    public EntityAILookIdle(EntityCreatureBase setHost) {
+    public EntityAILookIdle(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(3);
     }

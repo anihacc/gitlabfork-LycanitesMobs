@@ -10,14 +10,14 @@ public class CreatureStats {
 	public static String[] STAT_NAMES = new String[] {"health", "defense", "armor", "speed", "damage", "attackSpeed", "rangedSpeed", "effect", "amplifier", "pierce", "sight"};
 
 	/** The entity using these stats. **/
-	public EntityCreatureBase entity;
+	public BaseCreatureEntity entity;
 
 
 	/**
 	 * Constructor
 	 * @param entity The entity instance that will use this stats instance.
 	 */
-	public CreatureStats(EntityCreatureBase entity) {
+	public CreatureStats(BaseCreatureEntity entity) {
 		this.entity = entity;
 	}
 

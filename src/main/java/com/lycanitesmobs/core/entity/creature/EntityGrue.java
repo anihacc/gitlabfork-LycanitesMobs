@@ -1,17 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -23,15 +21,15 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityGrue extends TameableCreatureEntity implements IMob {
     
 	private int teleportTime = 60;
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityGrue(World par1World) {
-        super(par1World);
+    public EntityGrue(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -46,31 +44,8 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSizeScale(double scale) {
-        if(this.isRareSubspecies()) {
-            super.setSizeScale(scale * 1.5D);
-            return;
-        }
-        super.setSizeScale(scale);
+        this.tasks.addTask(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 	
 	
@@ -129,7 +104,7 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     @Override
     public void startStealth() {
     	if(this.getEntityWorld().isRemote) {
-            EnumParticleTypes particle = EnumParticleTypes.SPELL_WITCH;
+			EnumParticleTypes particle = EnumParticleTypes.SPELL_WITCH;
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
@@ -153,14 +128,9 @@ public class EntityGrue extends EntityCreatureTameable implements IMob, IGroupSh
     	if(this.getSubspeciesIndex() > 2 && target instanceof EntityLivingBase) {
     		EntityLivingBase targetLiving = (EntityLivingBase)target;
     		List<Potion> goodEffects = new ArrayList<>();
-    		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
-    			if(potionEffectObj instanceof PotionEffect) {
-    				Potion potion = ((PotionEffect)potionEffectObj).getPotion();
-                    if(potion != null) {
-                        if(ObjectLists.inEffectList("buffs", potion))
-                            goodEffects.add(potion);
-                    }
-    			}
+    		for(PotionEffect effectInstance : targetLiving.getActivePotionEffects()) {
+				if(ObjectLists.inEffectList("buffs", effectInstance.getPotion()))
+					goodEffects.add(effectInstance.getPotion());
     		}
     		if(goodEffects.size() > 0) {
     			if(goodEffects.size() > 1)

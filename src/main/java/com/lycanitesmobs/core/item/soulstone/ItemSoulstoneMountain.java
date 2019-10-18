@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.item.soulstone;
 
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import com.lycanitesmobs.core.entity.creature.EntityBarghest;
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.entity.creature.EntityWildkin;
 import net.minecraft.entity.Entity;
@@ -34,7 +34,7 @@ public class ItemSoulstoneMountain extends ItemSoulstone {
     	if(playerExt == null)
     		return new ActionResult(EnumActionResult.SUCCESS, itemStack);
 
-        EntityCreatureTameable entity;
+        TameableCreatureEntity entity;
 		if(player.getRNG().nextBoolean())
         	entity = new EntityBarghest(world);
 		else

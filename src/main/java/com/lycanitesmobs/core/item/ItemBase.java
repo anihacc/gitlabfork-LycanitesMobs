@@ -18,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,7 +45,7 @@ public class ItemBase extends Item {//implements IScanThing {
     }
     
     public void setup() {
-        this.setRegistryName(this.modInfo.filename, this.itemName);
+        this.setRegistryName(this.modInfo.modid, this.itemName);
     	this.setUnlocalizedName(this.itemName);
         this.setCreativeTab(LycanitesMobs.itemsTab);
     }

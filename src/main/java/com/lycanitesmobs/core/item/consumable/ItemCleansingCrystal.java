@@ -34,8 +34,8 @@ public class ItemCleansingCrystal extends ItemBase {
 				itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
 			}
 
-			if(!world.isRemote && ObjectManager.getPotionEffect("cleansed") != null) {
-				player.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("cleansed"), 10 * 20));
+			if(!world.isRemote && ObjectManager.getEffect("cleansed") != null) {
+				player.addPotionEffect(new PotionEffect(ObjectManager.getEffect("cleansed"), 10 * 20));
 			}
 
 			return new ActionResult(EnumActionResult.SUCCESS, itemStack);

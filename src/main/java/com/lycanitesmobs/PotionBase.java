@@ -1,5 +1,6 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.AssetManager;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;

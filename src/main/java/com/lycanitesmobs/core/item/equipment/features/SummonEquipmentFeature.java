@@ -1,20 +1,17 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.spawner.MobSpawn;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
@@ -108,14 +105,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(attacker.getRNG().nextDouble() <= this.summonChance) {
 			try {
 				EntityLiving entity = (EntityLiving)this.entityClass.getConstructor(World.class).newInstance(new Object[]{attacker.getEntityWorld()});
-				if(entity instanceof EntityCreatureBase) {
-					EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+				if(entity instanceof BaseCreatureEntity) {
+					BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 					entityCreature.setMinion(true);
 					entityCreature.setTemporary(this.summonDuration * 20);
 					entityCreature.setSizeScale(this.sizeScale);
 
-					if(attacker instanceof EntityPlayer && entityCreature instanceof EntityCreatureTameable) {
-						EntityCreatureTameable entityTameable = (EntityCreatureTameable)entityCreature;
+					if(attacker instanceof EntityPlayer && entityCreature instanceof TameableCreatureEntity) {
+						TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
 						entityTameable.setPlayerOwner((EntityPlayer)attacker);
 						entityTameable.setSitting(false);
 						entityTameable.setFollowing(true);

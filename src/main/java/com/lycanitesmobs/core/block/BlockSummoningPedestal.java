@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.GuiHandler;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;

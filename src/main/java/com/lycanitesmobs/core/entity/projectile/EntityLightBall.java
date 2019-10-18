@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;

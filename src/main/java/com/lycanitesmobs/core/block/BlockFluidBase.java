@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -29,7 +29,7 @@ public class BlockFluidBase extends BlockFluidClassic {
         super(fluid, material);
         this.blockName = blockName;
         this.group = group;
-        this.setRegistryName(this.group.filename, this.blockName);
+        this.setRegistryName(this.group.modid, this.blockName);
         this.setUnlocalizedName(this.blockName);
 
         this.setRenderLayer(BlockRenderLayer.TRANSLUCENT);

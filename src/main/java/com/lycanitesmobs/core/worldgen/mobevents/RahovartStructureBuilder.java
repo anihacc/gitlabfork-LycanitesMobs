@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
@@ -64,15 +64,15 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 		// Spawn Boss:
 		if(ticks == 29 * 20) {
-			EntityCreatureBase entityCreatureBase = new EntityRahovart(world);
-			entityCreatureBase.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
-			world.spawnEntity(entityCreatureBase);
-			entityCreatureBase.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
+			BaseCreatureEntity baseCreatureEntity = new EntityRahovart(world);
+			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
+			world.spawnEntity(baseCreatureEntity);
+			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
 			ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {
-					mobEventPlayerServer.mobEvent.onSpawn(entityCreatureBase, world, player, pos, level, ticks);
+					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks);
 				}
 			}
 		}

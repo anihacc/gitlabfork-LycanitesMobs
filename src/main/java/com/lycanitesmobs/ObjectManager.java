@@ -1,18 +1,16 @@
 package com.lycanitesmobs;
 
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.client.ClientProxy;
 import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import com.lycanitesmobs.core.model.ModelEquipmentPart;
+import com.lycanitesmobs.client.model.ModelEquipmentPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.Minecraft;
@@ -51,7 +49,7 @@ public class ObjectManager {
 	public static Map<String, Fluid> fluids = new HashMap<>();
     public static Map<Block, Item> buckets = new HashMap<>();
     public static Map<String, Class> tileEntities = new HashMap<>();
-	public static Map<String, PotionBase> potionEffects = new HashMap<>();
+	public static Map<String, PotionBase> effects = new HashMap<>();
 
 	// Entity Maps:
 	public static Map<String, Class<? extends Entity>> specialEntities = new HashMap<>();
@@ -108,10 +106,10 @@ public class ObjectManager {
 	// ========== Fluid ==========
 	public static Fluid addFluid(String fluidName) {
         ModInfo group = currentModInfo;
-        Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.filename + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.filename + ":blocks/" + fluidName + "_flow"));
+        Fluid fluid = new Fluid(fluidName, new ResourceLocation(group.modid + ":blocks/" + fluidName + "_still"), new ResourceLocation(group.modid + ":blocks/" + fluidName + "_flow"));
 		fluids.put(fluidName, fluid);
 		if(!FluidRegistry.registerFluid(fluid)) {
-		    LycanitesMobs.printWarning("", "Another fluid was registered as " + fluidName);
+		    LycanitesMobs.logWarning("", "Another fluid was registered as " + fluidName);
         }
         return fluid;
 	}
@@ -161,13 +159,13 @@ public class ObjectManager {
     }
 
     // ========== Potion Effect ==========
-	public static PotionBase addPotionEffect(String name, ConfigBase config, boolean isBad, int color, boolean goodEffect) {
+	public static PotionBase addEffect(String name, ConfigBase config, boolean isBad, int color, boolean goodEffect) {
 		if(!config.getBool("Effects", name + " enabled", true, "Set to false to disable this potion effect.")) {
 			return null;
 		}
 
         PotionBase potion = new PotionBase(name, isBad, color);
-		potionEffects.put(name, potion);
+		effects.put(name, potion);
 		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", potion);
 
 		return potion;
@@ -222,10 +220,10 @@ public class ObjectManager {
     }
 	
 	// ========== Potion Effect ==========
-	public static PotionBase getPotionEffect(String name) {
+	public static PotionBase getEffect(String name) {
 		name = name.toLowerCase();
-		if(!potionEffects.containsKey(name)) return null;
-		return potionEffects.get(name);
+		if(!effects.containsKey(name)) return null;
+		return effects.get(name);
 	}
 
     // ========== Damage Source ==========
@@ -251,7 +249,7 @@ public class ObjectManager {
         event.getRegistry().registerAll(blocks.values().toArray(new Block[blocks.size()]));
         for(Block block : blocks.values()) {
             if(block.getRegistryName() == null) {
-                LycanitesMobs.printWarning("", "Block: " + block + " has no Registry Name!");
+                LycanitesMobs.logWarning("", "Block: " + block + " has no Registry Name!");
             }
             //event.getRegistry().register(block); Registered with ItemBlock
 			LycanitesMobs.proxy.addBlockRender(currentModInfo, block);
@@ -262,7 +260,7 @@ public class ObjectManager {
     public static void registerItems(RegistryEvent.Register<Item> event) {
 	    for(Item item : items.values()) {
 	        if(item.getRegistryName() == null) {
-	            LycanitesMobs.printWarning("", "Item: " + item + " has no Registry Name!");
+	            LycanitesMobs.logWarning("", "Item: " + item + " has no Registry Name!");
             }
             event.getRegistry().register(item);
             LycanitesMobs.proxy.addItemRender(itemGroups.get(item), item);
@@ -271,7 +269,7 @@ public class ObjectManager {
 
     // ========== Potions ==========
     public static void registerPotions(RegistryEvent.Register<Potion> event) {
-        for(PotionBase potion : potionEffects.values()) {
+        for(PotionBase potion : effects.values()) {
         	event.getRegistry().register(potion);
 		}
     }
@@ -280,7 +278,7 @@ public class ObjectManager {
 	public static void registerSpecialEntities(RegistryEvent.Register<EntityEntry> event) {
 		// Special Entities:
 		for(String entityName : specialEntities.keySet()) {
-			String registryName = LycanitesMobs.modInfo.filename + ":" + entityName;
+			String registryName = LycanitesMobs.modInfo.modid + ":" + entityName;
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(specialEntities.get(entityName))
 					.id(registryName, getNextSpecialEntityNetworkId())

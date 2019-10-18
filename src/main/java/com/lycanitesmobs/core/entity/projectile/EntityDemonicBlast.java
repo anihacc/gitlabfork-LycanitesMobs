@@ -1,9 +1,9 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.creature.EntityCacodemon;
 
@@ -126,8 +126,8 @@ public class EntityDemonicBlast extends EntityProjectileBase {
     @Override
     public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
     	entityLiving.addPotionEffect(new PotionEffect(MobEffects.WITHER, this.getEffectDuration(10), 0));
-		if(ObjectManager.getPotionEffect("decay") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("decay"), this.getEffectDuration(60), 0));
+		if(ObjectManager.getEffect("decay") != null) {
+			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     	return true;
     }
@@ -140,20 +140,20 @@ public class EntityDemonicBlast extends EntityProjectileBase {
 		}
 		if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
 			int explosionRadius = 2;
-			if (this.getThrower() != null && this.getThrower() instanceof EntityCreatureBase) {
-				EntityCreatureBase entityCreatureBase = (EntityCreatureBase) this.getThrower();
-				if(entityCreatureBase instanceof EntityCacodemon && !((EntityCacodemon)entityCreatureBase).cacodemonGreifing) {
+			if (this.getThrower() != null && this.getThrower() instanceof BaseCreatureEntity) {
+				BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) this.getThrower();
+				if(baseCreatureEntity instanceof EntityCacodemon && !((EntityCacodemon) baseCreatureEntity).cacodemonGreifing) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if(entityCreatureBase.getOwner() == entity || entityCreatureBase.getControllingPassenger() == entity) {
+				if(baseCreatureEntity.getOwner() == entity || baseCreatureEntity.getControllingPassenger() == entity) {
 					super.onImpactComplete(this.getPosition());
 					return;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 0) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 0) {
 					explosionRadius += 2;
 				}
-				if (entityCreatureBase.getSubspeciesIndex() > 2) {
+				if (baseCreatureEntity.getSubspeciesIndex() > 2) {
 					explosionRadius = 2;
 				}
 			}

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.properties.IProperty;
@@ -38,7 +38,7 @@ public class BlockSlabCustom extends BlockSlab {
         this.doubleBlock = doubleBlock;
         this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockSlab.EnumBlockHalf.BOTTOM).withProperty(VARIANT, Variant.DEFAULT));
         String slabName = "_slab";
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + slabName));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + slabName));
         this.setUnlocalizedName(block.blockName + slabName);
         block.copyAttributesTo(this);
 	}

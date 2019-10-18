@@ -45,11 +45,11 @@ public class ConfigBase {
             String configDirPath = LycanitesMobs.proxy.getMinecraftDir() + "/config/" + LycanitesMobs.modid;
             File configDir = new File(configDirPath);
             configDir.mkdir();
-            LycanitesMobs.printWarning("", "[Config] The current configs are too old, clearing all configs now...");
+            LycanitesMobs.logWarning("", "[Config] The current configs are too old, clearing all configs now...");
             try {
                 FileUtils.cleanDirectory(configDir);
             } catch (IOException e) {
-                LycanitesMobs.printWarning("", "[Config] Unable to clear the config directory! This could be a file permissions issue!");
+                LycanitesMobs.logWarning("", "[Config] Unable to clear the config directory! This could be a file permissions issue!");
                 e.printStackTrace();
             }
         }
@@ -76,8 +76,8 @@ public class ConfigBase {
     // Get Config:
     public static ConfigBase getConfig(ModInfo group, String configName) {
 		String configFileName = configName.toLowerCase();
-		if(!"lycanitesmobs".equalsIgnoreCase(group.filename)) {
-			configFileName = group.filename + "-" + configFileName;
+		if(!"lycanitesmobs".equalsIgnoreCase(group.modid)) {
+			configFileName = group.modid + "-" + configFileName;
 		}
         if(!configs.containsKey(configFileName)) {
 			registerConfig(new ConfigBase(group, configName, configFileName));
@@ -114,12 +114,12 @@ public class ConfigBase {
 		File configFile = new File(configDirPath + "/" + this.fileName + ".cfg");
 	    try {
 	    	configFile.createNewFile();
-	    	LycanitesMobs.printInfo("", "Config " + this.fileName + " created successfully.");
+	    	LycanitesMobs.logInfo("", "Config " + this.fileName + " created successfully.");
 	    }
 		catch (IOException e) {
-            LycanitesMobs.printWarning("", "Config " + this.fileName + " could not be created:");
+            LycanitesMobs.logWarning("", "Config " + this.fileName + " could not be created:");
 	    	System.out.println(e);
-            LycanitesMobs.printWarning("", "Make sure the config folder has write permissions or (if using Windows) isn't read only and that Minecraft is not in Program Files on a non-administrator account.");
+            LycanitesMobs.logWarning("", "Make sure the config folder has write permissions or (if using Windows) isn't read only and that Minecraft is not in Program Files on a non-administrator account.");
 		}
 	    
 	    // Read Config File:

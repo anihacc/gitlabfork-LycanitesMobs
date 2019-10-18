@@ -1,18 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.ExtendedEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.api.IGroupHeavy;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
@@ -20,11 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy {
-
-    protected EntityAIWander wanderAI;
-    protected EntityAIAttackMelee attackAI;
-
+public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy {
     protected int pickupCooldown = 100;
 
     // ==================================================
@@ -53,26 +47,7 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(2, this.aiSit);
-        this.attackAI = new EntityAIAttackMelee(this).setLongMemory(false);
-        this.tasks.addTask(3, this.attackAI);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(6, new EntityAIStayByWater(this).setSpeed(1.25D));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(7, this.wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(3, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class).setCheckSight(false));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	
@@ -85,18 +60,11 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if(!this.getEntityWorld().isRemote) {
-            // Wander Pause Rates:
-            if(this.isInWater())
-                this.wanderAI.setPauseRate(120);
-            else
-                this.wanderAI.setPauseRate(0);
-
             // Drop Owner When Tamed:
             if(this.isTamed() && this.hasPickupEntity() && this.getPickupEntity() == this.getOwner())
                 this.dropPickupEntity();
 
             // Entity Pickup Update:
-            this.attackAI.setEnabled(!this.hasPickupEntity());
             if(this.hasPickupEntity()) {
                 ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.getPickupEntity());
                 if(extendedEntity != null)
@@ -104,8 +72,8 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
                 if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof EntityLivingBase) {
-                        if(ObjectManager.getPotionEffect("penetration") != null)
-                            this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("penetration"), this.getEffectDuration(5), 1));
+                        if(ObjectManager.getEffect("penetration") != null)
+                            this.getPickupEntity().addPotionEffect(new PotionEffect(ObjectManager.getEffect("penetration"), this.getEffectDuration(5), 1));
                     }
                 }
             }
@@ -228,8 +196,6 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -333,14 +299,4 @@ public class EntityStrider extends EntityCreatureTameable implements IGroupHeavy
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 }

@@ -1,19 +1,14 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -21,9 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce {
+public class EntityWendigo extends BaseCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
+	WanderGoal wanderAI;
 	
     // ==================================================
  	//                    Constructor
@@ -43,19 +38,7 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(3, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(6, wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityBlaze.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityMagmaCube.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupFire.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
     
     
@@ -75,7 +58,7 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
                 trailWidth = 3;
             for(int y = 0; y < trailHeight; y++) {
                 Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
-                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
+                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
                     if(trailWidth == 1)
                         this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("frostfire").getDefaultState());
                     else
@@ -98,12 +81,12 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
         // Particles:
         if(this.getEntityWorld().isRemote) {
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }
 	        if(this.ticksExisted % 10 == 0)
 		        for(int i = 0; i < 2; ++i) {
-		            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+		            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 		        }
         }
     }
@@ -148,14 +131,6 @@ public class EntityWendigo extends EntityCreatureBase implements IMob, IGroupIce
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(IGroupIce.class))
-    		return false;
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {

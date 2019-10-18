@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -48,11 +48,11 @@ public class EntitySpectralbolt extends EntityProjectileBase {
     //========== Entity Living Collision ==========
     @Override
     public boolean onEntityLivingDamage(EntityLivingBase entityLiving) {
-    	if(ObjectManager.getPotionEffect("fear") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("fear"), this.getEffectDuration(2), 0));
+    	if(ObjectManager.getEffect("fear") != null) {
+			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("fear"), this.getEffectDuration(2), 0));
 		}
-		if(ObjectManager.getPotionEffect("insomnia") != null) {
-			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("insomnia"), this.getEffectDuration(60), 0));
+		if(ObjectManager.getEffect("insomnia") != null) {
+			entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("insomnia"), this.getEffectDuration(60), 0));
 		}
     	return true;
     }

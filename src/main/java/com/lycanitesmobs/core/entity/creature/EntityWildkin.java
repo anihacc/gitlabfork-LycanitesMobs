@@ -1,20 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityWildkin extends EntityCreatureTameable implements IMob {
+public class EntityWildkin extends TameableCreatureEntity implements IMob {
 
     // ==================================================
  	//                    Constructor
@@ -35,28 +33,13 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
+        this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+
         if(this.getNavigator() instanceof PathNavigateGround) {
             PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, this.aiSit);
-        this.tasks.addTask(2, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(3, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(4, new EntityAIBreakDoor(this));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this));
-        this.tasks.addTask(6, this.aiSit);
-        this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
 
@@ -90,16 +73,6 @@ public class EntityWildkin extends EntityCreatureTameable implements IMob {
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack);
-    }
 
 
     // ==================================================

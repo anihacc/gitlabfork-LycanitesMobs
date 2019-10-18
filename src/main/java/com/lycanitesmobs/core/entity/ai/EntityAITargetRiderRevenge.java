@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.ai;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class EntityAITargetRiderRevenge extends EntityAITargetAttack {
 	
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
     boolean callForHelp = false;
@@ -22,7 +22,7 @@ public class EntityAITargetRiderRevenge extends EntityAITargetAttack {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITargetRiderRevenge(EntityCreatureTameable setHost) {
+    public EntityAITargetRiderRevenge(TameableCreatureEntity setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;
@@ -87,14 +87,14 @@ public class EntityAITargetRiderRevenge extends EntityAITargetAttack {
                 Iterator possibleAllies = allies.iterator();
 
                 while (possibleAllies.hasNext()) {
-                    EntityCreatureBase possibleAlly = (EntityCreatureBase) possibleAllies.next();
+                    BaseCreatureEntity possibleAlly = (BaseCreatureEntity) possibleAllies.next();
                     if (possibleAlly != this.host && possibleAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target))
                         possibleAlly.setAttackTarget(this.target);
                 }
             }
         }
         catch(Exception e) {
-            LycanitesMobs.printWarning("", "An exception occurred when selecting help targets in rider revenge, this has been skipped to prevent a crash.");
+            LycanitesMobs.logWarning("", "An exception occurred when selecting help targets in rider revenge, this has been skipped to prevent a crash.");
             e.printStackTrace();
         }
 

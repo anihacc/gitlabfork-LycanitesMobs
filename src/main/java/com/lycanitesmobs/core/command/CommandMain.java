@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.command;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
@@ -22,7 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -409,9 +409,9 @@ public class CommandMain implements ICommand {
                 return;
             }
 
-            LycanitesMobs.printDebug("", "Getting Extended World for Dimension: " + world.provider.getDimension() + " World: " + world);
+            LycanitesMobs.logDebug("", "Getting Extended World for Dimension: " + world.provider.getDimension() + " World: " + world);
             ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
-            LycanitesMobs.printDebug("", "Got Extended World for Dimension: " + worldExt.world.provider.getDimension() + " World: " + worldExt.world);
+            LycanitesMobs.logDebug("", "Got Extended World for Dimension: " + worldExt.world.provider.getDimension() + " World: " + worldExt.world);
             if(worldExt == null) return;
 			
 			// Random:

@@ -1,8 +1,11 @@
 {
 	"name": "yale",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityYale",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelYale",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelYale",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,14 +40,14 @@
 	"effectDuration": 5,
 	"effectAmplifier": 1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0.25,
 	"eggBackColor": "#FFEEAA",
 	"eggForeColor": "#FFDD77",
 	"subspecies": [
 		{
 			"index": 1,
-			"name": "light",
+			"name": "lux",
 			"type": "uncommon"
 		},
 		{
@@ -54,7 +57,11 @@
 		}
 	],
 	"element": "earth",
+	"diets": [
+		"herbivore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,
@@ -62,8 +69,8 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:yalemeatraw",
-			"burningItem": "lycanitesmobs:yalemeatcooked",
+			"item": "lycanitesmobs:raw_yale_meat",
+			"burningItem": "lycanitesmobs:cooked_yale_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

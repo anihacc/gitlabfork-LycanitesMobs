@@ -5,14 +5,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.mobevent.effects.MobEventEffect;
 import com.lycanitesmobs.core.mobevent.trigger.MobEventTrigger;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ public class MobEvent {
 		}
 
 		if(!this.enabled || !MobEventManager.getInstance().mobEventsEnabled) {
-			LycanitesMobs.printDebug("MobEvents", "Mob Events System Disabled");
+			LycanitesMobs.logDebug("MobEvents", "Mob Events System Disabled");
 			return false;
 		}
 
@@ -176,11 +176,11 @@ public class MobEvent {
 		}
 
 		if(this.conditions.isEmpty()) {
-			LycanitesMobs.printDebug("MobEvents", "No Conditions");
+			LycanitesMobs.logDebug("MobEvents", "No Conditions");
 			return true;
 		}
 
-		LycanitesMobs.printDebug("MobEvents", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
+		LycanitesMobs.logDebug("MobEvents", "Conditions Required: " + (this.conditionsRequired > 0 ? this.conditionsRequired : "All"));
 		int conditionsMet = 0;
 		int conditionsRequired = this.conditionsRequired > 0 ? this.conditionsRequired : this.conditions.size();
 		for(SpawnCondition condition : this.conditions) {
@@ -189,16 +189,16 @@ public class MobEvent {
 				position = player.getPosition();
 			}
 			boolean met = condition.isMet(world, player, position);
-			LycanitesMobs.printDebug("MobEvents", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
+			LycanitesMobs.logDebug("MobEvents", "Condition: " + condition + " " + (met ? "Passed" : "Failed"));
 			if(met) {
 				if(++conditionsMet >= conditionsRequired) {
-					LycanitesMobs.printDebug("MobEvents", "Sufficient Conditions Met");
+					LycanitesMobs.logDebug("MobEvents", "Sufficient Conditions Met");
 					return true;
 				}
 			}
 		}
 
-		LycanitesMobs.printDebug("MobEvents", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
+		LycanitesMobs.logDebug("MobEvents", "Insufficient Conditions Met: " + conditionsMet + "/" + conditionsRequired);
 		return false;
 	}
 
@@ -211,7 +211,7 @@ public class MobEvent {
 	 * @return
 	 */
 	public boolean trigger(World world, EntityPlayer player, BlockPos pos, int level) {
-		LycanitesMobs.printDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
+		LycanitesMobs.logDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
 			return false;
@@ -253,8 +253,8 @@ public class MobEvent {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}
-		if(entity instanceof EntityCreatureBase) {
-			EntityCreatureBase entityCreature = (EntityCreatureBase)entity;
+		if(entity instanceof BaseCreatureEntity) {
+			BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
 			int levelBoost = this.levelBoostMin;
 			if(this.levelBoostMax > this.levelBoostMin) {
 				levelBoost += entityCreature.getRNG().nextInt(this.levelBoostMax - this.levelBoostMin + 1);

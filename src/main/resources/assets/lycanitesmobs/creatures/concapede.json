@@ -1,8 +1,11 @@
 {
 	"name": "concapede",
 	"creatureType": "arthropod",
+	"groups": [
+		"alpha"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityConcapedeHead",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelConcapedeHead",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelConcapedeHead",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#111144",
 	"eggForeColor": "#DD0000",
@@ -54,7 +57,11 @@
 		}
 	],
 	"element": "arbour",
+	"diets": [
+		"frugivore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,
@@ -68,8 +75,8 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:concapedemeatraw",
-			"burningItem": "lycanitesmobs:concapedemeatcooked",
+			"item": "lycanitesmobs:raw_concapede_meat",
+			"burningItem": "lycanitesmobs:cooked_concapede_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

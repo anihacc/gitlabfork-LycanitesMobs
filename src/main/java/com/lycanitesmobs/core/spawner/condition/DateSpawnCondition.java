@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.spawner.condition;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

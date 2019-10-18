@@ -1,25 +1,22 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.api.IGroupShadow;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupShadow {
+public class EntityEpion extends TameableCreatureEntity implements IMob {
     
-	public boolean epionGreifing = true;
+	public boolean epionGreifing = true; // TODO Creature flags.
 	
     // ==================================================
  	//                    Constructor
@@ -32,7 +29,6 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
         this.hasAttackSound = false;
         this.flySoundSpeed = 20;
         
-        this.epionGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Epion Griefing", this.epionGreifing, "Set to false to disable Epions falling and exploding in sunlight.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -42,21 +38,7 @@ public class EntityEpion extends EntityCreatureTameable implements IMob, IGroupS
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class).setCheckSight(false));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
     }
 	
 	

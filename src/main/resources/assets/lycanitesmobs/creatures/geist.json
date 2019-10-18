@@ -1,8 +1,11 @@
 {
 	"name": "geist",
 	"creatureType": "undead",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityGeist",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelGeist",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelGeist",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#705449",
 	"eggForeColor": "#310e08",

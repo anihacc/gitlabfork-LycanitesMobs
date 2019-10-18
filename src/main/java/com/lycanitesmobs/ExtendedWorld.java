@@ -51,7 +51,7 @@ public class ExtendedWorld extends WorldSavedData {
     // ==================================================
 	public static ExtendedWorld getForWorld(World world) {
 		if(world == null) {
-			//LycanitesMobs.printWarning("", "Tried to access an ExtendedWorld from a null World.");
+			//LycanitesMobs.logWarning("", "Tried to access an ExtendedWorld from a null World.");
 			return null;
 		}
         ExtendedWorld worldExt;
@@ -174,7 +174,7 @@ public class ExtendedWorld extends WorldSavedData {
 			this.markDirty();
 		this.worldEventStartTargetTime = setLong;
         if(setLong > 0)
-            LycanitesMobs.printDebug("MobEvents", "Next random mob will start after " + ((this.worldEventStartTargetTime - this.world.getTotalWorldTime()) / 20) + "secs.");
+            LycanitesMobs.logDebug("MobEvents", "Next random mob will start after " + ((this.worldEventStartTargetTime - this.world.getTotalWorldTime()) / 20) + "secs.");
 	}
 
     public void setWorldEventLastStartedTime(long setLong) {
@@ -216,7 +216,7 @@ public class ExtendedWorld extends WorldSavedData {
      *  **/
     public void startWorldEvent(MobEvent mobEvent) {
         if(mobEvent == null) {
-            LycanitesMobs.printWarning("", "Tried to start a null world event, stopping any event instead.");
+            LycanitesMobs.logWarning("", "Tried to start a null world event, stopping any event instead.");
             this.stopWorldEvent();
             return;
         }
@@ -285,7 +285,7 @@ public class ExtendedWorld extends WorldSavedData {
      *  **/
     public void startMobEvent(MobEvent mobEvent, EntityPlayer player, BlockPos pos, int level) {
         if(mobEvent == null) {
-            LycanitesMobs.printWarning("", "Tried to start a null mob event.");
+            LycanitesMobs.logWarning("", "Tried to start a null mob event.");
             return;
         }
 
@@ -324,12 +324,12 @@ public class ExtendedWorld extends WorldSavedData {
         if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
             mobEvent = MobEventManager.getInstance().mobEvents.get(mobEventName);
             if(!mobEvent.isEnabled()) {
-                LycanitesMobs.printWarning("", "Tried to start a mob event that was disabled with the name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
+                LycanitesMobs.logWarning("", "Tried to start a mob event that was disabled with the name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
                 return null;
             }
         }
         else {
-            LycanitesMobs.printWarning("", "Tried to start a mob event with the invalid name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
+            LycanitesMobs.logWarning("", "Tried to start a mob event with the invalid name: '" + mobEventName + "' on " + (this.world.isRemote ? "Client" : "Server"));
             return null;
         }
 
@@ -484,7 +484,7 @@ public class ExtendedWorld extends WorldSavedData {
 					}
 				}
 				catch(Exception e) {
-					LycanitesMobs.printWarning("Dungeon", "An exception occurred when loading a dungeon from NBT.");
+					LycanitesMobs.logWarning("Dungeon", "An exception occurred when loading a dungeon from NBT.");
 				}
 			}
 		}

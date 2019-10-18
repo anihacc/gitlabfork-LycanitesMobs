@@ -1,21 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.ItemStack;
+import net.minecraft.init.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGroupAnimal {
+public class EntitySilex extends AgeableCreatureEntity {
 
     // ==================================================
  	//                    Constructor
@@ -38,18 +35,8 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(3, new EntityAITempt(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
-        this.tasks.addTask(4, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(5, new EntityAIMate(this));
-        this.tasks.addTask(6, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(7, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        //this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 
 	
@@ -64,8 +51,6 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-		if(block == Blocks.FLOWING_WATER)
-			return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
         
@@ -105,28 +90,10 @@ public class EntitySilex extends EntityCreatureAgeable implements IAnimals, IGro
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 
     @Override
     public boolean canBurn() { return false; }
-
-
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntitySilex(this.getEntityWorld());
-    }
-
-    // ========== Breeding Item ==========
-    @Override
-    public boolean isBreedingItem(ItemStack testStack) {
-        if(testStack == null || !this.isInWater())
-            return false;
-        return testStack.getItem() == Items.DYE && testStack.getItemDamage() == 4;
-    }
 }

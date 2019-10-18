@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class EntityAIAttackMelee extends EntityAIBase {
 	// Targets:
-	private EntityCreatureBase host;
+	private BaseCreatureEntity host;
     private EntityLivingBase attackTarget;
     private Path pathToTarget;
     
@@ -33,7 +33,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIAttackMelee(EntityCreatureBase setHost) {
+    public EntityAIAttackMelee(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(3);
     }

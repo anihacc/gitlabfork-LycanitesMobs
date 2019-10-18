@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core.inventory;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerCreature extends ContainerBase {
-	public EntityCreatureBase creature;
+	public BaseCreatureEntity creature;
 	
 	// ==================================================
   	//                    Constructor
   	// ==================================================
-	public ContainerCreature(EntityCreatureBase creature, InventoryPlayer playerInventory) {
+	public ContainerCreature(BaseCreatureEntity creature, InventoryPlayer playerInventory) {
 		super();
 		this.addPlayerSlots(playerInventory, 0, 0);
 		this.creature = creature;
@@ -32,9 +32,9 @@ public class ContainerCreature extends ContainerBase {
 	// ==================================================
   	//                    Draw Slots
   	// ==================================================
-	public void drawCreatureEquipment(EntityCreatureBase creature, int equipX, int equipY) {
+	public void drawCreatureEquipment(BaseCreatureEntity creature, int equipX, int equipY) {
 		// Creature Accessories:
-		if(creature instanceof EntityCreatureRideable) {
+		if(creature instanceof RideableCreatureEntity) {
 			this.addSlot(creature.inventory, creature.inventory.getSlotFromType("saddle"), equipX, equipY);
 			equipY += 18;
 		}

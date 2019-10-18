@@ -1,19 +1,19 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
+import com.lycanitesmobs.core.entity.goals.actions.MoveRestrictionGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDoomfireball;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -21,19 +21,19 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupDemon {
+public class EntityBelph extends TameableCreatureEntity implements IMob {
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityBelph.class, DataSerializers.VARINT);
 
     public int hellfireEnergy = 0;
-    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();
+    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityBelph(World par1World) {
-        super(par1World);
+    public EntityBelph(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
@@ -44,27 +44,17 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
+        //this.tasks.addTask(this.nextTravelGoalIndex++, new MoveRestrictionGoal(this));
+
         super.initEntityAI();
+
+        this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
+
         if(this.getNavigator() instanceof PathNavigateGround) {
             PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
             pathNavigateGround.setBreakDoors(true);
         }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBreakDoor(this));
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(5, new EntityAIMoveRestriction(this));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBehemoth.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
     }
 
     // ========== Init ==========
@@ -106,12 +96,12 @@ public class EntityBelph extends EntityCreatureTameable implements IMob, IGroupD
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
+    public boolean canAttackEntity(EntityLivingBase target) {
     	if(this.isTamed())
-    		return super.canAttackClass(targetClass);
-    	if(targetClass.isAssignableFrom(EntityBehemoth.class))
+    		return super.canAttackEntity(target);
+    	if(target instanceof EntityBehemoth)
     		return false;
-        return super.canAttackClass(targetClass);
+        return super.canAttackEntity(target);
     }
     
     // ========== Ranged Attack ==========

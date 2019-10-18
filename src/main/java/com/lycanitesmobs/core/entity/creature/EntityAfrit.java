@@ -1,23 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupIce;
-import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -25,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupFire {
+public class EntityAfrit extends TameableCreatureEntity implements IMob {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;
@@ -55,24 +45,7 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(5.0F).setCheckSight(false));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(5, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(5.0F).setCheckSight(false));
     }
 	
 	
@@ -145,12 +118,6 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
@@ -195,6 +162,11 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     public boolean waterDamage() { return true; }
 
     @Override
+    public boolean canBreatheUnderlava() {
+        return true;
+    }
+
+    @Override
     public float getFallResistance() {
         return 100;
     }
@@ -220,15 +192,5 @@ public class EntityAfrit extends EntityCreatureTameable implements IMob, IGroupF
     	if(damageSrc.isFireDamage())
     		return 0F;
     	else return super.getDamageModifier(damageSrc);
-    }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("CookedMeat", testStack);
     }
 }

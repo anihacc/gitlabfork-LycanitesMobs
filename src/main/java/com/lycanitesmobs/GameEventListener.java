@@ -2,10 +2,7 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.EntityItemCustom;
+import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ItemBase;
@@ -24,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -51,8 +47,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import thaumcraft.api.OreDictionaryEntries;
 
 public class GameEventListener {
 
@@ -186,7 +180,7 @@ public class GameEventListener {
         // ========== Force Remove Entity ==========
         if(!(event.getEntity() instanceof EntityLivingBase)) {
             if(ExtendedEntity.FORCE_REMOVE_ENTITY_IDS != null && ExtendedEntity.FORCE_REMOVE_ENTITY_IDS.length > 0) {
-                LycanitesMobs.printDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
+                LycanitesMobs.logDebug("ForceRemoveEntity", "Forced entity removal, checking: " + event.getEntity().getName());
                 for(String forceRemoveID : ExtendedEntity.FORCE_REMOVE_ENTITY_IDS) {
                     if(forceRemoveID.equalsIgnoreCase(event.getEntity().getName())) {
                         event.getEntity().setDead();
@@ -288,8 +282,8 @@ public class GameEventListener {
 		}
 
 		// Can Be Targeted:
-		if(event.getEntityLiving() instanceof EntityLiving && targetEntity instanceof EntityCreatureBase) {
-			if(!((EntityCreatureBase)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
+		if(event.getEntityLiving() instanceof EntityLiving && targetEntity instanceof BaseCreatureEntity) {
+			if(!((BaseCreatureEntity)targetEntity).canBeTargetedBy(event.getEntityLiving())) {
 				//event.getEntityLiving().setRevengeTarget(null);
 				if(event.isCancelable())
 					event.setCanceled(true);
@@ -323,7 +317,7 @@ public class GameEventListener {
 
 		// ========== Mounted Protection ==========
 		if(damagedEntity.getRidingEntity() != null) {
-			if(damagedEntity.getRidingEntity() instanceof EntityCreatureRideable) {
+			if(damagedEntity.getRidingEntity() instanceof RideableCreatureEntity) {
 
 				// Prevent Mounted Entities from Suffocating:
 				if("inWall".equals(event.getSource().damageType)) {
@@ -333,7 +327,7 @@ public class GameEventListener {
 				}
 
 				// Copy Mount Immunities to Rider:
-				EntityCreatureRideable creatureRideable = (EntityCreatureRideable)event.getEntityLiving().getRidingEntity();
+				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getRidingEntity();
 				if(!creatureRideable.isDamageTypeApplicable(event.getSource().damageType, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
@@ -366,10 +360,10 @@ public class GameEventListener {
             && (Utilities.isHalloween() || Utilities.isYuletide() || Utilities.isNewYear())) {
             boolean noSeaonalDrop = false;
             boolean alwaysDrop = false;
-            if(event.getEntityLiving() instanceof EntityCreatureBase) {
-                if (((EntityCreatureBase) event.getEntityLiving()).isMinion())
+            if(event.getEntityLiving() instanceof BaseCreatureEntity) {
+                if (((BaseCreatureEntity) event.getEntityLiving()).isMinion())
                     noSeaonalDrop = true;
-                if (((EntityCreatureBase) event.getEntityLiving()).getSubspecies() != null)
+                if (((BaseCreatureEntity) event.getEntityLiving()).getSubspecies() != null)
                     alwaysDrop = true;
             }
 
@@ -447,8 +441,8 @@ public class GameEventListener {
 		if(mouseOver != null) {
 			Entity mouseOverEntity = mouseOver.entityHit;
 			if(mouseOverEntity != null) {
-				if(mouseOverEntity instanceof EntityCreatureBase) {
-					EntityCreatureBase mouseOverCreature = (EntityCreatureBase)mouseOverEntity;
+				if(mouseOverEntity instanceof BaseCreatureEntity) {
+					BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 					event.getLeft().add("");
 					event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
 					event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getMinecraft().player));
@@ -476,8 +470,8 @@ public class GameEventListener {
 					event.getLeft().add("Has Avoid Target: " + mouseOverCreature.hasAvoidTarget());
 					event.getLeft().add("Has Master Target: " + mouseOverCreature.hasMaster());
 					event.getLeft().add("Has Parent Target: " + mouseOverCreature.hasParent());
-					if(mouseOverEntity instanceof EntityCreatureTameable) {
-						EntityCreatureTameable mouseOverTameable = (EntityCreatureTameable)mouseOverCreature;
+					if(mouseOverEntity instanceof TameableCreatureEntity) {
+						TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
 						event.getLeft().add("");
 						event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
 						event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());

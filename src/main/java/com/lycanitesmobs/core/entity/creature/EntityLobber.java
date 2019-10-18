@@ -1,25 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupIce;
-import com.lycanitesmobs.api.IGroupPlant;
-import com.lycanitesmobs.api.IGroupWater;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -30,16 +22,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire {
+public class EntityLobber extends BaseCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
-    public boolean lobberMelting = true;
+	WanderGoal wanderAI;
+    public boolean lobberMelting = true; // TODO Creature flags.
 	
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityLobber(World par1World) {
-        super(par1World);
+    public EntityLobber(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -48,7 +40,6 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
         this.isLavaCreature = true;
         this.hasAttackSound = false;
 
-        this.lobberMelting = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Rare Lobber Melting", this.lobberMelting, "Set to false to disable Umber Lobbers melting certain blocks.");
         this.setupMob();
 
         this.setPathPriority(PathNodeType.LAVA, 0F);
@@ -58,32 +49,8 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this).setSink(true));
-        this.tasks.addTask(1, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(2, new EntityAIStayByWater(this).setSpeed(1.25D));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(6, wanderAI);
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-		this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-		this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntitySnowman.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 2);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
     
     
     // ==================================================
@@ -94,14 +61,6 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     public void onLivingUpdate() {
         super.onLivingUpdate();
         
-        // Wander Pause Rates:
-        if(!this.getEntityWorld().isRemote) {
-            if (this.lavaContact())
-                this.wanderAI.setPauseRate(120);
-            else
-                this.wanderAI.setPauseRate(0);
-        }
-        
         // Trail:
         if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
         	int trailHeight = 1;
@@ -110,7 +69,7 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
                 trailWidth = 3;
         	for(int y = 0; y < trailHeight; y++) {
         		Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
-        		if(block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire")) {
+        		if(block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire")) {
                     if(trailWidth == 1)
                         this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), Blocks.FIRE.getDefaultState());
                     else
@@ -132,8 +91,8 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
                 for(int d = -((int)Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++)
                     for(int h = 0; h <= Math.ceil(this.height); h++) {
                         Block block = this.getEntityWorld().getBlockState(this.getPosition().add(w, h, d)).getBlock();
-                        if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.PLANKS || block == Blocks.GRAVEL || block == Blocks.SAND) {
-							IBlockState blockState = Blocks.FLOWING_LAVA.getDefaultState().withProperty(BlockLiquid.LEVEL, 5);
+                        if(block == Blocks.OBSIDIAN || block == Blocks.COBBLESTONE || block == Blocks.DIRT || block == Blocks.GRAVEL || block == Blocks.SAND) {
+							IBlockState blockState = Blocks.FLOWING_LAVA.getStateFromMeta(11);
                             if(block == Blocks.OBSIDIAN)
                                 blockState = Blocks.LAVA.getDefaultState();
                             this.getEntityWorld().setBlockState(this.getPosition().add(w, h, d), blockState);
@@ -182,8 +141,6 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
 		BlockPos pos = new BlockPos(x, y, z);
         if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.LAVA)
         	return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-		if(this.getEntityWorld().getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
-			return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         
         if(this.getAttackTarget() != null)
         	return super.getBlockPathWeight(x, y, z);
@@ -203,14 +160,6 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     // ==================================================
     //                      Attacks
     // ==================================================
-    // ========== Set Attack Target ==========
-    @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(IGroupFire.class))
-    		return false;
-        return super.canAttackClass(targetClass);
-    }
-    
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
@@ -237,12 +186,12 @@ public class EntityLobber extends EntityCreatureBase implements IMob, IGroupFire
     public boolean waterDamage() { return this.getSubspeciesIndex() < 3; }
     
     @Override
-    public boolean canBreatheUnderwater() {
+    public boolean canBreatheUnderlava() {
         return true;
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return true;
     }
     

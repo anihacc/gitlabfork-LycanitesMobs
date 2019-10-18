@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
 import net.minecraft.block.Block;
@@ -56,8 +56,8 @@ public class EntityHellfireball extends EntityProjectileBase {
     	if(!entityLiving.isImmuneToFire()) {
     		entityLiving.setFire(this.getEffectDuration(10) / 20);
         }
-        if(ObjectManager.getPotionEffect("decay") != null) {
-            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("decay"), this.getEffectDuration(60), 0));
+        if(ObjectManager.getEffect("decay") != null) {
+            entityLiving.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
         }
     	return true;
     }

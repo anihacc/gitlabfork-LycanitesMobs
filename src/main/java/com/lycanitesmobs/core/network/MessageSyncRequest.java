@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ public class MessageSyncRequest implements IMessage, IMessageHandler<MessageSync
 			EntityPlayer player = ctx.getServerHandler().player;
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			playerExt.needsFullSync = true;
-			LycanitesMobs.printDebug("Packets", "Requested full player sync.");
+			LycanitesMobs.logDebug("Packets", "Requested full player sync.");
 		});
 		return null;
 	}

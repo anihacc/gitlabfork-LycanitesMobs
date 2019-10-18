@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -8,12 +8,12 @@ public class EntityAIFollowParent extends EntityAIFollow {
 	public boolean followAsAdult = false;
 	
 	// Targets:
-	EntityCreatureAgeable host;
+	AgeableCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIFollowParent(EntityCreatureAgeable setHost) {
+    public EntityAIFollowParent(AgeableCreatureEntity setHost) {
     	super(setHost);
         this.setMutexBits(1);
         this.host = setHost;

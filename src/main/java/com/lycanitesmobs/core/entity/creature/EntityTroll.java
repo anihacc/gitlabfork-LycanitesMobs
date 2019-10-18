@@ -1,26 +1,24 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
+import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityTroll extends EntityCreatureTameable implements IMob {
+public class EntityTroll extends TameableCreatureEntity implements IMob {
 	
-	public boolean trollGreifing = true;
+	public boolean trollGreifing = true; // TODO Creature flags.
 	
 	// ========== Unique Entity Variables ==========
 	public boolean stoneForm = false;
@@ -38,7 +36,6 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
         //this.canGrow = false;
         //this.babySpawnChance = 0.01D;
         
-        this.trollGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Troll Griefing", this.trollGreifing, "Set to false to disable Troll block destruction.");
         this.solidCollision = true;
         this.setupMob();
     }
@@ -46,26 +43,14 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-        super.initEntityAI();
-        if(this.getNavigator() instanceof PathNavigateGround) {
-            PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
-            pathNavigateGround.setBreakDoors(true);
-        }
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBreakDoor(this));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.5D).setRange(14.0F).setMinChaseDistance(5.0F));
-        this.tasks.addTask(6, this.aiSit);
-        this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+		super.initEntityAI();
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+		if(this.getNavigator() instanceof PathNavigateGround) {
+			PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
+			pathNavigateGround.setBreakDoors(true);
+		}
     }
     
     
@@ -104,7 +89,7 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
  	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.trollGreifing) {
  		    	float distance = this.getAttackTarget().getDistance(this);
  		    		if(distance <= this.width + 4.0F)
- 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 10, true);
+ 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);
  	        }
     }
 
@@ -138,28 +123,19 @@ public class EntityTroll extends EntityCreatureTameable implements IMob {
     // ========== Damage Modifier ==========
     /** A multiplier that alters how much damage this mob receives from the given DamageSource, use for resistances and weaknesses. Note: The defense multiplier is handled before this. **/
     public float getDamageModifier(DamageSource damageSrc) {
-        if("Jarno".equals(this.getCustomNameTag()))
-            return 0;
-
-    	if(this.stoneForm) {
-    		if(damageSrc.getTrueSource() != null) {
-    			Item heldItem = null;
-        		if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
-                    EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
-    	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-    	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
-    	    		}
-        		}
-        		
-        		if(ObjectLists.isPickaxe(heldItem))
-    				return 2.0F;
-        	}
-    		return 0.25F;
-    	}
-    	
-    	if(damageSrc.isFireDamage())
-    		return 2.0F;
-    	return 1.0F;
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
+				EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isPickaxe(heldItem.getItem())) {
+				return 3.0F;
+			}
+		}
+		return super.getDamageModifier(damageSrc);
     }
     
     

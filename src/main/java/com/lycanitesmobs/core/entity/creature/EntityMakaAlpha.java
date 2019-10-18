@@ -1,26 +1,23 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAlpha;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, IGroupAlpha {
+public class EntityMakaAlpha extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
@@ -31,7 +28,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
-        this.attackTime = 10;
+        this.attackCooldownMax = 10;
         this.setupMob();
     }
 
@@ -39,19 +36,10 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(5, new EntityAIAttackMelee(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
-        this.tasks.addTask(6, new EntityAIAttackMelee(this));
-        this.tasks.addTask(9, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getClass()));
 
-        this.targetTasks.addTask(0, new EntityAITargetRevenge(this).setHelpClasses(EntityMaka.class));
-		this.targetTasks.addTask(2, new EntityAITargetDefend(this, EntityVillager.class));
-		this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupPredator.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityMakaAlpha.class).setChance(10));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class).setOnlyNearby(true).setChance(100));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class).setOnlyNearby(true).setChance(100));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
 	
 	
@@ -98,23 +86,15 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
 	// ==================================================
    	//                      Attacks
    	// ==================================================
-    // ========== Attack Class ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass == EntityMaka.class)
+    public boolean canAttackEntity(EntityLivingBase target) {
+		if(target instanceof EntityMaka)
+			return false;
+    	if(target instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || target.getHealth() / target.getMaxHealth() <= 0.25F))
     		return false;
-    	else return super.canAttackClass(targetClass);
+    	else return super.canAttackEntity(target);
     }
-    
-    // ========== Attack Entity ==========
-    @Override
-    public boolean canAttackEntity(EntityLivingBase entity) {
-    	if(entity instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || entity.getHealth() / entity.getMaxHealth() <= 0.25F))
-    		return false;
-    	else return super.canAttackEntity(entity);
-    }
-    
-    // ========== Set Attack Target ==========
+
     @Override
     public void setAttackTarget(EntityLivingBase entity) {
     	if(entity == null && this.getAttackTarget() instanceof EntityMakaAlpha) {
@@ -125,6 +105,13 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     	}
     	super.setAttackTarget(entity);
     }
+
+	@Override
+	public boolean rollAttackTargetChance(EntityLivingBase target) {
+    	if(target instanceof EntityPlayer || target.getClass() == this.getClass())
+    		return this.getRNG().nextDouble() <= 0.01D;
+		return true;
+	}
     
     
     // ==================================================
@@ -144,13 +131,7 @@ public class EntityMakaAlpha extends EntityCreatureAgeable implements IAnimals, 
     // ==================================================
     // ========== Create Child ==========
 	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityMaka(this.getEntityWorld());
+	public AgeableCreatureEntity createChild(AgeableCreatureEntity partner) {
+		return (AgeableCreatureEntity) CreatureManager.getInstance().getCreature("maka").createEntity(this.getEntityWorld());
 	}
-	
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return false;
-    }
 }

@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.block.fluid;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockFluidBase;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

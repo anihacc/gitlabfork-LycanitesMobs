@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityAIStayByHome extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private boolean enabled = true;
@@ -16,7 +16,7 @@ public class EntityAIStayByHome extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIStayByHome(EntityCreatureBase setHost) {
+    public EntityAIStayByHome(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }

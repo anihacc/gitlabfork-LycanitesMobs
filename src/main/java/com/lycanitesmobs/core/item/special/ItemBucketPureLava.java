@@ -10,7 +10,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,7 +30,7 @@ public class ItemBucketPureLava extends ItemBucket {
         super(ObjectManager.getBlock("purelava"));
         this.group = LycanitesMobs.modInfo;
         this.itemName = "bucketpurelava";
-        this.setRegistryName(this.group.filename, this.itemName);
+        this.setRegistryName(this.group.modid, this.itemName);
         this.setUnlocalizedName(this.itemName);
         this.setCreativeTab(LycanitesMobs.itemsTab);
         ObjectManager.addBucket(this, ObjectManager.getBlock("purelava"), fluid);

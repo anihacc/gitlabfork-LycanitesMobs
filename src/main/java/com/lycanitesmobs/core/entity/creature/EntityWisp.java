@@ -1,10 +1,8 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupLight;
-import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
 import net.minecraft.entity.Entity;
@@ -12,7 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,14 +17,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
+public class EntityWisp extends TameableCreatureEntity {
 	EntityWisp playPartner = null;
 
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityWisp(World par1World) {
-        super(par1World);
+    public EntityWisp(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -43,19 +40,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
-		this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(600));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-		this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupShadow.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(10.0F));
     }
 
 
@@ -80,7 +65,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 			// Light Aura:
 			if(!this.isPetType("familiar")) {
 				if (this.updateTick % 10 == 0) {
-					List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
+					List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 2);
 					for (Object entityObj : aoeTargets) {
 						EntityLivingBase target = (EntityLivingBase) entityObj;
 						if(target == this) {
@@ -100,8 +85,8 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 						if(target instanceof EntityZombie || target instanceof EntitySkeleton) {
 							target.setFire(1);
 						}
-						if(target instanceof EntityCreatureBase) {
-							EntityCreatureBase targetCreature = (EntityCreatureBase)target;
+						if(target instanceof BaseCreatureEntity) {
+							BaseCreatureEntity targetCreature = (BaseCreatureEntity)target;
 							if(targetCreature.daylightBurns()) {
 								targetCreature.setFire(1);
 							}
@@ -128,7 +113,7 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 				}
 			}
 			else {
-				if(this.playPartner.isDead || this.getAttackTarget() == this.playPartner || this.getDistance(this.playPartner) >= 100) {
+				if(!this.playPartner.isEntityAlive() || this.getAttackTarget() == this.playPartner || this.getDistance(this.playPartner) >= 100) {
 					this.playPartner = null;
 				}
 				else if(this.hasAttackTarget()) {
@@ -151,6 +136,17 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
 		}
     }
 
+    @Override
+	public boolean rollWanderChance() {
+		if(this.playPartner == null) {
+			return super.rollWanderChance();
+		}
+		if(this.isAttackOnCooldown()) {
+			return false;
+		}
+		return this.getRNG().nextDouble() <= 0.002D;
+	}
+
 
     // ==================================================
     //                      Attacks
@@ -172,11 +168,6 @@ public class EntityWisp extends EntityCreatureTameable implements IGroupLight {
     		return false;
 		}
     	return super.canAttackEntity(targetEntity);
-	}
-
-	@Override
-	public float getEyeHeight() {
-    	return this.height * 0.5F;
 	}
 
 

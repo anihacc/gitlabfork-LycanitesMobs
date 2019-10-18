@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.item.temp;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class ItemStaffSavage extends ItemStaffSummoning {
     }
     
     // ========== Minion Effects ==========
-    public void applyMinionEffects(EntityCreatureBase minion) {
+    public void applyMinionEffects(BaseCreatureEntity minion) {
     	minion.setHealth(minion.getHealth() / 2);
     }
     

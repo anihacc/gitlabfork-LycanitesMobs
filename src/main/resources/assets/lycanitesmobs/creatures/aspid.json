@@ -1,8 +1,11 @@
 {
 	"name": "aspid",
 	"creatureType": "beast",
+	"groups": [
+		"animal"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAspid",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAspid",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAspid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0.25,
 	"eggBackColor": "#009944",
 	"eggForeColor": "#446600",
@@ -54,7 +57,11 @@
 		}
 	],
 	"element": "poison",
+	"diets": [
+		"fungivore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,
@@ -68,8 +75,8 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:aspidmeatraw",
-			"burningItem": "lycanitesmobs:aspidmeatcooked",
+			"item": "lycanitesmobs:raw_aspid_meat",
+			"burningItem": "lycanitesmobs:cooked_aspid_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

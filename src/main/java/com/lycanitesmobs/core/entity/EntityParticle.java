@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.EntityThrowable;

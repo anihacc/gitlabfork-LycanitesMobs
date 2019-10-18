@@ -1,18 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
+import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -24,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityBeholder extends EntityCreatureRideable {
-	public boolean beholderGreifing = true;
+public class EntityBeholder extends RideableCreatureEntity {
+	public boolean beholderGreifing = true; // TODO Creature flags.
     
     // ==================================================
  	//                    Constructor
@@ -38,7 +35,6 @@ public class EntityBeholder extends EntityCreatureRideable {
         this.hasAttackSound = false;
         
         this.setAttackCooldownMax(20);
-		this.beholderGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Beholder Griefing", this.beholderGreifing, "Set to false to disable Beholder projectile explosions.");
 		this.solidCollision = true;
         this.setupMob();
 
@@ -49,24 +45,7 @@ public class EntityBeholder extends EntityCreatureRideable {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(5, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-		this.tasks.addTask(6, this.aiSit);
-		this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-		this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-		this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
     }
 
 
@@ -77,8 +56,8 @@ public class EntityBeholder extends EntityCreatureRideable {
     public void riderEffects(EntityLivingBase rider) {
         if(rider.isPotionActive(MobEffects.MINING_FATIGUE))
             rider.removePotionEffect(MobEffects.MINING_FATIGUE);
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+        if(rider.isPotionActive(ObjectManager.getEffect("weight")))
+            rider.removePotionEffect(ObjectManager.getEffect("weight"));
     }
 
     
@@ -96,15 +75,10 @@ public class EntityBeholder extends EntityCreatureRideable {
     		// Eat Buffs:
         	if(damageEntity instanceof EntityLivingBase) {
         		EntityLivingBase targetLiving = (EntityLivingBase)damageEntity;
-        		List<Potion> goodEffects = new ArrayList<Potion>();
-        		for(Object potionEffectObj : targetLiving.getActivePotionEffects()) {
-        			if(potionEffectObj instanceof PotionEffect) {
-        				Potion potion = ((PotionEffect)potionEffectObj).getPotion();
-                        if(potion != null) {
-                            if(ObjectLists.inEffectList("buffs", potion))
-                                goodEffects.add(potion);
-                        }
-        			}
+        		List<Potion> goodEffects = new ArrayList<>();
+        		for(PotionEffect effect : targetLiving.getActivePotionEffects()) {
+					if(ObjectLists.inEffectList("buffs", effect.getPotion()))
+						goodEffects.add(effect.getPotion());
         		}
         		if(goodEffects.size() > 0 && this.getRNG().nextBoolean()) {
         			if(goodEffects.size() > 1)

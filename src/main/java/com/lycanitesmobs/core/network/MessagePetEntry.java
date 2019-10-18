@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.network;
 
 import io.netty.buffer.ByteBuf;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;

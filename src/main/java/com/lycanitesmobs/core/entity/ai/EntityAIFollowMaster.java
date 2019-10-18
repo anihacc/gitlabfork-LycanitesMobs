@@ -1,17 +1,17 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
 public class EntityAIFollowMaster extends EntityAIFollow {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIFollowMaster(EntityCreatureBase setHost) {
+    public EntityAIFollowMaster(BaseCreatureEntity setHost) {
     	super(setHost);
         this.setMutexBits(1);
         this.host = setHost;

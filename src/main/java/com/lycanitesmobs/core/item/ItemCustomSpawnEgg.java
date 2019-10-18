@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.dispenser.DispenserBehaviorMobEggCustom;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockFence;
@@ -52,11 +52,11 @@ public class ItemCustomSpawnEgg extends ItemBase {
 
         this.itemName = name;
         this.creatureType = creatureType;
-        this.setRegistryName(this.modInfo.filename, this.itemName);
+        this.setRegistryName(this.modInfo.modid, this.itemName);
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, new DispenserBehaviorMobEggCustom());
 
-		LycanitesMobs.printDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
+		LycanitesMobs.logDebug("Creature Type", "Created Creature Type Spawn Egg: " + this.itemName);
     }
     
 	// ==================================================
@@ -73,7 +73,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
 				creatureTitle = creatureInfo.getTitle();
 			}
 			else {
-				creatureTitle = LanguageManager.translate("entity." + this.modInfo.filename + "." + creatureName + ".name");
+				creatureTitle = LanguageManager.translate("entity." + this.modInfo.modid + "." + creatureName + ".name");
 			}
             displayName += creatureTitle;
         }
@@ -102,7 +102,7 @@ public class ItemCustomSpawnEgg extends ItemBase {
         CreatureInfo creatureInfo = this.getCreatureInfo(itemStack);
         if(creatureInfo == null) {
         	String creatureName = this.getCreatureName(itemStack);
-            LycanitesMobs.printWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
+            LycanitesMobs.logWarning("Mob Spawn Egg", "Unable to get Creature Info for id: " + creatureName);
             return "Unable to get Creature Info for id: '" + creatureName + "' this spawn egg may have been created by a give command without NBT data.";
         }
         return creatureInfo.getDescription();

@@ -1,36 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.api.IGroupBoss;
+import com.lycanitesmobs.api.IGroupHeavy;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityThresher extends EntityCreatureRideable implements IMob, IGroupPredator, IGroupHeavy {
-
-	EntityAIWander wanderAI;
-    protected int whirlpoolRange = 8;
+public class EntityThresher extends RideableCreatureEntity implements IMob, IGroupHeavy {
+    protected int whirlpoolRange = 8; // TODO Creature flags.
     protected int whirlpoolEnergy = 0;
     protected int whirlpoolEnergyMax = 5 * 20;
     protected boolean whirlpoolRecharging = true;
@@ -56,41 +46,13 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
 
         // Stats:
         this.entityCollisionReduction = 0.9F;
-
-        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Thresher Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Thresher's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 10 blocks in size itself which the range must cover.");
     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false).setRange(2));
-        this.tasks.addTask(5, this.aiSit);
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(7, wanderAI.setPauseRate(60));
-        this.tasks.addTask(8, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntitySquid.class));
-        }
-        this.targetTasks.addTask(9, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(2));
     }
     
     
@@ -102,7 +64,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-		// Whirlpool:
+        // Whirlpool:
         if(!this.getEntityWorld().isRemote) {
             if(this.whirlpoolRecharging) {
                 if(++this.whirlpoolEnergy >= this.whirlpoolEnergyMax)
@@ -115,7 +77,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
                         continue;
                     if(entity instanceof EntityLivingBase) {
                         EntityLivingBase entityLivingBase = (EntityLivingBase)entity;
-                        if(entityLivingBase.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entityLivingBase))
+                        if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                     }
                     EntityPlayerMP player = null;
@@ -148,10 +110,10 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     @Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("paralysis")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("paralysis"));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
+        if(rider.isPotionActive(ObjectManager.getEffect("paralysis")))
+            rider.removePotionEffect(ObjectManager.getEffect("paralysis"));
+        if(rider.isPotionActive(ObjectManager.getEffect("penetration")))
+            rider.removePotionEffect(ObjectManager.getEffect("penetration"));
     }
 
     // ========== Extra Animations ==========
@@ -195,8 +157,6 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -236,7 +196,7 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 
@@ -272,11 +232,6 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
         return 2.0F;
     }
 
-    @Override
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
-    }
-
     // Dismount:
     @Override
     public void onDismounted(Entity entity) {
@@ -294,26 +249,6 @@ public class EntityThresher extends EntityCreatureRideable implements IMob, IGro
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return 10; }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityThresher(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack) || ObjectLists.inItemList("cookedfish", testStack);
-    }
 
 
     // ==================================================

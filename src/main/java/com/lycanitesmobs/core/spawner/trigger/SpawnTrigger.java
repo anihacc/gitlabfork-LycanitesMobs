@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.Spawner;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
@@ -146,7 +146,7 @@ public abstract class SpawnTrigger {
 		}
 
 		if("".equals(this.spawner.eventName)) {
-			LycanitesMobs.printDebug("JSONSpawner", "Trigger Fired: " + this + " for: " + this.spawner.name);
+			LycanitesMobs.logDebug("JSONSpawner", "Trigger Fired: " + this + " for: " + this.spawner.name);
 		}
 		return this.spawner.trigger(world, player, this, triggerPos, level, this.count, chain);
 	}

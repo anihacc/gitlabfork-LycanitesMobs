@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 
 public class ItemInfo {
 
@@ -37,13 +37,13 @@ public class ItemInfo {
 			this.itemClass = (Class<? extends Item>) Class.forName(json.get("itemClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
 		}
 		try {
 			this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
 		}
 	}
 
@@ -61,7 +61,7 @@ public class ItemInfo {
 	 * @return Item registry entity id.
 	 */
 	public String getEntityId() {
-		return this.group.filename + ":" + this.getName();
+		return this.group.modid + ":" + this.getName();
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ItemInfo {
 	 * @return Item resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.group.filename, this.getName());
+		return new ResourceLocation(this.group.modid, this.getName());
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class ItemInfo {
 	 * @return Item language key.
 	 */
 	public String getLocalisationKey() {
-		return this.group.filename + "." + this.getName();
+		return this.group.modid + "." + this.getName();
 	}
 
 	/**

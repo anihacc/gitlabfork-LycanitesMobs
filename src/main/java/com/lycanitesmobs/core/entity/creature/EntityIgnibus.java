@@ -1,25 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
+import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -29,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire, IGroupHeavy {
+public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;
@@ -37,8 +32,8 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityIgnibus(World par1World) {
-        super(par1World);
+    public EntityIgnibus(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -59,44 +54,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIMate(this));
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(4, new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(20.0F).setMinChaseDistance(10.0F));
-        this.tasks.addTask(5, this.aiSit);
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(7, new EntityAIFollowParent(this));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupIce.class));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(IGroupWater.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPlant.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAlpha.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSizeScale(double scale) {
-        if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 1.5D);
-            return;
-        }
-        super.setSizeScale(scale);
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(20.0F).setMinChaseDistance(10.0F));
     }
 
 
@@ -148,10 +106,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     @Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
-        if(rider.isBurning())
-            rider.extinguish();
+        super.riderEffects(rider);
     }
 
 
@@ -212,7 +167,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        List<EntityProjectileRapidFire> projectiles = new ArrayList<EntityProjectileRapidFire>();
+        List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
 
         EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
@@ -281,7 +236,9 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
     public boolean canBurn() { return false; }
 
     @Override
-    public boolean waterDamage() { return false; }
+    public boolean canBreatheUnderlava() {
+        return true;
+    }
 
     @Override
     public float getFallResistance() {
@@ -298,16 +255,6 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         if(damageSrc.isFireDamage())
             return 0F;
         else return super.getDamageModifier(damageSrc);
-    }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
     }
 
 
@@ -345,7 +292,7 @@ public class EntityIgnibus extends EntityCreatureRideable implements IGroupFire,
         if(rider instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)rider;
             // Type:
-            List<EntityProjectileRapidFire> projectiles = new ArrayList<EntityProjectileRapidFire>();
+            List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
 
             EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), player, 15, 3);
             projectiles.add(projectileEntry);

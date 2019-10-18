@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
@@ -9,7 +8,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIChase extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     private EntityLivingBase target;
     
     // Properties:
@@ -21,7 +20,7 @@ public class EntityAIChase extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIChase(EntityCreatureBase setHost) {
+    public EntityAIChase(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }

@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.item.special;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

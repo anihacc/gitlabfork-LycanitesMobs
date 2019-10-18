@@ -1,35 +1,25 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
+import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
+import net.minecraft.entity.*;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupPredator {
+public class EntityIoray extends RideableCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
-    EntityAIAttackRanged rangedAttackAI;
+	WanderGoal wanderAI;
 
     // ==================================================
  	//                    Constructor
@@ -52,35 +42,8 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false).setMaxChaseDistance(4.0F));
-        this.rangedAttackAI = new EntityAIAttackRanged(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false);
-        this.tasks.addTask(5, rangedAttackAI);
-        this.tasks.addTask(6, this.aiSit);
-        this.tasks.addTask(7, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(8, wanderAI.setPauseRate(60));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntitySquid.class));
-        }
-        this.targetTasks.addTask(9, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(4.0F));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F).setMountedAttacking(false));
     }
     
     
@@ -91,10 +54,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
 	@Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("paralysis")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("paralysis"));
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("penetration")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("penetration"));
+        super.riderEffects(rider);
     }
 
 	
@@ -109,8 +69,6 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -150,7 +108,7 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 
@@ -161,11 +119,6 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     // ==================================================
     //                      Attacks
     // ==================================================
-    @Override
-    public float getEyeHeight() {
-        return this.height * 0.5F;
-    }
-
     // ========== Ranged Attack ==========
     EntityWaterJet projectile = null;
     @Override
@@ -232,9 +185,6 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
         this.applyStaminaCost();
     }
 
-    @Override
-    public boolean shouldDismountInWater(Entity rider) { return false; }
-
     // Dismount:
     @Override
     public void onDismounted(Entity entity) {
@@ -252,26 +202,6 @@ public class EntityIoray extends EntityCreatureRideable implements IMob, IGroupP
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return 10; }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityIoray(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack) || ObjectLists.inItemList("cookedfish", testStack);
-    }
 
 
     // ==================================================

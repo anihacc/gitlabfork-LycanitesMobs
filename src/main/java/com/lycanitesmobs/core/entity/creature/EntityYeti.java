@@ -1,17 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupIce;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -25,13 +21,13 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 
-public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGroupAnimal, IGroupIce {
+public class EntityYeti extends AgeableCreatureEntity {
 	
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityYeti(World par1World) {
-        super(par1World);
+    public EntityYeti(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -45,19 +41,8 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(2, new EntityAIAvoid(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-        this.tasks.addTask(3, new EntityAIMate(this));
-        this.tasks.addTask(4, new EntityAITempt(this).setItemList("Vegetables"));
-        this.tasks.addTask(5, new EntityAIFollowParent(this).setSpeed(1.0D));
-        this.tasks.addTask(6, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(1, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(2, new EntityAITargetParent(this).setSightCheck(false).setDistance(32.0D));
-        this.targetTasks.addTask(3, new EntityAITargetAvoid(this).setTargetClass(IGroupPredator.class));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_herbivore"));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	
 	
@@ -84,7 +69,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOW_SHOVEL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 	
@@ -128,22 +113,6 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
         if(potionEffect.getPotion() == MobEffects.HUNGER) return false;
         return super.isPotionApplicable(potionEffect);
     }
-    
-    
-    // ==================================================
-    //                     Breeding
-    // ==================================================
-    // ========== Create Child ==========
-	@Override
-	public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-		return new EntityYeti(this.getEntityWorld());
-	}
-	
-	// ========== Breeding Item ==========
-	@Override
-	public boolean isBreedingItem(ItemStack testStack) {
-		return ObjectLists.inItemList("Vegetables", testStack);
-    }
 	
     
 	// ==================================================
@@ -152,7 +121,7 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     // ========== Get Interact Commands ==========
     @Override
     public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
-    	HashMap<Integer, String> commands = new HashMap<Integer, String>();
+    	HashMap<Integer, String> commands = new HashMap<>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
     	
     	if(itemStack != null) {
@@ -166,13 +135,14 @@ public class EntityYeti extends EntityCreatureAgeable implements IAnimals, IGrou
     
     // ========== Perform Command ==========
     @Override
-    public void performCommand(String command, EntityPlayer player, ItemStack itemStack) {
+    public boolean performCommand(String command, EntityPlayer player, ItemStack itemStack) {
     	
     	// Milk:
     	if(command.equals("Milk")) {
     		this.replacePlayersItem(player, itemStack, new ItemStack(Items.MILK_BUCKET));
+    		return true;
     	}
     	
-    	super.performCommand(command, player, itemStack);
+    	return super.performCommand(command, player, itemStack);
     }
 }

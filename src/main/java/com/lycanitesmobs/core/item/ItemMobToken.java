@@ -20,7 +20,7 @@ public class ItemMobToken extends ItemBase {
 
     @Override
     public void setup() {
-        this.setRegistryName(this.modInfo.filename, this.itemName);
+        this.setRegistryName(this.modInfo.modid, this.itemName);
         this.setUnlocalizedName(this.itemName);
     }
 

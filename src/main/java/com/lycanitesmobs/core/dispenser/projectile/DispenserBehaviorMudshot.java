@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.dispenser.projectile;
 
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;

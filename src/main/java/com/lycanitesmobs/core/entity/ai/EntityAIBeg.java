@@ -1,13 +1,13 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class EntityAIBeg extends EntityAIBase {
 	// Targets:
-    private EntityCreatureTameable host;
+    private TameableCreatureEntity host;
     private EntityPlayer player;
     
     // Properties:
@@ -17,7 +17,7 @@ public class EntityAIBeg extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIBeg(EntityCreatureTameable setHost) {
+    public EntityAIBeg(TameableCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(2);
     }

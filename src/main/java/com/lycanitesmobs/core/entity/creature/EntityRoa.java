@@ -1,36 +1,29 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.*;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.api.IGroupBoss;
+import com.lycanitesmobs.api.IGroupHeavy;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPredator {
+public class EntityRoa extends RideableCreatureEntity implements IMob {
 
-	EntityAIWander wanderAI;
-    protected int whirlpoolRange = 6;
+	WanderGoal wanderAI;
+    protected int whirlpoolRange = 6; // TODO Creature flags.
     protected int whirlpoolEnergy = 0;
     protected int whirlpoolEnergyMax = 5 * 20;
     protected boolean whirlpoolRecharging = true;
@@ -51,41 +44,13 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         this.babySpawnChance = 0D;
         this.canGrow = true;
         this.setupMob();
-
-        this.whirlpoolRange = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Roa Whirlpool Range", this.whirlpoolRange, "The range (in blocks) of the Roa's whirlpool pull effect, set to 0 to disable, note that the Roa is nearly 2 blocks in size itself which the range must cover.");
     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(4, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.tasks.addTask(5, this.aiSit);
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(7, wanderAI.setPauseRate(60));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetRiderRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetRiderAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(5, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(6, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(7, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-            this.targetTasks.addTask(8, new EntityAITargetAttack(this).setTargetClass(EntitySquid.class));
-        }
-        this.targetTasks.addTask(9, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
     
     
@@ -97,7 +62,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-		// Whirlpool:
+        // Whirlpool:
         if(!this.getEntityWorld().isRemote) {
             if(this.whirlpoolRecharging) {
                 if(++this.whirlpoolEnergy >= this.whirlpoolEnergyMax)
@@ -110,7 +75,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
                         continue;
                     if(entity instanceof EntityLivingBase) {
                         EntityLivingBase entityLivingBase = (EntityLivingBase)entity;
-                        if(entityLivingBase.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entityLivingBase))
+                        if(entityLivingBase.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entityLivingBase))
                             continue;
                         if(!entity.isInWater() && !this.spawnEventType.equalsIgnoreCase("sharknado"))
                             continue;
@@ -148,10 +113,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
     @Override
     public void riderEffects(EntityLivingBase rider) {
         rider.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, (5 * 20) + 5, 1));
-        if(rider.isPotionActive(MobEffects.BLINDNESS))
-            rider.removePotionEffect(MobEffects.BLINDNESS);
-        if(rider.isPotionActive(ObjectManager.getPotionEffect("weight")))
-            rider.removePotionEffect(ObjectManager.getPotionEffect("weight"));
+        super.riderEffects(rider);
     }
 
     // ========== Extra Animations ==========
@@ -200,8 +162,6 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -250,7 +210,7 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return "sharknado".equals(this.spawnEventType);
     }
 
@@ -286,11 +246,6 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
         return 2.0F;
     }
 
-    @Override
-    public boolean shouldDismountInWater(Entity rider) {
-        return false;
-    }
-
     // Dismount:
     @Override
     public void onDismounted(Entity entity) {
@@ -308,26 +263,6 @@ public class EntityRoa extends EntityCreatureRideable implements IMob, IGroupPre
     public int getNoBagSize() { return 0; }
     @Override
     public int getBagSize() { return 10; }
-
-
-    // ==================================================
-    //                      Breeding
-    // ==================================================
-    // ========== Create Child ==========
-    @Override
-    public EntityCreatureAgeable createChild(EntityCreatureAgeable baby) {
-        return new EntityRoa(this.getEntityWorld());
-    }
-
-
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-        return ObjectLists.inItemList("cookedmeat", testStack) || ObjectLists.inItemList("cookedfish", testStack);
-    }
 
 
     // ==================================================

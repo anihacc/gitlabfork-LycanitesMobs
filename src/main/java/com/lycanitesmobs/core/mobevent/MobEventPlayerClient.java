@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.mobevent;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.gui.GuiOverlay;
+import com.lycanitesmobs.client.gui.GuiOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +37,7 @@ public class MobEventPlayerClient {
 		this.mobEvent = mobEvent;
         this.world = world;
         if(!world.isRemote)
-            LycanitesMobs.printWarning("", "Created a MobEventClient with a server side world, this shouldn't happen, things are going to get weird!");
+            LycanitesMobs.logWarning("", "Created a MobEventClient with a server side world, this shouldn't happen, things are going to get weird!");
 	}
 	
 	
@@ -61,7 +61,7 @@ public class MobEventPlayerClient {
 
     public void playSound() {
         if(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()) == null) {
-            LycanitesMobs.printWarning("MobEvent", "Sound missing for: " + this.mobEvent.getTitle());
+            LycanitesMobs.logWarning("MobEvent", "Sound missing for: " + this.mobEvent.getTitle());
             return;
         }
         this.sound = new PositionedSoundRecord(AssetManager.getSound("mobevent_" + this.mobEvent.title.toLowerCase()).getSoundName(), SoundCategory.RECORDS, 1.0F, 1.0F, false, 0, ISound.AttenuationType.NONE, 0.0F, 0.0F, 0.0F);

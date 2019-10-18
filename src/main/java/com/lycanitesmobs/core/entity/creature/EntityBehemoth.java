@@ -1,19 +1,16 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.AssetManager;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -25,19 +22,19 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGroupDemon {
+public class EntityBehemoth extends TameableCreatureEntity implements IMob {
 
     // Data Manager:
-    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.<Integer>createKey(EntityCreatureBase.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> HELLFIRE_ENERGY = EntityDataManager.createKey(EntityBehemoth.class, DataSerializers.VARINT);
 
     public int hellfireEnergy = 0;
-    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<EntityHellfireOrb>();
+    public List<EntityHellfireOrb> hellfireOrbs = new ArrayList<>();
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityBehemoth(World par1World) {
-        super(par1World);
+    public EntityBehemoth(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
@@ -49,19 +46,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(6, new EntityAIWander(this).setSpeed(1.0D));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpClasses(EntityBelph.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F).setChaseTime(-1));
     }
 
     // ========== Init ==========
@@ -104,7 +89,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
                 trailWidth = 3;
             for(int y = 0; y < trailHeight; y++) {
                 Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();
-                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW_LAYER || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire") || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
+                if(block != null && (block == Blocks.AIR || block == Blocks.FIRE || block == Blocks.SNOW || block == Blocks.TALLGRASS || block == ObjectManager.getBlock("frostfire") || block == ObjectManager.getBlock("icefire") || block == ObjectManager.getBlock("scorchfire") || block == ObjectManager.getBlock("doomfire"))) {
                     if(trailWidth == 1)
                         this.getEntityWorld().setBlockState(this.getPosition().add(0, y, 0), ObjectManager.getBlock("hellfire").getDefaultState());
                     else
@@ -124,10 +109,10 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-    	if(targetClass.isAssignableFrom(EntityBelph.class))
-    		return false;
-        return super.canAttackClass(targetClass);
+    public boolean canAttackEntity(EntityLivingBase target) {
+        if(target instanceof EntityBelph)
+            return false;
+        return super.canAttackEntity(target);
     }
     
     // ========== Ranged Attack ==========
@@ -156,7 +141,7 @@ public class EntityBehemoth extends EntityCreatureTameable implements IMob, IGro
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     public ResourceLocation getTexture() {
-        if(!"Krampus".equals(this.getCustomNameTag()))
+        if(!this.hasCustomName() || !"Krampus".equals(this.getCustomNameTag()))
             return super.getTexture();
 
         String textureName = this.getTextureName() + "_krampus";

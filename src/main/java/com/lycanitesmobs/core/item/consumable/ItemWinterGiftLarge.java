@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.item.consumable;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
@@ -13,7 +13,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class ItemWinterGiftLarge extends ItemBase {
@@ -73,8 +73,8 @@ public class ItemWinterGiftLarge extends ItemBase {
                     entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 
                     // Themed Names:
-                    if (entity instanceof EntityCreatureBase) {
-                        EntityCreatureBase entityCreature = (EntityCreatureBase) entity;
+                    if (entity instanceof BaseCreatureEntity) {
+                        BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
                         entityCreature.addLevel(world.rand.nextInt(10));
                         if (entityCreature.creatureInfo.getName().equals("wildkin"))
                             entityCreature.setCustomNameTag("Gooderness");

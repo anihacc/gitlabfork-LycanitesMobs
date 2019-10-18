@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
@@ -13,7 +12,7 @@ public class EntityAITargetDefend extends EntityAITarget {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetDefend(EntityCreatureBase setHost, Class<? extends EntityLivingBase> defendClass) {
+    public EntityAITargetDefend(BaseCreatureEntity setHost, Class<? extends EntityLivingBase> defendClass) {
         super(setHost);
         this.setMutexBits(1);
         this.defendClass = defendClass;
@@ -69,8 +68,8 @@ public class EntityAITargetDefend extends EntityAITarget {
 		if(target instanceof EntityCreature) {
 			targetTarget = ((EntityCreature)target).getAttackTarget();
 		}
-		else if(target instanceof EntityCreatureBase) {
-			targetTarget = ((EntityCreatureBase)target).getAttackTarget();
+		else if(target instanceof BaseCreatureEntity) {
+			targetTarget = ((BaseCreatureEntity)target).getAttackTarget();
 		}
 		if(targetTarget == null) {
 			return false;

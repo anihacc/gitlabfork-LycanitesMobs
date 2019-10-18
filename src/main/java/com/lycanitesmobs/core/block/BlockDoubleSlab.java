@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

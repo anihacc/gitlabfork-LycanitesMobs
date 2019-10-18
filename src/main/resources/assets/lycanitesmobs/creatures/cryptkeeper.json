@@ -1,8 +1,11 @@
 {
 	"name": "cryptkeeper",
 	"creatureType": "undead",
+	"groups": [
+		"raider"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityCryptkeeper",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelCryptkeeper",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelCryptkeeper",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#CC9966",
 	"eggForeColor": "#AA8800",
@@ -54,6 +57,10 @@
 		}
 	],
 	"element": "gravity",
+	"diets": [
+		"carnivore",
+		"detritivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

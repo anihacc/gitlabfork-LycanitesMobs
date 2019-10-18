@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
@@ -102,8 +102,8 @@ public class EntityDevilGatling extends EntityProjectileBase {
             }
         }
 
-		if(ObjectManager.getPotionEffect("decay") != null) {
-			target.addPotionEffect(new PotionEffect(ObjectManager.getPotionEffect("decay"), this.getEffectDuration(60), 0));
+		if(ObjectManager.getEffect("decay") != null) {
+			target.addPotionEffect(new PotionEffect(ObjectManager.getEffect("decay"), this.getEffectDuration(60), 0));
 		}
     }
     

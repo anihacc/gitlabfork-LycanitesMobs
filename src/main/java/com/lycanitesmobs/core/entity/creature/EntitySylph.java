@@ -1,21 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.api.IGroupFire;
-import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityAetherwave;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntitySylph extends EntityCreatureTameable implements IMob {
+public class EntitySylph extends TameableCreatureEntity implements IMob {
 
 	public float fireDamageAbsorbed = 0;
 
@@ -37,20 +34,9 @@ public class EntitySylph extends EntityCreatureTameable implements IMob {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(2, new EntityAIAttackRanged(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(16.0F).setMinChaseDistance(8.0F));
 
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupDemon.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(IGroupShadow.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityPlayer.class));
     }
 	
 	

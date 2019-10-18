@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StayByHomeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,9 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +24,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IGroupPredator {
+public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	public boolean inHiveCache = false;
 	private int hiveCheckCacheTime = 0;
 	public class HiveExposedCoordinates {
@@ -42,10 +38,10 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 			this.orientationMeta = orientationMeta;
 		}
 	}
-	public List<HiveExposedCoordinates> hiveExposedBlocks = new ArrayList<HiveExposedCoordinates>();
+	public List<HiveExposedCoordinates> hiveExposedBlocks = new ArrayList<>();
 	private int hiveExposedBlockCacheTime = 0;
 	
-	private int vespidQueenSwarmLimit = 10;
+	private int vespidQueenSwarmLimit = 10; // TODO Creature Flags.
 	private boolean vespidHiveBuilding = true;
 	
     // ==================================================
@@ -65,32 +61,25 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 
         this.stepHeight = 1.0F;
         this.setAttackCooldownMax(10);
-        
-        this.vespidQueenSwarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Vespid Queen Swarm Limit", this.vespidQueenSwarmLimit, "Limits how many Vespid drones a Queen can have before she will no longer spawn babies in hives.");
-        this.vespidHiveBuilding = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Vespid Hive Building", this.vespidHiveBuilding, "Set to false to stop Vespids from building hives all together.");
     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(7, new EntityAIStayByHome(this));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(1200));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
+        this.tasks.addTask(this.nextTravelGoalIndex, new StayByHomeGoal(this));
 
-        this.targetTasks.addTask(1, new EntityAITargetMasterAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetAttack(this).setTargetClass(EntityConba.class));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityVespidQueen.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVespid.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IAnimals.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getClass()));
+		Class<? extends Entity> conbaType = CreatureManager.getInstance().getEntityClass("conba");
+		if(conbaType != null)
+			this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(conbaType));
     }
+
+    @Override
+	public boolean rollWanderChance() {
+		return this.getRNG().nextDouble() <= 0.0008D;
+	}
 
 	
 	// ==================================================
@@ -148,22 +137,22 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 			return;
 		
 		// Spawn Babies:
-		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(EntityVespid.class, 32D) < this.vespidQueenSwarmLimit) {
+		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityClass(), 32D) < this.vespidQueenSwarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
 				EntityLivingBase minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
-				if(minion instanceof EntityCreatureAgeable) {
-		    		((EntityCreatureAgeable)minion).setGrowingAge(((EntityCreatureAgeable) minion).growthTime);
+				if(minion instanceof AgeableCreatureEntity) {
+		    		((AgeableCreatureEntity)minion).setGrowingAge(((AgeableCreatureEntity) minion).growthTime);
 		    	}
 			}
 		}
 	}
 	
     public EntityLivingBase spawnAlly(double x, double y, double z) {
-    	EntityLivingBase minion = new EntityVespid(this.getEntityWorld());
+		EntityLivingBase minion = CreatureManager.getInstance().getCreature("vespid").createEntity(this.getEntityWorld());
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
-    	if(minion instanceof EntityCreatureBase) {
-    		((EntityCreatureBase)minion).applySubspecies(this.getSubspeciesIndex());
+    	if(minion instanceof BaseCreatureEntity) {
+    		((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
     	}
     	this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null)
@@ -232,7 +221,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
         IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
-            if(searchBlock == ObjectManager.getBlock("veswax") && searchBlock.getMetaFromState(searchState) < 8)
+            if(searchBlock == ObjectManager.getBlock("veswax"))
                 return true;
         return false;
     }
@@ -241,7 +230,7 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
         IBlockState searchState = this.getEntityWorld().getBlockState(searchPos);
         Block searchBlock = searchState.getBlock();
         if(searchBlock != null)
-            if(searchBlock == ObjectManager.getBlock("propolis") && searchBlock.getMetaFromState(searchState) < 8)
+            if(searchBlock == ObjectManager.getBlock("propolis"))
                 return true;
         return false;
     }
@@ -299,20 +288,20 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 		}
 		return false;
 	}
-	
+
 	public List<HiveExposedCoordinates> getHiveExposureBlocks() {
 		if(this.hiveExposedBlockCacheTime <= 0) {
 			this.hiveExposedBlockCacheTime = 200;
 			this.hiveExposedBlocks = new ArrayList<HiveExposedCoordinates>();
 			BlockPos hivePos = this.getHivePosition();
 			int hiveMax = 28;
-			
+
 			for(int x = hivePos.getX() - hiveMax; x <= hivePos.getX() + hiveMax; x++) {
 				for(int y = hivePos.getY() - hiveMax; y <= hivePos.getY() + hiveMax; y++) {
 					for(int z = hivePos.getZ() - hiveMax; z <= hivePos.getZ() + hiveMax; z++) {
-                        BlockPos checkPos = new BlockPos(x, y, z);
+						BlockPos checkPos = new BlockPos(x, y, z);
 						if(this.isHiveBlock(checkPos)) {
-                            IBlockState state = this.getEntityWorld().getBlockState(checkPos);
+							IBlockState state = this.getEntityWorld().getBlockState(checkPos);
 							Block block = state.getBlock();
 							int orientationMeta = block.getMetaFromState(state);
 							EnumFacing facing = EnumFacing.getFront(orientationMeta);
@@ -325,16 +314,16 @@ public class EntityVespidQueen extends EntityCreatureAgeable implements IMob, IG
 							}
 
 							if(facing.getFrontOffsetY() == 0) {
-                                if(!this.isHiveBlock(checkPos.add(0, -1, 0)) && this.canPlaceBlockAt(checkPos.add(0, -1, 0)))
+								if(!this.isHiveBlock(checkPos.add(0, -1, 0)) && this.canPlaceBlockAt(checkPos.add(0, -1, 0)))
 									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, -1, 0), orientationMeta));
-                                if(!this.isHiveBlock(checkPos.add(0, 1, 0)) && this.canPlaceBlockAt(checkPos.add(0, 1, 0)))
+								if(!this.isHiveBlock(checkPos.add(0, 1, 0)) && this.canPlaceBlockAt(checkPos.add(0, 1, 0)))
 									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 1, 0), orientationMeta));
 							}
 
 							if(facing.getFrontOffsetZ() == 0) {
-                                if(!this.isHiveBlock(checkPos.add(0, 0, -1)) && this.canPlaceBlockAt(checkPos.add(0, 0, -1)))
+								if(!this.isHiveBlock(checkPos.add(0, 0, -1)) && this.canPlaceBlockAt(checkPos.add(0, 0, -1)))
 									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 0, -1), orientationMeta));
-                                if(!this.isHiveBlock(checkPos.add(0, 0, 1)) && this.canPlaceBlockAt(checkPos.add(0, 0, 1)))
+								if(!this.isHiveBlock(checkPos.add(0, 0, 1)) && this.canPlaceBlockAt(checkPos.add(0, 0, 1)))
 									this.hiveExposedBlocks.add(new HiveExposedCoordinates(block, checkPos.add(0, 0, 1), orientationMeta));
 							}
 						}

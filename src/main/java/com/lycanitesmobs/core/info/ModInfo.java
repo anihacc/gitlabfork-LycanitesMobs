@@ -1,12 +1,10 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -25,7 +23,7 @@ public class ModInfo {
     public String name;
 
     /** The filename of this mod, used for assets, config, etc. This should usually match the mod ID. **/
-    public String filename;
+    public String modid;
 	
 	// ========== Spawn Dimensions ========== TODO Remove
     /** A comma separated list of dimensions that mobs in this mod spawn in. As read from the config **/
@@ -54,7 +52,7 @@ public class ModInfo {
     public ModInfo(Object mod, String name, int order) {
     	this.mod = mod;
         this.name = name;
-        this.filename = name.toLowerCase().replace(" ", "");
+        this.modid = name.toLowerCase().replace(" ", "");
         this.order = order;
 
         modInfos.put(this.name, this);
@@ -66,6 +64,6 @@ public class ModInfo {
 	 * @return The text to display.
 	 */
 	public String getTitle() {
-    	return LanguageManager.translate(this.filename + ".name");
+    	return LanguageManager.translate(this.modid + ".name");
 	}
 }

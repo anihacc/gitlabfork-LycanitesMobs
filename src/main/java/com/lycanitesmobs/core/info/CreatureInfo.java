@@ -3,13 +3,15 @@ package com.lycanitesmobs.core.info;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -23,8 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -32,6 +34,12 @@ public class CreatureInfo {
 	// Core Info:
 	/** The name of this mob. Lowercase, no space, used for language entries and for generating the entity id, etc. Required. **/
 	protected String name;
+
+	/** The creature type this creature belongs to. **/
+	public CreatureType creatureType;
+
+	/** A list of groups that this creature is in. **/
+	public List<CreatureGroup> groups = new ArrayList<>();
 
 	/** The entity class used by this creature. **/
 	public Class<? extends EntityLiving> entityClass;
@@ -42,9 +50,6 @@ public class CreatureInfo {
 
 	/** The mod info of the mod this creature belongs to. **/
 	public ModInfo modInfo;
-
-	/** The creature type this creature belongs to. **/
-	public CreatureType creatureType;
 
 	/** If false, this mob will be removed from the world if present and wont be allowed by any spawners. **/
 	public boolean enabled = true;
@@ -75,6 +80,8 @@ public class CreatureInfo {
 	public double sight = 16.0D;
 	public double knockbackResistance = 0.0D;
 
+	public int packSize = 3;
+
 
 	// Spawn Egg:
 	/** The background color of this mob's egg. Required. **/
@@ -97,10 +104,16 @@ public class CreatureInfo {
 	/** The Elements of this creature, affects buffs and debuffs amongst other things. **/
 	public List<ElementInfo> elements = new ArrayList<>();
 
+	/** The diets that this creature has, this controls what food it can eat for being healed, breeding, etc. Diets will search for a tag group lycanitesmobs:diet_dietname.json for items. Creature Types will also provide what diet they are suited for. **/
+	public List<String> diets = new ArrayList<>();
+
 
 	// Creature Difficulty:
 	/** If true, this mob is allowed on Peaceful Difficulty. **/
 	public boolean peaceful = false;
+
+	/** If true, this mob can be farmed (bred and lured using food items). The entity must have age AI for this. **/
+	public boolean farmable = false;
 
 	/** If true, this mob can be summoned as a minion. The entity must have pet AI for this. **/
 	public boolean summonable = false;
@@ -153,7 +166,7 @@ public class CreatureInfo {
 			this.entityClass = (Class<? extends EntityLiving>) Class.forName(json.get("entityClass").getAsString());
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
+			LycanitesMobs.logWarning("", "[Creature] Unable to find the Java Entity Class: " + json.get("entityClass").getAsString() + " for " + this.getName());
 		}
 
 		if(json.has("enabled"))
@@ -167,14 +180,14 @@ public class CreatureInfo {
 		try {
 			LycanitesMobs.proxy.loadCreatureModel(this, json.get("modelClass").getAsString());
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
+			LycanitesMobs.logWarning("", "[Creature] Unable to find a valid Java Model Class: " + json.get("modelClass").getAsString() + " for creature: " + this.getTitle());
 		}
 
 		// Creature Type:
 		if(json.has("creatureType")) {
 			this.creatureType = CreatureManager.getInstance().getCreatureType(json.get("creatureType").getAsString());
 			if(this.creatureType == null) {
-				LycanitesMobs.printWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
+				LycanitesMobs.logWarning("", "Unable to find the creature type: " + json.get("creatureType").getAsString() + " when load creature: " + this.name);
 			}
 		}
 		if(this.creatureType == null) {
@@ -182,6 +195,20 @@ public class CreatureInfo {
 		}
 		if(this.creatureType != null) {
 			this.creatureType.addCreature(this);
+		}
+
+		// Creature Group:
+		if(json.has("groups")) {
+			for(String groupName : JSONHelper.getJsonStrings(json.getAsJsonArray("groups"))) {
+				CreatureGroup group = CreatureManager.getInstance().getCreatureGroup(groupName);
+				if(group != null) {
+					this.groups.add(group);
+					group.addCreature(this);
+				}
+				else {
+					LycanitesMobs.logWarning("", "[Creature] Unable to find the Creature Group: " + groupName + " for Creature: " + this.name);
+				}
+			}
 		}
 
 		// Spawning:
@@ -220,10 +247,14 @@ public class CreatureInfo {
 			this.effectAmplifier = json.get("effectAmplifier").getAsDouble();
 		if(json.has("pierce"))
 			this.pierce = json.get("pierce").getAsDouble();
+
 		if(json.has("knockbackResistance"))
 			this.knockbackResistance = json.get("knockbackResistance").getAsDouble();
 		if(json.has("sight"))
 			this.sight = json.get("sight").getAsDouble();
+
+		if(json.has("packSize"))
+			this.packSize = json.get("packSize").getAsInt();
 
 		// Spawn Egg:
 		this.eggBackColor = Color.decode(json.get("eggBackColor").getAsString()).getRGB();
@@ -256,13 +287,19 @@ public class CreatureInfo {
 			this.elements.add(element);
 		}
 
+		// Diets:
+		if(json.has("diets"))
+			this.diets = JSONHelper.getJsonStrings(json.get("diets").getAsJsonArray());
+
 		// Flags:
 		if(json.has("boss"))
 			this.boss = json.get("boss").getAsBoolean();
 		if(json.has("peaceful"))
 			this.peaceful = json.get("peaceful").getAsBoolean();
 
-		// Pet or Minion:
+		// Features:
+		if(json.has("farmable"))
+			this.farmable = json.get("farmable").getAsBoolean();
 		if(json.has("summonable"))
 			this.summonable = json.get("summonable").getAsBoolean();
 		if(json.has("tameable"))
@@ -282,7 +319,7 @@ public class CreatureInfo {
 					this.drops.add(itemDrop);
 				}
 				else {
-					LycanitesMobs.printWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
+					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
 				}
 			}
 		}
@@ -296,7 +333,7 @@ public class CreatureInfo {
 		if(this.dummy) {
 			return;
 		}
-		LycanitesMobs.printDebug("", "Loading: " + this.getName());
+		LycanitesMobs.logDebug("", "Loading: " + this.getName());
 
 		// Add Stats:
 		ItemStack achievementStack = new ItemStack(ObjectManager.getItem("mobtoken"));
@@ -318,14 +355,14 @@ public class CreatureInfo {
 			subspecies.load(this);
 		}
 
-		LycanitesMobs.printDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+		LycanitesMobs.logDebug("Creature", "Creature Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 
 	public void lateLoad() {
 		// Vanilla Spawning:
 		this.creatureSpawn.registerVanillaSpawns(this);
-		LycanitesMobs.printDebug("Creature", "Creature Late Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
+		LycanitesMobs.logDebug("Creature", "Creature Late Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");
 	}
 
 
@@ -340,7 +377,7 @@ public class CreatureInfo {
 		AssetManager.addSound(this.name + suffix + "_attack", modInfo, "entity." + this.name + suffix + ".attack");
 		AssetManager.addSound(this.name + suffix + "_jump", modInfo, "entity." + this.name + suffix + ".jump");
 		AssetManager.addSound(this.name + suffix + "_fly", modInfo, "entity." + this.name + suffix + ".fly");
-		if(this.isSummonable() || this.isTameable() || EntityCreatureTameable.class.isAssignableFrom(this.entityClass)) {
+		if(this.isSummonable() || this.isTameable() || TameableCreatureEntity.class.isAssignableFrom(this.entityClass)) {
 			AssetManager.addSound(this.name + suffix + "_tame", modInfo, "entity." + this.name + suffix + ".tame");
 			AssetManager.addSound(this.name + suffix + "_beg", modInfo, "entity." + this.name + suffix + ".beg");
 		}
@@ -367,7 +404,25 @@ public class CreatureInfo {
 	 * @return Creature registry entity id.
 	 */
 	public String getEntityId() {
-		return this.modInfo.filename + ":" + this.getName();
+		return this.modInfo.modid + ":" + this.getName();
+	}
+
+
+	/**
+	 * Returns the entity class of this creature.
+	 * @return Creature's entity class.
+	 */
+	public Class<? extends Entity> getEntityClass() {
+		return this.entityClass;
+	}
+
+
+	/**
+	 * Returns the groups that this creature is in.
+	 * @return Creature name.
+	 */
+	public List<CreatureGroup> getGroups() {
+		return this.groups;
 	}
 
 
@@ -376,7 +431,7 @@ public class CreatureInfo {
 	 * @return Creature resource location.
 	 */
 	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.modInfo.filename, this.getName());
+		return new ResourceLocation(this.modInfo.modid, this.getName());
 	}
 
 
@@ -385,7 +440,7 @@ public class CreatureInfo {
 	 * @return Creature language key.
 	 */
 	public String getLocalisationKey() {
-		return this.modInfo.filename + "." + this.getName();
+		return this.modInfo.modid + "." + this.getName();
 	}
 
 
@@ -461,11 +516,41 @@ public class CreatureInfo {
 
 
 	/**
+	 * Returns a comma separated list of Diets used by this Creature.
+	 * @return The Diets used by this Creature.
+	 */
+	public String getDietNames() {
+		if(this.diets.isEmpty()) {
+			return "None";
+		}
+		String dietNames = "";
+		boolean firstDiet = true;
+		for(String diet : this.diets) {
+			if(!firstDiet) {
+				dietNames += ", ";
+			}
+			firstDiet = false;
+			dietNames += LanguageManager.translate("diet." + diet);
+		}
+		return dietNames;
+	}
+
+
+	/**
+	 * Returns if this creature is farmable.
+	 * @return True if creature is farmable.
+	 */
+	public boolean isFarmable() {
+		return this.farmable && AgeableCreatureEntity.class.isAssignableFrom(this.entityClass);
+	}
+
+
+	/**
 	 * Returns if this creature is summonable.
 	 * @return True if creature is summonable.
 	 */
 	public boolean isSummonable() {
-		return this.summonable && EntityCreatureTameable.class.isAssignableFrom(this.entityClass);
+		return this.summonable && TameableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 
@@ -474,7 +559,7 @@ public class CreatureInfo {
 	 * @return True if creature is tameable.
 	 */
 	public boolean isTameable() {
-		return this.tameable && EntityCreatureTameable.class.isAssignableFrom(this.entityClass);
+		return this.tameable && TameableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 
@@ -483,7 +568,7 @@ public class CreatureInfo {
 	 * @return True if creature is mountable.
 	 */
 	public boolean isMountable() {
-		return this.mountable && EntityCreatureRideable.class.isAssignableFrom(this.entityClass);
+		return this.mountable && RideableCreatureEntity.class.isAssignableFrom(this.entityClass);
 	}
 
 
@@ -517,16 +602,16 @@ public class CreatureInfo {
 	 * @return A Subspecies or null if using the base species.
 	 */
 	public Subspecies getRandomSubspecies(EntityLivingBase entity, boolean rare) {
-		LycanitesMobs.printDebug("Subspecies", "~0===== Subspecies =====0~");
-		LycanitesMobs.printDebug("Subspecies", "Selecting random subspecies for: " + entity);
+		LycanitesMobs.logDebug("Subspecies", "~0===== Subspecies =====0~");
+		LycanitesMobs.logDebug("Subspecies", "Selecting random subspecies for: " + entity);
 		if(rare) {
-			LycanitesMobs.printDebug("Subspecies", "The conditions have been set to rare increasing the chances of a subspecies being picked.");
+			LycanitesMobs.logDebug("Subspecies", "The conditions have been set to rare increasing the chances of a subspecies being picked.");
 		}
 		if(this.subspecies.isEmpty()) {
-			LycanitesMobs.printDebug("Subspecies", "No species available, will be base species.");
+			LycanitesMobs.logDebug("Subspecies", "No species available, will be base species.");
 			return null;
 		}
-		LycanitesMobs.printDebug("Subspecies", "Subspecies Available: " + this.subspecies.size());
+		LycanitesMobs.logDebug("Subspecies", "Subspecies Available: " + this.subspecies.size());
 
 		// Get Viable Subspecies:
 		List<Subspecies> possibleSubspecies = new ArrayList<>();
@@ -540,7 +625,7 @@ public class CreatureInfo {
 			}
 		}
 		if(possibleSubspecies.isEmpty()) {
-			LycanitesMobs.printDebug("Subspecies", "No species allowed, will be base species.");
+			LycanitesMobs.logDebug("Subspecies", "No species allowed, will be base species.");
 			return null;
 		}
 
@@ -553,7 +638,7 @@ public class CreatureInfo {
 			}
 		}
 
-		LycanitesMobs.printDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
+		LycanitesMobs.logDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
 
 		// Get Weights:
 		int baseSpeciesWeightScaled = Subspecies.baseSpeciesWeight;
@@ -567,13 +652,13 @@ public class CreatureInfo {
 		for(Subspecies subspeciesEntry : possibleSubspecies) {
 			totalWeight += subspeciesEntry.weight;
 		}
-		LycanitesMobs.printDebug("Subspecies", "Total Weight: " + totalWeight);
+		LycanitesMobs.logDebug("Subspecies", "Total Weight: " + totalWeight);
 
 		// Roll and Check Default:
 		int roll = entity.getRNG().nextInt(totalWeight) + 1;
-		LycanitesMobs.printDebug("Subspecies", "Rolled: " + roll);
+		LycanitesMobs.logDebug("Subspecies", "Rolled: " + roll);
 		if(roll <= baseSpeciesWeightScaled) {
-			LycanitesMobs.printDebug("Subspecies", "Base species selected: " + baseSpeciesWeightScaled);
+			LycanitesMobs.logDebug("Subspecies", "Base species selected: " + baseSpeciesWeightScaled);
 			return null;
 		}
 
@@ -582,12 +667,12 @@ public class CreatureInfo {
 		for(Subspecies subspeciesEntry : possibleSubspecies) {
 			checkWeight += subspeciesEntry.weight;
 			if(roll <= checkWeight) {
-				LycanitesMobs.printDebug("Subspecies", "Subspecies selected: " + subspeciesEntry.toString());
+				LycanitesMobs.logDebug("Subspecies", "Subspecies selected: " + subspeciesEntry.toString());
 				return subspeciesEntry;
 			}
 		}
 
-		LycanitesMobs.printWarning("Subspecies", "The roll was higher than the Total Weight, this shouldn't happen.");
+		LycanitesMobs.logWarning("Subspecies", "The roll was higher than the Total Weight, this shouldn't happen.");
 		return null;
 	}
 
@@ -614,6 +699,23 @@ public class CreatureInfo {
 		if(roll > hostWeight)
 			return partnerSubspecies;
 		return hostSubspecies;
+	}
+
+	/**
+	 * Returns if this creature can eat the provided item as food for healing, breeding, etc.
+	 * @param itemStack The item to eat.
+	 * @return True if the item can be eaten.
+	 */
+	public boolean canEat(ItemStack itemStack) {
+		if(this.diets.isEmpty()) {
+			return false;
+		}
+		for(String diet : this.diets) {
+			if(ObjectLists.inItemList("diet_" + diet, itemStack)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

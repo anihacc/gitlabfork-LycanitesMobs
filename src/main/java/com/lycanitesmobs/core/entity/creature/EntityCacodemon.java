@@ -1,40 +1,34 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.api.IGroupDemon;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureRideable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCacodemon extends EntityCreatureRideable implements IGroupDemon {
-    public boolean cacodemonGreifing = true;
+public class EntityCacodemon extends RideableCreatureEntity {
+    public boolean cacodemonGreifing = true; // TODO Creature flags.
     
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityCacodemon(World par1World) {
-        super(par1World);
+    public EntityCacodemon(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
         this.hasAttackSound = false;
 
-        this.cacodemonGreifing = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getBool("Features", "Cacodemon Griefing", this.cacodemonGreifing, "Set to false to disable Cacodemon projectile explosions.");
         this.setAttackCooldownMax(20);
         this.setupMob();
 
@@ -46,37 +40,8 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIMate(this));
-        this.tasks.addTask(2, new EntityAIPlayerControl(this));
-        this.tasks.addTask(3, new EntityAITempt(this).setTemptDistanceMin(4.0D));
-        this.tasks.addTask(4, new EntityAIAttackRanged(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
-        this.tasks.addTask(5, this.aiSit);
-        this.tasks.addTask(6, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(7, new EntityAIFollowParent(this));
-        this.tasks.addTask(8, new EntityAIWander(this).setPauseRate(30));
-        this.tasks.addTask(9, new EntityAIBeg(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(3, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(4, new EntityAITargetOwnerThreats(this));
-        this.targetTasks.addTask(4, new EntityAITargetRevenge(this));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityGhast.class));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSizeScale(double scale) {
-        if(this.isRareSubspecies()) {
-            super.setSizeScale(scale * 1.5D);
-            return;
-        }
-        super.setSizeScale(scale);
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
+        this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityGhast.class));
     }
 
 
@@ -108,7 +73,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
 
         // Spawn Minions:
         if(CreatureManager.getInstance().getCreature("wraith").enabled) {
-            if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").entityClass, 64D) < 10) {
+            if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").getEntityClass(), 64D) < 10) {
                 float random = this.rand.nextFloat();
                 if (random <= 0.1F) {
                     this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
@@ -118,7 +83,7 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     }
 
     public void spawnAlly(double x, double y, double z) {
-        EntityWraith minion = new EntityWraith(this.getEntityWorld());
+        EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
         minion.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
 		minion.setMinion(true);
 		minion.setMasterTarget(this);
@@ -155,14 +120,10 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
    	// ==================================================
     // ========== Set Attack Target ==========
     @Override
-    public boolean canAttackClass(Class targetClass) {
-        if(targetClass.isAssignableFrom(EntityTrite.class) || targetClass.isAssignableFrom(EntityAstaroth.class) || targetClass.isAssignableFrom(EntityAsmodeus.class))
+    public boolean canAttackEntity(EntityLivingBase target) {
+        if(target instanceof  EntityTrite || target instanceof  EntityAstaroth || target instanceof  EntityAsmodeus || target instanceof  EntityWraith)
             return false;
-        if(CreatureManager.getInstance().getCreature("wraith") != null) {
-            if (targetClass.isAssignableFrom(CreatureManager.getInstance().getCreature("wraith").entityClass))
-                return false;
-        }
-        return super.canAttackClass(targetClass);
+        return super.canAttackEntity(target);
     }
 
 	// ========== Ranged Attack ==========
@@ -185,16 +146,6 @@ public class EntityCacodemon extends EntityCreatureRideable implements IGroupDem
     
     @Override
     public boolean canBurn() { return false; }
-    
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
-    // ========== Healing Item ==========
-    @Override
-    public boolean isHealingItem(ItemStack testStack) {
-    	return ObjectLists.inItemList("CookedMeat", testStack);
-    }
 
 
     // ==================================================

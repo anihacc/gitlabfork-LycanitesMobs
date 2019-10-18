@@ -3,24 +3,20 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.api.IGroupShadow;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySpectre extends EntityCreatureTameable implements IMob, IGroupShadow, IGroupHeavy {
+public class EntitySpectre extends TameableCreatureEntity implements IMob, IGroupHeavy {
 
 	protected int pullRange = 6;
 	protected int pullEnergy = 0;
@@ -32,8 +28,8 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
     // ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntitySpectre(World par1World) {
-        super(par1World);
+    public EntitySpectre(World world) {
+        super(world);
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEFINED;
@@ -48,39 +44,8 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIStealth(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
+        this.tasks.addTask(this.nextPriorityGoalIndex++, new StealthGoal(this).setStealthTime(20).setStealthAttack(true).setStealthMove(true));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 	
 	
@@ -104,7 +69,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
 			this.pullEnergy = Math.min(this.pullEnergy, this.pullEnergyMax);
 			if(this.canPull()) {
 				for (EntityLivingBase entity : this.getNearbyEntities(EntityLivingBase.class, null, this.pullRange)) {
-					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getPotionEffect("weight")) || !this.canAttackEntity(entity))
+					if (entity == this || entity == this.getControllingPassenger() || entity instanceof IGroupBoss || entity instanceof IGroupHeavy || entity.isPotionActive(ObjectManager.getEffect("weight")) || !this.canAttackEntity(entity))
 						continue;
 					EntityPlayerMP player = null;
 					if (entity instanceof EntityPlayerMP) {
@@ -137,7 +102,7 @@ public class EntitySpectre extends EntityCreatureTameable implements IMob, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.equipment;
 
 import com.google.common.collect.Multimap;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,7 +46,7 @@ public class ItemEquipment extends ItemBase {
 		super();
 		this.itemName = "equipment";
 		this.modInfo = LycanitesMobs.modInfo;
-		this.setRegistryName(this.modInfo.filename, this.itemName);
+		this.setRegistryName(this.modInfo.modid, this.itemName);
 		this.setUnlocalizedName(this.itemName);
 		this.setMaxStackSize(1);
 	}

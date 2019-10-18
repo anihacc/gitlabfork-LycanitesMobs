@@ -38,7 +38,7 @@ public class ElementManager extends JSONLoader {
 		for(ElementInfo elementInfo : this.elements.values()) {
 			elementInfo.init();
 		}
-		LycanitesMobs.printDebug("Element", "Complete! " + this.elements.size() + " JSON Elements Loaded In Total.");
+		LycanitesMobs.logDebug("Element", "Complete! " + this.elements.size() + " JSON Elements Loaded In Total.");
 	}
 
 
@@ -47,7 +47,7 @@ public class ElementManager extends JSONLoader {
 		ElementInfo elementInfo = new ElementInfo();
 		elementInfo.loadFromJSON(json);
 		if(elementInfo.name == null) {
-			LycanitesMobs.printWarning("", "Unable to load " + name + " json due to missing name.");
+			LycanitesMobs.logWarning("", "Unable to load " + name + " json due to missing name.");
 			return;
 		}
 		this.elements.put(elementInfo.name, elementInfo);

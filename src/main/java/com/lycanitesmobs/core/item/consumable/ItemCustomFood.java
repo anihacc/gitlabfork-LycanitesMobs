@@ -15,7 +15,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -52,7 +52,7 @@ public class ItemCustomFood extends ItemFood {
 		this.texturePath = setTexturePath;
         this.foodClass = foodClass;
 		this.setMaxStackSize(64);
-		this.setRegistryName(this.group.filename, this.itemName);
+		this.setRegistryName(this.group.modid, this.itemName);
 		this.setCreativeTab(LycanitesMobs.itemsTab);
 		this.setUnlocalizedName(itemName);
 		this.setPotionEffect(MobEffects.INSTANT_HEALTH, 1, this.getInstantHealing(), 1.0F);

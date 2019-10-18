@@ -1,8 +1,11 @@
 {
 	"name": "jabberwock",
 	"creatureType": "beast",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityJabberwock",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJabberwock",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelJabberwock",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0.25,
 	"eggBackColor": "#662222",
 	"eggForeColor": "#FFFFAA",
@@ -54,6 +57,10 @@
 		}
 	],
 	"element": "earth",
+	"diets": [
+		"carnivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

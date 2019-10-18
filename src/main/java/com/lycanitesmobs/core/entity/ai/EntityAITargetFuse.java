@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -17,7 +17,7 @@ public class EntityAITargetFuse extends EntityAITarget {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetFuse(EntityCreatureBase setHost) {
+    public EntityAITargetFuse(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexBits(8);
     }
@@ -99,17 +99,17 @@ public class EntityAITargetFuse extends EntityAITarget {
 
 		// Subspecies Check:
 		if(this.host.isRareSubspecies()) {
-			if(!(target instanceof EntityCreatureBase)) {
+			if(!(target instanceof BaseCreatureEntity)) {
 				return false;
 			}
-			if(!((EntityCreatureBase)target).isRareSubspecies()) {
+			if(!((BaseCreatureEntity)target).isRareSubspecies()) {
 				return false;
 			}
 		}
 
 		// Owner Check:
-		if(this.host instanceof EntityCreatureTameable && target instanceof EntityCreatureTameable) {
-			if(((EntityCreatureTameable)this.host).getPlayerOwner() != ((EntityCreatureTameable)target).getPlayerOwner()) {
+		if(this.host instanceof TameableCreatureEntity && target instanceof TameableCreatureEntity) {
+			if(((TameableCreatureEntity)this.host).getPlayerOwner() != ((TameableCreatureEntity)target).getPlayerOwner()) {
 				return false;
 			}
 		}

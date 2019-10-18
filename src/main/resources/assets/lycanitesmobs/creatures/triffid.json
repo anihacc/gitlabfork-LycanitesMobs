@@ -1,8 +1,11 @@
 {
 	"name": "triffid",
 	"creatureType": "plant",
+	"groups": [
+		"nature"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityTriffid",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelTriffid",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelTriffid",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 15,
 	"effectAmplifier": 1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 1,
 	"eggBackColor": "#e60f05",
 	"eggForeColor": "#09e30d",
@@ -54,6 +57,11 @@
 		}
 	],
 	"element": "poison",
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
+	],
 	"peaceful": false,
 	"summonable": true,
 	"tameable": false,

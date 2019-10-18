@@ -52,7 +52,7 @@ public class ItemDrop {
 			itemDrop.loadFromJSON(json);
 		}
 		else {
-			LycanitesMobs.printWarning("", "[JSON] Unable to load item drop from json as it has no item id!");
+			LycanitesMobs.logWarning("", "[JSON] Unable to load item drop from json as it has no item id!");
 		}
 
 		return itemDrop;

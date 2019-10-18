@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.AssetManager;
+import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
 

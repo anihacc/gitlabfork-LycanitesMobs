@@ -27,13 +27,13 @@ public abstract class Submod {
 			CreatureManager.getInstance().loadCreaturesFromJSON(this.group);
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Creatures loaded for: " + this.group.name);
+			LycanitesMobs.logWarning("", "No Creatures loaded for: " + this.group.name);
 		}
 		try {
 			EquipmentPartManager.getInstance().loadAllFromJSON(this.group);
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Equipment Parts loaded for: " + this.group.name);
+			LycanitesMobs.logWarning("", "No Equipment Parts loaded for: " + this.group.name);
 		}
 		this.registerModels();
 	}

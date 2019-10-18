@@ -27,25 +27,25 @@ public class VillageSpawnLocation extends RandomSpawnLocation {
 
 	@Override
 	public List<BlockPos> getSpawnPositions(World world, EntityPlayer player, BlockPos triggerPos) {
-		LycanitesMobs.printDebug("JSONSpawner", "Getting Nearest Village Within Range");
+		LycanitesMobs.logDebug("JSONSpawner", "Getting Nearest Village Within Range");
 
 		Village village = world.getVillageCollection().getNearestVillage(triggerPos, this.villageRange);
 
 		// No Village:
 		if(village == null) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Village within range found.");
+			LycanitesMobs.logDebug("JSONSpawner", "No Village within range found.");
 			return new ArrayList<>();
 		}
 
 		// Too Far:
 		double villageDistance = Math.sqrt(village.getCenter().distanceSq(triggerPos));
 		if(villageDistance > this.villageRange) {
-			LycanitesMobs.printDebug("JSONSpawner", "No Village within range, nearest was: " + villageDistance + " at: " + village.getCenter());
+			LycanitesMobs.logDebug("JSONSpawner", "No Village within range, nearest was: " + villageDistance + " at: " + village.getCenter());
 			return new ArrayList<>();
 		}
 
 		// Village Found:
-		LycanitesMobs.printDebug("JSONSpawner", "Found a Village within range, at: " + village.getCenter());
+		LycanitesMobs.logDebug("JSONSpawner", "Found a Village within range, at: " + village.getCenter());
 		return super.getSpawnPositions(world, player, village.getCenter());
 	}
 

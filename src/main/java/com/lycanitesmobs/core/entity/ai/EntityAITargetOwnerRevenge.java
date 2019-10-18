@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
 
 public class EntityAITargetOwnerRevenge extends EntityAITargetAttack {
 	
 	// Targets:
-	private EntityCreatureTameable host;
+	private TameableCreatureEntity host;
 	
 	// Properties:
     private int revengeTime;
@@ -14,7 +14,7 @@ public class EntityAITargetOwnerRevenge extends EntityAITargetAttack {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITargetOwnerRevenge(EntityCreatureTameable setHost) {
+    public EntityAITargetOwnerRevenge(TameableCreatureEntity setHost) {
         super(setHost);
     	this.host = setHost;
     	this.tameTargeting = true;

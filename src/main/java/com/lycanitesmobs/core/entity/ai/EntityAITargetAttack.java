@@ -6,10 +6,8 @@ import com.lycanitesmobs.api.IGroupAlpha;
 import com.lycanitesmobs.api.IGroupAnimal;
 import com.lycanitesmobs.api.IGroupPredator;
 import com.lycanitesmobs.api.Targeting;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.EnumDifficulty;
 
@@ -29,7 +27,7 @@ public class EntityAITargetAttack extends EntityAITarget {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public EntityAITargetAttack(EntityCreatureBase setHost) {
+    public EntityAITargetAttack(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexBits(1);
     }
@@ -166,7 +164,7 @@ public class EntityAITargetAttack extends EntityAITarget {
                     return false;
             }
             catch (Exception e) {
-                LycanitesMobs.printWarning("", "An exception occurred when assessing pack sizes, this has been skipped to prevent a crash.");
+                LycanitesMobs.logWarning("", "An exception occurred when assessing pack sizes, this has been skipped to prevent a crash.");
                 e.printStackTrace();
             }
         }
@@ -229,7 +227,7 @@ public class EntityAITargetAttack extends EntityAITarget {
 				newTarget = possibleTargets.get(0);
 			}
 			catch (Exception e) {
-				LycanitesMobs.printWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
+				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
 				e.printStackTrace();
 			}
 			return newTarget;

@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.ai;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 
 public class EntityAIFollowFuse extends EntityAIFollow {
 	// Targets:
-	EntityCreatureBase host;
+	BaseCreatureEntity host;
 
 	// Fusion:
 	double fuseRange = 2;
@@ -14,7 +14,7 @@ public class EntityAIFollowFuse extends EntityAIFollow {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIFollowFuse(EntityCreatureBase setHost) {
+    public EntityAIFollowFuse(BaseCreatureEntity setHost) {
     	super(setHost);
         this.setMutexBits(1);
         this.host = setHost;

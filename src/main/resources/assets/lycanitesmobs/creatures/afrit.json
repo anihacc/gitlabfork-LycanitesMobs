@@ -1,8 +1,11 @@
 {
 	"name": "afrit",
 	"creatureType": "imp",
+	"groups": [
+		"inferno"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAfrit",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelAfrit",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAfrit",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +40,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0,
 	"eggBackColor": "#110000",
 	"eggForeColor": "#773300",
@@ -56,6 +59,11 @@
 	"elements": [
 		"fire",
 		"acid"
+	],
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore"
 	],
 	"peaceful": false,
 	"summonable": false,

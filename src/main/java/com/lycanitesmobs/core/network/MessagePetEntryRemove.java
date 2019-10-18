@@ -1,6 +1,6 @@
 package com.lycanitesmobs.core.network;
 
-import com.lycanitesmobs.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.pets.PetEntry;
 import io.netty.buffer.ByteBuf;
@@ -47,7 +47,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
                     PetManager petManager = playerExt.petManager;
                     PetEntry petEntry = petManager.getEntry(message.petEntryID);
                     if(petEntry == null) {
-                        LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from server!");
+                        LycanitesMobs.logWarning("", "Tried to remove a null PetEntry from server!");
                         return; // Nothing to remove!
                     }
                     petEntry.remove();
@@ -64,7 +64,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-			LycanitesMobs.printWarning("", "Tried to remove a null PetEntry from client!");
+			LycanitesMobs.logWarning("", "Tried to remove a null PetEntry from client!");
             return null; // Nothing to remove!
         }
         petEntry.remove();
@@ -84,7 +84,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
 		try {
             this.petEntryID = packet.readInt();
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem decoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 	}
@@ -102,7 +102,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
 		try {
 			packet.writeInt(this.petEntryID);
 		} catch (Exception e) {
-			LycanitesMobs.printWarning("", "There was a problem encoding the packet: " + packet + ".");
+			LycanitesMobs.logWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();
 		}
 	}

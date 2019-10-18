@@ -1,28 +1,26 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityGeonach extends EntityCreatureTameable implements IMob, IGroupRock, IFusable {
+public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusable {
 	
-	public int geonachBlockBreakRadius = 0;
+	public int geonachBlockBreakRadius = 0; // TODO Creature flags.
 	public float fireDamageAbsorbed = 0;
     
     // ==================================================
@@ -35,7 +33,6 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         
-        this.geonachBlockBreakRadius = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Rare Geonach Block Break Radius", this.geonachBlockBreakRadius, "Controls how large the Celestial Geonach's block breaking radius is when it is charging towards its target. Set to -1 to disable. For their block breaking radius on spawn, see the ROCK spawn type features instead. Note that this is only for the extremely rare Geonach.");
         this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -46,35 +43,10 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
-        super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIFollowFuse(this).setLostDistance(16));
-        this.tasks.addTask(2, new EntityAIAttackMelee(this).setLongMemory(true));
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntitySilverfish.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-		this.targetTasks.addTask(7, new EntityAITargetFuse(this));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntitySilverfish.class));
+		super.initEntityAI();
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
-
-	// ========== Set Size ==========
-	@Override
-	public void setSizeScale(double scale) {
-		if(this.isRareSubspecies()) {
-			super.setSizeScale(scale * 1.5D);
-			return;
-		}
-		super.setSizeScale(scale);
-	}
 	
 	
     // ==================================================
@@ -102,26 +74,26 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 			}
 
 			// Environmental Transformation:
-			if(!this.isTamed()) {
+			if(!this.isTamed() && !this.isRareSubspecies()) {
 				if (this.updateTick % 40 == 0 && this.isInLava()) {
-					this.transform(EntityVolcan.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityClass("volcan"), null, false);
 				}
 				if (this.fireDamageAbsorbed >= 10) {
-					this.transform(EntityVolcan.class, null, false);
+					this.transform(CreatureManager.getInstance().getEntityClass("volcan"), null, false);
 				}
 			}
 		}
 
-        // Particles:
-        if(this.getEntityWorld().isRemote)
-            for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        this.posY + this.rand.nextDouble() * (double) this.height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-                        0.0D, 0.0D, 0.0D,
-                        Blocks.TALLGRASS.getStateId(Blocks.STONE.getDefaultState()));
-            }
+		// Particles:
+		if(this.getEntityWorld().isRemote)
+			for(int i = 0; i < 2; ++i) {
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						this.posY + this.rand.nextDouble() * (double) this.height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						0.0D, 0.0D, 0.0D,
+						Blocks.TALLGRASS.getStateId(Blocks.STONE.getDefaultState()));
+			}
     }
 
 
@@ -190,24 +162,19 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
     // ========== Damage Modifier ==========
     @Override
     public float getDamageModifier(DamageSource damageSrc) {
-    	if(damageSrc.getTrueSource() != null) {
-            // Silverfish Extermination:
-            if(damageSrc.getTrueSource() instanceof EntitySilverfish) {
-                return 0F;
-            }
-
-            // Pickaxe Damage:
-    		Item heldItem = null;
-    		if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
-                EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
-	    		if(entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null) {
-	    			heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND).getItem();
-	    		}
-    		}
-    		if(ObjectLists.isPickaxe(heldItem))
-                return 4.0F;
-    	}
-    	return 1.0F;
+		if(damageSrc.getTrueSource() != null) {
+			ItemStack heldItem = ItemStack.EMPTY;
+			if(damageSrc.getTrueSource() instanceof EntityLivingBase) {
+				EntityLivingBase entityLiving = (EntityLivingBase)damageSrc.getTrueSource();
+				if(!entityLiving.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
+				}
+			}
+			if(ObjectLists.isPickaxe(heldItem.getItem())) {
+				return 3.0F;
+			}
+		}
+		return super.getDamageModifier(damageSrc);
     }
     
     
@@ -250,19 +217,19 @@ public class EntityGeonach extends EntityCreatureTameable implements IMob, IGrou
 	@Override
 	public Class getFusionClass(IFusable fusable) {
 		if(fusable instanceof EntityCinder) {
-			return EntityVolcan.class;
+			return CreatureManager.getInstance().getEntityClass("volcan");
 		}
 		if(fusable instanceof EntityJengu) {
-			return EntitySpriggan.class;
+			return CreatureManager.getInstance().getEntityClass("spriggan");
 		}
 		if(fusable instanceof EntityDjinn) {
-			return EntityBanshee.class;
+			return CreatureManager.getInstance().getEntityClass("banshee");
 		}
 		if(fusable instanceof EntityAegis) {
-			return EntityVapula.class;
+			return CreatureManager.getInstance().getEntityClass("vapula");
 		}
 		if(fusable instanceof EntityArgus) {
-			return EntityTremor.class;
+			return CreatureManager.getInstance().getEntityClass("tremor");
 		}
 		return null;
 	}

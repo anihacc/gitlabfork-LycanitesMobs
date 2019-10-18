@@ -1,28 +1,18 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupAnimal;
-import com.lycanitesmobs.api.IGroupPredator;
-import com.lycanitesmobs.api.IGroupPrey;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
-import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPredator {
-	
-	EntityAIWander wanderAI;
-    int swarmLimit = 5;
+public class EntityAbtu extends TameableCreatureEntity implements IMob {
+    int swarmLimit = 5; // TODO Creature Flags
     
     // ==================================================
  	//                    Constructor
@@ -39,31 +29,13 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
         this.babySpawnChance = 0.9D;
         this.canGrow = true;
         this.setupMob();
-
-        this.swarmLimit = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Abtu Swarm Limit", this.swarmLimit, "Limits how many Abtu there can be when swarming.");
     }
 
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(1, new EntityAIStayByWater(this));
-        this.tasks.addTask(2, this.aiSit);
-        this.tasks.addTask(3, new EntityAIAttackMelee(this).setLongMemory(false));
-        this.wanderAI = new EntityAIWander(this);
-        this.tasks.addTask(6, wanderAI.setPauseRate(0));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(3, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupPrey.class));
-        if(CreatureManager.getInstance().config.predatorsAttackAnimals) {
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(IGroupAnimal.class));
-            this.targetTasks.addTask(5, new EntityAITargetAttack(this).setTargetClass(EntityAnimal.class));
-        }
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
     
     
@@ -104,7 +76,7 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
 	}
 	
     public void spawnAlly(double x, double y, double z) {
-    	EntityCreatureAgeable minion = new EntityAbtu(this.getEntityWorld());
+    	AgeableCreatureEntity minion = (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
     	minion.setGrowingAge(minion.growthTime);
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
@@ -126,8 +98,6 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
         Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
         if(block == Blocks.WATER)
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
-        if(block == Blocks.FLOWING_WATER)
-            return (super.getBlockPathWeight(x, y, z) + 1) * waterWeight;
         if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(x, y, z)))
             return (super.getBlockPathWeight(x, y, z) + 1) * (waterWeight + 1);
 
@@ -171,7 +141,7 @@ public class EntityAbtu extends EntityCreatureTameable implements IMob, IGroupPr
     }
     
     @Override
-    public boolean canBreatheAboveWater() {
+    public boolean canBreatheAir() {
         return false;
     }
 }

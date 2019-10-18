@@ -1,8 +1,11 @@
 {
 	"name": "beholder",
 	"creatureType": "aberration",
+	"groups": [
+		"monster"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityBeholder",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelBeholder",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelBeholder",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -56,6 +59,14 @@
 	"elements": [
 		"gravity",
 		"void"
+	],
+	"diets": [
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"herbivore",
+		"frugivore",
+		"fungivore"
 	],
 	"peaceful": false,
 	"summonable": false,

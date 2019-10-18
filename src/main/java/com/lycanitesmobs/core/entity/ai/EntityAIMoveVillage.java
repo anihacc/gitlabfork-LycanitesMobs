@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class EntityAIMoveVillage extends EntityAIBase {
 	// Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     
     // Properties:
     private double speed;
@@ -29,7 +28,7 @@ public class EntityAIMoveVillage extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAIMoveVillage(EntityCreatureBase setHost) {
+    public EntityAIMoveVillage(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(1);
     }

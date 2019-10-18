@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 
 public class DamageEquipmentFeature extends EquipmentFeature {
 	/** How much damage this part adds to the weapon attack. **/

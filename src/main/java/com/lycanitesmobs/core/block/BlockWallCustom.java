@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.localisation.LanguageManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.BlockWall;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -22,7 +21,7 @@ public class BlockWallCustom extends BlockWall {
 	// ==================================================
 	public BlockWallCustom(BlockBase block) {
 		super(block);
-        this.setRegistryName(new ResourceLocation(block.group.filename, block.blockName + "_wall"));
+        this.setRegistryName(new ResourceLocation(block.group.modid, block.blockName + "_wall"));
         this.setUnlocalizedName(block.blockName + "_wall");
 	}
 

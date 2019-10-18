@@ -1,8 +1,12 @@
 {
 	"name": "joust",
 	"creatureType": "arthropod",
+	"groups": [
+		"animal",
+		"hardy"
+	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityJoust",
-	"modelClass": "com.lycanitesmobs.core.model.creature.ModelJoust",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelJoust",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
@@ -37,7 +41,7 @@
 	"effectDuration": 5,
 	"effectAmplifier": -1,
 	"pierce": 1,
-	"sight": 16,
+	"sight": 24,
 	"knockbackResistance": 0.25,
 	"eggBackColor": "#FF9900",
 	"eggForeColor": "#FFFF00",
@@ -49,12 +53,16 @@
 		},
 		{
 			"index": 2,
-			"name": "light",
+			"name": "lux",
 			"type": "uncommon"
 		}
 	],
 	"element": "quake",
+	"diets": [
+		"exudativore"
+	],
 	"peaceful": true,
+	"farmable": true,
 	"summonable": false,
 	"tameable": false,
 	"mountable": false,
@@ -62,8 +70,8 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "lycanitesmobs:joustmeatraw",
-			"burningItem": "lycanitesmobs:joustmeatcooked",
+			"item": "lycanitesmobs:raw_joust_meat",
+			"burningItem": "lycanitesmobs:cooked_joust_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

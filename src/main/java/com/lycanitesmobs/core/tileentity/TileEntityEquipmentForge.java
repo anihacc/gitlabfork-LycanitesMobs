@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.core.gui.GuiEquipmentForge;
+import com.lycanitesmobs.client.gui.GuiEquipmentForge;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,9 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.NonNullList;
-import com.lycanitesmobs.core.localisation.LanguageManager;
-
-import java.util.UUID;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 
 public class TileEntityEquipmentForge extends TileEntityBase implements IInventory {
 	/** A list of item stacks in the forge. **/
@@ -186,7 +184,7 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 
 	@Override
 	public void onGuiButton(byte buttonId) {
-		LycanitesMobs.printDebug("", "Received button packet id: " + buttonId);
+		LycanitesMobs.logDebug("", "Received button packet id: " + buttonId);
 	}
 
 

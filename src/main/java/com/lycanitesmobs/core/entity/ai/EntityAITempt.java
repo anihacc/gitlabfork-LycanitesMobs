@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.entity.ai;
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ObjectLists;
-import com.lycanitesmobs.core.entity.EntityCreatureAgeable;
+import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAITempt extends EntityAIBase {
     // Targets:
-    private EntityCreatureBase host;
+    private BaseCreatureEntity host;
     private EntityPlayer player;
     
     // Properties:
@@ -41,7 +40,7 @@ public class EntityAITempt extends EntityAIBase {
 	// ==================================================
  	//                    Constructor
  	// ==================================================
-    public EntityAITempt(EntityCreatureBase setHost) {
+    public EntityAITempt(BaseCreatureEntity setHost) {
         this.host = setHost;
         this.setMutexBits(3);
     }
@@ -104,7 +103,7 @@ public class EntityAITempt extends EntityAIBase {
         if(!this.host.canBeTempted())
         	return false;
         
-        if(this.host instanceof EntityCreatureTameable && this.host.isTamed())
+        if(this.host instanceof TameableCreatureEntity && this.host.isTamed())
         	return false;
 		
         this.player = this.host.getEntityWorld().getClosestPlayerToEntity(this.host, this.temptDistanceMax);
@@ -199,8 +198,8 @@ public class EntityAITempt extends EntityAIBase {
         this.player = null;
         this.host.getNavigator().clearPath();
         this.retemptTime = this.retemptTimeMax;
-        if(this.host instanceof EntityCreatureAgeable) {
-            EntityCreatureAgeable ageable = (EntityCreatureAgeable)this.host;
+        if(this.host instanceof AgeableCreatureEntity) {
+            AgeableCreatureEntity ageable = (AgeableCreatureEntity)this.host;
             if(!ageable.isChild() && !ageable.canBreed())
                 this.retemptTime *= 10;
         }

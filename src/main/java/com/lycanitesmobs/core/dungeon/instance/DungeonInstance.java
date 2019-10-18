@@ -71,7 +71,7 @@ public class DungeonInstance {
 			return true;
 		}
 		if(this.world == null || this.originPos == null) {
-			LycanitesMobs.printWarning("Dungeon", "Tried to initialise a dungeon with a missing world or origin. " + this);
+			LycanitesMobs.logWarning("Dungeon", "Tried to initialise a dungeon with a missing world or origin. " + this);
 			return false;
 		}
 
@@ -101,7 +101,7 @@ public class DungeonInstance {
 		this.random = new Random(this.seed);
 
 		// Generate Layout:
-		LycanitesMobs.printDebug("Dungeon", "Starting Dungeon Instance Generation For " + this);
+		LycanitesMobs.logDebug("Dungeon", "Starting Dungeon Instance Generation For " + this);
 		if(this.layout == null) {
 			this.layout = new DungeonLayout(this);
 			this.layout.generate(this.random);
@@ -177,7 +177,7 @@ public class DungeonInstance {
 		int[] chunkMax = nbtTagCompound.getIntArray("ChunkMax");
 		this.chunkMax = new ChunkPos(chunkMax[0], chunkMax[1]);
 
-		LycanitesMobs.printDebug("Dungeon", "Loaded Dungeon Instance from NBT: " + this);
+		LycanitesMobs.logDebug("Dungeon", "Loaded Dungeon Instance from NBT: " + this);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class DungeonInstance {
 		nbtTagCompound.setIntArray("ChunkMin", new int[] {this.chunkMin.z, this.chunkMin.z});
 		nbtTagCompound.setIntArray("ChunkMax", new int[] {this.chunkMax.z, this.chunkMax.z});
 
-		LycanitesMobs.printDebug("Dungeon", "Saved Dungeon Instance to NBT: " + this);
+		LycanitesMobs.logDebug("Dungeon", "Saved Dungeon Instance to NBT: " + this);
 		return nbtTagCompound;
 	}
 

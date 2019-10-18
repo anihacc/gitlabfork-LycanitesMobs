@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.renderer;
+package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.ClientProxy;
 import com.lycanitesmobs.core.block.BlockBase;

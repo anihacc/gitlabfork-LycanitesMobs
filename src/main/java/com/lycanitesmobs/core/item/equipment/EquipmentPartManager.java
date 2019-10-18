@@ -37,10 +37,10 @@ public class EquipmentPartManager extends JSONLoader {
 		}
 		try {
 			this.loadAllJson(groupInfo, "Equipment", "equipment", "itemName", false);
-			LycanitesMobs.printDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
+			LycanitesMobs.logDebug("Equipment", "Complete! " + this.equipmentParts.size() + " JSON Equipment Parts Loaded In Total.");
 		}
 		catch(Exception e) {
-			LycanitesMobs.printWarning("", "No Equipment loaded for: " + groupInfo.name);
+			LycanitesMobs.logWarning("", "No Equipment loaded for: " + groupInfo.name);
 		}
 	}
 
@@ -50,11 +50,11 @@ public class EquipmentPartManager extends JSONLoader {
 		ItemEquipmentPart equipmentPart = new ItemEquipmentPart(groupInfo);
 		equipmentPart.loadFromJSON(json);
 		if(this.equipmentParts.containsKey(equipmentPart.itemName)) {
-			LycanitesMobs.printWarning("", "[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);
+			LycanitesMobs.logWarning("", "[Equipment] Tried to add a Equipment Part with a name that is already in use: " + equipmentPart.itemName);
 			return;
 		}
 		if(this.equipmentParts.values().contains(equipmentPart)) {
-			LycanitesMobs.printWarning("", "[Equipment] Tried to add a Equipment Part that is already added: " + equipmentPart.itemName);
+			LycanitesMobs.logWarning("", "[Equipment] Tried to add a Equipment Part that is already added: " + equipmentPart.itemName);
 			return;
 		}
 		this.equipmentParts.put(equipmentPart.itemName, equipmentPart);

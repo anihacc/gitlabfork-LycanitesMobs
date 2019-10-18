@@ -3,8 +3,6 @@ package com.lycanitesmobs.core.spawner.trigger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityCreatureBase;
 import com.lycanitesmobs.core.spawner.Spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;

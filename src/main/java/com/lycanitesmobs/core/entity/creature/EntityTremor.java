@@ -1,27 +1,23 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.api.IGroupRock;
-import com.lycanitesmobs.core.config.ConfigBase;
-import com.lycanitesmobs.core.entity.EntityCreatureTameable;
-import com.lycanitesmobs.core.entity.ai.*;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityTremor extends EntityCreatureTameable implements IMob, IGroupRock {
+public class EntityTremor extends TameableCreatureEntity implements IMob {
 
-	private EntityAIAttackMelee meleeAttackAI;
+	private AttackMeleeGoal meleeAttackAI;
 
-	public int tremorExplosionStrength = 1;
+	public int tremorExplosionStrength = 1; // TODO Creature flags.
 
     // ==================================================
  	//                    Constructor
@@ -33,7 +29,6 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
         this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
 
-		this.tremorExplosionStrength = ConfigBase.getConfig(this.creatureInfo.modInfo, "general").getInt("Features", "Tremor Explosion Strength", this.tremorExplosionStrength, "Controls the strength of a Tremor's explosion when attacking, set to -1 to disable completely.");
 		this.setupMob();
 
         this.stepHeight = 1.0F;
@@ -43,39 +38,7 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.meleeAttackAI = new EntityAIAttackMelee(this).setLongMemory(true);
-        this.tasks.addTask(2, meleeAttackAI);
-        this.tasks.addTask(3, this.aiSit);
-        this.tasks.addTask(4, new EntityAIFollowOwner(this).setStrayDistance(16).setLostDistance(32));
-        this.tasks.addTask(8, new EntityAIWander(this));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this).setTargetClass(EntityPlayer.class));
-        this.tasks.addTask(11, new EntityAILookIdle(this));
-
-        this.targetTasks.addTask(0, new EntityAITargetOwnerRevenge(this));
-        this.targetTasks.addTask(1, new EntityAITargetOwnerAttack(this));
-        this.targetTasks.addTask(2, new EntityAITargetRevenge(this).setHelpCall(true));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(4, new EntityAITargetAttack(this).setTargetClass(EntityVillager.class));
-        this.targetTasks.addTask(6, new EntityAITargetOwnerThreats(this));
-    }
-
-    // ========== Set Size ==========
-    @Override
-    public void setSize(float width, float height) {
-        if(this.getSubspeciesIndex() == 3) {
-            super.setSize(width * 2, height * 2);
-            return;
-        }
-        super.setSize(width, height);
-    }
-
-    @Override
-    public double getRenderScale() {
-        if(this.getSubspeciesIndex() == 3) {
-            return this.sizeScale * 2;
-        }
-        return this.sizeScale;
+        this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 	
 	
@@ -165,11 +128,11 @@ public class EntityTremor extends EntityCreatureTameable implements IMob, IGroup
 	}
 
 	@Override
-	public boolean isPotionApplicable(PotionEffect potionEffect) {
-    	if(potionEffect != null && potionEffect.getPotion() == MobEffects.WITHER) {
+	public boolean isPotionApplicable(PotionEffect effectInstance) {
+    	if(effectInstance.getPotion() == MobEffects.WITHER) {
     		return false;
 		}
-		return super.isPotionApplicable(potionEffect);
+		return super.isPotionApplicable(effectInstance);
 	}
     
     @Override

@@ -40,14 +40,14 @@ public class DonationFamiliars {
 			} finally {
 				inputStream.close();
 			}
-			LycanitesMobs.printInfo("", "Online donations file read successfully.");
+			LycanitesMobs.logInfo("", "Online donations file read successfully.");
 		} catch (Throwable e) {
-			LycanitesMobs.printInfo("", "Unable to access the online donations file, using local copy instead, this might be out of date.");
+			LycanitesMobs.logInfo("", "Unable to access the online donations file, using local copy instead, this might be out of date.");
 			e.printStackTrace();
 //            try {
 //                jsonString = FileUtils.readFileToString(FileUtils.getFile(LycanitesMobs.proxy.getMinecraftDir() + "/assets/lycanitesmobs/familiars.json"));
 //            } catch (IOException e1) {
-//                LycanitesMobs.printWarning("Donations", "There was a problem reading the local copy of the donations file.");
+//                LycanitesMobs.logWarning("Donations", "There was a problem reading the local copy of the donations file.");
 //                e1.printStackTrace();
 //                return;
 //            }
