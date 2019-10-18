@@ -82,8 +82,8 @@
 			"chance": 0.25
 		},
 		{
-			"item": "lycanitesmobs:raw_yeti_meat",
-			"burningItem": "lycanitesmobs:cooked_yeti_meat",
+			"item": "lycanitesmobs:yetimeatraw",
+			"burningItem": "lycanitesmobs:yetimeatcooked",
 			"minAmount": 2,
 			"maxAmount": 5,
 			"chance": 1

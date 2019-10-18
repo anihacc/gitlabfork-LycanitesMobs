@@ -70,8 +70,8 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:raw_ika_meat",
-			"burningItem": "lycanitesmobs:cooked_ika_meat",
+			"item": "lycanitesmobs:ikameatraw",
+			"burningItem": "lycanitesmobs:ikameatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

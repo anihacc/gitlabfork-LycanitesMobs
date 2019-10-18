@@ -68,8 +68,8 @@
 	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "lycanitesmobs:raw_joust_meat",
-			"burningItem": "lycanitesmobs:cooked_joust_meat",
+			"item": "lycanitesmobs:joustmeatraw",
+			"burningItem": "lycanitesmobs:joustmeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

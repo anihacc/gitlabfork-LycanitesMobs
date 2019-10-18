@@ -75,8 +75,8 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:raw_aspid_meat",
-			"burningItem": "lycanitesmobs:cooked_aspid_meat",
+			"item": "lycanitesmobs:aspidmeatraw",
+			"burningItem": "lycanitesmobs:aspidmeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

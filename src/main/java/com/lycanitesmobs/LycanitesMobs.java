@@ -36,6 +36,8 @@ import com.lycanitesmobs.core.worldgen.WorldGeneratorFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -249,6 +251,14 @@ public class LycanitesMobs {
     public void postInit(FMLPostInitializationEvent event) {
 		// Creatures:
 		CreatureManager.getInstance().lateStartup(modInfo);
+
+		/*/ Test All Drops:
+		for (ItemDrop itemDrop: ItemDrop.allDrops) {
+			Item item = GameRegistry.findRegistry(Item.class).getValue(new ResourceLocation(itemDrop.itemId)); // TESTING
+			if (item == null) {
+				LycanitesMobs.logWarning("", "[JSON] Bad item id: " + itemDrop.itemId);
+			}
+		}*/
     }
 
 

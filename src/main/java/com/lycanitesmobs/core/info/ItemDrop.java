@@ -12,13 +12,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class ItemDrop {
+	public static List<ItemDrop> allDrops = new ArrayList<>();
+
 	// ========== Item ==========
-	protected String itemId;
+	public String itemId;
 	protected int metadata;
 
 	protected String burningItemId;
@@ -54,6 +54,7 @@ public class ItemDrop {
 		else {
 			LycanitesMobs.logWarning("", "[JSON] Unable to load item drop from json as it has no item id!");
 		}
+		allDrops.add(itemDrop);
 
 		return itemDrop;
 	}

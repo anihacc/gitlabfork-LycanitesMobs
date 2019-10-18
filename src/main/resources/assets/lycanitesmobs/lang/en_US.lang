@@ -23,7 +23,7 @@ spawner.chaos.level1.back=Balance seems to be restored... For now at least...
 # Uncommon:
 subspecies.ashen.name=Ashen
 subspecies.dark.name=Dark
-subspecies.light.name=Light
+subspecies.lux.name=Lux
 subspecies.verdant.name=Verdant
 subspecies.scarlet.name=Scarlet
 subspecies.azure.name=Azure

@@ -69,14 +69,15 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "minecraft:lapis_lazuli",
+			"item": "minecraft:dye",
+			"metadata": 4,
 			"minAmount": 2,
 			"maxAmount": 4,
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:raw_silex_meat",
-			"burningItem": "lycanitesmobs:cooked_silex_meat",
+			"item": "lycanitesmobs:silexmeatraw",
+			"burningItem": "lycanitesmobs:silexmeatcooked",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1
