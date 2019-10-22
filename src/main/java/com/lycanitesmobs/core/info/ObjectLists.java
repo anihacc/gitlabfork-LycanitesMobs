@@ -197,9 +197,12 @@ public class ObjectLists {
 
 		// Raw Fish:
 		ObjectLists.addItem("diet_piscivore", Items.FISH);
-
+		ObjectLists.addItem("diet_piscivore", new ItemStack(Items.FISH, 1, 1)); // Salmon
+		ObjectLists.addItem("diet_piscivore", new ItemStack(Items.FISH, 1, 2)); // Clown
+		ObjectLists.addItem("diet_piscivore", new ItemStack(Items.FISH, 1, 3)); // Puffer
 		// Cooked Fish:
 		ObjectLists.addItem("diet_piscivore", Items.COOKED_FISH);
+		ObjectLists.addItem("diet_piscivore", new ItemStack(Items.COOKED_FISH, 1, 1)); // Cooked Salmon
 
 		// Vegetables:
 		ObjectLists.addItem("diet_herbivore", Items.WHEAT);

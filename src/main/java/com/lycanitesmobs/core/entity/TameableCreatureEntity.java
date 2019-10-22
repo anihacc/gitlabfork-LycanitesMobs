@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
@@ -757,7 +758,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     // ==================================================
     //                    Pet Control
     // ==================================================
-    public boolean petControlsEnabled() { return false; }
+    public boolean petControlsEnabled() { return true; }
     public byte behaviourBitMask() { return this.getByteFromDataManager(TAMED); }
     
     // ========== Sitting ==========

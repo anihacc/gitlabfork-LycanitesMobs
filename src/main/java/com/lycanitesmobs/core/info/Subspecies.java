@@ -61,6 +61,9 @@ public class Subspecies {
     /** The index of this subspecies in MobInfo. Set by MobInfo when added. Should never be 0 as that is used by the default and will result in this subspecies being ignored. **/
     public int index;
 
+	/** The size scale of this subspecies. **/
+	public double scale = 1.0D;
+
 	/** The skin of this subspecies. Skins refer to different models and major texture changes. Ex: Void Astaroth. **/
 	public String skin;
 
@@ -172,6 +175,11 @@ public class Subspecies {
 		Subspecies subspecies = new Subspecies(skin, color, rarity);
 		subspecies.index = json.get("index").getAsInt();
 
+		// Scale:
+		if(json.has("scale")) {
+			subspecies.scale = json.get("scale").getAsDouble();
+		}
+
 		// Model Class:
 		if (json.has("modelClass")) {
 			try {
@@ -243,6 +251,15 @@ public class Subspecies {
 		}
         return subspeciesName;
     }
+
+
+	/**
+	 * Gets the size scale of this subspecies.
+	 * @return The size scale.
+	 */
+	public double getScale() {
+		return this.scale;
+	}
 
 
 	/**

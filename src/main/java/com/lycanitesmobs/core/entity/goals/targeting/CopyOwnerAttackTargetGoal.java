@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,15 +35,15 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
 			return false;
     	if(this.host.getOwner() == null)
     		return false;
+		if (!(this.host.getOwner() instanceof EntityLivingBase))
+			return false;
 
-        if (!(this.host.getOwner() instanceof EntityLiving))
-            return false;
-        EntityLiving owner = (EntityLiving)this.host.getOwner();
+		EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
     	this.target = owner.getLastAttackedEntity();
     	if(this.target == null) {
     		return false;
     	}
-    	if(lastAttackTime == owner.getLastAttackedEntityTime())
+    	if(this.lastAttackTime == owner.getLastAttackedEntityTime())
     		return false;
     	return true;
     }
@@ -53,8 +54,8 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public void startExecuting() {
-    	if(this.isTargetValid(target)) {
-			lastAttackTime = ((EntityLiving)this.host.getOwner()).getLastAttackedEntityTime();
+    	if(this.isEntityTargetable(this.target, false)) {
+			this.lastAttackTime = ((EntityLivingBase)this.host.getOwner()).getLastAttackedEntityTime();
 			super.startExecuting();
 		}
     }
@@ -74,7 +75,8 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
     // ==================================================
   	//                    Valid Target
   	// ==================================================
-    private boolean isTargetValid(EntityLivingBase target) {
+	@Override
+	protected boolean isValidTarget(EntityLivingBase target) {
     	if(target == null)
             return false;
     	if(!target.isEntityAlive())

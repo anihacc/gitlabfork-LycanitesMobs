@@ -1171,8 +1171,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Get Random Size ==========
     public void getRandomSize() {
 		double range = CreatureManager.getInstance().config.randomSizeMax - CreatureManager.getInstance().config.randomSizeMin;
-    	double randomScale = range * this.getRNG().nextDouble();
-    	this.setSizeScale(CreatureManager.getInstance().config.randomSizeMin + randomScale);
+		double randomScale = range * this.getRNG().nextDouble();
+		double scale = CreatureManager.getInstance().config.randomSizeMin + randomScale;
+		if(this.subspecies != null)
+			scale *= this.subspecies.getScale();
+		this.setSizeScale(scale);
     }
 
     /**
@@ -1521,7 +1524,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 
         if(this.despawnCheck()) {
-            if(!this.isBoundPet())
+            if(!this.isBoundPet() || this.isMinion())
         	    this.inventory.dropInventory();
         	this.setDead();
         }
@@ -2753,12 +2756,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			targetZ = newY + this.posZ;
 
 			distanceX = targetX - this.posX;
-			distanceY = target.getEntityBoundingBox().minY + (target.height * 0.25D) - projectile.posY;
+			distanceY = target.getEntityBoundingBox().minY + (target.height * 0.5D) - projectile.posY;
 			distanceZ = targetZ - this.posZ;
 		}
 
 		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
-		projectile.shoot(distanceX, distanceY + distanceXZ, distanceZ, velocity, inaccuracy);
+		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
 		this.getEntityWorld().spawnEntity(projectile);
 
 		if(projectile.getLaunchSound() != null) {
@@ -3562,11 +3565,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Cycles through all of this entity's DropRates and drops random loot, usually called on death. If this mob is a minion, this method is cancelled. **/
     @Override
     protected void dropFewItems(boolean playerKill, int lootLevel) {
-    	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet()) return;
+    	if(this.getEntityWorld().isRemote || this.isMinion() || this.isBoundPet())
+    		return;
     	int subspeciesScale = 1;
-    	if(this.getSubspeciesIndex() > 2)
+    	if(this.isRareSubspecies())
     		subspeciesScale = Subspecies.rareDropScale;
-    	else if(this.getSubspeciesIndex() > 0)
+    	else if(this.getSubspecies() == null || "uncommon".equals(this.getSubspecies().rarity))
     		subspeciesScale = Subspecies.uncommonDropScale;
 
     	for(ItemDrop itemDrop : this.drops) {
@@ -3816,7 +3820,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public boolean canCarryItems() { return getInventorySize() > 0; }
     /** Returns the current size of this mob's inventory. (Some mob inventories can vary in size such as mounts with and without bag items equipped.) **/
     public int getInventorySize() { return this.inventory.getSizeInventory(); }
-    /** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailalbe.) **/
+    /** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailable.) **/
     public int getInventorySizeMax() { return Math.max(this.getNoBagSize(), this.getBagSize()); }
     /** Returns true if this mob is equipped with a bag item. **/
     public boolean hasBag() {

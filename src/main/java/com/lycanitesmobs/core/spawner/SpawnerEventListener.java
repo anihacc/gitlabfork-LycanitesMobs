@@ -474,21 +474,17 @@ public class SpawnerEventListener {
 			return;
 		}
 
-		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
-			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.FLOWING_WATER) {
-					trigger = true;
-				}
+		if(event.getState().getBlock() == Blocks.WATER || event.getState().getBlock() == Blocks.FLOWING_WATER) {
+			IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
+			if(sideBlockState.getBlock() == Blocks.LAVA) {
+				trigger = true;
 			}
 		}
 
-		else if(event.getState().getBlock() == Blocks.STONE) {
-			for(EnumFacing side : event.getNotifiedSides()) {
-				IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.FLOWING_LAVA) {
-					trigger = true;
-				}
+		else if(event.getState().getBlock() == Blocks.LAVA || event.getState().getBlock() == Blocks.FLOWING_LAVA) {
+			IBlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
+			if(sideBlockState.getBlock() == Blocks.WATER) {
+				trigger = true;
 			}
 		}
 

@@ -20,9 +20,6 @@ import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
 public class ModelWisp extends ModelTemplateElemental {
-	LayerEffect ballLayer;
-	LayerEffect ballGlowLayer;
-	LayerEffect hairLayer;
 
 	// ==================================================
   	//                    Constructors
@@ -48,12 +45,9 @@ public class ModelWisp extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		this.ballLayer = new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true);
-		renderer.addLayer(this.ballLayer);
-		this.ballGlowLayer = new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.ADD.id, true);
-		renderer.addLayer(this.ballGlowLayer);
-		this.hairLayer = new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4));
-		renderer.addLayer(this.hairLayer);
+		renderer.addLayer(new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerEffect(renderer, "ball_glow",  "ball", true, LayerEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
 	}
 
 
@@ -115,16 +109,16 @@ public class ModelWisp extends ModelTemplateElemental {
 			return false;
 		}
 		if(partName.equals("ball01")) {
-			return layer == this.ballLayer;
+			return layer != null && "ball".equals(layer.name);
 		}
 		if(partName.equals("ball02") || partName.equals("ball03")) {
-			return layer == this.ballGlowLayer;
+			return layer != null && "ball_glow".equals(layer.name);
 		}
 		if(partName.contains("fringe")) {
-			return layer == this.hairLayer;
+			return layer != null && "hair".equals(layer.name);
 		}
 		if(partName.contains("hair")) {
-			return layer == this.hairLayer;
+			return layer != null && "hair".equals(layer.name);
 		}
 		return layer == null;
 	}
@@ -136,7 +130,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
 	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
-		if(layer == this.ballLayer || layer ==  this.ballGlowLayer) {
+		if(layer != null && ("ball".equals(layer.name) || "ball_glow".equals(layer.name))) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;
 			float color = ((float)Math.cos(Math.toRadians(glow)) * 0.1f) + 0.9f;

@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 
 public class RevengeOwnerGoal extends FindAttackTargetGoal {
 	
@@ -45,14 +46,16 @@ public class RevengeOwnerGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
     	if(!this.host.isTamed())
     		return false;
     	if(this.host.getOwner() == null)
     		return false;
-        if (!(this.host.getOwner() instanceof EntityLiving))
+        if (!(this.host.getOwner() instanceof EntityLivingBase))
             return false;
-        EntityLiving owner = (EntityLiving)this.host.getOwner();
+
+		EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
         int i = owner.getRevengeTimer();
         if(i == this.revengeTime)
         	return false;
@@ -65,8 +68,9 @@ public class RevengeOwnerGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                 Start Executing
  	// ==================================================
+	@Override
     public void startExecuting() {
-        EntityLiving owner = (EntityLiving)this.host.getOwner();
+		EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
         this.target = owner.getRevengeTarget();
         this.revengeTime = owner.getRevengeTimer();
         if(this.callForHelp) {
