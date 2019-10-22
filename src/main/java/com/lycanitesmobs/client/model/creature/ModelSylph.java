@@ -18,8 +18,6 @@ import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelSylph extends ModelTemplateElemental {
-	LayerCreatureEffect hoodLayer;
-	LayerCreatureEffect wingLayer;
 
 	// ==================================================
   	//                    Constructors
@@ -45,12 +43,8 @@ public class ModelSylph extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-
-		this.hoodLayer = new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true);
-		renderer.addLayer(this.hoodLayer);
-
-		this.wingLayer = new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(0, 1));
-		renderer.addLayer(this.wingLayer);
+		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(0, 1)));
 	}
 
 
@@ -111,11 +105,11 @@ public class ModelSylph extends ModelTemplateElemental {
 	// ==================================================
 	@Override
 	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
-		if(partName.contains("hood")) {
-			return layer == this.hoodLayer;
+		if (partName.contains("hood")) {
+			return layer != null && "hood".equals(layer.name);
 		}
-		if(partName.contains("wing")) {
-			return layer == this.wingLayer;
+		if (partName.contains("wing")) {
+			return layer != null && "wing".equals(layer.name);
 		}
 		return layer == null;
 	}

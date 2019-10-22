@@ -105,7 +105,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 		// Lesser Actions:
 		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowOwnerGoal(this).setStrayDistance(6).setLostDistance(24).setSpeed(2D));
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new BegGoal(this));
-
     }
     
     // ========== Name ==========
@@ -767,7 +766,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ==================================================
     //                    Pet Control
     // ==================================================
-    public boolean petControlsEnabled() { return false; }
+    public boolean petControlsEnabled() { return true; }
     public byte behaviourBitMask() { return this.getByteFromDataManager(TAMED); }
     
     // ========== Sitting ==========

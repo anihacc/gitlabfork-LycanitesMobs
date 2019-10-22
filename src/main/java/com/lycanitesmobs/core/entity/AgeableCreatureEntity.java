@@ -63,7 +63,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 		this.dataManager.register(LOVE, 0);
 	}
 
-	// ========== Init ==========
+	// ========== Init AI ==========
 	@Override
 	protected void registerGoals() {
 		// Greater Actions:

@@ -50,6 +50,15 @@ public class LayerCreatureEffect extends LayerCreatureBase {
 		this.subspecies = subspecies;
 	}
 
+	public LayerCreatureEffect(CreatureRenderer renderer, String name, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+		super(renderer);
+		this.name = name;
+		this.textureSuffix = textureSuffix;
+		this.glow = glow;
+		this.blending = blending;
+		this.subspecies = subspecies;
+	}
+
 
     // ==================================================
     //                      Visuals

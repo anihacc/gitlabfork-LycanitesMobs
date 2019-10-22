@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.spawner.trigger.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -512,40 +513,19 @@ public class SpawnerEventListener {
 			return;
 		}
 
-		if(event.getState().getBlock() == Blocks.OBSIDIAN) {
-			for(Direction side : event.getNotifiedSides()) {
-				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.WATER) {
-					trigger = true;
-				}
-			}
-		}
-
-		else if(event.getState().getBlock() == Blocks.STONE) {
-			for(Direction side : event.getNotifiedSides()) {
-				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.LAVA) {
-					trigger = true;
-				}
-			}
-		}
-
-		/*else if(event.getState().getBlock() == Blocks.COBBLESTONE) {
-			boolean water = false;
-			boolean lava = false;
-			for(Direction side : event.getNotifiedSides()) {
-				BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().offset(side));
-				if(sideBlockState.getBlock() == Blocks.WATER || sideBlockState.getBlock() == Blocks.WATER) {
-					water = true;
-				}
-				else if(sideBlockState.getBlock() == Blocks.LAVA || sideBlockState.getBlock() == Blocks.LAVA) {
-					lava = true;
-				}
-			}
-			if(water && lava) {
+		if(event.getState().getBlock() == Blocks.WATER) {
+			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
+			if(sideBlockState.getBlock() == Blocks.LAVA && sideBlockState.get(FlowingFluidBlock.LEVEL) == 0) {
 				trigger = true;
 			}
-		}*/
+		}
+
+		else if(event.getState().getBlock() == Blocks.LAVA) {
+			BlockState sideBlockState = event.getWorld().getBlockState(event.getPos().down());
+			if(sideBlockState.getBlock() == Blocks.WATER && sideBlockState.get(FlowingFluidBlock.LEVEL) == 0) {
+				trigger = true;
+			}
+		}
 
 		if(trigger) {
 			if(this.lastMixPos != null && this.lastMixPos.equals(event.getPos())) {

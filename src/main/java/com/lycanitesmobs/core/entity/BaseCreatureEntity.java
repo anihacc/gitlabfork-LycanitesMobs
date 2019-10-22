@@ -1345,7 +1345,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.onSyncUpdate();
 
         if(this.despawnCheck()) {
-            if(!this.isBoundPet())
+            if(!this.isBoundPet() || this.isMinion())
         	    this.inventory.dropInventory();
         	this.remove();
         }
@@ -2453,12 +2453,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			targetZ = newY + this.posZ;
 
 			distanceX = targetX - this.posX;
-			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.25D) - projectile.posY;
+			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.posY;
 			distanceZ = targetZ - this.posZ;
 		}
 
 		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
-		projectile.shoot(distanceX, distanceY + distanceXZ, distanceZ, velocity, inaccuracy);
+		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
 		this.getEntityWorld().addEntity(projectile);
 
 		if(projectile.getLaunchSound() != null) {
@@ -3410,9 +3410,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.hasDropped = true;
 
     	int subspeciesScale = 1;
-    	if(this.getSubspeciesIndex() > 2)
+    	if(this.isRareSubspecies())
     		subspeciesScale = Subspecies.rareDropScale;
-    	else if(this.getSubspeciesIndex() > 0)
+		else if(this.getSubspecies() == null || "uncommon".equals(this.getSubspecies().rarity))
     		subspeciesScale = Subspecies.uncommonDropScale;
 
     	for(ItemDrop itemDrop : this.drops) {

@@ -75,7 +75,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 			}
 
 			// Environmental Transformation:
-			if(!this.isTamed()) {
+			if(!this.isTamed() && !this.isRareSubspecies()) {
 				if (this.updateTick % 40 == 0 && this.isInLava()) {
 					this.transform(CreatureManager.getInstance().getEntityType("volcan"), null, false);
 				}

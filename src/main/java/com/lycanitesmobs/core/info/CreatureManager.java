@@ -42,9 +42,6 @@ public class CreatureManager extends JSONLoader {
 	/** A map of all creatures by class. **/
 	public Map<Class, CreatureInfo> creatureClassMap = new HashMap<>();
 
-	/** The next available network id for creatures to register by. **/
-	protected int nextCreatureNetworkId = 100;
-
 	/** A list of mods that have loaded with this Creature Manager. **/
 	public List<ModInfo> loadedMods = new ArrayList<>();
 
@@ -101,13 +98,13 @@ public class CreatureManager extends JSONLoader {
 	/** Loads all JSON Creature Types. Should be done before creatures are loaded so that they can find their type on load. **/
 	public void loadCreatureTypesFromJSON(ModInfo modInfo) {
 		this.loadAllJson(modInfo, "Creature Type", "creaturetypes", "name", true, null, FileLoader.COMMON, StreamLoader.COMMON);
-		LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Types Loaded In Total.");
+		LycanitesMobs.logDebug("Creature", "Complete! " + this.creatureTypes.size() + " JSON Creature Types Loaded In Total.");
 	}
 
 	/** Loads all JSON Creature Groups. Should be done before creatures are loaded so that they can find their groups on load. **/
 	public void loadCreatureGroupsFromJSON(ModInfo modInfo) {
 		this.loadAllJson(modInfo, "Creature Group", "creaturegroups", "name", true, null, FileLoader.COMMON, StreamLoader.COMMON);
-		LycanitesMobs.logDebug("Creature", "Complete! " + this.creatures.size() + " JSON Creature Groups Loaded In Total.");
+		LycanitesMobs.logDebug("Creature", "Complete! " + this.creatureGroups.size() + " JSON Creature Groups Loaded In Total.");
 	}
 
 	/** Loads all JSON Creatures. Should only initially be done on pre-init and before Creature Info is loaded and can then be done in game on reload. **/

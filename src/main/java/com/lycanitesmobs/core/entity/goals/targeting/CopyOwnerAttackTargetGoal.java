@@ -33,15 +33,15 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
 			return false;
     	if(this.host.getOwner() == null)
     		return false;
-
         if (!(this.host.getOwner() instanceof LivingEntity))
             return false;
+
         LivingEntity owner = (LivingEntity)this.host.getOwner();
     	this.target = owner.getLastAttackedEntity();
     	if(this.target == null) {
     		return false;
     	}
-    	if(lastAttackTime == owner.getLastAttackedEntityTime())
+    	if(this.lastAttackTime == owner.getLastAttackedEntityTime())
     		return false;
     	return true;
     }
@@ -52,8 +52,8 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public void startExecuting() {
-    	if(this.isTargetValid(target)) {
-			lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastAttackedEntityTime();
+    	if(this.isEntityTargetable(this.target, false)) {
+			this.lastAttackTime = ((LivingEntity)this.host.getOwner()).getLastAttackedEntityTime();
 			super.startExecuting();
 		}
     }
@@ -73,7 +73,8 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
     // ==================================================
   	//                    Valid Target
   	// ==================================================
-    private boolean isTargetValid(LivingEntity target) {
+	@Override
+	protected boolean isValidTarget(LivingEntity target) {
     	if(target == null)
             return false;
     	if(!target.isAlive())

@@ -191,6 +191,7 @@ public class SummonSet {
 		if(this.getSitting()) behaviour += BEHAVIOUR_ID.SITTING.id;
 		if(this.getFollowing()) behaviour += BEHAVIOUR_ID.FOLLOWING.id;
 		if(this.getPassive()) behaviour += BEHAVIOUR_ID.PASSIVE.id;
+		if(this.getAssist()) behaviour += BEHAVIOUR_ID.ASSIST.id;
 		if(this.getAggressive()) behaviour += BEHAVIOUR_ID.AGGRESSIVE.id;
 		if(this.getPVP()) behaviour += BEHAVIOUR_ID.PVP.id;
 		return behaviour;
@@ -217,6 +218,9 @@ public class SummonSet {
     	
     	if(nbtTagCompound.contains("Passive"))
     		this.passive = nbtTagCompound.getBoolean("Passive");
+
+		if(nbtTagCompound.contains("Assist"))
+			this.assist = nbtTagCompound.getBoolean("Assist");
     	
     	if(nbtTagCompound.contains("Aggressive"))
     		this.aggressive = nbtTagCompound.getBoolean("Aggressive");
@@ -237,6 +241,8 @@ public class SummonSet {
     	nbtTagCompound.putBoolean("Following", this.following);
     	
     	nbtTagCompound.putBoolean("Passive", this.passive);
+
+		nbtTagCompound.putBoolean("Assist", this.assist);
     	
     	nbtTagCompound.putBoolean("Aggressive", this.aggressive);
     	
