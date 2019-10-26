@@ -33,6 +33,10 @@ public class ExtendedEntity implements IExtendedEntity {
     Vector3d lastSafePos;
     private boolean playerAllowFlyingSnapshot;
     private boolean playerIsFlyingSnapshot;
+
+    // Last Attacked:
+	public LivingEntity lastAttackedEntity;
+	public int lastAttackedTime = 0;
 	
 	// Picked Up:
 	public Entity pickedUpByEntity;
@@ -98,6 +102,11 @@ public class ExtendedEntity implements IExtendedEntity {
     public LivingEntity getEntity() {
         return this.entity;
     }
+
+	public void setLastAttackedEntity(LivingEntity target) {
+		this.lastAttackedEntity = target;
+		this.lastAttackedTime = this.entity.ticksExisted;
+	}
 	
 	
 	// ==================================================

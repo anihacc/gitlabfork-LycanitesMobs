@@ -473,6 +473,8 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	public boolean canAttack(EntityType targetType) {
 		if(this.isPassive())
 			return false;
+		if(this.isTamed())
+			return true;
 		return super.canAttack(targetType);
 	}
 	
@@ -497,6 +499,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
                     }
                 }
             }
+            return true;
         }
 		return super.canAttack(targetEntity);
 	}

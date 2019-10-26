@@ -128,8 +128,6 @@ public class DefendOwnerGoal extends TargetingGoal {
         double distance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).width;
         double heightDistance = 4.0D - this.host.getSize(Pose.STANDING).height;
         if(this.host.useDirectNavigator())
-            heightDistance = this.getTargetDistance() - this.host.getSize(Pose.STANDING).height;
-        if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);
         if(this.callForHelp)
