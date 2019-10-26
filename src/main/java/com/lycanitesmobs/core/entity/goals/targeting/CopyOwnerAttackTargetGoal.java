@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,11 +40,19 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
 			return false;
 
 		EntityLivingBase owner = (EntityLivingBase)this.host.getOwner();
+		int lastAttackedTime = owner.getLastAttackedEntityTime();
     	this.target = owner.getLastAttackedEntity();
     	if(this.target == null) {
-    		return false;
+			ExtendedEntity extendedOwner = ExtendedEntity.getForEntity(owner);
+			if(extendedOwner != null) {
+				this.target = extendedOwner.lastAttackedEntity;
+				lastAttackedTime = extendedOwner.lastAttackedTime;
+			}
     	}
-    	if(this.lastAttackTime == owner.getLastAttackedEntityTime())
+		if(this.target == null) {
+			return false;
+		}
+    	if(this.lastAttackTime == lastAttackedTime)
     		return false;
     	return true;
     }

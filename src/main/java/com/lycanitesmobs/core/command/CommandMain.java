@@ -14,11 +14,13 @@ import com.lycanitesmobs.core.mobevent.MobEvent;
 import com.lycanitesmobs.core.mobevent.MobEventListener;
 import com.lycanitesmobs.core.mobevent.MobEventManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
+import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -304,6 +306,10 @@ public class CommandMain implements ICommand {
 			// Packet:
 			if("packet".equalsIgnoreCase(args[1])) {
 				beastiary.sendAllToClient();
+				extendedPlayer.sendAllSummonSetsToPlayer();
+				MessageSummonSetSelection message = new MessageSummonSetSelection(extendedPlayer);
+				LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)player);
+				extendedPlayer.sendPetEntriesToPlayer("");
 				commandSender.sendMessage(new TextComponentString("Force sent a full Beastiary update packet."));
 				return;
 			}

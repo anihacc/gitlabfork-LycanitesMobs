@@ -307,13 +307,17 @@ public class GameEventListener {
         EntityLivingBase damagedEntity = event.getEntityLiving();
         ExtendedEntity damagedEntityExt = ExtendedEntity.getForEntity(damagedEntity);
 
-        EntityDamageSource entityDamageSource = null;
-        if(event.getSource() instanceof EntityDamageSource)
-            entityDamageSource = (EntityDamageSource)event.getSource();
-
-//        Entity damagingEntity = null;
-//        if(entityDamageSource != null)
-//            damagingEntity = entityDamageSource.getSourceOfDamage();
+        // True Source Extended Entity:
+        EntityDamageSource entityDamageSource;
+        if(event.getSource() instanceof EntityDamageSource) {
+			entityDamageSource = (EntityDamageSource) event.getSource();
+			if(entityDamageSource.getTrueSource() != null && entityDamageSource.getTrueSource() instanceof EntityLivingBase) {
+				ExtendedEntity attackerExtendedEntity = ExtendedEntity.getForEntity((EntityLivingBase)entityDamageSource.getTrueSource());
+				if(attackerExtendedEntity != null) {
+					attackerExtendedEntity.setLastAttackedEntity(damagedEntity);
+				}
+			}
+		}
 
 		// ========== Mounted Protection ==========
 		if(damagedEntity.getRidingEntity() != null) {

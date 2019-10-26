@@ -307,7 +307,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
     // ========== Create Child ==========
 	public AgeableCreatureEntity createChild(AgeableCreatureEntity partener) {
-		return null;
+		return (AgeableCreatureEntity)this.creatureInfo.createEntity(this.getEntityWorld());
 	}
 	
 	// ========== Breeding Item ==========

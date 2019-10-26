@@ -267,6 +267,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			this.sendAllSummonSetsToPlayer();
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this);
 			LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);
+			this.sendPetEntriesToPlayer("");
 		}
 
         // Pet Manager:

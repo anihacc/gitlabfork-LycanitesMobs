@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -123,12 +124,10 @@ public class DefendOwnerGoal extends TargetingGoal {
     	
     	// Aggressive Check:
     	if(!this.host.isAggressive())
-            return false;
+			return false;
         
         double distance = this.getTargetDistance() - this.host.width;
         double heightDistance = 4.0D - this.host.height;
-        if(this.host.useDirectNavigator())
-            heightDistance = this.getTargetDistance() - this.host.height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
         this.target = this.getNewTarget(distance, heightDistance, distance);

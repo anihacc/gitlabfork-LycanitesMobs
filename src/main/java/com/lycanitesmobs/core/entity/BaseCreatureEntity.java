@@ -2199,6 +2199,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Movement Speed Modifier ==========
     /** The local speed modifier of this mob, AI classes will also provide their own modifiers that will be multiplied by this modifier. To be used dynamically by various mob behaviours. Not to be confused with getSpeedMultiplier(). **/
     public float getAISpeedModifier() {
+    	if(!this.canWalk() && !this.isInWater() && !this.isFlying()) {
+    		return 0.1F;
+		}
     	return 1.0F;
     }
     

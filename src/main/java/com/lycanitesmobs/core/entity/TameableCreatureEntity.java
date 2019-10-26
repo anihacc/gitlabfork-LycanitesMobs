@@ -466,6 +466,8 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	public boolean canAttackClass(Class targetClass) {
 		if(this.isPassive())
 			return false;
+		if(this.isTamed())
+			return true;
 		return super.canAttackClass(targetClass);
 	}
 	
@@ -490,6 +492,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
                     }
                 }
             }
+            return true;
         }
 		return super.canAttackEntity(targetEntity);
 	}
