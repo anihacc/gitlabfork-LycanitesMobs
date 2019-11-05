@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -12,7 +13,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMorock extends RideableCreatureEntity implements IMob {
+public class EntityMorock extends RideableCreatureEntity implements IMob, IGroupHeavy {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;

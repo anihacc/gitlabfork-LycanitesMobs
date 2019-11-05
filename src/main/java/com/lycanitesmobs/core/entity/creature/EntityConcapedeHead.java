@@ -152,7 +152,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     	if(this.isInLove())
     		return false;
 		this.getEntityWorld();
-		if(this.getEntityWorld().isDaytime())
+		if(this.isDaytime())
     		return this.testLightLevel() < 2;
     	else
     		return super.isAggressive();

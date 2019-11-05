@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigator;
 import net.minecraft.entity.ai.goal.Goal;
@@ -21,6 +20,7 @@ public class PaddleGoal extends Goal {
         this.host = setEntity;
         if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
             setEntity.getNavigator().setCanSwim(true);
+		this.sink = this.host.canBreatheUnderwater() || this.host.canBreatheUnderlava();
     }
     
     
