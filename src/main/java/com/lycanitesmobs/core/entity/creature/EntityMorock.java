@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.Entity;
@@ -12,7 +13,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityMorock extends RideableCreatureEntity implements IMob {
+public class EntityMorock extends RideableCreatureEntity implements IMob, IGroupHeavy {
 
     protected boolean wantsToLand;
     protected boolean  isLanded;
@@ -179,9 +180,6 @@ public class EntityMorock extends RideableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
-            return;
-
         if(this.abilityToggled)
             return;
         if(this.getStamina() < this.getStaminaCost())

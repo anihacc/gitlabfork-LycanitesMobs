@@ -147,9 +147,6 @@ public class EntityFeradon extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-        if(this.getEntityWorld().isRemote)
-            return;
-
         if(!this.onGround)
             return;
         if(this.abilityToggled)

@@ -100,9 +100,6 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     // ==================================================
     @Override
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
-    		return;
-
     	if(this.abilityToggled)
     		return;
     	if(this.getStamina() < this.getStaminaCost())

@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
@@ -14,7 +15,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityQuetzodracl extends RideableCreatureEntity implements IMob {
+public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, IGroupHeavy {
 
     protected AttackMeleeGoal attackAI;
     protected int waterTime = 0;

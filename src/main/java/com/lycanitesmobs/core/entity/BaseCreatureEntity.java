@@ -3433,7 +3433,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public boolean canPickupEntity(EntityLivingBase entity) {
         if(this.getPickupEntity() == entity)
             return false;
-        if(entity instanceof IGroupBoss || entity instanceof IGroupHeavy)
+        if(entity instanceof IGroupBoss || (entity instanceof IGroupHeavy && !(this instanceof IGroupHeavy)))
             return false;
     	ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(entity);
 		if(extendedEntity == null)

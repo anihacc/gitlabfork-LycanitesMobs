@@ -90,9 +90,6 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
-    		return;
-    	
     	if(this.abilityToggled)
     		return;
     	if(this.getStamina() < this.getStaminaCost())

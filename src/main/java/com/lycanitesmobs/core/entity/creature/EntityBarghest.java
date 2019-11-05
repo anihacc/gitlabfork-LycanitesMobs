@@ -149,9 +149,6 @@ public class EntityBarghest extends RideableCreatureEntity {
     //                   Mount Ability
     // ==================================================
     public void mountAbility(Entity rider) {
-    	if(this.getEntityWorld().isRemote)
-    		return;
-
         if(!this.onGround)
             return;
     	if(this.abilityToggled)
