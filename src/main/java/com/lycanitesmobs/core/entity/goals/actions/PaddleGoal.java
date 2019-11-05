@@ -20,6 +20,7 @@ public class PaddleGoal extends EntityAIBase {
 		this.setMutexBits(4);
 		if(setEntity.getNavigator() instanceof PathNavigateGround)
 			((PathNavigateGround)setEntity.getNavigator()).setCanSwim(true);
+		this.sink = this.host.canBreatheUnderwater() || this.host.canBreatheUnderlava();
     }
     
     
