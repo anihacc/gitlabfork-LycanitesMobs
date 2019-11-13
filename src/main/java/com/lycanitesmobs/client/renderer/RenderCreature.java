@@ -65,7 +65,10 @@ public class RenderCreature extends RenderLiving<BaseCreatureEntity> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.mainModel = this.defaultModel;
+
+		if(this.mainModel == null) {
+			this.mainModel = this.defaultModel;
+		}
 
 		if(this.mainModel == null) {
 			return;
@@ -140,7 +143,7 @@ public class RenderCreature extends RenderLiving<BaseCreatureEntity> {
     	
     	if(entity.getAlwaysRenderNameTagForRender()) {
     		if(entity instanceof TameableCreatureEntity)
-    			if(((TameableCreatureEntity)entity).isTamed())
+    			if(entity.isTamed())
     				return entity == this.renderManager.pointedEntity;
     		return true;
     	}
