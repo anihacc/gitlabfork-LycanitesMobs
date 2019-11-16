@@ -158,8 +158,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
         if(this.getPetEntry() != null) {
 			if(this.getPetEntry().entity != this && this.getPetEntry().entity != null)
 				return true;
-			if(this.getPetEntry().host == null || this.getPetEntry().host.isDead)
+			if(this.getPetEntry().host == null || !this.getPetEntry().host.isEntityAlive()) {
+				this.getPetEntry().saveEntityNBT();
 				return true;
+			}
 		}
 
     	if(this.isTamed() && !this.isTemporary)
@@ -406,6 +408,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	 */
 	@Override
     public boolean isOnSameTeam(Entity target) {
+		if(target == null) {
+			return false;
+		}
+
 		if(this.getEntityWorld().isRemote) {
 			return super.isOnSameTeam(target);
 		}
@@ -669,7 +675,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(EntityPlayer player) {
-    	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies()) {
+    	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies() && !this.isBoss()) {
 			if (this.rand.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();

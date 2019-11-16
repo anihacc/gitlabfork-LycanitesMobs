@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -73,6 +74,14 @@ public class EntityJoustAlpha extends AgeableCreatureEntity {
     	}
     	super.setAttackTarget(entity);
     }
+
+	@Override
+	public boolean isProtective(Entity entity) {
+		if(entity instanceof EntityJoust) {
+			return true;
+		}
+		return super.isProtective(entity);
+	}
     
     
     // ==================================================

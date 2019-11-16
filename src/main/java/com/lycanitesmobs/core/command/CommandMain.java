@@ -114,7 +114,7 @@ public class CommandMain implements ICommand {
 		}
 
 		// Spawner:
-		if("spawners".equalsIgnoreCase(args[0])) {
+		if("spawners".equalsIgnoreCase(args[0]) || "spawner".equalsIgnoreCase(args[0])) {
 			reply = LanguageManager.translate("lyc.command.spawners.invalid");
 			if (args.length < 2) {
 				commandSender.sendMessage(new TextComponentString(reply));
@@ -134,21 +134,6 @@ public class CommandMain implements ICommand {
 				reply = LanguageManager.translate("lyc.command.spawners.creative");
 				SpawnerEventListener.testOnCreative = !SpawnerEventListener.testOnCreative;
 				reply = reply.replace("%value%", "" + SpawnerEventListener.testOnCreative);
-				commandSender.sendMessage(new TextComponentString(reply));
-				return;
-			}
-		}
-		if("spawner".equalsIgnoreCase(args[0])) {
-			reply = LanguageManager.translate("lyc.command.spawners.invalid");
-			if (args.length < 2) {
-				commandSender.sendMessage(new TextComponentString(reply));
-				return;
-			}
-
-			// Add:
-			if("reload".equalsIgnoreCase(args[1])) {
-				reply = LanguageManager.translate("lyc.command.spawners.reload");
-				SpawnerManager.getInstance().reload();
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}

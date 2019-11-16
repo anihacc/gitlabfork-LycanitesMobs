@@ -3,10 +3,7 @@ package com.lycanitesmobs.core.entity;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.*;
-import com.lycanitesmobs.api.IFusable;
-import com.lycanitesmobs.api.IGroupBoss;
-import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.api.IGroupIce;
+import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.ai.DirectNavigator;
 import com.lycanitesmobs.core.entity.ai.EntityAIMoveRestriction;
@@ -2527,10 +2524,18 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			return false;
 		}
 
+		if(this.getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL && targetEntity instanceof EntityPlayer) {
+			return false;
+		}
+
+		if(!Targeting.isValidTarget(this, targetEntity)) {
+			return false;
+		}
+
 		// Players:
         if(targetEntity instanceof EntityPlayer) {
             EntityPlayer targetPlayer = (EntityPlayer)targetEntity;
-            if(targetPlayer.capabilities.isCreativeMode) {
+            if(targetPlayer.capabilities.disableDamage) {
 				return false;
 			}
         }
@@ -2543,11 +2548,22 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         // Creatures:
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
-            if(targetCreature.getMasterTarget() == this) {
+
+			// Same Species, Same Owner:
+			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
+				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
+					return false;
+				}
+			}
+
+			// Master:
+			if(targetCreature.getMasterTarget() == this) {
 				return false;
 			}
-            if(!(this instanceof IGroupBoss)) {
-                if(!this.isTamed()) {
+
+			// Bosses and Rares:
+			if(!(this instanceof IGroupBoss)) {
+				if(!this.isTamed()) {
 					if(targetEntity instanceof IGroupBoss) {
 						return false;
 					}
@@ -2555,7 +2571,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 						return false;
 					}
 				}
-            }
+			}
         }
 
         // Inaccessible From Water:
@@ -2605,13 +2621,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     **/
     @Override
     public void setRevengeTarget(EntityLivingBase entityLivingBase) {
-    	boolean aggressiveOverride = CreatureManager.getInstance().config.animalsFightBack;
-    	if(!aggressiveOverride && this.extraMobBehaviour != null)
-    		aggressiveOverride = this.extraMobBehaviour.aggressiveOverride;
-    	if(!aggressiveOverride && this.fleeHealthPercent > 0 && this.getHealth() / this.getMaxHealth() <= this.fleeHealthPercent)
-    		this.setAvoidTarget(entityLivingBase);
-    	else
-    		super.setRevengeTarget(entityLivingBase);
+    	super.setRevengeTarget(entityLivingBase);
     }
     
     // ========== Melee ==========
@@ -3040,7 +3050,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
     
     /** Returns true if this mob should defend other entities that cry for help. Used mainly by the revenge AI. **/
-    public boolean isProtective(Entity entity) { return true; }
+    public boolean isProtective(Entity entity) {
+		return entity.getClass() == this.getClass();
+    }
 
     /** Returns true if this mob has an Attack Target. **/
     public boolean hasAttackTarget() {

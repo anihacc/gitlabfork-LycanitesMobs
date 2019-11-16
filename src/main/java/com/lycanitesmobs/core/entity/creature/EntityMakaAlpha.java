@@ -2,11 +2,13 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,6 +39,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     protected void initEntityAI() {
         super.initEntityAI();
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getClass()));
+		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityMaka.class));
 
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
@@ -92,7 +95,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 			return false;
     	if(target instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || target.getHealth() / target.getMaxHealth() <= 0.25F))
     		return false;
-    	else return super.canAttackEntity(target);
+    	return super.canAttackEntity(target);
     }
 
     @Override
@@ -111,6 +114,14 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     	if(target instanceof EntityPlayer || target.getClass() == this.getClass())
     		return this.getRNG().nextDouble() <= 0.01D;
 		return true;
+	}
+
+	@Override
+	public boolean isProtective(Entity entity) {
+    	if(entity instanceof EntityMaka) {
+    		return true;
+		}
+    	return super.isProtective(entity);
 	}
     
     

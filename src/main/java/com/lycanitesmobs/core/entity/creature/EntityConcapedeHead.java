@@ -1,26 +1,27 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityConcapedeHead extends AgeableCreatureEntity {
 	
 	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
+	public BaseCreatureEntity backSegment;
 	
     // ==================================================
  	//                    Constructor
@@ -41,8 +42,9 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_herbivore"));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_frugivore"));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityConcapedeSegment.class));
     }
 	
 	
@@ -53,7 +55,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void onFirstSpawn() {
 		// Create Starting Segments:
-        if(!this.getEntityWorld().isRemote && !this.hasMaster()) {
+        if(!this.getEntityWorld().isRemote && this.backSegment == null) {
         	this.setGrowingAge(-this.growthTime / 4);
         	int segmentCount = this.getRNG().nextInt(CONCAPEDE_SIZE_MAX);
     		AgeableCreatureEntity parentSegment = this;
@@ -61,6 +63,10 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
         		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
+				segmentEntity.applySubspecies(this.getSubspeciesIndex());
+				segmentEntity.setSizeScale(this.sizeScale);
+				segmentEntity.spawnEventType = this.spawnEventType;
+				segmentEntity.firstSpawn = false;
         		parentSegment.getEntityWorld().spawnEntity(segmentEntity);
 				parentSegment = segmentEntity;
         	}
@@ -72,11 +78,10 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     // ==================================================
     //                      Updates
     // ==================================================
-	// ========== Living Update ==========
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-    }
+	public boolean shouldFollowParent() {
+		return false; // Never follow parents.
+	}
 	
 	
 	// ==================================================
@@ -85,23 +90,35 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		// Spawn Additional Segments:
-		if(!this.firstSpawn && age == 0 && CreatureManager.getInstance().getCreature("ConcapedeSegment") != null && !this.getEntityWorld().isRemote) {
+		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
 			age = -(this.growthTime / 4);
-			BaseCreatureEntity parentSegment = this;
-			boolean lastSegment = false;
+
 			int size = 0;
-			while(!lastSegment) {
+			BaseCreatureEntity lastSegment = this;
+			while(size <= CONCAPEDE_SIZE_MAX) {
 				size++;
-				if(parentSegment.hasMaster() && parentSegment.getMasterTarget() instanceof BaseCreatureEntity)
-					parentSegment = (BaseCreatureEntity)(parentSegment.getMasterTarget());
-				else
-					lastSegment = true;
+
+				BaseCreatureEntity trailingSegment = null;
+				if(lastSegment instanceof EntityConcapedeHead)
+					trailingSegment = ((EntityConcapedeHead)lastSegment).backSegment;
+				else if(lastSegment instanceof EntityConcapedeSegment)
+					trailingSegment = ((EntityConcapedeSegment)lastSegment).backSegment;
+
+				if(trailingSegment == null || trailingSegment == lastSegment) {
+					break;
+				}
+				lastSegment = trailingSegment;
 			}
+
 			if(size < CONCAPEDE_SIZE_MAX) {
-				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
-	    		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
-	    		parentSegment.getEntityWorld().spawnEntity(segmentEntity);
-				segmentEntity.setParentTarget(parentSegment);
+				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(lastSegment.getEntityWorld());
+	    		segmentEntity.setLocationAndAngles(lastSegment.posX, lastSegment.posY, lastSegment.posZ, 0.0F, 0.0F);
+				segmentEntity.setParentTarget(lastSegment);
+				segmentEntity.applySubspecies(this.getSubspeciesIndex());
+				segmentEntity.setSizeScale(this.sizeScale);
+				segmentEntity.spawnEventType = this.spawnEventType;
+				segmentEntity.firstSpawn = false;
+	    		lastSegment.getEntityWorld().spawnEntity(segmentEntity);
 			}
 		}
         super.setGrowingAge(age);
@@ -162,14 +179,20 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     	if(this.isInLove())
     		return false;
     	if(entity instanceof EntityConcapedeSegment) {
-    		BaseCreatureEntity checkSegment = this;
-    		while(checkSegment != null) {
-    			if(checkSegment == entity)
-    				return true;
-    			if(!checkSegment.hasMaster())
+    		BaseCreatureEntity checkCreature = (BaseCreatureEntity)entity;
+    		while(true) {
+    			if(!checkCreature.hasParent()) {
     				break;
-    			checkSegment = (BaseCreatureEntity)checkSegment.getMasterTarget();
-    		}
+				}
+				if(checkCreature.getParentTarget() == this) {
+					return true;
+				}
+    			if(checkCreature.getParentTarget() instanceof BaseCreatureEntity) {
+					checkCreature = (BaseCreatureEntity)checkCreature.getParentTarget();
+					continue;
+				}
+    			break;
+			}
     	}
     	return false;
     }
@@ -195,6 +218,11 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	public boolean canBreed() {
         return this.getGrowingAge() >= 0;
     }
+
+	@Override
+	public boolean canMate() {
+		return false;
+	}
     
     
     // ==================================================

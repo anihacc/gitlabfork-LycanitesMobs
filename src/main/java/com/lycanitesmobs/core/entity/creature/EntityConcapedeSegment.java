@@ -3,16 +3,15 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.FollowParentGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +27,8 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	// Parent UUID:
 	/** Used to identify the parent segment when loading this saved entity, set to null when found or lost for good. **/
 	UUID parentUUID = null;
+
+	public BaseCreatureEntity backSegment;
 	
     // ==================================================
  	//                    Constructor
@@ -49,6 +50,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(0.5D));
         super.initEntityAI();
     }
 
@@ -69,10 +71,6 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     public void getRandomSubspecies() {
     	if(this.subspecies == null && !this.hasParent()) {
     		this.subspecies = this.creatureInfo.getRandomSubspecies(this);
-    		if(this.subspecies != null)
-    			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to " + this.subspecies.getTitle());
-    		else
-    			LycanitesMobs.logDebug("Subspecies", "Setting " + this.getSpeciesName() + " to base species.");
     	}
     	
     	if(this.hasParent() && this.getParentTarget() instanceof BaseCreatureEntity) {
@@ -97,7 +95,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	@Override
     public void onLivingUpdate() {
         // Try to Load Parent from UUID:
-        if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null) {
+        if(!this.getEntityWorld().isRemote && !this.hasParent() && this.parentUUID != null && this.updateTick > 0 && this.updateTick % 40 == 0) {
 	        double range = 64D;
 	        List connections = this.getEntityWorld().getEntitiesWithinAABB(AgeableCreatureEntity.class, this.getEntityBoundingBox().grow(range, range, range));
 	        Iterator possibleConnections = connections.iterator();
@@ -116,9 +114,9 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         // Concapede Connections:
         if(!this.getEntityWorld().isRemote) {
         	// Check if back segment is alive:
-        	if(this.hasMaster()) {
-        		if(!this.getMasterTarget().isEntityAlive())
-        			this.setMasterTarget(null);
+        	if(this.backSegment != null) {
+        		if(!this.backSegment.isEntityAlive())
+					this.backSegment = null;
         	}
 
         	// Check if front segment is alive:
@@ -131,7 +129,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         	if(this.hasParent()) {
         		this.faceEntity(this.getParentTarget(), 360, 360);
         		
-        		double segmentDistance = 0.5D;
+        		double segmentDistance = 0.65D;
         		Vec3d pos;
         		if(this.getParentTarget() instanceof BaseCreatureEntity)
         			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.25D, 0);
@@ -159,6 +157,13 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)
         	this.setGrowingAge(-this.growthTime);
     }
+
+    @Override
+	public boolean rollWanderChance() {
+		if(this.hasParent())
+    		return false;
+		return super.rollWanderChance();
+	}
 	
 	
 	// ==================================================
@@ -174,9 +179,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 			concapedeHead.copyLocationAndAnglesFrom(this);
 			concapedeHead.firstSpawn = false;
 			concapedeHead.setGrowingAge(-this.growthTime / 4);
+			concapedeHead.setSizeScale(this.sizeScale);
+			concapedeHead.applySubspecies(this.getSubspeciesIndex());
 			this.getEntityWorld().spawnEntity(concapedeHead);
-			if(this.hasMaster() && this.getMasterTarget() instanceof EntityConcapedeSegment)
-				((EntityConcapedeSegment)this.getMasterTarget()).setParentTarget(concapedeHead);
+			if(this.backSegment != null)
+				this.backSegment.setParentTarget(concapedeHead);
 			this.setDead();
 		}
     }
@@ -226,8 +233,12 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ==================================================
 	@Override
 	public void setParentTarget(EntityLivingBase setTarget) {
-		if(setTarget instanceof EntityConcapedeSegment || setTarget instanceof EntityConcapedeHead)
-			((BaseCreatureEntity)setTarget).setMasterTarget(this);
+    	if(setTarget != this) {
+			if (setTarget instanceof EntityConcapedeSegment)
+				((EntityConcapedeSegment) setTarget).backSegment = this;
+			if (setTarget instanceof EntityConcapedeHead)
+				((EntityConcapedeHead) setTarget).backSegment = this;
+		}
 		super.setParentTarget(setTarget);
 	}
     
@@ -255,7 +266,8 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ==================================================
 	@Override
     public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
-    	if(type.equals("inWall")) return false;
+    	if(type.equals("inWall"))
+    		return false;
     	return super.isDamageTypeApplicable(type, source, damage);
     }
     
@@ -286,6 +298,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 	public boolean canBreed() {
         return !this.hasParent();
     }
+
+	@Override
+	public boolean shouldFindParent() {
+		return false;
+	}
     
     
     // ==================================================
@@ -294,21 +311,20 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
    	// ========== Read ===========
     /** Used when loading this mob from a saved chunk. **/
     @Override
-    public void readFromNBT(NBTTagCompound nbtTagCompound) {
-    	if(nbtTagCompound.hasKey("ParentUUIDMost") && nbtTagCompound.hasKey("ParentUUIDLeast")) {
-            this.parentUUID = new UUID(nbtTagCompound.getLong("ParentUUIDMost"), nbtTagCompound.getLong("ParentUUIDLeast"));
-        }
-        super.readFromNBT(nbtTagCompound);
+    public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+    	if(nbtTagCompound.hasKey("ParentUUIDMost")) {
+            this.parentUUID = nbtTagCompound.getUniqueId("ParentUUID");
+		}
+        super.readEntityFromNBT(nbtTagCompound);
     }
     
     // ========== Write ==========
     /** Used when saving this mob to a chunk. **/
     @Override
     public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
-    	if(this.getParentTarget() != null) {
-    		nbtTagCompound.setLong("ParentUUIDMost", this.getParentTarget().getUniqueID().getMostSignificantBits());
-    		nbtTagCompound.setLong("ParentUUIDLeast", this.getParentTarget().getUniqueID().getLeastSignificantBits());
+		super.writeEntityToNBT(nbtTagCompound);
+    	if(this.hasParent()) {
+    		nbtTagCompound.setUniqueId("ParentUUID", this.getParentTarget().getUniqueID());
     	}
-        super.writeEntityToNBT(nbtTagCompound);
     }
 }

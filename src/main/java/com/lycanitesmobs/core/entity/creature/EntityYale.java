@@ -170,7 +170,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 		this.colorMixer.getStackInSlot(1).setItemDamage(j);
 		ItemStack itemstack = CraftingManager.findMatchingResult(this.colorMixer, entityA.world);
 		int k;
-		if(itemstack != null && itemstack.getItem() == Items.DYE)
+		if(!itemstack.isEmpty() && itemstack.getItem() == Items.DYE)
 			k = itemstack.getItemDamage();
 		else
 			k = this.getEntityWorld().rand.nextBoolean() ? i : j;
