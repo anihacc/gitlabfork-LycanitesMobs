@@ -2,8 +2,6 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureGroup;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -63,27 +61,8 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 			return false;
 		}
 
-    	// Group Check:
-		boolean shouldFlee = false;
-		boolean shouldAttack = false;
-		boolean shouldPackAttack = false;
-		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
-			if(group.shouldFlee(target)) {
-				shouldFlee = true;
-			}
-			if(group.shouldHunt(target)) {
-				shouldAttack = true;
-			}
-			if(group.shouldPackHunt(target)) {
-				shouldPackAttack = true;
-			}
-		}
-		if(shouldFlee) {
-			if(!shouldPackAttack || !this.host.isInPack()) {
-				return false;
-			}
-		}
-		if(!shouldAttack && (!shouldPackAttack || !this.host.isInPack())) {
+		// Group Check:
+		if(!this.shouldCreatureGroupHunt(this.host, target)) {
 			return false;
 		}
     	

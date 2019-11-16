@@ -195,7 +195,7 @@ public class PetManager {
             if(petEntry.active)
 			    petEntry.onUpdate(world);
             else
-                removedEntries.add(petEntry);
+                this.removedEntries.add(petEntry);
 		}
 
         // Remove Inactive Entries:

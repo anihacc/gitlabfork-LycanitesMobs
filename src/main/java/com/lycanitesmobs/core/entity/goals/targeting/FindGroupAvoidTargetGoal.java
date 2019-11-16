@@ -60,16 +60,6 @@ public class FindGroupAvoidTargetGoal extends FindAvoidTargetGoal {
 			return false;
 
 		// Group Check:
-		boolean shouldFlee = false;
-		boolean shouldPackHunt = false;
-		for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
-			if(group.shouldFlee(target)) {
-				shouldFlee = true;
-			}
-			if(group.shouldPackHunt(target)) {
-				shouldPackHunt = true;
-			}
-		}
-    	return shouldFlee && (!shouldPackHunt || !this.host.isInPack());
+		return this.shouldCreatureGroupFlee(this.host, target);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -164,20 +165,22 @@ public abstract class TargetingGoal extends Goal {
         if(this.allySelector == null || this.target == null)
             return;
         try {
-            double d0 = this.getTargetDistance();
-            List allies = this.host.getEntityWorld().getEntitiesWithinAABB(this.host.getClass(), this.host.getBoundingBox().grow(d0, 4.0D, d0), this.allySelector);
+            double targetDistance = this.getTargetDistance();
+            List allies = this.host.getEntityWorld().getEntitiesWithinAABB(BaseCreatureEntity.class, this.host.getBoundingBox().grow(targetDistance, 4.0D, targetDistance), this.allySelector);
             Iterator possibleAllies = allies.iterator();
 
-            while (possibleAllies.hasNext()) {
+            while(possibleAllies.hasNext()) {
                 LivingEntity possibleAlly = (LivingEntity)possibleAllies.next();
-                if(possibleAlly instanceof BaseCreatureEntity) {
-                    BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity)possibleAlly;
-                    if (possibleCreatureAlly.getAttackTarget() == null && !possibleAlly.isOnSameTeam(this.target) && possibleCreatureAlly.canAttack(this.target.getType()) && possibleCreatureAlly.canAttack(this.target))
-                        possibleCreatureAlly.setAttackTarget(this.target);
-                }
-                else {
-                    if (possibleAlly.getRevengeTarget() == null && !possibleAlly.isOnSameTeam(this.target))
-                        possibleAlly.setRevengeTarget(this.target);
+                if(!possibleAlly.isOnSameTeam(this.target) && possibleAlly.canAttack(this.target.getType())) {
+                    if (possibleAlly instanceof BaseCreatureEntity) {
+                        BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity) possibleAlly;
+                        if (possibleCreatureAlly.getAttackTarget() == null && possibleCreatureAlly.canAttack(this.target) && this.shouldCreatureGroupRevenge(possibleCreatureAlly, this.target))
+                            possibleCreatureAlly.setAttackTarget(this.target);
+                    }
+                    else {
+                        if (possibleAlly.getRevengeTarget() == null)
+                            possibleAlly.setRevengeTarget(this.target);
+                    }
                 }
             }
         }
@@ -264,16 +267,69 @@ public abstract class TargetingGoal extends Goal {
 		if(checkTarget instanceof PlayerEntity)
 			return false;
 
-        // Same Species:
-        if(checkTarget.getClass() != this.host.getClass())
+        // Protective:
+        if(checkTarget instanceof BaseCreatureEntity) {
+            if(!((BaseCreatureEntity)checkTarget).isProtective(this.host))
+                return false;
+        }
+        else if(checkTarget.getClass() != this.host.getClass()) {
             return false;
-
-        // Same Team:
-		if(!checkTarget.isOnSameTeam(this.host))
-			return false;
+        }
 
         // Sight Check:
         return !this.checkSight || this.host.getEntitySenses().canSee(checkTarget);
+    }
+
+    protected boolean shouldCreatureGroupHunt(BaseCreatureEntity creature, LivingEntity target) {
+        boolean shouldFlee = false;
+        boolean shouldHunt = false;
+        boolean shouldPackHunt = false;
+        for(CreatureGroup group : creature.creatureInfo.getGroups()) {
+            if(group.shouldFlee(target)) {
+                shouldFlee = true;
+            }
+            if(group.shouldHunt(target)) {
+                shouldHunt = true;
+            }
+            if(group.shouldPackHunt(target)) {
+                shouldPackHunt = true;
+            }
+        }
+        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
+        if(shouldFlee && !canPackHunt) {
+            return false;
+        }
+        return shouldHunt;
+    }
+
+    protected boolean shouldCreatureGroupFlee(BaseCreatureEntity creature, LivingEntity target) {
+        boolean shouldFlee = false;
+        boolean shouldPackHunt = false;
+        for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
+            if(group.shouldFlee(target)) {
+                shouldFlee = true;
+            }
+            if(group.shouldPackHunt(target)) {
+                shouldPackHunt = true;
+            }
+        }
+        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
+        return shouldFlee && !canPackHunt;
+    }
+
+    protected boolean shouldCreatureGroupRevenge(BaseCreatureEntity creature, LivingEntity target) {
+        boolean shouldRevenge = creature.creatureInfo.getGroups().isEmpty();
+        boolean shouldPackHunt = false;
+        for(CreatureGroup group : creature.creatureInfo.getGroups()) {
+            if (group.shouldRevenge(creature.getRevengeTarget())) {
+                shouldRevenge = true;
+            }
+            if (group.shouldPackHunt(creature.getRevengeTarget())) {
+                shouldPackHunt = true;
+            }
+        }
+        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
+        return shouldRevenge || canPackHunt;
     }
     
     

@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -103,6 +104,14 @@ public class EntityJoust extends AgeableCreatureEntity {
 		if(target instanceof EntityJoustAlpha)
 			return false;
 		return super.canAttack(target);
+	}
+
+	@Override
+	public boolean isProtective(Entity entity) {
+		if(entity instanceof EntityJoust) {
+			return true;
+		}
+		return super.isProtective(entity);
 	}
     
     

@@ -107,15 +107,19 @@ public class FindParentGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public boolean shouldExecute() {
-		if (this.host.updateTick % 20 != 0) {
+		if (this.host.updateTick % 20 != 0 || !this.host.shouldFindParent()) {
 			return false;
 		}
 
     	this.target = null;
-    	if(this.host.getGrowingAge() >= 0) {
+    	if(!this.host.shouldFollowParent()) {
     		this.host.setParentTarget(null);
     		return false;
     	}
+
+		if(this.host.hasParent()) {
+			return false;
+		}
     	
         if(this.host.updateTick % 20 != 0 && this.targetChance > 0 && this.host.getRNG().nextInt(this.targetChance) != 0)
             return false;

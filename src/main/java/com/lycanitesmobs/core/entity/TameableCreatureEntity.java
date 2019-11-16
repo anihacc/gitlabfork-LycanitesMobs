@@ -158,8 +158,10 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
         if(this.getPetEntry() != null) {
 			if(this.getPetEntry().entity != this && this.getPetEntry().entity != null)
 				return true;
-			if(this.getPetEntry().host == null || !this.getPetEntry().host.isAlive())
+			if(this.getPetEntry().host == null || !this.getPetEntry().host.isAlive()) {
+				this.getPetEntry().saveEntityNBT();
 				return true;
+			}
 		}
 
     	if(this.isTamed() && !this.isTemporary)
@@ -671,7 +673,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(PlayerEntity player) {
-    	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies()) {
+    	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies() && !this.isBoss()) {
 			if (this.rand.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();

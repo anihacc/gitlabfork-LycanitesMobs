@@ -274,6 +274,14 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 		return !this.isChild();
 	}
 
+	/**
+	 * Returns if this creature should look for a parent to follow if it has none already.
+	 * @return True if this creature should actively seek parents.
+	 */
+	public boolean shouldFindParent() {
+		return true;
+	}
+
 	
 	// ==================================================
   	//                        Size
@@ -318,6 +326,11 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	// ========== Love Check ==========
 	public boolean isInLove() {
 		return this.loveTime > 0;
+	}
+
+	// ========== Mate Check ==========
+	public boolean canMate() {
+		return this.isInLove();
 	}
 	
 	// ========== Breed ==========

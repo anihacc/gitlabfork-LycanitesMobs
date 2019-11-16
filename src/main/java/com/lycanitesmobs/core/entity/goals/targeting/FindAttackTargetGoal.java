@@ -99,11 +99,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		if(!this.tameTargeting && this.host.isTamed()) {
 			return false;
 		}
-
-		// Random Chance:
-		if(!this.host.rollAttackTargetChance(target)) {
-			return false;
-		}
     	
     	// Type Check:
     	if(!this.host.canAttack(target.getType()))
@@ -153,7 +148,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
         if(this.callForHelp)
             this.callNearbyForHelp();
 
-        return this.target != null;
+		return this.target != null && this.host.rollAttackTargetChance(this.target);
     }
 
 

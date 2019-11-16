@@ -57,7 +57,7 @@ public class MateGoal extends Goal {
   	// ==================================================
 	@Override
     public boolean shouldExecute() {
-        if(!this.host.isInLove()) {
+        if(!this.host.canMate()) {
 			return false;
 		}
         this.partner = this.getPartner();

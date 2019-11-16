@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -25,6 +26,12 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 	/** The maximum local area difficulty level. **/
 	public float difficultyMax = -1;
+
+	/** The minimum distance from world spawn. **/
+	public float spawnDistanceMin = -1;
+
+	/** The maximum distance from world spawn. **/
+	public float spawnDistanceMax = -1;
 
     /** The minimum level of the player. **/
     public int levelMin = -1;
@@ -76,6 +83,12 @@ public class PlayerSpawnCondition extends SpawnCondition {
 
 		if(json.has("difficultyMax"))
 			this.difficultyMax = json.get("difficultyMax").getAsFloat();
+
+		if(json.has("spawnDistanceMin"))
+			this.spawnDistanceMin = json.get("spawnDistanceMin").getAsFloat();
+
+		if(json.has("spawnDistanceMax"))
+			this.spawnDistanceMax = json.get("spawnDistanceMax").getAsFloat();
 
 		if(json.has("levelMin"))
 			this.levelMin = json.get("levelMin").getAsInt();
@@ -146,6 +159,14 @@ public class PlayerSpawnCondition extends SpawnCondition {
 			if (this.difficultyMax >= 0 && difficulty > this.difficultyMax) {
 				return false;
 			}
+		}
+
+		// Check Spawn Distance:
+		if(this.spawnDistanceMin >= 0 && player.getDistanceSq(new Vec3d(world.getSpawnPoint())) < this.spawnDistanceMin) {
+			return false;
+		}
+		if(this.spawnDistanceMax >= 0 && player.getDistanceSq(new Vec3d(world.getSpawnPoint())) > this.spawnDistanceMax) {
+			return false;
 		}
 
 		// Check Level:

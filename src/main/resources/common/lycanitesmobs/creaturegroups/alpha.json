@@ -2,7 +2,8 @@
 	"name": "alpha",
 	"loadDefault": true,
 	"hunt": [
-		"predator"
+		"predator",
+		"humanoid"
 	],
 	"pack": [],
 	"wary": [

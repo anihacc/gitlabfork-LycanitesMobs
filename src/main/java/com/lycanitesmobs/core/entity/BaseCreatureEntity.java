@@ -2721,7 +2721,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
     
     /** Returns true if this mob should defend other entities that cry for help. Used mainly by the revenge AI. **/
-    public boolean isProtective(Entity entity) { return true; }
+    public boolean isProtective(Entity entity) {
+    	return entity.getClass() == this.getClass();
+    }
 
     /** Returns true if this mob has an Attack Target. **/
     public boolean hasAttackTarget() {

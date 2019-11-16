@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.DefendEntitiesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
@@ -9,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,6 +41,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
     protected void registerGoals() {
         super.registerGoals();
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(this.getType()));
+		this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityMaka.class));
 
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
@@ -58,6 +61,14 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 				this.setAttackTarget(null);
 			}
 		}
+	}
+
+	@Override
+	public boolean isProtective(Entity entity) {
+		if(entity instanceof EntityMaka) {
+			return true;
+		}
+		return super.isProtective(entity);
 	}
 	
 	
@@ -94,7 +105,7 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 			return false;
     	if(target instanceof EntityMakaAlpha && (this.getHealth() / this.getMaxHealth() <= 0.25F || target.getHealth() / target.getMaxHealth() <= 0.25F))
     		return false;
-    	else return super.canAttack(target);
+    	return super.canAttack(target);
     }
 
     @Override
