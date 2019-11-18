@@ -2596,7 +2596,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(this.isFlying()) {
 			range += this.getFlightOffset();
 		}
-		return range;
+		return range * range;
 	}
 	
     // ========== Targets ==========
