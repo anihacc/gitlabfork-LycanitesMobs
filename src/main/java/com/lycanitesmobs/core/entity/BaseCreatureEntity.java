@@ -329,7 +329,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
     /** Used for the ANIMATION_STATE watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum ANIMATION_STATE_BITS {
-		ATTACKED((byte)1), GROUNDED((byte)2), IN_WATER((byte)4), BLOCKING((byte)8), MINION((byte)16), EXTRA01((byte)32);
+		ATTACKED((byte)1), GROUNDED((byte)2), IN_WATER((byte)4), BLOCKING((byte)8), MINION((byte)16), EXTRA01((byte)32), BOSS((byte)64);
 		public final byte id;
 	    ANIMATION_STATE_BITS(byte value) { this.id = value; }
 	    public byte getValue() { return id; }
@@ -1039,7 +1039,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
         String name = this.getFullName();
-        if(this.isBoss())
+        if(this.isBossAlways())
             name += " (Phase " + (this.getBattlePhase() + 1) + ")";
         this.bossInfo = (BossInfoServer)(new BossInfoServer(new TextComponentString(name), color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
     }
@@ -1809,6 +1809,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	if(this.extraAnimation01())
         		animations += ANIMATION_STATE_BITS.EXTRA01.id;
 
+			// Spawned As Boss Animation:
+			if(this.spawnedAsBoss)
+				animations += ANIMATION_STATE_BITS.BOSS.id;
+
         	this.dataManager.set(ANIMATION_STATE, animations);
         }
 
@@ -1826,6 +1830,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         	this.onGround = (animationState & ANIMATION_STATE_BITS.GROUNDED.id) > 0;
             this.inWater = (animationState & ANIMATION_STATE_BITS.IN_WATER.id) > 0;
         	this.extraAnimation01 = (animationState & ANIMATION_STATE_BITS.EXTRA01.id) > 0;
+			this.spawnedAsBoss = (animationState & ANIMATION_STATE_BITS.BOSS.id) > 0;
         }
 
         // Is Minion:
@@ -2587,9 +2592,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @return The attack range.
 	 */
 	public double getMeleeAttackRange() {
-		double range = this.width * 1.55D;
-		if(this.isCurrentlyFlying()) {
-			range += 0.5D;
+		double range = this.width + 1.5D;
+		if(this.isFlying()) {
+			range += this.getFlightOffset();
 		}
 		return range;
 	}
@@ -3324,7 +3329,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Returns true if this mob is currently flying. **/
     public boolean isCurrentlyFlying() { return this.isFlying(); }
     /** Can this entity by tempted (usually lured by an item) currently? **/
-    public boolean canBeTempted() { return !this.isRareSubspecies(); }
+    public boolean canBeTempted() {
+    	return !this.isRareSubspecies() && !this.spawnedAsBoss && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
+    }
     
     /** Called when the creature has eaten. Some special AIs use this such as EntityAIEatBlock. **/
     public void onEat() {}
@@ -4532,7 +4539,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
     // ========== Boss Info ==========
     public boolean showBossInfo() {
-        if(this.forceBossHealthBar || (this.isBoss() && this.isBossAlways()))
+        if(this.forceBossHealthBar || this.isBoss())
             return true;
         // Rare subspecies health bar:
         if(this.isRareSubspecies())

@@ -990,7 +990,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
     }
     
     // =========== Movement ==========
-    public boolean canBeTempted() { return !this.isTamed(); }
+    public boolean canBeTempted() { return super.canBeTempted(); }
 
     @Override
     public boolean shouldDismountInWater(Entity rider) {

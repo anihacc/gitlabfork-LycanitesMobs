@@ -307,7 +307,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
   	//                      Breeding
   	// ==================================================
     /** Can this entity by tempted (usually lured by an item) currently? **/
-    public boolean canBeTempted() { return !this.isInLove(); }
+    public boolean canBeTempted() { return !this.isInLove() && super.canBeTempted(); }
 
 	// ========== Targets ==========
 	public AgeableCreatureEntity getBreedingTarget() { return this.breedingTarget; }

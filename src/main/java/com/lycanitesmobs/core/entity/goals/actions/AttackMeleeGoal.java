@@ -240,8 +240,8 @@ public class AttackMeleeGoal extends EntityAIBase {
 	 * @return The maximum attack range.
 	 */
 	protected double getAttackRange(EntityLivingBase attackTarget) {
-		double range = this.host.getMeleeAttackRange();
-		range += this.attackRange + attackTarget.width;
-		return range;
+		double creatureRange = this.host.getMeleeAttackRange();
+		double targetSize = (attackTarget.width + 1) * (attackTarget.width + 1);
+		return creatureRange + targetSize + this.attackRange;
 	}
 }
