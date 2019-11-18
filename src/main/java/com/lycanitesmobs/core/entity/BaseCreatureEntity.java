@@ -308,7 +308,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
     /** Used for the ANIMATION_STATE watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum ANIMATION_STATE_BITS {
-		ATTACKED((byte)1), GROUNDED((byte)2), IN_WATER((byte)4), BLOCKING((byte)8), MINION((byte)16), EXTRA01((byte)32);
+		ATTACKED((byte)1), GROUNDED((byte)2), IN_WATER((byte)4), BLOCKING((byte)8), MINION((byte)16), EXTRA01((byte)32), BOSS((byte)64);
 		public final byte id;
 	    ANIMATION_STATE_BITS(byte value) { this.id = value; }
 	    public byte getValue() { return id; }
@@ -1009,7 +1009,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
 		ITextComponent name = this.getTitle();
-        if(this.isBoss())
+        if(this.isBossAlways())
             name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
         this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
     }
@@ -1626,6 +1626,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	if(this.extraAnimation01())
         		animations += ANIMATION_STATE_BITS.EXTRA01.id;
 
+			// Spawned As Boss Animation:
+			if(this.spawnedAsBoss)
+				animations += ANIMATION_STATE_BITS.BOSS.id;
+
         	this.dataManager.set(ANIMATION_STATE, animations);
         }
 
@@ -1643,6 +1647,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         	this.onGround = (animationState & ANIMATION_STATE_BITS.GROUNDED.id) > 0;
             this.inWater = (animationState & ANIMATION_STATE_BITS.IN_WATER.id) > 0;
         	this.extraAnimation01 = (animationState & ANIMATION_STATE_BITS.EXTRA01.id) > 0;
+        	this.spawnedAsBoss = (animationState & ANIMATION_STATE_BITS.BOSS.id) > 0;
         }
 
         // Is Minion:
@@ -3159,7 +3164,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Can this entity by tempted (usually lured by an item) currently? **/
     public boolean canBeTempted() {
-    	return !this.isRareSubspecies() && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
+    	return !this.isRareSubspecies() && !this.spawnedAsBoss && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
     }
 
 	@Override
@@ -4398,7 +4403,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // ========== Boss Info ==========
     public boolean showBossInfo() {
-        if(this.forceBossHealthBar || (this.isBoss() && this.isBossAlways()))
+        if(this.forceBossHealthBar || this.isBoss())
             return true;
         // Rare subspecies health bar:
         if(this.isRareSubspecies())
