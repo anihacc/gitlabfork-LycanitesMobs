@@ -28,8 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ItemEquipment extends ItemBase {
 	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
@@ -288,6 +287,19 @@ public class ItemEquipment extends ItemBase {
 	// ==================================================
 	//                     Harvesting
 	// ==================================================
+	@Override
+	public Set<String> getToolClasses(ItemStack itemStack) {
+		Map<String, Boolean> toolTypes = new HashMap<>();
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			String toolType = harvestFeature.getToolType();
+			if(toolType != null) {
+				toolTypes.put(toolType, true);
+			}
+		}
+		return toolTypes.keySet();
+	}
+
 	@Override
 	public int getHarvestLevel(ItemStack itemStack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
 		int harvestLevel = -1;
