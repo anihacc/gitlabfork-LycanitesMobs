@@ -6,7 +6,9 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -68,6 +70,9 @@ public class CreatureGroup {
 	/** If true, this group includes Blazes and Magma Cubes. **/
 	public boolean inferno = false;
 
+	/** A list of additional entity ids in this group. **/
+	public List<String> entityIds = new ArrayList<>();
+
 	/**
 	 * Loads this creature group from json.
 	 */
@@ -111,6 +116,9 @@ public class CreatureGroup {
 		}
 		if(json.has("inferno")) {
 			this.inferno = json.get("inferno").getAsBoolean();
+		}
+		if(json.has("entityIds")) {
+			this.entityIds = JSONHelper.getJsonStrings(json.get("entityIds").getAsJsonArray());
 		}
 	}
 
@@ -185,6 +193,13 @@ public class CreatureGroup {
 	 * @return True if the entity is in this group, otherwise false.
 	 */
 	public boolean hasEntity(@Nonnull Entity entity) {
+		if(entity instanceof BaseCreatureEntity) {
+			return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
+		}
+		if(!(entity instanceof LivingEntity)) {
+			return false;
+		}
+
 		if(this.animals && entity instanceof AnimalEntity) {
 			return true;
 		}
@@ -200,10 +215,17 @@ public class CreatureGroup {
 		if(this.inferno && (entity.getType() == EntityType.BLAZE || entity.getType() == EntityType.MAGMA_CUBE)) {
 			return true;
 		}
-		if(!(entity instanceof BaseCreatureEntity)) {
+
+		ResourceLocation entityResourceLocation = entity.getType().getRegistryName();
+		if(entityResourceLocation == null) {
 			return false;
 		}
-		return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
+		String entityId = entityResourceLocation.toString();
+		if(this.entityIds.contains(entityId)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
