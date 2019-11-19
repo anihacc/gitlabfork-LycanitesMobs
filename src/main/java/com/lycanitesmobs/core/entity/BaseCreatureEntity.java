@@ -1038,7 +1038,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     }
 
     public void createBossInfo(BossInfo.Color color, boolean darkenSky) {
-        String name = this.getFullName();
+        String name = this.getName();
         if(this.isBossAlways())
             name += " (Phase " + (this.getBattlePhase() + 1) + ")";
         this.bossInfo = (BossInfoServer)(new BossInfoServer(new TextComponentString(name), color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);

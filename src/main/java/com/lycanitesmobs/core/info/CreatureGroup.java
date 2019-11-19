@@ -5,10 +5,13 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -70,6 +73,9 @@ public class CreatureGroup {
 	/** If true, this group includes Blazes and Magma Cubes. **/
 	public boolean inferno = false;
 
+	/** A list of additional entity ids in this group. **/
+	public List<String> entityIds = new ArrayList<>();
+
 	/**
 	 * Loads this creature group from json.
 	 */
@@ -113,6 +119,9 @@ public class CreatureGroup {
 		}
 		if(json.has("inferno")) {
 			this.inferno = json.get("inferno").getAsBoolean();
+		}
+		if(json.has("entityIds")) {
+			this.entityIds = JSONHelper.getJsonStrings(json.get("entityIds").getAsJsonArray());
 		}
 	}
 
@@ -187,6 +196,13 @@ public class CreatureGroup {
 	 * @return True if the entity is in this group, otherwise false.
 	 */
 	public boolean hasEntity(@Nonnull Entity entity) {
+		if(entity instanceof BaseCreatureEntity) {
+			return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
+		}
+		if(!(entity instanceof EntityLivingBase)) {
+			return false;
+		}
+
 		if(this.animals && entity instanceof EntityAnimal) {
 			return true;
 		}
@@ -202,10 +218,17 @@ public class CreatureGroup {
 		if(this.inferno && (entity instanceof EntityBlaze || entity instanceof EntityMagmaCube)) {
 			return true;
 		}
-		if(!(entity instanceof BaseCreatureEntity)) {
+
+		ResourceLocation entityResourceLocation = EntityList.getKey(entity);
+		if(entityResourceLocation == null) {
 			return false;
 		}
-		return ((BaseCreatureEntity)entity).creatureInfo.groups.contains(this);
+		String entityId = entityResourceLocation.toString();
+		if(this.entityIds.contains(entityId)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
