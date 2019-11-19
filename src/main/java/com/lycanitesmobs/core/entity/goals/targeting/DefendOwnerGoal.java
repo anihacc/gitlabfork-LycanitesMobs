@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,7 +51,7 @@ public class DefendOwnerGoal extends TargetingGoal {
     protected EntityLivingBase getTarget() { return this.host.getAttackTarget(); }
     @Override
     protected void setTarget(EntityLivingBase newTarget) { this.host.setAttackTarget(newTarget); }
-    protected Entity getOwner() { return this.host.getOwner(); }
+    protected Entity getOwner() { return this.tamedHost.getPlayerOwner(); }
     
     
     // ==================================================
@@ -90,10 +90,10 @@ public class DefendOwnerGoal extends TargetingGoal {
 		}
 
         // Threat Check:
-        if(target instanceof IMob && !(target instanceof EntityTameable) && !(target instanceof BaseCreatureEntity)) {
+        if(target instanceof IMob && !(target instanceof IEntityOwnable) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.tamedHost.getOwner())) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.getOwner())) {
             return true;
         }
         else if(target instanceof EntityLiving && ((EntityLiving)target).getAttackTarget() == this.getOwner()) {
