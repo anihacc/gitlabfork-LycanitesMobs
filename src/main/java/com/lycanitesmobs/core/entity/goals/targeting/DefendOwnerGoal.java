@@ -50,7 +50,7 @@ public class DefendOwnerGoal extends TargetingGoal {
     protected LivingEntity getTarget() { return this.host.getAttackTarget(); }
     @Override
     protected void setTarget(LivingEntity newTarget) { this.host.setAttackTarget(newTarget); }
-    protected Entity getOwner() { return this.host.getOwner(); }
+    protected Entity getOwner() { return this.tamedHost.getPlayerOwner(); }
     
     
     // ==================================================
@@ -92,7 +92,7 @@ public class DefendOwnerGoal extends TargetingGoal {
         if(target instanceof IMob && !(target instanceof TameableEntity) && !(target instanceof BaseCreatureEntity)) {
             return true;
         }
-        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.tamedHost.getOwner())) {
+        else if(target instanceof BaseCreatureEntity && ((BaseCreatureEntity)target).isHostileTo(this.getOwner())) {
             return true;
         }
         else if(target instanceof MobEntity && ((MobEntity)target).getAttackTarget() == this.getOwner()) {
