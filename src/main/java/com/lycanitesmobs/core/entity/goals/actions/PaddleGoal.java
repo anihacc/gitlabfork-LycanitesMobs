@@ -20,7 +20,7 @@ public class PaddleGoal extends Goal {
         this.host = setEntity;
         if(setEntity.getNavigator() instanceof GroundPathNavigator || setEntity.getNavigator() instanceof CreaturePathNavigator)
             setEntity.getNavigator().setCanSwim(true);
-		this.sink = this.host.canBreatheUnderwater() || this.host.canBreatheUnderlava();
+		this.sink = this.host.canBreatheUnderwater() || (this.host.canBreatheUnderlava() && this.host.isLavaCreature);
     }
     
     
@@ -70,16 +70,14 @@ public class PaddleGoal extends Goal {
                 }
 	    	}
 
-			if(!this.host.isStrongSwimmer()) {
-				if (this.host.posY < targetY) {
-					this.host.getJumpController().setJumping();
-				}
-				else {
-					this.host.addVelocity(0, -(0.01F + this.host.getAIMoveSpeed() * 0.25F), 0);
-				}
+			if (this.host.posY < targetY) {
+				this.host.getJumpController().setJumping();
+			}
+			else {
+				this.host.addVelocity(0, -(0.01F + this.host.getAIMoveSpeed() * 0.25F), 0);
 			}
     	}
-    	else if(this.host.getRNG().nextFloat() < 0.8F && !this.host.isStrongSwimmer()) {
+    	else if(this.host.getRNG().nextFloat() < 0.8F) {
 			this.host.getJumpController().setJumping();
 		}
     }
