@@ -45,13 +45,9 @@ public abstract class TargetingGoal extends Goal {
     public TargetingGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 
-        if(this.host.noClip) {
-            this.checkSight = false;
-        }
-
         this.targetSelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-            if(this.checkSight && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
                 return false;
             }
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isEntityTargetable(entity, false);
@@ -59,7 +55,7 @@ public abstract class TargetingGoal extends Goal {
 
         this.allySelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-			if(this.checkSight && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+			if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
 				return false;
 			}
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isAllyTarget(entity);
@@ -96,7 +92,7 @@ public abstract class TargetingGoal extends Goal {
         if(this.host.getDistance(this.getTarget()) > distance)
             return false;
         
-        if(this.checkSight)
+        if(this.shouldCheckSight())
             if(this.host.getEntitySenses().canSee(this.getTarget()))
                 this.cantSeeTime = 0;
             else if(++this.cantSeeTime > this.cantSeeTimeMax)
@@ -229,7 +225,7 @@ public abstract class TargetingGoal extends Goal {
             return false;
         
         // Sight Check:
-        if(this.checkSight && !checkTarget.isPotionActive(Effects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
+        if(this.shouldCheckSight() && !checkTarget.isPotionActive(Effects.GLOWING) && !this.host.getEntitySenses().canSee(checkTarget)) // Glowing
             return false;
         
         // Nearby Check:
@@ -243,6 +239,14 @@ public abstract class TargetingGoal extends Goal {
         }
         
         return true;
+    }
+
+    /**
+     * Returns if this targeting goal should check for clear sight.
+     * @return True if sight should be checked.
+     */
+    protected boolean shouldCheckSight() {
+        return this.checkSight && !this.host.canSeeThroughWalls();
     }
 
 	/**
@@ -281,7 +285,7 @@ public abstract class TargetingGoal extends Goal {
         }
 
         // Sight Check:
-        return !this.checkSight || this.host.getEntitySenses().canSee(checkTarget);
+        return !this.shouldCheckSight() || this.host.getEntitySenses().canSee(checkTarget);
     }
 
     protected boolean shouldCreatureGroupHunt(BaseCreatureEntity creature, LivingEntity target) {
