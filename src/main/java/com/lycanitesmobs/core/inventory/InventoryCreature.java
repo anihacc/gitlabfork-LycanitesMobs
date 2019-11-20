@@ -170,7 +170,7 @@ public class InventoryCreature implements IInventory {
 	// ==================================================
   	//                      Actions
   	// ==================================================
-	public void onInventoryChanged() {
+	public void onInventoryChanged(boolean refresh) {
 		if(this.creature.getEntityWorld().isRemote)
 			return;
 		
@@ -196,8 +196,9 @@ public class InventoryCreature implements IInventory {
             else
 			    this.creature.getDataManager().set(dataParameter, itemStack);
 		}
-		
-		this.creature.scheduleGUIRefresh();
+
+        if(refresh)
+			this.creature.scheduleGUIRefresh();
 	}
 	
 	@Override
@@ -246,7 +247,7 @@ public class InventoryCreature implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slotID, ItemStack itemStack) {
 		this.setInventorySlotContentsNoUpdate(slotID, itemStack);
-        this.onInventoryChanged();
+        this.onInventoryChanged("bag".equals(this.getTypeFromSlot(slotID)));
 	}
 	
 	public void setInventorySlotContentsNoUpdate(int slotID, ItemStack itemStack) {
@@ -268,7 +269,7 @@ public class InventoryCreature implements IInventory {
 	public ItemStack decrStackSize(int slot, int amount) {
 		ItemStack[] splitStacks = this.decrStackSize(this.getStackInSlot(slot), amount);
 		this.setInventorySlotContents(slot, splitStacks[0]);
-        this.onInventoryChanged();
+        this.onInventoryChanged(false);
 		return splitStacks[1];
 	}
 
@@ -557,7 +558,7 @@ public class InventoryCreature implements IInventory {
 				}
             }
     	}
-    	this.onInventoryChanged();
+    	this.onInventoryChanged(false);
     }
     
     // ========== Write ==========
