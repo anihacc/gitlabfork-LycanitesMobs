@@ -1521,7 +1521,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 
         if(this.despawnCheck()) {
-            if(!this.isBoundPet() || this.isMinion())
+            if(!this.isBoundPet() || this.isTemporary)
         	    this.inventory.dropInventory();
         	this.setDead();
         }

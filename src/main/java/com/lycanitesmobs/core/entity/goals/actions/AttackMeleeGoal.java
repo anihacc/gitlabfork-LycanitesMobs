@@ -185,10 +185,9 @@ public class AttackMeleeGoal extends EntityAIBase {
         this.host.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
 
 		// Path To Target:
-		if((this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) && --this.repathTime <= 0) {
-			this.repathTime = failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
-
-        	if(!this.host.useDirectNavigator()) {
+		if(this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) {
+        	if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
+				this.repathTime = failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
 				if(this.host.isFlying()) {
 					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, this.speed);
 				}
@@ -208,7 +207,7 @@ public class AttackMeleeGoal extends EntityAIBase {
 					failedPathFindingPenalty += failedPathFindingPenaltyMax;
 				}
         	}
-        	else {
+        	else if(this.host.useDirectNavigator()) {
         		this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.posX, (int) (attackTarget.getEntityBoundingBox().minY + this.host.getFlightOffset()), (int) attackTarget.posZ), speed);
         	}
         }

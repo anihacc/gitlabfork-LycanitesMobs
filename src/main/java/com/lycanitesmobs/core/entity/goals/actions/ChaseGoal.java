@@ -50,12 +50,12 @@ public class ChaseGoal extends EntityAIBase {
 		}
         //else if(this.host.getDistance(this.target) > (double)(this.maxTargetDistance * this.maxTargetDistance))
             //return false;
-        
-        Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.posX, this.target.posY, this.target.posZ));
-        if(vec3 == null)
-            return false;
-        
-        this.movePos = new BlockPos(vec3.x, vec3.y, vec3.z);
+
+		Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.posX, this.target.posY, this.target.posZ));
+		if (vec3 == null)
+			return false;
+		this.movePos = new BlockPos(vec3.x, vec3.y, vec3.z);
+
         return true;
     }
 	
@@ -72,7 +72,7 @@ public class ChaseGoal extends EntityAIBase {
 		if(!fixated && this.target.getDistance(this.host) > (double)(this.maxTargetDistance * this.maxTargetDistance)) {
 			return false;
 		}
-		if (this.host.getNavigator().noPath()) {
+		if (!this.host.useDirectNavigator() && this.host.getNavigator().noPath()) {
 			return this.shouldExecute();
 		}
     	return true;
