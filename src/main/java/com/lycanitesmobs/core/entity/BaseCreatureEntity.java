@@ -3124,6 +3124,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		return true;
 	}
 
+	/** Returns true if this entity can see through walls. **/
+	public boolean canSeeThroughWalls() {
+		return false;
+	}
+
     /** Returns this entity's Owner Target. **/
     public Entity getOwner() {
     	return null;

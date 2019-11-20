@@ -77,6 +77,11 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     public boolean useDirectNavigator() {
         return true;
     }
+
+    @Override
+    public boolean canSeeThroughWalls() {
+        return true;
+    }
     
     
     // ==================================================
