@@ -45,6 +45,10 @@ public abstract class TargetingGoal extends Goal {
     public TargetingGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
 
+        if(this.host.noClip) {
+            this.checkSight = false;
+        }
+
         this.targetSelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
             if(this.checkSight && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
