@@ -79,7 +79,7 @@ public class RandomPositionGenerator {
             	possibleZ += MathHelper.floor(entity.posZ);
                 BlockPos possiblePos = new BlockPos(possibleX, possibleY, possibleZ);
 
-                if((!pastHome || entity.positionNearHome(possibleX, possibleY, possibleZ)) && pathNavigate.canEntityStandOnPos(possiblePos)) {
+                if((!pastHome || entity.positionNearHome(possibleX, possibleY, possibleZ)) && (entity.useDirectNavigator() || pathNavigate.canEntityStandOnPos(possiblePos))) {
                     float pathWeight = entity.getBlockPathWeight(possibleX, possibleY, possibleZ);
                     if(pathWeight > pathMin) {
                     	pathMin = pathWeight;

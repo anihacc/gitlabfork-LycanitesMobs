@@ -1345,7 +1345,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.onSyncUpdate();
 
         if(this.despawnCheck()) {
-            if(!this.isBoundPet() || this.isMinion())
+            if(!this.isBoundPet() || this.isTemporary)
         	    this.inventory.dropInventory();
         	this.remove();
         }
