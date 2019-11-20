@@ -10,6 +10,8 @@
 		"boss"
 	],
 	"flee":  [],
-	"ignore": [],
+	"ignore": [
+		"boss"
+	],
 	"default": "retaliate"
 }

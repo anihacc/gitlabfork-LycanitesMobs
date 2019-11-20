@@ -5,6 +5,8 @@
 	"pack": [],
 	"wary": [],
 	"flee":  [],
-	"ignore": [],
+	"ignore": [
+		"boss"
+	],
 	"default": "wary"
 }

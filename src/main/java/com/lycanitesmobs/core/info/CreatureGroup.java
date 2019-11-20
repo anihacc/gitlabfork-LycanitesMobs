@@ -224,9 +224,8 @@ public class CreatureGroup {
 			return false;
 		}
 		String entityId = entityResourceLocation.toString();
-		if(this.entityIds.contains(entityId)) {
+		if(this.entityIds.contains(entityId))
 			return true;
-		}
 
 		return false;
 	}
@@ -237,15 +236,15 @@ public class CreatureGroup {
 	 * @return True if this group should retaliate.
 	 */
 	public boolean shouldRevenge(Entity entity) {
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
 		for(CreatureGroup group : this.waryGroups) {
 			if(group.hasEntity(entity))
 				return false;
 		}
 		for(CreatureGroup group : this.fleeGroups) {
-			if(group.hasEntity(entity))
-				return false;
-		}
-		for(CreatureGroup group : this.ignoreGroups) {
 			if(group.hasEntity(entity))
 				return false;
 		}
@@ -258,6 +257,10 @@ public class CreatureGroup {
 	 * @return True if this group should hunt.
 	 */
 	public boolean shouldHunt(Entity entity) {
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
 		for(CreatureGroup group : this.huntGroups) {
 			if(group.hasEntity(entity))
 				return true;
@@ -271,6 +274,10 @@ public class CreatureGroup {
 	 * @return True if this group should hunt when in a pack.
 	 */
 	public boolean shouldPackHunt(Entity entity) {
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
 		for(CreatureGroup group : this.packGroups) {
 			if(group.hasEntity(entity))
 				return true;
