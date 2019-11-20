@@ -10,6 +10,8 @@
 		"predator",
 		"boss"
 	],
-	"ignore": [],
+	"ignore": [
+		"boss"
+	],
 	"default": "wary"
 }

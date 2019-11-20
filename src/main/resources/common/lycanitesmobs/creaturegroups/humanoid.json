@@ -9,7 +9,9 @@
 		"predator",
 		"monster"
 	],
-	"ignore": [],
+	"ignore": [
+		"boss"
+	],
 	"default": "wary",
 	"humanoids": true
 }

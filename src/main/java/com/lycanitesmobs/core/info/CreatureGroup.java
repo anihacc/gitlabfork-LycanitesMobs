@@ -255,6 +255,10 @@ public class CreatureGroup {
 	 * @return True if this group should hunt.
 	 */
 	public boolean shouldHunt(Entity entity) {
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
 		for(CreatureGroup group : this.huntGroups) {
 			if(group.hasEntity(entity))
 				return true;
@@ -268,6 +272,10 @@ public class CreatureGroup {
 	 * @return True if this group should hunt when in a pack.
 	 */
 	public boolean shouldPackHunt(Entity entity) {
+		for(CreatureGroup group : this.ignoreGroups) {
+			if(group.hasEntity(entity))
+				return false;
+		}
 		for(CreatureGroup group : this.packGroups) {
 			if(group.hasEntity(entity))
 				return true;
