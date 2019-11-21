@@ -6,8 +6,8 @@
 	"changeTheme": false,
 	"tileSpawners": false,
 	"tileChests": false,
-	"sizeMin": [16, 9, 16],
-	"sizeMax": [32, 9, 32],
+	"sizeMin": [32, 12, 32],
+	"sizeMax": [40, 15, 40],
 	"floor": [
 		{
 			"layer": 0,
