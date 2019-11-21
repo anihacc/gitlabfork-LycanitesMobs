@@ -179,7 +179,7 @@ public class FearEntity extends BaseCreatureEntity {
     		if(this.pickupEntity instanceof EntityFlying)
     			return true;
     		if(this.pickupEntity instanceof EntityPlayer)
-    			return ((EntityPlayer)this.pickupEntity).capabilities.isFlying;
+    			return ((EntityPlayer)this.pickupEntity).capabilities.isCreativeMode;
     	}
     	return false;
     }

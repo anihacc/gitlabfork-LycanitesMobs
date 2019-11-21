@@ -238,10 +238,10 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
 			return CreatureManager.getInstance().getEntityClass("zephyr");
 		}
 		if(fusable instanceof EntityAegis) {
-			return CreatureManager.getInstance().getEntityClass("aegis");
+			return CreatureManager.getInstance().getEntityClass("wisp");
 		}
 		if(fusable instanceof EntityArgus) {
-			return CreatureManager.getInstance().getEntityClass("argus");
+			return CreatureManager.getInstance().getEntityClass("grue");
 		}
 		return null;
 	}
