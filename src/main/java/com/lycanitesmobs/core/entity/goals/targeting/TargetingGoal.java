@@ -84,7 +84,9 @@ public abstract class TargetingGoal extends Goal {
     public boolean shouldContinueExecuting() {
         if(this.getTarget() == null)
             return false;
-        if(!this.isEntityTargetable(this.getTarget(), true))
+        if(!this.getTarget().isAlive())
+            return false;
+        if(this.shouldStopTargeting(this.getTarget()))
             return false;
 
         // Target Out of Range:
@@ -99,6 +101,10 @@ public abstract class TargetingGoal extends Goal {
                 return false;
         
         return true;
+    }
+
+    public boolean shouldStopTargeting(LivingEntity target) {
+        return false;
     }
     
     

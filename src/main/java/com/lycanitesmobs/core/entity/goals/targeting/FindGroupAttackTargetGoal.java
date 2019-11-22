@@ -89,38 +89,6 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 	// ==================================================
 	@Override
 	public LivingEntity getNewTarget(double rangeX, double rangeY, double rangeZ) {
-		// Faster Player Targeting:
-		if(this.targetPlayers) {
-			LivingEntity newTarget = null;
-			try {
-				List<? extends PlayerEntity> players = this.host.getEntityWorld().getPlayers();
-				if (players.isEmpty())
-					return null;
-				List<PlayerEntity> possibleTargets = new ArrayList<>();
-				for(PlayerEntity player : players) {
-					if(this.isValidTarget(player))
-						possibleTargets.add(player);
-				}
-				if (possibleTargets.isEmpty())
-					return null;
-				Collections.sort(possibleTargets, this.nearestSorter);
-				newTarget = possibleTargets.get(0);
-			}
-			catch (Exception e) {
-				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
-				e.printStackTrace();
-			}
-
-			// Return player target unless other entities should also be targeted.
-			if(newTarget != null) {
-				return newTarget;
-			}
-		}
-
-		if(this.host.updateTick % 40 == 0) {
-			return super.getNewTarget(rangeX, rangeY, rangeZ);
-		}
-
-		return null;
+		return super.getNewTarget(rangeX, rangeY, rangeZ);
 	}
 }

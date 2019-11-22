@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +24,21 @@ public class FindAttackTargetGoal extends TargetingGoal {
     public FindAttackTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
+
+		for(CreatureGroup group : setHost.creatureInfo.groups) {
+			for(CreatureGroup targetGroup : group.huntGroups) {
+				if (targetGroup.humanoids) {
+					this.targetPlayers = true;
+					break;
+				}
+			}
+			for(CreatureGroup targetGroup : group.packGroups) {
+				if (targetGroup.humanoids) {
+					this.targetPlayers = true;
+					break;
+				}
+			}
+		}
     }
 
 
@@ -101,8 +117,9 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
     	
     	// Type Check:
-    	if(!this.host.canAttack(target.getType()))
-            return false;
+    	if(!this.host.canAttack(target.getType())) {
+			return false;
+		}
 
         // Entity Check:
 		if(!this.host.canAttack(target)) {
@@ -151,6 +168,11 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		return this.target != null && this.host.rollAttackTargetChance(this.target);
     }
 
+	@Override
+	public boolean shouldStopTargeting(LivingEntity target) {
+		return !this.isValidTarget(target);
+	}
+
 
 	// ==================================================
 	//                  Get New Target
@@ -180,7 +202,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 			}
 
 			// Return player target unless other entities should also be targeted.
-			if(newTarget != null || this.targetTypes.size() == 1) {
+			if(newTarget != null) {
 				return newTarget;
 			}
 		}

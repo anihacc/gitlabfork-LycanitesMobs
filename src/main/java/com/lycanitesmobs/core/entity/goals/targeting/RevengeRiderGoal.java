@@ -97,27 +97,30 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 
 
 	// ==================================================
+	//                  Continue Executing
+	// ==================================================
+	@Override
+	public boolean shouldStopTargeting(LivingEntity target) {
+		return target != this.getRiderRevengeTarget();
+	}
+
+
+	// ==================================================
 	//                    Rider Revenge
 	// ==================================================
 	public LivingEntity getRiderRevengeTarget() {
-		LivingEntity revengeTarget = this.host.getRider().getRevengeTarget();
-		if(revengeTarget == null) {
-			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
-			if(extendedEntity != null) {
-				revengeTarget = extendedEntity.lastAttackedEntity;
-			}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+		if(extendedEntity != null) {
+			return extendedEntity.lastAttackedEntity;
 		}
-		return revengeTarget;
+		return null;
 	}
 
 	public int getRiderRevengeTime() {
-		int revengeTime = this.host.getRider().getRevengeTimer();
-		if(revengeTime == 0) {
-			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
-			if(extendedEntity != null) {
-				revengeTime = extendedEntity.lastAttackedTime;
-			}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+		if(extendedEntity != null) {
+			return extendedEntity.lastAttackedTime;
 		}
-		return revengeTime;
+		return 0;
 	}
 }
