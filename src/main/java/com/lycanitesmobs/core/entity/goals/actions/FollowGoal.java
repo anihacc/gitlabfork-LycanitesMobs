@@ -68,16 +68,18 @@ public abstract class FollowGoal extends Goal {
 	@Override
     public boolean shouldExecute() {
     	Entity target = this.getTarget();
-	    if(target == null)
+	    if(target == null || target == this.host)
 	        return false;
         if(!target.isAlive())
         	return false;
 
 		double distance = this.host.getDistance(target);
-	    if(distance > this.lostDistance && this.lostDistance != 0)
-	        return false;
-	    if(distance <= this.strayDistance && this.strayDistance != 0)
-	        return false;
+	    if(distance > this.lostDistance && this.lostDistance != 0) {
+			return false;
+		}
+	    if(distance <= this.strayDistance && this.strayDistance != 0) {
+			return false;
+		}
 	    
         return true;
     }
@@ -94,12 +96,15 @@ public abstract class FollowGoal extends Goal {
         if(!target.isAlive())
         	return false;
         
-        double distance = this.host.getDistance(target);
-        if(distance > this.lostDistance && this.lostDistance != 0)
-        	this.setTarget(null);
+        double distance = this.host.getDistanceSq(target);
+        if(distance > this.lostDistance && this.lostDistance != 0) {
+			this.setTarget(null);
+			return false;
+		}
         // Start straying when we reach halfway between the stray radius and the target
-        if(distance <= this.strayDistance / 2.0 && this.strayDistance != 0)
-        	return false;
+        if(distance <= this.strayDistance / 2.0 && this.strayDistance != 0) {
+			return false;
+		}
 		this.onTargetDistance(distance, target);
         
         return this.getTarget() != null;
@@ -121,7 +126,7 @@ public abstract class FollowGoal extends Goal {
 	@Override
     public void tick() {
         if(this.updateRate-- <= 0) {
-            this.updateRate = 10;
+			this.updateRate = 60;
             Entity target = this.getTarget();
         	if(!this.host.useDirectNavigator()) {
         		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity)) {

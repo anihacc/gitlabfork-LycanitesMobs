@@ -50,7 +50,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(0.5D));
+		this.goalSelector.addGoal(this.nextTravelGoalIndex++, new FollowParentGoal(this).setSpeed(1.0D).setStrayDistance(0));
         super.registerGoals();
     }
 
@@ -226,6 +226,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     		return 0.0D;
     	return super.getFallingMod();
     }
+
+    @Override
+	public boolean useDirectNavigator() {
+    	return true;
+	}
     
     
     // ==================================================

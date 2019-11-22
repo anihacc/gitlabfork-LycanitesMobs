@@ -78,10 +78,9 @@ public class FindParentGoal extends TargetingGoal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(target.getClass()))
             return false;
 
-        if(target instanceof AnimalEntity && ((AnimalEntity)target).getGrowingAge() < 0)
-            return false;
-    	if(target instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)target).getGrowingAge() < 0)
-            return false;
+		if(target.isChild()) {
+			return false;
+		}
         
         // Tamed Checks:
         if(!this.tameTargeting && this.host instanceof TameableCreatureEntity && this.host.isTamed())
