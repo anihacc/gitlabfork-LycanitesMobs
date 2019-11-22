@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
 import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.EntityLiving;
@@ -85,7 +86,9 @@ public abstract class TargetingGoal extends EntityAIBase {
     public boolean shouldContinueExecuting() {
         if(this.getTarget() == null)
             return false;
-        if(!this.isEntityTargetable(this.getTarget(), true)) {
+        if(!this.getTarget().isEntityAlive())
+            return false;
+        if(this.shouldStopTargeting(this.getTarget())) {
             return false;
         }
 
@@ -101,6 +104,10 @@ public abstract class TargetingGoal extends EntityAIBase {
                 return false;
         
         return true;
+    }
+
+    public boolean shouldStopTargeting(EntityLivingBase target) {
+        return false;
     }
     
     

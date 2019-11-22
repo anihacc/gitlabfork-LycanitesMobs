@@ -3611,7 +3611,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	int subspeciesScale = 1;
     	if(this.isRareSubspecies())
     		subspeciesScale = Subspecies.rareDropScale;
-    	else if(this.getSubspecies() == null || "uncommon".equals(this.getSubspecies().rarity))
+    	else if(this.getSubspecies() != null && "uncommon".equals(this.getSubspecies().rarity))
     		subspeciesScale = Subspecies.uncommonDropScale;
 
     	for(ItemDrop itemDrop : this.drops) {

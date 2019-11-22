@@ -59,9 +59,8 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 			return false;
     	if(this.host.getRider() == null)
     		return false;
-        int i = this.getRiderRevengeTime();
-		if(i == this.revengeTime)
-        	return false;
+		if(this.getRiderRevengeTime() == this.revengeTime)
+			return false;
         if(!this.isEntityTargetable(this.getRiderRevengeTarget(), false))
         	return false;
         return true;
@@ -98,27 +97,39 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 
 
 	// ==================================================
+	//                  Continue Executing
+	// ==================================================
+	@Override
+	public boolean shouldStopTargeting(EntityLivingBase target) {
+		return target != this.getRiderRevengeTarget();
+	}
+
+
+	// ==================================================
+	//                 Valid Target Check
+	// ==================================================
+	@Override
+	protected boolean isValidTarget(EntityLivingBase target) {
+		return true;
+	}
+
+
+	// ==================================================
 	//                    Rider Revenge
 	// ==================================================
     public EntityLivingBase getRiderRevengeTarget() {
-		EntityLivingBase revengeTarget = this.host.getRider().getRevengeTarget();
-		if(revengeTarget == null) {
-			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
-			if(extendedEntity != null) {
-				revengeTarget = extendedEntity.lastAttackedEntity;
-			}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+		if(extendedEntity != null) {
+			return extendedEntity.lastAttackedEntity;
 		}
-		return revengeTarget;
+		return null;
 	}
 
 	public int getRiderRevengeTime() {
-		int revengeTime = this.host.getRider().getRevengeTimer();
-		if(revengeTime == 0) {
-			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
-			if(extendedEntity != null) {
-				revengeTime = extendedEntity.lastAttackedTime;
-			}
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+		if(extendedEntity != null) {
+			return extendedEntity.lastAttackedTime;
 		}
-		return revengeTime;
+		return 0;
 	}
 }

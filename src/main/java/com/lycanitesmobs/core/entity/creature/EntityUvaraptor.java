@@ -96,7 +96,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
     		return;
     	
     	this.playJumpSound();
-    	this.leap(1.0D, 1.5D);
+    	this.leap(1.0D, 2D);
     	
     	this.applyStaminaCost();
     }

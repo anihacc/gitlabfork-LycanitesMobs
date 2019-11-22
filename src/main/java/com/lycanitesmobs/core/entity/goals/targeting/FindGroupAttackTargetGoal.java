@@ -1,13 +1,8 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 
@@ -16,6 +11,21 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
   	// ==================================================
     public FindGroupAttackTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
+
+        for(CreatureGroup group : setHost.creatureInfo.groups) {
+			for(CreatureGroup targetGroup : group.huntGroups) {
+				if (targetGroup.humanoids) {
+					this.targetPlayers = true;
+					break;
+				}
+			}
+			for(CreatureGroup targetGroup : group.packGroups) {
+				if (targetGroup.humanoids) {
+					this.targetPlayers = true;
+					break;
+				}
+			}
+		}
     }
 
 
@@ -91,38 +101,6 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 	// ==================================================
 	@Override
 	public EntityLivingBase getNewTarget(double rangeX, double rangeY, double rangeZ) {
-		// Faster Player Targeting:
-		if(this.targetPlayers) {
-			EntityLivingBase newTarget = null;
-			try {
-				List<? extends EntityPlayer> players = this.host.getEntityWorld().getPlayers(EntityPlayer.class, this.targetSelector);
-				if (players.isEmpty())
-					return null;
-				List<EntityPlayer> possibleTargets = new ArrayList<>();
-				for(EntityPlayer player : players) {
-					if(this.isValidTarget(player))
-						possibleTargets.add(player);
-				}
-				if (possibleTargets.isEmpty())
-					return null;
-				Collections.sort(possibleTargets, this.nearestSorter);
-				newTarget = possibleTargets.get(0);
-			}
-			catch (Exception e) {
-				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
-				e.printStackTrace();
-			}
-
-			// Return player target unless other entities should also be targeted.
-			if(newTarget != null) {
-				return newTarget;
-			}
-		}
-
-		if(this.host.updateTick % 40 == 0) {
-			return super.getNewTarget(rangeX, rangeY, rangeZ);
-		}
-
-		return null;
+		return super.getNewTarget(rangeX, rangeY, rangeZ);
 	}
 }

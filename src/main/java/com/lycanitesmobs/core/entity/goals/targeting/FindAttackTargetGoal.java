@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityArgus;
 import com.lycanitesmobs.core.entity.creature.EntityBanshee;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -114,8 +115,9 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
     	
     	// Type Check:
-    	if(!this.host.canAttackClass(target.getClass()))
-            return false;
+    	if(!this.host.canAttackClass(target.getClass())) {
+			return false;
+		}
 
         // Entity Check:
 		if(!this.host.canAttackEntity(target)) {
@@ -141,7 +143,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
 
 		if(this.targetPlayers) {
-			if (this.host.updateTick % 10 != 0) {
+			if (this.host.updateTick % 5 != 0) {
 				return false;
 			}
 		}
@@ -164,6 +166,11 @@ public class FindAttackTargetGoal extends TargetingGoal {
         return this.target != null && this.host.rollAttackTargetChance(this.target);
     }
 
+    @Override
+	public boolean shouldStopTargeting(EntityLivingBase target) {
+		return !this.isValidTarget(target);
+	}
+
 
 	// ==================================================
 	//                  Get New Target
@@ -179,8 +186,9 @@ public class FindAttackTargetGoal extends TargetingGoal {
 					return null;
 				List<EntityPlayer> possibleTargets = new ArrayList<>();
 				for(EntityPlayer player : players) {
-					if(this.isValidTarget(player))
+					if(this.isValidTarget(player)) {
 						possibleTargets.add(player);
+					}
 				}
 				if (possibleTargets.isEmpty())
 					return null;
@@ -192,8 +200,8 @@ public class FindAttackTargetGoal extends TargetingGoal {
 				e.printStackTrace();
 			}
 
-			// Return player target unless other entities should also be targeted.
-			if(newTarget != null || this.targetClasses.size() == 1) {
+			// Return player target first always.
+			if(newTarget != null) {
 				return newTarget;
 			}
 		}
