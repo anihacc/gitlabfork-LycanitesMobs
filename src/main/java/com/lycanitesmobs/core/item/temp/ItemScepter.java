@@ -171,7 +171,7 @@ public class ItemScepter extends ItemBase {
     public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
     	if(!world.isRemote) {
         	//EntityThrowable projectile = new EntityThrowable(world, player);
-    		//projectile.setDamage((int)(projectile.getDamage() * power));
+    		//projectile.setDamageScale((int)(projectile.getDamage() * power));
         	//world.spawnEntity(projectile);
             //world.playSoundAtEntity(player, ((ICustomProjectile) projectile).getLaunchSound(), 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
         }

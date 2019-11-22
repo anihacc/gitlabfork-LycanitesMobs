@@ -2,13 +2,14 @@ package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.lycanitesmobs.*;
+import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.GuiHandler;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.ai.DirectNavigator;
-import com.lycanitesmobs.core.entity.ai.EntityAIMoveRestriction;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetAttack;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetRevenge;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;
@@ -37,7 +38,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -63,7 +63,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -229,7 +228,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Whether the mob should use it's leash AI or not. **/
     private boolean leashAIActive = false;
     /** Movement AI for mobs that are leashed. **/
-    private EntityAIBase leashMoveTowardsRestrictionAI = new EntityAIMoveRestriction(this);
+    private EntityAIBase leashMoveTowardsRestrictionAI = new MoveRestrictionGoal(this);
     /** The flight navigator class, a makeshift class that handles flight and free swimming movement, replaces the pathfinder. **/
     public DirectNavigator directNavigator;
 
@@ -372,8 +371,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 
     // Override AI:
-    public EntityAITargetAttack aiTargetPlayer = new EntityAITargetAttack(this).setTargetClass(EntityPlayer.class);
-    public EntityAITargetRevenge aiDefendAnimals = new EntityAITargetRevenge(this).setHelpClasses(IAnimals.class);
+    public FindAttackTargetGoal aiTargetPlayer = null;
+    public RevengeGoal aiDefendAnimals = null;
 
 
     // ==================================================
@@ -2591,12 +2590,24 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * Returns the melee attack range of this creature.
 	 * @return The attack range.
 	 */
-	public double getMeleeAttackRange() {
+	public double getPhysicalRange() {
 		double range = this.width + 1.5D;
 		if(this.isFlying()) {
 			range += this.getFlightOffset();
 		}
 		return range * range;
+	}
+
+	/**
+	 * Returns the required attack range.
+	 * @param attackTarget The entity to attack.
+	 * @param additionalReach Extra attack range.
+	 * @return The maximum attack range.
+	 */
+	public double getMeleeAttackRange(EntityLivingBase attackTarget, double additionalReach) {
+		double creatureRange = this.getPhysicalRange();
+		double targetSize = (attackTarget.width + 1) * (attackTarget.width + 1);
+		return creatureRange + targetSize + additionalReach;
 	}
 	
     // ========== Targets ==========
@@ -3338,7 +3349,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	return !this.isRareSubspecies() && !this.spawnedAsBoss && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
     }
     
-    /** Called when the creature has eaten. Some special AIs use this such as EntityAIEatBlock. **/
+    /** Called when the creature has eaten. Some special AIs use this such as EatBlockGoal. **/
     public void onEat() {}
     
     // ========== Stealth ==========

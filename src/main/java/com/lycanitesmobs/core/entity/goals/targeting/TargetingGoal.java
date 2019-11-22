@@ -85,8 +85,9 @@ public abstract class TargetingGoal extends EntityAIBase {
     public boolean shouldContinueExecuting() {
         if(this.getTarget() == null)
             return false;
-        if(!this.getTarget().isEntityAlive())
+        if(!this.isEntityTargetable(this.getTarget(), true)) {
             return false;
+        }
 
         // Target Out of Range:
         double distance = this.getTargetDistance() + 2;

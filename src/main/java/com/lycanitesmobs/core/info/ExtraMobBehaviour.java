@@ -1,6 +1,10 @@
 package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ExtraMobBehaviour {
@@ -143,13 +147,19 @@ public class ExtraMobBehaviour {
     		this.aiAttackPlayers = nbtTagCompound.getBoolean("AIAttackPlayers");
     		this.host.targetTasks.removeTask(this.host.aiTargetPlayer);
     		if(this.aiAttackPlayers) {
-    			this.host.targetTasks.addTask(9, this.host.aiTargetPlayer);
+				if(this.host.aiTargetPlayer == null) {
+					this.host.aiTargetPlayer = new FindAttackTargetGoal(this.host).addTargets(EntityPlayer.class);
+				}
+				this.host.targetTasks.addTask(9, this.host.aiTargetPlayer);
     		}
     	}
     	if(nbtTagCompound.hasKey("AIDefendAnimals")) {
     		this.aiDefendAnimals = nbtTagCompound.getBoolean("AIDefendAnimals");
     		this.host.targetTasks.removeTask(this.host.aiDefendAnimals);
     		if(this.aiDefendAnimals) {
+				if(this.host.aiDefendAnimals == null) {
+					this.host.aiDefendAnimals = new RevengeGoal(this.host).setHelpClasses(EntityAnimal.class);
+				}
     			this.host.targetTasks.addTask(10, this.host.aiDefendAnimals);
     		}
     	}

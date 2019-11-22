@@ -493,7 +493,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
                     if(targetTameable.isTamed()) {
                         if(!canPVP)
                             return false;
-                        if(targetTameable.getOwner() == this.getOwner())
+                        if(targetTameable.getPlayerOwner() == this.getPlayerOwner())
                             return false;
                     }
                 }

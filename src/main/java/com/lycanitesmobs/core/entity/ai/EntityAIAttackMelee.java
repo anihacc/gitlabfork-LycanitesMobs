@@ -223,7 +223,7 @@ public class EntityAIAttackMelee extends EntityAIBase {
 	 * @return The maximum attack range.
 	 */
 	protected double getAttackRange(EntityLivingBase attackTarget) {
-		double range = this.host.getMeleeAttackRange();
+		double range = this.host.getPhysicalRange();
 		range += this.attackRange + attackTarget.width;
 		return range;
 	}
