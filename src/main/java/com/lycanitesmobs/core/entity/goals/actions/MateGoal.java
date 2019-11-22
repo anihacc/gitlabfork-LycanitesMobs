@@ -94,7 +94,7 @@ public class MateGoal extends Goal {
         	this.host.getNavigator().tryMoveToEntityLiving(this.partner, this.speed);
         else
         	this.host.directNavigator.setTargetPosition(new BlockPos((int)this.partner.posX, (int)this.partner.posY, (int)this.partner.posZ), speed);
-        if(this.host.getDistanceSq(this.partner) < this.mateDistance + this.host.getMeleeAttackRange()) {
+        if(this.host.getDistanceSq(this.partner) < this.mateDistance + this.host.getPhysicalRange()) {
 			++this.mateTime;
 			if(this.mateTime >= mateTimeMax) {
 				this.host.procreate(this.partner);

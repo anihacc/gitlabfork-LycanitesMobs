@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.goals.actions;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -26,7 +25,7 @@ public class AttackMeleeGoal extends Goal {
     private int attackTime;
     private double attackRange = 0.5D;
     private float maxChaseDistance = 1024F;
-    private double damage = 1.0D;
+    private double damageScale = 1.0D;
     public boolean enabled = true;
 
     // Pathing:
@@ -50,8 +49,8 @@ public class AttackMeleeGoal extends Goal {
     	this.speed = setSpeed;
     	return this;
     }
-    public AttackMeleeGoal setDamage(double scale) {
-    	this.damage = scale;
+    public AttackMeleeGoal setDamageScale(double scale) {
+    	this.damageScale = scale;
     	return this;
     }
     public AttackMeleeGoal setTargetClass(Class setTargetClass) {
@@ -140,7 +139,7 @@ public class AttackMeleeGoal extends Goal {
         this.attackTarget = this.host.getAttackTarget();
         if(this.attackTarget == null)
         	return false;
-        if(!this.host.isAlive() || !attackTarget.isAlive())
+		if(!this.host.isAlive() || !this.attackTarget.isAlive())
         	return false;
         if(this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
         	return false;
@@ -216,13 +215,13 @@ public class AttackMeleeGoal extends Goal {
         }
         
         // Damage Target:
-		LycanitesMobs.logDebug("Attack", "Attack range: " + this.getAttackRange(attackTarget) + "/" + this.host.getDistanceSq(attackTarget.posX, attackTarget.getBoundingBox().minY, attackTarget.posZ));
-        if(this.host.getDistanceSq(attackTarget.posX, attackTarget.getBoundingBox().minY, attackTarget.posZ) <= this.getAttackRange(attackTarget)) {
+		LycanitesMobs.logDebug("Attack", "Attack range: " + this.host.getMeleeAttackRange(attackTarget, this.attackRange) + "/" + this.host.getDistanceSq(attackTarget.posX, attackTarget.getBoundingBox().minY, attackTarget.posZ));
+        if(this.host.getDistanceSq(attackTarget.posX, attackTarget.getBoundingBox().minY, attackTarget.posZ) <= this.host.getMeleeAttackRange(attackTarget, this.attackRange)) {
             if(--this.attackTime <= 0) {
                 this.attackTime = this.host.getMeleeCooldown();
                 if(!this.host.getHeldItemMainhand().isEmpty())
                     this.host.swingArm(Hand.MAIN_HAND);
-                this.host.attackMelee(attackTarget, damage);
+                this.host.attackMelee(attackTarget, this.damageScale);
             }
 
             // Move helper won't change the Yaw if the target is already close by
@@ -235,15 +234,4 @@ public class AttackMeleeGoal extends Goal {
             this.host.rotationYaw = this.host.rotationYaw + f;
         }
     }
-
-	/**
-	 * Returns the required attack range.
-	 * @param attackTarget The entity to attack.
-	 * @return The maximum attack range.
-	 */
-	protected double getAttackRange(LivingEntity attackTarget) {
-		double creatureRange = this.host.getMeleeAttackRange();
-		double targetSize = (attackTarget.getSize(Pose.STANDING).width + 1) * (attackTarget.getSize(Pose.STANDING).width + 1);
-		return creatureRange + targetSize + this.attackRange;
-	}
 }

@@ -2,7 +2,9 @@ package com.lycanitesmobs.core.info;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
+import com.lycanitesmobs.core.entity.goals.targeting.RevengeGoal;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ExtraMobBehaviour {
@@ -155,6 +157,9 @@ public class ExtraMobBehaviour {
     		this.aiDefendAnimals = nbtTagCompound.getBoolean("AIDefendAnimals");
     		this.host.targetSelector.removeGoal(this.host.aiDefendAnimals);
     		if(this.aiDefendAnimals) {
+				if(this.host.aiDefendAnimals == null) {
+					this.host.aiDefendAnimals = new RevengeGoal(this.host).setHelpClasses(AnimalEntity.class);
+				}
     			this.host.targetSelector.addGoal(10, this.host.aiDefendAnimals);
     		}
     	}

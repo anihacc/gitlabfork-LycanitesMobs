@@ -68,6 +68,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         }
 
 		if(this.hasRiderTarget()) {
+			// Rider Buffs:
 			if(this.getControllingPassenger() instanceof LivingEntity) {
 				LivingEntity riderLiving = (LivingEntity)this.getControllingPassenger();
 
@@ -82,6 +83,13 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 							riderLiving.removePotionEffect(effectInstance.getPotion());
 					}
 				}
+			}
+
+			// Mount Melee:
+			if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.updateTick % 20 == 0) {
+				LivingEntity mountedAttackTarget = this.getAttackTarget();
+				if(mountedAttackTarget != null && this.getDistanceSq(mountedAttackTarget.posX, mountedAttackTarget.getBoundingBox().minY, mountedAttackTarget.posZ) <= this.getMeleeAttackRange(mountedAttackTarget, 1))
+					this.attackMelee(this.getAttackTarget(), 1);
 			}
     	}
     	else {

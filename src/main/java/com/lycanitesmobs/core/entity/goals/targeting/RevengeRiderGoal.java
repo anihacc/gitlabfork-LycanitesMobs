@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +17,6 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 	private TameableCreatureEntity host;
 	
 	// Properties:
-    boolean callForHelp = false;
     private int revengeTime;
 	
 	// ==================================================
@@ -58,10 +58,10 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
     		return false;
     	if(this.host.getRider() == null)
     		return false;
-        int i = this.host.getRider().getRevengeTimer();
+        int i = this.getRiderRevengeTime();
         if(i == this.revengeTime)
         	return false;
-        if(!this.isEntityTargetable(this.host.getRider().getRevengeTarget(), false))
+        if(!this.isEntityTargetable(this.getRiderRevengeTarget(), false))
         	return false;
         return true;
     }
@@ -71,8 +71,8 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
  	//                 Start Executing
  	// ==================================================
     public void startExecuting() {
-        this.target = this.host.getRider().getRevengeTarget();
-        this.revengeTime = this.host.getRider().getRevengeTimer();
+        this.target = this.getRiderRevengeTarget();
+        this.revengeTime = this.getRiderRevengeTime();
 
         try {
             if (this.callForHelp) {
@@ -94,4 +94,30 @@ public class RevengeRiderGoal extends FindAttackTargetGoal {
 
         super.startExecuting();
     }
+
+
+	// ==================================================
+	//                    Rider Revenge
+	// ==================================================
+	public LivingEntity getRiderRevengeTarget() {
+		LivingEntity revengeTarget = this.host.getRider().getRevengeTarget();
+		if(revengeTarget == null) {
+			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+			if(extendedEntity != null) {
+				revengeTarget = extendedEntity.lastAttackedEntity;
+			}
+		}
+		return revengeTarget;
+	}
+
+	public int getRiderRevengeTime() {
+		int revengeTime = this.host.getRider().getRevengeTimer();
+		if(revengeTime == 0) {
+			ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.host.getRider());
+			if(extendedEntity != null) {
+				revengeTime = extendedEntity.lastAttackedTime;
+			}
+		}
+		return revengeTime;
+	}
 }

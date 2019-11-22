@@ -496,7 +496,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
                     if(targetTameable.isTamed()) {
                         if(!canPVP)
                             return false;
-                        if(targetTameable.getOwner() == this.getOwner())
+						if(targetTameable.getPlayerOwner() == this.getPlayerOwner())
                             return false;
                     }
                 }

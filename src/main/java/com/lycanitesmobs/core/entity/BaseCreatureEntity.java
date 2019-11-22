@@ -21,7 +21,6 @@ import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
-import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.item.special.ItemSoulgazer;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -40,7 +39,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.item.minecart.MinecartEntity;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
@@ -351,7 +349,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     // Override AI:
     public FindAttackTargetGoal aiTargetPlayer = null;
-    public RevengeGoal aiDefendAnimals = new RevengeGoal(this).setHelpClasses(AnimalEntity.class);
+    public RevengeGoal aiDefendAnimals = null;
 
 	/**
 	 * Constructor
@@ -2295,12 +2293,24 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * Returns the melee attack range of this creature.
 	 * @return The attack range.
 	 */
-	public double getMeleeAttackRange() {
+	public double getPhysicalRange() {
 		double range = this.getSize(Pose.STANDING).width + 1.5D;
 		if(this.isFlying()) {
 			range += this.getFlightOffset();
 		}
 		return range * range;
+	}
+
+	/**
+	 * Returns the required attack range.
+	 * @param attackTarget The entity to attack.
+	 * @param additionalReach Extra attack range.
+	 * @return The maximum attack range.
+	 */
+	public double getMeleeAttackRange(LivingEntity attackTarget, double additionalReach) {
+		double creatureRange = this.getPhysicalRange();
+		double targetSize = (attackTarget.getSize(Pose.STANDING).width + 1) * (attackTarget.getSize(Pose.STANDING).width + 1);
+		return creatureRange + targetSize + additionalReach;
 	}
 	
     // ========== Targets ==========

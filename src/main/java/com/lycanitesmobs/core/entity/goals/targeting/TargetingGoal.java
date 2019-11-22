@@ -84,7 +84,7 @@ public abstract class TargetingGoal extends Goal {
     public boolean shouldContinueExecuting() {
         if(this.getTarget() == null)
             return false;
-        if(!this.getTarget().isAlive())
+        if(!this.isEntityTargetable(this.getTarget(), true))
             return false;
 
         // Target Out of Range:

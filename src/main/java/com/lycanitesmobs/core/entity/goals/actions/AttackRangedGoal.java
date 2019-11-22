@@ -140,7 +140,7 @@ public class AttackRangedGoal extends Goal {
         LivingEntity possibleAttackTarget = this.host.getAttackTarget();
         if(possibleAttackTarget == null)
             return false;
-        if(!possibleAttackTarget.isAlive())
+		if(!possibleAttackTarget.isAlive())
             return false;
         this.attackTarget = possibleAttackTarget;
 
