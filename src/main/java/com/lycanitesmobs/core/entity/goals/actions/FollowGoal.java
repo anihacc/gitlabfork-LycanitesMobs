@@ -66,16 +66,18 @@ public abstract class FollowGoal extends EntityAIBase {
 	@Override
     public boolean shouldExecute() {
     	Entity target = this.getTarget();
-	    if(target == null)
+	    if(target == null || target == this.host)
 	        return false;
         if(!target.isEntityAlive())
         	return false;
 
 		double distance = this.host.getDistance(target);
-	    if(distance > this.lostDistance && this.lostDistance != 0)
-	        return false;
-	    if(distance <= this.strayDistance && this.strayDistance != 0)
-	        return false;
+	    if(distance > this.lostDistance && this.lostDistance != 0) {
+			return false;
+		}
+	    if(distance <= this.strayDistance && this.strayDistance != 0) {
+			return false;
+		}
 	    
         return true;
     }
@@ -93,11 +95,14 @@ public abstract class FollowGoal extends EntityAIBase {
         	return false;
         
         double distance = this.host.getDistance(target);
-        if(distance > this.lostDistance && this.lostDistance != 0)
-        	this.setTarget(null);
+        if(distance > this.lostDistance && this.lostDistance != 0) {
+			this.setTarget(null);
+			return false;
+		}
         // Start straying when we reach halfway between the stray radius and the target
-        if(distance <= this.strayDistance / 2.0 && this.strayDistance != 0)
-        	return false;
+        if(distance <= this.strayDistance / 2.0 && this.strayDistance != 0) {
+			return false;
+		}
 		this.onTargetDistance(distance, target);
         
         return this.getTarget() != null;

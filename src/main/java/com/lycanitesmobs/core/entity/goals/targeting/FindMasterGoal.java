@@ -87,7 +87,7 @@ public class FindMasterGoal extends TargetingGoal {
             return false;
         
         // Tamed Checks:
-        if(!this.tameTargeting && this.host instanceof TameableCreatureEntity && ((TameableCreatureEntity)this.host).isTamed())
+        if(!this.tameTargeting && this.host.isTamed())
         	return false;
     	return true;
     }

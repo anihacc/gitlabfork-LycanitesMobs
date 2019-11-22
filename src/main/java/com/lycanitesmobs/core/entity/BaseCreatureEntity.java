@@ -553,7 +553,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
 
 		// Lesser Actions:
-		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(8.0D));
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(12.0D));
 		this.tasks.addTask(this.nextIdleGoalIndex++, new WanderGoal(this));
 		this.tasks.addTask(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(EntityPlayer.class));
 		this.tasks.addTask(this.nextIdleGoalIndex++, new LookIdleGoal(this));

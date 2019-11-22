@@ -226,6 +226,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     		return 0.0D;
     	return super.getFallingMod();
     }
+
+	@Override
+	public boolean useDirectNavigator() {
+		return true;
+	}
     
     
     // ==================================================

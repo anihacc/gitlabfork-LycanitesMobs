@@ -42,7 +42,7 @@ public class EntityMaka extends AgeableCreatureEntity {
 		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_herbivore"));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false).setRange(64.0D));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityMakaAlpha.class).setSightCheck(false));
     }
 
 

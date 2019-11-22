@@ -270,7 +270,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	 * @return True if this creature should actively seek parents.
 	 */
 	public boolean shouldFindParent() {
-		return true;
+		return this.isChild();
 	}
 
 	
