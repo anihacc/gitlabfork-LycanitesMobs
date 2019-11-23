@@ -244,10 +244,11 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 				text = "\u00A7l" + new TranslationTextComponent("creature.stat.respawning").getFormattedText() + ": ";
 			}
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
-			barX = nextX + this.getFontRenderer().getStringWidth(text);
+
 			int barY = nextY - 1;
 			int barWidth = (256 / 4) + 16;
 			int barHeight = (32 / 4) + 2;
+			barX = nextX + this.getFontRenderer().getStringWidth(text);
 			this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 			if(this.playerExt.selectedPet.respawnTime <= 0) {
 				float healthNormal = this.playerExt.selectedPet.getHealth() / this.playerExt.selectedPet.getMaxHealth();
@@ -256,6 +257,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
 				this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
+				this.getFontRenderer().drawString("" + (this.playerExt.selectedPet.respawnTime / 20) + "s", barX + barWidth + 10, nextY, 0xFFFFFF);
 			}
 		}
 

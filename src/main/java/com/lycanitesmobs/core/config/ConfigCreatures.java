@@ -28,6 +28,7 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> mountingEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> mountingFlightEnabled;
 	public final ForgeConfigSpec.ConfigValue<Boolean> friendlyFire;
+	public final ForgeConfigSpec.ConfigValue<Integer> petRespawnTime;
 	
 	public final ForgeConfigSpec.ConfigValue<Double> beastiaryAddOnDeathChance;
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
@@ -96,6 +97,9 @@ public class ConfigCreatures {
 		friendlyFire = builder.comment("If true, pets, minions, etc can't harm their owners (with ranged attacks, etc).")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.friendlyFire")
 				.define("friendlyFire", true);
+		petRespawnTime = builder.comment("The time in tics that it takes for a pet to respawn.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.petRespawnTime")
+				.define("petRespawnTime", 3 * 60 * 20);
 
 		beastiaryAddOnDeathChance = builder.comment("The chance that creatures are added to the player's Beastiary when killed, the Soulgazer can also be used to add creatures. Bosses are always a 100% chance.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.beastiaryAddOnDeathChance")

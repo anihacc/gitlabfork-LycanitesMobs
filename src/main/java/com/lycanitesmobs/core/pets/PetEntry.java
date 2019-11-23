@@ -111,7 +111,7 @@ public class PetEntry {
         this.summonSet.summonableOnly = false;
         this.summonSet.setSummonType(summonType);
 
-        this.respawnTimeMax = 5 * 60 * 20;
+        this.respawnTimeMax = CreatureManager.getInstance().config.petRespawnTime;
         if("minion".equalsIgnoreCase(this.type))
             this.temporary = true;
 	}
@@ -282,6 +282,8 @@ public class PetEntry {
                 // Respawn:
                 if(!this.isRespawning)
                     this.respawnTime = 0;
+                if(this.respawnTime > this.respawnTimeMax)
+                    this.respawnTime = this.respawnTimeMax;
                 if(this.respawnTime-- <= 0) {
                     this.spawnEntity();
                     this.isRespawning = false;

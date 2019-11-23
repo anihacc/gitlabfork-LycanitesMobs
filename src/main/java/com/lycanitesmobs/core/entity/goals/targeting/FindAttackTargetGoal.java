@@ -24,21 +24,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
     public FindAttackTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
         this.setMutexFlags(EnumSet.of(Flag.TARGET));
-
-		for(CreatureGroup group : setHost.creatureInfo.groups) {
-			for(CreatureGroup targetGroup : group.huntGroups) {
-				if (targetGroup.humanoids) {
-					this.targetPlayers = true;
-					break;
-				}
-			}
-			for(CreatureGroup targetGroup : group.packGroups) {
-				if (targetGroup.humanoids) {
-					this.targetPlayers = true;
-					break;
-				}
-			}
-		}
     }
 
 
@@ -184,17 +169,18 @@ public class FindAttackTargetGoal extends TargetingGoal {
 			LivingEntity newTarget = null;
 			try {
 				List<? extends PlayerEntity> players = this.host.getEntityWorld().getPlayers();
-				if (players.isEmpty())
-					return null;
-				List<PlayerEntity> possibleTargets = new ArrayList<>();
-				for(PlayerEntity player : players) {
-					if(this.isValidTarget(player))
-						possibleTargets.add(player);
+				if(!players.isEmpty()) {
+					List<PlayerEntity> possibleTargets = new ArrayList<>();
+					for (PlayerEntity player : players) {
+						if (this.isValidTarget(player)) {
+							possibleTargets.add(player);
+						}
+					}
+					if (!possibleTargets.isEmpty()) {
+						Collections.sort(possibleTargets, this.nearestSorter);
+						newTarget = possibleTargets.get(0);
+					}
 				}
-				if (possibleTargets.isEmpty())
-					return null;
-				Collections.sort(possibleTargets, this.nearestSorter);
-				newTarget = possibleTargets.get(0);
 			}
 			catch (Exception e) {
 				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");

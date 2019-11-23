@@ -223,8 +223,9 @@ public abstract class TargetingGoal extends Goal {
 		}
         
         // Valid Check:
-        if(!this.isValidTarget(checkTarget))
+        if(!this.isValidTarget(checkTarget)) {
             return false;
+        }
         
         // Home Check:
         if(!this.host.positionNearHome(MathHelper.floor(checkTarget.posX), MathHelper.floor(checkTarget.posY), MathHelper.floor(checkTarget.posZ)))
