@@ -280,6 +280,7 @@ public class GuiBeastiaryPets extends GuiBeastiary {
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
 				this.drawTexture(AssetManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
+				this.getFontRenderer().drawString("" + (this.playerExt.selectedPet.respawnTime / 20) + "s", barX + barWidth + 10, nextY, 0xFFFFFF);
 			}
 		}
 

@@ -51,6 +51,9 @@ public class CreatureConfig {
 	/** If true, tamed mobs wont harm their owners. **/
 	public boolean friendlyFire = true;
 
+	/** The time in tics that it takes for a pet to respawn. **/
+	public int petRespawnTime = 3 * 60 * 20;
+
 
 	// Beastiary:
 	/** The chance that a creature gets added to the killing player's Beastiary on death, always 100% for bosses. **/
@@ -142,6 +145,7 @@ public class CreatureConfig {
 		this.mountingEnabled = config.getBool("Pets", "Mounting", this.mountingEnabled, "Set to false to disable mounts.");
 		this.mountingFlightEnabled = config.getBool("Pets", "Flying Mounting", this.mountingFlightEnabled, "Set to false to disable flying mounts, if all mounts are disable this option doesn't matter.");
 		this.friendlyFire = config.getBool("Pets", "Friendly Fire", this.friendlyFire, "If true, pets, minions, etc can't harm their owners (with ranged attacks, etc).");
+		this.petRespawnTime = config.getInt("Pets", "Friendly Fire", this.petRespawnTime, "The time in tics that it takes for a pet to respawn.");
 
 		// Beastiary:
 		config.setCategoryComment("Beastiary", "Here you can control all settings related to the player's Beastiary.");

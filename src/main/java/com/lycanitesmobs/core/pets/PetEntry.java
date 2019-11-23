@@ -6,6 +6,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.info.CreatureConfig;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -108,7 +109,7 @@ public class PetEntry {
         this.summonSet.summonableOnly = false;
         this.summonSet.setSummonType(summonType);
 
-        this.respawnTimeMax = 5 * 60 * 20;
+        this.respawnTimeMax = CreatureManager.getInstance().config.petRespawnTime;
         if("minion".equalsIgnoreCase(this.type))
             this.temporary = true;
 	}
@@ -273,6 +274,8 @@ public class PetEntry {
                 // Respawn:
                 if(!this.isRespawning)
                     this.respawnTime = 0;
+                if(this.respawnTime > this.respawnTimeMax)
+                    this.respawnTime = this.respawnTimeMax;
                 if(this.respawnTime-- <= 0) {
                     this.spawnEntity();
                     this.isRespawning = false;

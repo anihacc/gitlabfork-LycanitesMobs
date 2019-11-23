@@ -182,18 +182,18 @@ public class FindAttackTargetGoal extends TargetingGoal {
 			EntityLivingBase newTarget = null;
 			try {
 				List<? extends EntityPlayer> players = this.host.getEntityWorld().getPlayers(EntityPlayer.class, this.targetSelector);
-				if (players.isEmpty())
-					return null;
-				List<EntityPlayer> possibleTargets = new ArrayList<>();
-				for(EntityPlayer player : players) {
-					if(this.isValidTarget(player)) {
-						possibleTargets.add(player);
+				if(!players.isEmpty()) {
+					List<EntityPlayer> possibleTargets = new ArrayList<>();
+					for (EntityPlayer player : players) {
+						if (this.isValidTarget(player)) {
+							possibleTargets.add(player);
+						}
+					}
+					if (!possibleTargets.isEmpty()) {
+						Collections.sort(possibleTargets, this.nearestSorter);
+						newTarget = possibleTargets.get(0);
 					}
 				}
-				if (possibleTargets.isEmpty())
-					return null;
-				Collections.sort(possibleTargets, this.nearestSorter);
-				newTarget = possibleTargets.get(0);
 			}
 			catch (Exception e) {
 				LycanitesMobs.logWarning("", "An exception occurred when player target selecting, this has been skipped to prevent a crash.");
