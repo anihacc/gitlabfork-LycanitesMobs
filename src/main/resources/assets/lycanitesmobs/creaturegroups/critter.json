@@ -2,16 +2,12 @@
 	"name": "critter",
 	"loadDefault": true,
 	"hunt": [],
-	"pack": [
-		"humanoid"
-	],
+	"pack": [],
 	"wary": [],
 	"flee":  [
 		"predator",
 		"boss"
 	],
-	"ignore": [
-		"boss"
-	],
+	"ignore": [],
 	"default": "wary"
 }

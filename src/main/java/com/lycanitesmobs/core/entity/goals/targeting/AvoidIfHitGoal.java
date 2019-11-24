@@ -1,8 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureGroup;
 
 public class AvoidIfHitGoal extends FindAvoidTargetGoal {
 

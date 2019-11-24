@@ -50,38 +50,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
         super.onLivingUpdate();
 
         if(!this.getEntityWorld().isRemote) {
-			/*if (!this.hasAttackTarget() && !this.isPetType("familiar") && this.updateTick % 40 == 0){
-				BlockPos protectLocation = null;
-				if(this.hasHome()) {
-					protectLocation = this.getHomePosition();
-				}
-				else if(this.villagePos == null || this.updateTick % 400 == 0) {
-					this.villagePos = this.getEntityWorld().findNearestStructure("Village", this.getPosition(), 128, false);
-				}
-				protectLocation = this.villagePos;
-
-				// Monitor Nearest Player: TODO Global village reputation is no longer a thing, disabled for now, should be moved to AI Goal.
-				if(protectLocation != null) {
-					EntityPlayer player = this.getEntityWorld().getNearestAttackablePlayer(this, 64, 32);
-					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-					if (player != null) {
-						if (this.chestProtection && Math.sqrt(player.getDistanceSq(new Vec3d(protectLocation))) <= 60)
-							if ((player.openContainer instanceof ChestContainer)) {
-								this.setAttackTarget(player);
-								this.setFixateTarget(player);
-							}
-							else if (extendedPlayer != null && extendedPlayer.justBrokenBlock != null) {
-								Block brokenBlock = extendedPlayer.justBrokenBlock.getBlock();
-								if (brokenBlock instanceof ChestBlock || brokenBlock instanceof DoorBlock || brokenBlock == Blocks.GLOWSTONE) {
-									this.setAttackTarget(player);
-									this.setFixateTarget(player);
-								}
-							}
-					}
-				}
-			}*/
-
-			if(!this.hasAttackTarget()) {
+			if(!this.hasAttackTarget() && this.currentBlockingTime < 2) {
 				this.setBlocking();
 			}
 		}
@@ -132,7 +101,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	/** Called when this mob has received damage. Here a random blocking chance is applied. **/
 	@Override
 	public void onDamage(DamageSource damageSrc, float damage) {
-		if(this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
+		if(this.getRNG().nextDouble() > 0.5D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
 		super.onDamage(damageSrc, damage);
 	}

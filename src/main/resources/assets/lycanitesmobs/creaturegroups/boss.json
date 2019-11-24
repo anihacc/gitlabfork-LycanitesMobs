@@ -10,5 +10,8 @@
 	"ignore": [
 		"boss"
 	],
-	"default": "retaliate"
+	"default": "retaliate",
+	"entityIds": [
+		"minecraft:ender_dragon"
+	]
 }

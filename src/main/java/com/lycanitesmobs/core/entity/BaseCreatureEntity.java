@@ -3213,7 +3213,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @return True if in a pack.
 	 */
 	public boolean isInPack() {
-		return this.creatureInfo.packSize <= 1 || this.countAllies(32D) >= this.creatureInfo.packSize;
+		return this.creatureInfo.packSize <= 1 || this.countAllies(10) >= this.creatureInfo.packSize;
 	}
 
     
