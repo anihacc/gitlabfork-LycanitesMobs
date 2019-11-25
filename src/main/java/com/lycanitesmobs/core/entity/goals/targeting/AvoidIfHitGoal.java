@@ -54,7 +54,7 @@ public class AvoidIfHitGoal extends FindAvoidTargetGoal {
     		return false;
 
     	// Group Check:
-		if(this.shouldCreatureGroupRevenge(this.host, this.host.getRevengeTarget())) {
+		if(this.host.shouldCreatureGroupRevenge(this.host.getRevengeTarget())) {
 			return false;
 		}
 

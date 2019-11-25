@@ -58,6 +58,6 @@ public class FindGroupAvoidTargetGoal extends FindAvoidTargetGoal {
 			return false;
 
 		// Group Check:
-		return this.shouldCreatureGroupFlee(this.host, target);
+		return this.host.shouldCreatureGroupFlee(target);
     }
 }

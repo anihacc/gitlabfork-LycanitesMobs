@@ -2609,6 +2609,58 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		double targetSize = (attackTarget.width + 1) * (attackTarget.width + 1);
 		return creatureRange + targetSize + additionalReach;
 	}
+
+	public boolean shouldCreatureGroupRevenge(EntityLivingBase target) {
+		boolean shouldRevenge = this.creatureInfo.getGroups().isEmpty();
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if (group.shouldRevenge(target)) {
+				shouldRevenge = true;
+			}
+			if (group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		return shouldRevenge || canPackHunt;
+	}
+
+	public boolean shouldCreatureGroupHunt(EntityLivingBase target) {
+		boolean shouldFlee = false;
+		boolean shouldHunt = false;
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if(group.shouldFlee(target)) {
+				shouldFlee = true;
+			}
+			if(group.shouldHunt(target)) {
+				shouldHunt = true;
+			}
+			if(group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		if(shouldFlee && !canPackHunt) {
+			return false;
+		}
+		return shouldHunt;
+	}
+
+	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {
+		boolean shouldFlee = false;
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if(group.shouldFlee(target)) {
+				shouldFlee = true;
+			}
+			if(group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		return shouldFlee && !canPackHunt;
+	}
 	
     // ========== Targets ==========
     /** Gets the attack target of this entity's Master Target Entity. **/

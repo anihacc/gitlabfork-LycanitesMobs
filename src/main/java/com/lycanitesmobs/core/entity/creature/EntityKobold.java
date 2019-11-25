@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.GetBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.GetItemGoal;
+import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -97,6 +98,27 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 	        }
         }
     }
+
+    @Override
+	public boolean shouldCreatureGroupRevenge(EntityLivingBase target) {
+		if(target instanceof EntityPlayer && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return true;
+		return super.shouldCreatureGroupRevenge(target);
+	}
+
+	@Override
+	public boolean shouldCreatureGroupHunt(EntityLivingBase target) {
+		if(target instanceof EntityPlayer && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return true;
+		return super.shouldCreatureGroupHunt(target);
+	}
+
+	@Override
+	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {
+		if(target instanceof EntityPlayer && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return false;
+		return super.shouldCreatureGroupFlee(target);
+	}
     
 	
     // ==================================================
