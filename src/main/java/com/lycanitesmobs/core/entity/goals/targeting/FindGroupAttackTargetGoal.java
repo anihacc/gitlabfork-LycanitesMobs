@@ -74,7 +74,7 @@ public class FindGroupAttackTargetGoal extends FindAttackTargetGoal {
 		}
 
 		// Group Check:
-		if(!this.shouldCreatureGroupHunt(this.host, target)) {
+		if(!this.host.shouldCreatureGroupHunt(target)) {
 			return false;
 		}
     	

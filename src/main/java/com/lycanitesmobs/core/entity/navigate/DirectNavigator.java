@@ -66,7 +66,7 @@ public class DirectNavigator {
 	}
     
 	public boolean isTargetPositionValid(BlockPos targetPosition) {
-		if(targetPosition == null)
+		/*if(targetPosition == null)
 			return true;
 		if(this.host.isStrongSwimmer() && this.host.isSwimmable(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()))
 			return true;
@@ -75,7 +75,7 @@ public class DirectNavigator {
 		if(!this.host.getEntityWorld().isAirBlock(new BlockPos(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ())) && !this.host.noClip)
 			return false;
 		if(targetPosition.getY() < 3)
-			return false;
+			return false;*/
 		return true;
 	}
 

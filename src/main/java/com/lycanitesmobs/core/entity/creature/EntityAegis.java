@@ -52,38 +52,7 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
         super.livingTick();
 
         if(!this.getEntityWorld().isRemote) {
-			/*if (!this.hasAttackTarget() && !this.isPetType("familiar") && this.updateTick % 40 == 0){
-				BlockPos protectLocation = null;
-				if(this.hasHome()) {
-					protectLocation = this.getHomePosition();
-				}
-				else if(this.villagePos == null || this.updateTick % 400 == 0) {
-					this.villagePos = this.getEntityWorld().findNearestStructure("Village", this.getPosition(), 128, false);
-				}
-				protectLocation = this.villagePos;
-
-				// Monitor Nearest Player: TODO Global village reputation is no longer a thing, disabled for now, should be moved to AI Goal.
-				if(protectLocation != null) {
-					PlayerEntity player = this.getEntityWorld().getNearestAttackablePlayer(this, 64, 32);
-					ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
-					if (player != null) {
-						if (this.chestProtection && Math.sqrt(player.getDistanceSq(new Vec3d(protectLocation))) <= 60)
-							if ((player.openContainer instanceof ChestContainer)) {
-								this.setAttackTarget(player);
-								this.setFixateTarget(player);
-							}
-							else if (extendedPlayer != null && extendedPlayer.justBrokenBlock != null) {
-								Block brokenBlock = extendedPlayer.justBrokenBlock.getBlock();
-								if (brokenBlock instanceof ChestBlock || brokenBlock instanceof DoorBlock || brokenBlock == Blocks.GLOWSTONE) {
-									this.setAttackTarget(player);
-									this.setFixateTarget(player);
-								}
-							}
-					}
-				}
-			}*/
-
-			if(!this.hasAttackTarget()) {
+			if(!this.hasAttackTarget() && this.currentBlockingTime < 2) {
 				this.setBlocking();
 			}
 		}

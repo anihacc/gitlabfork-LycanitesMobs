@@ -190,12 +190,7 @@ public class AttackMeleeGoal extends Goal {
 		if(this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) {
 			if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
 				this.repathTime = failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
-				if(this.host.isFlying()) {
-					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, this.speed);
-				}
-				else {
-					this.host.getNavigator().tryMoveToEntityLiving(attackTarget, this.speed);
-				}
+				this.host.getNavigator().tryMoveToEntityLiving(attackTarget, this.speed);
 				if(this.host.getNavigator().getPath() != null) {
 	                PathPoint finalPathPoint = this.host.getNavigator().getPath().getFinalPathPoint();
 	                if(finalPathPoint != null && attackTarget.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {

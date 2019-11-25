@@ -180,7 +180,7 @@ public abstract class TargetingGoal extends Goal {
                 if(!possibleAlly.isOnSameTeam(this.target) && possibleAlly.canAttack(this.target.getType())) {
                     if (possibleAlly instanceof BaseCreatureEntity) {
                         BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity) possibleAlly;
-                        if (possibleCreatureAlly.getAttackTarget() == null && possibleCreatureAlly.canAttack(this.target) && this.shouldCreatureGroupRevenge(possibleCreatureAlly, this.target))
+                        if (possibleCreatureAlly.getAttackTarget() == null && possibleCreatureAlly.canAttack(this.target) && possibleCreatureAlly.shouldCreatureGroupRevenge(this.target))
                             possibleCreatureAlly.setAttackTarget(this.target);
                     }
                     else {
@@ -293,58 +293,6 @@ public abstract class TargetingGoal extends Goal {
 
         // Sight Check:
         return !this.shouldCheckSight() || this.host.getEntitySenses().canSee(checkTarget);
-    }
-
-    protected boolean shouldCreatureGroupHunt(BaseCreatureEntity creature, LivingEntity target) {
-        boolean shouldFlee = false;
-        boolean shouldHunt = false;
-        boolean shouldPackHunt = false;
-        for(CreatureGroup group : creature.creatureInfo.getGroups()) {
-            if(group.shouldFlee(target)) {
-                shouldFlee = true;
-            }
-            if(group.shouldHunt(target)) {
-                shouldHunt = true;
-            }
-            if(group.shouldPackHunt(target)) {
-                shouldPackHunt = true;
-            }
-        }
-        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
-        if(shouldFlee && !canPackHunt) {
-            return false;
-        }
-        return shouldHunt;
-    }
-
-    protected boolean shouldCreatureGroupFlee(BaseCreatureEntity creature, LivingEntity target) {
-        boolean shouldFlee = false;
-        boolean shouldPackHunt = false;
-        for(CreatureGroup group : this.host.creatureInfo.getGroups()) {
-            if(group.shouldFlee(target)) {
-                shouldFlee = true;
-            }
-            if(group.shouldPackHunt(target)) {
-                shouldPackHunt = true;
-            }
-        }
-        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
-        return shouldFlee && !canPackHunt;
-    }
-
-    protected boolean shouldCreatureGroupRevenge(BaseCreatureEntity creature, LivingEntity target) {
-        boolean shouldRevenge = creature.creatureInfo.getGroups().isEmpty();
-        boolean shouldPackHunt = false;
-        for(CreatureGroup group : creature.creatureInfo.getGroups()) {
-            if (group.shouldRevenge(creature.getRevengeTarget())) {
-                shouldRevenge = true;
-            }
-            if (group.shouldPackHunt(creature.getRevengeTarget())) {
-                shouldPackHunt = true;
-            }
-        }
-        boolean canPackHunt = shouldPackHunt && this.host.isInPack();
-        return shouldRevenge || canPackHunt;
     }
     
     

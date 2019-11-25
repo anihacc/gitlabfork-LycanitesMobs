@@ -142,7 +142,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         			this.posX = pos.x - segmentDistance;
         		
         		if(this.posY - pos.y > segmentDistance)
-        			this.posY = pos.y + segmentDistance;
+        			this.posY = pos.y;
         		else if(this.posY - pos.y < -(segmentDistance / 2))
         			this.posY = pos.y;
         		
@@ -152,6 +152,11 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         			this.posZ = pos.z - segmentDistance;
         	}
         }
+
+        // Look at parent:
+		if(this.hasParent()) {
+			this.getLookController().setLookPositionWithEntity(this.getParentTarget(), 30.0F, 30.0F);
+		}
         
         // Growth Into Head:
         if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)

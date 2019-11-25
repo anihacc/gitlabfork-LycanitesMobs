@@ -98,6 +98,27 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 	        }
         }
     }
+
+	@Override
+	public boolean shouldCreatureGroupRevenge(LivingEntity target) {
+		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return true;
+		return super.shouldCreatureGroupRevenge(target);
+	}
+
+	@Override
+	public boolean shouldCreatureGroupHunt(LivingEntity target) {
+		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return true;
+		return super.shouldCreatureGroupHunt(target);
+	}
+
+	@Override
+	public boolean shouldCreatureGroupFlee(LivingEntity target) {
+		if(target instanceof PlayerEntity && (target.getHealth() / target.getMaxHealth()) <= 0.5F)
+			return false;
+		return super.shouldCreatureGroupFlee(target);
+	}
     
 	
     // ==================================================

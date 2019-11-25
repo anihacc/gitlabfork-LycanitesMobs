@@ -2312,6 +2312,58 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double targetSize = (attackTarget.getSize(Pose.STANDING).width + 1) * (attackTarget.getSize(Pose.STANDING).width + 1);
 		return creatureRange + targetSize + additionalReach;
 	}
+
+	public boolean shouldCreatureGroupRevenge(LivingEntity target) {
+		boolean shouldRevenge = this.creatureInfo.getGroups().isEmpty();
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if (group.shouldRevenge(target)) {
+				shouldRevenge = true;
+			}
+			if (group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		return shouldRevenge || canPackHunt;
+	}
+
+	public boolean shouldCreatureGroupHunt(LivingEntity target) {
+		boolean shouldFlee = false;
+		boolean shouldHunt = false;
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if(group.shouldFlee(target)) {
+				shouldFlee = true;
+			}
+			if(group.shouldHunt(target)) {
+				shouldHunt = true;
+			}
+			if(group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		if(shouldFlee && !canPackHunt) {
+			return false;
+		}
+		return shouldHunt;
+	}
+
+	public boolean shouldCreatureGroupFlee(LivingEntity target) {
+		boolean shouldFlee = false;
+		boolean shouldPackHunt = false;
+		for(CreatureGroup group : this.creatureInfo.getGroups()) {
+			if(group.shouldFlee(target)) {
+				shouldFlee = true;
+			}
+			if(group.shouldPackHunt(target)) {
+				shouldPackHunt = true;
+			}
+		}
+		boolean canPackHunt = shouldPackHunt && this.isInPack();
+		return shouldFlee && !canPackHunt;
+	}
 	
     // ========== Targets ==========
     /** Gets the attack target of this entity's Master Target Entity. **/
@@ -2883,7 +2935,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return True if in a pack.
 	 */
 	public boolean isInPack() {
-		return this.creatureInfo.packSize <= 1 || this.countAllies(32D) >= this.creatureInfo.packSize;
+		return this.creatureInfo.packSize <= 1 || this.countAllies(10) >= this.creatureInfo.packSize;
 	}
 
     
