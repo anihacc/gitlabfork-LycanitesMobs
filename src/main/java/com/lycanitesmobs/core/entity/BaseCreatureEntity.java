@@ -200,6 +200,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // Spawning:
     /** Use the onFirstSpawn() method and not this variable. True if this creature has spawned for the first time (naturally or via spawn egg, etc, not reloaded from a saved chunk). **/
     public boolean firstSpawn = true;
+	/** True if this creature needs to pick a random level during it's onFireSpawn, this is ignore if firstSpawn is false. **/
+	public boolean needsInitialLevel = true;
     /** Should this mob check for block collisions when spawning? **/
     public boolean spawnsInBlock = false;
     /** Can this mob spawn where it can't see the sky above? **/
@@ -1142,7 +1144,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public void onFirstSpawn() {
         if(this.hasPetEntry() || this.isMinion())
             return;
-        this.applyLevel(this.getStartingLevel());
+		if(this.needsInitialLevel)
+			this.applyLevel(this.getStartingLevel());
         if(CreatureManager.getInstance().config.subspeciesSpawn && !this.creatureInfo.creatureSpawn.disableSubspecies)
     	    this.getRandomSubspecies();
 		if(CreatureManager.getInstance().config.randomSizes)
@@ -1220,6 +1223,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 	/** Sets and applies the level of this mob refreshing stats, higher levels have higher stats. **/
 	public void applyLevel(int level) {
+		this.needsInitialLevel = false;
 		this.setLevel(level);
 		this.refreshStats();
 	}
