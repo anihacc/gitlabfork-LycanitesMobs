@@ -95,15 +95,15 @@ public class AttackMeleeGoal extends Goal {
 		if(this.host.hasPickupEntity() && !this.host.canAttackWithPickup()) {
 			return false;
 		}
-    	
-        attackTarget = this.host.getAttackTarget();
-        if(attackTarget == null)
+
+        this.attackTarget = this.host.getAttackTarget();
+        if(this.attackTarget == null)
             return false;
-        if(!attackTarget.isAlive())
+        if(!this.attackTarget.isAlive())
             return false;
         if(this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
         	return false;
-        if(this.targetClass != null && !this.targetClass.isAssignableFrom(attackTarget.getClass()))
+        if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.attackTarget.getClass()))
             return false;
 
         if(--this.repathTime <= 0) {
@@ -189,19 +189,19 @@ public class AttackMeleeGoal extends Goal {
 		// Path To Target:
 		if(this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) {
 			if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
-				this.repathTime = failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
+				this.repathTime = this.failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
 				this.host.getNavigator().tryMoveToEntityLiving(attackTarget, this.speed);
 				if(this.host.getNavigator().getPath() != null) {
 	                PathPoint finalPathPoint = this.host.getNavigator().getPath().getFinalPathPoint();
 	                if(finalPathPoint != null && attackTarget.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {
-						failedPathFindingPenalty = 0;
+						this.failedPathFindingPenalty = 0;
 					}
 	                else {
-						failedPathFindingPenalty += failedPathFindingPenaltyMax;
+						this.failedPathFindingPenalty += this.failedPathFindingPenaltyMax;
 					}
 	            }
 	            else {
-					failedPathFindingPenalty += failedPathFindingPenaltyMax;
+					this.failedPathFindingPenalty += this.failedPathFindingPenaltyMax;
 				}
         	}
 			else if(this.host.useDirectNavigator()) {
