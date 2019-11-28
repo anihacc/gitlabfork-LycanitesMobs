@@ -262,7 +262,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
             if(isChild && !renderAsTrophy) {
                 this.childScale(partName);
                 if(this.bigChildHead && (partName.equals("head") || partName.equals("mouth")))
-                    this.translate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
+                    this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
             }
 
             // Trophy Scaling:
@@ -442,6 +442,8 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
    	//                  Child Scale
    	// ==================================================
     public void childScale(String partName) {
+		if(this.bigChildHead && ("head".equals(partName) || "mouth".equals(partName)))
+			return;
     	this.animator.doScale(0.5F, 0.5F, 0.5F);
     }
 

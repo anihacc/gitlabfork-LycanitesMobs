@@ -9,7 +9,7 @@
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
-		"enabled": false,
+		"enabled": true,
 		"spawners": ["creature", "animal", "portal", "nether"],
 		"disableSubspecies": false,
 		"dimensionIds": ["minecraft:the_nether"],
@@ -42,6 +42,7 @@
 	"pierce": 1,
 	"sight": 24,
 	"knockbackResistance": 0.25,
+	"packSize": 1,
 	"eggBackColor": "#FF0099",
 	"eggForeColor": "#990000",
 	"subspecies": [

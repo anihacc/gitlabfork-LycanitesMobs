@@ -30,10 +30,10 @@ public class ModelTemplateBiped extends ModelCreatureObj {
 
         // Idle:
         if(partName.equals("mouth")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
         }
         if(partName.equals("neck")) {
-            this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
         }
         if(partName.contains("armleft")) {
             rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
