@@ -1907,8 +1907,8 @@ item.planttreat.description=Made from fresh vegetables and sugar cane, some plan
 item.undeadtreat.name=Undead Treat
 item.undeadtreat.description=Made from the finest rotten flesh, but can any undead creature be swayed by this?
 #
-item.lycanitesmobs.wormtreat=Worm Treat
-item.lycanitesmobs.wormtreat.description=Made from very gamey meat, those worm creatures seem to like that.
+item.wormtreat.name=Worm Treat
+item.wormtreat.description=Made from very gamey meat, those worm creatures seem to like that.
 # ========================================================================
 # %event% will be replaced with the name of the event, don't translate this!
 event.started=%event% has begun!

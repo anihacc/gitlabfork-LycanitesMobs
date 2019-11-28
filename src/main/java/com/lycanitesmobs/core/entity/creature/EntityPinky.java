@@ -105,7 +105,7 @@ public class EntityPinky extends RideableCreatureEntity {
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 1.0D;
+        return (double)this.height * 0.9D;
     }
 	
 	
