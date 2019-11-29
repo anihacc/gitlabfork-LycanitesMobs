@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,6 +22,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	
 	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
 	public BaseCreatureEntity backSegment;
+	public boolean isHungry = true;
 	
     // ==================================================
  	//                    Constructor
@@ -89,8 +91,9 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		// Spawn Additional Segments:
-		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
+		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && !this.isHungry && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
 			age = -(this.growthTime / 4);
+			this.isHungry = true;
 
 			int size = 0;
 			BaseCreatureEntity lastSegment = this;
@@ -218,6 +221,18 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         return this.getGrowingAge() >= 0;
     }
 
+    @Override
+	public boolean breed() {
+		if(super.breed()) {
+			this.isHungry = false;
+			if(this.getAge() == 0) {
+				this.setGrowingAge(0);
+			}
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public boolean canMate() {
 		return false;
@@ -231,4 +246,26 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     public float getFallResistance() {
     	return 100;
     }
+
+
+	// ==================================================
+	//                        NBT
+	// ==================================================
+	// ========== Read ===========
+	/** Used when loading this mob from a saved chunk. **/
+	@Override
+	public void readAdditional(CompoundNBT nbtTagCompound) {
+		if(nbtTagCompound.contains("IsHungry")) {
+			this.isHungry = nbtTagCompound.getBoolean("IsHungry");
+		}
+		super.readAdditional(nbtTagCompound);
+	}
+
+	// ========== Write ==========
+	/** Used when saving this mob to a chunk. **/
+	@Override
+	public void writeAdditional(CompoundNBT nbtTagCompound) {
+		super.writeAdditional(nbtTagCompound);
+		nbtTagCompound.putBoolean("IsHungry", this.isHungry);
+	}
 }
