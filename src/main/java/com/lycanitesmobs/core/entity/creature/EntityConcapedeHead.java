@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -15,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,6 +22,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	
 	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
 	public BaseCreatureEntity backSegment;
+	public boolean isHungry = true;
 	
     // ==================================================
  	//                    Constructor
@@ -90,8 +91,9 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 	@Override
 	public void setGrowingAge(int age) {
 		// Spawn Additional Segments:
-		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
+		if(!this.getEntityWorld().isRemote && !this.firstSpawn && age == 0 && !this.isHungry && CreatureManager.getInstance().getCreature("concapedesegment") != null) {
 			age = -(this.growthTime / 4);
+			this.isHungry = true;
 
 			int size = 0;
 			BaseCreatureEntity lastSegment = this;
@@ -220,6 +222,18 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     }
 
 	@Override
+	public boolean breed() {
+		if(super.breed()) {
+			this.isHungry = false;
+			if(this.getAge() == 0) {
+				this.setGrowingAge(0);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	public boolean canMate() {
 		return false;
 	}
@@ -232,4 +246,26 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     public float getFallResistance() {
     	return 100;
     }
+
+
+	// ==================================================
+	//                        NBT
+	// ==================================================
+	// ========== Read ===========
+	/** Used when loading this mob from a saved chunk. **/
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbtTagCompound) {
+		if(nbtTagCompound.hasKey("IsHungry")) {
+			this.isHungry = nbtTagCompound.getBoolean("IsHungry");
+		}
+		super.readEntityFromNBT(nbtTagCompound);
+	}
+
+	// ========== Write ==========
+	/** Used when saving this mob to a chunk. **/
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeEntityToNBT(nbtTagCompound);
+		nbtTagCompound.setBoolean("IsHungry", this.isHungry);
+	}
 }
