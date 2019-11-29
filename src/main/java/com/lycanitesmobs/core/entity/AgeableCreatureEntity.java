@@ -318,8 +318,23 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	
 	// ========== Valid Partner ==========
 	public boolean canBreedWith(AgeableCreatureEntity partner) {
-		if(partner == this) return false;
-		if(partner.getClass() != this.getClass()) return false;
+		if(partner == this)
+			return false;
+		if(partner.getClass() != this.getClass())
+			return false;
+		if(this.getSubspecies() == null) {
+			if(partner.getSubspecies() != null && partner.getSubspecies().skin != null) {
+				return false;
+			}
+		}
+		else if(this.getSubspecies().skin != null) {
+			if(partner.getSubspecies() == null) {
+				return false;
+			}
+			if(!this.getSubspecies().skin.equals(partner.getSubspecies().skin)) {
+				return false;
+			}
+		}
 		return this.isInLove() && partner.isInLove();
 	}
 	

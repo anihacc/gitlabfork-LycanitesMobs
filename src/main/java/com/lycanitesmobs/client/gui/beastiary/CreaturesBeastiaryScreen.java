@@ -7,6 +7,7 @@ import com.lycanitesmobs.client.gui.beastiary.lists.CreatureTypeList;
 import com.lycanitesmobs.client.gui.beastiary.lists.SubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
+import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -97,13 +98,18 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 
 		// Creature Display:
 		if(this.playerExt.selectedCreature != null) {
+			Subspecies subspecies = null;
+			if(this.playerExt.selectedSubspecies != 0) {
+				subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
+			}
+
 			// Model:
 			CreatureInfo creatureInfo = this.playerExt.selectedCreature;
 			CreatureKnowledge creatureKnowledge = this.playerExt.beastiary.getCreatureKnowledge(this.playerExt.selectedCreature.getName());
 
 			// Element:
 			String text = "\u00A7l" + new TranslationTextComponent("creature.stat.element").getFormattedText() + ": " + "\u00A7r";
-			text += creatureInfo.elements != null ? creatureInfo.getElementNames().getFormattedText() : "None";
+			text += creatureInfo.elements != null ? creatureInfo.getElementNames(subspecies).getFormattedText() : "None";
 			this.getFontRenderer().drawSplitString(text, nextX, nextY, width, 0xFFFFFF);
 
 			// Level:

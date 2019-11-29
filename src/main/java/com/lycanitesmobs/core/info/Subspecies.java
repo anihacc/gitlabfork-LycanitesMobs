@@ -6,8 +6,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.config.ConfigCreatureSubspecies;
 import com.lycanitesmobs.core.entity.CreatureStats;
+import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.spawner.condition.SpawnCondition;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -84,8 +86,14 @@ public class Subspecies {
     /** Higher priority Subspecies will always spawn in place of lower priority ones if they can spawn (conditions are met) regardless of weight. Only increase this above 0 if a subspecies has conditions otherwise they will stop standard/base Subspecies from showing up. **/
     public int priority = 0;
 
+	/** The Elements of this subspecies, affects buffs and debuffs amongst other things. **/
+	public List<ElementInfo> elements = new ArrayList<>();
+
     /** A list of Spawn Conditions required for this subspecies to spawn. **/
     public List<SpawnCondition> spawnConditions = new ArrayList<>();
+
+	/** The offset relative to this subspecies width and height that riding entities should be offset by. **/
+	public Vec3d mountOffset = null;
 
 
 	/**
@@ -167,6 +175,23 @@ public class Subspecies {
 			subspecies.priority = json.get("priority").getAsInt();
 		}
 
+		// Elements:
+		List<String> elementNames = new ArrayList<>();
+		if(json.has("element")) {
+			elementNames.add(json.get("element").getAsString());
+		}
+		if(json.has("elements")) {
+			elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+		}
+		subspecies.elements.clear();
+		for(String elementName : elementNames) {
+			ElementInfo element = ElementManager.getInstance().getElement(elementName);
+			if (element == null) {
+				throw new RuntimeException("[Creature] The element " + elementName + " cannot be found for subspecies: " + subspecies.skin);
+			}
+			subspecies.elements.add(element);
+		}
+
 		// Conditions:
 		if(json.has("conditions")) {
 			JsonArray jsonArray = json.get("conditions").getAsJsonArray();
@@ -177,6 +202,9 @@ public class Subspecies {
 				subspecies.spawnConditions.add(spawnCondition);
 			}
 		}
+
+		// Mount Offset:
+		subspecies.mountOffset = JSONHelper.getVec3d(json, "mountOffset", null);
 
 		return subspecies;
 	}

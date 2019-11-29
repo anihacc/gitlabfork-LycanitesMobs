@@ -39,6 +39,7 @@
     "subspecies.celestial": "Celestial",
     "subspecies.umber": "Umber",
     "_comment": "Skins:",
+    "subspecies.moloch": "Moloch",
     "subspecies.void": "Void",
     "_comment": "========== Items ==========",
     "item.lycanitesmobs.horsearmormetal": "Iron Pet Armor",

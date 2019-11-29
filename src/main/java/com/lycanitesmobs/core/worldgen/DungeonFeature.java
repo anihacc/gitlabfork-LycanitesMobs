@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.Feature;
@@ -54,6 +55,9 @@ public class DungeonFeature extends Feature<NoFeatureConfig> {
 						LycanitesMobs.logDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkPos.x + (dungeonSizeMax * x)) + " Z" + (chunkPos.z + (dungeonSizeMax * z)));
 						DungeonInstance dungeonInstance = new DungeonInstance();
 						int yPos = worldWriter.getSeaLevel();
+						if(world.getDimension().getType() == DimensionType.THE_NETHER || world.getDimension().getType() == DimensionType.THE_END) {
+							yPos = 64;
+						}
 						BlockPos dungeonPos = new ChunkPos(chunkPos.x + (dungeonSizeMax * x), chunkPos.z + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
 						dungeonInstance.setOrigin(dungeonPos);
 						dungeonInstance.init(world);

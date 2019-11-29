@@ -57,6 +57,32 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
             }
         }
+        if(partName.contains("tail")) {
+            float sine = 0;
+            if(partName.equals("tail.002") || partName.equals("tail02")) {
+                sine = 1;
+            }
+            else if(partName.equals("tail.003") || partName.equals("tail03")) {
+                sine = 2;
+            }
+            else if(partName.equals("tail.004")) {
+                sine = 3;
+            }
+            else if(partName.equals("tail.005")) {
+                sine = 4;
+            }
+            else if(partName.equals("tail.006")) {
+                sine = 5;
+            }
+            else if(partName.equals("tail.007")) {
+                sine = 6;
+            }
+            sine = (MathHelper.sin(sine / 6) - 0.5F);
+            float tailRotX = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
+            float tailRotY = (float)-Math.toDegrees(MathHelper.cos((loop + time) * sine * 0.1F) * 0.4F);
+            rotY += Math.toDegrees(MathHelper.cos(time * 0.25F) * distance);
+            this.rotate(tailRotX, tailRotY, 0);
+        }
 
 		// Fingers:
 		if(partName.contains("finger")) {

@@ -11,6 +11,7 @@ import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
+import com.lycanitesmobs.core.entity.creature.EntityPinky;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
@@ -1283,6 +1284,17 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public int getEffectStrength(float value) {
         return Math.round((value * (float)(this.creatureStats.getAmplifier())));
     }
+
+	/**
+	 * Returns a list of elements that this creature is using.
+	 * @return A list of elements.
+	 */
+	public List<ElementInfo> getElements() {
+		if(this.getSubspecies() != null && !this.getSubspecies().elements.isEmpty()) {
+			return this.getSubspecies().elements;
+		}
+		return this.creatureInfo.elements;
+	}
 
 
 	// ==================================================
@@ -3477,7 +3489,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @param amplifier The effect amplifier which is multiplied by this creature's stats.
 	 */
 	public void applyDebuffs(LivingEntity entity, int duration, int amplifier) {
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : this.getElements()) {
 			element.debuffEntity(entity, this.getEffectDuration(duration), this.getEffectAmplifier(amplifier));
 		}
 	}
@@ -3491,7 +3503,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	public void applyBuffs(LivingEntity entity, int duration, int amplifier) {
 		if(this.creatureStats.getAmplifier() >= 0) {
-			for(ElementInfo element : this.creatureInfo.elements) {
+			for(ElementInfo element : getElements()) {
 				element.buffEntity(entity, this.getEffectDuration(duration), this.getEffectAmplifier(amplifier));
 			}
 		}
@@ -3709,7 +3721,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean getAlwaysRenderNameTagForRender() {
-		if(this.getSubspecies() != null && !this.hasCustomName())
+		if(this.getSubspecies() != null && this.getSubspecies().color != null && !this.hasCustomName())
 			return this.renderSubspeciesNameTag();
 		return super.getAlwaysRenderNameTagForRender();
 	}
@@ -3881,7 +3893,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
     	// Element Damage:
-		if(source instanceof ElementDamageSource && this.creatureInfo.elements.contains(((ElementDamageSource)source).getElement())) {
+		if(source instanceof ElementDamageSource && getElements().contains(((ElementDamageSource)source).getElement())) {
 			return false;
 		}
 
@@ -3935,7 +3947,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
     public boolean isPotionApplicable(EffectInstance effectInstance) {
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.isEffectApplicable(effectInstance)) {
 				return false;
 			}
@@ -3948,7 +3960,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.extraMobBehaviour != null)
     		if(this.extraMobBehaviour.fireImmunityOverride)
     			return false;
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.canBurn()) {
 				return false;
 			}
@@ -3961,7 +3973,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns true if this mob should be damaged by extreme cold such as from ooze. **/
     public boolean canFreeze() {
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.canFreeze()) {
 				return false;
 			}
@@ -4138,18 +4150,27 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Mounted Y Offset ==========
     /** An X Offset used to position the mob that is riding this mob. **/
     public double getMountedXOffset() {
-        return 0;
+    	if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.getSize(Pose.STANDING).width * this.getSubspecies().mountOffset.getX();
+		}
+        return (double)this.getSize(Pose.STANDING).width * this.creatureInfo.mountOffset.getX();
     }
 
 	/** A Y Offset used to position the mob that is riding this mob. **/
 	@Override
 	public double getMountedYOffset() {
-		return super.getMountedYOffset() - 0.5D;
+		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.getSize(Pose.STANDING).height * this.getSubspecies().mountOffset.getY();
+		}
+		return (double)this.getSize(Pose.STANDING).height * this.creatureInfo.mountOffset.getY();
 	}
 
 	/** A Z Offset used to position the mob that is riding this mob. **/
 	public double getMountedZOffset() {
-		return 0;
+		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.getSize(Pose.STANDING).width * this.getSubspecies().mountOffset.getZ();
+		}
+		return (double)this.getSize(Pose.STANDING).width * this.creatureInfo.mountOffset.getZ();
 	}
 
     /** Get entities that are near this entity. **/
@@ -4438,6 +4459,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public ResourceLocation getEquipmentTexture(String equipmentName) {
         if(!this.canEquip())
             return this.getTexture();
+		if(this.getSubspecies() != null && this.getSubspecies().skin != null) {
+			equipmentName = this.getSubspecies().skin + "_" + equipmentName;
+		}
     	return this.getSubTexture(equipmentName);
     }
 

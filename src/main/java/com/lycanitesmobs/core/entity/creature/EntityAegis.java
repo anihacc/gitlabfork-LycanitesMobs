@@ -10,6 +10,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.RavagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.util.DamageSource;
@@ -105,8 +106,10 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	public void onDamage(DamageSource damageSrc, float damage) {
 		if(this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
-		if(damageSrc.getTrueSource() instanceof RavagerEntity)
-			damage *= 0.5F;
+		if(damageSrc.getTrueSource() != null) {
+			if(damageSrc.getTrueSource() instanceof MonsterEntity)
+				damage *= 0.5F;
+		}
 		super.onDamage(damageSrc, damage);
 	}
 

@@ -372,6 +372,46 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/pinky/mount", "stream": false}]
     },
+    "entity.pinky.moloch.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/say", "stream": false}]
+    },
+    "entity.pinky.moloch.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/hurt", "stream": false}]
+    },
+    "entity.pinky.moloch.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/death", "stream": false}]
+    },
+    "entity.pinky.moloch.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/step", "stream": false}]
+    },
+    "entity.pinky.moloch.jump": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/jump", "stream": false}]
+    },
+    "entity.pinky.moloch.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/attack", "stream": false}]
+    },
+    "entity.pinky.moloch.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/beg", "stream": false}]
+    },
+    "entity.pinky.moloch.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/tame", "stream": false}]
+    },
+    "entity.pinky.moloch.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/eat", "stream": false}]
+    },
+    "entity.pinky.moloch.mount": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/mount", "stream": false}]
+    },
     "entity.trite.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/trite/say", "stream": false}]

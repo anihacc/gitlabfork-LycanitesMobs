@@ -375,9 +375,9 @@ public class GameEventListener {
 			if(mouseOverEntity instanceof BaseCreatureEntity) {
 				BaseCreatureEntity mouseOverCreature = (BaseCreatureEntity)mouseOverEntity;
 				event.getLeft().add("");
-				event.getLeft().add("Target Creature: " + mouseOverCreature.getName());
+				event.getLeft().add("Target Creature: " + mouseOverCreature.getName().getFormattedText());
 				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
-				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames());
+				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getFormattedText());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
 				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
@@ -405,7 +405,7 @@ public class GameEventListener {
 					TameableCreatureEntity mouseOverTameable = (TameableCreatureEntity)mouseOverCreature;
 					event.getLeft().add("");
 					event.getLeft().add("Owner ID: " + (mouseOverTameable.getOwnerId() != null ? mouseOverTameable.getOwnerId().toString() : "None"));
-					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName());
+					event.getLeft().add("Owner Name: " + mouseOverTameable.getOwnerName().getFormattedText());
 				}
 			}
 		}
