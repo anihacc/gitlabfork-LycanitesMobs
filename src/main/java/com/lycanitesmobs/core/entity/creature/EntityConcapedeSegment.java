@@ -151,16 +151,16 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         		else if(this.posZ - pos.z < -segmentDistance)
         			this.posZ = pos.z - segmentDistance;
         	}
-        }
 
-        // Look at parent:
-		if(this.hasParent()) {
-			this.getLookController().setLookPositionWithEntity(this.getParentTarget(), 30.0F, 30.0F);
-		}
-        
-        // Growth Into Head:
-        if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)
-        	this.setGrowingAge(-this.growthTime);
+			// Look at parent:
+			if(this.hasParent()) {
+				this.getLookController().setLookPositionWithEntity(this.getParentTarget(), 30.0F, 30.0F);
+			}
+
+			// Growth Into Head:
+			if(!this.getEntityWorld().isRemote && this.getGrowingAge() <= 0)
+				this.setGrowingAge(-this.growthTime);
+        }
     }
 
 	@Override

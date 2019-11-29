@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;

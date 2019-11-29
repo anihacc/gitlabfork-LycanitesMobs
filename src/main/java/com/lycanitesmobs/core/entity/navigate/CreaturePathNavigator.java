@@ -7,9 +7,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Pose;
+import net.minecraft.network.DebugPacketSender;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+
+import java.util.Iterator;
 
 public class CreaturePathNavigator extends PathNavigator {
 
@@ -246,8 +249,8 @@ public class CreaturePathNavigator extends PathNavigator {
             return directTraceType == RayTraceResult.Type.MISS;
         }
 
-        int i = MathHelper.floor(startVec.x);
-        int j = MathHelper.floor(startVec.z);
+        int startX = MathHelper.floor(startVec.x);
+        int startZ = MathHelper.floor(startVec.z);
         double distanceX = endVec.x - startVec.x;
         double distanceY = endVec.z - startVec.z;
         double distance = distanceX * distanceX + distanceY * distanceY;
@@ -259,55 +262,54 @@ public class CreaturePathNavigator extends PathNavigator {
             double d3 = 1.0D / Math.sqrt(distance);
             distanceX = distanceX * d3;
             distanceY = distanceY * d3;
-            sizeX = sizeX + 2;
-            sizeZ = sizeZ + 2;
+            sizeX += 2;
+            sizeZ += 2;
 
-            if(!this.isSafeToStandAt(i, (int)startVec.y, j, sizeX, sizeY, sizeZ, startVec, distanceX, distanceY)) {
+            if(!this.isSafeToStandAt(startX, (int)startVec.y, startZ, sizeX, sizeY, sizeZ, startVec, distanceX, distanceY)) {
                 return false;
             }
             else {
-                sizeX = sizeX - 2;
-                sizeZ = sizeZ - 2;
-                double d4 = 1.0D / Math.abs(distanceX);
-                double d5 = 1.0D / Math.abs(distanceY);
-                double d6 = (double)i - startVec.x;
-                double d7 = (double)j - startVec.z;
-
+                sizeX -= 2;
+                sizeZ -= 2;
+                double scanSpeedX = 1.0D / Math.abs(distanceX);
+                double scanSpeedZ = 1.0D / Math.abs(distanceY);
+                double scanX = (double) startX - startVec.x;
+                double scanZ = (double) startZ - startVec.z;
                 if (distanceX >= 0.0D) {
-                    ++d6;
+                    ++scanX;
                 }
 
                 if (distanceY >= 0.0D) {
-                    ++d7;
+                    ++scanZ;
                 }
 
-                d6 = d6 / distanceX;
-                d7 = d7 / distanceY;
-                int k = distanceX < 0.0D ? -1 : 1;
-                int l = distanceY < 0.0D ? -1 : 1;
-                int i1 = MathHelper.floor(endVec.x);
-                int j1 = MathHelper.floor(endVec.z);
-                int k1 = i1 - i;
-                int l1 = j1 - j;
+                scanX /= distanceX;
+                scanZ /= distanceY;
+                int scanPosX = distanceX < 0.0D ? -1 : 1;
+                int scanPosZ = distanceY < 0.0D ? -1 : 1;
+                int scanEndX = MathHelper.floor(endVec.x);
+                int scanEndZ = MathHelper.floor(endVec.z);
+                int scanDistanceX = scanEndX - startX;
+                int scanDistanceZ = scanEndZ - startZ;
 
-                while (k1 * k > 0 || l1 * l > 0) {
-                    if(d6 < d7) {
-                        d6 += d4;
-                        i += k;
-                        k1 = i1 - i;
+                do {
+                    if (scanDistanceX * scanPosX <= 0 && scanDistanceZ * scanPosZ <= 0) {
+                        return true;
+                    }
+
+                    if (scanX < scanZ) {
+                        scanX += scanSpeedX;
+                        startX += scanPosX;
+                        scanDistanceX = scanEndX - startX;
                     }
                     else {
-                        d7 += d5;
-                        j += l;
-                        l1 = j1 - j;
+                        scanZ += scanSpeedZ;
+                        startZ += scanPosZ;
+                        scanDistanceZ = scanEndZ - startZ;
                     }
+                } while (this.isSafeToStandAt(startX, MathHelper.floor(startVec.y), startZ, sizeX, sizeY, sizeZ, startVec, distanceX, distanceY));
 
-                    if(!this.isSafeToStandAt(i, (int)startVec.y, j, sizeX, sizeY, sizeZ, startVec, distanceX, distanceY)) {
-                        return false;
-                    }
-                }
-
-                return true;
+                return false;
             }
         }
     }
@@ -368,19 +370,23 @@ public class CreaturePathNavigator extends PathNavigator {
     }
 
     /** Returns true if the position is clear. **/
-    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d startVec, double distanceX, double distanceZ) {
-        for (BlockPos blockpos : BlockPos.getAllInBoxMutable(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1))) {
-            double d0 = (double)blockpos.getX() + 0.5D - startVec.x;
-            double d1 = (double)blockpos.getZ() + 0.5D - startVec.z;
+    private boolean isPositionClear(int x, int y, int z, int sizeX, int sizeY, int sizeZ, Vec3d startVec, double distanceScaleX, double distanceScaleZ) {
+        Iterator blockPosIterator = BlockPos.getAllInBoxMutable(new BlockPos(x, y, z), new BlockPos(x + sizeX - 1, y + sizeY - 1, z + sizeZ - 1)).iterator();
 
-            if (d0 * distanceX + d1 * distanceZ >= 0.0D) {
-                if (!this.world.getBlockState(blockpos).isOpaqueCube(this.world, blockpos)) {
-                    return false;
-                }
+        BlockPos blockPos;
+        double distanceX;
+        double distanceZ;
+        do {
+            if (!blockPosIterator.hasNext()) {
+                return true;
             }
-        }
 
-        return true;
+            blockPos = (BlockPos)blockPosIterator.next();
+            distanceX = (double)blockPos.getX() + 0.5D - startVec.x;
+            distanceZ = (double)blockPos.getZ() + 0.5D - startVec.z;
+        } while(distanceX * distanceScaleX + distanceZ * distanceScaleZ < 0.0D || this.world.getBlockState(blockPos).allowsMovement(this.world, blockPos, PathType.LAND));
+
+        return false;
     }
 
 
@@ -426,12 +432,14 @@ public class CreaturePathNavigator extends PathNavigator {
     /** Follows the path moving to the next index when needed, etc. Called by tick() if canNavigate() and noPath() are both true. **/
     @Override
     protected void pathFollow() {
+        float entityWidth = this.entity.getSize(Pose.STANDING).width;
+        Vec3d currentPos = this.getEntityPosition();
+
         // Flight:
         if(this.entityCreature.isFlying() || this.entityCreature.canSwim()) {
-            Vec3d entityVector = this.getEntityPosition();
-            float entitySize = this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width;
+            float entitySize = entityWidth * entityWidth;
 
-            if (entityVector.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < entitySize) {
+            if (currentPos.squareDistanceTo(this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex())) < entitySize) {
                 this.currentPath.incrementPathIndex();
             }
 
@@ -439,18 +447,23 @@ public class CreaturePathNavigator extends PathNavigator {
             for (int pathIndex = Math.min(this.currentPath.getCurrentPathIndex() + pathIndexRange, this.currentPath.getCurrentPathLength() - 1); pathIndex > this.currentPath.getCurrentPathIndex(); --pathIndex) {
                 Vec3d pathVector = this.currentPath.getVectorFromIndex(this.entity, pathIndex);
 
-                if (pathVector.squareDistanceTo(entityVector) <= 36.0D && this.isDirectPathBetweenPoints(entityVector, pathVector, 0, 0, 0)) {
+                if (pathVector.squareDistanceTo(currentPos) <= 36.0D && this.isDirectPathBetweenPoints(currentPos, pathVector, 0, 0, 0)) {
                     this.currentPath.setCurrentPathIndex(pathIndex);
                     break;
                 }
             }
 
-            this.checkForStuck(entityVector);
+            this.checkForStuck(currentPos);
             return;
         }
 
         // Walking:
-        super.pathFollow();
+        this.maxDistanceToWaypoint = entityWidth > 0.75F ? entityWidth : 0.75F - entityWidth / 2.0F;
+        Vec3d pathTargetPos = this.currentPath.getCurrentPos();
+        if (Math.abs(this.entity.posX - (pathTargetPos.x + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.posZ - (pathTargetPos.z + (entityWidth + 1) / 2D)) < (double)this.maxDistanceToWaypoint && Math.abs(this.entity.posY - pathTargetPos.y) < 1.0D) {
+            this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
+        }
+        this.checkForStuck(currentPos);
     }
 
     /** Called on entity update to update the navigation progress. **/

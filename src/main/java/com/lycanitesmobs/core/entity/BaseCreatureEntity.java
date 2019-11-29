@@ -224,6 +224,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // Targets:
 	/** A list of Entity Types that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
 	protected List<EntityType> hostileTargets = new ArrayList<>();
+	/** A list of Entity Classes that this creature is naturally hostile towards, any Attack Targeting Goal will add to this list. **/
+	protected List<Class<? extends Entity>> hostileTargetClasses = new ArrayList<>();
     /** A target used for alpha creatures or connected mobs such as following concapede segements. **/
     private LivingEntity masterTarget;
     /** A target used usually for child mobs or connected mobs such as leading concapede segments. **/
@@ -2261,12 +2263,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(targetEntity instanceof BaseCreatureEntity) {
 			BaseCreatureEntity targetCreature = (BaseCreatureEntity)targetEntity;
 
-			// Same Species, Same Owner:
+			/*/ Same Species, Same Owner (including no owners):
 			if(targetCreature.getClass() == this.getClass() && targetCreature.getOwner() == this.getOwner()) {
 				if(this.getAttackTarget() != targetCreature.getAttackTarget()) {
 					return false;
 				}
-			}
+			}*/
 
 			// Master:
             if(targetCreature.getMasterTarget() == this) {
@@ -2775,6 +2777,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.hostileTargets.contains(target.getType())) {
 			return true;
 		}
+		if(this.hostileTargetClasses.contains(target.getClass())) {
+			return true;
+		}
 		for(CreatureGroup group : this.creatureInfo.getGroups()) {
 			if(group.shouldHunt(target) || group.shouldPackHunt(target)) {
 				return true;
@@ -2783,13 +2788,22 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	return false;
 	}
 
-	/** Marks this creature as hostile towards the provided entity. **/
+	/** Marks this creature as hostile towards the provided entity type. **/
 	public void setHostileTo(EntityType targetType) {
 		if(this.hostileTargets == null)
 			this.hostileTargets = new ArrayList<>();
 		if(this.hostileTargets.contains(targetType))
 			return;
 		this.hostileTargets.add(targetType);
+	}
+
+	/** Marks this creature as hostile towards the provided entity class. **/
+	public void setHostileTo(Class<? extends Entity> targetClass) {
+		if(this.hostileTargetClasses == null)
+			this.hostileTargetClasses = new ArrayList<>();
+		if(this.hostileTargetClasses.contains(targetClass))
+			return;
+		this.hostileTargetClasses.add(targetClass);
 	}
     
     /** Returns true if this mob should defend other entities that cry for help. Used mainly by the revenge AI. **/

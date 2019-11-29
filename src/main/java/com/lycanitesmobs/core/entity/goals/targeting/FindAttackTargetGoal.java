@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureGroup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +12,7 @@ import java.util.*;
 public class FindAttackTargetGoal extends TargetingGoal {
 	// Targets:
     private List<EntityType> targetTypes = new ArrayList<>();
+	private List<Class<? extends Entity>> targetClasses = new ArrayList<>();
 
     // Properties:
 	protected boolean targetPlayers;
@@ -44,6 +45,16 @@ public class FindAttackTargetGoal extends TargetingGoal {
 		}
     	return this;
     }
+
+	public FindAttackTargetGoal addTargets(Class<? extends Entity>... targets) {
+		this.targetClasses.addAll(Arrays.asList(targets));
+		for(Class<? extends Entity> targetType : targets) {
+			this.host.setHostileTo(targetType);
+			if(targetType.isAssignableFrom(PlayerEntity.class))
+				this.targetPlayers = true;
+		}
+		return this;
+	}
     
     public FindAttackTargetGoal setOnlyNearby(boolean setNearby) {
     	this.nearbyOnly = setNearby;
@@ -92,8 +103,22 @@ public class FindAttackTargetGoal extends TargetingGoal {
     @Override
     protected boolean isValidTarget(LivingEntity target) {
     	// Target Type Check:
-		if(this.targetTypes.size() > 0 && !this.targetTypes.contains(target.getType())) {
+		if(!this.targetTypes.isEmpty() && !this.targetTypes.contains(target.getType())) {
 			return false;
+		}
+
+		// Target Class Check:
+		if(!this.targetClasses.isEmpty()) {
+			boolean isTargetClass = false;
+			for (Class<? extends Entity> targetClass : this.targetClasses) {
+				if (targetClass.isAssignableFrom(target.getClass())) {
+					isTargetClass = true;
+					break;
+				}
+			}
+			if(!isTargetClass) {
+				return false;
+			}
 		}
 
 		// Tamed Targeting Check:
@@ -115,7 +140,6 @@ public class FindAttackTargetGoal extends TargetingGoal {
         if(this.requirePack && !this.host.isInPack()) {
             return false;
         }
-        
     	return true;
     }
     

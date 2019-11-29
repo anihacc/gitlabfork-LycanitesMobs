@@ -48,6 +48,11 @@ public class EntityPinky extends RideableCreatureEntity {
 
         this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.ZOMBIE_PIGMAN));
     }
+
+	@Override
+	public boolean shouldCreatureGroupFlee(LivingEntity target) {
+		return false;
+	}
 	
 	
     // ==================================================
@@ -105,7 +110,7 @@ public class EntityPinky extends RideableCreatureEntity {
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.9D;
+        return (double)this.getSize(Pose.STANDING).height * 1.1D;
     }
 	
 	

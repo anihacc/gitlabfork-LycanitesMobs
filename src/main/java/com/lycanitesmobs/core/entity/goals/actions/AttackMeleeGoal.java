@@ -125,6 +125,7 @@ public class AttackMeleeGoal extends Goal {
 				return this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.posX, (int) attackTarget.posY + this.host.getFlightOffset(), (int) attackTarget.posZ), this.speed);
 			}
         }
+
         return true;
     }
 	
