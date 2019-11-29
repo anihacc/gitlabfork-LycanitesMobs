@@ -27,7 +27,7 @@ public class EntityWendigo extends BaseCreatureEntity implements IMob {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEFINED;
+        this.attribute = EnumCreatureAttribute.UNDEAD;
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;

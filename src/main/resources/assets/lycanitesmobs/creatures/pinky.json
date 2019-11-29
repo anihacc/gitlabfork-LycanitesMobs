@@ -10,12 +10,12 @@
 	"enabled": true,
 	"spawning": {
 		"enabled": true,
-		"spawners": ["creature", "animal", "portal", "nether"],
+		"spawners": ["creature", "animal", "portal", "nether", "end"],
 		"disableSubspecies": false,
-		"dimensionIds": [-1],
+		"dimensionIds": [-1, 1],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomes": ["nether"],
+		"biomes": ["nether", "end"],
 		"spawnWeight": 6,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
@@ -55,6 +55,74 @@
 			"index": 2,
 			"name": "scarlet",
 			"type": "uncommon"
+		},
+		{
+			"index": 4,
+			"skin": "moloch",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelPinkyMoloch",
+			"type": "common",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			],
+			"mountOffset": [
+				0,
+				1.0,
+				0
+			]
+		},
+		{
+			"index": 5,
+			"skin": "moloch",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelPinkyMoloch",
+			"color": "verdant",
+			"type": "uncommon",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			],
+			"mountOffset": [
+				0,
+				1.0,
+				0
+			]
+		},
+		{
+			"index": 6,
+			"skin": "moloch",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelPinkyMoloch",
+			"color": "golden",
+			"type": "uncommon",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": [1],
+					"dimensionListType": "whitelist"
+				}
+			],
+			"mountOffset": [
+				0,
+				1.0,
+				0
+			]
 		}
 	],
 	"element": "nether",
@@ -80,5 +148,10 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"mountOffset": [
+		0,
+		1.1,
+		0
+	]
 }

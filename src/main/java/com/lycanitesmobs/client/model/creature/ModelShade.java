@@ -61,32 +61,5 @@ public class ModelShade extends ModelTemplateBiped {
 		if(partName.equals("mouth")) {
 			this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.2F) * 0.1F), 0.0F, 0.0F);
 		}
-
-		else if(partName.contains("tail")) {
-			float sine = 0;
-			if(partName.equals("tail.002")) {
-				sine = 1;
-			}
-			else if(partName.equals("tail.003")) {
-				sine = 2;
-			}
-			else if(partName.equals("tail.004")) {
-				sine = 3;
-			}
-			else if(partName.equals("tail.005")) {
-				sine = 4;
-			}
-			else if(partName.equals("tail.006")) {
-				sine = 5;
-			}
-			else if(partName.equals("tail.007")) {
-				sine = 6;
-			}
-			sine = (MathHelper.sin(sine / 6) - 0.5F);
-			float rotX = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
-			float rotY = (float)-Math.toDegrees(MathHelper.cos((loop + time) * sine * 0.1F) * 0.4F);
-			rotY += Math.toDegrees(MathHelper.cos(time * 0.25F) * distance);
-			this.rotate(rotX, rotY, 0);
-		}
     }
 }

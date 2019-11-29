@@ -10,6 +10,7 @@ import com.lycanitesmobs.client.gui.beastiary.list.GuiSubspeciesList;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureKnowledge;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -115,6 +116,11 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 		// Creature Display:
 		if(this.playerExt.selectedCreature != null) {
+			Subspecies subspecies = null;
+			if(this.playerExt.selectedSubspecies != 0) {
+				subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
+			}
+
 			// Model:
 			this.renderCreature(this.playerExt.selectedCreature, this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + 100, mouseX, mouseY, partialTicks);
 			CreatureInfo creatureInfo = this.playerExt.selectedCreature;
@@ -122,7 +128,7 @@ public class GuiBeastiaryCreatures extends GuiBeastiary {
 
 			// Element:
 			String text = "\u00A7l" + LanguageManager.translate("creature.stat.element") + ": " + "\u00A7r";
-			text += creatureInfo.elements != null ? creatureInfo.getElementNames() : "None";
+			text += creatureInfo.elements != null ? creatureInfo.getElementNames(subspecies) : "None";
 			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 
 			// Level:

@@ -236,7 +236,7 @@ public class DungeonSchematic {
 			}
 		}
 
-		if(!this.biomes.isEmpty() && !isValidBiome(world.getBiome(pos))) {
+		if(!isValidBiome(world.getBiome(pos))) {
 			return false;
 		}
 
@@ -250,6 +250,9 @@ public class DungeonSchematic {
 	 * @return True if at least one biome in the provided list is a valid biome.
 	 */
 	public boolean isValidBiome(Biome biome) {
+		if(this.biomes.isEmpty()) {
+			return true;
+		}
 		if(this.biomes.contains(biome)) {
 			return true;
 		}

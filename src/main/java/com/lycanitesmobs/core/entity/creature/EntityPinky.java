@@ -105,15 +105,6 @@ public class EntityPinky extends RideableCreatureEntity {
     }
 	
 	
-    // ==================================================
-    //                     Movement
-    // ==================================================
-    @Override
-    public double getMountedYOffset() {
-        return (double)this.height * 1.1D;
-    }
-	
-	
 	// ==================================================
    	//                      Attacks
    	// ==================================================
@@ -186,11 +177,6 @@ public class EntityPinky extends RideableCreatureEntity {
     // ==================================================
     //                     Immunities
     // ==================================================
-    @Override
-    public boolean canBurn() {
-        return false;
-    }
-    
     @Override
     public float getFallResistance() {
     	return 10;

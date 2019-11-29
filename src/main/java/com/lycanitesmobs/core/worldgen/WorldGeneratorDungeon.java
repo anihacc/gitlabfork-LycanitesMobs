@@ -6,6 +6,7 @@ import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.dungeon.instance.DungeonInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -61,6 +62,9 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 						LycanitesMobs.logDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkX + (dungeonSizeMax * x)) + " Z" + (chunkZ + (dungeonSizeMax * z)));
 						DungeonInstance dungeonInstance = new DungeonInstance();
 						int yPos = world.getSeaLevel();
+						if(world.provider.getDimensionType() == DimensionType.NETHER || world.provider.getDimensionType() == DimensionType.THE_END) {
+							yPos = 64;
+						}
 						BlockPos dungeonPos = new ChunkPos(chunkX + (dungeonSizeMax * x), chunkZ + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
 						dungeonInstance.setOrigin(dungeonPos);
 						extendedWorld.addDungeonInstance(dungeonInstance, new UUID(world.rand.nextLong(), world.rand.nextLong()));

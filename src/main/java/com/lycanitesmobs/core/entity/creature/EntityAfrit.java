@@ -61,7 +61,7 @@ public class EntityAfrit extends TameableCreatureEntity implements IMob {
         if(!this.getEntityWorld().isRemote) {
             if(this.isLanded) {
                 this.wantsToLand = false;
-                if(this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
+                if(!this.isSitting() && this.updateTick % (5 * 20) == 0 && this.getRNG().nextBoolean()) {
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }

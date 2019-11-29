@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -103,6 +104,10 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 	public void onDamage(DamageSource damageSrc, float damage) {
 		if(this.getRNG().nextDouble() > 0.5D && this.getHealth() / this.getMaxHealth() > 0.25F)
 			this.setBlocking();
+		if(damageSrc.getTrueSource() != null) {
+			if(damageSrc.getTrueSource() instanceof EntityMob)
+				damage *= 0.5F;
+		}
 		super.onDamage(damageSrc, damage);
 	}
 

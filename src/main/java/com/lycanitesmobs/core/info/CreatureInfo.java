@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -146,6 +147,9 @@ public class CreatureInfo {
 	/** A custom scale to apply to the mob's hitbox. **/
 	public double hitboxScale = 1;
 
+	/** The offset relative to this creatures width and height that riding entities should be offset by. **/
+	public Vec3d mountOffset = new Vec3d(0.0D, 1.0D, 0.0D);
+
 
 	/**
 	 * Constructor
@@ -223,6 +227,7 @@ public class CreatureInfo {
 			this.sizeScale = json.get("sizeScale").getAsDouble();
 		if(json.has("hitboxScale"))
 			this.hitboxScale = json.get("hitboxScale").getAsDouble();
+		this.mountOffset = JSONHelper.getVec3d(json, "mountOffset", this.mountOffset);
 
 		// Stats:
 		if(json.has("experience"))
@@ -498,13 +503,17 @@ public class CreatureInfo {
 	 * Returns a comma separated list of Elements used by this Creature.
 	 * @return The Elements used by this Creature.
 	 */
-	public String getElementNames() {
-		if(this.elements.isEmpty()) {
+	public String getElementNames(Subspecies subspecies) {
+		List<ElementInfo> elements = this.elements;
+		if(subspecies != null && !subspecies.elements.isEmpty()) {
+			elements = subspecies.elements;
+		}
+		if(elements.isEmpty()) {
 			return "None";
 		}
 		String elementNames = "";
 		boolean firstElement = true;
-		for(ElementInfo element : this.elements) {
+		for(ElementInfo element : elements) {
 			if(!firstElement) {
 				elementNames += ", ";
 			}

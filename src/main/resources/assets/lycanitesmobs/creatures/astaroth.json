@@ -61,6 +61,9 @@
 			"modelClass": "com.lycanitesmobs.client.model.creature.ModelAstarothVoid",
 			"type": "common",
 			"priority": 1,
+			"elements": [
+				"void"
+			],
 			"conditions": [
 				{
 					"type": "world",
@@ -76,6 +79,9 @@
 			"color": "violet",
 			"type": "uncommon",
 			"priority": 1,
+			"elements": [
+				"void"
+			],
 			"conditions": [
 				{
 					"type": "world",
@@ -91,6 +97,9 @@
 			"color": "keppel",
 			"type": "uncommon",
 			"priority": 1,
+			"elements": [
+				"void"
+			],
 			"conditions": [
 				{
 					"type": "world",

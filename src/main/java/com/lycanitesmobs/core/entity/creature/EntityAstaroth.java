@@ -105,11 +105,4 @@ public class EntityAstaroth extends BaseCreatureEntity implements IMob {
         }
         super.onDeath(par1DamageSource);
     }
-    
-    
-    // ==================================================
-    //                     Immunities
-    // ==================================================
-    @Override
-    public boolean canBurn() { return false; }
 }

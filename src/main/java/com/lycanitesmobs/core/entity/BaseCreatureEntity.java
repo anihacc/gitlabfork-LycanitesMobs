@@ -1285,6 +1285,17 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         return Math.round((value * (float)(this.creatureStats.getAmplifier())));
     }
 
+	/**
+	 * Returns a list of elements that this creature is using.
+	 * @return A list of elements.
+	 */
+	public List<ElementInfo> getElements() {
+		if(this.getSubspecies() != null && !this.getSubspecies().elements.isEmpty()) {
+			return this.getSubspecies().elements;
+		}
+		return this.creatureInfo.elements;
+	}
+
 
 	// ==================================================
 	//                    Subspecies
@@ -3624,7 +3635,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param amplifier The effect amplifier which is multiplied by this creature's stats.
 	 */
 	public void applyDebuffs(EntityLivingBase entity, int duration, int amplifier) {
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			element.debuffEntity(entity, this.getEffectDuration(duration), this.getEffectAmplifier(amplifier));
 		}
 	}
@@ -3638,7 +3649,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 */
 	public void applyBuffs(EntityLivingBase entity, int duration, int amplifier) {
 		if(this.creatureStats.getAmplifier() >= 0) {
-			for(ElementInfo element : this.creatureInfo.elements) {
+			for(ElementInfo element : getElements()) {
 				element.buffEntity(entity, this.getEffectDuration(duration), this.getEffectAmplifier(amplifier));
 			}
 		}
@@ -3862,7 +3873,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Gets whether this mob should always display its nametag client side. **/
     @SideOnly(Side.CLIENT)
     public boolean getAlwaysRenderNameTagForRender() {
-        if(this.getSubspecies() != null && !this.hasCustomName())
+        if(this.getSubspecies() != null && this.getSubspecies().color != null && !this.hasCustomName())
     		return this.renderSubspeciesNameTag();
         return super.getAlwaysRenderNameTagForRender();
     }
@@ -4059,7 +4070,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Returns whether or not the specified potion effect can be applied to this entity. **/
     @Override
     public boolean isPotionApplicable(PotionEffect potionEffect) {
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.isEffectApplicable(potionEffect)) {
 				return false;
 			}
@@ -4072,7 +4083,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	if(this.extraMobBehaviour != null)
     		if(this.extraMobBehaviour.fireImmunityOverride)
     			return false;
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.canBurn()) {
 				return false;
 			}
@@ -4088,7 +4099,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     	if(this instanceof IGroupIce) {
     		return false;
 		}
-		for(ElementInfo element : this.creatureInfo.elements) {
+		for(ElementInfo element : getElements()) {
 			if(!element.canFreeze()) {
 				return false;
 			}
@@ -4271,18 +4282,27 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Mounted Y Offset ==========
     /** An X Offset used to position the mob that is riding this mob. **/
     public double getMountedXOffset() {
-        return 0;
+		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.width * this.getSubspecies().mountOffset.x;
+		}
+		return (double)this.width * this.creatureInfo.mountOffset.x;
     }
 
 	/** A Y Offset used to position the mob that is riding this mob. **/
 	@Override
 	public double getMountedYOffset() {
-		return super.getMountedYOffset() - 0.5D;
+		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.height * this.getSubspecies().mountOffset.y;
+		}
+		return (double)this.height * this.creatureInfo.mountOffset.y;
 	}
 
-	/** A Z Offset used to position the mob that is riding this mob. **/
+	/** A Z Offset used to positions the mob that is riding this mob. **/
 	public double getMountedZOffset() {
-		return 0;
+		if(this.getSubspecies() != null && this.getSubspecies().mountOffset != null) {
+			return (double)this.width * this.getSubspecies().mountOffset.z;
+		}
+		return (double)this.width * this.creatureInfo.mountOffset.z;
 	}
     
    	// ========== Get Nearby Entities ==========
@@ -4561,6 +4581,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public ResourceLocation getEquipmentTexture(String equipmentName) {
         if(!this.canEquip())
             return this.getTexture();
+		if(this.getSubspecies() != null && this.getSubspecies().skin != null) {
+			equipmentName = this.getSubspecies().skin + "_" + equipmentName;
+		}
     	return this.getSubTexture(equipmentName);
     }
 

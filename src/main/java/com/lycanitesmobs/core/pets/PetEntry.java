@@ -301,7 +301,7 @@ public class PetEntry {
                 if(entity instanceof EntityLivingBase) {
                     // Passive Healing:
                     EntityLivingBase entityLiving = (EntityLivingBase)this.entity;
-                    if(this.entityTick % 20 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth()) {
+                    if(this.entityTick % 60 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth()) {
                         entityLiving.setHealth(Math.min(entityLiving.getHealth() + 1, entityLiving.getMaxHealth()));
                     }
                     this.entityHealth = entityLiving.getHealth();
