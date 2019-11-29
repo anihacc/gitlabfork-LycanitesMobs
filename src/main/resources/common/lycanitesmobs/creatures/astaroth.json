@@ -12,10 +12,10 @@
 		"enabled": true,
 		"spawners": ["monster", "beast", "portal", "nether"],
 		"disableSubspecies": false,
-		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end"],
+		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end", "midnight:midnight"],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomes": ["nether", "end"],
+		"biomes": ["nether", "end", "wasteland", "hills", "mountain"],
 		"spawnWeight": 2,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 2,
@@ -67,7 +67,7 @@
 			"conditions": [
 				{
 					"type": "world",
-					"dimensionIds": ["minecraft:the_end"],
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
 					"dimensionListType": "whitelist"
 				}
 			]
@@ -85,7 +85,7 @@
 			"conditions": [
 				{
 					"type": "world",
-					"dimensionIds": ["minecraft:the_end"],
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
 					"dimensionListType": "whitelist"
 				}
 			]
@@ -103,7 +103,7 @@
 			"conditions": [
 				{
 					"type": "world",
-					"dimensionIds": ["minecraft:the_end"],
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
 					"dimensionListType": "whitelist"
 				}
 			]
