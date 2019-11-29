@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -31,6 +32,11 @@ public class EntityChupacabra extends TameableCreatureEntity {
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setSpeed(1.5D));
+    }
+
+    @Override
+    public boolean shouldCreatureGroupFlee(EntityLivingBase target) {
+        return false;
     }
 	
 	

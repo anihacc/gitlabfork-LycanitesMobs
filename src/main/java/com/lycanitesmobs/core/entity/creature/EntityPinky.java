@@ -48,6 +48,11 @@ public class EntityPinky extends RideableCreatureEntity {
 
         this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityPigZombie.class));
     }
+
+	@Override
+	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {
+		return false;
+	}
 	
 	
     // ==================================================
@@ -105,7 +110,7 @@ public class EntityPinky extends RideableCreatureEntity {
     // ==================================================
     @Override
     public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
+        return (double)this.height * 1.1D;
     }
 	
 	
