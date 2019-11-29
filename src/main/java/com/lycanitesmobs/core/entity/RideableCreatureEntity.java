@@ -75,7 +75,10 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 				// Run Mount Rider Effects:
 				this.riderEffects(riderLiving);
 
-				// Protect Rider from Potion Effects:
+				// Protect Rider from Effects:
+				if(!this.canBurn()) {
+					riderLiving.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+				}
 				for(Object possibleEffect : riderLiving.getActivePotionEffects().toArray(new Object[0])) {
 					if(possibleEffect instanceof EffectInstance) {
 						EffectInstance effectInstance = (EffectInstance)possibleEffect;

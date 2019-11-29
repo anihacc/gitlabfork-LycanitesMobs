@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
@@ -26,6 +27,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -202,6 +205,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     public void livingTick() {
     	super.livingTick();
     	this.staminaUpdate();
+
+    	// Owner Buffs:
+    	if(!this.getEntityWorld().isRemote() && this.isPet() && this.getDistanceSq(this.getPlayerOwner()) <= 64) {
+    		this.ownerEffects();
+		}
 	}
     
     public void staminaUpdate() {
@@ -212,6 +220,40 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	if(this.staminaRecovery < this.getStaminaRecoveryMax())
     		this.staminaRecovery = Math.min(this.staminaRecovery + (this.getStaminaRecoveryMax() / this.getStaminaRecoveryWarmup()), this.getStaminaRecoveryMax());
     }
+
+	/**
+	 * Grants constant effects to the owner if the owner is nearby.
+	 */
+	public void ownerEffects() {
+		// Protect Owner from Effects:
+		if(!this.canBurn()) {
+			this.getPlayerOwner().addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, (5 * 20) + 5, 1));
+		}
+		for(Object possibleEffect : this.getPlayerOwner().getActivePotionEffects().toArray(new Object[0])) {
+			if(possibleEffect instanceof EffectInstance) {
+				EffectInstance effectInstance = (EffectInstance)possibleEffect;
+				if(!this.isPotionApplicable(effectInstance))
+					this.getPlayerOwner().removePotionEffect(effectInstance.getPotion());
+			}
+		}
+	}
+
+	/**
+	 * Returns true if the is a standard pet and is tamed with a player owner, not a minion, mount, familiar, etc. Does not check if soulbound.
+	 * @return True if a standard pet.
+	 */
+	public boolean isPet() {
+		if(!this.isTamed() || this.getPlayerOwner() == null) {
+			return false;
+		}
+		if(this.creatureInfo.isMountable()) {
+			return false;
+		}
+		if(this.isTemporary) {
+			return false;
+		}
+		return this.getPetEntry() == null || this.isPetType("pet");
+	}
 
 
     // ==================================================
@@ -598,11 +640,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * Returns the owner of this entity as a player or null if there is no player owner. This is separated from getOwner and getOwnerId as they behave inconsistently when built.
 	 * @return The player owner.
 	 */
-	public Entity getPlayerOwner() {
+	public PlayerEntity getPlayerOwner() {
 		if(this.getEntityWorld().isRemote) {
 			Entity owner = this.getOwner();
 			if(owner instanceof PlayerEntity) {
-				return owner;
+				return (PlayerEntity)owner;
 			}
 			return null;
 		}
