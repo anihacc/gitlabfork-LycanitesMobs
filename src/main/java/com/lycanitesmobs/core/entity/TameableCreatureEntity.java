@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.ai.EntityAISit;
@@ -748,7 +747,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	 * Called when this creature is first tamed by a player, this clears movement, targets, etc and sets default the pet behaviour.
 	 */
 	public void onTamedByPlayer() {
-		this.refreshStats();
+		this.refreshAttributes();
 		this.clearMovement();
 		this.setAttackTarget(null);
 		this.setSitting(false);

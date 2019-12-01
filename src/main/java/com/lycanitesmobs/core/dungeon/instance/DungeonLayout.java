@@ -128,14 +128,15 @@ public class DungeonLayout {
 			}
 			DungeonSector dungeonSector = this.dungeonInstance.schematic.getRandomSector(nextType, random);
 			SectorInstance sectorInstance = new SectorInstance(this, dungeonSector, random);
-			sectorInstance.connect(lastSector.getRandomConnector(random, sectorInstance));
+			SectorConnector sectorConnector = lastSector.getRandomConnector(random, sectorInstance);
+			sectorInstance.connect(sectorConnector);
 
 			// Finish Sector:
-			if("stairs".equals(nextType) && sectorInstance.getOccupiedBoundsMin().getY() <= 9) {
+			if("stairs".equals(nextType) && sectorInstance.getOccupiedBoundsMin().getY() <= 1) {
 				nextType = "finish";
 				dungeonSector = this.dungeonInstance.schematic.getRandomSector(nextType, random);
 				sectorInstance = new SectorInstance(this, dungeonSector, random);
-				sectorInstance.connect(lastSector.getRandomConnector(random, sectorInstance));
+				sectorInstance.connect(sectorConnector);
 			}
 
 			sectorInstance.init(random);

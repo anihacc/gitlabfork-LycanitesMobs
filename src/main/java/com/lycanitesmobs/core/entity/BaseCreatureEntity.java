@@ -426,9 +426,22 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	@Override
 	protected void applyEntityAttributes() {
 		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
+		this.loadCreatureFlags();
+
 		this.creatureStats = new CreatureStats(this);
 		this.extraMobBehaviour = new ExtraMobBehaviour(this);
 		this.directNavigator = new DirectNavigator(this);
+
+		// Prepare AI Indexes:
+		this.nextPriorityGoalIndex = 10;
+		this.nextDistractionGoalIndex = 30;
+		this.nextCombatGoalIndex = 50;
+		this.nextTravelGoalIndex = 70;
+		this.nextIdleGoalIndex = 90;
+
+		this.nextReactTargetIndex = 10;
+		this.nextSpecialTargetIndex = 30;
+		this.nextFindTargetIndex = 50;
 
 		super.applyEntityAttributes();
 		this.getAttributeMap().registerAttribute(DEFENSE);
@@ -436,13 +449,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
 		this.getAttributeMap().registerAttribute(RANGED_SPEED);
 
-		this.applyStats();
+		this.applyDynamicAttributes();
 	}
 
 	/**
-	 * Loads this entity's stats.
+	 * Loads this entity's dynamic attributes.
 	 */
-	public void applyStats() {
+	public void applyDynamicAttributes() {
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.creatureStats.getHealth());
 		this.getEntityAttribute(DEFENSE).setBaseValue(this.creatureStats.getDefense());
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(this.creatureStats.getArmor());
@@ -455,17 +468,58 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
 
 	/**
-	 * Called when this entity needs to reload its stats. Should be called when the subspecies, level, etc of this creature changes.
+	 * Called when this entity needs to reload its (dynamic) attributes. Should be called when the subspecies, level, etc of this creature changes.
 	 */
-	public void refreshStats() {
-		this.applyStats();
+	public void refreshAttributes() {
+		this.applyDynamicAttributes();
 		this.setHealth((float)this.creatureStats.getHealth());
 		this.refreshBossHealthName();
 	}
-    
-    // ========== Setup ==========
-    /** This should be called by the specific mob entity and set the default starting values. **/
-    public void setupMob() {
+
+	/**
+	 * Called after the Creature Info is applied, should be used to read from creature flags.
+	 */
+	public void loadCreatureFlags() {
+
+	}
+
+	/**
+	 * Registers all AI Goals for this entity.
+	 */
+	@Override
+	protected void initEntityAI() {
+		// Greater Targeting:
+		if(this instanceof IFusable)
+			this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
+
+		// Greater Actions:
+		this.tasks.addTask(this.nextPriorityGoalIndex++, new PaddleGoal(this));
+		this.tasks.addTask(this.nextPriorityGoalIndex++, new StayByWaterGoal(this));
+		this.tasks.addTask(this.nextPriorityGoalIndex++, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
+		if(this.creatureInfo.isTameable())
+			this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
+		if(this instanceof IFusable)
+			this.tasks.addTask(this.nextDistractionGoalIndex++, new FollowFuseGoal(this).setLostDistance(16));
+
+		super.initEntityAI();
+
+		// Lesser Targeting:
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindGroupAttackTargetGoal(this));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
+
+		// Lesser Actions:
+		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(12.0D));
+		this.tasks.addTask(this.nextIdleGoalIndex++, new WanderGoal(this));
+		this.tasks.addTask(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(EntityPlayer.class));
+		this.tasks.addTask(this.nextIdleGoalIndex++, new LookIdleGoal(this));
+	}
+
+	/**
+	 * The final setup stage when constructing this entity, should be called last by the constructors of each specific entity class.
+	 */
+	public void setupMob() {
         // Size:
         this.setWidth *= this.creatureInfo.hitboxScale;
         this.setHeight *= this.creatureInfo.hitboxScale;
@@ -529,37 +583,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         InventoryCreature.registerDataParameters(this.dataManager);
         this.initialized = true;
     }
-
-	// ========== Init AI ==========
-	@Override
-	protected void initEntityAI() {
-		// Greater Targeting:
-		if(this instanceof IFusable)
-			this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
-
-		// Greater Actions:
-		this.tasks.addTask(this.nextPriorityGoalIndex++, new PaddleGoal(this));
-		this.tasks.addTask(this.nextPriorityGoalIndex++, new StayByWaterGoal(this));
-		this.tasks.addTask(this.nextPriorityGoalIndex++, new AvoidGoal(this).setNearSpeed(1.3D).setFarSpeed(1.2D).setNearDistance(5.0D).setFarDistance(20.0D));
-		if(this.creatureInfo.isTameable())
-			this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setTemptDistanceMin(4.0D));
-		if(this instanceof IFusable)
-			this.tasks.addTask(this.nextDistractionGoalIndex++, new FollowFuseGoal(this).setLostDistance(16));
-
-		super.initEntityAI();
-
-		// Lesser Targeting:
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindGroupAttackTargetGoal(this));
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindGroupAvoidTargetGoal(this));
-
-		// Lesser Actions:
-		this.tasks.addTask(this.nextTravelGoalIndex++, new FollowMasterGoal(this).setStrayDistance(12.0D));
-		this.tasks.addTask(this.nextIdleGoalIndex++, new WanderGoal(this));
-		this.tasks.addTask(this.nextIdleGoalIndex++, new WatchClosestGoal(this).setTargetClass(EntityPlayer.class));
-		this.tasks.addTask(this.nextIdleGoalIndex++, new LookIdleGoal(this));
-	}
     
     // ========== Name ==========
     /** Returns the display name of this entity. Use this when displaying it's name. **/
@@ -1225,7 +1248,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public void applyLevel(int level) {
 		this.needsInitialLevel = false;
 		this.setLevel(level);
-		this.refreshStats();
+		this.refreshAttributes();
 	}
 
 	/** Sets the level of this mob without refreshing stats, used when loading from NBT or from applyLevel(). If a level is changed use applyLevel() instead. **/
@@ -1303,7 +1326,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	/** Sets the subspecies of this mob by index and refreshes stats. If not a valid ID or 0 it will be set to null which is for base species. **/
 	public void applySubspecies(int subspeciesIndex) {
 		this.setSubspecies(subspeciesIndex);
-		this.refreshStats();
+		this.refreshAttributes();
 	}
 
 	/** Sets the subspecies of this mob by index without refreshing stats, use applySubspecies() if changing toa  new subspecies. If not a valid ID or 0 it will be set to null which is for base species. **/

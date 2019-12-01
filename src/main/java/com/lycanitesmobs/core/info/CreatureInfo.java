@@ -151,6 +151,17 @@ public class CreatureInfo {
 	public Vec3d mountOffset = new Vec3d(0.0D, 1.0D, 0.0D);
 
 
+	// Flags:
+	/** A list of boolean flags set for this creature. **/
+	protected Map<String, Boolean> boolFlags = new HashMap<>();
+
+	/** A list of double flags set for this creature. **/
+	protected Map<String, Double> doubleFlags = new HashMap<>();
+
+	/** A list of string flags set for this creature. **/
+	protected Map<String, String> stringFlags = new HashMap<>();
+
+
 	/**
 	 * Constructor
 	 * @param modInfo The mod that this creature definition will belong to.
@@ -326,6 +337,29 @@ public class CreatureInfo {
 				else {
 					LycanitesMobs.logWarning("", "[Creature] Unable to add item drop to creature: " + this.name + ".");
 				}
+			}
+		}
+
+		// Flags:
+		if(json.has("flags")) {
+			for(JsonElement flagJson : json.getAsJsonArray("flags")) {
+				JsonObject flagJsonObject = flagJson.getAsJsonObject();
+				if(!flagJsonObject.has("name") || !flagJsonObject.has("value")) {
+					LycanitesMobs.logWarning("", "Invalid creature json flag, make sure that the flag has both a name and value, skipping this flag.");
+					continue;
+				}
+				try {
+					this.addFlag(flagJsonObject.get("name").getAsString(), flagJsonObject.get("value").getAsBoolean());
+				}
+				catch(Exception e) {}
+				try {
+					this.addFlag(flagJsonObject.get("name").getAsString(), flagJsonObject.get("value").getAsDouble());
+				}
+				catch(Exception e) {}
+				try {
+					this.addFlag(flagJsonObject.get("name").getAsString(), flagJsonObject.get("value").getAsString());
+				}
+				catch(Exception e) {}
 			}
 		}
 	}
@@ -742,5 +776,84 @@ public class CreatureInfo {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Adds a new boolean flag to this creature.
+	 * @param flagName The name of the flag.
+	 * @param flagValue The value of the flag.
+	 */
+	public void addFlag(String flagName, boolean flagValue) {
+		this.boolFlags.put(flagName, flagValue);
+	}
+
+	/**
+	 * Adds a new double flag to this creature.
+	 * @param flagName The name of the flag.
+	 * @param flagValue The value of the flag.
+	 */
+	public void addFlag(String flagName, double flagValue) {
+		this.doubleFlags.put(flagName, flagValue);
+	}
+
+	/**
+	 * Adds a new string flag to this creature.
+	 * @param flagName The name of the flag.
+	 * @param flagValue The value of the flag.
+	 */
+	public void addFlag(String flagName, String flagValue) {
+		this.stringFlags.put(flagName, flagValue);
+	}
+
+	/**
+	 * Returns a boolean flag that this creature has.
+	 * @param flagName The name of the flag to get.
+	 * @param defaultValue The value to return if the flag is missing.
+	 * @return The flag value.
+	 */
+	public boolean getFlag(String flagName, boolean defaultValue) {
+		if(!this.boolFlags.containsKey(flagName)) {
+			return defaultValue;
+		}
+		return this.boolFlags.get(flagName);
+	}
+
+	/**
+	 * Returns a double flag that this creature has rounded into an integer.
+	 * @param flagName The name of the flag to get.
+	 * @param defaultValue The value to return if the flag is missing.
+	 * @return The flag value.
+	 */
+	public int getFlag(String flagName, int defaultValue) {
+		if(!this.doubleFlags.containsKey(flagName)) {
+			return defaultValue;
+		}
+		return Math.round(this.doubleFlags.get(flagName).floatValue());
+	}
+
+	/**
+	 * Returns a double flag that this creature has.
+	 * @param flagName The name of the flag to get.
+	 * @param defaultValue The value to return if the flag is missing.
+	 * @return The flag value.
+	 */
+	public double getFlag(String flagName, double defaultValue) {
+		if(!this.doubleFlags.containsKey(flagName)) {
+			return defaultValue;
+		}
+		return this.doubleFlags.get(flagName);
+	}
+
+	/**
+	 * Returns a string flag that this creature has.
+	 * @param flagName The name of the flag to get.
+	 * @param defaultValue The value to return if the flag is missing.
+	 * @return The flag value.
+	 */
+	public String getFlag(String flagName, String defaultValue) {
+		if(!this.stringFlags.containsKey(flagName)) {
+			return defaultValue;
+		}
+		return this.stringFlags.get(flagName);
 	}
 }

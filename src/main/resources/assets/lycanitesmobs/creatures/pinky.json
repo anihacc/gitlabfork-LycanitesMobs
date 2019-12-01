@@ -15,7 +15,7 @@
 		"dimensionIds": [-1, 1],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomes": ["nether", "end"],
+		"biomes": ["nether", "end", "wasteland", "hills", "mountain"],
 		"spawnWeight": 6,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
