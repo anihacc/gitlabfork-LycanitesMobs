@@ -10,7 +10,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityGorgomite extends BaseCreatureEntity implements IMob {
-	private int gorgomiteSwarmLimit = 10; // TODO Creature flags.
+	private int gorgomiteSwarmLimit = 5;
     
     // ==================================================
  	//                    Constructor
@@ -22,15 +22,19 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
         this.attribute = CreatureAttribute.ARTHROPOD;
         this.hasAttackSound = true;
         this.setupMob();
-     }
+    }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
         this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityManticore.class));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.gorgomiteSwarmLimit = this.creatureInfo.getFlag("swarmLimit", this.gorgomiteSwarmLimit);
+	}
 	
 	
     // ==================================================

@@ -431,6 +431,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	@Override
 	protected void registerAttributes() {
 		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
+		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
 
 		this.creatureStats = new CreatureStats(this);
@@ -482,6 +483,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
 
 	/**
+	 * Called after the Creature Info is applied, should be used to read from creature flags.
+	 */
+	public void loadCreatureFlags() {
+
+	}
+
+	/**
 	 * Registers all AI Goals for this entity.
 	 */
 	@Override
@@ -515,7 +523,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	}
     
     /**
-	 * The final setup stage when constructing this entity, should be called last by the constructors each specific entity class.
+	 * The final setup stage when constructing this entity, should be called last by the constructors of each specific entity class.
 	 */
     public void setupMob() {
         // Size:

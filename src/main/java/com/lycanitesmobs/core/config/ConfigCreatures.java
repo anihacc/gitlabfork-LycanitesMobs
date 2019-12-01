@@ -34,8 +34,7 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> beastiaryKnowledgeMessages;
 	
 	public final ForgeConfigSpec.ConfigValue<Double> bossAntiFlight;
-	
-	public final ForgeConfigSpec.ConfigValue<Boolean> predatorsAttackAnimals;
+
 	public final ForgeConfigSpec.ConfigValue<Boolean> mobsAttackVillagers;
 	public final ForgeConfigSpec.ConfigValue<Boolean> animalsFightBack;
 	public final ForgeConfigSpec.ConfigValue<Boolean> elementalFusion;
@@ -112,9 +111,6 @@ public class ConfigCreatures {
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.bossAntiFlight")
 				.define("bossAntiFlight", 3D);
 
-		predatorsAttackAnimals = builder.comment("Set to false to prevent predator mobs from attacking animals/farmable mobs.")
-				.translation(CoreConfig.CONFIG_PREFIX + "creatures.predatorsAttackAnimals")
-				.define("predatorsAttackAnimals", true);
 		mobsAttackVillagers = builder.comment("Set to false to prevent mobs that attack players from also attacking villagers.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.mobsAttackVillagers")
 				.define("mobsAttackVillagers", true);
