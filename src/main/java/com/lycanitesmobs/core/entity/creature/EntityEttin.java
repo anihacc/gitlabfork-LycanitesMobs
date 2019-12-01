@@ -10,7 +10,7 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
 public class EntityEttin extends AgeableCreatureEntity implements IMob {
-	public boolean ettinGreifing = true; // TODO Creature flags.
+	public boolean greifing = true;
     
     // ==================================================
  	//                    Constructor
@@ -32,7 +32,6 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
         this.attackPhaseMax = 2;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
 		super.initEntityAI();
@@ -44,6 +43,11 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
 			pathNavigateGround.setBreakDoors(true);
 		}
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+	}
 	
 	
     // ==================================================
@@ -54,7 +58,7 @@ public class EntityEttin extends AgeableCreatureEntity implements IMob {
     public void onLivingUpdate() {
     	// Destroy Blocks:
 		if(!this.getEntityWorld().isRemote)
-	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.ettinGreifing) {
+	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.greifing) {
 		    	float distance = this.getAttackTarget().getDistance(this);
 		    		if(distance <= this.width + 4.0F)
 		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);

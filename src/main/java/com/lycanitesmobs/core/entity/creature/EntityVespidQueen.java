@@ -41,8 +41,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	public List<HiveExposedCoordinates> hiveExposedBlocks = new ArrayList<>();
 	private int hiveExposedBlockCacheTime = 0;
 	
-	private int vespidQueenSwarmLimit = 10; // TODO Creature Flags.
-	private boolean vespidHiveBuilding = true;
+	private int swarmLimit = 10;
 	
     // ==================================================
  	//                    Constructor
@@ -63,7 +62,6 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
         this.setAttackCooldownMax(10);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
@@ -76,9 +74,9 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 			this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(conbaType));
     }
 
-    @Override
-	public boolean rollWanderChance() {
-		return this.getRNG().nextDouble() <= 0.0008D;
+	@Override
+	public void loadCreatureFlags() {
+		this.swarmLimit = this.creatureInfo.getFlag("swarmLimit", this.swarmLimit);
 	}
 
 	
@@ -100,28 +98,26 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 	@Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        
-        if(this.vespidHiveBuilding) {
-	        // Hive Cache Times:
-	        this.hiveCheckCacheTime--;
-	        if(this.hiveCheckCacheTime < 0)
-	        	this.hiveCheckCacheTime = 0;
-	        this.hiveExposedBlockCacheTime--;
-	        if(this.hiveExposedBlockCacheTime < 0)
-	        	this.hiveExposedBlockCacheTime = 0;
-	        
-	        // Set Home In Hive:
-	        if(!this.getEntityWorld().isRemote && !this.hasHome()) {
-	        	if(this.hiveFoundationsSet()) {
-	        		this.setHome((int)this.posX, (int)this.posY, (int)this.posZ, 16F);
-	        	}
-	        }
-	        
-	        // Spawn Babies:
-	        if(!this.getEntityWorld().isRemote && this.hiveFoundationsSet() && this.ticksExisted % 60 == 0) {
-				this.allyUpdate();
-	        }
-        }
+
+		// Hive Cache Times:
+		this.hiveCheckCacheTime--;
+		if(this.hiveCheckCacheTime < 0)
+			this.hiveCheckCacheTime = 0;
+		this.hiveExposedBlockCacheTime--;
+		if(this.hiveExposedBlockCacheTime < 0)
+			this.hiveExposedBlockCacheTime = 0;
+
+		// Set Home In Hive:
+		if(!this.getEntityWorld().isRemote && !this.hasHome()) {
+			if(this.hiveFoundationsSet()) {
+				this.setHome((int)this.posX, (int)this.posY, (int)this.posZ, 16F);
+			}
+		}
+
+		// Spawn Babies:
+		if(!this.getEntityWorld().isRemote && this.hiveFoundationsSet() && this.ticksExisted % 60 == 0) {
+			this.allyUpdate();
+		}
         
         // Don't Keep Infected Conbas Targeted:
         if(!this.getEntityWorld().isRemote && this.getAttackTarget() instanceof EntityConba) {
@@ -130,6 +126,11 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
         	}
         }
     }
+
+	@Override
+	public boolean rollWanderChance() {
+		return this.getRNG().nextDouble() <= 0.0008D;
+	}
     
     // ========== Spawn Babies ==========
 	public void allyUpdate() {
@@ -137,7 +138,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 			return;
 		
 		// Spawn Babies:
-		if(this.vespidQueenSwarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityClass(), 32D) < this.vespidQueenSwarmLimit) {
+		if(this.swarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityClass(), 32D) < this.swarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
 				EntityLivingBase minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));

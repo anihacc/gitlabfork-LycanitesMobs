@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityAbtu extends TameableCreatureEntity implements IMob {
-    int swarmLimit = 5; // TODO Creature Flags
+    int swarmLimit = 5;
     
     // ==================================================
  	//                    Constructor
@@ -31,12 +31,16 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.swarmLimit = this.creatureInfo.getFlag("swarmLimit", this.swarmLimit);
+	}
     
     
     // ==================================================

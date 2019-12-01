@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 public class EntitySpriggan extends TameableCreatureEntity implements IMob {
-	public int farmingRate = 20; // TODO Creature flags.
+	public int farmingRate = 20;
 
     // ==================================================
  	//                    Constructor
@@ -39,12 +39,16 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setStaminaTime(100).setRange(8.0F).setMinChaseDistance(4.0F));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.farmingRate = this.creatureInfo.getFlag("farmingRate", this.farmingRate);
+	}
 
 
     // ==================================================

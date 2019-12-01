@@ -5,7 +5,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,8 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityLobber extends BaseCreatureEntity implements IMob {
 
-	WanderGoal wanderAI;
-    public boolean lobberMelting = true; // TODO Creature flags.
+    public int blockMeltingRadius = 2;
 	
     // ==================================================
  	//                    Constructor
@@ -45,12 +43,16 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
         this.setPathPriority(PathNodeType.LAVA, 0F);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.blockMeltingRadius = this.creatureInfo.getFlag("blockMeltingRadius", this.blockMeltingRadius);
+	}
     
     
     // ==================================================
@@ -83,10 +85,10 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
 		}
 
         // Rare Subspecies Powers:
-        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() >= 3 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.lobberMelting && this.ticksExisted % 10 == 0) {
+        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() >= 3 && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.blockMeltingRadius > 0 && this.ticksExisted % 10 == 0) {
 
             // Melt Blocks:
-            int range = 2;
+            int range = this.blockMeltingRadius;
             for(int w = -((int)Math.ceil(this.width) + range); w <= (Math.ceil(this.width) + range); w++)
                 for(int d = -((int)Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++)
                     for(int h = 0; h <= Math.ceil(this.height); h++) {

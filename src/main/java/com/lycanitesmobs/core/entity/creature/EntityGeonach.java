@@ -20,7 +20,8 @@ import net.minecraft.world.World;
 
 public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusable {
 	
-	public int geonachBlockBreakRadius = 0; // TODO Creature flags.
+	public int blockBreakRadius = 0;
+
 	public float fireDamageAbsorbed = 0;
     
     // ==================================================
@@ -47,6 +48,11 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 		super.initEntityAI();
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.blockBreakRadius = this.creatureInfo.getFlag("blockBreakRadius", this.blockBreakRadius);
+	}
 	
 	
     // ==================================================
@@ -67,8 +73,8 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 						this.leap(6.0F, 1.0D, this.getAttackTarget());
 					else
 						this.leap(6.0F, 0D, this.getAttackTarget());
-					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.geonachBlockBreakRadius > -1 && !this.isTamed()) {
-						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.geonachBlockBreakRadius);
+					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.blockBreakRadius > -1 && !this.isTamed()) {
+						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.blockBreakRadius);
 					}
 				}
 			}

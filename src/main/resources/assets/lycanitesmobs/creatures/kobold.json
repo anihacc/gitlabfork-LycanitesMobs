@@ -106,5 +106,15 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "greifing",
+			"value": true
+		},
+		{
+			"name": "theivery",
+			"value": true
+		}
+	]
 }

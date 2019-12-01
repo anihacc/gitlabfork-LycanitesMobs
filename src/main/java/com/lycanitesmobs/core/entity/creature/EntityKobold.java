@@ -4,7 +4,6 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.GetBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.GetItemGoal;
-import com.lycanitesmobs.core.info.CreatureGroup;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -13,14 +12,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityKobold extends TameableCreatureEntity implements IMob {
-    public boolean torchGreifing = true; // TODO Creature flags.
+    public boolean greifing = true;
     public boolean theivery = true;
 
     // ==================================================
@@ -39,11 +37,10 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
 		this.tasks.addTask(this.nextIdleGoalIndex++, new GetItemGoal(this).setDistanceMax(8).setSpeed(1.2D));
-		if(this.torchGreifing)
+		if(this.greifing)
 			this.tasks.addTask(this.nextIdleGoalIndex++, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
 
 		super.initEntityAI();
@@ -51,6 +48,12 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(EntityPlayer.class).setLongMemory(false));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.theivery = this.creatureInfo.getFlag("theivery", this.theivery);
+	}
 	
 	
 	// ==================================================
@@ -74,7 +77,7 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
         super.onLivingUpdate();
         
         // Torch Looting:
-        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.torchGreifing) {
+        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.greifing) {
 	        if(this.torchLootingTime-- <= 0) {
 	        	this.torchLootingTime = 60;
 	        	int distance = 2;

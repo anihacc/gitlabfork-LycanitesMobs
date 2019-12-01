@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupHeavy {
 
-    public boolean khalkLavaDeath = true; // TODO Creature flags.
+    public boolean lavaDeath = true;
 
     // ==================================================
  	//                    Constructor
@@ -42,12 +42,16 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
         this.setPathPriority(PathNodeType.LAVA, 0F);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.lavaDeath = this.creatureInfo.getFlag("lavaDeath", this.lavaDeath);
+	}
 	
 	
     // ==================================================
@@ -107,7 +111,7 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
    	// ==================================================
     @Override
 	public void onDeath(DamageSource damageSource) {
-		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.khalkLavaDeath && !this.isTamed()) {
+		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.lavaDeath && !this.isTamed()) {
 			int lavaWidth = (int)Math.floor(this.width) - 1;
 			int lavaHeight = (int)Math.floor(this.height) - 1;
 			for(int x = (int)this.posX - lavaWidth; x <= (int)this.posX + lavaWidth; x++) {

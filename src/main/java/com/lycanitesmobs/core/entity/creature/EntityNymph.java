@@ -15,7 +15,7 @@ import java.util.List;
 
 public class EntityNymph extends TameableCreatureEntity {
 
-	public int healingRate = 20; // TODO Creature flags.
+	public int healingRate = 20;
 
     // ==================================================
  	//                    Constructor
@@ -34,11 +34,15 @@ public class EntityNymph extends TameableCreatureEntity {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.healingRate = this.creatureInfo.getFlag("healingRate", this.healingRate);
+	}
 
 
     // ==================================================

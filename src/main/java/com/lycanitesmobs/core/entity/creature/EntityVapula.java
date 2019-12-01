@@ -20,7 +20,8 @@ import net.minecraft.world.World;
 
 public class EntityVapula extends TameableCreatureEntity implements IMob {
 
-	public int vapulaBlockBreakRadius = 0; // TODO Creature flags.
+	public int blockBreakRadius = 0;
+
 	public float fireDamageAbsorbed = 0;
 
     // ==================================================
@@ -40,13 +41,17 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
         this.setAttackCooldownMax(60);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setMaxChaseDistanceSq(3.0F));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(18.0F).setMinChaseDistance(10.0F).setCheckSight(false));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.blockBreakRadius = this.creatureInfo.getFlag("blockBreakRadius", this.blockBreakRadius);
+	}
 	
 	
     // ==================================================
@@ -67,8 +72,8 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
 						this.leap(6.0F, 1.0D, this.getAttackTarget());
 					else
 						this.leap(6.0F, 0D, this.getAttackTarget());
-					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.vapulaBlockBreakRadius > -1 && !this.isTamed()) {
-						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.vapulaBlockBreakRadius);
+					if (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.blockBreakRadius > -1 && !this.isTamed()) {
+						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.blockBreakRadius);
 					}
 				}
 			}

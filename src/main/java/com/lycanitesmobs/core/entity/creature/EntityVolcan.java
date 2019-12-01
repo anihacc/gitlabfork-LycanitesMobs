@@ -21,9 +21,7 @@ import java.util.List;
 
 public class EntityVolcan extends TameableCreatureEntity implements IMob {
 
-	private AttackMeleeGoal meleeAttackAI;
-
-	public int volcanMeltRadius = 2; // TODO Creature flags.
+	public int blockMeltingRadius = 2;
 
     // ==================================================
  	//                    Constructor
@@ -40,12 +38,16 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(2, new AttackMeleeGoal(this).setLongMemory(true));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.blockMeltingRadius = this.creatureInfo.getFlag("blockMeltingRadius", this.blockMeltingRadius);
+	}
 	
 	
     // ==================================================
@@ -68,8 +70,8 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
 		}
 
 		// Melt Blocks:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.volcanMeltRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
-			int range = this.volcanMeltRadius;
+		if(!this.getEntityWorld().isRemote && this.updateTick % 40 == 0 && this.blockMeltingRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing")) {
+			int range = this.blockMeltingRadius;
 			for (int w = -((int) Math.ceil(this.width) + range); w <= (Math.ceil(this.width) + range); w++) {
 				for (int d = -((int) Math.ceil(this.width) + range); d <= (Math.ceil(this.width) + range); d++) {
 					for (int h = -((int) Math.ceil(this.height) + range); h <= Math.ceil(this.height); h++) {

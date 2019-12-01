@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 
 public class EntityRoa extends RideableCreatureEntity implements IMob {
 
-	WanderGoal wanderAI;
-    protected int whirlpoolRange = 6; // TODO Creature flags.
+    protected int whirlpoolRange = 6;
+
     protected int whirlpoolEnergy = 0;
     protected int whirlpoolEnergyMax = 5 * 20;
     protected boolean whirlpoolRecharging = true;
@@ -46,11 +46,15 @@ public class EntityRoa extends RideableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+    }
+
+    @Override
+    public void loadCreatureFlags() {
+        this.whirlpoolRange = this.creatureInfo.getFlag("whirlpoolRange", this.whirlpoolRange);
     }
     
     

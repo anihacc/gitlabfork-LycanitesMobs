@@ -20,7 +20,8 @@ import java.util.List;
 
 public class EntityVespid extends AgeableCreatureEntity implements IMob {
     public PlaceBlockGoal aiPlaceBlock;
-	private boolean vespidHiveBuilding = true; // TODO Creature Flags.
+
+	private boolean hiveBuilding = true;
 	
     // ==================================================
  	//                    Constructor
@@ -38,9 +39,8 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
 
         this.stepHeight = 1.0F;
         this.setAttackCooldownMax(10);
-     }
+    }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
@@ -50,6 +50,11 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
 
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new FindMasterGoal(this).setTargetClass(EntityVespidQueen.class).setRange(64.0D));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.hiveBuilding = this.creatureInfo.getFlag("hiveBuilding", this.hiveBuilding);
+	}
 	
 	// ==================================================
   	//                       Spawning
@@ -82,7 +87,7 @@ public class EntityVespid extends AgeableCreatureEntity implements IMob {
         }
         
         // Building AI:
-        if(!this.getEntityWorld().isRemote && this.vespidHiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
+        if(!this.getEntityWorld().isRemote && this.hiveBuilding && this.hasMaster() && this.getMasterTarget() instanceof EntityVespidQueen && this.aiPlaceBlock.blockState == null) {
         	EntityVespidQueen queen = (EntityVespidQueen)this.getMasterTarget();
         	
         	// Build Hive Foundations:

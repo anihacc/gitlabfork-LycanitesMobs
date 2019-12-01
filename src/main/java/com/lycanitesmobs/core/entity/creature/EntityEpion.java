@@ -10,13 +10,11 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class EntityEpion extends TameableCreatureEntity implements IMob {
     
-	public boolean epionGreifing = true; // TODO Creature flags.
+	public boolean greifing = true;
 	
     // ==================================================
  	//                    Constructor
@@ -34,12 +32,16 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(6.0F));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+	}
 	
 	
     // ==================================================
@@ -57,7 +59,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 				if(this.subspecies != null)
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
-                if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing)
+                if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.greifing)
 	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, false);
 	        	this.setDead();
         	}
@@ -88,7 +90,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
     @Override
     public boolean isFlying() {
     	if(this.getEntityWorld().isRemote) return true;
-    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.epionGreifing) {
+    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.greifing) {
     		float brightness = this.getBrightness();
         	if(brightness > 0.5F && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
         		return false;

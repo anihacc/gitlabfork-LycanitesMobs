@@ -20,7 +20,8 @@ import net.minecraft.world.World;
 public class EntityRoc extends RideableCreatureEntity implements IMob {
     public AttackMeleeGoal attackAI;
 
-    public boolean creeperDropping = true; // TODO Creature Flags.
+    public boolean creeperDropping = true;
+
     private int creeperDropCooldown = 0;
 	
     // ==================================================
@@ -39,7 +40,6 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         this.targetTasks.addTask(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityCreeper.class));
@@ -48,6 +48,11 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
         this.attackAI = new AttackMeleeGoal(this).setLongMemory(false);
         this.tasks.addTask(this.nextCombatGoalIndex++, this.attackAI);
+    }
+
+    @Override
+    public void loadCreatureFlags() {
+        this.creeperDropping = this.creatureInfo.getFlag("creeperDropping", this.creeperDropping);
     }
 	
 	

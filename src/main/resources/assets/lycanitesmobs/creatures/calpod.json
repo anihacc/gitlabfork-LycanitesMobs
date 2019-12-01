@@ -109,5 +109,15 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "greifing",
+			"value": true
+		},
+		{
+			"name": "swarmLimit",
+			"value": 5
+		}
+	]
 }

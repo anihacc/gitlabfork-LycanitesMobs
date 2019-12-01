@@ -15,8 +15,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityAegis extends TameableCreatureEntity implements IFusable {
-	public boolean chestProtection = true; // TODO Creature flags. Chest protection.
-
     // ==================================================
  	//                    Constructor
  	// ==================================================

@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class EntityConcapedeHead extends AgeableCreatureEntity {
 	
-	public static int CONCAPEDE_SIZE_MAX = 10; // TODO Creature flags.
+	public static int CONCAPEDE_SIZE_MAX = 10;
 	public BaseCreatureEntity backSegment;
 	public boolean isHungry = true;
 	
@@ -39,7 +39,6 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
@@ -47,6 +46,11 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityConcapedeSegment.class));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		CONCAPEDE_SIZE_MAX = this.creatureInfo.getFlag("sizeMax", CONCAPEDE_SIZE_MAX);
+	}
 	
 	
     // ==================================================
