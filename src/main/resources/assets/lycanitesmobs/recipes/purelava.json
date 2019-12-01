@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:purelava",
+    "item": "lycanitesmobs:bucketpurelava",
     "count": 1
   },
   "ingredients": [
 	{
-      "item": "minecraft:bucket",
+      "item": "minecraft:lava_bucket",
       "item": "minecraft:ghast_tear"
     }
   ],

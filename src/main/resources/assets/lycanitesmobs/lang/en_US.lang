@@ -423,8 +423,8 @@ tile.frostfire.description=A magical flame that superfreezes, will cause damage 
 #
 #
 # ========== Fluids ==========
-tile.purelava.name=Pure Lava
-tile.purelava.description=Clearer than regular lava, flows slightly faster and no inferno mobs spawn in this. Can be renewed like water.
+tile.purelava.name=Moglava
+tile.purelava.description=Clearer than regular lava, flows slightly faster and no creatures spawn in this. Can be renewed like water.
 #
 tile.ooze.name=Ooze
 tile.ooze.description=An icy gel substance, causes slowness, hunger and applies low damage over time.
