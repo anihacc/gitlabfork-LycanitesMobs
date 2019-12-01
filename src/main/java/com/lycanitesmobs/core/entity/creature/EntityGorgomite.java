@@ -6,11 +6,12 @@ import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityGorgomite extends BaseCreatureEntity implements IMob {
-	private int gorgomiteSwarmLimit = 5;
+	private int swarmLimit = 5;
     
     // ==================================================
  	//                    Constructor
@@ -33,7 +34,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 
 	@Override
 	public void loadCreatureFlags() {
-		this.gorgomiteSwarmLimit = this.creatureInfo.getFlag("swarmLimit", this.gorgomiteSwarmLimit);
+		this.swarmLimit = this.creatureInfo.getFlag("swarmLimit", this.swarmLimit);
 	}
 	
 	
@@ -43,7 +44,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 	// ========== Living Update ==========
 	@Override
     public void livingTick() {
-		if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.updateTick % 20 == 0) {
+		if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.getAttackTarget() instanceof PlayerEntity && this.updateTick % 60 == 0) {
 			this.allyUpdate();
 		}
         
@@ -56,7 +57,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 			return;
 		
 		// Spawn Minions:
-		if(this.gorgomiteSwarmLimit > 0 && this.countAllies(64D) < this.gorgomiteSwarmLimit) {
+		if(this.swarmLimit > 0 && this.countAllies(64D) < this.swarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.25F)
 				this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));

@@ -83,5 +83,11 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "sizeMax",
+			"value": 10
+		}
+	]
 }

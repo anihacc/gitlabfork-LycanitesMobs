@@ -108,5 +108,11 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "blockMeltingRadius",
+			"value": 2
+		}
+	]
 }

@@ -17,7 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityCacodemon extends RideableCreatureEntity {
-    public boolean cacodemonGreifing = true; // TODO Creature flags.
+    public boolean greifing = true;
     
     // ==================================================
  	//                    Constructor
@@ -36,12 +36,16 @@ public class EntityCacodemon extends RideableCreatureEntity {
         this.hitAreaWidthScale = 1.5F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.25D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
         this.targetSelector.addGoal(this.nextFindTargetIndex++, new FindAttackTargetGoal(this).addTargets(EntityType.GHAST));
+    }
+
+    @Override
+    public void loadCreatureFlags() {
+        this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
     }
 
 

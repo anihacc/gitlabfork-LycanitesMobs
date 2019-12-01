@@ -29,8 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityLobber extends BaseCreatureEntity implements IMob {
 
-	WanderGoal wanderAI;
-    public boolean lobberMelting = true; // TODO Creature flags.
+    public int blockMeltingRadius = 2;
 	
     // ==================================================
  	//                    Constructor
@@ -50,12 +49,16 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
         this.setPathPriority(PathNodeType.LAVA, 0F);
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(8.0F));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.blockMeltingRadius = this.creatureInfo.getFlag("blockMeltingRadius", this.blockMeltingRadius);
+	}
     
     
     // ==================================================
@@ -88,10 +91,10 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
 		}
 
         // Rare Subspecies Powers:
-        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() >= 3 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.lobberMelting && this.ticksExisted % 10 == 0) {
+        if(!this.getEntityWorld().isRemote && this.getSubspeciesIndex() >= 3 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.blockMeltingRadius > 0 && this.ticksExisted % 10 == 0) {
 
             // Melt Blocks:
-            int range = 2;
+            int range = this.blockMeltingRadius;
             for(int w = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++)
                 for(int d = -((int)Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++)
                     for(int h = 0; h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {

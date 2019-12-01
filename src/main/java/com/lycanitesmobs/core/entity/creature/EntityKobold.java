@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityKobold extends TameableCreatureEntity implements IMob {
-    public boolean torchGreifing = true; // TODO Creature flags.
+    public boolean greifing = true;
     public boolean theivery = true;
 
     // ==================================================
@@ -39,11 +39,10 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
 		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetItemGoal(this).setDistanceMax(8).setSpeed(1.2D));
-		if(this.torchGreifing)
+		if(this.greifing)
 			this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
 
 		super.registerGoals();
@@ -51,6 +50,12 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setTargetClass(PlayerEntity.class).setLongMemory(false));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.theivery = this.creatureInfo.getFlag("theivery", this.theivery);
+	}
 	
 	
 	// ==================================================
@@ -74,7 +79,7 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
         super.livingTick();
         
         // Torch Looting:
-        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.torchGreifing) {
+        if(!this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing) {
 	        if(this.torchLootingTime-- <= 0) {
 	        	this.torchLootingTime = 60;
 	        	int distance = 2;

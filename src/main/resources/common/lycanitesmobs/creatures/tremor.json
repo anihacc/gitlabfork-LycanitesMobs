@@ -90,5 +90,11 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "explosionStrength",
+			"value": 1
+		}
+	]
 }

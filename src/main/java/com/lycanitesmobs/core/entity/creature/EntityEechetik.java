@@ -19,7 +19,7 @@ import java.util.List;
 
 public class EntityEechetik extends TameableCreatureEntity implements IMob {
 
-	public int eechetikMyceliumRadius = 2; // TODO Creature flags.
+	public int myceliumRadius = 2;
 
     // ==================================================
  	//                    Constructor
@@ -36,12 +36,16 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.myceliumRadius = this.creatureInfo.getFlag("myceliumRadius", this.myceliumRadius);
+	}
 	
 	
     // ==================================================
@@ -68,8 +72,8 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
 		}
 
 		// Grow Mycelium:
-		if(!this.getEntityWorld().isRemote && this.updateTick % 100 == 0 && this.eechetikMyceliumRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
-			int range = this.eechetikMyceliumRadius;
+		if(!this.getEntityWorld().isRemote && this.updateTick % 100 == 0 && this.myceliumRadius > 0 && !this.isTamed() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
+			int range = this.myceliumRadius;
 			for (int w = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); w <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); w++) {
 				for (int d = -((int) Math.ceil(this.getSize(Pose.STANDING).width) + range); d <= (Math.ceil(this.getSize(Pose.STANDING).width) + range); d++) {
 					for (int h = -((int) Math.ceil(this.getSize(Pose.STANDING).height) + range); h <= Math.ceil(this.getSize(Pose.STANDING).height); h++) {

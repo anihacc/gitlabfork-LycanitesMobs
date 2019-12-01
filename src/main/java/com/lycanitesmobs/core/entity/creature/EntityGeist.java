@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class EntityGeist extends AgeableCreatureEntity implements IMob {
 
-    public boolean geistShadowfireDeath = true; // TODO Creature flags.
+    public boolean shadowfireDeath = true;
 
     // ==================================================
  	//                    Constructor
@@ -39,7 +39,6 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(this.nextTravelGoalIndex++, new MoveVillageGoal(this));
@@ -55,6 +54,11 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             pathNavigateGround.setBreakDoors(true);
             pathNavigateGround.setAvoidSun(true);
         }
+    }
+
+    @Override
+    public void loadCreatureFlags() {
+        this.shadowfireDeath = this.creatureInfo.getFlag("shadowfireDeath", this.shadowfireDeath);
     }
     
     
@@ -97,7 +101,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     @Override
     public void onDeath(DamageSource damageSource) {
         try {
-            if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.geistShadowfireDeath) {
+            if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.shadowfireDeath) {
                 int shadowfireWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) + 1;
                 int shadowfireHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) + 1;
                 for(int x = (int)this.posX - shadowfireWidth; x <= (int)this.posX + shadowfireWidth; x++) {

@@ -15,9 +15,7 @@ import net.minecraft.world.World;
 
 public class EntityTremor extends TameableCreatureEntity implements IMob {
 
-	private AttackMeleeGoal meleeAttackAI;
-
-	public int tremorExplosionStrength = 1; // TODO Creature flags.
+	public int explosionStrength = 1;
 
     // ==================================================
  	//                    Constructor
@@ -34,14 +32,18 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
         this.stepHeight = 1.0F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
-	
-	
+
+	@Override
+	public void loadCreatureFlags() {
+		this.explosionStrength = this.creatureInfo.getFlag("explosionStrength", this.explosionStrength);
+	}
+
+
     // ==================================================
     //                      Updates
     // ==================================================
@@ -80,8 +82,8 @@ public class EntityTremor extends TameableCreatureEntity implements IMob {
     		return false;
     	
     	// Explosion:
-		int explosionStrength = Math.max(1, this.tremorExplosionStrength);
-		Explosion.Mode damageTerrain = this.tremorExplosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
+		int explosionStrength = Math.max(1, this.explosionStrength);
+		Explosion.Mode damageTerrain = this.explosionStrength > 0 && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) ? Explosion.Mode.BREAK : Explosion.Mode.NONE;
 		if(this.isPetType("familiar")) {
 			explosionStrength = 1;
 			damageTerrain = Explosion.Mode.NONE;

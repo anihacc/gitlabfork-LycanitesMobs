@@ -100,5 +100,11 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "whirlpoolRange",
+			"value": 8
+		}
+	]
 }

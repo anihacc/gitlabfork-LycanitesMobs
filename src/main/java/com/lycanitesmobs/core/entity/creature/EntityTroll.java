@@ -7,7 +7,6 @@ import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.util.DamageSource;
@@ -18,9 +17,8 @@ import net.minecraft.world.World;
 
 public class EntityTroll extends TameableCreatureEntity implements IMob {
 	
-	public boolean trollGreifing = true; // TODO Creature flags.
-	
-	// ========== Unique Entity Variables ==========
+	public boolean greifing = true;
+
 	public boolean stoneForm = false;
     
     // ==================================================
@@ -40,7 +38,6 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
         this.setupMob();
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
 		super.registerGoals();
@@ -52,6 +49,11 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
 			pathNavigateGround.setBreakDoors(true);
 		}
     }
+
+	@Override
+	public void loadCreatureFlags() {
+		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+	}
     
     
     // ==================================================
@@ -86,7 +88,7 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
         
         // Destroy Blocks:
  		if(!this.getEntityWorld().isRemote)
- 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.trollGreifing) {
+ 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing) {
  		    	float distance = this.getAttackTarget().getDistance(this);
  		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
  		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);

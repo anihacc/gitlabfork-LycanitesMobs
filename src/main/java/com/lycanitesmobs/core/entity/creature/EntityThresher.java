@@ -20,7 +20,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityThresher extends RideableCreatureEntity implements IMob, IGroupHeavy {
-    protected int whirlpoolRange = 8; // TODO Creature flags.
+    protected int whirlpoolRange = 8;
+
     protected int whirlpoolEnergy = 0;
     protected int whirlpoolEnergyMax = 5 * 20;
     protected boolean whirlpoolRecharging = true;
@@ -48,11 +49,15 @@ public class EntityThresher extends RideableCreatureEntity implements IMob, IGro
         this.entityCollisionReduction = 0.9F;
     }
 
-    // ========== Init AI ==========
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(2));
+    }
+
+    @Override
+    public void loadCreatureFlags() {
+        this.whirlpoolRange = this.creatureInfo.getFlag("whirlpoolRange", this.whirlpoolRange);
     }
     
     

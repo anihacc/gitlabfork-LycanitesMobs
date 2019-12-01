@@ -109,5 +109,11 @@
 		}
 	],
 	"sizeScale": 1,
-	"hitboxScale": 1
+	"hitboxScale": 1,
+	"flags": [
+		{
+			"name": "blockBreakRadius",
+			"value": 0
+		}
+	]
 }
