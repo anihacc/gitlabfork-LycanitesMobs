@@ -1688,7 +1688,7 @@ item.poisongland.description=Squeeze to place a poison cloud!
 item.bucketooze.name=Ooze Bucket
 item.bucketooze.description=Ooze is an icy gel substance, causes slowness and applies low damage over time.
 #
-item.bucketpurelava.name=Pure Lava Bucket
+item.bucketpurelava.name=Moglava Bucket
 item.bucketpurelava.description=Clearer that regular lava, flows slightly faster and no inferno mobs spawn in this. Can be renewed like water.
 #
 #

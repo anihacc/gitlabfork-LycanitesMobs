@@ -254,7 +254,7 @@ public class CreatureSpawn {
 	 * @param biomes A list of biomes to find a match in.
 	 * @return True if at least one biome in the provided list is a valid biome.
 	 */
-	public boolean isValidBiome(List<Biome> biomes) {
+	public boolean isValidBiome(Biome biome) {
 		if(this.ignoreBiome) {
 			return true;
 		}
@@ -264,10 +264,8 @@ public class CreatureSpawn {
 			if (this.biomesFromTags == null) {
 				this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 			}
-			for (Biome validBiome : this.biomesFromTags) {
-				if (biomes.contains(validBiome)) {
-					return true;
-				}
+			if (this.biomesFromTags.contains(biome)) {
+				return true;
 			}
 		}
 
@@ -276,10 +274,8 @@ public class CreatureSpawn {
 			if (this.biomes == null) {
 				this.biomes = JSONHelper.getBiomes(this.biomeIds);
 			}
-			for (Biome validBiome : this.biomes) {
-				if (biomes.contains(validBiome)) {
-					return true;
-				}
+			if (this.biomes.contains(biome)) {
+				return true;
 			}
 		}
 

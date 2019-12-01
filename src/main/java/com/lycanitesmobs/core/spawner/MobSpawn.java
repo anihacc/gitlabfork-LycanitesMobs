@@ -216,7 +216,7 @@ public class MobSpawn {
 	 * @param biomes A list of biomes to check, if null, the biome check is ignored.
 	 * @param forceIgnoreDimension If true, the dimension check is ignored.
 	 **/
-	public boolean canSpawn(World world, int blockCount, List<Biome> biomes, boolean forceIgnoreDimension) {
+	public boolean canSpawn(World world, int blockCount, Biome biome, boolean forceIgnoreDimension) {
 		// Global Check:
 		if(!CreatureManager.getInstance().spawnConfig.isAllowedGlobal(world)) {
 			return false;
@@ -248,7 +248,7 @@ public class MobSpawn {
 		// CreatureInfo World:
 		if(this.creatureInfo != null) {
 			// Minimum World Day:
-			if(this.creatureInfo != null && this.creatureInfo.creatureSpawn.worldDayMin > 0) {
+			if(this.creatureInfo.creatureSpawn.worldDayMin > 0) {
 				ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 				if(worldExt != null) {
 					int day = (int) Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 24000D);
@@ -264,8 +264,8 @@ public class MobSpawn {
 			}
 
 			// Biome:
-			if(biomes != null && this.shouldCheckBiome()) {
-				if(!this.creatureInfo.creatureSpawn.isValidBiome(biomes)) {
+			if(biome != null && this.shouldCheckBiome()) {
+				if(!this.creatureInfo.creatureSpawn.isValidBiome(biome)) {
 					return false;
 				}
 			}

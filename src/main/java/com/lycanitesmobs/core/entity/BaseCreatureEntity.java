@@ -756,6 +756,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(!this.fixedSpawnCheck(world, pos)) {
 			return false;
 		}
+
+        // Dimension Check:
+		LycanitesMobs.logDebug("MobSpawns", "Dimension check...");
+        if(!this.creatureInfo.creatureSpawn.isAllowedDimension(this.getEntityWorld())) {
+        	return false;
+		}
         
     	// Mob Spawner Check:
     	LycanitesMobs.logDebug("MobSpawns", "Checking for nearby Mob Spawner...");

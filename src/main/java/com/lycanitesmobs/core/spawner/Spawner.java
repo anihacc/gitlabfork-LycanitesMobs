@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.mobevent.MobEvent;
@@ -17,12 +18,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class Spawner {
@@ -429,7 +430,7 @@ public class Spawner {
 		}
 
 		// Get Mobs:
-		List<MobSpawn> mobSpawns = this.getMobSpawns(world, player, spawnPositions.size(), biomes);
+		Map<Biome, List<MobSpawn>> mobSpawns = this.getMobSpawns(world, player, spawnPositions.size(), biomes);
 		LycanitesMobs.logDebug("JSONSpawner", "Spawnable Mobs Found: " + mobSpawns.size());
 		if(mobSpawns.size() == 0) {
 			return false;
@@ -444,7 +445,14 @@ public class Spawner {
 			LycanitesMobs.logDebug("JSONSpawner", "Spawn Position: " + spawnPos);
 
 			// Choose Mob To Spawn:
-			MobSpawn mobSpawn = this.chooseMobToSpawn(world, mobSpawns);
+			MobSpawn mobSpawn = null;
+			Biome spawnBiome = world.getBiome(spawnPos);
+			if(mobSpawns.containsKey(null)) {
+				mobSpawn = this.chooseMobToSpawn(world, mobSpawns.get(null));
+			}
+			else if(mobSpawns.containsKey(spawnBiome)) {
+				mobSpawn = this.chooseMobToSpawn(world, mobSpawns.get(spawnBiome));
+			}
 			if(mobSpawn == null) {
 				LycanitesMobs.logDebug("JSONSpawner", "No Mob Spawn Chosen");
 				continue;
@@ -562,35 +570,57 @@ public class Spawner {
 
 
     /**
-     * Returns all viable mobs that can be spawned within the spawn conditions. Spawn block costs, chances and biomes are checked here.
-     * @param world The World to spawn in.
-     * @param player The player that is being spawned around. Can be null.
+	 * Returns all viable mobs that can be spawned within the spawn conditions. Spawn block costs, chances and biomes are checked here.
+	 * @param world The World to spawn in.
+	 * @param player The player that is being spawned around. Can be null.
 	 * @param blockCount The total number of possible spawn positions found.
-	 * @param biomes A list of all biomes within the spawning area. If null, biome checks will be ignored.
-     * @return The MobSpawn of the mob to spawn or null if no mob can be spawned at the position.
-     **/
-    public List<MobSpawn> getMobSpawns(World world, EntityPlayer player, int blockCount, List<Biome> biomes) {
-    	List<MobSpawn> allMobSpawns = new ArrayList<>();
+	 * @param biomes A list of all biomes within the spawning area. If null, biome checks will be ignored, all mob spawn will be added to a null map key.
+	 * @return A map of biomes and mob spawn lists with each mob spawn available to each biome.
+	 **/
+	public Map<Biome, List<MobSpawn>> getMobSpawns(World world, @Nullable EntityPlayer player, int blockCount, @Nullable List<Biome> biomes) {
+		Map<Biome, List<MobSpawn>> mobSpawns = new HashMap<>();
 
-    	// Global Spawns:
+		if(biomes == null) {
+			mobSpawns.put(null, this.getBiomeSpawns(world, player, blockCount, null));
+			return mobSpawns;
+		}
+
+		for(Biome biome: biomes) {
+			mobSpawns.put(biome, this.getBiomeSpawns(world, player, blockCount, biome));
+		}
+		return mobSpawns;
+	}
+
+	/**
+	 * Returns all viable mobs that can be spawned within the spawn conditions and specific biome.
+	 * @param world The world to spawn in.
+	 * @param player The player that is being spawned around. Can be null.
+	 * @param blockCount The total number of possible spawn positions found.
+	 * @param biome The biome to spawn in.
+	 * @return A list of mob spawns.
+	 */
+	public List<MobSpawn> getBiomeSpawns(World world, @Nullable EntityPlayer player, int blockCount, @Nullable Biome biome) {
+		List<MobSpawn> biomeSpawns = new ArrayList<>();
+
+		// Global Spawns:
 		Collection<MobSpawn> globalSpawns = SpawnerMobRegistry.getMobSpawns(this.sharedName);
 		if(globalSpawns != null) {
-			allMobSpawns.addAll(globalSpawns);
+			biomeSpawns.addAll(globalSpawns);
 		}
 
 		// Local Spawns:
-		allMobSpawns.addAll(this.mobSpawns);
+		biomeSpawns.addAll(this.mobSpawns);
 
 		// Get Viable Spawns:
 		List<MobSpawn> viableMobSpawns = new ArrayList<>();
-		for(MobSpawn possibleMobSpawn : allMobSpawns) {
-			if(possibleMobSpawn.canSpawn(world, blockCount, biomes, this.ignoreDimensions)) {
+		for(MobSpawn possibleMobSpawn : biomeSpawns) {
+			if(possibleMobSpawn.canSpawn(world, blockCount, biome, this.ignoreDimensions)) {
 				viableMobSpawns.add(possibleMobSpawn);
 			}
 		}
 
-        return viableMobSpawns;
-    }
+		return viableMobSpawns;
+	}
 
 	/**
 	 * Gets a weighted random mob to spawn.
@@ -715,6 +745,7 @@ public class Spawner {
 		}
 
 		// Spawn:
+		LycanitesMobs.logDebug("JSONSpawner", "Adding Entity To World: " + world + " - " + entityLiving);
 		world.spawnEntity(entityLiving);
 
 		// After Spawn:

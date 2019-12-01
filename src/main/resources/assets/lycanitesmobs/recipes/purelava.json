@@ -1,13 +1,15 @@
 {
-  "result": {
-    "item": "lycanitesmobs:bucketpurelava",
-    "count": 1
-  },
-  "ingredients": [
-	{
-      "item": "minecraft:lava_bucket",
-      "item": "minecraft:ghast_tear"
-    }
-  ],
-  "type": "forge:ore_shapeless"
+    "result": {
+        "item": "lycanitesmobs:bucketpurelava",
+        "count": 1
+    },
+    "ingredients": [
+        {
+            "item": "minecraft:lava_bucket"
+        },
+        {
+            "item": "minecraft:ghast_tear"
+        }
+    ],
+    "type": "forge:ore_shapeless"
 }
