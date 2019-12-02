@@ -193,16 +193,18 @@ public class CreatureSpawn {
 
 		// Add Vanilla Spawns:
 		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
-			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0) {
+			if(creatureInfo.enabled && this.enabled && this.spawnWeight > 0 && this.spawnGroupMax > 0 && CreatureManager.getInstance().spawnConfig.spawnWeightScale > 0) {
+				int vanillaWeight = (int)Math.ceil(CreatureManager.getInstance().spawnConfig.spawnWeightScale * this.spawnWeight);
 				for(EnumCreatureType creatureType : this.vanillaSpawnerTypes) {
-					EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
+					EntityRegistry.addSpawn(creatureInfo.entityClass, vanillaWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
 					for(Biome biome : this.biomesFromTags) {
 						if(biome == Biomes.HELL) {
-							EntityRegistry.addSpawn(creatureInfo.entityClass, this.spawnWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
+							EntityRegistry.addSpawn(creatureInfo.entityClass, vanillaWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
 							break;
 						}
 					}
 				}
+				LycanitesMobs.logDebug("MobSetup", "Vanilla Spawns Added - Weight: " + vanillaWeight);
 			}
 		}
 
@@ -251,7 +253,7 @@ public class CreatureSpawn {
 
 	/**
 	 * Returns if any of the provided biomes are valid for this creature to spawn in.
-	 * @param biomes A list of biomes to find a match in.
+	 * @param biome The biome to find a match in.
 	 * @return True if at least one biome in the provided list is a valid biome.
 	 */
 	public boolean isValidBiome(Biome biome) {

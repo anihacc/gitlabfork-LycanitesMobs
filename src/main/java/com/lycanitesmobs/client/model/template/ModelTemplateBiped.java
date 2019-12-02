@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
@@ -117,6 +118,12 @@ public class ModelTemplateBiped extends ModelObj {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
+            }
+            if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
+                if (partName.equals("body")) {
+                    float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
+                    posY += bob;
+                }
             }
         }
 
