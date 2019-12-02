@@ -1549,12 +1549,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         }
 
         // Natural Despawn Light Scaling:
-        float light = this.getBrightness();
-        if(!this.creatureInfo.creatureSpawn.spawnsInLight && light > 0.5F) {
-			this.idleTime += 2;
-		}
-		else if(!this.creatureInfo.creatureSpawn.spawnsInDark && light <= 0.5F) {
-			this.idleTime += 2;
+		if(!this.getEntityWorld().isRemote) {
+			float light = this.getBrightness();
+			if (!this.creatureInfo.creatureSpawn.spawnsInLight && light > 0.5F) {
+				this.idleTime += 2;
+			}
+			else if (!this.creatureInfo.creatureSpawn.spawnsInDark && light <= 0.5F) {
+				this.idleTime += 2;
+			}
 		}
 
 	    // Stealth Invisibility:
