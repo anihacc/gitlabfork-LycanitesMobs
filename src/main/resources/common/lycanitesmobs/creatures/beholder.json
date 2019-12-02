@@ -110,7 +110,7 @@
 	"hitboxScale": 1,
 	"flags": [
 		{
-			"name": "greifing",
+			"name": "griefing",
 			"value": true
 		}
 	]

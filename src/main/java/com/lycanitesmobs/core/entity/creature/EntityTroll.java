@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class EntityTroll extends TameableCreatureEntity implements IMob {
 	
-	public boolean greifing = true;
+	public boolean griefing = true;
 
 	public boolean stoneForm = false;
     
@@ -52,7 +52,7 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public void loadCreatureFlags() {
-		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
     
     
@@ -88,7 +88,7 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
         
         // Destroy Blocks:
  		if(!this.getEntityWorld().isRemote)
- 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing) {
+ 	        if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
  		    	float distance = this.getAttackTarget().getDistance(this);
  		    		if(distance <= this.getSize(Pose.STANDING).width + 4.0F)
  		    			this.destroyArea((int)this.posX, (int)this.posY, (int)this.posZ, 0.5F, true);

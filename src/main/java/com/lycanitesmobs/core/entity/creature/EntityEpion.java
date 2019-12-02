@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class EntityEpion extends TameableCreatureEntity implements IMob {
     
-	public boolean greifing = true;
+	public boolean griefing = true;
 	
     // ==================================================
  	//                    Constructor
@@ -44,7 +44,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 
 	@Override
 	public void loadCreatureFlags() {
-		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
 	
 	
@@ -63,7 +63,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 				if(this.subspecies != null)
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
-                if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing)
+                if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing)
 	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.NONE);
 	        	this.remove();
         	}
@@ -94,7 +94,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
     @Override
     public boolean isFlying() {
     	if(this.getEntityWorld().isRemote) return true;
-    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing) {
+    	if(this.daylightBurns() && this.getEntityWorld().isDaytime() && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
     		float brightness = this.getBrightness();
         	if(brightness > 0.5F && this.getEntityWorld().canBlockSeeSky(this.getPosition()))
         		return false;

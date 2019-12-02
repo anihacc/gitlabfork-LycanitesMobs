@@ -5,11 +5,9 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -17,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityCacodemon extends RideableCreatureEntity {
-    public boolean greifing = true;
+    public boolean griefing = true;
     
     // ==================================================
  	//                    Constructor
@@ -45,7 +43,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
 
     @Override
     public void loadCreatureFlags() {
-        this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+        this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
     }
 
 

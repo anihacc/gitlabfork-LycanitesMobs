@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 public class EntityCalpod extends BaseCreatureEntity implements IMob {
 	private int swarmLimit = 5;
-	private boolean greifing = true;
+	private boolean griefing = true;
 
     // ==================================================
  	//                    Constructor
@@ -37,7 +37,7 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
 	@Override
 	public void loadCreatureFlags() {
 		this.swarmLimit = this.creatureInfo.getFlag("swarmLimit", this.swarmLimit);
-		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
 	
 	
@@ -53,7 +53,7 @@ public class EntityCalpod extends BaseCreatureEntity implements IMob {
 
 		// Destroy Blocks:
 		if(!this.getEntityWorld().isRemote)
-			if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.greifing) {
+			if(this.getAttackTarget() != null && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing) {
 				float distance = this.getAttackTarget().getDistance(this);
 				if(distance <= this.getSize(Pose.STANDING).width + 1.0F)
 					this.destroyAreaBlock((int)this.posX, (int)this.posY, (int)this.posZ, LogBlock.class, true, 0);

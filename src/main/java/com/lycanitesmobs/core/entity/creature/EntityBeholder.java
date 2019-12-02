@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityBeholder extends RideableCreatureEntity {
-	public boolean greifing = true;
+	public boolean griefing = true;
     
     // ==================================================
  	//                    Constructor
@@ -48,7 +48,7 @@ public class EntityBeholder extends RideableCreatureEntity {
 
 	@Override
 	public void loadCreatureFlags() {
-		this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
 
 
