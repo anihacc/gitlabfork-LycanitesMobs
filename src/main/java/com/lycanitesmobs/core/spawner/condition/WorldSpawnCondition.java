@@ -140,7 +140,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 		int day = (int)Math.floor((worldExt.useTotalWorldTime ? world.getTotalWorldTime() : world.getWorldTime()) / 23999D);
 
 		// Check Dimension:
-		if(this.dimensionIds != null) {
+		if(this.dimensionIds != null && this.dimensionIds.length > 0) {
 			boolean dimensionIdFound = false;
 			for(int dimensionId : this.dimensionIds) {
 				if(world.provider.getDimension() == dimensionId) {
@@ -148,10 +148,10 @@ public class WorldSpawnCondition extends SpawnCondition {
 					break;
 				}
 			}
-			if("whitelist".equalsIgnoreCase(this.dimensionListType) && !dimensionIdFound) {
+			if(!dimensionIdFound && "whitelist".equalsIgnoreCase(this.dimensionListType)) {
 				return false;
 			}
-			if("blacklist".equalsIgnoreCase(this.dimensionListType) && dimensionIdFound) {
+			if(dimensionIdFound && "blacklist".equalsIgnoreCase(this.dimensionListType)) {
 				return false;
 			}
 		}
