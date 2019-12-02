@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCacodemon extends RideableCreatureEntity {
-    public boolean greifing = true;
+    public boolean griefing = true;
     
     // ==================================================
  	//                    Constructor
@@ -45,7 +45,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
 
     @Override
     public void loadCreatureFlags() {
-        this.greifing = this.creatureInfo.getFlag("greifing", this.greifing);
+        this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
     }
 
 
