@@ -7,6 +7,8 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -181,19 +183,26 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
         return true;
     }
 
-
-    // ==================================================
-    //                      Targets
-    // ==================================================
     @Override
-    public boolean isAggressive() {
+    public boolean canAttack(LivingEntity targetEntity) {
         if(this.isTamed()) {
-            return super.isAggressive();
+            return super.canAttack(targetEntity);
         }
-        if(this.getEntityWorld() != null && this.getEntityWorld().isDaytime())
-            return this.testLightLevel() < 2;
-        else
-            return super.isAggressive();
+
+        // Ignore Targets Picked Up By Another Mob:
+        ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(targetEntity);
+        if(extendedEntity != null && extendedEntity.pickedUpByEntity != null) {
+            return false;
+        }
+
+        // Daytime Players/Villagers:
+        if(targetEntity instanceof PlayerEntity || targetEntity instanceof VillagerEntity) {
+            if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
+                return false;
+            }
+        }
+
+        return super.canAttack(targetEntity);
     }
     
     
@@ -227,7 +236,10 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
     
     @Override
     public double[] getPickupOffset(Entity entity) {
-    	return new double[]{0, -1.0D, 0};
+        if(entity != null) {
+            return new double[]{0, 1 - entity.getSize(Pose.STANDING).height, 0};
+        }
+        return new double[]{0, -1, 0};
     }
     
     

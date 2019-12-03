@@ -2,7 +2,7 @@
 	"name": "remobra",
 	"creatureType": "dragon",
 	"groups": [
-		"monster"
+		"opportunist"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityRemobra",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelRemobra",

@@ -2,7 +2,7 @@
 	"name": "raiko",
 	"creatureType": "avian",
 	"groups": [
-		"monster"
+		"opportunist"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityRaiko",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelRaiko",

@@ -2,7 +2,7 @@
 	"name": "manticore",
 	"creatureType": "beast",
 	"groups": [
-		"predator"
+		"opportunist"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityManticore",
 	"modelClass": "com.lycanitesmobs.client.model.creature.ModelManticore",
