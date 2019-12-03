@@ -62,7 +62,7 @@ public class WorldGeneratorDungeon implements IWorldGenerator {
 						LycanitesMobs.logDebug("Dungeon", "Creating A New Dungeon At Chunk: X" + (chunkX + (dungeonSizeMax * x)) + " Z" + (chunkZ + (dungeonSizeMax * z)));
 						DungeonInstance dungeonInstance = new DungeonInstance();
 						int yPos = world.getSeaLevel();
-						if(world.provider.getDimensionType() == DimensionType.NETHER || world.provider.getDimensionType() == DimensionType.THE_END) {
+						if(yPos < 64) {
 							yPos = 64;
 						}
 						BlockPos dungeonPos = new ChunkPos(chunkX + (dungeonSizeMax * x), chunkZ + (dungeonSizeMax * z)).getBlock(7, yPos, 7);
