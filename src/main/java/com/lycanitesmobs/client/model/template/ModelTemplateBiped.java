@@ -123,10 +123,12 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
             }
-            if(partName.equals("legleft"))
-                rotX += 20;
-            if(partName.equals("legright"))
-                rotX -= 20;
+            if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
+                if (partName.equals("body")) {
+                    float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
+                    posY += bob;
+                }
+            }
         }
 
         // Attack:
