@@ -1,7 +1,7 @@
-# Blender MTL File: 'arix.blend'
+# Blender MTL File: 'afrit.blend'
 # Material Count: 2
 
-newmtl arix
+newmtl afrit
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -11,9 +11,9 @@ Ni 1.000000
 d 0.000000
 illum 0
 map_Kd afrit.png
-map_d arix.png
+map_d afrit.png
 
-newmtl arix_arix
+newmtl afrit_NONE
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -22,5 +22,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 0
-map_Kd arix.png
-map_d arix.png
+map_Kd afrit.png
+map_d afrit.png
