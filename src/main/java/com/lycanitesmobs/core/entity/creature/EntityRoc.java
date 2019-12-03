@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -10,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -178,36 +180,37 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     }
 
     @Override
-    public boolean canAttackEntity(EntityLivingBase target) {
-        ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(target);
-        if(extendedEntity != null && extendedEntity.pickedUpByEntity != null)
-            return false;
+    public boolean canAttackEntity(EntityLivingBase targetEntity) {
+        if(this.isTamed()) {
+            return super.canAttackEntity(targetEntity);
+        }
 
-        if(!this.creeperDropping && target instanceof EntityCreeper)
+        // Ignore Targets Picked Up By Another Mob:
+        ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(targetEntity);
+        if(extendedEntity != null && extendedEntity.pickedUpByEntity != null) {
             return false;
+        }
+
+        // Creeper Bombing:
+        if(!this.creeperDropping && targetEntity instanceof EntityCreeper) {
+            return false;
+        }
         if(this.hasPickupEntity()) {
-            if (target instanceof EntityCreeper)
+            if (targetEntity instanceof EntityCreeper)
                 return false;
         }
-        if (this.creeperDropCooldown > 0)
+        if(this.creeperDropCooldown > 0) {
             return false;
-
-        return super.canAttackEntity(target);
-    }
-
-
-    // ==================================================
-    //                      Targets
-    // ==================================================
-    @Override
-    public boolean isAggressive() {
-        if(this.isTamed()) {
-            return super.isAggressive();
         }
-        if(this.getEntityWorld() != null && this.getEntityWorld().isDaytime())
-            return this.testLightLevel() < 2;
-        else
-            return super.isAggressive();
+
+        // Daytime Players/Villagers:
+        if(targetEntity instanceof EntityPlayer || targetEntity instanceof EntityVillager) {
+            if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
+                return false;
+            }
+        }
+
+        return super.canAttackEntity(targetEntity);
     }
     
     
@@ -227,7 +230,10 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
     
     @Override
     public double[] getPickupOffset(Entity entity) {
-    	return new double[]{0, -1.0D, 0};
+        if(entity != null) {
+            return new double[]{0, 1 - entity.height, 0};
+        }
+    	return new double[]{0, 0, 0};
     }
 
     @Override
@@ -263,15 +269,6 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
         if(this.hasPickupEntity() && this.getPickupEntity() instanceof EntityPlayer)
             return new BlockPos(wanderPosition.getX(), this.restrictYHeightFromGround(wanderPosition, 6, 14), wanderPosition.getZ());
         return super.getWanderPosition(wanderPosition);
-    }
-
-
-    // ==================================================
-    //                      Movement
-    // ==================================================
-    @Override
-    public double getMountedYOffset() {
-        return (double)this.height * 0.9D;
     }
 
 

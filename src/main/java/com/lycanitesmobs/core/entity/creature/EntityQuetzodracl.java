@@ -219,7 +219,10 @@ public class EntityQuetzodracl extends RideableCreatureEntity implements IMob, I
     
     @Override
     public double[] getPickupOffset(Entity entity) {
-    	return new double[]{0, -1.0D, 0};
+        if(entity != null) {
+            return new double[]{0, 1 - entity.height, 0};
+        }
+        return new double[]{0, 0, 0};
     }
     
     

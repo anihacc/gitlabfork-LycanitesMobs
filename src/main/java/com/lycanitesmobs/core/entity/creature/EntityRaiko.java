@@ -7,7 +7,9 @@ import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
@@ -181,19 +183,26 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
         return true;
     }
 
-
-    // ==================================================
-    //                      Targets
-    // ==================================================
     @Override
-    public boolean isAggressive() {
+    public boolean canAttackEntity(EntityLivingBase targetEntity) {
         if(this.isTamed()) {
-            return super.isAggressive();
+            return super.canAttackEntity(targetEntity);
         }
-        if(this.getEntityWorld() != null && this.getEntityWorld().isDaytime())
-            return this.testLightLevel() < 2;
-        else
-            return super.isAggressive();
+
+        // Ignore Targets Picked Up By Another Mob:
+        ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(targetEntity);
+        if(extendedEntity != null && extendedEntity.pickedUpByEntity != null) {
+            return false;
+        }
+
+        // Daytime Players/Villagers:
+        if(targetEntity instanceof EntityPlayer || targetEntity instanceof EntityVillager) {
+            if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
+                return false;
+            }
+        }
+
+        return super.canAttackEntity(targetEntity);
     }
     
     
@@ -227,7 +236,10 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
     
     @Override
     public double[] getPickupOffset(Entity entity) {
-    	return new double[]{0, -1.0D, 0};
+        if(entity != null) {
+            return new double[]{0, 1 - entity.height, 0};
+        }
+        return new double[]{0, 0, 0};
     }
     
     
