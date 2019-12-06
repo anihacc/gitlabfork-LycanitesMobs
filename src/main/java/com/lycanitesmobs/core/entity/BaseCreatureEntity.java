@@ -200,7 +200,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // Spawning:
     /** Use the onFirstSpawn() method and not this variable. True if this creature has spawned for the first time (naturally or via spawn egg, etc, not reloaded from a saved chunk). **/
     public boolean firstSpawn = true;
-	/** True if this creature needs to pick a random level during it's onFireSpawn, this is ignore if firstSpawn is false. **/
+	/** True if this creature needs to pick a random level during it's onFirstSpawn, this is ignored if firstSpawn is false. **/
 	public boolean needsInitialLevel = true;
     /** Should this mob check for block collisions when spawning? **/
     public boolean spawnsInBlock = false;
@@ -472,7 +472,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 */
 	public void refreshAttributes() {
 		this.applyDynamicAttributes();
-		this.setHealth((float)this.creatureStats.getHealth());
+		this.setHealth(this.getMaxHealth());
 		this.refreshBossHealthName();
 	}
 
