@@ -4133,10 +4133,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         int light = this.getEntityWorld().getLight(pos);*/
 
-		float light = 15 * this.getBrightness();
-        if(light == 0) return 0;
-        if(light <= 7) return 1;
-        if(light <= 14) return 2;
+		float brightness = this.getBrightness();
+        if(brightness == 0) return 0;
+        if(brightness < 0.25F) return 1;
+        if(brightness < 1) return 2;
         return 3;
     }
     
