@@ -105,10 +105,16 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
                 rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
             }
+
             if(partName.equals("legleft"))
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.4F * distance);
             if(partName.equals("legright"))
                 rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
+
+            if(partName.contains("legleft0"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.6F * distance);
+            if(partName.contains("legright0"))
+                rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.6F * distance);
         }
 
         // Jumping/Flying:
@@ -136,10 +142,7 @@ public class ModelTemplateBiped extends ModelCreatureObj {
             if (partName.equals("mouth")) {
                 rotX += 20.0F;
             }
-            if (partName.contains("armleft")) {
-                rotX -= 20.0F + (60.0F * this.getAttackProgress());
-            }
-            if (partName.contains("armright")) {
+            if (partName.contains("armleft") || partName.contains("armright")) {
                 rotX -= 80.0F * this.getAttackProgress();
             }
         }

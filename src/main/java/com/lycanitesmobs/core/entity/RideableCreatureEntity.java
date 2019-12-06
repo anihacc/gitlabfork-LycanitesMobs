@@ -91,8 +91,9 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 			// Mount Melee:
 			if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.updateTick % 20 == 0) {
 				LivingEntity mountedAttackTarget = this.getAttackTarget();
-				if(mountedAttackTarget != null && this.getDistanceSq(mountedAttackTarget.posX, mountedAttackTarget.getBoundingBox().minY, mountedAttackTarget.posZ) <= this.getMeleeAttackRange(mountedAttackTarget, 1))
+				if(mountedAttackTarget != null && this.canAttack(mountedAttackTarget) && this.getDistanceSq(mountedAttackTarget.posX, mountedAttackTarget.getBoundingBox().minY, mountedAttackTarget.posZ) <= this.getMeleeAttackRange(mountedAttackTarget, 1)) {
 					this.attackMelee(this.getAttackTarget(), 1);
+				}
 			}
     	}
     	else {
@@ -420,7 +421,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             LivingEntity rider = this.getRider();
             if(target == rider)
                 return true;
-            if(rider != null)
+            if(rider != null && target != null)
                 return rider.isOnSameTeam(target);
         }
         return super.isOnSameTeam(target);

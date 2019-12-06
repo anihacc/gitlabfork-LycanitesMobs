@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
@@ -922,10 +921,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	if(!this.petControlsEnabled())
     		set = false;
         byte tamedStatus = this.getByteFromDataManager(TAMED);
-        if(set)
-            this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.PVP.id));
-        else
-            this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.PVP.id)));
+        if(set) {
+			this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.PVP.id));
+		}
+        else {
+			this.setAttackTarget(null);
+			this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.PVP.id)));
+		}
     }
     
     

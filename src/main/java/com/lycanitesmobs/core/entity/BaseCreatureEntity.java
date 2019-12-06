@@ -2300,7 +2300,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             // Bosses and Rares:
             if(!(this instanceof IGroupBoss)) {
                 if(!this.isTamed()) {
-					if(targetEntity instanceof IGroupBoss) {
+					if(targetCreature.isBoss()) {
 						return false;
 					}
 					if(this.isRareSubspecies()) {

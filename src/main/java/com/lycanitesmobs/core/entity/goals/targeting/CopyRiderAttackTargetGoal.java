@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class CopyRiderAttackTargetGoal extends TargetingGoal {
 	// Targets:
@@ -71,10 +72,14 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
   	//                    Valid Target
   	// ==================================================
     private boolean isTargetValid(LivingEntity target) {
-    	if(target == null) return false;
-    	if(!target.isAlive()) return false;
-		if(target == this.host) return false;
-		if(!this.host.canAttack(target.getType())) return false;
+    	if(target == null)
+    		return false;
+    	if(!target.isAlive())
+    		return false;
+		if(target == this.host)
+			return false;
+		if(!this.host.canAttack(target.getType()))
+			return false;
     	return true;
     }
     

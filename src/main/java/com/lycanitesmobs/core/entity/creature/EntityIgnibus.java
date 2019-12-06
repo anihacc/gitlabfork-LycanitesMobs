@@ -143,7 +143,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     public boolean isFlying() { return !this.isLanded; }
 
     @Override
-    public boolean isStrongSwimmer() { return true; }
+    public boolean isStrongSwimmer() { return false; }
     
     
     // ==================================================

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -58,6 +57,10 @@ public class DefendOwnerGoal extends TargetingGoal {
  	// ==================================================
     @Override
     protected boolean isValidTarget(LivingEntity target) {
+		if(target == null) {
+			return false;
+		}
+
     	// Owner Check:
     	if(!this.tamedHost.isTamed() || this.getOwner() == null)
     		return false;
@@ -134,4 +137,15 @@ public class DefendOwnerGoal extends TargetingGoal {
             this.callNearbyForHelp();
         return this.target != null;
     }
+
+
+	// ==================================================
+	//                  Continue Executing
+	// ==================================================
+	@Override
+	public boolean shouldContinueExecuting() {
+		if(!this.isValidTarget(this.getTarget()))
+			return false;
+		return super.shouldContinueExecuting();
+	}
 }

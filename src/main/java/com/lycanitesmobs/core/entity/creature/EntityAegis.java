@@ -64,6 +64,14 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 		}
 		return super.canBeTargetedBy(entity);
 	}
+
+	@Override
+	public boolean shouldCreatureGroupHunt(LivingEntity target) {
+		if(target instanceof TameableCreatureEntity && ((TameableCreatureEntity)target).isTamed()) {
+			return false;
+		}
+		return super.shouldCreatureGroupHunt(target);
+	}
     
     
     // ==================================================
