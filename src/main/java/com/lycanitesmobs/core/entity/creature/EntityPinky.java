@@ -34,8 +34,7 @@ public class EntityPinky extends RideableCreatureEntity {
         this.hasAttackSound = true;
         this.spreadFire = true;
         this.setupMob();
-        
-        this.attackCooldownMax = 10;
+
         this.stepHeight = 1.0F;
     }
 

@@ -59,6 +59,10 @@ public class DefendOwnerGoal extends TargetingGoal {
  	// ==================================================
     @Override
     protected boolean isValidTarget(EntityLivingBase target) {
+    	if(target == null) {
+    		return false;
+		}
+
     	// Owner Check:
     	if(!this.tamedHost.isTamed() || this.getOwner() == null)
     		return false;
@@ -135,4 +139,15 @@ public class DefendOwnerGoal extends TargetingGoal {
             this.callNearbyForHelp();
         return this.target != null;
     }
+
+
+	// ==================================================
+	//                  Continue Executing
+	// ==================================================
+	@Override
+	public boolean shouldContinueExecuting() {
+		if(!this.isValidTarget(this.getTarget()))
+			return false;
+		return super.shouldContinueExecuting();
+	}
 }

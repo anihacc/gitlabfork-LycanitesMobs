@@ -75,7 +75,7 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
  	// ==================================================
     @Override
     public boolean shouldContinueExecuting() {
-        if(this.host.isSitting())
+        if(this.host.isSitting() || !this.isValidTarget(this.getTarget()))
             return false;
         return super.shouldContinueExecuting();
     }

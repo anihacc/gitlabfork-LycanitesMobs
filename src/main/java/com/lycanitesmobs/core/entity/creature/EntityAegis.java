@@ -11,6 +11,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -61,6 +62,14 @@ public class EntityAegis extends TameableCreatureEntity implements IFusable {
 			return false;
 		}
 		return super.canBeTargetedBy(entity);
+	}
+
+	@Override
+	public boolean shouldCreatureGroupHunt(EntityLivingBase target) {
+		if(target instanceof TameableCreatureEntity && ((TameableCreatureEntity)target).isTamed()) {
+			return false;
+		}
+		return super.shouldCreatureGroupHunt(target);
 	}
     
     

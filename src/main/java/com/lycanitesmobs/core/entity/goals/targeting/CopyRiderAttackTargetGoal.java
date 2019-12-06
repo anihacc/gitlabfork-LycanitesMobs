@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class CopyRiderAttackTargetGoal extends TargetingGoal {
 	// Targets:
@@ -47,7 +48,7 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
   	// ==================================================
     @Override
     public void startExecuting() {
-    	if(isTargetValid(target)) {
+    	if(this.isTargetValid(target)) {
 			lastAttackTime = this.host.getRider().getLastAttackedEntityTime();
 			super.startExecuting();
 		}
@@ -61,7 +62,7 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
     public boolean shouldContinueExecuting() {
     	if(!this.host.hasRiderTarget())
     		return false;
-        if(this.host.isSitting())
+        if(this.host.isSitting() || !this.isValidTarget(this.getTarget()))
             return false;
         return super.shouldContinueExecuting();
     }
@@ -71,9 +72,12 @@ public class CopyRiderAttackTargetGoal extends TargetingGoal {
   	//                    Valid Target
   	// ==================================================
     private boolean isTargetValid(EntityLivingBase target) {
-    	if(target == null) return false;
-    	if(!target.isEntityAlive()) return false;
-		if(target == this.host) return false;
+    	if(target == null)
+    		return false;
+    	if(!target.isEntityAlive())
+    		return false;
+		if(target == this.host)
+			return false;
 		if(!this.host.canAttackClass(target.getClass()))
 			return false;
 		if(!this.host.canAttackEntity(target))
