@@ -82,6 +82,7 @@ public class ModelRoc extends ModelCreatureObj {
 			}
 		}
 
+		// Body Bob:
 		if(partName.equals("body")) {
 			float bob = -MathHelper.sin(loop * 0.2F) * 0.1F;
 			if (bob < 0)
