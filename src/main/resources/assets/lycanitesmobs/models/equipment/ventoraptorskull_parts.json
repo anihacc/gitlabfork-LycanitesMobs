@@ -12,9 +12,9 @@
   {
     "name": "TipB",
     "parent": "Base",
-    "centerX": "-0.048",
-    "centerY": "0.061",
-    "centerZ": "0.459",
+    "centerX": "-0.078",
+    "centerY": "-0.009",
+    "centerZ": "0.379",
     "rotationX": "0.0",
     "rotationY": "89.964",
     "rotationZ": "0.0"
@@ -22,9 +22,9 @@
   {
     "name": "TipC",
     "parent": "Base",
-    "centerX": "0.048",
-    "centerY": "0.061",
-    "centerZ": "0.459",
+    "centerX": "0.078",
+    "centerY": "-0.009",
+    "centerZ": "0.379",
     "rotationX": "0.0",
     "rotationY": "-89.964",
     "rotationZ": "-179.928"

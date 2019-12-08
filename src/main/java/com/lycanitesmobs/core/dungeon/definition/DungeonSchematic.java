@@ -468,7 +468,7 @@ public class DungeonSchematic {
 				addLoot = itemDrop.chance <= random.nextDouble();
 			}
 			if(addLoot) {
-				int quantity = itemDrop.getQuantity(random, 0);
+				int quantity = itemDrop.getQuantity(random, 0, 1);
 				if(quantity > 0) {
 					loot.add(new ItemStack(itemDrop.getItemStack().getItem(), quantity));
 				}

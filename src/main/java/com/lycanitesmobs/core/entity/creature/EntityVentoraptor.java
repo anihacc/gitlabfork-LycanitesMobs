@@ -89,11 +89,6 @@ public class EntityVentoraptor extends RideableCreatureEntity {
     	return 0.98D;
     }
 
-    @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 0.8D;
-    }
-
     
     // ==================================================
     //                   Mount Ability

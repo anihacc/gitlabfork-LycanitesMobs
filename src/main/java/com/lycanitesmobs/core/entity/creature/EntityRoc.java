@@ -241,6 +241,14 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
             return false;
         return super.canPickupEntity(entity);
     }
+
+    @Override
+    public boolean canAttackWithPickup() {
+        if(this.getPickupEntity() instanceof CreeperEntity) {
+            return true;
+        }
+        return super.canAttackWithPickup();
+    }
     
     
     // ==================================================

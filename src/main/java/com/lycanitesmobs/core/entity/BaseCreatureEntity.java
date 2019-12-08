@@ -538,7 +538,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         this.loadItemDrops();
 		if(ItemEquipmentPart.MOB_PART_DROPS.containsKey(this.creatureInfo.getEntityId())) {
 			for(ItemEquipmentPart itemEquipmentPart : ItemEquipmentPart.MOB_PART_DROPS.get(this.creatureInfo.getEntityId())) {
-				this.drops.add(new ItemDrop(itemEquipmentPart.getRegistryName().toString(), itemEquipmentPart.dropChance).setMaxAmount(1));
+				ItemDrop partDrop = new ItemDrop(itemEquipmentPart.getRegistryName().toString(), itemEquipmentPart.dropChance).setMaxAmount(1);
+				partDrop.bonusAmount = false;
+				this.drops.add(partDrop);
 			}
 		}
 
@@ -3537,18 +3539,21 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     		subspeciesScale = Subspecies.uncommonDropScale;
 
     	for(ItemDrop itemDrop : this.drops) {
-            if(itemDrop.subspeciesID >= 0 && itemDrop.subspeciesID != this.getSubspeciesIndex())
-                continue;
-    		int quantity = itemDrop.getQuantity(this.rand, 0);
-            if(itemDrop.subspeciesID < 0)
-                quantity *= subspeciesScale;
-    		if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1)
-    			quantity = Math.round((float)quantity * (float)this.extraMobBehaviour.itemDropMultiplierOverride);
-    		ItemStack dropStack = null;
-    		if(quantity > 0)
-    			dropStack = itemDrop.getEntityDropItemStack(this, quantity);
-    		if(dropStack != null)
-    			this.dropItem(dropStack);
+            if(itemDrop.subspeciesID >= 0 && itemDrop.subspeciesID != this.getSubspeciesIndex()) {
+				continue;
+			}
+            int multiplier = 1;
+			if(itemDrop.subspeciesID < 0) {
+				multiplier *= subspeciesScale;
+			}
+			if(this.extraMobBehaviour != null && this.extraMobBehaviour.itemDropMultiplierOverride != 1) {
+				multiplier = Math.round((float) multiplier * (float) this.extraMobBehaviour.itemDropMultiplierOverride);
+			}
+    		int quantity = itemDrop.getQuantity(this.rand, 0, multiplier);
+    		if(quantity <= 0) {
+    			return;
+			}
+			this.dropItem(itemDrop.getEntityDropItemStack(this, quantity));
     	}
     }
     

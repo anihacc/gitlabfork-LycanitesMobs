@@ -16,7 +16,7 @@
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
 		"biomes": ["plains", "savanna", "-snowy"],
-		"spawnWeight": 8,
+		"spawnWeight": 6,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
 		"spawnGroupMin": 1,

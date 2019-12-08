@@ -137,7 +137,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
 		this.setFur(false);
 		this.playSound(SoundEvents.ENTITY_SHEEP_SHEAR, 1.0F, 1.0F);
 
-		int quantity = this.woolDrop.getQuantity(this.getRNG(), fortune);
+		int quantity = this.woolDrop.getQuantity(this.getRNG(), fortune, 1);
 		ItemStack dropStack = this.woolDrop.getEntityDropItemStack(this, quantity);
 		this.dropItem(dropStack);
 		dropStacks.add(dropStack);

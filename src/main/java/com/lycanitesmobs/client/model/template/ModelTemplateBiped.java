@@ -6,6 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateBiped extends ModelCreatureObj {
+    protected float tailScaleX = 1;
+    protected float tailScaleY = 1F;
 
     // ==================================================
     //                 Animate Part
@@ -43,10 +45,6 @@ public class ModelTemplateBiped extends ModelCreatureObj {
             rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
             rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
         }
-        if(partName.equals("tail")) {
-            rotX = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
-            rotY = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.09F) * 0.05F - 0.05F);
-        }
         if(entity == null || entity.onGround || entity.isInWater()) {
             if(partName.equals("wingleft")) {
                 rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
@@ -57,6 +55,8 @@ public class ModelTemplateBiped extends ModelCreatureObj {
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
             }
         }
+
+        // Tail:
         if(partName.contains("tail")) {
             float sine = 0;
             if(partName.equals("tail.002") || partName.equals("tail02")) {
@@ -80,8 +80,9 @@ public class ModelTemplateBiped extends ModelCreatureObj {
             sine = (MathHelper.sin(sine / 6) - 0.5F);
             float tailRotX = (float)-Math.toDegrees(MathHelper.cos((loop + time) * 0.1F) * 0.05F - 0.05F);
             float tailRotY = (float)-Math.toDegrees(MathHelper.cos((loop + time) * sine * 0.1F) * 0.4F);
-            rotY += Math.toDegrees(MathHelper.cos(time * 0.25F) * distance);
-            this.rotate(tailRotX, tailRotY, 0);
+            tailRotX += Math.toDegrees(MathHelper.cos(time * 0.5F) * 0.1F * distance * 0.5F);
+            tailRotY += Math.toDegrees(MathHelper.cos(time * 0.25F) * distance * 0.5F);
+            this.rotate(tailRotX * this.tailScaleX, tailRotY * this.tailScaleY, 0);
         }
 
 		// Fingers:
