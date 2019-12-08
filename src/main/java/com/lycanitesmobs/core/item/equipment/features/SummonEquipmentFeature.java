@@ -15,9 +15,6 @@ import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 
 public class SummonEquipmentFeature extends EquipmentFeature {
-	/** The entity class to spawn. **/
-	public Class entityClass;
-
 	/** The id of the mob to summon. **/
 	public String summonMobId;
 
@@ -42,18 +39,6 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		super.loadFromJSON(json);
 
 		this.summonMobId = json.get("summonMobId").getAsString();
-		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
-		if(creatureInfo != null) {
-			this.entityClass = creatureInfo.entityClass;
-		}
-		else {
-			Class entityClass = null;
-			net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.ForgeRegistries.ENTITIES.getValue(new ResourceLocation(this.summonMobId));
-			if(entry != null) {
-				entityClass = entry.getEntityClass();
-			}
-			this.entityClass = entityClass;
-		}
 
 		if(json.has("summonChance"))
 			this.summonChance = json.get("summonChance").getAsDouble();
@@ -104,34 +89,47 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		// Summon:
 		if(attacker.getRNG().nextDouble() <= this.summonChance) {
 			try {
-				EntityLiving entity = (EntityLiving)this.entityClass.getConstructor(World.class).newInstance(new Object[]{attacker.getEntityWorld()});
-				if(entity instanceof BaseCreatureEntity) {
-					BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
-					entityCreature.setMinion(true);
-					entityCreature.setTemporary(this.summonDuration * 20);
-					entityCreature.setSizeScale(this.sizeScale);
-
-					if(attacker instanceof EntityPlayer && entityCreature instanceof TameableCreatureEntity) {
-						TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
-						entityTameable.setPlayerOwner((EntityPlayer)attacker);
-						entityTameable.setSitting(false);
-						entityTameable.setFollowing(true);
-						entityTameable.setPassive(false);
-						entityTameable.setAssist(true);
-						entityTameable.setAggressive(true);
-						entityTameable.setPVP(target instanceof EntityPlayer);
+				Class entityClass = null;
+				CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
+				if(creatureInfo != null) {
+					entityClass = creatureInfo.entityClass;
+				}
+				else {
+					net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.ForgeRegistries.ENTITIES.getValue(new ResourceLocation(this.summonMobId));
+					if(entry != null) {
+						entityClass = entry.getEntityClass();
 					}
+				}
+				if(entityClass != null) {
+					EntityLiving entity = (EntityLiving) entityClass.getConstructor(World.class).newInstance(new Object[]{attacker.getEntityWorld()});
+					if (entity instanceof BaseCreatureEntity) {
+						BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
+						entityCreature.setMinion(true);
+						entityCreature.setTemporary(this.summonDuration * 20);
+						entityCreature.setSizeScale(this.sizeScale);
 
-					float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
-					if(attacker.getRNG().nextBoolean()) {
-						randomAngle = -randomAngle;
-					}
-					BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
+						if (attacker instanceof EntityPlayer && entityCreature instanceof TameableCreatureEntity) {
+							TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
+							entityTameable.setPlayerOwner((EntityPlayer) attacker);
+							entityTameable.setSitting(false);
+							entityTameable.setFollowing(true);
+							entityTameable.setPassive(false);
+							entityTameable.setAssist(true);
+							entityTameable.setAggressive(true);
+							entityTameable.setPVP(target instanceof EntityPlayer);
+						}
+
+						float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
+						if (attacker.getRNG().nextBoolean()) {
+							randomAngle = -randomAngle;
+						}
+						BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
 					/*if(!entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP)) {
 						randomAngle = -randomAngle;
 					}*/
-					entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
-					attacker.getEntityWorld().spawnEntity(entity);
+						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
+						attacker.getEntityWorld().spawnEntity(entity);
+					}
 				}
 			}
 			catch (Exception e) {

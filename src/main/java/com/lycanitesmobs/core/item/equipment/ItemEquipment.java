@@ -445,7 +445,7 @@ public class ItemEquipment extends ItemBase {
 		}
 
 		cooldown = 2.4D * (cooldown / i);
-		return cooldown;
+		return Math.min(3.5D, cooldown);
 	}
 
 	/**

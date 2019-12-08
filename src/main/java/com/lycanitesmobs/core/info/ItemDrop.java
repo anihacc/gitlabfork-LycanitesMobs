@@ -29,6 +29,7 @@ public class ItemDrop {
 	
 	public int minAmount = 1;
 	public int maxAmount = 1;
+	public boolean bonusAmount = true;
 	
 	public float chance = 0;
 
@@ -113,6 +114,8 @@ public class ItemDrop {
 			this.minAmount = json.get("minAmount").getAsInt();
 		if(json.has("maxAmount"))
 			this.maxAmount = json.get("maxAmount").getAsInt();
+		if(json.has("bonusAmount"))
+			this.bonusAmount = json.get("bonusAmount").getAsBoolean();
 		if(json.has("chance"))
 			this.chance = json.get("chance").getAsFloat();
 		if(json.has("subspecies"))
@@ -173,9 +176,10 @@ public class ItemDrop {
 	 * Returns a quantity to drop.
 	 * @param random The instance of random to use.
 	 * @param bonus A bonus multiplier.
+	 * @param multiplier The value to multiply the quantity by.
 	 * @return The randomised amount to drop.
 	 */
-	public int getQuantity(Random random, int bonus) {
+	public int getQuantity(Random random, int bonus, int multiplier) {
 		// Will It Drop?
 		float roll = random.nextFloat();
 		roll = Math.max(roll, 0);
@@ -184,13 +188,14 @@ public class ItemDrop {
 		
 		// How Many?
 		int min = this.minAmount;
-		int max = this.maxAmount + bonus;
-		if(max <= min)
-			return min;
+		int max = this.maxAmount + (this.bonusAmount ? bonus : 0);
+		if(max <= min) {
+			return min * multiplier;
+		}
 		roll = roll / this.chance;
 		float dropRange = (max - min) * roll;
 		int dropAmount = min + Math.round(dropRange);
-		return dropAmount;
+		return dropAmount * multiplier;
 	}
 
 	/**
@@ -283,6 +288,8 @@ public class ItemDrop {
 			this.metadata = nbtTagCompound.getInteger("Metadata");
 		this.minAmount = nbtTagCompound.getInteger("MinAmount");
 		this.maxAmount = nbtTagCompound.getInteger("MaxAmount");
+		if(nbtTagCompound.hasKey("BonusAmount"))
+			this.bonusAmount = nbtTagCompound.getBoolean("BonusAmount");
 		this.chance = nbtTagCompound.getFloat("Chance");
 	}
 
@@ -301,6 +308,7 @@ public class ItemDrop {
 		nbtTagCompound.setInteger("Metadata", this.metadata);
 		nbtTagCompound.setInteger("MinAmount", this.minAmount);
 		nbtTagCompound.setInteger("MaxAmount", this.maxAmount);
+		nbtTagCompound.setBoolean("BonusAmount", this.bonusAmount);
 		nbtTagCompound.setFloat("Chance", this.chance);
 
 		return true;

@@ -189,7 +189,12 @@ public class AttackMeleeGoal extends EntityAIBase {
 		if(this.longMemory || this.host.getEntitySenses().canSee(attackTarget)) {
         	if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
 				this.repathTime = this.failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
-				this.host.getNavigator().tryMoveToEntityLiving(attackTarget, this.speed);
+				if(this.host.isCurrentlyFlying()) {
+					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.posX, this.attackTarget.getEntityBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, this.speed);
+				}
+				else {
+					this.host.getNavigator().tryMoveToEntityLiving(attackTarget, this.speed);
+				}
 				if(this.host.getNavigator().getPath() != null) {
 	                PathPoint finalPathPoint = this.host.getNavigator().getPath().getFinalPathPoint();
 	                if(finalPathPoint != null && attackTarget.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {

@@ -1,7 +1,7 @@
-# Blender MTL File: 'ventoraptorskull.blend'
+# Blender MTL File: 'uvaraptorskull.blend'
 # Material Count: 2
 
-newmtl ventoraptor
+newmtl uvaraptorskull
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -10,10 +10,10 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 0
-map_Kd ventoraptorskull.png
-map_d ventoraptorskull.png
+map_Kd uvaraptorskull.png
+map_d uvaraptorskull.png
 
-newmtl ventoraptor_NONE
+newmtl uvaraptorskull_NONE
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -22,5 +22,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 0
-map_Kd ventoraptorskull.png
-map_d ventoraptorskull.png
+map_Kd uvaraptorskull.png
+map_d uvaraptorskull.png

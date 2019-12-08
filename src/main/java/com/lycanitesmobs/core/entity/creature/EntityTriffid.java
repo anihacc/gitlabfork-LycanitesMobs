@@ -75,7 +75,7 @@ public class EntityTriffid extends TameableCreatureEntity implements IMob {
                     heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
                 }
             }
-            if(ObjectLists.isAxe(heldItem.getItem())) {
+            if(ObjectLists.isAxe(heldItem)) {
                 return 2.0F;
             }
         }

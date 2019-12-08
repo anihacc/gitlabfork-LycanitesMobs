@@ -70,7 +70,7 @@ public class EntityUvaraptor extends RideableCreatureEntity {
 	@Override
 	public float getAISpeedModifier() {
 		if(!this.onGround)
-			return 2.0F;
+			return 5.0F;
 		return 1.0F;
 	}
 

@@ -165,7 +165,7 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
 					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
 				}
 			}
-			if(ObjectLists.isPickaxe(heldItem.getItem())) {
+			if(ObjectLists.isPickaxe(heldItem)) {
 				return 3.0F;
 			}
 		}

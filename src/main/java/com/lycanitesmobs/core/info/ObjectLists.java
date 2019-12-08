@@ -314,25 +314,14 @@ public class ObjectLists {
     // ==================================================
     //                   Check Tools
     // ==================================================
-    // ========== Sword ==========
-	public static boolean isSword(Item item) {
-		if(item == null)
-			return false;
-		if(item instanceof ItemSword)
-			return true;
-		if(item instanceof ItemShears)
-			return false;
-		return item.getDestroySpeed(new ItemStack(item), Blocks.MELON_BLOCK.getDefaultState()) > 1F;
-	}
-
     // ========== Pickaxe ==========
-	public static boolean isPickaxe(Item item) {
-		if(item == null)
+	public static boolean isPickaxe(ItemStack itemStack) {
+		if(itemStack.isEmpty())
 			return false;
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = itemStack.getUnlocalizedName().split("\\.");
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
                 if("Pickaxe".equalsIgnoreCase(toolName) || "Hammer".equalsIgnoreCase(toolName))
@@ -341,11 +330,11 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemPickaxe)
+            if(itemStack.getItem() instanceof ItemPickaxe)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "pickaxe", null, null) != -1)
+            if(itemStack.getItem().getHarvestLevel(itemStack, "pickaxe", null, null) != -1)
                 return true;
-            return item.getDestroySpeed(new ItemStack(item), Blocks.STONE.getDefaultState()) > 1F;
+            return itemStack.getDestroySpeed(Blocks.STONE.getDefaultState()) > 1F;
 
         }
         catch(Exception e) {}
@@ -353,13 +342,13 @@ public class ObjectLists {
 	}
 
     // ========== Axe ==========
-	public static boolean isAxe(Item item) {
-        if(item == null)
+	public static boolean isAxe(ItemStack itemStack) {
+        if(itemStack.isEmpty())
             return false;
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = itemStack.getUnlocalizedName().split("\\.");
             for(String toolNamePart : toolNameParts)
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
@@ -369,11 +358,11 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemAxe)
+            if(itemStack.getItem() instanceof ItemAxe)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "axe", null, null) != -1)
+            if(itemStack.getItem().getHarvestLevel(itemStack, "axe", null, null) != -1)
                 return true;
-            return item.getDestroySpeed(new ItemStack(item), Blocks.LOG.getDefaultState()) > 1F;
+            return itemStack.getDestroySpeed(Blocks.LOG.getDefaultState()) > 1F;
 
         }
         catch(Exception e) {}
@@ -381,13 +370,13 @@ public class ObjectLists {
 	}
 
     // ========== Shovel ==========
-	public static boolean isShovel(Item item) {
-		if(item == null)
+	public static boolean isShovel(ItemStack itemStack) {
+		if(itemStack.isEmpty())
             return false;
         try {
 
             // Check Tinkers Tool:
-            String[] toolNameParts = item.getUnlocalizedName().split("\\.");
+            String[] toolNameParts = itemStack.getUnlocalizedName().split("\\.");
             if(toolNameParts.length >= 3 && "InfiTool".equalsIgnoreCase(toolNameParts[1])) {
                 String toolName = toolNameParts[2];
                 if("Shovel".equalsIgnoreCase(toolName) || "Excavator".equalsIgnoreCase(toolName) || "Mattock".equalsIgnoreCase(toolName))
@@ -396,11 +385,11 @@ public class ObjectLists {
             }
 
             // Vanilla Based Checks:
-            if(item instanceof ItemSpade)
+            if(itemStack.getItem() instanceof ItemSpade)
                 return true;
-            if(item.getHarvestLevel(new ItemStack(item), "shovel", null, null) != -1)
+            if(itemStack.getItem().getHarvestLevel(itemStack, "shovel", null, null) != -1)
                 return true;
-            return item.getDestroySpeed(new ItemStack(item), Blocks.DIRT.getDefaultState()) > 1F;
+            return itemStack.getDestroySpeed(Blocks.DIRT.getDefaultState()) > 1F;
 
         }
         catch(Exception e) {}

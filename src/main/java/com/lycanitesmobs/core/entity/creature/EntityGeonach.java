@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -176,7 +177,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
 				}
 			}
-			if(ObjectLists.isPickaxe(heldItem.getItem())) {
+			if(ObjectLists.isPickaxe(heldItem)) {
 				return 3.0F;
 			}
 		}

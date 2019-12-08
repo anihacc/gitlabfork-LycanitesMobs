@@ -106,7 +106,7 @@ public class EntityTreant extends BaseCreatureEntity implements IMob, IGroupHeav
 					heldItem = entityLiving.getHeldItem(EnumHand.MAIN_HAND);
 				}
 			}
-			if(ObjectLists.isAxe(heldItem.getItem())) {
+			if(ObjectLists.isAxe(heldItem)) {
 				return 2.0F;
 			}
 		}
