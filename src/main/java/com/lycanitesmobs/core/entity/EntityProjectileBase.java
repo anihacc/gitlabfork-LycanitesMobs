@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -177,6 +178,11 @@ public class EntityProjectileBase extends EntityThrowable {
 
     @Override
 	public void spawnRunningParticles() {}
+
+	@Override
+	public boolean handleWaterMovement() {
+		return this.inWater;
+	}
     
     
     // ==================================================
