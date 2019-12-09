@@ -2648,7 +2648,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 */
 	public double getMeleeAttackRange(EntityLivingBase attackTarget, double additionalReach) {
 		double creatureRange = this.getPhysicalRange();
-		double targetSize = (attackTarget.width + 1) * (attackTarget.width + 1);
+		double targetSize = 1;
+		if(attackTarget != null) {
+			targetSize = (attackTarget.width + 1) * (attackTarget.width + 1);
+		}
 		return creatureRange + targetSize + additionalReach;
 	}
 
@@ -4026,7 +4029,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Returns the total armor value of this mob. **/
     @Override
     public int getTotalArmorValue() {
-    	return this.inventory.getArmorValue();
+    	return super.getTotalArmorValue() + this.inventory.getArmorValue();
     }
     
     // ========== Pickup Items ==========

@@ -459,7 +459,7 @@ public class GameEventListener {
 					event.getLeft().add("Speed: " + mouseOverCreature.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() + "/" + mouseOverCreature.creatureStats.getSpeed());
 					event.getLeft().add("");
 					event.getLeft().add("Defense: " + mouseOverCreature.creatureStats.getDefense());
-					event.getLeft().add("Armor: " + mouseOverCreature.creatureStats.getArmor());
+					event.getLeft().add("Armor: " + mouseOverCreature.getTotalArmorValue());
 					event.getLeft().add("");
 					event.getLeft().add("Damage: " + mouseOverCreature.creatureStats.getDamage());
 					event.getLeft().add("Melee Speed: " + mouseOverCreature.creatureStats.getAttackSpeed());
