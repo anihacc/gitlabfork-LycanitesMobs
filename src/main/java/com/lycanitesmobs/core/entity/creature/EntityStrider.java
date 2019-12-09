@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupHeavy;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -15,11 +16,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy {
+public class EntityStrider extends RideableCreatureEntity implements IGroupHeavy {
     protected int pickupCooldown = 100;
 
     // ==================================================
@@ -70,7 +72,12 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
                 ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.getPickupEntity());
                 if(extendedEntity != null)
                     extendedEntity.setPickedUpByEntity(this);
-                if(this.pickupTime++ % 40 == 0) {
+
+                if(this.isTamed() && !this.canAttack(this.getPickupEntity())) {
+                    this.getPickupEntity().addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, this.getEffectDuration(5), 1));
+                }
+
+                else if(this.pickupTime++ % 40 == 0) {
                     this.attackEntityAsMob(this.getPickupEntity(), 0.5F);
                     if(this.getPickupEntity() instanceof LivingEntity) {
                         if(ObjectManager.getEffect("penetration") != null)
@@ -90,50 +97,25 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     // ==================================================
     //                   Mount Ability
     // ==================================================
-    /*@Override
+    @Override
     public void mountAbility(Entity rider) {
         if(this.getEntityWorld().isRemote)
             return;
 
         if(this.abilityToggled)
             return;
+
+        if(this.hasPickupEntity()) {
+            this.dropPickupEntity();
+            return;
+        }
+
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        // Penetrating Screech:
-        double distance = 10.0D;
-        List<LivingEntity> possibleTargets = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(distance, distance, distance), new Predicate<LivingEntity>() {
-            @Override
-            public boolean apply(LivingEntity possibleTarget) {
-                if(!possibleTarget.isAlive()
-                        || possibleTarget == EntityStrider.this
-                        || EntityStrider.this.isRidingOrBeingRiddenBy(possibleTarget)
-                        || EntityStrider.this.isOnSameTeam(possibleTarget)
-                        || EntityStrider.this.canAttack(possibleTarget.getType())
-                        || EntityStrider.this.canAttack(possibleTarget))
-                    return false;
-
-                return true;
-            }
-        });
-        if(!possibleTargets.isEmpty()) {
-            for(LivingEntity possibleTarget : possibleTargets) {
-                boolean doDamage = true;
-                if(this.getRider() instanceof PlayerEntity) {
-                    if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((PlayerEntity)this.getRider(), possibleTarget))) {
-                        doDamage = false;
-                    }
-                }
-                if(doDamage) {
-                    if (ObjectManager.getEffectInstance("penetration") != null)
-                        possibleTarget.addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("penetration"), this.getEffectDuration(5), 1));
-                    else
-                        possibleTarget.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 10 * 20, 0));
-                }
-            }
-        }
-        this.playAttackSound();
-        this.triggerAttackCooldown();
+        LivingEntity nearestTarget = this.getNearestEntity(LivingEntity.class, null, 4, false);
+        if(this.canPickupEntity(nearestTarget))
+            this.pickupEntity(nearestTarget);
 
         this.applyStaminaCost();
     }
@@ -149,25 +131,6 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     public float getStaminaRecoveryMax() {
         return 1.0F;
     }
-
-    @Override
-    public boolean shouldDismountInWater(Entity rider) { return false; }
-
-    // Mounted Y Offset:
-    @Override
-    public double getMountedYOffset() {
-        return (double)this.getSize(Pose.STANDING).height * 1.0D * this.sizeScale;
-    }
-
-    // Mount/Dismount:
-    @Override
-    public void onDismounted(Entity entity) {
-        super.onDismounted(entity);
-        if(entity != null && entity instanceof LivingEntity) {
-            if(ObjectManager.getEffectInstance("fallresist") != null)
-                ((LivingEntity)entity).addPotionEffect(new EffectInstance(ObjectManager.getEffectInstance("fallresist"), 3 * 20, 1));
-        }
-    }*/
 
 	
     // ==================================================
@@ -246,7 +209,7 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
     /** Called when this mob has received damage. Here there is a random chance of this mob dropping any picked up entities. **/
     @Override
     public void onDamage(DamageSource damageSrc, float damage) {
-        if(this.hasPickupEntity() && this.getRNG().nextFloat() <= 0.25F)
+        if(this.hasPickupEntity() && !this.isTamed() && this.getRNG().nextFloat() <= 0.25F)
             this.dropPickupEntity();
         super.onDamage(damageSrc, damage);
     }
@@ -276,7 +239,7 @@ public class EntityStrider extends TameableCreatureEntity implements IGroupHeavy
 
     // ========== Pickup ==========
     public boolean canPickupEntity(LivingEntity entity) {
-        if(this.pickupCooldown > 0)
+        if(!this.isTamed() && this.pickupCooldown > 0)
             return false;
         return super.canPickupEntity(entity);
     }

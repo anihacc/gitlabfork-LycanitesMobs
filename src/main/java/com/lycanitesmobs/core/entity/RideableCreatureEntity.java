@@ -282,16 +282,26 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
                     this.move(MoverType.SELF, new Vec3d(this.getMotion().x, verticalMotion / 16, this.getMotion().z));
                     this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
                 }
-                else if(this.isInWater() || this.isInLava()) {
+				else if(this.isInWater()) {
+					if(!this.canBreatheUnderwater()) {
+						verticalMotion *= 0.25f;
+						strafe *= 0.25f;
+						forward *= 0.25f;
+					}
+					this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
+					this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
+					this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
+				}
+				else if(this.isInLava()) {
 					if(!this.isStrongSwimmer()) {
 						verticalMotion *= 0.25f;
 						strafe *= 0.25f;
 						forward *= 0.25f;
 					}
 					this.moveRelative(0.1F, new Vec3d(strafe, 0, forward));
-                    this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
+					this.move(MoverType.SELF, this.getMotion().add(0, verticalMotion / 16, 0));
 					this.setMotion(this.getMotion().mul(0.8999999761581421D, 0.8999999761581421D, 0.8999999761581421D));
-                }
+				}
                 else
                     super.travel(new Vec3d(strafe, up, forward));
             }
