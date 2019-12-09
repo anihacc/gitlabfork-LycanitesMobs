@@ -39,8 +39,9 @@ public class CreaturePathNavigator extends PathNavigator {
     protected boolean canNavigate() {
         if(this.entityCreature.isFlying())
             return true;
-        if(this.entityCreature.isInWater())
+        if(this.entityCreature.isInWater()) {
             return this.entityCreature.canWade() || this.entityCreature.isStrongSwimmer();
+        }
         return this.entity.onGround || this.entity.isPassenger();
     }
 
@@ -477,14 +478,8 @@ public class CreaturePathNavigator extends PathNavigator {
                 this.clearPath();
         }
 
-        // Update Path and Move:
-        if (!this.noPath() || !this.entityCreature.canClimb()) {
-            super.tick();
-            return;
-        }
-
         // Climbing Tick:
-        if (this.climbTargetPos != null) {
+        if (this.noPath() && this.entityCreature.canClimb() && this.climbTargetPos != null) {
             double d0 = (double)(this.entity.getSize(Pose.STANDING).width * this.entity.getSize(Pose.STANDING).width);
 
             if (this.entity.getDistanceSq(new Vec3d(this.climbTargetPos)) >= d0 && (this.entity.posY <= (double)this.climbTargetPos.getY() || this.entity.getDistanceSq(new Vec3d(this.climbTargetPos.getX(), MathHelper.floor(this.entity.posY), this.climbTargetPos.getZ())) >= d0)) {
@@ -492,6 +487,33 @@ public class CreaturePathNavigator extends PathNavigator {
             }
             else {
                 this.climbTargetPos = null;
+            }
+            return;
+        }
+
+        // Update Path and Move:
+        if (!this.noPath()) {
+            ++this.totalTicks;
+            if (this.tryUpdatePath) {
+                this.updatePath();
+            }
+
+            if (this.canNavigate()) {
+                this.pathFollow();
+            }
+            else if (this.currentPath != null && this.currentPath.getCurrentPathIndex() < this.currentPath.getCurrentPathLength()) {
+                Vec3d vec3d = this.getEntityPosition();
+                Vec3d vec3d1 = this.currentPath.getVectorFromIndex(this.entity, this.currentPath.getCurrentPathIndex());
+                if (vec3d.y > vec3d1.y && !this.entity.onGround && MathHelper.floor(vec3d.x) == MathHelper.floor(vec3d1.x) && MathHelper.floor(vec3d.z) == MathHelper.floor(vec3d1.z)) {
+                    this.currentPath.setCurrentPathIndex(this.currentPath.getCurrentPathIndex() + 1);
+                }
+            }
+
+            DebugPacketSender.func_218803_a(this.world, this.entity, this.currentPath, this.maxDistanceToWaypoint);
+            if (!this.noPath()) {
+                Vec3d vec3d2 = this.currentPath.getPosition(this.entity);
+                BlockPos blockpos = new BlockPos(vec3d2);
+                this.entity.getMoveHelper().setMoveTo(vec3d2.x, this.world.getBlockState(blockpos.down()).isAir() ? vec3d2.y : WalkNodeProcessor.getGroundY(this.world, blockpos), vec3d2.z, this.speed);
             }
         }
     }

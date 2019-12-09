@@ -4,12 +4,12 @@ import com.google.common.collect.Sets;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntitySilex;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.Pose;
-import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.pathfinding.*;
 import net.minecraft.tags.BlockTags;
@@ -122,7 +122,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     @Override
     public PathPoint getStart() {
         // Flying/Strong Swimming:
-        if(this.flying() || this.swimming()) {
+        if(this.flying() || (this.entityCreature.isStrongSwimmer() && this.entityCreature.canSwim())) {
             return this.openPoint(MathHelper.floor(this.entity.getBoundingBox().minX), MathHelper.floor(this.entity.getBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getBoundingBox().minZ));
         }
 
@@ -181,11 +181,13 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         if(this.flying() || this.swimming()) {
             int i = 0;
             for (Direction direction : Direction.values()) {
-                PathPoint pathPoint;
-                if(this.flying())
-                    pathPoint = this.getFlightNode(fromPoint.x + direction.getXOffset(), fromPoint.y + direction.getYOffset(), fromPoint.z + direction.getZOffset());
-                else
+                PathPoint pathPoint = null;
+                if(this.swimming()) {
                     pathPoint = this.getWaterNode(fromPoint.x + direction.getXOffset(), fromPoint.y + direction.getYOffset(), fromPoint.z + direction.getZOffset());
+                }
+                if(pathPoint == null) {
+                    pathPoint = this.getFlightNode(fromPoint.x + direction.getXOffset(), fromPoint.y + direction.getYOffset(), fromPoint.z + direction.getZOffset());
+                }
                 if(pathPoint != null && !pathPoint.visited) {
                     pathOptions[i++] = pathPoint;
                 }
@@ -444,6 +446,19 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     @Override
     public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
         PathNodeType pathnodetype = this.getPathNodeTypeRaw(blockaccessIn, x, y, z);
+
+        // Water:
+        if (pathnodetype == PathNodeType.WATER) {
+            for(Direction direction : Direction.values()) {
+                PathNodeType pathnodetype2 = this.getPathNodeTypeRaw(blockaccessIn, x + direction.getXOffset(), y + direction.getYOffset(), z + direction.getZOffset());
+                if (pathnodetype2 == PathNodeType.BLOCKED) {
+                    return PathNodeType.WATER_BORDER;
+                }
+            }
+            return PathNodeType.WATER;
+        }
+
+        // Open:
         if (pathnodetype == PathNodeType.OPEN && y >= 1) {
             Block block = blockaccessIn.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
             PathNodeType pathnodetype1 = this.getPathNodeTypeRaw(blockaccessIn, x, y - 1, z);
@@ -598,7 +613,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                         if(j == y) { // Y must be water.
                             return PathNodeType.BLOCKED;
                         }
-                        if(!blockState.allowsMovement(this.blockaccess, blockPos, PathType.AIR)) { // Blocked above water.
+                        if(!blockState.allowsMovement(this.blockaccess, blockPos, PathType.AIR) && !blockState.allowsMovement(this.blockaccess, blockPos, PathType.WATER)) { // Blocked above water.
                             return PathNodeType.BLOCKED;
                         }
                     }
@@ -614,7 +629,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                     }
 
                     // Ooze Swimming (With Water Damage):
-                    if(this.entityCreature.canFreeze() && ObjectManager.getBlock("ooze") != null && blockState.getBlock() != ObjectManager.getBlock("ooze")) {
+                    if(this.entityCreature.canFreeze() && ObjectManager.getBlock("ooze") != null && blockState.getBlock() == ObjectManager.getBlock("ooze")) {
                         return PathNodeType.BLOCKED;
                     }
                 }
