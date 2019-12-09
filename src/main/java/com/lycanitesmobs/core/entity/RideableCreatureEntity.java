@@ -287,18 +287,30 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
                     this.motionY *= 0.8999999761581421D;
                     this.motionZ *= 0.8999999761581421D;
                 }
-                else if(this.isInWater() || this.isInLava()) {
+				else if(this.isInWater()) {
+					if(!this.canBreatheUnderwater()) {
+						verticalMotion *= 0.25f;
+						strafe *= 0.25f;
+						forward *= 0.25f;
+					}
+					this.moveRelative(strafe, 0, forward, 0.1F);
+					this.move(MoverType.SELF, this.motionX, verticalMotion / 16, this.motionZ);
+					this.motionX *= 0.8999999761581421D;
+					this.motionY *= 0.8999999761581421D;
+					this.motionZ *= 0.8999999761581421D;
+				}
+				else if(this.isInLava()) {
 					if(!this.isStrongSwimmer()) {
 						verticalMotion *= 0.25f;
 						strafe *= 0.25f;
 						forward *= 0.25f;
 					}
-                    this.moveRelative(strafe, 0, forward, 0.1F);
-                    this.move(MoverType.SELF, this.motionX, verticalMotion / 16, this.motionZ);
-                    this.motionX *= 0.8999999761581421D;
-                    this.motionY *= 0.8999999761581421D;
-                    this.motionZ *= 0.8999999761581421D;
-                }
+					this.moveRelative(strafe, 0, forward, 0.1F);
+					this.move(MoverType.SELF, this.motionX, verticalMotion / 16, this.motionZ);
+					this.motionX *= 0.8999999761581421D;
+					this.motionY *= 0.8999999761581421D;
+					this.motionZ *= 0.8999999761581421D;
+				}
                 else
                     super.travel(strafe, up, forward);
             }

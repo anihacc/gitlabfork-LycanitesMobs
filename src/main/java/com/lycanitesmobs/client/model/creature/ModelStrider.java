@@ -1,16 +1,15 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.model.ModelObj;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelObjOld;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelStrider extends ModelObjOld {
+public class ModelStrider extends ModelObj {
 
 	// ==================================================
   	//                    Constructors
@@ -23,18 +22,9 @@ public class ModelStrider extends ModelObjOld {
     	// Load Model:
     	this.initModel("strider", LycanitesMobs.modInfo, "entity/strider");
 
-    	// Set Rotation Centers:
-    	setPartCenter("body", 0F, 8.0F, 0F);
-
-        setPartCenter("armleft", 0.4F, 9F, -1.8F);
-        setPartCenter("armright", -0.4F, 9F, -1.8F);
-
-    	setPartCenter("legleft", 1.4F, 7.8F, 0F);
-        setPartCenter("legright", -1.4F, 7.8F, 0F);
-    	setPartCenter("legback", 0F, 8F, 0.8F);
-
-        this.lockHeadX = true;
-        this.lockHeadY = true;
+    	// Scaling:
+        this.lookHeadScaleX = 0;
+        this.lookHeadScaleY = 0;
 
         // Trophy:
         this.trophyScale = 0.4F;
@@ -50,7 +40,6 @@ public class ModelStrider extends ModelObjOld {
     @Override
     public void animatePart(String partName, EntityLiving entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
-    	float pi = (float)Math.PI;
     	float posX = 0F;
     	float posY = 0F;
     	float posZ = 0F;
@@ -97,20 +86,8 @@ public class ModelStrider extends ModelObjOld {
         }
     	
     	// Apply Animations:
-		this.rotate(rotation, angleX, angleY, angleZ);
+		this.angle(rotation, angleX, angleY, angleZ);
     	this.rotate(rotX, rotY, rotZ);
     	this.translate(posX, posY, posZ);
     }
-
-
-    // ==================================================
-    //              Rotate and Translate
-    // ==================================================
-    /*@Override
-    public void childScale(String partName) {
-        if(partName.equals("head"))
-            translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
-        else
-            super.childScale(partName);
-    }*/
 }
