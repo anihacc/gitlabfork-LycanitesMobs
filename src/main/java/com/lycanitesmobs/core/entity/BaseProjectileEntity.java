@@ -200,6 +200,11 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
     @Override
 	public void spawnRunningParticles() {}
+
+	@Override
+	public boolean handleWaterMovement() {
+		return this.inWater;
+	}
     
     
     // ==================================================
