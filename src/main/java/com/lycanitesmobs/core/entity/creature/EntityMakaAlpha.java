@@ -89,6 +89,13 @@ public class EntityMakaAlpha extends AgeableCreatureEntity {
 	// ==================================================
    	//                      Attacks
    	// ==================================================
+	@Override
+	public boolean canAttackClass(Class targetClass) {
+		if(targetClass == this.getClass())
+			return true;
+		return super.canAttackClass(targetClass);
+	}
+
     @Override
     public boolean canAttackEntity(EntityLivingBase target) {
 		if(target instanceof EntityMaka)

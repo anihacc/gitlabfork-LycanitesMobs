@@ -2561,6 +2561,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public boolean canAttackClass(Class targetClass) {
 		if(!CreatureManager.getInstance().config.mobsAttackVillagers && targetClass == EntityVillager.class)
 			return false;
+		if(targetClass == this.getClass())
+			return false;
 		return true;
 	}
 
