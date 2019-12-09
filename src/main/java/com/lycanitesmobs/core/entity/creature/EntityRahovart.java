@@ -658,12 +658,12 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Attacked From ==========
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damage) {
+    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
         if(this.playerTargets != null && damageSrc.getTrueSource() != null && damageSrc.getTrueSource() instanceof PlayerEntity) {
             if (!this.playerTargets.contains(damageSrc.getTrueSource()))
                 this.playerTargets.add((PlayerEntity)damageSrc.getTrueSource());
         }
-        return super.attackEntityFrom(damageSrc, damage);
+        return super.attackEntityFrom(damageSrc, damageAmount);
     }
 
 

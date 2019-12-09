@@ -56,6 +56,7 @@ import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
@@ -2689,27 +2690,58 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ==================================================
    	//                    Taking Damage
    	// ==================================================
+	@Override
+	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+		if(this.isInvulnerableTo(damageSrc)) {
+			return;
+		}
+		damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
+		if (damageAmount <= 0)
+			return;
+
+		// Modifiers:
+		damageAmount *= this.getDamageModifier(damageSrc);
+		damageAmount = this.applyArmorCalculations(damageSrc, damageAmount);
+		damageAmount = this.applyPotionDamageCalculations(damageSrc, damageAmount);
+		damageAmount = this.getDamageAfterDefense(damageAmount);
+		if(this.isBoss() || this.isRareSubspecies()) {
+			if (!(damageSrc.getTrueSource() instanceof PlayerEntity))
+				damageAmount *= 0.25F;
+		}
+
+		// Absorption:
+		float damageBeforeAbsorption = damageAmount;
+		damageAmount = Math.max(damageAmount - this.getAbsorptionAmount(), 0.0F);
+		this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageBeforeAbsorption - damageAmount));
+		float absorbedDamage = damageBeforeAbsorption - damageAmount;
+		if (absorbedDamage > 0.0F && absorbedDamage < 3.4028235E37F && damageSrc.getTrueSource() instanceof ServerPlayerEntity) {
+			((ServerPlayerEntity)damageSrc.getTrueSource()).addStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(absorbedDamage * 10.0F));
+		}
+
+		damageAmount = net.minecraftforge.common.ForgeHooks.onLivingDamage(this, damageSrc, damageAmount);
+		if (damageAmount != 0.0F) {
+			float healthBeforeDamage = this.getHealth();
+			this.getCombatTracker().trackDamage(damageSrc, healthBeforeDamage, damageAmount);
+			this.setHealth(healthBeforeDamage - damageAmount);
+			this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAmount);
+		}
+	}
+
     // ========== Attacked From ==========
     /** Called when this entity has been attacked, uses a DamageSource and damage value. **/
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damage) {
+    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
     	if(this.getEntityWorld().isRemote)
     		return false;
         if(this.isInvulnerableTo(damageSrc))
         	return false;
-        if(!this.isInvulnerableTo(damageSrc.getDamageType(), damageSrc, damage))
+        if(!this.isInvulnerableTo(damageSrc.getDamageType(), damageSrc, damageAmount))
         	return false;
         if(!this.isInvulnerableTo(damageSrc.getTrueSource()))
         	return false;
-        damage *= this.getDamageModifier(damageSrc);
-        damage = this.getDamageAfterDefense(damage);
-        if(this.isBoss() || this.isRareSubspecies()) {
-            if (!(damageSrc.getTrueSource() instanceof PlayerEntity))
-                damage *= 0.25F;
-        }
         
-        if(super.attackEntityFrom(damageSrc, damage)) {
-        	this.onDamage(damageSrc, damage);
+        if(super.attackEntityFrom(damageSrc, damageAmount)) {
+        	this.onDamage(damageSrc, damageAmount);
             Entity entity = damageSrc.getImmediateSource();
             if(entity instanceof ThrowableEntity)
             	entity = ((ThrowableEntity)entity).getThrower();
