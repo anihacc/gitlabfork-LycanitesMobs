@@ -471,9 +471,9 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
   	//                    Immunities
   	// ==================================================
     @Override
-    public boolean attackEntityFrom(DamageSource damageSource, float damage) {
+    public boolean attackEntityFrom(DamageSource damageSource, float damageAmount) {
         Entity entity = damageSource.getTrueSource();
-        return this.getControllingPassenger() != null && this.isRidingOrBeingRiddenBy(entity) ? false : super.attackEntityFrom(damageSource, damage);
+        return this.getControllingPassenger() != null && this.isRidingOrBeingRiddenBy(entity) ? false : super.attackEntityFrom(damageSource, damageAmount);
     }
     
     @Override

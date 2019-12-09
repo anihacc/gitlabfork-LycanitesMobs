@@ -29,11 +29,11 @@ public class InventoryCreature implements IInventory {
     // Basic Armor Values: (Copied values from EntityHorse)
     public static final Map<String, Integer> armorValues = new HashMap<>();
     static {
-        armorValues.put("Leather", 3);
-        armorValues.put("Iron", 5);
-        armorValues.put("Gold", 7);
-        armorValues.put("Chain", 9);
-        armorValues.put("Diamond", 11);
+        armorValues.put("Leather", 5);
+        armorValues.put("Iron", 10);
+        armorValues.put("Gold", 15);
+        armorValues.put("Chain", 17);
+        armorValues.put("Diamond", 20);
     }
 
     // Equipment Types:

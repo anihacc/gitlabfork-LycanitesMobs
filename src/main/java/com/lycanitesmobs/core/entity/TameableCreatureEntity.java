@@ -562,7 +562,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	
     // ========== Attacked From ==========
     @Override
-    public boolean attackEntityFrom(DamageSource damageSrc, float damage) {
+    public boolean attackEntityFrom(DamageSource damageSrc, float damageAmount) {
         if (this.isEntityInvulnerable(damageSrc))
             return false;
         else {
@@ -576,7 +576,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
             if(this.isTamed() && this.getOwner() == entity)
             	return false;
 
-            return super.attackEntityFrom(damageSrc, damage);
+            return super.attackEntityFrom(damageSrc, damageAmount);
         }
     }
 

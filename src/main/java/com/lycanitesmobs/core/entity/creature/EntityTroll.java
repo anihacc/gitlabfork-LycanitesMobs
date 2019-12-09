@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.BreakDoorGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityBoulderBlast;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -44,7 +45,7 @@ public class EntityTroll extends TameableCreatureEntity implements IMob {
     protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(this.nextDistractionGoalIndex++, new BreakDoorGoal(this));
-		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
+		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(40.0F).setMinChaseDistance(10.0F).setLongMemory(false));
 
 		if(this.getNavigator() instanceof PathNavigateGround) {
 			PathNavigateGround pathNavigateGround = (PathNavigateGround)this.getNavigator();
