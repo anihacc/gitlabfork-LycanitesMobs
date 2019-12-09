@@ -64,7 +64,7 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
     // ========== Despawning ==========
     @Override
     protected boolean canDespawnNaturally() {
-    	if(this.inventory.hasBagItems()) return false;
+    	//if(this.inventory.hasBagItems()) return false;
         return super.canDespawnNaturally();
     }
 	
