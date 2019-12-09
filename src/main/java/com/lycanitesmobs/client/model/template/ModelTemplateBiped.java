@@ -6,8 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateBiped extends ModelCreatureObj {
-    protected float tailScaleX = 1;
+    protected float tailScaleX = 1F;
     protected float tailScaleY = 1F;
+    protected float flightBobScale = 1F;
 
     // ==================================================
     //                 Animate Part
@@ -133,7 +134,7 @@ public class ModelTemplateBiped extends ModelCreatureObj {
             if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
                 if (partName.equals("body")) {
                     float bob = MathHelper.sin(loop * 0.4F) * 0.15F;
-                    posY += bob;
+                    posY += bob * this.flightBobScale;
                 }
             }
         }

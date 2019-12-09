@@ -2258,6 +2258,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Returns whether or not this mob is allowed to attack the given target class. **/
 	@Override
 	public boolean canAttack(EntityType<?> entityType) {
+		if(entityType == this.getType())
+			return false;
 		return true;
 	}
 

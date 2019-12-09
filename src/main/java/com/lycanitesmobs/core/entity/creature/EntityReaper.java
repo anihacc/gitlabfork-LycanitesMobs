@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import net.minecraft.entity.CreatureAttribute;
@@ -40,6 +41,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(0.75D).setRange(14.0F).setMinChaseDistance(0.75F).setCheckSight(false));
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true));
     }
 	
 	
@@ -130,11 +132,15 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     //                       Visuals
     // ==================================================
     /** Returns this creature's main texture. Also checks for for subspecies. **/
-    public ResourceLocation getTexture() {
+    @Override
+    public ResourceLocation getTexture(String suffix) {
         if(!"Satan Claws".equals(this.getCustomName()))
-            return super.getTexture();
+            return super.getTexture(suffix);
 
         String textureName = this.getTextureName() + "_satanclaws";
+        if(!"".equals(suffix)) {
+            textureName += "_" + suffix;
+        }
         if(TextureManager.getTexture(textureName) == null)
             TextureManager.addTexture(textureName, this.creatureInfo.modInfo, "textures/entity/" + textureName.toLowerCase() + ".png");
         return TextureManager.getTexture(textureName);

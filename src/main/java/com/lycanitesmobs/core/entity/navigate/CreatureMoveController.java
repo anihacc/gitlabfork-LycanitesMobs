@@ -158,7 +158,7 @@ public class CreatureMoveController extends MovementController {
             double motionZ = d4 * d6;
             d4 = Math.sin((double)(this.entityCreature.ticksExisted + this.entityCreature.getEntityId()) * 0.75D) * 0.05D;
             double motionY = d4 * (d6 + d5) * 0.25D;
-            motionY += (double)this.entityCreature.getAIMoveSpeed() * y * 0.1D;
+            motionY += (double)this.entityCreature.getAIMoveSpeed() * y * 0.125D;
             this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
 
             LookController lookController = this.entityCreature.getLookController();
