@@ -9,7 +9,7 @@
 	"knockbackChance": 0,
 	"effectDuration": 3,
 	"effectAmplifier": 1,
-	"velocity": 1.1,
+	"velocity": 0.6,
 	"weight": 0,
 	"lifetime": 10,
 	"elements": [
