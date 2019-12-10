@@ -24,6 +24,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
@@ -356,6 +357,18 @@ public class GameEventListener {
 				}
 			}
 		}
+	}
+
+
+	// ==================================================
+	//               Mounting / Dismounting
+	// ==================================================
+	@SubscribeEvent
+	public void onEntityMount(EntityMountEvent event) {
+		if(!event.isDismounting() || !(event.getEntityMounting() instanceof PlayerEntity) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
+			return;
+		}
+		event.setCanceled(event.getEntityMounting().isSneaking());
 	}
 
 

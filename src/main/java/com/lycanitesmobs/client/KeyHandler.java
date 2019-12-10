@@ -28,6 +28,7 @@ public class KeyHandler {
 	
 	public boolean inventoryOpen = false;
 	
+	public KeyBinding dismount = new KeyBinding("key.mount.dismount", GLFW.GLFW_KEY_C, "Lycanites Mobs");
 	public KeyBinding mountAbility = new KeyBinding("key.mount.ability", GLFW.GLFW_KEY_X, "Lycanites Mobs");
 	public KeyBinding mountInventory = new KeyBinding("key.mount.inventory", GLFW.GLFW_KEY_UNKNOWN, "Lycanites Mobs");
 
@@ -43,6 +44,7 @@ public class KeyHandler {
 		instance = this;
 		
 		// Register Keys:
+		ClientRegistry.registerKeyBinding(this.dismount);
 		ClientRegistry.registerKeyBinding(this.mountAbility);
 		ClientRegistry.registerKeyBinding(this.mountInventory);
 		ClientRegistry.registerKeyBinding(this.index);
@@ -111,6 +113,10 @@ public class KeyHandler {
 			if(this.mc.gameSettings.keyBindJump.isKeyDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.JUMP.id;
 			
+			// Mount Ability: Adds to control states.
+			if(this.dismount.isKeyDown())
+				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT.id;
+
 			// Mount Ability: Adds to control states.
 			if(this.mountAbility.isKeyDown())
 				controlStates += ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY.id;

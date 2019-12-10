@@ -1411,7 +1411,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 			if(perchTarget instanceof PlayerEntity && !perchTarget.isPassenger()) {
 				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((PlayerEntity) perchTarget);
-				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY)) {
+				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
 					this.perchOnEntity(null);
 				}
 			}

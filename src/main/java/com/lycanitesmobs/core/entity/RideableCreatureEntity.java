@@ -95,7 +95,16 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 					this.attackMelee(this.getAttackTarget(), 1);
 				}
 			}
-    	}
+
+			// Dismounting:
+			if (this.getControllingPassenger() instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
+				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
+				if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
+					player.stopRiding();
+				}
+			}
+		}
     	else {
     		this.abilityToggled = false;
 			this.inventoryToggled = false;
@@ -202,11 +211,11 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             if (this.getControllingPassenger() instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
                 ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
-                if (playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
+                if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                     verticalMotion = this.creatureStats.getSpeed() * 20;
                 }
-                else if(player.rotationPitch > 0 && forward != 0.0F) {
-                    verticalMotion = this.creatureStats.getSpeed() * 20 * -(player.rotationPitch / 90);
+				else if(player.isSneaking()) {
+                    verticalMotion = -this.creatureStats.getSpeed() * 20;
                 }
                 else {
                     verticalMotion = 0;
