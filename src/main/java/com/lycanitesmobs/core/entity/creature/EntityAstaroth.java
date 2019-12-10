@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -78,7 +77,7 @@ public class EntityAstaroth extends BaseCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDevilstar.class, target, range, 0, new Vec3d(0, -2.8F, 0), 1.2f, 1f, 1F);
+        this.fireProjectile("devilstar", target, range, 0, new Vec3d(0, -2.8F, 0), 1.2f, 1f, 1F);
         super.attackRanged(target, range);
     }
 	

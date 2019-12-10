@@ -1,26 +1,26 @@
 {
-	"name": "ember",
+	"name": "devilstar",
 	"loadDefault": true,
 	"width": 1.0,
 	"height": 1.0,
-	"scale": 0.5,
-	"damage": 1,
+	"scale": 1.0,
+	"damage": 2,
 	"pierce": 1,
-	"knockbackChance": 0,
-	"effectDuration": 3,
+	"knockbackChance": 0.125,
+	"effectDuration": 5,
 	"effectAmplifier": 1,
-	"velocity": 1.1,
+	"velocity": 1.0,
 	"weight": 0,
 	"lifetime": 10,
 	"elements": [
-		"fire"
+		"void"
 	],
 	"behaviours": [],
-	"waterproof": false,
-	"lavaproof": false,
+	"waterproof": true,
+	"lavaproof": true,
 	"cutGrass": false,
 	"impactSound": false,
-	"ripper": false,
+	"ripper": true,
 	"pierceBlocks": false,
 	"glow": true
 }

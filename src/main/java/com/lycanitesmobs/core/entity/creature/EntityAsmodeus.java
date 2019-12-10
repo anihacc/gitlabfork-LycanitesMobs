@@ -9,8 +9,8 @@ import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
 import com.lycanitesmobs.core.entity.projectile.EntityDevilGatling;
-import com.lycanitesmobs.core.entity.projectile.EntityDevilstar;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.IMob;
@@ -434,7 +434,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Devilstars ==========
     public void attackDevilstar(float angle) {
         // Type:
-        BaseProjectileEntity projectile = new EntityDevilstar(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDevilstar.class), this.getEntityWorld(), this);
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("devilstar");
+        if(projectileInfo == null) {
+            return;
+        }
+        BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
         projectile.setProjectileScale(4f);
 
         // Y Offset:
