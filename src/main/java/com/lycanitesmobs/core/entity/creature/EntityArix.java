@@ -74,7 +74,7 @@ public class EntityArix extends TameableCreatureEntity implements IMob {
         }
         
         // Particles:
-        if(this.getEntityWorld().isRemote)
+        if(this.getEntityWorld().isRemote && !this.hasPerchTarget())
 	        for(int i = 0; i < 2; ++i) {
 	            this.getEntityWorld().spawnParticle(EnumParticleTypes.SNOWBALL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, 0.0D, 0.0D, 0.0D);
 	        }

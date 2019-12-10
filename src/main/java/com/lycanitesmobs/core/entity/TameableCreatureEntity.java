@@ -282,7 +282,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player == this.getPlayerOwner())
+		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player == this.getPlayerOwner())
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
     	
     	// Server Item Commands:

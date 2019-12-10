@@ -76,22 +76,22 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 
 		if(creatureInfo.creatureType != null) {
 			// Taming:
-			if (creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
+			if(creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
 				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
 
 				// Mounting:
-				if (creatureInfo.isMountable()) {
+				if(creatureInfo.isMountable()) {
 					text += "\u00A7l" + LanguageManager.translate("gui.beastiary.mountable") + "\u00A7r\n\n";
 				}
 			}
 
 			// Summoning:
-			if (creatureInfo.isSummonable()) {
+			if(creatureInfo.isSummonable()) {
 				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
 			}
 
 			// Perching:
-			if ((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
+			if((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
 				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.perchable") + "\u00A7r\n\n";
 			}
 		}
