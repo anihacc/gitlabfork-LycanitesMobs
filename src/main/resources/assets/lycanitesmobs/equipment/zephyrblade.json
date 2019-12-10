@@ -21,7 +21,7 @@
 			"damageKnockback": 0,
 			"damageCooldown": 0.5,
 			"damageRange": 1,
-			"damageSweep": 45
+			"damageSweep": 90
 		},
 		{
 			"featureType": "damage",
@@ -31,7 +31,7 @@
 			"damageKnockback": 0,
 			"damageCooldown": 0.5,
 			"damageRange": 1,
-			"damageSweep": 45
+			"damageSweep": 180
 		},
 		{
 			"featureType": "damage",
@@ -40,7 +40,7 @@
 			"damageKnockback": 0,
 			"damageCooldown": 0.25,
 			"damageRange": 1,
-			"damageSweep": 45
+			"damageSweep": 180
 		},
 		{
 			"featureType": "effect",

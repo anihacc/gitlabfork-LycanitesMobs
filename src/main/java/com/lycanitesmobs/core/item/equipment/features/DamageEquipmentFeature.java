@@ -56,7 +56,7 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		if(this.damageRange > 0) {
 			description += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + this.damageRange;
 		}
-		if(this.damageSweep > 45) {
+		if(this.damageSweep > 0) {
 			description += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + this.damageSweep;
 		}
 		return description;

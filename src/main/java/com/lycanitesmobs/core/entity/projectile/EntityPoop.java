@@ -5,6 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,12 +79,14 @@ public class EntityPoop extends EntityProjectileBase {
     //========== On Impact Particles/Sounds ==========
     @Override
     public void onImpactVisuals() {
-    	for(int i = 0; i < 8; ++i)
-            this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-                    this.posX, this.posY, this.posZ,
-                    0.0D, 0.0D, 0.0D,
-                    Blocks.TALLGRASS.getStateId(Blocks.DIRT.getDefaultState())
-            );
+    	if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
+			for (int i = 0; i < 8; ++i)
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+						this.posX, this.posY, this.posZ,
+						0.0D, 0.0D, 0.0D,
+						Blocks.TALLGRASS.getStateId(Blocks.DIRT.getDefaultState())
+				);
+		}
     }
     
     

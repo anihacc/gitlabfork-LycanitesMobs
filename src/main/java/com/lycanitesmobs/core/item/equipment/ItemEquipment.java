@@ -1,8 +1,12 @@
 package com.lycanitesmobs.core.item.equipment;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.goals.targeting.TargetingGoal;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +17,9 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.EnumAction;
@@ -31,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemEquipment extends ItemBase {
-	/** I am sorry, I couldn't find another way. Set in getMetadata(ItemStack) as it's called just before rendering. **/
+	/** I am sorry, I couldn't find another way besides this dirty hack in 1.12.2, it's all nice and lovely in 1.14.4 though! Set in getMetadata(ItemStack) as it's called just before rendering. **/
 	public static ItemStack ITEMSTACK_TO_RENDER;
 
 	/** The maximum amount of parts that can be added to an Equipment Piece. **/
@@ -353,44 +359,111 @@ public class ItemEquipment extends ItemBase {
 	/**
 	 * Called when an entity is hit with this item.
 	 * @param itemStack The ItemStack being hit with.
-	 * @param target The target entity being hit.
+	 * @param primaryTarget The target entity being hit.
 	 * @param attacker The entity using this item to hit.
 	 * @return True on successful hit.
 	 */
 	@Override
-	public boolean hitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
-		// Knockback:
-		double knockback = this.getDamageKnockback(itemStack);
-		if(knockback != 0 && attacker != null && target != null) {
-			double xDist = attacker.posX - target.posX;
-			double zDist = attacker.posZ - target.posZ;
-			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
-			double motionCap = 10;
-			if(target.motionX < motionCap && target.motionX > -motionCap && target.motionZ < motionCap && target.motionZ > -motionCap) {
-				target.addVelocity(
-						-(xDist / xzDist * knockback + target.motionX * knockback),
-						0,
-						-(zDist / xzDist * knockback + target.motionZ * knockback)
-				);
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase primaryTarget, EntityLivingBase attacker) {
+		// Sweeping:
+		List<EntityLivingBase> targets = new ArrayList<>();
+		targets.add(primaryTarget);
+		if(attacker != null && !attacker.getEntityWorld().isRemote) {
+			double sweepAngle = this.getDamageSweep(itemStack) / 2; // Halved for centering.
+			if(sweepAngle > 0) {
+				float sweepDamage = (float) this.getDamageAmount(itemStack);
+				double sweepRange = 1 + this.getDamageRange(itemStack);
+				List<EntityLivingBase> possibleTargets = attacker.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, attacker.getEntityBoundingBox().grow(sweepRange, sweepRange, sweepRange));
+				for (EntityLivingBase possibleTarget : possibleTargets) {
+					// Valid Sweep Target:
+					if (possibleTarget == attacker || possibleTarget == primaryTarget) {
+						continue;
+					}
+					if (!possibleTarget.isEntityAlive()) {
+						continue;
+					}
+					if (possibleTarget instanceof EntityTameable) {
+						EntityTameable possibleTameableTarget = (EntityTameable) possibleTarget;
+						if (possibleTameableTarget.getOwner() != null && !attacker.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+							continue;
+						}
+						if (possibleTameableTarget.getOwner() == attacker) {
+							continue;
+						}
+					}
+					if (possibleTarget instanceof TameableCreatureEntity) {
+						TameableCreatureEntity possibleTameableTarget = (TameableCreatureEntity) possibleTarget;
+						if (possibleTameableTarget.getPlayerOwner() != null && !attacker.getEntityWorld().getMinecraftServer().isPVPEnabled()) {
+							continue;
+						}
+						if (possibleTameableTarget.getPlayerOwner() == attacker) {
+							continue;
+						}
+					}
+
+					// Check Angle:
+					double targetXDist = possibleTarget.posX - attacker.posX;
+					double targetZDist = attacker.posZ - possibleTarget.posZ;
+					double targetAngleAbsolute = 180 + Math.toDegrees(Math.atan2(targetXDist, targetZDist));
+					double targetAngle = Math.abs(targetAngleAbsolute - attacker.rotationYaw);
+					if(targetAngle > 180) {
+						targetAngle = 180 - (targetAngle - 180);
+					}
+					if(targetAngle > sweepAngle) {
+						continue;
+					}
+
+					targets.add(possibleTarget);
+					DamageSource sweepSource = DamageSource.GENERIC;
+					if (attacker instanceof EntityPlayer) {
+						sweepSource = DamageSource.causePlayerDamage((EntityPlayer) attacker);
+					}
+					possibleTarget.attackEntityFrom(sweepSource, sweepDamage);
+				}
 			}
 		}
 
-		// Effects:
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "effect")) {
-			EffectEquipmentFeature effectFeature = (EffectEquipmentFeature)equipmentFeature;
-			effectFeature.onHitEntity(itemStack, target, attacker);
+		// Sweep Sound:
+		if(attacker instanceof EntityPlayer && targets.size() > 1) {
+			EntityPlayer playerAttacker = (EntityPlayer)attacker;
+			playerAttacker.spawnSweepParticles();
+			attacker.getEntityWorld().playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, attacker.getSoundCategory(), 1.0F, 1.0F);
 		}
 
-		// Summons:
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
-			SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
-			summonFeature.onHitEntity(itemStack, target, attacker);
-		}
+		for(EntityLivingBase target : targets) {
+			// Knockback:
+			double knockback = this.getDamageKnockback(itemStack);
+			if (knockback != 0 && attacker != null && target != null) {
+				double xDist = attacker.posX - target.posX;
+				double zDist = attacker.posZ - target.posZ;
+				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double motionCap = 10;
+				if (target.motionX < motionCap && target.motionX > -motionCap && target.motionZ < motionCap && target.motionZ > -motionCap) {
+					target.addVelocity(
+							-(xDist / xzDist * knockback + target.motionX * knockback),
+							0,
+							-(zDist / xzDist * knockback + target.motionZ * knockback)
+					);
+				}
+			}
 
-		// Projectiles:
-		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
-			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
-			projectileFeature.onHitEntity(itemStack, target, attacker);
+			// Effects:
+			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "effect")) {
+				EffectEquipmentFeature effectFeature = (EffectEquipmentFeature)equipmentFeature;
+				effectFeature.onHitEntity(itemStack, target, attacker);
+			}
+
+			// Summons:
+			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "summon")) {
+				SummonEquipmentFeature summonFeature = (SummonEquipmentFeature)equipmentFeature;
+				summonFeature.onHitEntity(itemStack, target, attacker);
+			}
+
+			// Projectiles:
+			for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+				ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+				projectileFeature.onHitEntity(itemStack, target, attacker);
+			}
 		}
 
 		return true;
@@ -449,6 +522,20 @@ public class ItemEquipment extends ItemBase {
 	}
 
 	/**
+	 * Returns the attack range of this equipment.
+	 * @param itemStack The equipment ItemStack.
+	 * @return The amount of range.
+	 */
+	public double getDamageRange(ItemStack itemStack) {
+		double range = 0;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
+			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
+			range += damageFeature.damageRange;
+		}
+		return range;
+	}
+
+	/**
 	 * Returns the attack knockback of this equipment.
 	 * @param itemStack The equipment ItemStack.
 	 * @return The amount of knockback.
@@ -460,6 +547,20 @@ public class ItemEquipment extends ItemBase {
 			knockback += damageFeature.damageKnockback;
 		}
 		return knockback;
+	}
+
+	/**
+	 * Returns the attack sweep angle of this equipment.
+	 * @param itemStack The equipment ItemStack.
+	 * @return The amount of knockback.
+	 */
+	public double getDamageSweep(ItemStack itemStack) {
+		double sweep = 0;
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "damage")) {
+			DamageEquipmentFeature damageFeature = (DamageEquipmentFeature)equipmentFeature;
+			sweep += damageFeature.damageSweep;
+		}
+		return sweep;
 	}
 
 

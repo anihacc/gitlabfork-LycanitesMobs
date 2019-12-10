@@ -92,7 +92,7 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
 		}
 
 		// Particles:
-		if(this.getEntityWorld().isRemote)
+		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles)
 			for(int i = 0; i < 2; ++i) {
 				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
 						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,

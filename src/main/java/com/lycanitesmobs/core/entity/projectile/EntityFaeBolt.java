@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -67,20 +68,22 @@ public class EntityFaeBolt extends EntityProjectileBase {
     //========== On Impact Particles/Sounds ==========
     @Override
     public void onImpactVisuals() {
-    	for(int i = 0; i < 8; ++i) {
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					this.posY + this.rand.nextDouble() * (double) this.height,
-					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					0.0D, 0.0D, 0.0D,
-					Blocks.TALLGRASS.getStateId(Blocks.YELLOW_FLOWER.getDefaultState()));
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
-					this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					this.posY + this.rand.nextDouble() * (double) this.height,
-					this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-					0.0D, 0.0D, 0.0D,
-					Blocks.TALLGRASS.getStateId(Blocks.RED_FLOWER.getDefaultState()));
-    	}
+    	if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
+			for (int i = 0; i < 8; ++i) {
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						this.posY + this.rand.nextDouble() * (double) this.height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						0.0D, 0.0D, 0.0D,
+						Blocks.TALLGRASS.getStateId(Blocks.YELLOW_FLOWER.getDefaultState()));
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
+						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						this.posY + this.rand.nextDouble() * (double) this.height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width,
+						0.0D, 0.0D, 0.0D,
+						Blocks.TALLGRASS.getStateId(Blocks.RED_FLOWER.getDefaultState()));
+			}
+		}
     }
 
 

@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
+import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
@@ -112,7 +113,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 		}
 
 		// Particles:
-		if(this.getEntityWorld().isRemote)
+		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles)
 			for(int i = 0; i < 2; ++i) {
 				this.getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_CRACK,
 						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,

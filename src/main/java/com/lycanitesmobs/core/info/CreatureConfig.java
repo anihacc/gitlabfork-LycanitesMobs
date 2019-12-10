@@ -18,6 +18,9 @@ public class CreatureConfig {
 	/** If true, alpha is disabled on mob textures, this can make them look undesirable but can increase performance on low end systems. **/
 	public boolean disableModelAlpha = false;
 
+	/** If true, block particles are not spawned by mobs (useful for visual mods that create 3D block particles which can cause lag in high numbers). **/
+	public boolean disableBlockParticles = false;
+
 	// Stats:
 	/** The minimum base starting level of every mob. Cannot be less than 1. **/
 	public int startingLevelMin = 1;
@@ -129,6 +132,7 @@ public class CreatureConfig {
 		this.subspeciesTags = config.getBool("Client", "Subspecies Tags", this.subspeciesTags, "If true, all mobs that are a subspecies will always show their nametag.");
 		this.idleSoundTicks = config.getInt("Client", "Idle Sound Ticks", this.idleSoundTicks, "The minimum interval in ticks between random idle sounds.");
 		this.disableModelAlpha = config.getBool("Client", "Disable Model Alpha", this.disableModelAlpha, "If true, alpha is disabled on mob textures, this can make them look undesirable but can increase performance on low end systems.");
+		this.disableBlockParticles = config.getBool("Client", "Disable Block Particles", this.disableBlockParticles, "If true, block particles are not spawned by mobs (useful for visual mods that create 3D block particles which can cause lag in high numbers).");
 
 		// Stats:
 		config.setCategoryComment("Base Starting Level", "The base starting level is the level every mob will start at. Mob Events, Special Spawners and other things will then add onto this base level.");
