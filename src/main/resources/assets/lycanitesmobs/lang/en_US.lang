@@ -13,7 +13,7 @@ spawner.darkness.level2=You can hear sounds from the darkness itself... Quick, r
 spawner.darkness.level3=A shadowy creature has spawned from the darkness!
 spawner.darkness.level1.back=The sounds seem to have stopped... For now at least...
 spawner.chaos.level1=You are disrupting the balance of nature, be careful!
-spawner.chaos.level2=Your destructive actions on the elements is drawing in Chaotic energy!
+spawner.chaos.level2=Your destructaive actions on the elements is drawing in Chaotic energy!
 spawner.chaos.level3=Chaotic energy has manifested into something! Beware!
 spawner.chaos.level1.back=Balance seems to be restored... For now at least...
 #
@@ -313,7 +313,8 @@ effect.envenom=Envenom
 #
 #
 # ========== Key Bindings ==========
-key.mount.ability=Mount Ability / Unperch Pet
+key.mount.dismount=Dismount / Unperch Pet
+key.mount.ability=Mount Ability
 key.mount.inventory=Mount Inventory
 key.index=Beastiary Index
 key.beastiary=Beastiary

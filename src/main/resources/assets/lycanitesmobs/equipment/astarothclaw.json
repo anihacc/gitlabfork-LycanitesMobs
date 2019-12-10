@@ -58,7 +58,10 @@
 			"featureType": "projectile",
 			"levelMin": 1,
 			"projectileName": "devilstar",
-			"projectileTrigger": "hold"
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 2,
+			"count": 1
 		}
 	]
 }

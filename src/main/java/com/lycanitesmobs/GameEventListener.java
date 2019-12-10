@@ -31,6 +31,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -427,6 +428,18 @@ public class GameEventListener {
 			return;
 		}
 		extendedPlayer.setJustBrokenBlock(event.getState());
+	}
+
+
+	// ==================================================
+	//               Mounting / Dismounting
+	// ==================================================
+	@SubscribeEvent
+	public void onEntityMount(EntityMountEvent event) {
+		if(!event.isDismounting() || !(event.getEntityMounting() instanceof EntityPlayer) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
+			return;
+		}
+		event.setCanceled(event.getEntityMounting().isSneaking());
 	}
 
 

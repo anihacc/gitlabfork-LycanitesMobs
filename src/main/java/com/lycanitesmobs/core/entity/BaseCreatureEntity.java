@@ -1600,7 +1600,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			}
 			if(perchTarget instanceof EntityPlayer && !perchTarget.isRiding()) {
 				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((EntityPlayer)perchTarget);
-				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY)) {
+				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {
 					this.perchOnEntity(null);
 				}
 			}
