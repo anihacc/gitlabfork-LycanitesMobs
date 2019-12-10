@@ -129,6 +129,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param count How long (in ticks) the equipment has been used for.
 	 */
 	public void onHoldSecondary(LivingEntity shooter, int count) {
+		if(!"secondary".equalsIgnoreCase(this.projectileTrigger)) {
+			return;
+		}
 		ExtendedEntity shooterExt = ExtendedEntity.getForEntity(shooter);
 		if(shooterExt == null) {
 			return;
