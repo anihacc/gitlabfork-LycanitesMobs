@@ -37,6 +37,7 @@ public class PacketHandler {
 		HANDLER.registerMessage(messageID++, MessageSummonSet.class, MessageSummonSet::encode, MessageSummonSet::decode, MessageSummonSet::handle);
 		HANDLER.registerMessage(messageID++, MessageSummonSetSelection.class, MessageSummonSetSelection::encode, MessageSummonSetSelection::decode, MessageSummonSetSelection::handle);
 		HANDLER.registerMessage(messageID++, MessageEntityPickedUp.class, MessageEntityPickedUp::encode, MessageEntityPickedUp::decode, MessageEntityPickedUp::handle);
+		HANDLER.registerMessage(messageID++, MessageEntityPerched.class, MessageEntityPerched::encode, MessageEntityPerched::decode, MessageEntityPerched::handle);
 		HANDLER.registerMessage(messageID++, MessageWorldEvent.class, MessageWorldEvent::encode, MessageWorldEvent::decode, MessageWorldEvent::handle);
 		HANDLER.registerMessage(messageID++, MessageMobEvent.class, MessageMobEvent::encode, MessageMobEvent::decode, MessageMobEvent::handle);
 		HANDLER.registerMessage(messageID++, MessageSummoningPedestalStats.class, MessageSummoningPedestalStats::encode, MessageSummoningPedestalStats::decode, MessageSummoningPedestalStats::handle);

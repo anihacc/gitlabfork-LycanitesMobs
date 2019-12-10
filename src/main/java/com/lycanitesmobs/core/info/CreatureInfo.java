@@ -133,6 +133,9 @@ public class CreatureInfo {
 	/** If true, this mob can be used as a mount. The entity must have mount AI for this. **/
 	public boolean mountable = false;
 
+	/** If true, this mob can perch on it's owner's shoulder. The entity must have pet AI for this. **/
+	public boolean perchable = false;
+
 	/** How many charges this creature normally costs to summon. **/
 	public int summonCost = 1;
 
@@ -329,6 +332,8 @@ public class CreatureInfo {
 			this.tameable = json.get("tameable").getAsBoolean();
 		if(json.has("mountable"))
 			this.mountable = json.get("mountable").getAsBoolean();
+		if(json.has("perchable"))
+			this.perchable = json.get("perchable").getAsBoolean();
 		if(json.has("summonCost"))
 			this.summonCost = json.get("summonCost").getAsInt();
 		if(json.has("dungeonLevel"))
@@ -618,6 +623,15 @@ public class CreatureInfo {
 	 */
 	public boolean isMountable() {
 		return this.mountable && RideableCreatureEntity.class.isAssignableFrom(this.entityClass);
+	}
+
+
+	/**
+	 * Returns if this creature is perchable.
+	 * @return True if creature is perchable.
+	 */
+	public boolean isPerchable() {
+		return this.perchable;
 	}
 
 

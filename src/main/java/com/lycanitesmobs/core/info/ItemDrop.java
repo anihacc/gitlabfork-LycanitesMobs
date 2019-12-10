@@ -178,7 +178,7 @@ public class ItemDrop {
 		roll = roll / this.chance;
 		float dropRange = (max - min) * roll;
 		int dropAmount = min + Math.round(dropRange);
-		return dropAmount * multiplier;
+		return Math.min(dropAmount * multiplier, this.getItemStack().getMaxStackSize());
 	}
 
 	/**

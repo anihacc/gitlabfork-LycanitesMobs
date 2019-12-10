@@ -255,6 +255,17 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	}
 
 
+	// ==================================================
+	//                       Perching
+	// ==================================================
+	public boolean canPerch(LivingEntity target) {
+		if(!this.creatureInfo.isPerchable()) {
+			return false;
+		}
+		return this.getPlayerOwner() == target;
+	}
+
+
     // ==================================================
     //                       Interact
     // ==================================================
@@ -263,9 +274,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     public HashMap<Integer, String> getInteractCommands(PlayerEntity player, @Nonnull ItemStack itemStack) {
     	HashMap<Integer, String> commands = new HashMap<>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
+
+		// Perch:
+		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
+			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
+		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	
@@ -366,6 +381,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             this.isJumping = false;
 			return true;
     	}
+
+		// Perch:
+		if(command.equals("Perch")) {
+			this.playTameSound();
+			this.perchOnEntity(player);
+			return true;
+		}
     	
     	return super.performCommand(command, player, itemStack);
     }

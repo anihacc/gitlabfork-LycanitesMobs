@@ -238,6 +238,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     private LivingEntity fixateTarget;
 	/** Used to identify the fixate target when loading this saved entity. **/
 	private UUID fixateUUID = null;
+	/** The entity that this mob is perching on. **/
+	private LivingEntity perchTarget;
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
@@ -305,7 +307,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Used for the TARGET watcher bitmap, bitmaps save on many packets and make network performance better! **/
 	public enum TARGET_BITS {
-		ATTACK((byte)1), MASTER((byte)2), PARENT((byte)4), AVOID((byte)8), RIDER((byte)16), PICKUP((byte)32);
+		ATTACK((byte)1), MASTER((byte)2), PARENT((byte)4), AVOID((byte)8), RIDER((byte)16), PICKUP((byte)32), PERCH((byte)64);
 		public final byte id;
 	    TARGET_BITS(byte value) { this.id = value; }
 	    public byte getValue() { return id; }
@@ -1397,6 +1399,24 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             this.leap(0, 0.4D);
         }
 
+		// Perching:
+		LivingEntity perchTarget = this.getPerchTarget();
+		if(perchTarget != null) {
+			ExtendedEntity perchEntityExt = ExtendedEntity.getForEntity(this.getPerchTarget());
+			if(perchEntityExt != null) {
+				Vec3d perchPosition = perchEntityExt.getPerchPosition();
+				this.setPosition(perchPosition.x, perchPosition.y, perchPosition.z);
+				this.setMotion(perchTarget.getMotion());
+				this.rotationYaw = perchTarget.rotationYaw;
+			}
+			if(perchTarget instanceof PlayerEntity && !perchTarget.isPassenger()) {
+				ExtendedPlayer perchPlayerExt = ExtendedPlayer.getForPlayer((PlayerEntity) perchTarget);
+				if(perchPlayerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_ABILITY)) {
+					this.perchOnEntity(null);
+				}
+			}
+		}
+
 		// Boss Health Update:
 		if(this.bossInfo != null) {
 			this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
@@ -1620,6 +1640,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     			targets += TARGET_BITS.RIDER.id;
 			if(this.getPickupEntity() != null)
 				targets += TARGET_BITS.PICKUP.id;
+			if(this.getPerchTarget() != null)
+				targets += TARGET_BITS.PERCH.id;
     		this.dataManager.set(TARGET, targets);
     	}
 
@@ -2932,6 +2954,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return this.getFixateTarget() != null;
 	}
 
+	/** Returns this entity's Avoid Target. **/
+	public LivingEntity getPerchTarget() { return this.perchTarget; }
+	/** Sets this entity's Avoid Target **/
+	public void setPerchTarget(LivingEntity setTarget) {
+		this.perchTarget = setTarget;
+	}
+	/** Returns true if this mob has a Avoid Target **/
+	public boolean hasPerchTarget() {
+		if(!this.getEntityWorld().isRemote)
+			return this.getPerchTarget() != null;
+		else
+			return (this.getByteFromDataManager(TARGET) & TARGET_BITS.PERCH.id) > 0;
+	}
+
 	/** Can be overridden to add a random chance of targeting the provided entity. **/
 	public boolean rollAttackTargetChance(LivingEntity target) {
 		return true;
@@ -3623,6 +3659,32 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Apply Drop Effects ==========
     /** Used to add effects or alter the dropped entity item. **/
     public void applyDropEffects(CustomItemEntity entityItem) {}
+
+
+	// ==================================================
+	//                       Perching
+	// ==================================================
+	public void perchOnEntity(LivingEntity target) {
+		// Unperch:
+		if(target == null) {
+			if(this.getPerchTarget() != null) {
+				ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(this.getPerchTarget());
+				if(extendedEntity != null) {
+					extendedEntity.setPerchedByEntity(null);
+				}
+			}
+			this.setPerchTarget(null);
+			return;
+		}
+
+		// Perch:
+		ExtendedEntity extendedEntity = ExtendedEntity.getForEntity(target);
+		if(extendedEntity == null) {
+			return;
+		}
+		this.setPerchTarget(target);
+		extendedEntity.setPerchedByEntity(this);
+	}
     
     
     // ==================================================
@@ -3680,7 +3742,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** The main interact method that is called when a player right clicks this entity. **/
     @Override
     public boolean processInteract(PlayerEntity player, Hand hand) {
-	    if(assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand)))
+		if(this.hasPerchTarget()) {
+			return false;
+		}
+	    if(this.assessInteractCommand(getInteractCommands(player, player.getHeldItem(hand)), player, player.getHeldItem(hand)))
 	    	return true;
 	    return super.processInteract(player, hand);
     }
@@ -3957,7 +4022,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(("inWall".equals(type) || "cactus".equals(type)) && (this.isRareSubspecies() || this.isBoss()))
             return false;
 		if("inWall".equals(type))
-			return !CreatureManager.getInstance().config.suffocationImmunity;
+			return !CreatureManager.getInstance().config.suffocationImmunity && !this.hasPerchTarget();
 		if("drown".equals(type))
 			return !CreatureManager.getInstance().config.drownImmunity;
         return true;
@@ -4680,7 +4745,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Fly ==========
     /** Plays a flying sound, usually a wing flap, called randomly when flying. **/
     public void playFlySound() {
-    	if(!this.isFlying()) return;
+    	if(!this.isFlying() || this.hasPerchTarget()) return;
       	this.playSound(ObjectManager.getSound(this.getSoundName() + "_fly"), this.getSoundVolume(), 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
     }
 

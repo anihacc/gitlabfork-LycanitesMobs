@@ -60,20 +60,36 @@ public class CreatureDescriptionList extends BaseList {
 		}
 		ITextComponent text = new StringTextComponent("");
 
-		// Taming:
-		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text.appendText("\u00A7l")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.tameable"))
-					.appendText(": " + "\u00A7r")
-					.appendSibling(creatureInfo.creatureType.getTreatItem().getName())
-					.appendText("\n\n");
-		}
+		if(creatureInfo.creatureType != null) {
+			// Taming:
+			if(creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
+				text.appendText("\u00A7l")
+						.appendSibling(new TranslationTextComponent("gui.beastiary.tameable"))
+						.appendText(": " + "\u00A7r")
+						.appendSibling(creatureInfo.creatureType.getTreatItem().getName())
+						.appendText("\n\n");
 
-		// Summoning:
-		if(creatureInfo.creatureType != null && creatureInfo.isSummonable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text.appendText("\u00A7l")
-					.appendSibling(new TranslationTextComponent("gui.beastiary.summonable"))
-					.appendText("\u00A7r\n\n");
+				// Mounting:
+				if(creatureInfo.isMountable()) {
+					text.appendText("\u00A7l")
+							.appendSibling(new TranslationTextComponent("gui.beastiary.mountable"))
+							.appendText("\u00A7r\n\n");
+				}
+			}
+
+			// Summoning:
+			if(creatureInfo.isSummonable()) {
+				text.appendText("\u00A7l")
+						.appendSibling(new TranslationTextComponent("gui.beastiary.summonable"))
+						.appendText("\u00A7r\n\n");
+			}
+
+			// Perching:
+			if((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
+				text.appendText("\u00A7l")
+						.appendSibling(new TranslationTextComponent("gui.beastiary.perchable"))
+						.appendText("\u00A7r\n\n");
+			}
 		}
 
 		// Diet:

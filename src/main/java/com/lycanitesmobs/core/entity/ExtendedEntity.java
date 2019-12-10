@@ -5,12 +5,14 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.config.ConfigAdmin;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.network.MessageEntityPerched;
 import com.lycanitesmobs.core.network.MessageEntityPickedUp;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
+import net.minecraft.util.math.Vec3d;
 
 import javax.vecmath.Vector3d;
 import java.util.HashMap;
@@ -40,7 +42,10 @@ public class ExtendedEntity implements IExtendedEntity {
 	
 	// Picked Up:
 	public Entity pickedUpByEntity;
-	private int pickedUpByEntityID;
+
+	// Percher
+	public Entity perchedByEntity;
+	public boolean perchedEntityNoclip = false;
 
     // Fear:
 	public FearEntity fearEntity;
@@ -151,6 +156,12 @@ public class ExtendedEntity implements IExtendedEntity {
         // Picked Up By Entity:
 		try {
 			this.updatePickedUpByEntity();
+		}
+		catch (Exception e) {}
+
+		// Perched By Entity:
+		try {
+			this.updatedPerchedByEntity();
 		}
 		catch (Exception e) {}
 	}
@@ -270,6 +281,83 @@ public class ExtendedEntity implements IExtendedEntity {
 	
 	public boolean isFeared() {
 		return this.pickedUpByEntity instanceof FearEntity;
+	}
+
+
+	// ==================================================
+	//                     Perched
+	// ==================================================
+	/**
+	 * Sets the entity that is perching on this entity.
+	 * @param perchedByEntity The entity to perch on this entity or null to clear.
+	 */
+	public void setPerchedByEntity(Entity perchedByEntity) {
+		if(this.perchedByEntity != null) {
+			this.perchedByEntity.noClip = this.perchedEntityNoclip;
+			if(this.perchedByEntity instanceof BaseCreatureEntity) {
+				((BaseCreatureEntity) this.perchedByEntity).setPerchTarget(null);
+			}
+		}
+
+		this.perchedByEntity = perchedByEntity;
+		if(perchedByEntity != null) {
+			this.perchedEntityNoclip = perchedByEntity.noClip;
+			perchedByEntity.noClip = true;
+			if(perchedByEntity instanceof BaseCreatureEntity) {
+				((BaseCreatureEntity)perchedByEntity).setPerchTarget(this.entity);
+			}
+		}
+
+		if(!this.entity.getEntityWorld().isRemote) {
+			MessageEntityPerched message = new MessageEntityPerched(this.entity, this.perchedByEntity);
+			LycanitesMobs.packetHandler.sendToWorld(message, this.entity.getEntityWorld());
+		}
+	}
+
+	/**
+	 * Returns the entity currently perching on this entity if any.
+	 * @return The entity perching on this entity or null.
+	 */
+	public Entity getPerchedByEntity() {
+		return this.perchedByEntity;
+	}
+
+	/**
+	 * Returns the xyz position that an entity should perch on this entity at.
+	 * @return The perch position.
+	 */
+	public Vec3d getPerchPosition() {
+		double entityWidth = this.entity.getSize(this.entity.getPose()).width;
+		double entityHeight = this.entity.getSize(this.entity.getPose()).height;
+
+		double angle = Math.toRadians(this.entity.rotationYaw) + 90;
+		double xPerchPos = this.entity.posX;
+		double zPerchPos = this.entity.posZ;
+		double distance = entityWidth * 0.7D;
+		if(distance != 0) {
+			xPerchPos += distance * -Math.sin(angle);
+			zPerchPos += distance * Math.cos(angle);
+		}
+
+		return new Vec3d(
+				xPerchPos,
+				this.entity.posY + entityHeight * 0.78D,
+				zPerchPos
+		);
+	}
+
+	/**
+	 * Updates the position of an entity that is perching on this entity.
+	 */
+	public void updatedPerchedByEntity() {
+		Entity perchedByEntity = this.getPerchedByEntity();
+		if(perchedByEntity != null) {
+			Vec3d perchPosition = this.getPerchPosition();
+			perchedByEntity.setPosition(perchPosition.getX(), perchPosition.getY(), perchPosition.getZ());
+			perchedByEntity.setMotion(this.entity.getMotion());
+			perchedByEntity.rotationYaw = this.entity.rotationYaw;
+			perchedByEntity.noClip = true;
+		}
 	}
 
 
