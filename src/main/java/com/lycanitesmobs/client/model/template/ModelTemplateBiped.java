@@ -27,6 +27,10 @@ public class ModelTemplateBiped extends ModelObj {
         float rotY = 0F;
         float rotZ = 0F;
 
+        BaseCreatureEntity creatureEntity = null;
+        if(entity instanceof BaseCreatureEntity)
+            creatureEntity = (BaseCreatureEntity)entity;
+
         // Idle:
         if(partName.equals("mouth")) {
             this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F), 0.0F, 0.0F);
@@ -116,7 +120,7 @@ public class ModelTemplateBiped extends ModelObj {
         }
 
         // Jumping/Flying:
-        if(entity != null && !entity.onGround && !entity.isInWater()) {
+        if(entity != null && !entity.onGround && !entity.isInWater() && (creatureEntity == null || (creatureEntity != null && !creatureEntity.hasPerchTarget()))) {
             if(partName.equals("wingleft")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
@@ -136,11 +140,21 @@ public class ModelTemplateBiped extends ModelObj {
         }
 
         // Attack:
-        if(partName.equals("mouth")) {
-            rotX += 20.0F * this.getAttackProgress();
+        if(creatureEntity != null && creatureEntity.hasAttackTarget()) {
+            if (partName.equals("mouth")) {
+                rotX += 20.0F * this.getAttackProgress();
+            }
+            if (partName.contains("armleft") || partName.contains("armright")) {
+                rotX -= 80.0F * this.getAttackProgress();
+            }
         }
-        if (partName.contains("armleft") || partName.contains("armright")) {
-            rotX -= 80.0F * this.getAttackProgress();
+
+        // Riding:
+        if(entity.isRiding()) {
+            if (partName.equals("legleft"))
+                rotX -= 50;
+            if (partName.equals("legright"))
+                rotX -= 50;
         }
 
         // Apply Animations:

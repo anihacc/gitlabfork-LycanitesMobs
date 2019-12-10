@@ -74,14 +74,26 @@ public class GuiCreatureDescriptionList extends GuiScrollingList {
 		}
 		String text = "";
 
-		// Taming:
-		if(creatureInfo.creatureType != null && creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text += "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
-		}
+		if(creatureInfo.creatureType != null) {
+			// Taming:
+			if (creatureInfo.isTameable() && creatureInfo.creatureType.getTreatItem() != null) {
+				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.tameable") + ": " + "\u00A7r" + LanguageManager.translate(creatureInfo.creatureType.getTreatItem().getUnlocalizedName() + ".name") + "\n\n";
 
-		// Summoning:
-		if(creatureInfo.creatureType != null && creatureInfo.isSummonable() && creatureInfo.creatureType.getTreatItem() != null) {
-			text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
+				// Mounting:
+				if (creatureInfo.isMountable()) {
+					text += "\u00A7l" + LanguageManager.translate("gui.beastiary.mountable") + "\u00A7r\n\n";
+				}
+			}
+
+			// Summoning:
+			if (creatureInfo.isSummonable()) {
+				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.summonable") + "\u00A7r\n\n";
+			}
+
+			// Perching:
+			if ((creatureInfo.isTameable() || creatureInfo.isSummonable()) && creatureInfo.isPerchable()) {
+				text += "\u00A7l" + LanguageManager.translate("gui.beastiary.perchable") + "\u00A7r\n\n";
+			}
 		}
 
 		// Diet:

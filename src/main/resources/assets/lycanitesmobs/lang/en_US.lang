@@ -97,6 +97,8 @@ gui.beastiary.combat=Combat
 gui.beastiary.unlockedat=Unlocked at
 gui.beastiary.tameable=This creature can be tamed with
 gui.beastiary.summonable=This creature can be summoned as a minion.
+gui.beastiary.mountable=This creature can ridden as a mount.
+gui.beastiary.perchable=This creature can perch on your shoulder.
 #
 # Pets:
 gui.beastiary.pets=Pets
@@ -311,7 +313,7 @@ effect.envenom=Envenom
 #
 #
 # ========== Key Bindings ==========
-key.mount.ability=Mount Ability
+key.mount.ability=Mount Ability / Unperch Pet
 key.mount.inventory=Mount Inventory
 key.index=Beastiary Index
 key.beastiary=Beastiary

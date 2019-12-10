@@ -192,14 +192,15 @@ public class EntityProjectileBase extends EntityThrowable {
      protected void onImpact(RayTraceResult rayTraceResult) {
      	 boolean collided = false;
          boolean entityCollision = false;
-         boolean blockCollision = false;
-         BlockPos impactPos = this.getPosition();
-     	
-     	// Entity Hit:
-     	if(rayTraceResult.entityHit != null) {
-     		if(this.getThrower() != null && rayTraceResult.entityHit == this.getThrower())
-     			return;
-     		boolean doDamage = true;
+		 boolean doDamage = true;
+		 boolean blockCollision = false;
+		 BlockPos impactPos = this.getPosition();
+
+		 // Entity Hit:
+		 if(rayTraceResult.entityHit != null) {
+			if(this.getThrower() != null && rayTraceResult.entityHit == this.getThrower()) {
+				return;
+			}
  			if(rayTraceResult.entityHit instanceof EntityLivingBase) {
  				doDamage = this.canDamage((EntityLivingBase)rayTraceResult.entityHit);
  			}
@@ -329,8 +330,8 @@ public class EntityProjectileBase extends EntityThrowable {
 				}
  	        }
      	}
-     	
-     	if(collided) {
+
+		 if(collided && (!entityCollision || doDamage)) {
  	    	// Impact Particles:
  	        if(!this.getEntityWorld().isRemote) {
 				this.onImpactComplete(impactPos);
@@ -370,6 +371,11 @@ public class EntityProjectileBase extends EntityThrowable {
 		    	if(MinecraftForge.EVENT_BUS.post(new AttackEntityEvent((EntityPlayer)owner, targetEntity))) {
 		    		return false;
 		    	}
+				if(targetEntity instanceof TameableCreatureEntity) {
+					TameableCreatureEntity targetCreature = (TameableCreatureEntity)targetEntity;
+					if(targetCreature.getPlayerOwner() == owner)
+						return false;
+				}
 		    }
 		    
 		    // Player PVP:

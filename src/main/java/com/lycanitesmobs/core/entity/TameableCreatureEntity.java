@@ -14,6 +14,7 @@ import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
@@ -256,14 +257,29 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	}
 
 
+	// ==================================================
+	//                       Perching
+	// ==================================================
+	public boolean canPerch(EntityLivingBase target) {
+		if(!this.creatureInfo.isPerchable()) {
+			return false;
+		}
+		return this.getPlayerOwner() == target;
+	}
+
+
     // ==================================================
     //                       Interact
     // ==================================================
     // ========== Get Interact Commands ==========
     @Override
     public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
-    	HashMap<Integer, String> commands = new HashMap<Integer, String>();
+    	HashMap<Integer, String> commands = new HashMap<>();
     	commands.putAll(super.getInteractCommands(player, itemStack));
+
+		// Perch:
+		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
+			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
 		if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack == null || player.isSneaking()) && player == this.getPlayerOwner())
@@ -286,6 +302,11 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 	    		if(equipSlot != null && (this.inventory.getEquipmentStack(equipSlot) == null || this.inventory.getEquipmentStack(equipSlot).getItem() != itemStack.getItem()))
 	    			commands.put(COMMAND_PIORITIES.EQUIPPING.id, "Equip Item");
     		}
+
+			// Soulstone:
+			if(itemStack.getItem() instanceof ItemSoulstone && this.isTamed()) {
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Soulstone");
+			}
     	}
 		
 		// Sit:
@@ -360,6 +381,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
             this.isJumping = false;
 			return true;
     	}
+
+		// Perch:
+		if(command.equals("Perch")) {
+			this.playTameSound();
+			this.perchOnEntity(player);
+			return true;
+		}
     	
     	return super.performCommand(command, player, itemStack);
     }
