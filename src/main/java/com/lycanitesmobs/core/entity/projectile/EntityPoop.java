@@ -4,6 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -79,10 +80,12 @@ public class EntityPoop extends BaseProjectileEntity {
     //========== On Impact Particles/Sounds ==========
     @Override
     public void onImpactVisuals() {
-    	for(int i = 0; i < 8; ++i)
-            this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.PODZOL.getDefaultState()),
-                    this.posX, this.posY, this.posZ,
-                    0.0D, 0.0D, 0.0D);
+		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
+			for (int i = 0; i < 8; ++i)
+				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.PODZOL.getDefaultState()),
+						this.posX, this.posY, this.posZ,
+						0.0D, 0.0D, 0.0D);
+		}
     }
     
     

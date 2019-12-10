@@ -18,6 +18,9 @@ public class CreatureConfig {
 	/** If true, alpha is disabled on mob textures, this can make them look undesirable but can increase performance on low end systems. **/
 	public boolean disableModelAlpha = false;
 
+	/** If true, block particles are not spawned by mobs (useful for visual mods that create 3D block particles which can cause lag in high numbers). **/
+	public boolean disableBlockParticles = false;
+
 	// Stats:
 	/** The minimum base starting level of every mob. Cannot be less than 1. **/
 	public int startingLevelMin = 1;
@@ -118,6 +121,7 @@ public class CreatureConfig {
 		this.subspeciesTags = ConfigCreatures.INSTANCE.subspeciesTags.get();
 		this.idleSoundTicks = ConfigCreatures.INSTANCE.idleSoundTicks.get();
 		this.disableModelAlpha = ConfigCreatures.INSTANCE.disableModelAlpha.get();
+		this.disableBlockParticles = ConfigCreatures.INSTANCE.disableBlockParticles.get();
 
 		// Stats:
 		this.startingLevelMin = ConfigCreatures.INSTANCE.startingLevelMin.get();

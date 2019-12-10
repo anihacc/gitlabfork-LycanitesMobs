@@ -64,7 +64,7 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.range"))
 					.appendText(" " + this.damageRange);
 		}
-		if(this.damageSweep > 45) {
+		if(this.damageSweep > 0) {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.sweep"))
 					.appendText(" " + this.damageSweep);

@@ -5,6 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.ModelProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityWisp;
+import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -95,7 +96,7 @@ public class EntityLightBall extends ModelProjectileEntity {
     //========== On Impact Particles/Sounds ==========
     @Override
     public void onImpactVisuals() {
-		if(this.getEntityWorld().isRemote) {
+		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
 			for (int i = 0; i < 8; ++i) {
 				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.GLOWSTONE.getDefaultState()),
 						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,

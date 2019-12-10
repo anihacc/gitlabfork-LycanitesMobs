@@ -143,10 +143,8 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						randomAngle = -randomAngle;
 					}
 					BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
-					/*if(!entity.getEntityWorld().isSideSolid(spawnPos, EnumFacing.UP)) {
-						randomAngle = -randomAngle;
-					}*/
 					entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
+					entityCreature.setAttackTarget(target);
 				}
 			}
 			catch (Exception e) {

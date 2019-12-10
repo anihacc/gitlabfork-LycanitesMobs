@@ -16,7 +16,8 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> subspeciesTags;
 	public final ForgeConfigSpec.ConfigValue<Integer> idleSoundTicks;
 	public final ForgeConfigSpec.ConfigValue<Boolean> disableModelAlpha;
-	
+	public final ForgeConfigSpec.ConfigValue<Boolean> disableBlockParticles;
+
 	public final ForgeConfigSpec.ConfigValue<Integer> startingLevelMin;
 	public final ForgeConfigSpec.ConfigValue<Integer> startingLevelMax;
 	public final ForgeConfigSpec.ConfigValue<Double> levelPerDay;
@@ -64,6 +65,9 @@ public class ConfigCreatures {
 		disableModelAlpha = builder.comment("If true, alpha is disabled on mob textures, this can make them look undesirable but can increase performance on low end systems.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.disableModelAlpha")
 				.define("disableModelAlpha", false);
+		disableBlockParticles = builder.comment("If true, block particles are not spawned by mobs (useful for visual mods that create 3D block particles which can cause lag in high numbers).")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.disableBlockParticles")
+				.define("disableBlockParticles", false);
 
 		startingLevelMin = builder.comment("The minimum base starting level of every mob. Cannot be less than 1.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.startingLevelMin")
