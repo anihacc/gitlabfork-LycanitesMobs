@@ -283,11 +283,9 @@ public class ItemManager {
 		ObjectManager.addItem("blizzardscepter", new ItemScepterBlizzard(), 2, 1, 1);
 		ObjectManager.addItem("doomfirecharge", new ItemDoomfireCharge());
 		ObjectManager.addItem("hellfirecharge", new ItemHellfireCharge());
-		ObjectManager.addItem("devilstarcharge", new ItemDevilstarCharge());
 		ObjectManager.addItem("demoniclightningcharge", new ItemDemonicLightningCharge());
 		ObjectManager.addItem("doomfirescepter", new ItemScepterDoomfire(), 2, 1, 1);
 		ObjectManager.addItem("hellfirescepter", new ItemScepterHellfire(), 2, 1, 1);
-		ObjectManager.addItem("devilstarscepter", new ItemScepterDevilstar(), 2, 1, 1);
 		ObjectManager.addItem("demoniclightningscepter", new ItemScepterDemonicLightning(), 2, 1, 1);
 		ObjectManager.addItem("throwingscythe", new ItemThrowingScythe());
 		ObjectManager.addItem("mudshotcharge", new ItemMudshotCharge());

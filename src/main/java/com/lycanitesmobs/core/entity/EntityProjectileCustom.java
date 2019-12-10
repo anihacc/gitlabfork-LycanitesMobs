@@ -174,9 +174,6 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	// ==================================================
 	@Override
 	public String getTextureName() {
-		if(this.projectileInfo != null) {
-			return this.projectileInfo.chargeItemName;
-		}
 		return this.entityName;
 	}
 

@@ -167,7 +167,6 @@ public class ProjectileManager extends JSONLoader {
 		this.addOldProjectile("blizzard", EntityBlizzard.class, ObjectManager.getItem("blizzardcharge"), new DispenserBehaviorBlizzard());
 		this.addOldProjectile("hellfireball", EntityHellfireball.class, ObjectManager.getItem("hellfirecharge"), new DispenserBehaviorHellfireball());
 		this.addOldProjectile("doomfireball", EntityDoomfireball.class, ObjectManager.getItem("doomfirecharge"), new DispenserBehaviorDoomfireball());
-		this.addOldProjectile("devilstar", EntityDevilstar.class, ObjectManager.getItem("devilstarcharge"), new DispenserBehaviorDevilstar());
 		this.addOldProjectile("demonicspark", EntityDemonicSpark.class, false);
 		this.addOldProjectile("demonicblast", EntityDemonicBlast.class, ObjectManager.getItem("demoniclightningcharge"), new DispenserBehaviorDemonicLightning());
 		this.addOldProjectile("hellfirewall", EntityHellfireWall.class, false);
