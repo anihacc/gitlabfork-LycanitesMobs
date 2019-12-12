@@ -211,6 +211,8 @@ lyc.command.debug.set=Updated %debug%.
 lyc.command.spawners.invalid=Invalid arguments, usage: /lycanitesmobs spawners [reload]
 lyc.command.spawners.reload=JSON Spawners have been reloaded.
 lyc.command.spawners.creative=Toggled Mob Spawn Triggers for Creative Mode players to %value%.
+lyc.command.spawners.test=Spawner test trigger forced.
+lyc.command.spawners.test.unknown=Unknown spawner.
 #
 # Equipment:
 lyc.command.equipment.invalid=Invalid arguments, usage: /lycanitesmobs equipment [reload]

@@ -137,6 +137,30 @@ public class CommandMain implements ICommand {
 				commandSender.sendMessage(new TextComponentString(reply));
 				return;
 			}
+
+			// Test:
+			if("test".equalsIgnoreCase(args[1])) {
+				reply = LanguageManager.translate("lyc.command.spawners.test");
+				if(!(commandSender instanceof EntityPlayer)) {
+					return;
+				}
+
+				if(args.length < 3 || !SpawnerManager.getInstance().spawners.containsKey(args[2])) {
+					reply = LanguageManager.translate("lyc.command.spawner.test.unknown");
+				}
+				String spawnerName = args[2];
+				World world = commandSender.getEntityWorld();
+				EntityPlayer player = (EntityPlayer)commandSender;
+				BlockPos pos = player.getPosition();
+				int level = 1;
+				if(args.length > 3) {
+					level = Math.max(1, NumberUtils.isCreatable(args[3]) ? Integer.parseInt(args[3]) : 1);
+				}
+
+				SpawnerManager.getInstance().spawners.get(spawnerName).trigger(world, player, null, pos, level, 1, 0);
+				commandSender.sendMessage(new TextComponentString(reply));
+				return;
+			}
 		}
 
 		// Dungeon:

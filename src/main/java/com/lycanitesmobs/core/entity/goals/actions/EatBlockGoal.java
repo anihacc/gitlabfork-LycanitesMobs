@@ -94,7 +94,7 @@ public class EatBlockGoal extends EntityAIBase {
   	// ==================================================
  	@Override
     public void startExecuting() {
-    	 this.eatTime = 40;
+    	 this.eatTime = this.eatTimeMax;
          this.host.clearMovement();
      }
  	
@@ -104,7 +104,7 @@ public class EatBlockGoal extends EntityAIBase {
   	// ==================================================
  	@Override
     public void resetTask() {
-    	 this.eatTime = 40;
+    	 this.eatTime = this.eatTimeMax;
      }
   	
      
