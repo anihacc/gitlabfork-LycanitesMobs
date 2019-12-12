@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class SpawnerEventListener {
 	private static SpawnerEventListener INSTANCE;
-	private static boolean testOnCreative = false;
+	public static boolean testOnCreative = false;
 
 	private List<WorldSpawnTrigger> worldSpawnTriggers = new ArrayList<>();
 	private List<PlayerSpawnTrigger> playerSpawnTriggers = new ArrayList<>();

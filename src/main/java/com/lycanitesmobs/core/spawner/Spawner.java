@@ -315,6 +315,7 @@ public class Spawner {
 	 * Starts a new spawn, usually called by Triggers.
 	 * @param world The World to spawn in.
 	 * @param player The player that is being spawned around. If null all player based checks and features are ignored.
+	 * @param spawnTrigger The spawn trigger that has triggered this spawn.
 	 * @param triggerPos The location that the spawn was triggered, usually used as the center for spawning around or on.
 	 * @param level The level of the spawn trigger, higher levels are from rarer spawn conditions and can result in tougher mobs being spawned.
 	 * @param countAmount How much this trigger affects the trigger count by.

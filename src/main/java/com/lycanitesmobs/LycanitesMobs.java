@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.capabilities.ExtendedEntityStorage;
 import com.lycanitesmobs.core.capabilities.ExtendedPlayerStorage;
 import com.lycanitesmobs.core.capabilities.IExtendedEntity;
 import com.lycanitesmobs.core.capabilities.IExtendedPlayer;
+import com.lycanitesmobs.core.command.CommandManager;
 import com.lycanitesmobs.core.compatibility.DLDungeons;
 import com.lycanitesmobs.core.config.ConfigDebug;
 import com.lycanitesmobs.core.config.CoreConfig;
@@ -81,27 +82,25 @@ public class LycanitesMobs {
 	// Potion Effects:
 	public static Effects EFFECTS;
 
-	/**
-	 * Constructor
-				*/
+	/** Constructor **/
 	public LycanitesMobs() {
-			modInfo = new ModInfo(this, name, 1000);
-			FileLoader.initAll(modInfo.modid);
-			StreamLoader.initAll(modInfo.modid);
+		modInfo = new ModInfo(this, name, 1000);
+		FileLoader.initAll(modInfo.modid);
+		StreamLoader.initAll(modInfo.modid);
 
-			// Config:
-			CoreConfig.buildSpec();
-			ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
+		// Config:
+		CoreConfig.buildSpec();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CoreConfig.SPEC);
 
-			// Setup Event Listeners:
-			IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-			modEventBus.addListener(this::commonSetup);
-			modEventBus.addListener(this::clientSetup);
-			modEventBus.addListener(this::serverStarting);
-			modEventBus.addListener(this::enqueueIMC);
-			modEventBus.addListener(this::processIMC);
-			modEventBus.register(ObjectManager.getInstance());
-			modEventBus.register(ItemManager.getInstance());
+		// Setup Event Listeners:
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::commonSetup);
+		modEventBus.addListener(this::clientSetup);
+		modEventBus.addListener(this::serverStarting);
+		modEventBus.addListener(this::enqueueIMC);
+		modEventBus.addListener(this::processIMC);
+		modEventBus.register(ObjectManager.getInstance());
+		modEventBus.register(ItemManager.getInstance());
 		modEventBus.register(CreatureManager.getInstance());
 		modEventBus.register(ProjectileManager.getInstance());
 		modEventBus.register(WorldGenManager.getInstance());
@@ -111,6 +110,7 @@ public class LycanitesMobs {
 
 		// Game Event Listeners:
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.EVENT_BUS.register(CommandManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(new GameEventListener());
 		MinecraftForge.EVENT_BUS.register(SpawnerEventListener.getInstance());
 		MinecraftForge.EVENT_BUS.register(MobEventManager.getInstance());

@@ -114,7 +114,7 @@ public class MobEventListener {
 				worldExt.setWorldEventStartTargetTime(world.getGameTime() + worldExt.getRandomEventDelay(world.rand));
 			}
 			if (world.getGameTime() >= worldExt.getWorldEventStartTargetTime()) {
-				this.triggerRandomMobEvent(world, worldExt);
+				this.triggerRandomMobEvent(world, worldExt, 1);
 			}
 		}
     }
@@ -123,7 +123,7 @@ public class MobEventListener {
 	/**
 	 * Triggers a Random Mob Event Trigger if one is available.
 	 *  **/
-	public void triggerRandomMobEvent(World world, ExtendedWorld worldExt) {
+	public void triggerRandomMobEvent(World world, ExtendedWorld worldExt, int level) {
         // Get Triggers and Total Weight:
 		List<RandomMobEventTrigger> validTriggers = new ArrayList<>();
 		int totalWeights = 0;
@@ -151,7 +151,7 @@ public class MobEventListener {
 		int searchWeight = 0;
 		for(RandomMobEventTrigger mobEventTrigger : validTriggers) {
 			if(mobEventTrigger.weight + searchWeight > randomWeight) {
-				mobEventTrigger.trigger(world, null, new BlockPos(0, 0, 0), 1);
+				mobEventTrigger.trigger(world, null, new BlockPos(0, 0, 0), level);
 				return;
 			}
 			searchWeight += mobEventTrigger.weight;
