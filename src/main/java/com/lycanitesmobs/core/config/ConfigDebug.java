@@ -40,7 +40,7 @@ public class ConfigDebug {
 		}
 
 		for(String enabledDebugKey : this.enabled.get()) {
-			if(debugKey.equals(enabledDebugKey))
+			if(debugKey.equalsIgnoreCase(enabledDebugKey))
 				return true;
 		}
 

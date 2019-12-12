@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.command;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.Beastiary;
 import com.lycanitesmobs.core.info.CreatureInfo;
@@ -18,8 +19,8 @@ public class BeastiaryCommand {
 	public static ArgumentBuilder<CommandSource, ?> register() {
 		return Commands.literal("beastiary")
 				.then(Commands.literal("complete").then(Commands.argument("rank", IntegerArgumentType.integer()).executes(BeastiaryCommand::complete)))
-				.then(Commands.literal("clear").executes(BeastiaryCommand::complete))
-				.then(Commands.literal("add").then(Commands.argument("creature", StringArgumentType.string()).then(Commands.argument("rank", IntegerArgumentType.integer()).executes(BeastiaryCommand::complete))));
+				.then(Commands.literal("clear").executes(BeastiaryCommand::clear))
+				.then(Commands.literal("add").then(Commands.argument("creature", StringArgumentType.string()).then(Commands.argument("rank", IntegerArgumentType.integer()).executes(BeastiaryCommand::add))));
 	}
 
 	public static int complete(final CommandContext<CommandSource> context) {
@@ -29,8 +30,11 @@ public class BeastiaryCommand {
 
 		int rank = Math.max(0, Math.min(3, IntegerArgumentType.getInteger(context, "rank")));
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity)context.getSource().getEntity());
-		Beastiary beastiary = extendedPlayer.getBeastiary();
+		if(extendedPlayer == null) {
+			return 0;
+		}
 
+		Beastiary beastiary = extendedPlayer.getBeastiary();
 		for(CreatureInfo creatureInfo : CreatureManager.getInstance().creatures.values()) {
 			beastiary.addCreatureKnowledge(new CreatureKnowledge(beastiary, creatureInfo.getName(), rank));
 		}
@@ -46,8 +50,11 @@ public class BeastiaryCommand {
 		}
 
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity)context.getSource().getEntity());
-		Beastiary beastiary = extendedPlayer.getBeastiary();
+		if(extendedPlayer == null) {
+			return 0;
+		}
 
+		Beastiary beastiary = extendedPlayer.getBeastiary();
 		beastiary.creatureKnowledgeList.clear();
 		beastiary.sendAllToClient();
 
@@ -63,8 +70,11 @@ public class BeastiaryCommand {
 		int rank = Math.max(0, Math.min(3, IntegerArgumentType.getInteger(context, "rank")));
 		String creatureName = StringArgumentType.getString(context, "creature");
 		ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer((PlayerEntity)context.getSource().getEntity());
-		Beastiary beastiary = extendedPlayer.getBeastiary();
+		if(extendedPlayer == null) {
+			return 0;
+		}
 
+		Beastiary beastiary = extendedPlayer.getBeastiary();
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(creatureName);
 		if(creatureInfo == null) {
 			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.beastiary.add.unknown"), true);

@@ -39,10 +39,13 @@ public class SpawnersCommand {
 	}
 
 	public static int list(final CommandContext<CommandSource> context) {
-		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.list"), true);
+		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawners.list"), true);
 		for(Spawner spawner : SpawnerManager.getInstance().spawners.values()) {
-			String eventName = spawner.name;
-			context.getSource().sendFeedback(new StringTextComponent(eventName), true);
+			if(!"".equals(spawner.eventName)) {
+				continue;
+			}
+			String spawnerName = spawner.name;
+			context.getSource().sendFeedback(new StringTextComponent(spawnerName), true);
 		}
 		return 0;
 	}

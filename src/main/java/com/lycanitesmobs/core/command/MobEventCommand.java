@@ -33,7 +33,7 @@ public class MobEventCommand {
 											.executes(MobEventCommand::randomWorld))
 							))
 				.then(Commands.literal("stop")
-						.executes(MobEventCommand::start)
+						.executes(MobEventCommand::stop)
 							.then(Commands.argument("world", IntegerArgumentType.integer())
 									.executes(MobEventCommand::stopWorld)));
 	}

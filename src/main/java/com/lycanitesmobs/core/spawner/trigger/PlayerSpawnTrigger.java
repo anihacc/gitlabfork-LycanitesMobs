@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.spawner.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.spawner.Spawner;
+import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -60,7 +61,7 @@ public class PlayerSpawnTrigger extends SpawnTrigger {
 	/** Called every player tick. **/
 	public void onTick(PlayerEntity player, long ticks) {
 		// Creative:
-		if(!this.creative && player.isCreative()) {
+		if(!SpawnerEventListener.testOnCreative && (!this.creative && player.isCreative())) {
 			return;
 		}
 

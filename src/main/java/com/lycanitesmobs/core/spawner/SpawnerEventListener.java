@@ -412,7 +412,7 @@ public class SpawnerEventListener {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		PlayerEntity player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayer();
 		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		
@@ -444,7 +444,7 @@ public class SpawnerEventListener {
 	/** This uses the item fished event to spawn mobs. **/
 	@SubscribeEvent
 	public void onFished(ItemFishedEvent event) {
-		PlayerEntity player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayer();
 		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 		if(!testOnCreative && player.abilities.isCreativeMode) { // No Spawning for Creative Players

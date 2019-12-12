@@ -125,7 +125,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 	// ==================================================
 	/** Returns this creature's main texture. Also checks for for subspecies. **/
 	public ResourceLocation getTexture() {
-		if(!"Vampire Bat".equals(this.getCustomName()))
+		if(!"Vampire Bat".equals(this.getCustomName().getFormattedText()))
 			return super.getTexture();
 
 		String textureName = this.getTextureName() + "_vampirebat";

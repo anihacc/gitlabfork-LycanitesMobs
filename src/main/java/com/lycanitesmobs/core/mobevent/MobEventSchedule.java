@@ -83,7 +83,7 @@ public class MobEventSchedule {
 	 */
 	public void start(ExtendedWorld worldExt) {
 		if(this.mobEvent == null) {
-			MobEventListener.getInstance().triggerRandomMobEvent(worldExt.world, worldExt);
+			MobEventListener.getInstance().triggerRandomMobEvent(worldExt.world, worldExt, 1);
 			return;
 		}
 		worldExt.startWorldEvent(this.mobEvent);

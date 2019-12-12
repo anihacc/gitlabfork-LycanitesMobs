@@ -17,7 +17,8 @@ public class SpawnerCommand {
 		return Commands.literal("spawner")
 				.then(Commands.literal("test")
 						.then(Commands.argument("spawner", StringArgumentType.string())
-								.then(Commands.argument("level", IntegerArgumentType.integer()).executes(SpawnerCommand::test))));
+								.then(Commands.argument("level", IntegerArgumentType.integer()).executes(SpawnerCommand::test))))
+				.then(Commands.literal("lighttest").executes(SpawnerCommand::lightTest));
 	}
 
 	public static int test(final CommandContext<CommandSource> context) {
@@ -38,6 +39,25 @@ public class SpawnerCommand {
 
 		SpawnerManager.getInstance().spawners.get(spawnerName).trigger(world, player, null, pos, level, 1, 0);
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.test"), true);
+		return 0;
+	}
+
+	public static int lightTest(final CommandContext<CommandSource> context) {
+		if(context.getSource().getEntity() == null) {
+			return 0;
+		}
+		float brightness = context.getSource().getEntity().getBrightness();
+		int level = 3;
+		if(brightness == 0) level = 0;
+		else if(brightness < 0.25F) level = 1;
+		else if(brightness < 1) level = 2;
+		String results = " Level: " + level + " Brightness: " + brightness;
+		if(level <= 1) {
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.dark").appendText(results), true);
+		}
+		else {
+			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.spawner.lighttest.light").appendText(results), true);
+		}
 		return 0;
 	}
 }

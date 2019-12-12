@@ -63,7 +63,7 @@ public class MobEventsCommand {
 	public static int list(final CommandContext<CommandSource> context) {
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevents.list"), true);
 		for(MobEvent mobEvent : MobEventManager.getInstance().mobEvents.values()) {
-			String eventName = mobEvent.name + " (" + mobEvent.getTitle() + ")";
+			String eventName = mobEvent.name + " (" + mobEvent.getTitle().getFormattedText() + ")";
 			context.getSource().sendFeedback(new StringTextComponent(eventName), true);
 		}
 		return 0;

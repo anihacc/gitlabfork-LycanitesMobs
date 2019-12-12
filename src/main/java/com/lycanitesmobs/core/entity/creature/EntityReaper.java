@@ -134,7 +134,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     /** Returns this creature's main texture. Also checks for for subspecies. **/
     @Override
     public ResourceLocation getTexture(String suffix) {
-        if(!"Satan Claws".equals(this.getCustomName()))
+        if(!"Satan Claws".equals(this.getCustomName().getFormattedText()))
             return super.getTexture(suffix);
 
         String textureName = this.getTextureName() + "_satanclaws";

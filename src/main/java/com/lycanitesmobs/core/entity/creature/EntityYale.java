@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.EatBlockGoal;
 import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import com.lycanitesmobs.core.info.ItemDrop;
 import com.lycanitesmobs.core.info.ObjectLists;
@@ -93,7 +94,8 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
     // ========== Init AI ==========
     @Override
     protected void registerGoals() {
-        super.registerGoals();
+		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new EatBlockGoal(this).setBlocks(Blocks.GRASS).setReplaceBlock(Blocks.DIRT));
+		super.registerGoals();
 		this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("vegetables"));
 		this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
