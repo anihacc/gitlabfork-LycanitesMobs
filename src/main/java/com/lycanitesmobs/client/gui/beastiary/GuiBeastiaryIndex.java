@@ -43,7 +43,7 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 
 		int menuWidth = this.colRightWidth;
 
-		int buttonCount = 3;
+		int buttonCount = 4;
 		int buttonPadding = 2;
 		int buttonWidth = Math.round((float)(menuWidth / buttonCount)) - buttonPadding;
 		int buttonWidthPadded = buttonWidth + buttonPadding;
@@ -55,9 +55,11 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 		// Links:
 		button = new GuiButton(100, buttonX, buttonY, buttonWidth, buttonHeight, "Website");
 		this.buttonList.add(button);
-		button = new GuiButton(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Patreon");
+		button = new GuiButton(101, buttonX + buttonWidthPadded, buttonY, buttonWidth, buttonHeight, "Twitter");
 		this.buttonList.add(button);
-		button = new GuiButton(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, "Discord");
+		button = new GuiButton(102, buttonX + (buttonWidthPadded * 2), buttonY, buttonWidth, buttonHeight, "Patreon");
+		this.buttonList.add(button);
+		button = new GuiButton(103, buttonX + (buttonWidthPadded * 3), buttonY, buttonWidth, buttonHeight, "Discord");
 		this.buttonList.add(button);
 
 		// Lists:
@@ -120,10 +122,15 @@ public class GuiBeastiaryIndex extends GuiBeastiary {
 			}
 			if(guiButton.id == 101) {
 				try {
-					this.openURI(new URI(LycanitesMobs.websitePatreon));
+					this.openURI(new URI(LycanitesMobs.twitter));
 				} catch (URISyntaxException e) {}
 			}
 			if(guiButton.id == 102) {
+				try {
+					this.openURI(new URI(LycanitesMobs.patreon));
+				} catch (URISyntaxException e) {}
+			}
+			if(guiButton.id == 103) {
 				try {
 					this.openURI(new URI(LycanitesMobs.discord));
 				} catch (URISyntaxException e) {}
