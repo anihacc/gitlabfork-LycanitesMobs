@@ -59,7 +59,8 @@ public class LycanitesMobs {
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
 	public static final String websiteAPI = "http://api.lycanitesmobs.com";
-	public static final String websitePatreon = "https://www.patreon.com/lycanite";
+	public static final String twitter = "https://twitter.com/Lycanite05";
+	public static final String patreon = "https://www.patreon.com/lycanite";
 	public static final String discord = "https://discord.gg/bFpV3z4";
 
 	public static final PacketHandler packetHandler = new PacketHandler();
