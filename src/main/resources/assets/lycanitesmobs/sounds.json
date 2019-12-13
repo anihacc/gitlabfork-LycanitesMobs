@@ -432,6 +432,26 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/trite/attack", "stream": false}]
     },
+    "entity.trite.void.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/trite/void/say", "stream": false}]
+    },
+    "entity.trite.void.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/trite/void/hurt", "stream": false}]
+    },
+    "entity.trite.void.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/trite/void/death", "stream": false}]
+    },
+    "entity.trite.void.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/trite/void/step", "stream": false}]
+    },
+    "entity.trite.void.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/trite/void/attack", "stream": false}]
+    },
     "entity.astaroth.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/astaroth/say", "stream": false}]

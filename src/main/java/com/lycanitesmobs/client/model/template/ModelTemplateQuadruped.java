@@ -30,6 +30,14 @@ public class ModelTemplateQuadruped extends ModelCreatureObj {
         if(partName.equals("neck")) {
             this.rotate((float) -Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         }
+        if(partName.contains("armleft")) {
+            rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+            rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+        }
+        if(partName.contains("armright")) {
+            rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
+            rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
+        }
         if(partName.equals("tail")) {
             rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
             rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
@@ -37,6 +45,14 @@ public class ModelTemplateQuadruped extends ModelCreatureObj {
 
         // Walking:
         float walkSwing = 0.6F;
+        if(partName.contains("armleft") || partName.equals("wingright")) {
+            rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.0F * distance * 0.5F);
+            rotZ -= Math.toDegrees(MathHelper.cos(time * walkSwing) * 0.5F * distance * 0.5F);
+        }
+        if(partName.contains("armright") || partName.equals("wingleft")) {
+            rotX += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 1.0F * distance * 0.5F);
+            rotZ += Math.toDegrees(MathHelper.cos(time * walkSwing + (float)Math.PI) * 0.5F * distance * 0.5F);
+        }
         if(partName.equals("legrightfront") || partName.equals("legleftback") || partName.equals("wingright"))
             rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F + (float)Math.PI) * walkSwing * distance);
         if(partName.equals("legleftfront") || partName.equals("legrightback") || partName.equals("wingleft"))

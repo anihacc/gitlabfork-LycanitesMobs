@@ -12,10 +12,10 @@
 		"enabled": true,
 		"spawners": ["monster", "beast", "portal", "nether"],
 		"disableSubspecies": false,
-		"dimensionIds": ["minecraft:the_nether"],
+		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end", "midnight:midnight"],
 		"dimensionListType": "whitelist",
 		"ignoreBiome": true,
-		"biomes": ["nether"],
+		"biomes": ["nether", "end"],
 		"spawnWeight": 8,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,
@@ -54,6 +54,59 @@
 			"index": 2,
 			"name": "lux",
 			"type": "uncommon"
+		},
+		{
+			"index": 4,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelTriteVoid",
+			"type": "common",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
+					"dimensionListType": "whitelist"
+				}
+			]
+		},
+		{
+			"index": 5,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelTriteVoid",
+			"color": "ashen",
+			"type": "uncommon",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
+					"dimensionListType": "whitelist"
+				}
+			]
+		},
+		{
+			"index": 6,
+			"skin": "void",
+			"modelClass": "com.lycanitesmobs.client.model.creature.ModelTriteVoid",
+			"color": "azure",
+			"type": "uncommon",
+			"priority": 1,
+			"elements": [
+				"void"
+			],
+			"conditions": [
+				{
+					"type": "world",
+					"dimensionIds": ["minecraft:the_end", "midnight:midnight"],
+					"dimensionListType": "whitelist"
+				}
+			]
 		}
 	],
 	"element": "nether",

@@ -64,7 +64,7 @@ public class ItemHalloweenTreat extends BaseItem {
   	//                       Good
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".good");
+		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
 		player.sendMessage(message);
         this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
@@ -84,7 +84,7 @@ public class ItemHalloweenTreat extends BaseItem {
   	//                       Bad
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".bad");
+		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message);
         this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
@@ -143,7 +143,7 @@ public class ItemHalloweenTreat extends BaseItem {
         ObjectLists.addEntity("halloween_tricks", "treant");
         ObjectLists.addEntity("halloween_tricks", "wraith");
         ObjectLists.addEntity("halloween_tricks", "grue");
-        ObjectLists.addEntity("halloween_tricks", "phantom");
+        ObjectLists.addEntity("halloween_tricks", "reaper");
         ObjectLists.addEntity("halloween_tricks", "epion");
     }
 }

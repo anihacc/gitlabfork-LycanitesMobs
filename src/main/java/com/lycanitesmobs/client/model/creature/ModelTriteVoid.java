@@ -1,8 +1,6 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObjOld;
-
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -10,18 +8,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelTrite extends ModelTemplateInsect {
-	
+public class ModelTriteVoid extends ModelTemplateInsect {
+
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelTrite() {
+    public ModelTriteVoid() {
         this(1.0F);
     }
 
-	public ModelTrite(float shadowSize) {
+	public ModelTriteVoid(float shadowSize) {
 		// Load Model:
-		this.initModel("trite", LycanitesMobs.modInfo, "entity/trite");
+		this.initModel("trite_void", LycanitesMobs.modInfo, "entity/trite_void");
 
 		// Scales:
 		this.mouthScaleX = 1.0F;
@@ -45,6 +43,32 @@ public class ModelTrite extends ModelTemplateInsect {
 			if (bob < 0)
 				bob += -bob * 2;
 			translate(0, bob, 0);
+		}
+
+		// Tentacles:
+		if(partName.contains("tentacle")) {
+			float loopOffset = 0;
+			if(partName.contains("front")) {
+				loopOffset += 10;
+			}
+			else if(partName.contains("back")) {
+				loopOffset += 30;
+			}
+
+			if(partName.contains("left")) {
+				this.rotate(
+						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+						(float) Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+				);
+			}
+			else {
+				this.rotate(
+						(float) Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F),
+						(float) -Math.toDegrees(MathHelper.sin((loop + (loopOffset / 2)) * 0.2F) * 0.25F) - 10,
+						(float) -Math.toDegrees(MathHelper.cos((loop + (loopOffset / 2)) * 0.09F) * 0.1F)
+				);
+			}
 		}
 	}
 }

@@ -6,6 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateInsect extends ModelCreatureObj {
+    public double mouthScaleX = 0F;
+    public double mouthScaleY = 1.0F;
 
     // ==================================================
     //                 Animate Part
@@ -26,10 +28,14 @@ public class ModelTemplateInsect extends ModelCreatureObj {
         float rotZ = 0F;
 
         // Idle:
-        if(partName.equals("mouthleft"))
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
-        if(partName.equals("mouthright"))
-            rotY -= (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
+        if(partName.equals("mouthleft")) {
+            rotX -= this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F + 0.05F);
+            rotY += this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
+        }
+        if(partName.equals("mouthright")) {
+            rotX += this.mouthScaleX * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
+            rotY -= this.mouthScaleY * -Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.05F);
+        }
         if(partName.equals("tail")) {
             rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
             rotY = (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
@@ -70,12 +76,17 @@ public class ModelTemplateInsect extends ModelCreatureObj {
         }
 
         // Attack:
-        if(partName.equals("leftmouth"))
-            rotY -= 15F * this.getAttackProgress();
-        if(partName.equals("rightmouth"))
-            rotY += 15F * this.getAttackProgress();
-        if(partName.equals("tail"))
+        if(partName.equals("leftmouth")) {
+            rotX += this.mouthScaleX * 15F * this.getAttackProgress();
+            rotY -= this.mouthScaleY * 15F * this.getAttackProgress();
+        }
+        if(partName.equals("rightmouth")) {
+            rotX += this.mouthScaleX * 15F * this.getAttackProgress();
+            rotY += this.mouthScaleY * 15F * this.getAttackProgress();
+        }
+        if(partName.equals("tail")) {
             rotX += 45 * this.getAttackProgress();
+        }
 
         // Apply Animations:
         this.angle(rotation, angleX, angleY, angleZ);

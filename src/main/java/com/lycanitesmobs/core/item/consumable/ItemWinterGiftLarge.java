@@ -57,7 +57,7 @@ public class ItemWinterGiftLarge extends BaseItem {
   	//                       Open
   	// ==================================================
     public void open(ItemStack itemStack, World world, PlayerEntity player) {
-        ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".bad");
+        ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
@@ -83,7 +83,7 @@ public class ItemWinterGiftLarge extends BaseItem {
                         entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("treant"))
                         entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
-                    else if (entityCreature.creatureInfo.getName().equals("phantom"))
+                    else if (entityCreature.creatureInfo.getName().equals("reaper"))
                         entityCreature.setCustomName(new StringTextComponent("Satan Claws"));
                     else if(entityCreature.creatureInfo.getName().equals("behemoth"))
                         entityCreature.setCustomName(new StringTextComponent("Krampus"));

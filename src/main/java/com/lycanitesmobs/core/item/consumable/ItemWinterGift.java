@@ -64,7 +64,7 @@ public class ItemWinterGift extends BaseItem {
   	//                       Good
   	// ==================================================
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".good");
+		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
 		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
@@ -84,7 +84,7 @@ public class ItemWinterGift extends BaseItem {
   	//                       Bad
   	// ==================================================
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
-		ITextComponent message = new TranslationTextComponent("item." + this.itemName + ".bad");
+		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message);
         this.playSound(world, player.getPosition(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 
@@ -110,7 +110,7 @@ public class ItemWinterGift extends BaseItem {
                         entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
                     else if (entityCreature.creatureInfo.getName().equals("treant"))
                         entityCreature.setCustomName(new StringTextComponent("Salty Tree"));
-                    else if (entityCreature.creatureInfo.getName().equals("phantom"))
+                    else if (entityCreature.creatureInfo.getName().equals("reaper"))
                         entityCreature.setCustomName(new StringTextComponent("Satan Claws"));
                     else if(entityCreature.creatureInfo.getName().equals("behemoth"))
                         entityCreature.setCustomName(new StringTextComponent("Krampus"));
@@ -147,7 +147,7 @@ public class ItemWinterGift extends BaseItem {
         ObjectLists.addEntity("winter_tricks", "jabberwock");
         ObjectLists.addEntity("winter_tricks", "ent");
         ObjectLists.addEntity("winter_tricks", "treant");
-        ObjectLists.addEntity("winter_tricks", "phantom");
+        ObjectLists.addEntity("winter_tricks", "reaper");
         ObjectLists.addEntity("winter_tricks", "behemoth");
     }
 }

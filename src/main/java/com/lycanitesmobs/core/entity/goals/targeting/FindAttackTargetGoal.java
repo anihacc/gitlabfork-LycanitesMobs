@@ -196,7 +196,7 @@ public class FindAttackTargetGoal extends TargetingGoal {
 				if(!players.isEmpty()) {
 					List<PlayerEntity> possibleTargets = new ArrayList<>();
 					for (PlayerEntity player : players) {
-						if (this.isValidTarget(player)) {
+						if (this.targetSelector.test(player)) {
 							possibleTargets.add(player);
 						}
 					}
