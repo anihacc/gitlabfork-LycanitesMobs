@@ -20,6 +20,7 @@
 			"type": "block",
 			"rangeMin": [16, 0, 16],
 			"rangeMax": [32, 32, 32],
+			"yMax": 50,
 			"sorting": "random",
 			"blocks": [
 				"minecraft:rail",

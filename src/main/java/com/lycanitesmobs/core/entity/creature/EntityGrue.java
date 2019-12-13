@@ -186,7 +186,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     // ==================================================
     @Override
     public ResourceLocation getTexture(String suffix) {
-        if(!"Shadow Clown".equals(this.getCustomName().getFormattedText()))
+        if(!this.hasCustomName() || !"Shadow Clown".equals(this.getCustomName().getFormattedText()))
             return super.getTexture(suffix);
 
         String textureName = this.getTextureName() + "_shadowclown";

@@ -9,6 +9,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class DebugCommand {
 		return Commands.literal("debug")
 				.then(Commands.literal("log").then(Commands.argument("category", StringArgumentType.string()).executes(DebugCommand::log)))
 				.then(Commands.literal("list").executes(DebugCommand::list))
+				.then(Commands.literal("biomesfromtag").then(Commands.argument("biometag", StringArgumentType.string()).executes(DebugCommand::biomesfromtag)))
+				.then(Commands.literal("listbiometags").executes(DebugCommand::listbiometags))
 				.then(Commands.literal("overlay").executes(DebugCommand::overlay));
 	}
 
@@ -46,6 +50,30 @@ public class DebugCommand {
 		String[] debugCategories = new String[] {"jsonspawner", "mobspawns", "entity", "subspecies", "creature", "mobevents", "dungeon", "items", "equipment"};
 		for(String debugCategory : debugCategories) {
 			context.getSource().sendFeedback(new StringTextComponent(debugCategory), true);
+		}
+		return 0;
+	}
+
+	public static int biomesfromtag(final CommandContext<CommandSource> context) {
+		String biomeTag = StringArgumentType.getString(context, "biometag").toLowerCase();
+		BiomeDictionary.Type biomeType = null;
+		try {
+			biomeType = BiomeDictionary.Type.getType(biomeTag);
+		} catch (Exception e) {
+			LycanitesMobs.logWarning("", "Unknown biome tag: " + biomeTag + ".");
+		}
+		if (biomeType == null) {
+			return 0;
+		}
+		for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
+			context.getSource().sendFeedback(biome.getDisplayName(), true);
+		}
+		return 0;
+	}
+
+	public static int listbiometags(final CommandContext<CommandSource> context) {
+		for(BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+			context.getSource().sendFeedback(new StringTextComponent(biomeType.getName()), true);
 		}
 		return 0;
 	}

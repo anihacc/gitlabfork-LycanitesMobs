@@ -218,11 +218,9 @@ public class CreatureSpawn {
 		String targetDimensionId = world.getDimension().getType().getRegistryName().toString();
 		for(String dimensionId : this.dimensionIds) {
 			if(dimensionId.equals(targetDimensionId)) {
-				LycanitesMobs.logDebug("MobSpawns", "Dimension " + targetDimensionId + " in " + this.dimensionListType + ".");
 				return this.dimensionListType.equalsIgnoreCase("whitelist");
 			}
 		}
-		LycanitesMobs.logDebug("MobSpawns", "Dimension " + targetDimensionId + " was not in " + this.dimensionListType + ".");
 		return this.dimensionListType.equalsIgnoreCase("blacklist");
 	}
 

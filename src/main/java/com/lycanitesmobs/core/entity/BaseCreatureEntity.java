@@ -4230,7 +4230,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Light enough for spawnsInLight: 2 = Light, 3 = Bright
     **/
     public byte testLightLevel(BlockPos pos) {
-        /*BlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
+        BlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
         if(pos.getY() < 0)
             return 0;
         if(spawnBlockState.getMaterial() == Material.WATER && CreatureManager.getInstance().spawnConfig.useSurfaceLightLevel)
@@ -4238,9 +4238,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         else
             pos = new BlockPos(pos.getX(), this.getGroundY(pos), pos.getZ());
 
-        int light = this.getEntityWorld().getLight(pos);*/
-
-		float brightness = this.getBrightness();
+		float brightness = this.getEntityWorld().getBrightness(pos);
         if(brightness == 0) return 0;
         if(brightness < 0.25F) return 1;
         if(brightness < 1) return 2;
