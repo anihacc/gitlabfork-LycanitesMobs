@@ -144,7 +144,7 @@ public class ItemHalloweenTreat extends ItemBase {
         ObjectLists.addEntity("halloween_tricks", "treant");
         ObjectLists.addEntity("halloween_tricks", "wraith");
         ObjectLists.addEntity("halloween_tricks", "grue");
-        ObjectLists.addEntity("halloween_tricks", "phantom");
+        ObjectLists.addEntity("halloween_tricks", "reaper");
         ObjectLists.addEntity("halloween_tricks", "epion");
     }
 }

@@ -4358,7 +4358,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         IBlockState spawnBlockState = this.getEntityWorld().getBlockState(pos);
         if(pos.getY() < 0)
             return 0;
-        if(spawnBlockState != null && spawnBlockState.getMaterial() == Material.WATER && CreatureManager.getInstance().spawnConfig.useSurfaceLightLevel)
+        if(spawnBlockState.getMaterial() == Material.WATER && CreatureManager.getInstance().spawnConfig.useSurfaceLightLevel)
             pos = new BlockPos(pos.getX(), this.getWaterSurfaceY(pos), pos.getZ());
         else
             pos = new BlockPos(pos.getX(), this.getGroundY(pos), pos.getZ());

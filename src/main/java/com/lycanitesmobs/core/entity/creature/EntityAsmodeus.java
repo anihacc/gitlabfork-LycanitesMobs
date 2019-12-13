@@ -87,7 +87,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.setAttackCooldownMax(30);
         this.hasJumpSound = true;

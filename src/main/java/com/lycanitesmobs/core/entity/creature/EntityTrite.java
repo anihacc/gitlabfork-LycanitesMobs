@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,7 +11,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.MobEffects;
 import net.minecraft.world.World;
 
-public class EntityTrite extends BaseCreatureEntity implements IMob {
+public class EntityTrite extends TameableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
@@ -19,7 +20,7 @@ public class EntityTrite extends BaseCreatureEntity implements IMob {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = true;
         this.setupMob();
     }

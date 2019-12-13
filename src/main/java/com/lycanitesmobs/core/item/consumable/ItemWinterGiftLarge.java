@@ -84,7 +84,7 @@ public class ItemWinterGiftLarge extends ItemBase {
                             entityCreature.setCustomNameTag("Salty Tree");
                         else if (entityCreature.creatureInfo.getName().equals("treant"))
                             entityCreature.setCustomNameTag("Salty Tree");
-                        else if (entityCreature.creatureInfo.getName().equals("phantom"))
+                        else if (entityCreature.creatureInfo.getName().equals("reaper"))
                             entityCreature.setCustomNameTag("Satan Claws");
                         else if(entityCreature.creatureInfo.getName().equals("behemoth"))
                             entityCreature.setCustomNameTag("Krampus");

@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellShield;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityAstaroth extends BaseCreatureEntity implements IMob {
+public class EntityAstaroth extends TameableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
@@ -22,7 +23,7 @@ public class EntityAstaroth extends BaseCreatureEntity implements IMob {
         super(world);
         
         // Setup:
-        this.attribute = EnumCreatureAttribute.UNDEAD;
+        this.attribute = EnumCreatureAttribute.UNDEFINED;
         this.hasAttackSound = false;
         this.solidCollision = false;
         this.setupMob();
@@ -104,4 +105,11 @@ public class EntityAstaroth extends BaseCreatureEntity implements IMob {
         }
         super.onDeath(par1DamageSource);
     }
+
+
+    // ==================================================
+    //                     Equipment
+    // ==================================================
+    public int getNoBagSize() { return 0; }
+    public int getBagSize() { return 5; }
 }
