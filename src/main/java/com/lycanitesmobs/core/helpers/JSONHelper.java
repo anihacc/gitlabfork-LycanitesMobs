@@ -179,42 +179,35 @@ public class JSONHelper {
 			}
 
 
-			Biome[] selectedBiomes = null;
+			List<Biome> selectedBiomes = new ArrayList<>();
 			if ("ALL".equalsIgnoreCase(biomeEntry)) {
-				for (BiomeDictionary.Type biomeType : getAllBiomeTypes()) {
-					if (selectedBiomes == null) {
-						Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-						selectedBiomes = selectedBiomesSet.toArray(new Biome[selectedBiomesSet.size()]);
-					}
-					else {
-						Set<Biome> typeBiomesSet = BiomeDictionary.getBiomes(biomeType);
-						Biome[] typeBiomes = typeBiomesSet.toArray(new Biome[typeBiomesSet.size()]);
-						if (typeBiomes != null)
-							selectedBiomes = ArrayUtils.addAll(selectedBiomes, typeBiomes);
-					}
+				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					selectedBiomes.addAll(selectedBiomesSet);
 				}
 			}
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
-				BiomeDictionary.Type biomeType;
+				BiomeDictionary.Type biomeType = null;
 				try {
 					biomeType = BiomeDictionary.Type.getType(biomeEntry);
 				} catch (Exception e) {
-					biomeType = null;
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
 				if (biomeType != null) {
 					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					selectedBiomes = selectedBiomesSet.toArray(new Biome[selectedBiomesSet.size()]);
+					selectedBiomes.addAll(selectedBiomesSet);
 				}
 			}
 
-			if (selectedBiomes != null) {
+			if (!selectedBiomes.isEmpty()) {
 				for (Biome biome : selectedBiomes)
-					if (additive && !biomeList.contains(biome)) {
-						biomeList.add(biome);
-					}
-					else if (!additive && biomeList.contains(biome)) {
-						biomeList.remove(biome);
+					if(!biomeList.contains(biome)) {
+						if (additive) {
+							biomeList.add(biome);
+						}
+						else {
+							biomeList.remove(biome);
+						}
 					}
 			}
 		}
@@ -231,42 +224,5 @@ public class JSONHelper {
 			}
 		}
 		return biomes;
-	}
-
-	/* Can no longer access a list of all biomes types without reflection. This is the alternative for now. */
-	public static BiomeDictionary.Type[] getAllBiomeTypes() {
-		return new BiomeDictionary.Type[] {
-				BiomeDictionary.Type.HOT,
-				BiomeDictionary.Type.COLD,
-				BiomeDictionary.Type.SPARSE,
-				BiomeDictionary.Type.DENSE,
-				BiomeDictionary.Type.WET,
-				BiomeDictionary.Type.DRY,
-				BiomeDictionary.Type.SAVANNA,
-				BiomeDictionary.Type.CONIFEROUS,
-				BiomeDictionary.Type.JUNGLE,
-				BiomeDictionary.Type.SPOOKY,
-				BiomeDictionary.Type.DEAD,
-				BiomeDictionary.Type.LUSH,
-				BiomeDictionary.Type.NETHER,
-				BiomeDictionary.Type.END,
-				BiomeDictionary.Type.MUSHROOM,
-				BiomeDictionary.Type.MAGICAL,
-				BiomeDictionary.Type.RARE,
-				BiomeDictionary.Type.OCEAN,
-				BiomeDictionary.Type.RIVER,
-				BiomeDictionary.Type.WATER,
-				BiomeDictionary.Type.MESA,
-				BiomeDictionary.Type.FOREST,
-				BiomeDictionary.Type.PLAINS,
-				BiomeDictionary.Type.MOUNTAIN,
-				BiomeDictionary.Type.HILLS,
-				BiomeDictionary.Type.SWAMP,
-				BiomeDictionary.Type.SANDY,
-				BiomeDictionary.Type.SNOWY,
-				BiomeDictionary.Type.WASTELAND,
-				BiomeDictionary.Type.BEACH,
-				BiomeDictionary.Type.VOID
-		};
 	}
 }
