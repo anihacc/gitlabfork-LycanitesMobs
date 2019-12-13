@@ -188,65 +188,40 @@ public class JSONHelper {
 			}
 
 
-			Biome[] selectedBiomes = null;
+			List<Biome> selectedBiomes = new ArrayList<>();
 			if ("ALL".equalsIgnoreCase(biomeEntry)) {
-				for (BiomeDictionary.Type biomeType : getAllBiomeTypes()) {
-					if (selectedBiomes == null) {
-						Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-						selectedBiomes = selectedBiomesSet.toArray(new Biome[selectedBiomesSet.size()]);
-					}
-					else {
-						Set<Biome> typeBiomesSet = BiomeDictionary.getBiomes(biomeType);
-						Biome[] typeBiomes = typeBiomesSet.toArray(new Biome[typeBiomesSet.size()]);
-						if (typeBiomes != null)
-							selectedBiomes = ArrayUtils.addAll(selectedBiomes, typeBiomes);
-					}
+				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
+					selectedBiomes.addAll(selectedBiomesSet);
 				}
 			}
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
-				BiomeDictionary.Type biomeType;
+				BiomeDictionary.Type biomeType = null;
 				try {
 					biomeType = BiomeDictionary.Type.getType(biomeEntry);
 				} catch (Exception e) {
-					biomeType = null;
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
 				if (biomeType != null) {
 					Set<Biome> selectedBiomesSet = BiomeDictionary.getBiomes(biomeType);
-					selectedBiomes = selectedBiomesSet.toArray(new Biome[selectedBiomesSet.size()]);
+					selectedBiomes.addAll(selectedBiomesSet);
 				}
 			}
 
-			if (selectedBiomes != null) {
+			if (!selectedBiomes.isEmpty()) {
 				for (Biome biome : selectedBiomes)
-					if (additive && !biomeList.contains(biome)) {
-						biomeList.add(biome);
-					}
-					else if (!additive && biomeList.contains(biome)) {
-						biomeList.remove(biome);
+					if(!biomeList.contains(biome)) {
+						if (additive) {
+							biomeList.add(biome);
+						}
+						else {
+							biomeList.remove(biome);
+						}
 					}
 			}
 		}
 
 		return biomeList;
-	}
-
-	public static List<DimensionType> getDimensions(List<String> dimensionIds) {
-		List<DimensionType> dimensions = new ArrayList<>();
-		IForgeRegistry<DimensionType> dimensionTypeRegistry = GameRegistry.findRegistry(DimensionType.class);
-		if(dimensionTypeRegistry == null) {
-			LycanitesMobs.logError("Unable to get the Dimension Type registry!");
-			return dimensions;
-		}
-		for(String dimensionId : dimensionIds) {
-			DimensionType dimension = dimensionTypeRegistry.getValue(new ResourceLocation(dimensionId));
-			if(dimension != null) {
-				dimensions.add(dimension);
-			}
-			else
-				LycanitesMobs.logWarning("", "Unknown dimension: " + dimensionId);
-		}
-		return dimensions;
 	}
 
 	public static List<Biome> getBiomes(List<String> biomeIds) {
@@ -275,8 +250,6 @@ public class JSONHelper {
 				BiomeDictionary.Type.SPOOKY,
 				BiomeDictionary.Type.DEAD,
 				BiomeDictionary.Type.LUSH,
-				BiomeDictionary.Type.NETHER,
-				BiomeDictionary.Type.END,
 				BiomeDictionary.Type.MUSHROOM,
 				BiomeDictionary.Type.MAGICAL,
 				BiomeDictionary.Type.RARE,
@@ -293,7 +266,11 @@ public class JSONHelper {
 				BiomeDictionary.Type.SNOWY,
 				BiomeDictionary.Type.WASTELAND,
 				BiomeDictionary.Type.BEACH,
-				BiomeDictionary.Type.VOID
+				BiomeDictionary.Type.VOID,
+				BiomeDictionary.Type.MODIFIED,
+				BiomeDictionary.Type.OVERWORLD,
+				BiomeDictionary.Type.NETHER,
+				BiomeDictionary.Type.END
 		};
 	}
 }
