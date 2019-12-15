@@ -1,10 +1,12 @@
 package com.lycanitesmobs.client.model.template;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelTemplateDragon extends ModelObj {
+    public boolean foldWings = true;
 
     // ==================================================
     //                 Animate Part
@@ -35,7 +37,7 @@ public class ModelTemplateDragon extends ModelObj {
         }
         if(partName.equals("tail") || partName.equals("tail01") || partName.equals("tail02")) {
             rotX += (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.25F);
-            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.05F + 0.25F);
+            rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.05F);
         }
 
         // Walking:
@@ -62,42 +64,44 @@ public class ModelTemplateDragon extends ModelObj {
                 rotZ += 25;
             }
 
-            if(partName.equals("wingleft01")) {
-                rotX += Math.toDegrees(walkIdle * 0.1F);
-                rotZ -= Math.toDegrees(walkIdle * 0.1F);
-                rotZ += 80;
-            }
-            if(partName.equals("wingright01")) {
-                rotX += Math.toDegrees(walkIdle * 0.1F);
-                rotZ -= Math.toDegrees(walkIdleRev * 0.1F);
-                rotZ -= 80;
-            }
-            if(partName.equals("wingleft02")) {
-                rotZ += Math.toDegrees(walkIdle * 0.1F);
-                rotZ -= 170;
-                rotX -= 10;
-            }
-            if(partName.equals("wingright02")) {
-                rotZ -= Math.toDegrees(walkIdle * 0.1F);
-                rotZ += 170;
-                rotX -= 10;
-            }
+            if(this.foldWings) {
+                if(partName.equals("wingleft01")) {
+                    rotX += Math.toDegrees(walkIdle * 0.1F);
+                    rotZ -= Math.toDegrees(walkIdle * 0.1F);
+                    rotZ += 80;
+                }
+                if(partName.equals("wingright01")) {
+                    rotX += Math.toDegrees(walkIdle * 0.1F);
+                    rotZ -= Math.toDegrees(walkIdleRev * 0.1F);
+                    rotZ -= 80;
+                }
+                if(partName.equals("wingleft02")) {
+                    rotZ += Math.toDegrees(walkIdle * 0.1F);
+                    rotZ -= 170;
+                    rotX -= 10;
+                }
+                if(partName.equals("wingright02")) {
+                    rotZ -= Math.toDegrees(walkIdle * 0.1F);
+                    rotZ += 170;
+                    rotX -= 10;
+                }
 
-            if(partName.equals("wingleftupper")) {
-                rotX += 20F + Math.toDegrees(walkIdle * 0.1F);
-                rotY += 60F;
-                rotZ -= Math.toDegrees(walkIdle * 0.1F);
-            }
-            if(partName.equals("wingrightupper")) {
-                rotX += 20F + Math.toDegrees(walkIdle * 0.1F);
-                rotY -= 60F;
-                rotZ -= Math.toDegrees(walkIdleRev * 0.1F);
-            }
-            if(partName.equals("wingleftlower")) {
-                rotZ += Math.toDegrees((walkIdle * 0.1F) - 0.1F) - 35F;
-            }
-            if(partName.equals("wingrightlower")) {
-                rotZ -= Math.toDegrees((walkIdle * 0.1F) - 0.1F) - 35F;
+                if (partName.equals("wingleftupper")) {
+                    rotX += 20F + Math.toDegrees(walkIdle * 0.1F);
+                    rotY += 60F;
+                    rotZ -= Math.toDegrees(walkIdle * 0.1F);
+                }
+                if (partName.equals("wingrightupper")) {
+                    rotX += 20F + Math.toDegrees(walkIdle * 0.1F);
+                    rotY -= 60F;
+                    rotZ -= Math.toDegrees(walkIdleRev * 0.1F);
+                }
+                if (partName.equals("wingleftlower")) {
+                    rotZ += Math.toDegrees((walkIdle * 0.1F) - 0.1F) - 35F;
+                }
+                if (partName.equals("wingrightlower")) {
+                    rotZ -= Math.toDegrees((walkIdle * 0.1F) - 0.1F) - 35F;
+                }
             }
         }
 
@@ -114,31 +118,6 @@ public class ModelTemplateDragon extends ModelObj {
                 rotX -= Math.toDegrees(flightLoop * 0.15F);
             }
 
-            if(partName.equals("wingleft")) {
-                rotX -= Math.toDegrees(flightLoop * 0.6F);
-                rotZ -= Math.toDegrees(flightLoop * 0.6F);
-            }
-            if(partName.equals("wingright")) {
-                rotX -= Math.toDegrees(flightLoop * 0.6F);
-                rotZ -= Math.toDegrees(flightLoopRev * 0.6F);
-            }
-
-            if(partName.equals("wingleft01") || partName.equals("armleft01") || partName.equals("wingleftupper")) {
-                rotX -= Math.toDegrees(flightLoop * 0.3F);
-                rotZ -= Math.toDegrees(flightLoop * 0.3F);
-            }
-            if(partName.equals("wingright01") || partName.equals("armright01") || partName.equals("wingrightupper")) {
-                rotX -= Math.toDegrees(flightLoop * 0.3F);
-                rotZ -= Math.toDegrees(flightLoopRev * 0.3F);
-            }
-
-            if(partName.equals("wingleft02") || partName.equals("armleft02")) {
-                rotZ -= Math.toDegrees(flightLoop * 0.3F);
-            }
-            if(partName.equals("wingright02") || partName.equals("armright02")) {
-                rotZ -= Math.toDegrees(flightLoopRev * 0.3F);
-            }
-
             if(partName.equals("legleftfront") || partName.equals("legrightfront")) {
                 rotX += 25;
                 rotX += Math.toDegrees(flightLoop * 0.1F);
@@ -146,6 +125,33 @@ public class ModelTemplateDragon extends ModelObj {
             if(partName.equals("legleftback") || partName.equals("legrightback")) {
                 rotX += 25;
                 rotX -= Math.toDegrees(flightLoop * 0.1F);
+            }
+
+            if(this.foldWings) {
+                if (partName.equals("wingleft")) {
+                    rotX -= Math.toDegrees(flightLoop * 0.6F);
+                    rotZ -= Math.toDegrees(flightLoop * 0.6F);
+                }
+                if (partName.equals("wingright")) {
+                    rotX -= Math.toDegrees(flightLoop * 0.6F);
+                    rotZ -= Math.toDegrees(flightLoopRev * 0.6F);
+                }
+
+                if (partName.equals("wingleft01") || partName.equals("armleft01") || partName.equals("wingleftupper")) {
+                    rotX -= Math.toDegrees(flightLoop * 0.3F);
+                    rotZ -= Math.toDegrees(flightLoop * 0.3F);
+                }
+                if (partName.equals("wingright01") || partName.equals("armright01") || partName.equals("wingrightupper")) {
+                    rotX -= Math.toDegrees(flightLoop * 0.3F);
+                    rotZ -= Math.toDegrees(flightLoopRev * 0.3F);
+                }
+
+                if (partName.equals("wingleft02") || partName.equals("armleft02")) {
+                    rotZ -= Math.toDegrees(flightLoop * 0.3F);
+                }
+                if (partName.equals("wingright02") || partName.equals("armright02")) {
+                    rotZ -= Math.toDegrees(flightLoopRev * 0.3F);
+                }
             }
         }
 

@@ -1128,7 +1128,7 @@ entity.lycanitesmobs.uvaraptor.combat=Uvaraptors leap into the air and attack th
 entity.lycanitesmobs.vapula.name=Vapula
 entity.lycanitesmobs.vapula.description=Powerful Gravity Elementals that embody the essence of structure itself. Geonach and Aegis Elementals can fuse to create powerful Vapula.
 entity.lycanitesmobs.vapula.habitat=Being Gravity Elementals, Vapula manifest from sources of compression and structure where they are often mount amongst gemstones like diamonds.
-entity.lycanitesmobs.vapula.combat=Vapula fire a rounf of sharp crystal projectiles from their back rapidly, once the round is fired they must recharge making them vulnerable. pickaxes and similar tools are very effective.
+entity.lycanitesmobs.vapula.combat=Vapula fire a round of sharp crystal projectiles from their back rapidly, once the round is fired they must recharge making them vulnerable. pickaxes and similar tools are very effective.
 # ========================================================================
 entity.lycanitesmobs.ventoraptor.name=Ventoraptor
 entity.lycanitesmobs.ventoraptor.description=Swift raptors that glide at incredible speeds. Can be tamed as one of the fastest known mounts.
@@ -1201,9 +1201,9 @@ entity.lycanitesmobs.zephyr.habitat=Being Electric Elementals, Zephyr manifest f
 entity.lycanitesmobs.zephyr.combat=Zephyrs will shock any foe close to them and direct attacks from them cause paralysis.
 # ========================================================================
 entity.lycanitesmobs.zoataur.name=Zoataur
-entity.lycanitesmobs.zoataur.description=Large reptilian beasts with thick scales.
-entity.lycanitesmobs.zoataur.habitat=These beasts can be found roaming the plains.
-entity.lycanitesmobs.zoataur.combat=Zoataur are slow but hit hard, they will also sometime curl into a defensive pose where they can block most damage, they can't move or attack when doing this however.
+entity.lycanitesmobs.zoataur.description=Zoataur are incredibly resilient drakes, while they are too bulky to be able to fly, their wings are incredibly dense and are used to block enemy attacks.
+entity.lycanitesmobs.zoataur.habitat=These beasts can be found roaming open plains and deserts.
+entity.lycanitesmobs.zoataur.combat=Zoataur are slow but hit hard, they will also block with their wings so it is best to hit them with slow heavy attacks when they are exposed. They can't attack when blocking.
 # ========================================================================
 creaturetype.spawn=Spawn
 creaturetype.beast.name=Beast
