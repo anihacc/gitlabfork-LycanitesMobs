@@ -1,7 +1,7 @@
 bl_info = {
     "name":         "Export Lycanites Mobs",
     "author":       "Lycanite (Richard Nicholson)",
-    "blender":      (2,7,8),
+    "blender":      (2,8,0),
     "version":      (0,0,1),
     "location":     "File > Export > Lycanites Mobs (.txt)",
     "description":  "Exports object data into an animation parts json file for loading into the Lycanites Mobs mod for Minecraft.",
@@ -9,13 +9,21 @@ bl_info = {
 }
 
 import bpy
+from bpy_extras.io_utils import ExportHelper
 from bpy.props import *
 
-class ExportLycanitesMobs(bpy.types.Operator):
+class ExportLycanitesMobs(bpy.types.Operator, ExportHelper):
   bl_idname = "export.lycanitesmobs"
   bl_label = 'Export Lycanites Mobs'
   
-  filepath = StringProperty(name="File Path", description="Filepath for exporting", maxlen= 1024, default="")
+  # ExportHelper Mixin:
+  filename_ext = "_parts.json"
+  filter_glob : StringProperty(
+            default="*_parts.json",
+            options={'HIDDEN'},
+  )
+  
+  filepath = StringProperty(name="File Path", description="Filepath for exporting", maxlen= 2048, default="")
   
   def execute(self, context):
     out = open(self.properties.filepath, "w")
@@ -50,18 +58,17 @@ class ExportLycanitesMobs(bpy.types.Operator):
     return {'RUNNING_MODAL'}
 
 
-
-
 def menu_func(self, context):
   self.layout.operator(ExportLycanitesMobs.bl_idname, text="Lycanites Mobs", icon='EXPORT')
-  
+
+#register, unregister = bpy.utils.register_classes_factory((ExportLycanitesMobs))  
 def register():
   bpy.utils.register_class(ExportLycanitesMobs)
-  bpy.types.INFO_MT_file_export.append(menu_func)
+  bpy.types.TOPBAR_MT_file_export.append(menu_func)
 
 def unregister():
   bpy.utils.unregister_class(ExportLycanitesMobs)
-  bpy.types.INFO_MT_file_export.remove(menu_func)
+  bpy.types.TOPBAR_MT_file_export.remove(menu_func)
 
 def eulerToDegree(euler):
   pi = 22.0/7.0
