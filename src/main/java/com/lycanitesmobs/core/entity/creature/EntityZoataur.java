@@ -1,15 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityZoataur extends TameableCreatureEntity implements IMob {
+import java.util.ArrayList;
+import java.util.List;
+
+public class EntityZoataur extends RideableCreatureEntity implements IMob {
     
     // ==================================================
  	//                    Constructor
@@ -62,7 +67,7 @@ public class EntityZoataur extends TameableCreatureEntity implements IMob {
     /** Called when this mob has received damage. Here a random blocking chance is applied. **/
     @Override
     public void onDamage(DamageSource damageSrc, float damage) {
-    	if(this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
+    	if(!this.hasRiderTarget() && this.getRNG().nextDouble() > 0.75D && this.getHealth() / this.getMaxHealth() > 0.25F)
     		this.setBlocking();
         super.onDamage(damageSrc, damage);
     }
@@ -87,10 +92,45 @@ public class EntityZoataur extends TameableCreatureEntity implements IMob {
     public float getFallResistance() {
     	return 100;
     }
+
+    @Override
+    public boolean isInvulnerableTo(String type, DamageSource source, float damage) {
+        if(type.equals("cactus")) return false;
+        return super.isInvulnerableTo(type, source, damage);
+    }
     
     
     // ==================================================
     //                     Pet Control
     // ==================================================
     public boolean petControlsEnabled() { return true; }
+
+
+    // ==================================================
+    //                   Mount Ability
+    // ==================================================
+    @Override
+    public void mountAbility(Entity rider) {
+        if(this.getEntityWorld().isRemote)
+            return;
+
+        this.currentBlockingTime = 10;
+
+        if(this.getStamina() < this.getStaminaCost())
+            return;
+
+        this.applyStaminaCost();
+    }
+
+    public float getStaminaCost() {
+        return 0.5F;
+    }
+
+    public int getStaminaRecoveryWarmup() {
+        return 2 * 20;
+    }
+
+    public float getStaminaRecoveryMax() {
+        return 1.0F;
+    }
 }

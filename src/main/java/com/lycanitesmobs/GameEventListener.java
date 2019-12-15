@@ -235,6 +235,14 @@ public class GameEventListener {
 		// ========== Mounted Protection ==========
 		if(damagedEntity.getRidingEntity() != null) {
 			if(damagedEntity.getRidingEntity() instanceof RideableCreatureEntity) {
+				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getRidingEntity();
+
+				// Shielding:
+				if(creatureRideable.isBlocking()) {
+					event.setAmount(0);
+					event.setCanceled(true);
+					return;
+				}
 
 				// Prevent Mounted Entities from Suffocating:
 				if("inWall".equals(event.getSource().damageType)) {
@@ -244,7 +252,6 @@ public class GameEventListener {
 				}
 
 				// Copy Mount Immunities to Rider:
-				RideableCreatureEntity creatureRideable = (RideableCreatureEntity)event.getEntityLiving().getRidingEntity();
 				if(!creatureRideable.isInvulnerableTo(event.getSource().damageType, event.getSource(), event.getAmount())) {
 					event.setAmount(0);
 					event.setCanceled(true);
