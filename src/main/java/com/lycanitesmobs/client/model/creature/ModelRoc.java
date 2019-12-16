@@ -1,8 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelObj;
-import com.lycanitesmobs.client.model.template.ModelTemplateDragon;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -10,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelRoc extends ModelObj {
+public class ModelRoc extends ModelCreatureObj {
 
 	// ==================================================
 	//                    Constructors

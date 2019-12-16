@@ -2,12 +2,12 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelGorger extends ModelObj {
+public class ModelGorger extends ModelCreatureObj {
 
     // ==================================================
     //                    Constructors

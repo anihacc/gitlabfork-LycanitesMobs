@@ -853,7 +853,12 @@ entity.lycanitesmobs.frostweaver.combat=Frostweavers spit an icy web that causes
 entity.lycanitesmobs.geist.name=Geist
 entity.lycanitesmobs.geist.description=Geists are opportunistic undead that deform and climb into other undead lifeforms or corpses and feed off whatever their host is capable of killing. When their host dies, Geists leap out and reform for a surprise attack!
 entity.lycanitesmobs.geist.habitat=Geists usually come from other undead creatures but can also be found lurking in Dark Forests and the End.
-entity.lycanitesmobs.geist.combat=Geists have a simple melee attack but on death release shadow fire, while this doesn;t burn, it does cause damage and blindness.
+entity.lycanitesmobs.geist.combat=Geists have a simple melee attack but on death release shadow fire, while this doesn't burn, it does cause damage and blindness.
+# ========================================================================
+entity.lycanitesmobs.amalgalich.name=Amalgalich
+entity.lycanitesmobs.amalgalich.description=A powerful lich that has engulfed so many souls to power it's colossal form that it has lost it's identity and succumbed to madness. This ravaging monstrosity must be put down!
+entity.lycanitesmobs.amalgalich.habitat=The Amalgalich is not natural and has no habitat data.
+entity.lycanitesmobs.amalgalich.combat=When it's eyes light, run or you will be consumed.
 # ========================================================================
 entity.lycanitesmobs.geken.name=Geken
 entity.lycanitesmobs.geken.description=Venomous reptiles with excellent jumping abilities.

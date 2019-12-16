@@ -1,10 +1,10 @@
 package com.lycanitesmobs.client.model.template;
 
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTemplateAquatic extends ModelObj {
+public class ModelTemplateAquatic extends ModelCreatureObj {
 
     // ==================================================
     //                 Animate Part

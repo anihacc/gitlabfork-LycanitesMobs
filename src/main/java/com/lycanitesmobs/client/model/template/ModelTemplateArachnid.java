@@ -1,11 +1,11 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTemplateArachnid extends ModelObj {
+public class ModelTemplateArachnid extends ModelCreatureObj {
 
     // ==================================================
     //                 Animate Part

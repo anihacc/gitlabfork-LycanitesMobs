@@ -1,11 +1,11 @@
 package com.lycanitesmobs.client.model.template;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTemplateInsect extends ModelObj {
+public class ModelTemplateInsect extends ModelCreatureObj {
     public double mouthScaleX = 0F;
     public double mouthScaleY = 1.0F;
 

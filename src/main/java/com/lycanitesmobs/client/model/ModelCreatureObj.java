@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public class ModelObj extends ModelCustom implements IAnimationModel {
+public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -93,11 +93,11 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelObj() {
+    public ModelCreatureObj() {
         this(1.0F);
     }
 
-    public ModelObj(float shadowSize) {
+    public ModelCreatureObj(float shadowSize) {
     	// Here a model should get its model, collect its parts into a list and then create ModelObjPart objects for each part.
     }
 
@@ -105,7 +105,7 @@ public class ModelObj extends ModelCustom implements IAnimationModel {
     // ==================================================
     //                    Init Model
     // ==================================================
-    public ModelObj initModel(String name, ModInfo groupInfo, String path) {
+    public ModelCreatureObj initModel(String name, ModInfo groupInfo, String path) {
     	// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {

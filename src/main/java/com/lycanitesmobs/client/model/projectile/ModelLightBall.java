@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 import com.lycanitesmobs.client.renderer.layer.LayerEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class ModelLightBall extends ModelObj {
+public class ModelLightBall extends ModelCreatureObj {
 	LayerEffect ballGlowLayer;
 
 	// ==================================================

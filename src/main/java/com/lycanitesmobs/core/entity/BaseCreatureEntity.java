@@ -250,6 +250,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	private UUID fixateUUID = null;
 	/** The entity that this mob is perching on. **/
 	private EntityLivingBase perchTarget;
+	/** A list of multiple player targets, used by boss goals. **/
+	public List<EntityPlayer> playerTargets = new ArrayList<>();
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
@@ -2898,8 +2900,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 		Vec3d facing = this.getFacingPositionDouble(this.posX, this.posY, this.posZ, range, angle);
 		double distanceX = facing.x - this.posX;
-		double distanceY = 0;
 		double distanceZ = facing.z - this.posZ;
+		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.D;
+		double distanceY = distanceXZ;
 		if(target != null) {
 			double targetX = target.posX - this.posX;
 			double targetZ = target.posZ - this.posZ;
@@ -2913,7 +2916,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			distanceZ = targetZ - this.posZ;
 		}
 
-		float distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1F;
+		projectile.weight = 0;
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
 		this.getEntityWorld().spawnEntity(projectile);
 

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelObj;
+import com.lycanitesmobs.client.model.ModelCreatureObj;
 import com.lycanitesmobs.client.renderer.layer.LayerBase;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class ModelChaosOrb extends ModelObj {
+public class ModelChaosOrb extends ModelCreatureObj {
 
 	// ==================================================
   	//                    Constructors
