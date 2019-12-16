@@ -90,6 +90,7 @@ public class EntityLightBall extends ModelProjectileEntity {
 	public void onEntityCollision(Entity entity) {
 		if(entity instanceof EntityWisp) {
 			((EntityWisp)entity).resetAttackCooldown();
+			this.remove();
 		}
 	}
 

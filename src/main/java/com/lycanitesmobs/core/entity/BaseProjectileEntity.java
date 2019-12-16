@@ -126,7 +126,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	
     
     // ==================================================
- 	//				  Update
+ 	//				        Update
  	// ==================================================
     @Override
     public void tick() {
