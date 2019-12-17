@@ -1511,6 +1511,9 @@ item.frostwebcharge.description=Use to throw a frosty web. Can also be fired fro
 item.chaosorbcharge.name=Chaos Orb Charge
 item.chaosorbcharge.description=Use to unleash an orb of chaos. Can also be fired from a dispenser.
 #
+item.lobdarklingscharge.name=Lob Darklings Charge
+item.lobdarklingscharge.description=Use to lob a shadowy ball of vicious Darklings! Can also be fired from a dispenser.
+#
 item.icefirecharge.name=Icefire Charge
 item.icefirecharge.description=Use to launch a ball of icefire. Can also be fired from a dispenser.
 #

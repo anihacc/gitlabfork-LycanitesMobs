@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderProjectile extends Render {
+public class RenderProjectileSprite extends Render {
     private float scale;
     private int renderTime = 0;
     Class projectileClass;
@@ -30,7 +30,7 @@ public class RenderProjectile extends Render {
     // ==================================================
     //                     Constructor
     // ==================================================
-    public RenderProjectile(RenderManager renderManager, Class projectileClass) {
+    public RenderProjectileSprite(RenderManager renderManager, Class projectileClass) {
     	super(renderManager);
         this.projectileClass = projectileClass;
     }

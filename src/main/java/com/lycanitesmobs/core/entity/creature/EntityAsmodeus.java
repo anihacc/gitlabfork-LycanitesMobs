@@ -487,13 +487,14 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     // ========== Minion Death ==========
     @Override
-    public void onMinionDeath(EntityLivingBase minion) {
+    public void onMinionDeath(EntityLivingBase minion, DamageSource damageSource) {
         if(minion instanceof EntityAstaroth && this.astarothMinions.contains(minion)) {
             this.astarothMinions.remove(minion);
         }
         if(minion instanceof EntityCacodemon && this.cacodemonMinions.contains(minion)) {
             this.cacodemonMinions.remove(minion);
         }
+        super.onMinionDeath(minion, damageSource);
     }
     
     

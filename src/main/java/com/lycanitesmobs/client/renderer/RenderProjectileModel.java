@@ -1,8 +1,12 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.client.model.ModelCustom;
+import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -10,10 +14,12 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
 
 @SideOnly(Side.CLIENT)
 public class RenderProjectileModel extends Render {
@@ -22,9 +28,13 @@ public class RenderProjectileModel extends Render {
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public RenderProjectileModel(String entityID, RenderManager renderManager) {
+	public RenderProjectileModel(RenderManager renderManager) {
+		super(renderManager);
+	}
+
+    public RenderProjectileModel(RenderManager renderManager, String projectileName) {
     	super(renderManager);
-    	this.mainModel = AssetManager.getModel(entityID);
+    	this.mainModel = AssetManager.getModel(projectileName);
         if(this.mainModel instanceof ModelCustom) {
             //ModelCustom modelCustom = (ModelCustom)this.mainModel;
             //modelCustom.addCustomLayers(this);
@@ -36,22 +46,37 @@ public class RenderProjectileModel extends Render {
 	//                    Do Render
 	// ==================================================
 	public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if(this.mainModel == null) {
+			if(entity instanceof EntityProjectileCustom) {
+				ProjectileInfo projectileInfo = ((EntityProjectileCustom)entity).projectileInfo;
+				if(projectileInfo == null) {
+					return;
+				}
+				try {
+					this.mainModel = projectileInfo.modelClass.getConstructor().newInstance();
+				} catch (Exception e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+			else {
+				return;
+			}
+		}
+
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
-		boolean shouldSit = entity.isRiding() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
-		this.mainModel.isRiding = shouldSit;
 
 		try {
 			GlStateManager.enableAlpha();
-			if (!this.bindEntityTexture(entity)) {
-				return;
+			if (this.bindEntityTexture(entity)) {
+				GlStateManager.translate((float) x, (float) y - 0.25F, (float) z);
+				GlStateManager.scale(0.5F, 0.5F, 0.5F);
+				GlStateManager.rotate(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+				this.mainModel.render(entity, 0, 0, partialTicks, 0, 0, 1);
+				GlStateManager.depthMask(true);
+				GlStateManager.disableRescaleNormal();
 			}
-			GlStateManager.translate((float)x, (float)y - 0.25F, (float)z);
-			GlStateManager.scale(0.5F, 0.5F, 0.5F);
-			GlStateManager.rotate(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
-			this.mainModel.render(entity, 0, 0, partialTicks, 0, 0, 1);
-			GlStateManager.depthMask(true);
-			GlStateManager.disableRescaleNormal();
 		}
 		catch (Exception exception)
 		{

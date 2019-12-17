@@ -53,7 +53,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
         super.onLivingUpdate();
         
         // Sunlight Explosions:
-        if(!this.getEntityWorld().isRemote && !this.isTamed()) {
+        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion()) {
         	if(!this.isFlying() && (this.onGround || this.isInWater()) && this.isEntityAlive()) {
         		int explosionRadius = 2;
 				if(this.subspecies != null)
@@ -110,7 +110,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
    	// ==================================================
     /** Returns true if this mob should be damaged by the sun. **/
     @Override
-    public boolean daylightBurns() { return true; }
+    public boolean daylightBurns() { return !this.isMinion(); }
     
     @Override
     public float getFallResistance() { return 100; }

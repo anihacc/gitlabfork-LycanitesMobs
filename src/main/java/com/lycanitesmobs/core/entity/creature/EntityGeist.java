@@ -1,6 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
@@ -100,9 +101,15 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     @Override
     public void onDeath(DamageSource damageSource) {
         try {
-            if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.shadowfireDeath) {
-                int shadowfireWidth = (int)Math.floor(this.width) + 1;
-                int shadowfireHeight = (int)Math.floor(this.height) + 1;
+            int shadowfireWidth = (int)Math.floor(this.width) + 1;
+            int shadowfireHeight = (int)Math.floor(this.height) + 1;
+            boolean permanent = false;
+            if(damageSource.getTrueSource() == this) {
+                permanent = true;
+                shadowfireWidth *= 5;
+            }
+
+            if(!this.getEntityWorld().isRemote && (permanent || (this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.shadowfireDeath))) {
                 for(int x = (int)this.posX - shadowfireWidth; x <= (int)this.posX + shadowfireWidth; x++) {
                     for(int y = (int)this.posY - shadowfireHeight; y <= (int)this.posY + shadowfireHeight; y++) {
                         for(int z = (int)this.posZ - shadowfireWidth; z <= (int)this.posZ + shadowfireWidth; z++) {
@@ -111,7 +118,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
                                 BlockPos placePos = new BlockPos(x, y + 1, z);
                                 Block upperBlock = this.getEntityWorld().getBlockState(placePos).getBlock();
                                 if(upperBlock == Blocks.AIR) {
-                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState(), 3);
+                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().withProperty(BlockFireBase.PERMANENT, permanent), 3);
                                 }
                             }
                         }

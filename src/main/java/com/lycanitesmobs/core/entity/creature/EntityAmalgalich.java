@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
@@ -7,6 +8,7 @@ import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -58,7 +60,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.consumptionDuration = 15 * 20;
         this.consumptionWindUp = 3 * 20;
         this.consumptionAnimationTime = 0;
-        int consumptionCooldown = 10 * 20;
+        int consumptionCooldown = 20 * 20;
 
         // All Phases:
         this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
@@ -76,30 +78,23 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
         // Phase 2:
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("geist").setSummonRate(20 * 5).setSummonCap(5).setPhase(1).setPerPlayer(true));
-        // Detonate Geists
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("epion").setSummonRate(20 * 5).setSummonCap(3).setPhase(1).setPerPlayer(true));
 
         // Phase 3:
-        // Shadow Meteors
         this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(2);
-        this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP2); // TODO Feared Only
+        this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP2);
+        this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(2));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("lobdarklings").setFireRate(10 * 20).setVelocity(0.8F).setScale(2F).setRandomCount(3).setAngle(360).setPhase(2));
 
         super.initEntityAI();
     }
 
-    // ========== Rendering Distance ==========
     /** Returns a larger bounding box for rendering this large entity. **/
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getEntityBoundingBox().grow(200, 50, 200).offset(0, -25, 0);
     }
 
-    // ========== Persistence ==========
-    @Override
-    public boolean isPersistant() {
-        return super.isPersistant(); //TODO Remove!
-    }
-
-    // ========== First Spawn ==========
     @Override
     public void onFirstSpawn() {
         super.onFirstSpawn();
@@ -215,8 +210,38 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
    	//                      Minions
    	// ==================================================
     @Override
-    public void onMinionDeath(EntityLivingBase minion) {
-        super.onMinionDeath(minion);
+    public boolean addMinion(EntityLivingBase minion) {
+        boolean minionAdded = super.addMinion(minion);
+        if(minionAdded && minion instanceof EntityGeist) {
+            BaseCreatureEntity minionCreature = (BaseCreatureEntity)minion;
+            minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new GrowGoal(minionCreature).setGrowthAmount(0.1F).setTickRate(20));
+            minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new SuicideGoal(minionCreature).setCountdown(20 * 20));
+        }
+        return minionAdded;
+    }
+
+    @Override
+    public void onMinionDeath(EntityLivingBase minion, DamageSource damageSource) {
+        super.onMinionDeath(minion, damageSource);
+
+        // Shadowfire Clearing:
+        if(minion instanceof EntityEpion) {
+            int extinguishWidth = 10;
+            int extinguishHeight = 30;
+            if(!this.getEntityWorld().isRemote) {
+                for(int x = (int)minion.posX - extinguishWidth; x <= (int)minion.posX + extinguishWidth; x++) {
+                    for(int y = (int)minion.posY - extinguishHeight; y <= (int)minion.posY + 2; y++) {
+                        for(int z = (int)minion.posZ - extinguishWidth; z <= (int)minion.posZ + extinguishWidth; z++) {
+                            Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+                            if(block == ObjectManager.getBlock("shadowfire")) {
+                                BlockPos placePos = new BlockPos(x, y, z);
+                                this.getEntityWorld().setBlockToAir(placePos);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -224,7 +249,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         super.onTryToDamageMinion(minion, damageAmount);
         if(damageAmount >= 1000) {
             minion.setDead();
-            this.heal(50);
+            this.heal(25);
         }
     }
     

@@ -148,6 +148,12 @@
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1
+		},
+		{
+			"item": "lycanitesmobs:lobdarklingscharge",
+			"minAmount": 10,
+			"maxAmount": 20,
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

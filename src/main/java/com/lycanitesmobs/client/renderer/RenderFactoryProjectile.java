@@ -11,8 +11,10 @@ public class RenderFactoryProjectile<T extends Entity> implements IRenderFactory
     protected Class oldProjectileClass;
     protected boolean oldModel;
 
-	public RenderFactoryProjectile() {
+    protected boolean hasModel;
 
+	public RenderFactoryProjectile(boolean hasModel) {
+		this.hasModel = hasModel;
 	}
 
 	public RenderFactoryProjectile(String projectileName, Class projectileClass, boolean hasModel) {
@@ -23,19 +25,29 @@ public class RenderFactoryProjectile<T extends Entity> implements IRenderFactory
 
     @Override
     public Render createRenderFor(RenderManager manager) {
-
-		// New JSON Projectiles
-		if(this.oldProjectileClass == null) {
-			return new RenderProjectile(manager, EntityProjectileCustom.class);
+		// Old Projectile Obj Models:
+		if(this.oldModel) {
+			try {
+				return new RenderProjectileModel(manager, this.oldProjectileName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
-		// Old Projectile Obj Models:
-        if(this.oldModel) {
-            return new RenderProjectileModel(this.oldProjectileName, manager);
-        }
+		// Old Projectile Item Sprite Models:
+		if(this.oldProjectileClass != null) {
+			return new RenderProjectileSprite(manager, this.oldProjectileClass);
+		}
 
-        // Old Projectile Item Sprite Models:
-        return new RenderProjectile(manager, this.oldProjectileClass);
+		// New JSON Projectile:
+		if(this.hasModel) {
+			try {
+				return new RenderProjectileModel(manager);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return new RenderProjectileSprite(manager, EntityProjectileCustom.class);
     }
 
 }

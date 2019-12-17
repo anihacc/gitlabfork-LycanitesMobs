@@ -1,21 +1,20 @@
-package com.lycanitesmobs.core.item.equipment.features;
+package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class SummonEquipmentFeature extends EquipmentFeature {
+public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 	/** The id of the mob to summon. **/
 	public String summonMobId;
 
@@ -34,11 +33,8 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	/** The size scale of summoned mobs. **/
 	public double sizeScale = 1;
 
-
 	@Override
 	public void loadFromJSON(JsonObject json) {
-		super.loadFromJSON(json);
-
 		this.summonMobId = json.get("summonMobId").getAsString();
 
 		if(json.has("summonChance"))
@@ -58,42 +54,18 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 	}
 
 	@Override
-	public String getDescription(ItemStack itemStack, int level) {
-		if(!this.isActive(itemStack, level)) {
-			return null;
-		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
-		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + "%";
-		if(this.summonDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
-		}
-		if(this.summonCountMin != this.summonCountMax) {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMin + " - " + this.summonCountMax;
-		}
-		else {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMax;
-		}
-		return description;
-	}
-
-	/**
-	 * Called when an entity is hit by equipment with this feature.
-	 * @param itemStack The ItemStack being hit with.
-	 * @param target The target entity being hit.
-	 * @param attacker The entity using this item to hit.
-	 */
-	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote) {
+	public void onProjectileImpact(EntityProjectileBase projectile, World world, BlockPos pos) {
+		if(projectile == null || projectile.getEntityWorld().isRemote) {
 			return;
 		}
 
 		// Summon:
 		int summonCount = this.summonCountMin;
 		if(this.summonCountMax > this.summonCountMin) {
-			summonCount = this.summonCountMin + attacker.getRNG().nextInt(this.summonCountMax - this.summonCountMin);
+			summonCount = this.summonCountMin + projectile.getEntityWorld().rand.nextInt(this.summonCountMax - this.summonCountMin);
 		}
 		for(int i = 0; i < summonCount; i++) {
-			if (attacker.getRNG().nextDouble() <= this.summonChance) {
+			if (projectile.getEntityWorld().rand.nextDouble() <= this.summonChance) {
 				try {
 					Class entityClass = null;
 					CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
@@ -107,32 +79,30 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						}
 					}
 					if (entityClass != null) {
-						EntityLiving entity = (EntityLiving) entityClass.getConstructor(World.class).newInstance(new Object[]{attacker.getEntityWorld()});
+						EntityLiving entity = (EntityLiving) entityClass.getConstructor(World.class).newInstance(new Object[]{projectile.getEntityWorld()});
 						if (entity instanceof BaseCreatureEntity) {
 							BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
 							entityCreature.setMinion(true);
 							entityCreature.setTemporary(this.summonDuration * 20);
 							entityCreature.setSizeScale(this.sizeScale);
 
-							if (attacker instanceof EntityPlayer && entityCreature instanceof TameableCreatureEntity) {
+							if (projectile.getThrower() instanceof EntityPlayer && entityCreature instanceof TameableCreatureEntity) {
 								TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
-								entityTameable.setPlayerOwner((EntityPlayer) attacker);
+								entityTameable.setPlayerOwner((EntityPlayer) projectile.getThrower());
 								entityTameable.setSitting(false);
 								entityTameable.setFollowing(true);
 								entityTameable.setPassive(false);
 								entityTameable.setAssist(true);
 								entityTameable.setAggressive(true);
-								entityTameable.setPVP(target instanceof EntityPlayer);
 							}
 
-							float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
-							if (attacker.getRNG().nextBoolean()) {
+							float randomAngle = 45F + (45F * projectile.getEntityWorld().rand.nextFloat());
+							if (projectile.getEntityWorld().rand.nextBoolean()) {
 								randomAngle = -randomAngle;
 							}
-							BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
-							entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
-							attacker.getEntityWorld().spawnEntity(entity);
-							entityCreature.setAttackTarget(target);
+							BlockPos spawnPos = entityCreature.getFacingPosition(projectile, -1, randomAngle);
+							entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), projectile.rotationYaw, 0.0F);
+							projectile.getEntityWorld().spawnEntity(entity);
 						}
 					}
 				} catch (Exception e) {

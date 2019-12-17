@@ -1,13 +1,12 @@
 package com.lycanitesmobs.core.block;
 
 
-import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
+    public static final PropertyBool PERMANENT = PropertyBool.create("premanent");
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -47,7 +47,14 @@ public class BlockFireBase extends BlockBase {
     public BlockFireBase(Material material, ModInfo group, String name) {
         super(material, group, name);
 
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)).withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)).withProperty(UPPER, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState()
+                .withProperty(AGE, 0)
+                .withProperty(PERMANENT, false)
+                .withProperty(NORTH, false)
+                .withProperty(EAST, false)
+                .withProperty(SOUTH, false)
+                .withProperty(WEST, false)
+                .withProperty(UPPER, false));
         this.removeOnTick = false;
         this.removeOnNoFireTick = false;
         this.loopTicks = true;
@@ -93,7 +100,8 @@ public class BlockFireBase extends BlockBase {
                     .withProperty(EAST,  this.canCatchFire(worldIn, pos.east(), EnumFacing.WEST))
                     .withProperty(SOUTH, this.canCatchFire(worldIn, pos.south(), EnumFacing.NORTH))
                     .withProperty(WEST,  this.canCatchFire(worldIn, pos.west(), EnumFacing.EAST))
-                    .withProperty(UPPER, this.canCatchFire(worldIn, pos.up(), EnumFacing.DOWN));
+                    .withProperty(UPPER, this.canCatchFire(worldIn, pos.up(), EnumFacing.DOWN))
+                    .withProperty(PERMANENT, false);
         }
         return this.getDefaultState();
     }
@@ -110,7 +118,7 @@ public class BlockFireBase extends BlockBase {
 
     @Override
     public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {AGE, NORTH, EAST, SOUTH, WEST, UPPER});
+        return new BlockStateContainer(this, AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UPPER);
     }
 
 
@@ -127,6 +135,10 @@ public class BlockFireBase extends BlockBase {
     // ========== Tick Update ==========
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        if(state.getValue(PERMANENT)) {
+            return;
+        }
+
         if (!world.getGameRules().getBoolean("doFireTick")) {
             if(this.removeOnNoFireTick)
                 world.setBlockToAir(pos);
@@ -139,7 +151,7 @@ public class BlockFireBase extends BlockBase {
 
         Block blockBelow = world.getBlockState(pos.down()).getBlock();
         boolean isOnFireSource = this.isBlockFireSource(blockBelow, world, pos.down(), EnumFacing.UP);
-        int age = state.getValue(AGE).intValue();
+        int age = state.getValue(AGE);
 
         // Environmental Extinguish:
         if (!isOnFireSource && this.canDie(world, pos) && rand.nextFloat() < 0.2F + (float)age * 0.03F) {

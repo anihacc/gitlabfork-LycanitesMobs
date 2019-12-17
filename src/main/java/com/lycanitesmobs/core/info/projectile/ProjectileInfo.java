@@ -9,6 +9,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.EntityProjectileModelCustom;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
@@ -278,6 +279,9 @@ public class ProjectileInfo {
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
 	public EntityProjectileBase createProjectile(World world, EntityLivingBase entityLivingBase) {
+		if(this.modelClass != null) {
+			return new EntityProjectileModelCustom(world, entityLivingBase, this);
+		}
 		return new EntityProjectileCustom(world, entityLivingBase, this);
 	}
 

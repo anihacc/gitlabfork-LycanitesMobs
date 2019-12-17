@@ -11,18 +11,19 @@ public class FireProjectilesGoal extends EntityAIBase {
 	BaseCreatureEntity host;
 
     // Properties:
-	private String projectileName;
-	private Class<? extends EntityProjectileBase> projectileClass;
-	float velocity = 1.6F;
-	float inaccuracy = 0F;
-	float scale = 1F;
-	float angle = 0F;
-	Vec3d offset = Vec3d.ZERO;
+	protected String projectileName;
+	protected Class<? extends EntityProjectileBase> projectileClass;
+	protected float velocity = 1.6F;
+	protected float inaccuracy = 0F;
+	protected float scale = 1F;
+	protected float angle = 0F;
+	protected Vec3d offset = Vec3d.ZERO;
 	private int fireRate = 60;
 	private boolean allPlayers = false;
+	private int randomCount = 0;
 	protected int phase = -1;
 
-	private int fireTime = 60;
+	private int abilityTime = 60;
 	private Entity attackTarget;
 
 
@@ -125,12 +126,22 @@ public class FireProjectilesGoal extends EntityAIBase {
 	}
 
 	/**
-	 * Sets anti flight summoning where minions are summoned at any player targets that are flying.
+	 * Sets if projectiles should be fired at all players.
 	 * @param allPlayers True to target all players (requires FindNearbyPlayers goal) otherwise the current attack target is used.
 	 * @return This goal for chaining.
 	 */
 	public FireProjectilesGoal setAllPlayers(boolean allPlayers) {
 		this.allPlayers = allPlayers;
+		return this;
+	}
+
+	/**
+	 * Sets random amount of projectiles to fire everywhere.
+	 * @param randomCount The amount of projectiles to randomly fire, o to disable.
+	 * @return This goal for chaining.
+	 */
+	public FireProjectilesGoal setRandomCount(int randomCount) {
+		this.randomCount = randomCount;
 		return this;
 	}
 
@@ -141,7 +152,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 		}
 
 		this.attackTarget = this.host.getAttackTarget();
-		if(!this.allPlayers && this.attackTarget == null) {
+		if(!this.allPlayers && this.randomCount <= 0 && this.attackTarget == null) {
 			return false;
 		}
 
@@ -150,7 +161,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		this.fireTime = 1;
+		this.abilityTime = 1;
 	}
 
 	@Override
@@ -160,7 +171,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 
 	@Override
     public void updateTask() {
-		if(this.fireTime++ % this.fireRate != 0) {
+		if(this.abilityTime++ % this.fireRate != 0) {
 			return;
 		}
 
@@ -170,6 +181,19 @@ public class FireProjectilesGoal extends EntityAIBase {
 				if(target.capabilities.disableDamage || target.isSpectator())
 					continue;
 				this.fireProjectile(target);
+			}
+			return;
+		}
+
+		// Random Mode:
+		if(this.randomCount > 0) {
+			for(int i = 0; i < this.randomCount; i++) {
+				if(this.projectileName != null) {
+					this.host.fireProjectile(this.projectileName, null, this.host.getRNG().nextFloat() * 10, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+				}
+				if(this.projectileClass != null) {
+					this.host.fireProjectile(this.projectileClass, null, this.host.getRNG().nextFloat() * 10, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
+				}
 			}
 			return;
 		}
