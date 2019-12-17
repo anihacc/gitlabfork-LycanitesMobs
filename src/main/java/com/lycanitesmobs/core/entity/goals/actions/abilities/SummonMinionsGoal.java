@@ -64,18 +64,8 @@ public class SummonMinionsGoal extends Goal {
     }
 
 	@Override
-    public boolean shouldContinueExecuting() {
-        return this.host.isAlive() && this.minionInfo != null;
-    }
-
-	@Override
     public void startExecuting() {
-		this.summonTime = this.summonRate;
-	}
-
-	@Override
-    public void resetTask() {
-		this.summonTime = this.summonRate;
+		this.summonTime = 1;
 	}
 
 	@Override
