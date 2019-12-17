@@ -1,10 +1,9 @@
 package com.lycanitesmobs.core.entity;
 
 import com.google.common.base.Optional;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.ai.EntityAISit;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.core.entity.damagesources.MinionEntityDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.BegGoal;
 import com.lycanitesmobs.core.entity.goals.actions.FollowOwnerGoal;
@@ -35,7 +34,6 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
-import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -53,9 +51,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 
     // Owner:
 	public UUID ownerUUID;
-
-	// AI:
-	public EntityAISit aiSit;
 
     // Datawatcher:
     protected static final DataParameter<Byte> TAMED = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);

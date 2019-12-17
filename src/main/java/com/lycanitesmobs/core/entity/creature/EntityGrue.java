@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;

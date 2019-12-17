@@ -1,9 +1,8 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.ai.EntityAISwimming;
-import com.lycanitesmobs.core.entity.ai.EntityAIWander;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.entity.goals.actions.PaddleGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,10 +32,6 @@ public class FearEntity extends BaseCreatureEntity {
         this.setSize(0.8f, 1.8f);
 
         this.setupMob();
-        
-        // AI Tasks:
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIWander(this).setPauseRate(0));
     }
 
     public FearEntity(World world, Entity feared) {
@@ -135,6 +130,11 @@ public class FearEntity extends BaseCreatureEntity {
 			}
 		}
     }
+
+	@Override
+	public boolean rollWanderChance() {
+		return true;
+	}
     
     
     // ==================================================

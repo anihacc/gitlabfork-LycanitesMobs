@@ -1,12 +1,11 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.ai.EntityAITargetAttack;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.Village;
 
-public class DefendVillageGoal extends EntityAITargetAttack {
+public class DefendVillageGoal extends FindAttackTargetGoal {
 
 	protected Village village;
 

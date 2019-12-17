@@ -5,7 +5,7 @@ import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;

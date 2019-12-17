@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.ai.RandomPositionGenerator;
 import com.lycanitesmobs.core.entity.navigate.CreaturePathNavigate;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;

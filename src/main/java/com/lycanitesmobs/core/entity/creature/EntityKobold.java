@@ -2,8 +2,8 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.GetBlockGoal;
-import com.lycanitesmobs.core.entity.goals.actions.GetItemGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.GetBlockGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.GetItemGoal;
 import com.lycanitesmobs.core.info.ObjectLists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

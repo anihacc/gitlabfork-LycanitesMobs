@@ -9,7 +9,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.*;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
-import com.lycanitesmobs.core.entity.ai.DirectNavigator;
+import com.lycanitesmobs.core.entity.navigate.DirectNavigator;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
 import com.lycanitesmobs.core.entity.navigate.CreatureMoveHelper;

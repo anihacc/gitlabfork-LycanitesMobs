@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.StealthGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;

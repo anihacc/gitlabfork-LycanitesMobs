@@ -1,4 +1,4 @@
-package com.lycanitesmobs.core.entity.goals.actions;
+package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
