@@ -146,6 +146,13 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 		
         super.updateAITasks();
 	}
+
+	@Override
+	public boolean shouldCreatureGroupFlee(LivingEntity target) {
+		if(this.isTamed())
+			return false;
+		return super.shouldCreatureGroupFlee(target);
+	}
     
     
     // ==================================================

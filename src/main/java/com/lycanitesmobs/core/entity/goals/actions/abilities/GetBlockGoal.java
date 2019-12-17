@@ -1,42 +1,45 @@
-package com.lycanitesmobs.core.entity.goals.actions;
+package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
-import com.google.common.base.Predicate;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
+import com.lycanitesmobs.core.info.ObjectLists;
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class GetItemGoal extends Goal {
+public class GetBlockGoal extends Goal {
 	// Targets:
 	private BaseCreatureEntity host;
-	private ItemEntity target;
+	private BlockPos target;
+	private int targetingTime = 0;
+    private TargetSorterNearest targetSorter;
 	
 	// Properties:
-    private Predicate<ItemEntity> targetSelector;
-    private TargetSorterNearest targetSorter;
-    private double distanceMax = 32.0D * 32.0D;
+    private int distanceMax = 8;
     double speed = 1.0D;
     private boolean checkSight = true;
     private int cantSeeTime = 0;
     protected int cantSeeTimeMax = 60;
     private int updateRate = 0;
-    private int recheckTime = 0;
+    public Block targetBlock = Blocks.TORCH;
+    public String targetBlockName = "";
     public boolean tamedLooting = true;
     
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public GetItemGoal(BaseCreatureEntity setHost) {
+    public GetBlockGoal(BaseCreatureEntity setHost) {
         super();
 		this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
         this.host = setHost;
-        this.targetSelector = input -> true;
         this.targetSorter = new TargetSorterNearest(setHost);
     }
     
@@ -44,22 +47,32 @@ public class GetItemGoal extends Goal {
     // ==================================================
   	//                  Set Properties
   	// ==================================================
-    public GetItemGoal setDistanceMax(double setDouble) {
-    	this.distanceMax = setDouble * setDouble;
+    public GetBlockGoal setDistanceMax(int setInt) {
+    	this.distanceMax = setInt;
     	return this;
     }
 
-    public GetItemGoal setSpeed(double setDouble) {
+    public GetBlockGoal setSpeed(double setDouble) {
     	this.speed = setDouble;
     	return this;
     }
     
-    public GetItemGoal setCheckSight(boolean setBool) {
+    public GetBlockGoal setCheckSight(boolean setBool) {
     	this.checkSight = setBool;
     	return this;
     }
     
-    public GetItemGoal setTamedLooting(boolean bool) {
+    public GetBlockGoal setBlock(Block block) {
+    	this.targetBlock = block;
+    	return this;
+    }
+    
+    public GetBlockGoal setBlockName(String name) {
+    	this.targetBlockName = name.toLowerCase();
+    	return this;
+    }
+    
+    public GetBlockGoal setTamedLooting(boolean bool) {
     	this.tamedLooting = bool;
     	return this;
     }
@@ -70,13 +83,11 @@ public class GetItemGoal extends Goal {
   	// ==================================================
 	@Override
     public boolean shouldExecute() {
-    	if(!this.host.canPickupItems())
+    	if(!this.host.canPickupItems() || !this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
-
-    	if(this.recheckTime++ < 40) {
+    	
+    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
     		return false;
-		}
-		this.recheckTime = 0;
 
     	if(!this.tamedLooting) {
     		if(this.host instanceof TameableCreatureEntity)
@@ -84,10 +95,38 @@ public class GetItemGoal extends Goal {
     				return false;
     	}
     	
-        double heightDistance = 4.0D;
-        if(this.host.useDirectNavigator())
-        	heightDistance = this.distanceMax;
-        List<ItemEntity> possibleTargets = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.distanceMax, heightDistance, this.distanceMax), this.targetSelector);
+    	// Search Delay:
+    	if(this.targetingTime-- <= 0) {
+    		this.targetingTime = 60;
+    	}
+    	else {
+    		return false;
+    	}
+    	
+        int heightDistance = 2;
+        List<BlockPos> possibleTargets = new ArrayList<BlockPos>();
+        for(int x = (int)this.host.posX - this.distanceMax; x < (int)this.host.posX + this.distanceMax; x++) {
+        	for(int y = (int)this.host.posY - heightDistance; y < (int)this.host.posY + heightDistance; y++) {
+        		for(int z = (int)this.host.posZ - this.distanceMax; z < (int)this.host.posZ + this.distanceMax; z++) {
+        			Block searchBlock = this.host.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
+                	if(searchBlock != null && searchBlock != Blocks.AIR) {
+                        BlockPos possibleTarget = null;
+                		if(!"".equalsIgnoreCase(this.targetBlockName)) {
+                			if(ObjectLists.isName(searchBlock, this.targetBlockName)) {
+                				possibleTarget = new BlockPos(x, y, z);
+                			}
+                		}
+                		else {
+                			if(searchBlock == this.targetBlock)
+                				possibleTarget = new BlockPos(x + 1, y, z);
+                		}
+                		if(possibleTarget != null) {
+                			possibleTargets.add(possibleTarget);
+                		}
+                	}
+                }
+            }
+        }
         
         if(possibleTargets.isEmpty())
             return false;
@@ -105,18 +144,19 @@ public class GetItemGoal extends Goal {
     public boolean shouldContinueExecuting() {
     	if(this.target == null)
             return false;
-        if(!this.target.isAlive())
-            return false;
+    	
+    	if(!this.host.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING))
+    		return false;
         
-        double distance = this.host.getDistance(target);
+        double distance = this.host.getDistanceSq(this.target.getX(), this.target.getY(), this.target.getZ());
         if(distance > this.distanceMax)
         	return false;
         
-        if(this.checkSight)
+        /*if(this.checkSight)
             if(this.host.getEntitySenses().canSee(this.target))
                 this.cantSeeTime = 0;
             else if(++this.cantSeeTime > this.cantSeeTimeMax)
-                return false;
+                return false;*/
         
         return true;
     }
@@ -147,11 +187,11 @@ public class GetItemGoal extends Goal {
 	@Override
     public void tick() {
         if(this.updateRate-- <= 0) {
-            this.updateRate = 20;
+            this.updateRate = 10;
         	if(!this.host.useDirectNavigator())
-        		this.host.getNavigator().tryMoveToEntityLiving(this.target, this.speed);
+        		this.host.getNavigator().tryMoveToXYZ(this.target.getX(), this.target.getY(), this.target.getZ(), this.speed);
         	else
-        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.target.posX, (int)this.target.posY, (int)this.target.posZ), this.speed);
+        		this.host.directNavigator.setTargetPosition(this.target, this.speed);
         }
     }
 }

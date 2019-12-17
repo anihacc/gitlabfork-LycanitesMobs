@@ -1,16 +1,13 @@
-package com.lycanitesmobs.core.entity.goals.actions;
+package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityWraith;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
 public class SummonMinionsGoal extends Goal {
 	BaseCreatureEntity host;

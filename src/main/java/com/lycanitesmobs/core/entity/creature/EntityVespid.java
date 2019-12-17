@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
-import com.lycanitesmobs.core.entity.goals.actions.PlaceBlockGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.PlaceBlockGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindMasterGoal;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

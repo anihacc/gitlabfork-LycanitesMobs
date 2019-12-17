@@ -33,9 +33,6 @@ public class FearEntity extends BaseCreatureEntity {
         //this.setSize(0.8f, 1.8f);
 
         this.setupMob();
-        
-        // AI Tasks:
-        this.goalSelector.addGoal(0, new PaddleGoal(this));
     }
 
     public FearEntity(EntityType<? extends FearEntity> entityType, World world, LivingEntity feared) {
@@ -129,6 +126,11 @@ public class FearEntity extends BaseCreatureEntity {
 			}
 		}
     }
+
+    @Override
+	public boolean rollWanderChance() {
+		return true;
+	}
     
     
     // ==================================================
