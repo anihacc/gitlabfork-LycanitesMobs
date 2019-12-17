@@ -492,6 +492,9 @@ tile.demonstonetile_stairs.description=How can something of such evil contain so
 #
 tile.soulcubedemonic.name=Demonic Soulcube
 tile.soulcubedemonic.description=A source of great demonic energy waiting to be unleashed, perfect for luring a great evil...
+#
+tile.soulcubeundead.name=Undead Soulcube
+tile.soulcubeundead.description=Inside lies thousands of twisted trapped souls waiting to escape!
 # ========================================================================
 tile.desertstonebrick_stairs.name=Desertstone Brick Stairs
 tile.desertstonebrick_stairs.description=A refined sandstone used to build great desert monuments.
@@ -1932,6 +1935,7 @@ event.boss.finished=%event% is unleashed!
 event.boss.phase=Phase
 #
 # ========== Event Names ==========
+mobevent.amalgalich.name=Amalgalich
 mobevent.arachnophobia.name=Arachnophobia
 mobevent.asmodeus.name=Asmodeus
 mobevent.bamstorm.name=Bamstorm

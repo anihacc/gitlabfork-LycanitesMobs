@@ -13,13 +13,14 @@ public class FireProjectilesGoal extends EntityAIBase {
     // Properties:
 	private String projectileName;
 	private Class<? extends EntityProjectileBase> projectileClass;
-	float velocity = 0.6F;
+	float velocity = 1.6F;
 	float inaccuracy = 0F;
 	float scale = 1F;
 	float angle = 0F;
 	Vec3d offset = Vec3d.ZERO;
 	private int fireRate = 60;
 	private boolean allPlayers = false;
+	protected int phase = -1;
 
 	private int fireTime = 60;
 	private Entity attackTarget;
@@ -32,6 +33,16 @@ public class FireProjectilesGoal extends EntityAIBase {
 	public FireProjectilesGoal(BaseCreatureEntity setHost) {
         this.host = setHost;
     }
+
+	/**
+	 * Sets the battle phase to restrict this goal to.
+	 * @param phase The phase to restrict to, if below 0 phases are ignored.
+	 * @return This goal for chaining.
+	 */
+	public FireProjectilesGoal setPhase(int phase) {
+		this.phase = phase;
+		return this;
+	}
 
 	/**
 	 * Sets the projectile via info to fire.
@@ -68,7 +79,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 	 * @param velocity The firing velocity.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setVelocity(int velocity) {
+	public FireProjectilesGoal setVelocity(float velocity) {
 		this.velocity = velocity;
 		return this;
 	}
@@ -78,7 +89,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 	 * @param scale The projectile scale.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setScale(int scale) {
+	public FireProjectilesGoal setScale(float scale) {
 		this.scale = scale;
 		return this;
 	}
@@ -134,7 +145,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 			return false;
 		}
 
-		return true;
+		return this.phase < 0 || this.phase == this.host.getBattlePhase();
     }
 
 	@Override

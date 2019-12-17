@@ -68,7 +68,7 @@ public class CreatureConfig {
 
 	// Bosses:
 	/** How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures. **/
-	public double bossAntiFlight = 3;
+	public double bossAntiFlight = 10;
 
 
 	// Interaction:

@@ -46,17 +46,17 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		}
 
 		// Build Obstacles:
-		if(ticks == 10 * 20) {
+		if(ticks == 3 * 20) {
 			this.buildObstacles(world, originX, originY, originZ);
 		}
 
 		// Build Walls:
-		if(ticks == 20 * 20) {
+		if(ticks == 5 * 20) {
 			this.buildArenaWalls(world, originX, originY, originZ);
 		}
 
 		// Hellfire Pillar Effect:
-		if(ticks == 25 * 20) {
+		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
 				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
 				entityProjectileBase.projectileLife = 9 * 20;
@@ -65,7 +65,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		}
 
 		// Spawn Boss:
-		if(ticks == 29 * 20) {
+		if(ticks == 25 * 20) {
 			BaseCreatureEntity baseCreatureEntity = new EntityAsmodeus(world);
 			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
 			world.spawnEntity(baseCreatureEntity);

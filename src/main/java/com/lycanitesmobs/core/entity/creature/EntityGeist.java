@@ -128,5 +128,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
    	//                     Immunities
    	// ==================================================
     @Override
-    public boolean daylightBurns() { return !this.isChild(); }
+    public boolean daylightBurns() {
+        return !this.isChild() && !this.isMinion();
+    }
 }

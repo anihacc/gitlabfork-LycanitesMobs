@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.actions.abilities.HealWhenNoPlayersGoal;
-import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
+import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -17,12 +17,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroupHeavy, IGroupBoss {
+    private ForceGoal consumptionGoalP0;
+    private ForceGoal consumptionGoalP2;
+    private int consumptionDuration = 15 * 20;
+    private int consumptionWindUp = 3 * 20;
+    private int consumptionAnimationTime = 0;
+
     // ==================================================
  	//                    Constructor
  	// ==================================================
@@ -46,8 +53,36 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ========== Init AI ==========
     @Override
     protected void initEntityAI() {
+        this.targetTasks.addTask(this.nextFindTargetIndex, new FindNearbyPlayersGoal(this));
+
+        this.consumptionDuration = 15 * 20;
+        this.consumptionWindUp = 3 * 20;
+        this.consumptionAnimationTime = 0;
+        int consumptionCooldown = 10 * 20;
+
+        // All Phases:
+        this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(60).setVelocity(1.6F).setScale(8F));
+        this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false));
+
+        // Phase 1:
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("reaper").setSummonRate(20 * 5).setSummonCap(5).setPhase(0).setPerPlayer(true));
+        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(0);
+        this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(0));
+        this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP0);
+
+        // Phase 2:
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("geist").setSummonRate(20 * 5).setSummonCap(5).setPhase(1).setPerPlayer(true));
+        // Detonate Geists
+
+        // Phase 3:
+        // Shadow Meteors
+        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(2);
+        this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP2); // TODO Feared Only
+
         super.initEntityAI();
     }
 
@@ -61,9 +96,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ========== Persistence ==========
     @Override
     public boolean isPersistant() {
-        if(this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAmalgalich)
-            return true;
-        return super.isPersistant();
+        return super.isPersistant(); //TODO Remove!
     }
 
     // ========== First Spawn ==========
@@ -82,6 +115,29 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+
+        // Arena Snapping:
+        if(this.hasArenaCenter()) {
+            BlockPos arenaPos = this.getArenaCenter();
+            double arenaY = this.posY;
+            if (this.getEntityWorld().isAirBlock(arenaPos))
+                arenaY = arenaPos.getY();
+            else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
+                arenaY = arenaPos.add(0, 1, 0).getY();
+
+            if (this.posX != arenaPos.getX() || this.posY != arenaY || this.posZ != arenaPos.getZ())
+                this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
+        }
+
+        // Consumption Animation:
+        if(this.getEntityWorld().isRemote) {
+            if(!this.extraAnimation01()) {
+                this.consumptionAnimationTime = this.consumptionDuration;
+            }
+            else {
+                this.consumptionAnimationTime--;
+            }
+        }
     }
 
     @Override
@@ -96,6 +152,16 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
             return;
         }
         this.setBattlePhase(0);
+    }
+
+    @Override
+    public boolean rollWanderChance() {
+        return false;
+    }
+
+    @Override
+    public boolean canBePushed() {
+        return false;
     }
     
     
@@ -119,7 +185,29 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     // ========== Consumption Attack ==========
     public float getConsumptionAnimation() {
-        return 0;
+        if(this.consumptionAnimationTime >= this.consumptionDuration) {
+            return 0F;
+        }
+        int windUpThreshhold = this.consumptionDuration - this.consumptionWindUp;
+        if(this.consumptionAnimationTime > windUpThreshhold) {
+            return 1F - (float)(this.consumptionAnimationTime - windUpThreshhold) / this.consumptionWindUp;
+        }
+        return 1F;
+    }
+
+    public boolean extraAnimation01() {
+        if(this.getEntityWorld().isRemote) {
+            return super.extraAnimation01();
+        }
+
+        if(this.getBattlePhase() == 0) {
+            return this.consumptionGoalP0.cooldownTime <= 0;
+        }
+        if(this.getBattlePhase() == 2) {
+            return this.consumptionGoalP2.cooldownTime <= 0;
+        }
+
+        return super.extraAnimation01();
     }
 	
 	
@@ -129,6 +217,15 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public void onMinionDeath(EntityLivingBase minion) {
         super.onMinionDeath(minion);
+    }
+
+    @Override
+    public void onTryToDamageMinion(EntityLivingBase minion, float damageAmount) {
+        super.onTryToDamageMinion(minion, damageAmount);
+        if(damageAmount >= 1000) {
+            minion.setDead();
+            this.heal(50);
+        }
     }
     
     

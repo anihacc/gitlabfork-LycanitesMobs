@@ -5,6 +5,7 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetwork;
 import com.lycanitesmobs.core.entity.navigate.ArenaNodeNetworkGrid;
@@ -53,7 +54,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
     public List<EntityPlayer> playerTargets = new ArrayList<>();
     public boolean firstPlayerTargetCheck = false;
-    public List<EntityTrite> triteMinions = new ArrayList<>();
     public List<EntityAstaroth> astarothMinions = new ArrayList<>();
     public List<EntityCacodemon> cacodemonMinions = new ArrayList<>();
 
@@ -107,6 +107,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         super.initEntityAI();
         this.aiRangedAttack = new AttackRangedGoal(this).setSpeed(1.0D).setStaminaTime(200).setStaminaDrainRate(3).setRange(90.0F).setChaseTime(0).setCheckSight(false);
         this.tasks.addTask(this.nextCombatGoalIndex++, this.aiRangedAttack);
+
+        // Phase 1:
+        this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("trite").setSummonRate(20 * 3).setSummonCap(3).setPerPlayer(true).setPhase(0));
     }
 
     // ========== Init ==========
@@ -200,12 +203,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Clean Minion Lists:
         if(this.getEntityWorld().isRemote && this.updateTick % 200 == 0) {
-            if(!this.triteMinions.isEmpty()) {
-                for (EntityTrite minion : this.triteMinions.toArray(new EntityTrite[this.triteMinions.size()])) {
-                    if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
-                        this.triteMinions.remove(minion);
-                }
-            }
             if(!this.astarothMinions.isEmpty()) {
                 for (EntityAstaroth minion : this.astarothMinions.toArray(new EntityAstaroth[this.astarothMinions.size()])) {
                     if(minion == null || !minion.isEntityAlive() || minion.getMasterTarget() != this)
@@ -235,6 +232,16 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 this.getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, particlePos.getX() + (this.rand.nextDouble() - 0.5D) * 2, particlePos.getY() + (this.height * 0.2D) + this.rand.nextDouble() * 2, particlePos.getZ() + (this.rand.nextDouble() - 0.5D) * 2, 0.0D, 0.0D, 0.0D);
             }
         }
+    }
+
+    @Override
+    public boolean rollWanderChance() {
+        return false;
+    }
+
+    @Override
+    public boolean canBePushed() {
+        return false;
     }
 
     // ========== Current Arena Node Update ==========
@@ -334,15 +341,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             else {
                 this.devilstarStreamCharge = this.devilstarStreamChargeMax;
                 this.devilstarStreamTime = this.devilstarStreamTimeMax;
-            }
-
-            // Summon Trites:
-            if(this.triteMinions.size() < playerCount * 3 && this.updateTick % 10 * 20 == 0) {
-                for (int i = 0; i < 3 * playerCount; i++) {
-                    EntityTrite minion = (EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
-                    this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
-                    this.triteMinions.add(minion);
-                }
             }
         }
 
@@ -490,9 +488,6 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Minion Death ==========
     @Override
     public void onMinionDeath(EntityLivingBase minion) {
-        if(minion instanceof EntityTrite && this.triteMinions.contains(minion)) {
-            this.triteMinions.remove(minion);
-        }
         if(minion instanceof EntityAstaroth && this.astarothMinions.contains(minion)) {
             this.astarothMinions.remove(minion);
         }

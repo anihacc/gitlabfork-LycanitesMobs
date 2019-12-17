@@ -73,15 +73,15 @@ public class ItemSoulkey extends ItemBase {
 
                 // Valid Altar:
                 if(!player.getEntityWorld().isRemote) {
-                    if (!player.capabilities.isCreativeMode)
-                        itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-                    if (itemStack.getCount() <= 0)
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
                         String message = LanguageManager.translate("message.soulkey.badlocation");
                         player.sendMessage(new TextComponentString(message));
                         return EnumActionResult.FAIL;
                     }
+                    if (!player.capabilities.isCreativeMode)
+                        itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+                    if (itemStack.getCount() <= 0)
+                        player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
                     String message = LanguageManager.translate("message.soulkey.active");
                     player.sendMessage(new TextComponentString(message));
                 }

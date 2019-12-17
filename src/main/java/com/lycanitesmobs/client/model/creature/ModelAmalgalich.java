@@ -3,7 +3,11 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelCreatureObj;
+import com.lycanitesmobs.client.renderer.RenderCreature;
+import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerEffect;
 import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,11 +26,36 @@ public class ModelAmalgalich extends ModelCreatureObj {
     public ModelAmalgalich(float shadowSize) {
     	// Load Model:
     	this.initModel("amalgalich", LycanitesMobs.modInfo, "entity/amalgalich");
+
+		// Scaling:
+		this.lookHeadScaleX = 0F;
+		this.lookHeadScaleY = 0.75F;
+		this.lookNeckScaleX = 0.25F;
+		this.lookNeckScaleY = 0.25F;
     	
     	// Trophy:
         this.trophyScale = 0.8F;
         this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
     }
+
+
+	// ==================================================
+	//                      Layers
+	// ==================================================
+	@Override
+	public void addCustomLayers(RenderCreature renderer) {
+		super.addCustomLayers(renderer);
+		renderer.addLayer(new LayerEffect(renderer, "fire", true, LayerEffect.BLEND.ADD.id, true));
+	}
+
+	@Override
+	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+    	if(layer != null && entity instanceof EntityAmalgalich) {
+    		return ((EntityAmalgalich)entity).getConsumptionAnimation() > 0;
+		}
+    	return super.canRenderPart(partName, entity, layer, trophy);
+	}
+
 
 	// ==================================================
 	//                 Animate Part
@@ -48,7 +77,9 @@ public class ModelAmalgalich extends ModelCreatureObj {
 		// Consumption:
 		if(entity instanceof EntityAmalgalich && ((EntityAmalgalich)entity).getConsumptionAnimation() > 0) {
 			float consumptionScale = ((EntityAmalgalich)entity).getConsumptionAnimation();
-			loop *= 8 * consumptionScale;
+			if(consumptionScale == 1) {
+				loop *= 8 * consumptionScale;
+			}
 			if(partName.equals("body")) {
 				posY -= 8F * consumptionScale;
 			}

@@ -252,6 +252,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	private EntityLivingBase perchTarget;
 	/** A list of multiple player targets, used by boss goals. **/
 	public List<EntityPlayer> playerTargets = new ArrayList<>();
+	/** A list of all minions summoned by this creature. **/
+	public List<EntityLivingBase> minions = new ArrayList<>();
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
@@ -1100,6 +1102,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         double x = this.posX + ((this.width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
         double y = this.posY + 1;
         double z = this.posZ + ((this.width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
+        this.minions.add(minion);
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
         if(minion instanceof BaseCreatureEntity) {
             ((BaseCreatureEntity)minion).setMinion(true);
@@ -1112,11 +1115,21 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             minion.setRevengeTarget(this.getAttackTarget());
     }
 
-    // ========== Minion Update ==========
+    public List<EntityLivingBase> getMinions(Class<? extends Entity> filterClass) {
+		List<EntityLivingBase> filteredMinions = new ArrayList<>();
+		for(EntityLivingBase minion : this.minions) {
+			if(filterClass.isAssignableFrom(minion.getClass())) {
+				filteredMinions.add(minion);
+			}
+		}
+		return filteredMinions;
+	}
+
     public void onMinionUpdate(EntityLivingBase minion, long tick) {}
 
-    // ========== Minion Death ==========
     public void onMinionDeath(EntityLivingBase minion) {}
+
+    public void onTryToDamageMinion(EntityLivingBase minion, float damageAmount) {}
 
     // ========== Minion ==========
     /** Set whether this mob is a minion or not, this should be used if this mob is summoned. **/
@@ -1813,6 +1826,15 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
         // Boss Health Bar:
         this.getBossInfo();
+
+        // Check Minions:
+		if(!this.minions.isEmpty()) {
+			for (EntityLivingBase minion : this.minions.toArray(new EntityLivingBase[0])) {
+				if(!minion.isEntityAlive()) {
+					this.minions.remove(minion);
+				}
+			}
+		}
 
         // Minion To Master Update:
         if(this.getMasterTarget() != null && this.getMasterTarget() instanceof BaseCreatureEntity)
@@ -4580,6 +4602,18 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(nbtTagCompound.hasKey("FixateUUIDMost") && nbtTagCompound.hasKey("FixateUUIDLeast")) {
 			this.fixateUUID = new UUID(nbtTagCompound.getLong("FixateUUIDMost"), nbtTagCompound.getLong("FixateUUIDLeast"));
 		}
+
+		if(nbtTagCompound.hasKey("MinionIds")) {
+			NBTTagList minionIds = nbtTagCompound.getTagList("MinionIds", 10);
+			for(int i = 0; i < minionIds.tagCount(); i++) {
+				NBTTagCompound minionId = minionIds.getCompoundTagAt(i);
+				if(minionId.hasKey("ID")) {
+					Entity entity = this.getEntityWorld().getEntityByID(minionId.getInteger("ID"));
+					if(entity instanceof EntityLivingBase)
+						this.minions.add((EntityLivingBase)entity);
+				}
+			}
+		}
     }
     
     // ========== Write ==========
@@ -4636,6 +4670,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         NBTTagCompound extTagCompound = new NBTTagCompound();
         this.extraMobBehaviour.writeToNBT(extTagCompound);
         nbtTagCompound.setTag("ExtraBehaviour", extTagCompound);
+
+		NBTTagList minionIds = new NBTTagList();
+		for(EntityLivingBase minion : this.minions) {
+			NBTTagCompound minionId = new NBTTagCompound();
+			minionId.setInteger("ID", minion.getEntityId());
+			minionIds.appendTag(minionId);
+		}
+		nbtTagCompound.setTag("MinionIds", minionIds);
     }
     
     

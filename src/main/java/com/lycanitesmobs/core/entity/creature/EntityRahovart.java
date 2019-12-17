@@ -206,6 +206,11 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
     }
 
+    @Override
+    public boolean rollWanderChance() {
+        return false;
+    }
+
     // ========== Phases Update ==========
     public void updatePhases() {
 

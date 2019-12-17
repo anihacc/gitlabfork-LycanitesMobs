@@ -11,11 +11,13 @@ public class SummonMinionsGoal extends EntityAIBase {
 	BaseCreatureEntity host;
 
     // Properties:
-	private int summonTime = 0;
-	private int summonRate = 60;
-	private CreatureInfo minionInfo;
-	private boolean antiFlight = false;
-
+	protected int summonTime = 0;
+	protected int summonRate = 60;
+	protected int summonCap = 5;
+	protected CreatureInfo minionInfo;
+	protected boolean perPlayer = false;
+	protected boolean antiFlight = false;
+	protected int phase = -1;
 
 	/**
 	 * Constrcutor
@@ -34,6 +36,26 @@ public class SummonMinionsGoal extends EntityAIBase {
     	this.summonRate = summonRate;
     	return this;
     }
+
+	/**
+	 * Sets the minion count cap for summoning.
+	 * @param summonCap The summoning cap.
+	 * @return This goal for chaining.
+	 */
+	public SummonMinionsGoal setSummonCap(int summonCap) {
+		this.summonCap = summonCap;
+		return this;
+	}
+
+	/**
+	 * If true, the cap is scaled per players detected.
+	 * @param perPlayer True to enable.
+	 * @return This goal for chaining.
+	 */
+	public SummonMinionsGoal setPerPlayer(boolean perPlayer) {
+		this.perPlayer = perPlayer;
+		return this;
+	}
 
 	/**
 	 * Sets anti flight summoning where minions are summoned at any player targets that are flying.
@@ -55,9 +77,22 @@ public class SummonMinionsGoal extends EntityAIBase {
     	return this;
     }
 
+	/**
+	 * Sets the battle phase to restrict this goal to.
+	 * @param phase The phase to restrict to, if below 0 phases are ignored.
+	 * @return This goal for chaining.
+	 */
+	public SummonMinionsGoal setPhase(int phase) {
+		this.phase = phase;
+		return this;
+	}
+
 	@Override
     public boolean shouldExecute() {
-		return this.host.isEntityAlive() && this.minionInfo != null;
+		if(!this.host.isEntityAlive() || this.minionInfo == null) {
+			return false;
+		}
+		return this.phase < 0 || this.phase == this.host.getBattlePhase();
     }
 
 	@Override
@@ -71,21 +106,30 @@ public class SummonMinionsGoal extends EntityAIBase {
 			return;
 		}
 
+		if(this.host.getMinions(this.minionInfo.getEntityClass()).size() >= this.summonCap) {
+			return;
+		}
+
 		// Anti Flight Mode:
 		if(this.antiFlight) {
 			for (EntityPlayer target : this.host.playerTargets) {
 				if(target.capabilities.disableDamage || target.isSpectator())
 					continue;
 				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.host.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
-					EntityLivingBase minion = this.minionInfo.createEntity(this.host.getEntityWorld());
-					this.host.summonMinion(minion, this.host.getRNG().nextDouble() * 360, this.host.width + 1);
-					if(minion instanceof BaseCreatureEntity) {
-						((BaseCreatureEntity)minion).setAttackTarget(target);
-					}
+					this.summonMinion(target);
 				}
 			}
+			return;
 		}
 
-		// TODO Standard mode.
+		this.summonMinion(this.host.getAttackTarget());
     }
+
+    protected void summonMinion(EntityLivingBase target) {
+		EntityLivingBase minion = this.minionInfo.createEntity(this.host.getEntityWorld());
+		this.host.summonMinion(minion, this.host.getRNG().nextDouble() * 360, this.host.width + 1);
+		if(minion instanceof BaseCreatureEntity) {
+			((BaseCreatureEntity)minion).setAttackTarget(target);
+		}
+	}
 }

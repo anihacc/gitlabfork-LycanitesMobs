@@ -4,10 +4,10 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
+import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
-import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -17,10 +17,10 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RahovartStructureBuilder extends StructureBuilder {
+public class AmalgalichStructureBuilder extends StructureBuilder {
 
-	public RahovartStructureBuilder() {
-		this.name = "rahovart";
+	public AmalgalichStructureBuilder() {
+		this.name = "amalgalich";
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 
 		// Spawn Boss:
 		if(ticks == 25 * 20) {
-			BaseCreatureEntity baseCreatureEntity = new EntityRahovart(world);
+			BaseCreatureEntity baseCreatureEntity = new EntityAmalgalich(world);
 			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
 			world.spawnEntity(baseCreatureEntity);
 			baseCreatureEntity.setArenaCenter(new BlockPos(originX, originY + 1, originZ));
@@ -83,11 +83,10 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	//                     Arena Floor
 	// ==================================================
 	public void buildArenaFloor(World world, int originX, int originY, int originZ) {
-		double rubbleChance = 0.01D;
 		int radius = 60;
 		int height = 40;
-		Block primaryBlock = ObjectManager.getBlock("demonstonetile");
-		Block secondaryBlock = ObjectManager.getBlock("demoncrystal");
+		Block primaryBlock = ObjectManager.getBlock("shadowstonetile");
+		Block secondaryBlock = ObjectManager.getBlock("shadowcrystal");
 		double secondaryChance = 0.05D;
 
 		int stripNumber = 1;
@@ -142,10 +141,10 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	public int[] buildPillar(World world, int originX, int originY, int originZ) {
 		int radiusMax = 5;
 		int height = 20 + Math.round(20 * world.rand.nextFloat());
-		Block primaryBlock = ObjectManager.getBlock("demonstonebrick");
-		Block secondaryBlock = ObjectManager.getBlock("demonstone");
-		Block tetriaryBlock = ObjectManager.getBlock("demonstonechiseled");
-		Block pillarBlock = ObjectManager.getBlock("demonstonepillar");
+		Block primaryBlock = ObjectManager.getBlock("shadowstonebrick");
+		Block secondaryBlock = ObjectManager.getBlock("shadowstone");
+		Block tetriaryBlock = ObjectManager.getBlock("shadowstonechiseled");
+		Block pillarBlock = ObjectManager.getBlock("shadowstonepillar");
 		double secondaryChance = 0.4D;
 		double tetriaryChance = 0.05D;
 		int[] decorationCoord = new int[] {originX, originY, originZ};
@@ -194,7 +193,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 	/** Adds decoration to a pillar. **/
 	public void buildDecoration(World world, int originX, int originY, int originZ) {
 		Block primaryBlock = Blocks.OBSIDIAN;
-		Block hazardBlock = ObjectManager.getBlock("hellfire");
+		Block hazardBlock = ObjectManager.getBlock("shadowfire");
 		world.setBlockState(new BlockPos(originX, originY + 1, originZ), primaryBlock.getDefaultState(), 2);
 		world.setBlockState(new BlockPos(originX, originY + 2, originZ), primaryBlock.getDefaultState(), 2);
 		world.setBlockState(new BlockPos(originX, originY + 3, originZ), hazardBlock.getDefaultState(), 2);
