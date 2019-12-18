@@ -27,6 +27,7 @@ public class AttackMeleeGoal extends Goal {
     private float maxChaseDistance = 1024F;
     private double damageScale = 1.0D;
     public boolean enabled = true;
+    protected int phase = -1;
 
     // Pathing:
 	private int failedPathFindingPenalty;
@@ -81,6 +82,16 @@ public class AttackMeleeGoal extends Goal {
     	this.enabled = setEnabled;
     	return this;
     }
+
+	/**
+	 * Sets the battle phase to restrict this goal to.
+	 * @param phase The phase to restrict to, if below 0 phases are ignored.
+	 * @return This goal for chaining.
+	 */
+	public AttackMeleeGoal setPhase(int phase) {
+		this.phase = phase;
+		return this;
+	}
 	
     
 	// ==================================================
@@ -90,6 +101,10 @@ public class AttackMeleeGoal extends Goal {
     public boolean shouldExecute() {
     	if(!this.enabled)
     		return false;
+
+		if(this.phase >= 0 && this.phase != this.host.getBattlePhase()) {
+			return false;
+		}
 
 		// With Pickup:
 		if(this.host.hasPickupEntity() && !this.host.canAttackWithPickup()) {
@@ -137,6 +152,9 @@ public class AttackMeleeGoal extends Goal {
     public boolean shouldContinueExecuting() {
     	if(!this.enabled)
     		return false;
+		if(this.phase >= 0 && this.phase != this.host.getBattlePhase()) {
+			return false;
+		}
         this.attackTarget = this.host.getAttackTarget();
         if(this.attackTarget == null)
         	return false;

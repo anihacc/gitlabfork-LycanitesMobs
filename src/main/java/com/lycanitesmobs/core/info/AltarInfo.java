@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.config.ConfigMobEvent;
 import com.lycanitesmobs.core.info.altar.*;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.mobevent.trigger.AltarMobEventTrigger;
+import com.lycanitesmobs.core.worldgen.mobevents.AmalgalichStructureBuilder;
 import com.lycanitesmobs.core.worldgen.mobevents.AsmodeusStructureBuilder;
 import com.lycanitesmobs.core.worldgen.mobevents.RahovartStructureBuilder;
 import net.minecraft.entity.Entity;
@@ -79,6 +80,10 @@ public class AltarInfo {
         AltarInfo asmodeusAltar = new AltarInfoAsmodeus("AsmodeusAltar");
         addAltar(asmodeusAltar);
         StructureBuilder.addStructureBuilder(new AsmodeusStructureBuilder());
+
+        AltarInfo amalgalichAltar = new AltarInfoAmalgalich("AmalgalichAltar");
+        addAltar(amalgalichAltar);
+        StructureBuilder.addStructureBuilder(new AmalgalichStructureBuilder());
 
         AltarInfo umberLobberAltar = new AltarInfoUmberLobber("UmberLobberAltar");
         addAltar(umberLobberAltar);

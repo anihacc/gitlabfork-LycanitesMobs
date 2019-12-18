@@ -2,8 +2,6 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,17 +13,19 @@ public class FireProjectilesGoal extends Goal {
 	BaseCreatureEntity host;
 
     // Properties:
-	private String projectileName;
-	private Class<? extends BaseProjectileEntity> projectileClass;
-	float velocity = 0.6F;
-	float inaccuracy = 0F;
-	float scale = 1F;
-	float angle = 0F;
-	Vec3d offset = Vec3d.ZERO;
-	private int fireRate = 60;
-	private boolean allPlayers = false;
+	protected String projectileName;
+	protected Class<? extends BaseProjectileEntity> projectileClass;
+	protected float velocity = 0.6F;
+	protected float inaccuracy = 0F;
+	protected float scale = 1F;
+	protected float angle = 0F;
+	protected Vec3d offset = Vec3d.ZERO;
+	protected int fireRate = 60;
+	protected boolean allPlayers = false;
+	protected int randomCount = 0;
+	protected int phase = -1;
 
-	private int fireTime = 60;
+	private int abilityTime = 60;
 	private Entity attackTarget;
 
 
@@ -37,6 +37,16 @@ public class FireProjectilesGoal extends Goal {
         this.host = setHost;
 		this.setMutexFlags(EnumSet.noneOf(Flag.class));
     }
+
+	/**
+	 * Sets the battle phase to restrict this goal to.
+	 * @param phase The phase to restrict to, if below 0 phases are ignored.
+	 * @return This goal for chaining.
+	 */
+	public FireProjectilesGoal setPhase(int phase) {
+		this.phase = phase;
+		return this;
+	}
 
 	/**
 	 * Sets the projectile via info to fire.
@@ -73,7 +83,7 @@ public class FireProjectilesGoal extends Goal {
 	 * @param velocity The firing velocity.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setVelocity(int velocity) {
+	public FireProjectilesGoal setVelocity(float velocity) {
 		this.velocity = velocity;
 		return this;
 	}
@@ -83,7 +93,7 @@ public class FireProjectilesGoal extends Goal {
 	 * @param scale The projectile scale.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setScale(int scale) {
+	public FireProjectilesGoal setScale(float scale) {
 		this.scale = scale;
 		return this;
 	}
@@ -119,12 +129,22 @@ public class FireProjectilesGoal extends Goal {
 	}
 
 	/**
-	 * Sets anti flight summoning where minions are summoned at any player targets that are flying.
+	 * Sets if projectiles should be fired at all players.
 	 * @param allPlayers True to target all players (requires FindNearbyPlayers goal) otherwise the current attack target is used.
 	 * @return This goal for chaining.
 	 */
 	public FireProjectilesGoal setAllPlayers(boolean allPlayers) {
 		this.allPlayers = allPlayers;
+		return this;
+	}
+
+	/**
+	 * Sets random amount of projectiles to fire everywhere.
+	 * @param randomCount The amount of projectiles to randomly fire, o to disable.
+	 * @return This goal for chaining.
+	 */
+	public FireProjectilesGoal setRandomCount(int randomCount) {
+		this.randomCount = randomCount;
 		return this;
 	}
 
@@ -135,16 +155,16 @@ public class FireProjectilesGoal extends Goal {
 		}
 
 		this.attackTarget = this.host.getAttackTarget();
-		if(!this.allPlayers && this.attackTarget == null) {
+		if(!this.allPlayers && this.randomCount <= 0 && this.attackTarget == null) {
 			return false;
 		}
 
-		return true;
+		return this.phase < 0 || this.phase == this.host.getBattlePhase();
     }
 
 	@Override
 	public void startExecuting() {
-		this.fireTime = 1;
+		this.abilityTime = 1;
 	}
 
 	@Override
@@ -154,7 +174,7 @@ public class FireProjectilesGoal extends Goal {
 
 	@Override
     public void tick() {
-		if(this.fireTime++ % this.fireRate != 0) {
+		if(this.abilityTime++ % this.fireRate != 0) {
 			return;
 		}
 
@@ -164,6 +184,14 @@ public class FireProjectilesGoal extends Goal {
 				if(target.abilities.disableDamage || target.isSpectator())
 					continue;
 				this.fireProjectile(target);
+			}
+			return;
+		}
+
+		// Random Mode:
+		if(this.randomCount > 0) {
+			for(int i = 0; i < this.randomCount; i++) {
+				this.host.fireProjectile(this.projectileName, null, this.host.getRNG().nextFloat() * 20, this.host.getRNG().nextFloat() * this.angle, this.offset, this.velocity, this.scale, this.inaccuracy);
 			}
 			return;
 		}

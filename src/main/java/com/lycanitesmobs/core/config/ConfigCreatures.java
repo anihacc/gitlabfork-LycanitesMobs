@@ -113,7 +113,7 @@ public class ConfigCreatures {
 
 		bossAntiFlight = builder.comment("How much higher players must be relative to a boss' y position (feet) to trigger anti flight measures.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.bossAntiFlight")
-				.define("bossAntiFlight", 3D);
+				.define("bossAntiFlight", 10D);
 
 		mobsAttackVillagers = builder.comment("Set to false to prevent mobs that attack players from also attacking villagers.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.mobsAttackVillagers")

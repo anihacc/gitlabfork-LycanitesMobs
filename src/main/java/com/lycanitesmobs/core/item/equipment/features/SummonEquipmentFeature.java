@@ -101,6 +101,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return;
 		}
 
+		// Summon:
 		EntityType entityType = null;
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreatureFromId(this.summonMobId);
 		if(creatureInfo != null) {
@@ -116,39 +117,43 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return;
 		}
 
-		// Summon:
-		if(attacker.getRNG().nextDouble() <= this.summonChance) {
-			try {
-				Entity entity = entityType.create(attacker.getEntityWorld());
-				entity.setLocationAndAngles(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ(), attacker.rotationYaw, 0.0F);
-				if(entity instanceof BaseCreatureEntity) {
-					BaseCreatureEntity entityCreature = (BaseCreatureEntity)entity;
-					entityCreature.setMinion(true);
-					entityCreature.setTemporary(this.summonDuration * 20);
-					entityCreature.setSizeScale(this.sizeScale);
+		int summonCount = this.summonCountMin;
+		if(this.summonCountMax > this.summonCountMin) {
+			summonCount = this.summonCountMin + attacker.getRNG().nextInt(this.summonCountMax - this.summonCountMin);
+		}
+		for(int i = 0; i < summonCount; i++) {
+			if (attacker.getRNG().nextDouble() <= this.summonChance) {
+				try {
+					Entity entity = entityType.create(attacker.getEntityWorld());
+					entity.setLocationAndAngles(attacker.getPosition().getX(), attacker.getPosition().getY(), attacker.getPosition().getZ(), attacker.rotationYaw, 0.0F);
+					if (entity instanceof BaseCreatureEntity) {
+						BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
+						entityCreature.setMinion(true);
+						entityCreature.setTemporary(this.summonDuration * 20);
+						entityCreature.setSizeScale(this.sizeScale);
 
-					if(attacker instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
-						TameableCreatureEntity entityTameable = (TameableCreatureEntity)entityCreature;
-						entityTameable.setPlayerOwner((PlayerEntity)attacker);
-						entityTameable.setSitting(false);
-						entityTameable.setFollowing(true);
-						entityTameable.setPassive(false);
-						entityTameable.setAssist(true);
-						entityTameable.setAggressive(true);
-						entityTameable.setPVP(target instanceof PlayerEntity);
-					}
+						if (attacker instanceof PlayerEntity && entityCreature instanceof TameableCreatureEntity) {
+							TameableCreatureEntity entityTameable = (TameableCreatureEntity) entityCreature;
+							entityTameable.setPlayerOwner((PlayerEntity) attacker);
+							entityTameable.setSitting(false);
+							entityTameable.setFollowing(true);
+							entityTameable.setPassive(false);
+							entityTameable.setAssist(true);
+							entityTameable.setAggressive(true);
+							entityTameable.setPVP(target instanceof PlayerEntity);
+						}
 
-					float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
-					if(attacker.getRNG().nextBoolean()) {
-						randomAngle = -randomAngle;
+						float randomAngle = 45F + (45F * attacker.getRNG().nextFloat());
+						if (attacker.getRNG().nextBoolean()) {
+							randomAngle = -randomAngle;
+						}
+						BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
+						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
+						entityCreature.setAttackTarget(target);
 					}
-					BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
-					entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
-					entityCreature.setAttackTarget(target);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}

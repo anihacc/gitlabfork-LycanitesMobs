@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.client.model.ModelProjectileBase;
@@ -33,6 +34,10 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
     // ==================================================
   	//                    Constructor
   	// ==================================================
+	public RenderProjectileModel(EntityRendererManager renderManager) {
+		super(renderManager);
+	}
+
     public RenderProjectileModel(EntityRendererManager renderManager, String projectileName) {
     	super(renderManager);
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
@@ -55,33 +60,45 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 	// ==================================================
 	@Override
 	public void doRender(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if(this.renderModel == null) {
+			if(entity instanceof CustomProjectileEntity) {
+				ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
+				if(projectileInfo == null) {
+					return;
+				}
+				this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
+				this.defaultModel = this.renderModel;
+			}
+			else {
+				return;
+			}
+		}
+
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
 
 		try {
 			GlStateManager.enableAlphaTest();
-			if (!this.bindEntityTexture(entity)) {
-				return;
-			}
-			GlStateManager.translatef((float)x, (float)y - 0.25F, (float)z);
-			GlStateManager.scalef(0.25F, 0.25F, 0.25F);
-			GlStateManager.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+			if (this.bindEntityTexture(entity)) {
+				GlStateManager.translatef((float) x, (float) y - 0.25F, (float) z);
+				GlStateManager.scalef(0.25F, 0.25F, 0.25F);
+				GlStateManager.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
 
-			if(!(this.renderModel instanceof ModelProjectileObj)) {
-				this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1); //render
-			}
-			else {
-				((ModelProjectileObj)this.renderModel).generateAnimationFrames(entity, 0, 0, partialTicks, 0, 0, 1);
-				this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, null, false);
-				for (LayerRenderer<BaseProjectileEntity, ModelProjectileBase> renderLayer : this.renderLayers) {
-					if (renderLayer instanceof LayerProjectileBase)
-						this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, (LayerProjectileBase) renderLayer, false);
+				if (!(this.renderModel instanceof ModelProjectileObj)) {
+					this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1); //render
 				}
-				((ModelProjectileObj)this.renderModel).clearAnimationFrames();
+				else {
+					((ModelProjectileObj) this.renderModel).generateAnimationFrames(entity, 0, 0, partialTicks, 0, 0, 1);
+					this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, null, false);
+					for (LayerRenderer<BaseProjectileEntity, ModelProjectileBase> renderLayer : this.renderLayers) {
+						if (renderLayer instanceof LayerProjectileBase)
+							this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1, (LayerProjectileBase) renderLayer, false);
+					}
+					((ModelProjectileObj) this.renderModel).clearAnimationFrames();
+				}
+				GlStateManager.depthMask(true);
+				GlStateManager.disableRescaleNormal();
 			}
-
-			GlStateManager.depthMask(true);
-			GlStateManager.disableRescaleNormal();
 		}
 		catch (Exception exception)
 		{

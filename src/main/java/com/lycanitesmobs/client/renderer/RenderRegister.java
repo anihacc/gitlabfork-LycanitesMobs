@@ -4,6 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileModelEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -28,7 +29,8 @@ public class RenderRegister {
         }
 
         // Projectiles:
-        RenderingRegistry.registerEntityRenderingHandler(CustomProjectileEntity.class, new RenderFactoryProjectile<CustomProjectileEntity>());
+        RenderingRegistry.registerEntityRenderingHandler(CustomProjectileModelEntity.class, new RenderFactoryProjectile<CustomProjectileEntity>(true));
+        RenderingRegistry.registerEntityRenderingHandler(CustomProjectileEntity.class, new RenderFactoryProjectile<CustomProjectileEntity>(false));
 
         // Old Sprite Projectiles:
         for(String projectileName : ProjectileManager.getInstance().oldSpriteProjectiles.keySet()) {

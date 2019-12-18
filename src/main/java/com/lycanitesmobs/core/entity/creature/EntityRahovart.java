@@ -206,6 +206,11 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
     }
 
+    @Override
+    public boolean rollWanderChance() {
+        return false;
+    }
+
     // ========== Phases Update ==========
     public void updatePhases() {
 
@@ -225,13 +230,13 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             if(this.updateTick % 20 == 0) {
                 for (EntityBelph minion : this.hellfireBelphMinions.toArray(new EntityBelph[this.hellfireBelphMinions.size()])) {
                     if (!minion.isAlive()) {
-                        this.onMinionDeath(minion);
+                        this.onMinionDeath(minion, null);
                         continue;
                     }
                     minion.hellfireEnergy += 5; // Charged after 20 secs.
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
-                        this.onMinionDeath(minion);
+                        this.onMinionDeath(minion, null);
                         this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
@@ -280,13 +285,13 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             if(this.hellfireWallTime <= 0 && this.updateTick % 20 == 0) {
                 for (EntityBehemoth minion : this.hellfireBehemothMinions.toArray(new EntityBehemoth[this.hellfireBehemothMinions.size()])) {
                     if (!minion.isAlive()) {
-                        this.onMinionDeath(minion);
+                        this.onMinionDeath(minion, null);
                         continue;
                     }
                     minion.hellfireEnergy += 5; // Charged after 20 secs.
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
-                        this.onMinionDeath(minion);
+                        this.onMinionDeath(minion, null);
                         this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
@@ -399,7 +404,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
     // ========== Minion Death ==========
     @Override
-    public void onMinionDeath(LivingEntity minion) {
+    public void onMinionDeath(LivingEntity minion, DamageSource damageSource) {
         if(minion instanceof EntityBelph && this.hellfireBelphMinions.contains(minion)) {
             this.hellfireBelphMinions.remove(minion);
             return;
@@ -414,6 +419,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             else
                 this.hellfireBarrierHealth -= 50;
         }
+        super.onMinionDeath(minion, damageSource);
     }
 
 

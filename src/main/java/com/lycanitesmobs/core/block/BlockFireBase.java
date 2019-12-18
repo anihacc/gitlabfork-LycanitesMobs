@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
+    public static final BooleanProperty PERMANENT = BooleanProperty.create("premanent");
     public static final BooleanProperty NORTH = SixWayBlock.NORTH;
     public static final BooleanProperty EAST = SixWayBlock.EAST;
     public static final BooleanProperty SOUTH = SixWayBlock.SOUTH;
@@ -50,12 +51,19 @@ public class BlockFireBase extends BlockBase {
 
         this.tickRate = 30; // Default tick rate, configs can set this to 1 to remove this fire block from worlds.
 
-        this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0).with(NORTH, false).with(EAST, false).with(SOUTH, false).with(WEST, false).with(UP, false));
+        this.setDefaultState(this.getStateContainer().getBaseState()
+                .with(AGE, 0)
+                .with(PERMANENT, false)
+                .with(NORTH, false)
+                .with(EAST, false)
+                .with(SOUTH, false)
+                .with(WEST, false)
+                .with(UP, false));
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(AGE, NORTH, EAST, SOUTH, WEST, UP);
+        builder.add(AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UP);
     }
 
 
@@ -76,7 +84,7 @@ public class BlockFireBase extends BlockBase {
             for(Direction direction : Direction.values()) {
                 BooleanProperty booleanproperty = FACING_TO_PROPERTY_MAP.get(direction);
                 if (booleanproperty != null) {
-                    blockstate1 = blockstate1.with(booleanproperty, Boolean.valueOf(this.canCatchFire(world, blockPos.offset(direction), direction.getOpposite())));
+                    blockstate1 = blockstate1.with(booleanproperty, this.canCatchFire(world, blockPos.offset(direction), direction.getOpposite()));
                 }
             }
 
@@ -125,6 +133,10 @@ public class BlockFireBase extends BlockBase {
     // ========== Tick Update ==========
     @Override
     public void tick(BlockState state, World world, BlockPos pos, Random rand) {
+        if(state.get(PERMANENT)) {
+            return;
+        }
+
         if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
             if(this.removeOnNoFireTick)
                 world.removeBlock(pos, false);

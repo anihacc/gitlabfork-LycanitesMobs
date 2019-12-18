@@ -4,7 +4,11 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelCreatureObj;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
+import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,7 +29,7 @@ public class ModelAmalgalich extends ModelCreatureObj {
     	this.initModel("amalgalich", LycanitesMobs.modInfo, "entity/amalgalich");
 
     	// Scaling:
-		this.lookHeadScaleX = 0.75F;
+		this.lookHeadScaleX = 0F;
 		this.lookHeadScaleY = 0.75F;
 		this.lookNeckScaleX = 0.25F;
 		this.lookNeckScaleY = 0.25F;
@@ -34,6 +38,24 @@ public class ModelAmalgalich extends ModelCreatureObj {
         this.trophyScale = 0.8F;
         this.trophyOffset = new float[] {0.0F, 0.0F, -0.4F};
     }
+
+
+	// ==================================================
+	//                      Layers
+	// ==================================================
+	@Override
+	public void addCustomLayers(CreatureRenderer renderer) {
+		super.addCustomLayers(renderer);
+		renderer.addLayer(new LayerCreatureEffect(renderer, "fire", true, LayerCreatureEffect.BLEND.ADD.id, true));
+	}
+
+	@Override
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
+		if(layer != null && entity instanceof EntityAmalgalich) {
+			return ((EntityAmalgalich)entity).getConsumptionAnimation() > 0;
+		}
+		return super.canRenderPart(partName, entity, layer, trophy);
+	}
 
 	// ==================================================
 	//                 Animate Part
@@ -55,7 +77,9 @@ public class ModelAmalgalich extends ModelCreatureObj {
 		// Consumption:
 		if(entity instanceof EntityAmalgalich && ((EntityAmalgalich)entity).getConsumptionAnimation() > 0) {
 			float consumptionScale = ((EntityAmalgalich)entity).getConsumptionAnimation();
-			loop *= 8 * consumptionScale;
+			if(consumptionScale == 1) {
+				loop *= 8 * consumptionScale;
+			}
 			if(partName.equals("body")) {
 				posY -= 8F * consumptionScale;
 			}

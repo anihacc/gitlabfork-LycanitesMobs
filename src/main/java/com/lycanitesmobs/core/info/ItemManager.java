@@ -174,6 +174,7 @@ public class ItemManager extends JSONLoader {
 		BlockMaker.addStoneBlocks(modInfo, "shadow", Blocks.OBSIDIAN);
 		BlockMaker.addStoneBlocks(modInfo, "demon", Items.NETHER_WART);
 		ObjectManager.addBlock("soulcubedemonic", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE), modInfo, "soulcubedemonic"));
+		ObjectManager.addBlock("soulcubeundead", new BlockBase(Block.Properties.create(Material.ROCK).sound(SoundType.STONE), modInfo, "soulcubeundead"));
 		ObjectManager.addBlock("propolis", new BlockVeswax(Block.Properties.create(Material.CLAY).sound(SoundType.WET_GRASS).hardnessAndResistance(0.6F).tickRandomly(), "propolis"));
 		ObjectManager.addBlock("veswax", new BlockVeswax(Block.Properties.create(Material.WOOD).sound(SoundType.WOOD).hardnessAndResistance(0.6F).tickRandomly(), "veswax"));
 

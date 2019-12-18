@@ -5,9 +5,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.core.dispenser.BaseProjectileDispenseBehaviour;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileModelEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
@@ -314,6 +316,9 @@ public class ProjectileInfo {
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
 	public BaseProjectileEntity createProjectile(World world, LivingEntity entityLivingBase) {
+		if(this.modelClassName != null && ModelManager.getInstance().getProjectileModel(this) != null) {
+			return new CustomProjectileModelEntity(this.getEntityType(), world, entityLivingBase, this);
+		}
 		return new CustomProjectileEntity(this.getEntityType(), world, entityLivingBase, this);
 	}
 

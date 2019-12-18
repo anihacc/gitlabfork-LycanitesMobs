@@ -177,15 +177,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     protected BlockPos arenaCenter = null;
 
 	// AI Goals:
-	protected int nextPriorityGoalIndex;
-	protected int nextDistractionGoalIndex;
-	protected int nextCombatGoalIndex;
-	protected int nextTravelGoalIndex;
-	protected int nextIdleGoalIndex;
+	public int nextPriorityGoalIndex;
+	public int nextDistractionGoalIndex;
+	public int nextCombatGoalIndex;
+	public int nextTravelGoalIndex;
+	public int nextIdleGoalIndex;
 
-	protected int nextReactTargetIndex;
-	protected int nextSpecialTargetIndex;
-	protected int nextFindTargetIndex;
+	public int nextReactTargetIndex;
+	public int nextSpecialTargetIndex;
+	public int nextFindTargetIndex;
 
     // Spawning:
     /** Use the onFirstSpawn() method and not this variable. True if this creature has spawned for the first time (naturally or via spawn egg, etc, not reloaded from a saved chunk). **/
@@ -242,6 +242,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	private LivingEntity perchTarget;
 	/** A list of multiple player targets, used by boss goals. **/
 	public List<PlayerEntity> playerTargets = new ArrayList<>();
+	/** A list of all minions summoned by this creature. **/
+	public List<LivingEntity> minions = new ArrayList<>();
 
 	// Client:
 	/** A list of player entities that need to have their GUI of this mob reopened on refresh. **/
@@ -1052,12 +1054,23 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     }
 
 
-    // ========== Summoning ==========
+	// ============================================
+	//                   Minions
+	// ============================================
+	/**
+	 * Summons the provided entity instance into the world as this creature's minion.
+	 * @param minion The entity instance to summon as a minion.
+	 * @param angle The spawn position angle of the minion reletive to this creature.
+	 * @param distance How far from this creature to summon the minion.
+	 */
     public void summonMinion(LivingEntity minion, double angle, double distance) {
         double angleRadians = Math.toRadians(angle);
-        double x = this.posX + ((this.getSize(Pose.STANDING).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
+        double x = this.posX + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
         double y = this.posY + 1;
-        double z = this.posZ + ((this.getSize(Pose.STANDING).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
+		if(minion instanceof BaseCreatureEntity && ((BaseCreatureEntity)minion).isFlying()) {
+			y += this.getSize(this.getPose()).height / 2;
+		}
+        double z = this.posZ + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		this.getEntityWorld().addEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
@@ -1066,21 +1079,57 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
         }
-        if(this.getAttackTarget() != null)
-            minion.setRevengeTarget(this.getAttackTarget());
+        if(this.getAttackTarget() != null) {
+			minion.setRevengeTarget(this.getAttackTarget());
+		}
+		this.addMinion(minion);
     }
 
-    // ========== Minion Update ==========
-    public void onMinionUpdate(LivingEntity minion, long tick) {}
+	/**
+	 * Adds a minion to this creature.
+	 * @param minion The minion to add.
+	 * @return True fi the minion is added, false if it was already added.
+	 */
+	public boolean addMinion(LivingEntity minion) {
+		if(this.minions.contains(minion)) {
+			return false;
+		}
+		this.minions.add(minion);
+		return true;
+	}
 
-    // ========== Minion Death ==========
-    public void onMinionDeath(LivingEntity minion) {}
+	/**
+	 * Returns a list of minions.
+	 * @param filterType An entity type to filter the list by, if null all minions are returned.
+	 * @return A lsit of minions.
+	 */
+	public List<LivingEntity> getMinions(EntityType filterType) {
+		if(filterType == null) {
+			return this.minions;
+		}
+		List<LivingEntity> filteredMinions = new ArrayList<>();
+		for(LivingEntity minion : this.minions) {
+			if(minion.getType() == filterType) {
+				filteredMinions.add(minion);
+			}
+		}
+		return filteredMinions;
+	}
 
-    // ========== Minion ==========
+	/** Called by minions when they update. **/
+	public void onMinionUpdate(LivingEntity minion, long tick) {}
+
+	/** Called by minions when they die. **/
+	public void onMinionDeath(LivingEntity minion, DamageSource damageSource) {}
+
+	/** Called by AI Goals that attempt to damage minions. **/
+	public void onTryToDamageMinion(LivingEntity minion, float damageAmount) {}
+
     /** Set whether this mob is a minion or not, this should be used if this mob is summoned. **/
     public void setMinion(boolean minion) {
     	this.isMinion = minion;
     }
+
     /** Returns whether or not this mob is a minion. **/
     public boolean isMinion() {
         return this.isMinion;
@@ -1098,7 +1147,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	this.temporaryDuration = 0;
     }
 
-    // ========== Minion ==========
+    // ========== Pet ==========
     /** Returns true if this mob has a pet entry and is thus bound to another entity. **/
     public boolean isBoundPet() {
         return this.hasPetEntry();
@@ -1616,6 +1665,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
         // Boss Health Bar:
         this.getBossInfo();
+
+		// Check Minions:
+		if(!this.minions.isEmpty()) {
+			for (LivingEntity minion : this.minions.toArray(new LivingEntity[0])) {
+				if(!minion.isAlive()) {
+					this.minions.remove(minion);
+				}
+			}
+		}
 
         // Minion To Master Update:
         if(this.getMasterTarget() != null && this.getMasterTarget() instanceof BaseCreatureEntity)
@@ -2589,7 +2647,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			distanceZ = targetZ - this.posZ;
 		}
 
-		projectile.weight = 0;
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
 		this.getEntityWorld().addEntity(projectile);
 
@@ -2840,7 +2897,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             }
         }
         if(this.getMasterTarget() != null && this.getMasterTarget() instanceof BaseCreatureEntity)
-            ((BaseCreatureEntity)this.getMasterTarget()).onMinionDeath(this);
+            ((BaseCreatureEntity)this.getMasterTarget()).onMinionDeath(this, damageSource);
     }
     
     
@@ -4443,6 +4500,18 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(nbtTagCompound.contains("FixateUUIDMost") && nbtTagCompound.contains("FixateUUIDLeast")) {
 			this.fixateUUID = new UUID(nbtTagCompound.getLong("FixateUUIDMost"), nbtTagCompound.getLong("FixateUUIDLeast"));
 		}
+
+		if(nbtTagCompound.contains("MinionIds")) {
+			ListNBT minionIds = nbtTagCompound.getList("MinionIds", 10);
+			for(int i = 0; i < minionIds.size(); i++) {
+				CompoundNBT minionId = minionIds.getCompound(i);
+				if(minionId.contains("ID")) {
+					Entity entity = this.getEntityWorld().getEntityByID(minionId.getInt("ID"));
+					if(entity instanceof LivingEntity)
+						this.addMinion((LivingEntity) entity);
+				}
+			}
+		}
     }
     
     // ========== Write ==========
@@ -4499,6 +4568,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         CompoundNBT extTagCompound = new CompoundNBT();
         this.extraMobBehaviour.write(extTagCompound);
         nbtTagCompound.put("ExtraBehaviour", extTagCompound);
+
+		ListNBT minionIds = new ListNBT();
+		for(LivingEntity minion : this.minions) {
+			CompoundNBT minionId = new CompoundNBT();
+			minionId.putInt("ID", minion.getEntityId());
+			minionIds.add(minionId);
+		}
+		nbtTagCompound.put("MinionIds", minionIds);
     }
     
     

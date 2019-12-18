@@ -51,12 +51,12 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		}
 
 		// Build Obstacles:
-		if(ticks == 10 * 20) {
+		if(ticks == 3 * 20) {
 			this.buildObstacles(world, originX, originY, originZ);
 		}
 
 		// Hellfire Pillar Effect:
-		if(ticks == 25 * 20) {
+		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
 				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
 				baseProjectileEntity.projectileLife = 9 * 20;
@@ -65,7 +65,7 @@ public class RahovartStructureBuilder extends StructureBuilder {
 		}
 
 		// Spawn Boss:
-		if(ticks == 29 * 20) {
+		if(ticks == 25 * 20) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity) CreatureManager.getInstance().getCreature("rahovart").createEntity(world);
 			baseCreatureEntity.setLocationAndAngles(originX, originY + 1, originZ, 0, 0);
 			world.addEntity(baseCreatureEntity);

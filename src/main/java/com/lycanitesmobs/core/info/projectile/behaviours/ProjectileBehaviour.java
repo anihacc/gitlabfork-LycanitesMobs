@@ -17,6 +17,9 @@ public abstract class ProjectileBehaviour {
 		if("placeBlocks".equals(type)) {
 			projectileBehaviour = new ProjectileBehaviourPlaceBlocks();
 		}
+		else if("summon".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourSummon();
+		}
 
 		if(projectileBehaviour == null) {
 			return null;

@@ -11,7 +11,11 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
     protected Class oldProjectileClass;
     protected boolean oldModel;
 
-	public RenderFactoryProjectile() {}
+	protected boolean hasModel;
+
+	public RenderFactoryProjectile(boolean hasModel) {
+		this.hasModel = hasModel;
+	}
 
 	public RenderFactoryProjectile(String projectileName, Class projectileClass, boolean hasModel) {
 		this.oldProjectileName = projectileName;
@@ -36,6 +40,13 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 		}
 
 		// New JSON Projectile:
+		if(this.hasModel) {
+			try {
+				return new RenderProjectileModel(manager);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return new RenderProjectileSprite(manager, CustomProjectileEntity.class);
     }
 

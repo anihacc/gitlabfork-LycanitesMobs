@@ -28,10 +28,12 @@ public class ModelProjectileEntity extends BaseProjectileEntity {
 	// ==================================================
 	//                      Visuals
 	// ==================================================
+	@Override
 	public String getTextureName() {
 	return this.entityName.toLowerCase();
 	}
 
+	@Override
 	public ResourceLocation getTexture() {
 		if(TextureManager.getTexture(this.getTextureName()) == null)
 			TextureManager.addTexture(this.getTextureName(), this.modInfo, "textures/projectile/" + this.getTextureName() + ".png");
