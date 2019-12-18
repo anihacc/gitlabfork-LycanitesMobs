@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.obj;
 
-import javax.vecmath.Vector3f;
 
+import net.minecraft.client.renderer.Vector3f;
 
 public class ObjObject {
 

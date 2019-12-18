@@ -1,25 +1,31 @@
 package com.lycanitesmobs.client.obj;
 
+import com.google.common.collect.ImmutableList;
 import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author jglrxavpok
  */
 public class TessellatorModel extends ObjModel
 {
+	public static VertexFormat VERTEX_FORMAT;
 
     //public static final EventBus MODEL_RENDERING_BUS = new EventBus();
 
@@ -58,8 +64,8 @@ public class TessellatorModel extends ObjModel
     {
         Collections.sort(objObjects, (a, b) -> {
 			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
-			double aDist = v.distanceTo(new Vec3d(a.center.x, a.center.y, a.center.z));
-			double bDist = v.distanceTo(new Vec3d(b.center.x, b.center.y, b.center.z));
+			double aDist = v.distanceTo(new Vec3d(a.center.getX(), a.center.getY(), a.center.getZ()));
+			double bDist = v.distanceTo(new Vec3d(b.center.getX(), b.center.getY(), b.center.getZ()));
 			return Double.compare(aDist, bDist);
 		});
         for(ObjObject object : objObjects)
@@ -83,7 +89,7 @@ public class TessellatorModel extends ObjModel
 
 
     @Override
-    public void renderGroupImpl(ObjObject obj, Vector4f color, Vector2f textureOffset) {
+    public void renderGroupImpl(ObjObject obj, Vector4f color, Vec2f textureOffset) {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tess.getBuffer();
         if(obj.mesh == null) {
@@ -109,6 +115,9 @@ public class TessellatorModel extends ObjModel
 		}
 
 		// Build Buffer:
+		if(VERTEX_FORMAT == null) {
+			//VERTEX_FORMAT = new VertexFormat(ImmutableList.builder().add(DefaultVertexFormats.POSITION_3F).add(DefaultVertexFormats.TEX_2F).add(DefaultVertexFormats.COLOR_4UB).add(DefaultVertexFormats.NORMAL_3B).add(DefaultVertexFormats.PADDING_1B).build());
+		}
         bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
         for(int i = 0; i < indices.length; i += 3) {
 
@@ -122,11 +131,11 @@ public class TessellatorModel extends ObjModel
             for(int iv = 0; iv < 3; iv++) {
                 Vertex v = obj.mesh.vertices[indices[i + iv]];
 				bufferBuilder
-                        .pos(v.getPos().x, v.getPos().y, v.getPos().z)
-                        .tex(v.getTexCoords().x + (textureOffset.getX() * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.getY() * 0.01f)))
-                        .color(color.x, color.y, color.z, color.w)
-                        //.normal(v.getNormal().x, v.getNormal().y, v.getNormal().z)
-						.normal(normal.x, normal.y, normal.z)
+                        .func_225582_a_(v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
+                        .func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //text
+                        .func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
+                        //.normal(v.getNormal().getX(), v.getNormal().getY(), v.getNormal().getZ())
+						.func_225584_a_(normal.getX(), normal.getY(), normal.getZ()) //normal
                         .endVertex();
             }
         }
@@ -188,15 +197,17 @@ public class TessellatorModel extends ObjModel
 		Vector3f output = new Vector3f();
 
 		// Calculate Edges:
-		Vector3f calU = new Vector3f(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
-		Vector3f calV = new Vector3f(p3.x - p1.x, p3.y - p1.y, p3.z - p1.z);
+		Vector3f calU = new Vector3f(p2.getX() - p1.getX(), p2.getY() - p1.getY(), p2.getZ() - p1.getZ());
+		Vector3f calV = new Vector3f(p3.getX() - p1.getX(), p3.getY() - p1.getY(), p3.getZ() - p1.getZ());
 
 		// Cross Edges
-		output.x = calU.y * calV.z - calU.z * calV.y;
-		output.y = calU.z * calV.x - calU.x * calV.z;
-		output.z = calU.x * calV.y - calU.y * calV.x;
+		output.set(
+				calU.getY() * calV.getZ() - calU.getZ() * calV.getY(),
+				calU.getZ() * calV.getX() - calU.getX() * calV.getZ(),
+				calU.getX() * calV.getY() - calU.getY() * calV.getX()
+		);
 
-		output.normalize();
+		output.func_229194_d_(); // normalize()
 		return output;
 	}
 }

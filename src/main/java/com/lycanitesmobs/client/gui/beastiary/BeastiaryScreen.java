@@ -11,6 +11,7 @@ import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -103,7 +104,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public void init() {
 		super.init();
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.mc.mainWindow;
+			this.scaledResolution = this.mc.func_228018_at_(); // getMainWIndow()
 		}
 
 		this.zLevel = -1000F;
@@ -278,42 +279,42 @@ public abstract class BeastiaryScreen extends BaseScreen {
 				//GlStateManager.enableDepthTest();
 				//GlStateManager.enableColorMaterial();
 
-				GlStateManager.pushMatrix();
-				GlStateManager.translatef((float)posX, (float)posY, -500.0F);
-				GlStateManager.scalef((float)(-scale), (float)scale, (float)scale);
-				GlStateManager.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
+				RenderSystem.pushMatrix();
+				RenderSystem.translatef((float)posX, (float)posY, -500.0F);
+				RenderSystem.scalef((float)(-scale), (float)scale, (float)scale);
+				RenderSystem.rotatef(180.0F, 0.0F, 0.0F, 1.0F);
 				float f = this.creaturePreviewEntity.renderYawOffset;
 				float f1 = this.creaturePreviewEntity.rotationYaw;
 				float f2 = this.creaturePreviewEntity.rotationPitch;
 				float f3 = this.creaturePreviewEntity.prevRotationYawHead;
 				float f4 = this.creaturePreviewEntity.rotationYawHead;
-				GlStateManager.rotatef(135.0F, 0.0F, 1.0F, 0.0F);
-				RenderHelper.enableStandardItemLighting();
-				GlStateManager.rotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-				GlStateManager.rotatef(-((float)Math.atan((double)(lookY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+				RenderSystem.rotatef(135.0F, 0.0F, 1.0F, 0.0F);
+				RenderSystem.enableLighting(); // RenderHelper enable item lighting
+				RenderSystem.rotatef(-135.0F, 0.0F, 1.0F, 0.0F);
+				RenderSystem.rotatef(-((float)Math.atan((double)(lookY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 				this.creaturePreviewEntity.renderYawOffset = (float)Math.atan((double)(lookX / 40.0F)) * 20.0F;
 				this.creaturePreviewEntity.rotationYaw = (float)Math.atan((double)(lookX / 40.0F)) * 40.0F;
 				this.creaturePreviewEntity.rotationPitch = -((float)Math.atan((double)(lookY / 40.0F))) * 20.0F;
 				this.creaturePreviewEntity.rotationYawHead = this.creaturePreviewEntity.rotationYaw;
 				this.creaturePreviewEntity.prevRotationYawHead = this.creaturePreviewEntity.rotationYaw;
-				GlStateManager.translatef(0.0F, 0.0F, 0.0F);
+				RenderSystem.translatef(0.0F, 0.0F, 0.0F);
 				EntityRendererManager renderManager = Minecraft.getInstance().getRenderManager();
-				renderManager.setPlayerViewY(180.0F);
+				//renderManager.setPlayerViewY(180.0F); TODO Copy from InventoryScreen
 				renderManager.setRenderShadow(false);
-				renderManager.renderEntity(this.creaturePreviewEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, true);
+				//renderManager.renderEntity(this.creaturePreviewEntity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, true);
 				renderManager.setRenderShadow(true);
 				this.creaturePreviewEntity.renderYawOffset = f;
 				this.creaturePreviewEntity.rotationYaw = f1;
 				this.creaturePreviewEntity.rotationPitch = f2;
 				this.creaturePreviewEntity.prevRotationYawHead = f3;
 				this.creaturePreviewEntity.rotationYawHead = f4;
-				GlStateManager.popMatrix();
+				RenderSystem.popMatrix();
 
 				RenderHelper.disableStandardItemLighting();
-				GlStateManager.disableRescaleNormal();
-				GlStateManager.activeTexture(GLX.GL_TEXTURE1);
-				GlStateManager.disableTexture();
-				GlStateManager.activeTexture(GLX.GL_TEXTURE0);
+				RenderSystem.disableRescaleNormal();
+				//RenderSystem.activeTexture(GLX.GL_TEXTURE1);
+				RenderSystem.disableTexture();
+				//RenderSystem.activeTexture(GLX.GL_TEXTURE0);
 			}
 		}
 		catch (Exception e) {
@@ -335,7 +336,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	 * @param creatureInfo The creature to play the sound from.
 	 */
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, ObjectManager.getSound(creatureInfo.getName() + "_say"), SoundCategory.NEUTRAL, 1, 1);
+		this.player.getEntityWorld().playSound(this.player, this.player.getPosition().getX(), this.player.getPosition().getY(), this.player.getPosition().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_say"), SoundCategory.NEUTRAL, 1, 1);
 	}
 
 	/**

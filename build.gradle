@@ -20,7 +20,7 @@ archivesBaseName = 'lycanitesmobs'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190721-1.14.3'
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
     // makeObfSourceJar = false
     // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
 
@@ -47,11 +47,24 @@ minecraft {
                 }
             }
         }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                lycanitesmobs {
+                    source sourceSets.main
+                }
+            }
+        }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.96'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.7'
     
     // Examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
