@@ -1,4 +1,8 @@
 {
+    "mobevent.amalgalich": {
+        "category": "record",
+        "sounds": [{"name": "lycanitesmobs:mobevent/amalgalich", "stream": true}]
+    },
     "mobevent.arachnophobia": {
         "category": "record",
         "sounds": [{"name": "lycanitesmobs:mobevent/arachnophobia", "stream": true}]
@@ -3119,6 +3123,30 @@
     "entity.triffid.beg": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/triffid/beg", "stream": false}]
+    },
+    "entity.amalgalich.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/say", "stream": false}]
+    },
+    "entity.amalgalich.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/hurt", "stream": false}]
+    },
+    "entity.amalgalich.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/death", "stream": false}]
+    },
+    "entity.amalgalich.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/attack", "stream": false}]
+    },
+    "entity.amalgalich.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/step", "stream": false}]
+    },
+    "entity.amalgalich.phase": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/amalgalich/phase", "stream": false}]
     },
     "projectile.frostweb": {
         "category": "ambient",

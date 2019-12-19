@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item.temp;
 
 import com.google.common.collect.Multimap;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.item.ItemBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -200,7 +200,7 @@ public class ItemScepter extends ItemBase {
     // ==================================================
     //                     Sounds
     // ==================================================
-    public void playSound(ItemStack itemStack, World world, EntityLivingBase entity, float power, EntityProjectileBase projectile) {
+    public void playSound(ItemStack itemStack, World world, EntityLivingBase entity, float power, BaseProjectileEntity projectile) {
         this.playSound(world, entity.posX, entity.posY, entity.posZ, projectile.getLaunchSound(), SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
     }
 

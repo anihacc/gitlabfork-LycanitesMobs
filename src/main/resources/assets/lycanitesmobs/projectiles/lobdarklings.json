@@ -1,6 +1,6 @@
 {
 	"name": "lobdarklings",
-	"entityClass": "com.lycanitesmobs.core.entity.EntityProjectileModelCustom",
+	"entityClass": "com.lycanitesmobs.core.entity.CustomProjectileModelEntity",
 	"modelClass": "com.lycanitesmobs.client.model.projectile.ModelLobDarklings",
 	"loadDefault": true,
 	"width": 2.0,

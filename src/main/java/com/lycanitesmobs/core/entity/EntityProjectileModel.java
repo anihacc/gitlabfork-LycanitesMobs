@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityProjectileModel extends EntityProjectileBase {
+public class EntityProjectileModel extends BaseProjectileEntity {
 
 
 	// ==================================================

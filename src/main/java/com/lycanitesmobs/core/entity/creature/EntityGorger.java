@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
@@ -69,7 +69,7 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy 
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        EntityProjectileBase projectile = new EntityMagma(this.getEntityWorld(), this);
+        BaseProjectileEntity projectile = new EntityMagma(this.getEntityWorld(), this);
         projectile.setProjectileScale(2f);
 
         // Y Offset:

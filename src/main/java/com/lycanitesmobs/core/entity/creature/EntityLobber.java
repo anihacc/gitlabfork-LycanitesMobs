@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityMagma;
 import net.minecraft.block.Block;
@@ -103,7 +103,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
 
             // Random Projectiles:
             if(this.ticksExisted % 40 == 0) {
-                EntityProjectileBase projectile = new EntityMagma(this.getEntityWorld(), this);
+                BaseProjectileEntity projectile = new EntityMagma(this.getEntityWorld(), this);
                 projectile.setProjectileScale(2f);
                 projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -231,9 +231,9 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 				scale *= 16;
                 scale *= ((BaseCreatureEntity)entity).getRenderScale();
             }
-			else if(entity instanceof EntityProjectileBase) {
+			else if(entity instanceof BaseProjectileEntity) {
 				scale *= 4;
-				scale *= ((EntityProjectileBase)entity).getProjectileScale();
+				scale *= ((BaseProjectileEntity)entity).getProjectileScale();
 			}
 		}
 

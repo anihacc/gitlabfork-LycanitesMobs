@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.core.entity.EntityParticle;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -43,7 +43,7 @@ public class RenderParticle extends Render {
     // ==================================================
     public void renderParticle(Entity entity, double x, double y, double z, float par8, float par9) {
     	float scale = 1f;
-    	try { scale = ((EntityProjectileBase)entity).getProjectileScale(); }
+    	try { scale = ((BaseProjectileEntity)entity).getProjectileScale(); }
     	catch(Exception e) {}
 
         GlStateManager.pushMatrix();
@@ -81,8 +81,8 @@ public class RenderParticle extends Render {
         double maxV = 1;
         float textureWidth = 0.00390625F;
         float textureHeight = 0.00390625F;
-        if(entity instanceof EntityProjectileBase) {
-            EntityProjectileBase entityProjectile = (EntityProjectileBase)entity;
+        if(entity instanceof BaseProjectileEntity) {
+            BaseProjectileEntity entityProjectile = (BaseProjectileEntity)entity;
             if(entityProjectile.animationFrameMax > 0) {
                 minV = (float)entityProjectile.animationFrame / (float)entityProjectile.animationFrameMax;
                 maxV = minV + (1F / (float)entityProjectile.animationFrameMax);

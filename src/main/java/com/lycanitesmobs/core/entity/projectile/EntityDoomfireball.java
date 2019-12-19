@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityDoomfireball extends EntityProjectileBase {
+public class EntityDoomfireball extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;

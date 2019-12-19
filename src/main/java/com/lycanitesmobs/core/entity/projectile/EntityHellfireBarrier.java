@@ -5,7 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.api.IGroupDemon;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityHellfireBarrier extends EntityProjectileBase {
+public class EntityHellfireBarrier extends BaseProjectileEntity {
 
 	// Properties:
     public EntityHellfireWall[][] hellfireWalls;

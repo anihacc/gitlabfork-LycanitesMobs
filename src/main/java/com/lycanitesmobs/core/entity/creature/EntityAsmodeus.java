@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.SummonMinionsGoal;
 import com.lycanitesmobs.core.entity.navigate.ArenaNode;
@@ -438,7 +438,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         if(projectileInfo == null) {
             return;
         }
-        EntityProjectileBase projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+        BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
         projectile.setProjectileScale(4f);
 
         // Y Offset:

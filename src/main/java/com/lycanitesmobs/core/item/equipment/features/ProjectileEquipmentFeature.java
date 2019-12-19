@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -170,7 +170,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		World world = shooter.getEntityWorld();
-		EntityProjectileBase mainProjectile = null;
+		BaseProjectileEntity mainProjectile = null;
 		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.height * 0.65), shooter.posZ);
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
@@ -191,7 +191,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				double yaw = shooter.rotationYaw + (this.spreadX * shooter.getRNG().nextDouble()) - (this.spreadX / 2);
 				double pitch = shooter.rotationPitch + (this.spreadY * shooter.getRNG().nextDouble()) - (this.spreadY / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				world.spawnEntity(projectile);
@@ -203,7 +203,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			for(int i = 0; i < this.count; i++) {
 				double yaw = shooter.rotationYaw + (angle * i) - (this.ringRange / 2);
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-				EntityProjectileBase projectile = projectileInfo.createProjectile(world, shooter);
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				world.spawnEntity(projectile);
 				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);

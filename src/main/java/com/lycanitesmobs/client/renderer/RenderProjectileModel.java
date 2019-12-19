@@ -1,12 +1,10 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.client.model.ModelCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -14,12 +12,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
 
 @SideOnly(Side.CLIENT)
 public class RenderProjectileModel extends Render {
@@ -47,8 +43,8 @@ public class RenderProjectileModel extends Render {
 	// ==================================================
 	public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		if(this.mainModel == null) {
-			if(entity instanceof EntityProjectileCustom) {
-				ProjectileInfo projectileInfo = ((EntityProjectileCustom)entity).projectileInfo;
+			if(entity instanceof CustomProjectileEntity) {
+				ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
 				if(projectileInfo == null) {
 					return;
 				}
@@ -107,8 +103,8 @@ public class RenderProjectileModel extends Render {
 	@Nullable
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-    	if(entity instanceof EntityProjectileBase) {
-			return ((EntityProjectileBase)entity).getTexture();
+    	if(entity instanceof BaseProjectileEntity) {
+			return ((BaseProjectileEntity)entity).getTexture();
 		}
 		return null;
     }

@@ -6,7 +6,7 @@ import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import com.lycanitesmobs.core.entity.creature.EntityBeholder;
 
 import com.lycanitesmobs.client.AssetManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumParticleTypes;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityArcaneLaserStorm extends EntityProjectileBase {
+public class EntityArcaneLaserStorm extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;

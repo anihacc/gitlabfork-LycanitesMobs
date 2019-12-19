@@ -7,9 +7,9 @@ import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.dispenser.DispenserBehaviorBase;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileModelCustom;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileModelEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
@@ -37,7 +37,7 @@ public class ProjectileInfo {
 	protected String name;
 
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
-	public Class<? extends Entity> entityClass = EntityProjectileCustom.class;
+	public Class<? extends Entity> entityClass = CustomProjectileEntity.class;
 	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
 	public Class<? extends ModelBase> modelClass;
 
@@ -278,11 +278,11 @@ public class ProjectileInfo {
 	 * @param world The world to create the projectile in.
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
-	public EntityProjectileBase createProjectile(World world, EntityLivingBase entityLivingBase) {
+	public BaseProjectileEntity createProjectile(World world, EntityLivingBase entityLivingBase) {
 		if(this.modelClass != null) {
-			return new EntityProjectileModelCustom(world, entityLivingBase, this);
+			return new CustomProjectileModelEntity(world, entityLivingBase, this);
 		}
-		return new EntityProjectileCustom(world, entityLivingBase, this);
+		return new CustomProjectileEntity(world, entityLivingBase, this);
 	}
 
 	/**
@@ -292,8 +292,8 @@ public class ProjectileInfo {
 	 * @param y The y position of the projectile.
 	 * @param z The z position of the projectile.
 	 */
-	public EntityProjectileBase createProjectile(World world, double x, double y, double z) {
-		return new EntityProjectileCustom(world, x, y, z, this);
+	public BaseProjectileEntity createProjectile(World world, double x, double y, double z) {
+		return new CustomProjectileEntity(world, x, y, z, this);
 	}
 
 	public SoundEvent getLaunchSound() {

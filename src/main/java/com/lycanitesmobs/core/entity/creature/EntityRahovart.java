@@ -4,7 +4,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
@@ -177,7 +177,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Random Projectiles:
             for(int i = 0; i < 3; i++) {
-                EntityProjectileBase projectile = new EntityHellfireball(this.getEntityWorld(), this);
+                BaseProjectileEntity projectile = new EntityHellfireball(this.getEntityWorld(), this);
                 projectile.setProjectileScale(8f);
                 projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

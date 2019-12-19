@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,7 +45,7 @@ public class ItemCharge extends ItemBase {
         }
 
         if(!world.isRemote) {
-            EntityProjectileBase projectile = this.createProjectile(itemStack, world, player);
+            BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null)
                 return new ActionResult<>(EnumActionResult.FAIL, itemStack);
             world.spawnEntity(projectile);
@@ -62,7 +62,7 @@ public class ItemCharge extends ItemBase {
      * @param entityPlayer The player using the charge.
      * @return A projectile instance.
      */
-    public EntityProjectileBase createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    public BaseProjectileEntity createProjectile(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         if(this.projectileInfo == null) {
             return null;
         }

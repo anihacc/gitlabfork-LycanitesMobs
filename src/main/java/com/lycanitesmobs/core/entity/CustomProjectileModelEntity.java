@@ -3,30 +3,27 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class EntityProjectileModelCustom extends EntityProjectileCustom {
+public class CustomProjectileModelEntity extends CustomProjectileEntity {
 
 	// ==================================================
 	//                   Constructors
 	// ==================================================
-	public EntityProjectileModelCustom(World world) {
+	public CustomProjectileModelEntity(World world) {
 		super(world);
 	}
 
-	public EntityProjectileModelCustom(World world, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(World world, ProjectileInfo projectileInfo) {
 		super(world, projectileInfo);
 	}
 
-	public EntityProjectileModelCustom(World world, EntityLivingBase entityLiving, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(World world, EntityLivingBase entityLiving, ProjectileInfo projectileInfo) {
 		super(world, entityLiving, projectileInfo);
 	}
 
-	public EntityProjectileModelCustom(World world, double x, double y, double z, ProjectileInfo projectileInfo) {
+	public CustomProjectileModelEntity(World world, double x, double y, double z, ProjectileInfo projectileInfo) {
 		super(world, x, y, z, projectileInfo);
 	}
 

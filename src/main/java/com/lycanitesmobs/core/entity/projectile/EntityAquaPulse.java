@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -16,7 +16,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAquaPulse extends EntityProjectileBase {
+public class EntityAquaPulse extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;

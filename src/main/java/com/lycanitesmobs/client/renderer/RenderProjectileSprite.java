@@ -1,8 +1,8 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.core.entity.EntityParticle;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
-import com.lycanitesmobs.core.entity.EntityProjectileCustom;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -54,13 +54,13 @@ public class RenderProjectileSprite extends Render {
     // ==================================================
     public void renderProjectile(Entity entity, double x, double y, double z, float par8, float par9) {
     	double scale = 0.5d;
-    	if(entity instanceof EntityProjectileCustom && ((EntityProjectileCustom)entity).projectileInfo == null) {
+    	if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
     		return;
 		}
-        if(entity instanceof EntityProjectileBase) {
-            EntityProjectileBase entityProjectileBase = (EntityProjectileBase)entity;
-            scale *= entityProjectileBase.getProjectileScale();
-            y += entityProjectileBase.getTextureOffsetY();
+        if(entity instanceof BaseProjectileEntity) {
+            BaseProjectileEntity baseProjectileEntity = (BaseProjectileEntity)entity;
+            scale *= baseProjectileEntity.getProjectileScale();
+            y += baseProjectileEntity.getTextureOffsetY();
         }
 
         GlStateManager.pushMatrix();
@@ -87,8 +87,8 @@ public class RenderProjectileSprite extends Render {
         double textureWidth = 0.5D;
         double textureHeight = 0.5D;
         double offsetY = 0;
-        if(entity instanceof EntityProjectileBase) {
-            EntityProjectileBase entityProjectile = (EntityProjectileBase)entity;
+        if(entity instanceof BaseProjectileEntity) {
+            BaseProjectileEntity entityProjectile = (BaseProjectileEntity)entity;
             if(entityProjectile.animationFrameMax > 0) {
                 minV = (float)entityProjectile.animationFrame / (float)entityProjectile.animationFrameMax;
                 maxV = minV + (1F / (float)entityProjectile.animationFrameMax);
@@ -183,8 +183,8 @@ public class RenderProjectileSprite extends Render {
     // ========== Get Texture ==========
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-    	if(entity instanceof EntityProjectileBase)
-    		return ((EntityProjectileBase)entity).getTexture();
+    	if(entity instanceof BaseProjectileEntity)
+    		return ((BaseProjectileEntity)entity).getTexture();
     	else if(entity instanceof EntityParticle)
     		return ((EntityParticle)entity).getTexture();
     	return null;

@@ -16,10 +16,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityProjectileCustom extends EntityProjectileBase {
+public class CustomProjectileEntity extends BaseProjectileEntity {
 
 	/** Used to sync the Projectile Info's name to use. **/
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(EntityProjectileCustom.class, DataSerializers.STRING);
+	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
 
 	/** The Projectile Info to base this projectile from. **/
 	public ProjectileInfo projectileInfo;
@@ -28,20 +28,20 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 	// ==================================================
 	//                   Constructors
 	// ==================================================
-	public EntityProjectileCustom(World world) {
+	public CustomProjectileEntity(World world) {
 		super(world);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 	}
 
-	public EntityProjectileCustom(World world, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(World world, ProjectileInfo projectileInfo) {
 		super(world);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public EntityProjectileCustom(World world, EntityLivingBase entityLiving, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(World world, EntityLivingBase entityLiving, ProjectileInfo projectileInfo) {
 		super(world, entityLiving);
 		if(projectileInfo != null)
 			this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, (float)projectileInfo.velocity, 1.0F);
@@ -50,7 +50,7 @@ public class EntityProjectileCustom extends EntityProjectileBase {
 		this.setProjectileInfo(projectileInfo);
 	}
 
-	public EntityProjectileCustom(World world, double x, double y, double z, ProjectileInfo projectileInfo) {
+	public CustomProjectileEntity(World world, double x, double y, double z, ProjectileInfo projectileInfo) {
 		super(world, x, y, z);
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.modInfo = LycanitesMobs.modInfo;

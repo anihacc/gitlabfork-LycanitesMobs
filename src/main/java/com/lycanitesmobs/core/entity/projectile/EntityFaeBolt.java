@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -13,7 +13,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityFaeBolt extends EntityProjectileBase {
+public class EntityFaeBolt extends BaseProjectileEntity {
 
 	// Properties:
 	public Entity shootingEntity;

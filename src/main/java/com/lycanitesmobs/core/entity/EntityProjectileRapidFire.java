@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.lang.reflect.Constructor;
 
-public class EntityProjectileRapidFire extends EntityProjectileBase {
+public class EntityProjectileRapidFire extends BaseProjectileEntity {
 	// Properties:
 	public EntityLivingBase shootingEntity;
 	private float projectileWidth = 0.2f;
@@ -161,8 +160,8 @@ public class EntityProjectileRapidFire extends EntityProjectileBase {
                 }
 	        }
 	        
-	        if(projectile instanceof EntityProjectileBase) {
-                ((EntityProjectileBase) projectile).setProjectileScale(this.projectileScale);
+	        if(projectile instanceof BaseProjectileEntity) {
+                ((BaseProjectileEntity) projectile).setProjectileScale(this.projectileScale);
             }
 	        
 	        world.spawnEntity((Entity)projectile);

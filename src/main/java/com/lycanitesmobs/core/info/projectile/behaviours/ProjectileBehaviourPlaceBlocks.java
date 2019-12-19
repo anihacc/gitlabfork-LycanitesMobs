@@ -1,8 +1,7 @@
 package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +36,7 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileImpact(EntityProjectileBase projectile, World world, BlockPos pos) {
+	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
 		Block block = GameRegistry.findRegistry(Block.class).getValue(new ResourceLocation(this.blockName));
 		if(block == null) {
 			return;

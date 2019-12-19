@@ -16,7 +16,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityPortal extends EntityProjectileBase {
+public class EntityPortal extends BaseProjectileEntity {
 	// Summoning Portal:
 	private double targetX;
 	private double targetY;

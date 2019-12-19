@@ -2,17 +2,15 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 	/** The id of the mob to summon. **/
@@ -54,7 +52,7 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileImpact(EntityProjectileBase projectile, World world, BlockPos pos) {
+	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
 		if(projectile == null || projectile.getEntityWorld().isRemote) {
 			return;
 		}

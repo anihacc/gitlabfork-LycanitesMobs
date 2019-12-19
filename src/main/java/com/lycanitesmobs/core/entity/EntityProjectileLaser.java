@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 
-public class EntityProjectileLaser extends EntityProjectileBase {
+public class EntityProjectileLaser extends BaseProjectileEntity {
 	// Properties:
 	public EntityLivingBase shootingEntity;
     /** The entity that this laser should appear from. **/

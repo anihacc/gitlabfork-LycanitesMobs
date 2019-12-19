@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
@@ -12,7 +12,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityBoulderBlast extends EntityProjectileBase {
+public class EntityBoulderBlast extends BaseProjectileEntity {
 	
 	// Properties:
 	public Entity shootingEntity;

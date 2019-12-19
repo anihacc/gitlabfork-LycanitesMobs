@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 
 import com.lycanitesmobs.core.entity.projectile.EntityTundra;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -42,7 +42,7 @@ public class ItemScepterTundra extends ItemScepter {
     @Override
     public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
     	if(!world.isRemote) {
-    		EntityProjectileBase projectile = new EntityTundra(world, entity);
+    		BaseProjectileEntity projectile = new EntityTundra(world, entity);
     		projectile.setDamage((int)(projectile.getDamage(null) * power * 2));
         	world.spawnEntity(projectile);
             this.playSound(itemStack, world, entity, power, projectile);

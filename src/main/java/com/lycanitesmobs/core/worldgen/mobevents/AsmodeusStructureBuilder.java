@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.worldgen.mobevents;
 import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
@@ -58,9 +58,9 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		// Hellfire Pillar Effect:
 		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
-				EntityProjectileBase entityProjectileBase = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
-				entityProjectileBase.projectileLife = 9 * 20;
-				world.spawnEntity(entityProjectileBase);
+				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
+				baseProjectileEntity.projectileLife = 9 * 20;
+				world.spawnEntity(baseProjectileEntity);
 			}
 		}
 

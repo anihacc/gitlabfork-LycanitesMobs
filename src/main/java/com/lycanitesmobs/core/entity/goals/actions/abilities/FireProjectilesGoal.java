@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileBase;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +12,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 
     // Properties:
 	protected String projectileName;
-	protected Class<? extends EntityProjectileBase> projectileClass;
+	protected Class<? extends BaseProjectileEntity> projectileClass;
 	protected float velocity = 1.6F;
 	protected float inaccuracy = 0F;
 	protected float scale = 1F;
@@ -60,7 +60,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 	 * @param projectileClass The projectile class to fire.
 	 * @return This goal for chaining.
 	 */
-	public FireProjectilesGoal setProjectile(Class<? extends EntityProjectileBase> projectileClass) {
+	public FireProjectilesGoal setProjectile(Class<? extends BaseProjectileEntity> projectileClass) {
 		this.projectileClass = projectileClass;
 		return this;
 	}

@@ -2903,7 +2903,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public EntityProjectileBase fireProjectile(String projectileName, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(String projectileName, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(projectileName);
 		if(projectileInfo == null) {
 			return null;
@@ -2923,10 +2923,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The newly created projectile.
 	 */
-	public EntityProjectileBase fireProjectile(Class projectileClass, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
-		EntityProjectileBase projectile = null;
+	public BaseProjectileEntity fireProjectile(Class projectileClass, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+		BaseProjectileEntity projectile = null;
 		try {
-			projectile = (EntityProjectileBase) projectileClass.getConstructor(World.class, EntityLivingBase.class).newInstance(this.getEntityWorld(), this);
+			projectile = (BaseProjectileEntity) projectileClass.getConstructor(World.class, EntityLivingBase.class).newInstance(this.getEntityWorld(), this);
 		}
 		catch (Exception e) {
 			LycanitesMobs.logWarning("", "Unable to create a projectile from the class: " + projectileClass);
@@ -2946,7 +2946,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @param inaccuracy How inaccurate the projectile aiming is.
 	 * @return The fired created projectile.
 	 */
-	public EntityProjectileBase fireProjectile(EntityProjectileBase projectile, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
+	public BaseProjectileEntity fireProjectile(BaseProjectileEntity projectile, Entity target, float range, float angle, Vec3d offset, float velocity, float scale, float inaccuracy) {
 		if(projectile == null) {
 			return null;
 		}

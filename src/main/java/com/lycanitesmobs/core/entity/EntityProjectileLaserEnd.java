@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityProjectileLaserEnd extends EntityProjectileBase {
+public class EntityProjectileLaserEnd extends BaseProjectileEntity {
 	// Laser End:
 	private double targetX;
 	private double targetY;
