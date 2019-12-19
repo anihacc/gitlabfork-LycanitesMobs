@@ -81,4 +81,12 @@ public class EquipmentFeature {
 		}
 		return "";
 	}
+
+	/** Returns a description of this feature. Returns null if the feature is not active. **/
+	public String getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		return this.featureType;
+	}
 }

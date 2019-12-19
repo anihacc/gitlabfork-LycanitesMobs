@@ -83,10 +83,23 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		return description;
 	}
 
+	@Override
+	public String getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		String summary = this.harvestType + " (" + this.harvestShape;
+		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
+			summary += " " + this.getHarvestRangeString(level);
+		}
+		summary += ")";
+		return summary;
+	}
+
 	public String getHarvestRangeString(int level) {
 		String harvestRangeString = "" + Math.round(this.harvestRange.getX() + (this.harvestRange.getX() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += ", " + Math.round(this.harvestRange.getY() + (this.harvestRange.getY() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += ", " + Math.round(this.harvestRange.getZ() + (this.harvestRange.getZ() * (level - 1) * this.harvestRangeLevelMultiplier));
+		harvestRangeString += "x" + Math.round(this.harvestRange.getY() + (this.harvestRange.getY() * (level - 1) * this.harvestRangeLevelMultiplier));
+		harvestRangeString += "x" + Math.round(this.harvestRange.getZ() + (this.harvestRange.getZ() * (level - 1) * this.harvestRangeLevelMultiplier));
 		return harvestRangeString;
 	}
 

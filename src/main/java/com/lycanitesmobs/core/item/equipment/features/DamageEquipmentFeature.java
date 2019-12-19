@@ -48,16 +48,16 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		}
 		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.damageAmount;
 		if(this.damageCooldown > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.cooldown") + " " + this.damageCooldown;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.cooldown") + " " + String.format("%.1f", this.damageCooldown);
 		}
 		if(this.damageKnockback > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.knockback") + " " + this.damageKnockback;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.knockback") + " " + String.format("%.0f", this.damageKnockback);
 		}
 		if(this.damageRange > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + this.damageRange;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + String.format("%.1f", this.damageRange);
 		}
 		if(this.damageSweep > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + this.damageSweep;
+			description += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + String.format("%.0f", this.damageSweep);
 		}
 		return description;
 	}

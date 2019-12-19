@@ -76,6 +76,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		return description;
 	}
 
+	@Override
+	public String getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		return LanguageManager.translate("entity." + this.summonMobId + ".name");
+	}
+
 	/**
 	 * Called when an entity is hit by equipment with this feature.
 	 * @param itemStack The ItemStack being hit with.

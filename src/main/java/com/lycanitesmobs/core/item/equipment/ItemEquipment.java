@@ -23,6 +23,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -80,6 +81,8 @@ public class ItemEquipment extends ItemBase {
 
 	public List<String> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
 		List<String> descriptions = new ArrayList<>();
+
+		// Part Names:
 		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(itemStack)) {
 			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
 			if(equipmentPart == null)
@@ -87,8 +90,70 @@ public class ItemEquipment extends ItemBase {
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
 			descriptions.add(equipmentPart.getItemStackDisplayName(itemStack) + " " + LanguageManager.translate("entity.level") + " " + partLevel);
 		}
-		//descriptions.add(LanguageManager.translate("common.holdshift"));
+		descriptions.add("-------------------\n");
+
+		// Damage:
+		String damageDescription = LanguageManager.translate("equipment.feature.damage") + " " + String.format("%.0f", this.getDamageAmount(itemStack) + 1);
+		damageDescription += "\n" + LanguageManager.translate("equipment.feature.damage.cooldown") + " " + String.format("%.1f", this.getDamageCooldown(itemStack));
+		damageDescription += "\n" + LanguageManager.translate("equipment.feature.damage.knockback") + " " + String.format("%.0f", this.getDamageKnockback(itemStack));
+		damageDescription += "\n" + LanguageManager.translate("equipment.feature.damage.range") + " " + String.format("%.1f", this.getDamageRange(itemStack));
+		damageDescription += "\n" + LanguageManager.translate("equipment.feature.damage.sweep") + " " + String.format("%.0f", Math.min(this.getDamageSweep(itemStack), 360));
+		descriptions.add(damageDescription);
+
+		// Summaries:
+		String harvestSummaries = this.getFeatureSummaries(itemStack, "harvest");
+		String effectSummaries = this.getFeatureSummaries(itemStack, "effect");
+		String projectileSummaries = this.getFeatureSummaries(itemStack, "projectile");
+		String summonSummaries = this.getFeatureSummaries(itemStack, "summon");
+		if(!"".equals(harvestSummaries) || !"".equals(effectSummaries) || !"".equals(projectileSummaries) || !"".equals(summonSummaries)) {
+			descriptions.add("-------------------\n");
+
+			// Harvest:
+			if (!"".equals(harvestSummaries)) {
+				descriptions.add(LanguageManager.translate("equipment.feature.harvest") + " " + harvestSummaries);
+			}
+
+			// Effect:
+			if (!"".equals(effectSummaries)) {
+				descriptions.add(LanguageManager.translate("equipment.feature.effect") + " " + effectSummaries);
+			}
+
+			// Projectile:
+			if (!"".equals(projectileSummaries)) {
+				descriptions.add(LanguageManager.translate("equipment.feature.projectile") + " " + projectileSummaries);
+			}
+
+			// Summon:
+			if (!"".equals(summonSummaries)) {
+				descriptions.add(LanguageManager.translate("equipment.feature.summon") + " " + summonSummaries);
+			}
+		}
+
 		return descriptions;
+	}
+
+
+	/**
+	 * Gets comma separated text of the description summary of the provided feature type.
+	 * @param itemStack The Equipment Piece itemstack to get parts and features from.
+	 * @param featureType The feature type to get the summaries of.
+	 * @return A string of summaries, empty if none are of the type are found.
+	 */
+	public String getFeatureSummaries(ItemStack itemStack, String featureType) {
+		Map<EquipmentFeature, ItemStack> effectFeatures = this.getFeaturesByTypeWithPartStack(itemStack, featureType);
+		String featureSummaries = "";
+		boolean first = true;
+		for (EquipmentFeature equipmentFeature : effectFeatures.keySet()) {
+			if(!first) {
+				featureSummaries += ", ";
+			}
+			first = false;
+			String featureSummary = equipmentFeature.getSummary(effectFeatures.get(equipmentFeature), this.getPartLevel(effectFeatures.get(equipmentFeature)));
+			if(featureSummary != null) {
+				featureSummaries += featureSummary;
+			}
+		}
+		return featureSummaries;
 	}
 
 
@@ -207,6 +272,29 @@ public class ItemEquipment extends ItemBase {
 
 
 	/**
+	 * Searches for the provided active features by type and returns a map of them with the feature as the key and the stack they are from as the value.
+	 * @param equipmentStack The itemStack of the Equipment.
+	 * @param featureType The type of feature to search for.
+	 * @return A list of features.
+	 */
+	public Map<EquipmentFeature, ItemStack> getFeaturesByTypeWithPartStack(ItemStack equipmentStack, String featureType) {
+		Map<EquipmentFeature, ItemStack> features = new HashMap<>();
+		for(ItemStack equipmentPartStack : this.getEquipmentPartStacks(equipmentStack)) {
+			ItemEquipmentPart equipmentPart = this.getEquipmentPart(equipmentPartStack);
+			if(equipmentPart == null) {
+				continue;
+			}
+			for (EquipmentFeature feature : equipmentPart.features) {
+				if(feature.isActive(equipmentPartStack, equipmentPart.getLevel(equipmentPartStack)) && feature.featureType.equalsIgnoreCase(featureType)) {
+					features.put(feature, equipmentPartStack);
+				}
+			}
+		}
+		return features;
+	}
+
+
+	/**
 	 * Cycles through each Equipment Part and lowers their level to the provided level cap, used by lower level Forges.
 	 * @param equipmentStack The itemStack of the Equipment.
 	 * @param levelCap The level cap to lower parts to.
@@ -240,6 +328,21 @@ public class ItemEquipment extends ItemBase {
 			}
 		}
 		return highestLevel;
+	}
+
+
+	/**
+	 * Gets the Equipment Part level from the provided itemstack.
+	 * @param partStack The itemstack to get a part level from.
+	 * @return The part level or 1 if the itemstack is invalid.
+	 */
+	public int getPartLevel(ItemStack partStack) {
+		Item featureItem = partStack.getItem();
+		if(!(featureItem instanceof ItemEquipmentPart)) {
+			return 1;
+		}
+		ItemEquipmentPart featurePart = (ItemEquipmentPart)featureItem;
+		return featurePart.getLevel(partStack);
 	}
 
 

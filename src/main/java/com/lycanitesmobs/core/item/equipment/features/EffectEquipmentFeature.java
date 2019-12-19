@@ -43,14 +43,40 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.effectType + " (" + this.effectTarget + ")";
-		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
-		}
+
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.getEffectTypeName() + " (" + this.effectTarget + ")";
 		if(this.effectStrength > 0) {
 			description += "\n" + LanguageManager.translate("equipment.feature.effect.strength") + " " + this.effectStrength;
 		}
+		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
+			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
+		}
+
 		return description;
+	}
+
+	@Override
+	public String getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+
+		String summary = this.getEffectTypeName() + " (" + this.effectTarget + ")";
+		if(this.effectStrength > 0) {
+			summary += " " + LanguageManager.translate("entity.level") + " " + this.effectStrength;
+		}
+		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
+			summary += " " + ((float)this.effectDuration / 20);
+		}
+		return summary;
+	}
+
+	public String getEffectTypeName() {
+		if("burning".equals(this.effectType)) {
+			return LanguageManager.translate("effect.burning");
+		}
+		ResourceLocation effectResource = new ResourceLocation(this.effectType);
+		return LanguageManager.translate("effect." + effectResource.getResourcePath());
 	}
 
 	/**
@@ -69,8 +95,8 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			effectTarget = attacker;
 		}
 
-		// Fire:
-		if("fire".equalsIgnoreCase(this.effectType)) {
+		// Burning:
+		if("burning".equalsIgnoreCase(this.effectType)) {
 			effectTarget.setFire(Math.round(((float)this.effectDuration) / 20));
 			return;
 		}

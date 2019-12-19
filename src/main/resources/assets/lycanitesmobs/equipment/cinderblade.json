@@ -45,7 +45,7 @@
 		{
 			"featureType": "effect",
 			"levelMax": 2,
-			"effectType": "fire",
+			"effectType": "burning",
 			"effectTarget": "target",
 			"effectDuration": 20,
 			"effectStrength": 1
@@ -53,7 +53,7 @@
 		{
 			"featureType": "effect",
 			"levelMin": 3,
-			"effectType": "fire",
+			"effectType": "burning",
 			"effectTarget": "target",
 			"effectDuration": 40,
 			"effectStrength": 1
