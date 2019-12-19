@@ -120,7 +120,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
                                 BlockPos placePos = new BlockPos(x, y + 1, z);
                                 Block upperBlock = this.getEntityWorld().getBlockState(placePos).getBlock();
                                 if(upperBlock == Blocks.AIR) {
-                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().with(BlockFireBase.PERMANENT, permanent), 3);
+                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().with(BlockFireBase.PERMANENT, permanent));
                                 }
                             }
                         }
