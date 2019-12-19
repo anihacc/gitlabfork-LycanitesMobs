@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
@@ -102,7 +103,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     @Override
     public void onDeath(DamageSource damageSource) {
         try {
-            int shadowfireWidth = (int)Math.floor(this.getSize(this.getPose()).height) + 1;
+            int shadowfireWidth = (int)Math.floor(this.getSize(this.getPose()).width) + 1;
             int shadowfireHeight = (int)Math.floor(this.getSize(this.getPose()).height) + 1;
             boolean permanent = false;
             if(damageSource.getTrueSource() == this) {

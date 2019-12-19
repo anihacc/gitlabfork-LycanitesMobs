@@ -96,7 +96,7 @@ public abstract class FollowGoal extends Goal {
         if(!target.isAlive())
         	return false;
         
-        double distance = this.host.getDistanceSq(target);
+        double distance = this.host.getDistance(target);
         if(distance > this.lostDistance && this.lostDistance != 0) {
 			this.setTarget(null);
 			return false;

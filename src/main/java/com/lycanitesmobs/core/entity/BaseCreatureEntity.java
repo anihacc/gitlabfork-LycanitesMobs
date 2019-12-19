@@ -1360,6 +1360,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return this.creatureInfo.elements;
 	}
 
+	/**
+	 * Returns true if this creature has the provided element.
+	 * @param element The element to check for.
+	 * @return True if this creature has the provided element.
+	 */
+	public boolean hasElement(ElementInfo element) {
+		return this.getElements().contains(element);
+	}
+
 
 	// ==================================================
 	//                    Subspecies

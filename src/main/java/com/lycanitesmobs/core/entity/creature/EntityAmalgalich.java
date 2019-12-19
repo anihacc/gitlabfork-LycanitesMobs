@@ -143,7 +143,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
             this.setBattlePhase(1);
             return;
         }
-        this.setBattlePhase(0);
+        this.setBattlePhase(1);
     }
 
     @Override

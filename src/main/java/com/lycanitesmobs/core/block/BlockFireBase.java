@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.block;
 
 
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.block.effect.BlockShadowfire;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
@@ -17,22 +19,20 @@ import java.util.Map;
 import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
-    public static final BooleanProperty PERMANENT = BooleanProperty.create("premanent");
+    public static final BooleanProperty PERMANENT = BooleanProperty.create("permanent");
     public static final BooleanProperty NORTH = SixWayBlock.NORTH;
     public static final BooleanProperty EAST = SixWayBlock.EAST;
     public static final BooleanProperty SOUTH = SixWayBlock.SOUTH;
     public static final BooleanProperty WEST = SixWayBlock.WEST;
     public static final BooleanProperty UP = SixWayBlock.UP;
-    private static final Map<Direction, BooleanProperty> FACING_TO_PROPERTY_MAP = SixWayBlock.FACING_TO_PROPERTY_MAP.entrySet().stream().filter((p_199776_0_) -> {
-        return p_199776_0_.getKey() != Direction.DOWN;
-    }).collect(Util.toMapCollector());
+    private static final Map<Direction, BooleanProperty> FACING_TO_PROPERTY_MAP = SixWayBlock.FACING_TO_PROPERTY_MAP.entrySet().stream().filter((p_199776_0_) -> p_199776_0_.getKey() != Direction.DOWN).collect(Util.toMapCollector());
 
     public boolean dieInRain = true;
     public boolean triggerTNT = true;
     public boolean tickRandomly = true;
     public int agingRate = 3;
     public float spreadChance = 1;
-    public boolean removeOnNoFireTick = false;
+    public boolean removeOnNoFireTick;
 
 
     // ==================================================
@@ -70,28 +70,29 @@ public class BlockFireBase extends BlockBase {
     // ==================================================
     //                   Block States
     // ==================================================
+    @Override
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return this.getStateForPlacement(context.getWorld(), context.getPos());
     }
 
     public BlockState getStateForPlacement(IBlockReader world, BlockPos blockPos) {
-        BlockPos blockpos = blockPos.down();
-        BlockState blockstate = world.getBlockState(blockpos);
-        if (!this.canCatchFire(world, blockPos, Direction.UP) && !Block.hasSolidSide(blockstate, world, blockpos, Direction.UP)) {
-            BlockState blockstate1 = this.getDefaultState();
+        BlockPos lowerBlockPos = blockPos.down();
+        BlockState lowerBlockState = world.getBlockState(lowerBlockPos);
+        if (!this.canCatchFire(world, blockPos, Direction.UP) && !Block.hasSolidSide(lowerBlockState, world, lowerBlockPos, Direction.UP)) {
+            BlockState placementState = this.getDefaultState();
 
             for(Direction direction : Direction.values()) {
                 BooleanProperty booleanproperty = FACING_TO_PROPERTY_MAP.get(direction);
                 if (booleanproperty != null) {
-                    blockstate1 = blockstate1.with(booleanproperty, this.canCatchFire(world, blockPos.offset(direction), direction.getOpposite()));
+                    placementState = placementState.with(booleanproperty, this.canCatchFire(world, blockPos.offset(direction), direction.getOpposite()));
                 }
             }
 
-            return blockstate1;
-        } else {
-            return this.getDefaultState();
+            return placementState.with(PERMANENT, false);
         }
+
+        return this.getDefaultState();
     }
 
 
@@ -102,7 +103,7 @@ public class BlockFireBase extends BlockBase {
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        return Block.hasSolidSide(worldIn.getBlockState(blockpos), worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
+        return worldIn.getBlockState(blockpos).func_224755_d(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
     }
 
     protected boolean areNeighborsFlammable(IBlockReader worldIn, BlockPos pos) {
@@ -132,24 +133,27 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random rand) {
-        if(state.get(PERMANENT)) {
+    public void tick(BlockState blockState, World world, BlockPos pos, Random rand) {
+        if (!world.isAreaLoaded(pos, 2)) {
             return;
         }
 
+        boolean permanent = blockState.get(PERMANENT);
+
         if (!world.getGameRules().getBoolean(GameRules.DO_FIRE_TICK)) {
-            if(this.removeOnNoFireTick)
+            if(this.removeOnNoFireTick && !permanent)
                 world.removeBlock(pos, false);
             return;
         }
 
         // Prevent Self Replacement:
-        if (!this.isValidPosition(state, world, pos) || this.removeOnTick)
+        if (!this.isValidPosition(blockState, world, pos) || this.removeOnTick) {
             world.removeBlock(pos, false);
+        }
 
         BlockState blockStateBelow = world.getBlockState(pos.down());
-        boolean isOnFireSource = this.isBlockFireSource(blockStateBelow, world, pos.down(), Direction.UP);
-        int age = state.get(AGE);
+        boolean isOnFireSource = permanent || this.isBlockFireSource(blockStateBelow, world, pos.down(), Direction.UP);
+        int age = blockState.get(AGE);
 
         // Environmental Extinguish:
         if (!isOnFireSource && this.canDie(world, pos) && rand.nextFloat() < 0.2F + (float)age * 0.03F) {
@@ -159,8 +163,8 @@ public class BlockFireBase extends BlockBase {
 
         // Increase Age:
         if (age < 15) {
-            state = state.with(AGE, Math.max(age + Math.round((float)rand.nextInt(this.agingRate) / 2), 15));
-            world.setBlockState(pos, state, 4);
+            blockState = blockState.with(AGE, Math.max(age + Math.round((float)rand.nextInt(this.agingRate) / 2), 15));
+            world.setBlockState(pos, blockState, 4);
         }
 
         // Schedule Next Update:
@@ -191,7 +195,7 @@ public class BlockFireBase extends BlockBase {
         }
 
         // Spread Fire:
-        if(this.spreadChance <= 0)
+        if(this.spreadChance <= 0 || permanent)
             return;
         boolean highHumidity = world.isBlockinHighHumidity(pos);
         int humidityChance = 0;
@@ -225,7 +229,7 @@ public class BlockFireBase extends BlockBase {
                                 int spreadAge = age + rand.nextInt(5) / 4;
                                 if (spreadAge > 15)
                                     spreadAge = 15;
-                                world.setBlockState(spreadPos, state.with(AGE, spreadAge), 3);
+                                world.setBlockState(spreadPos, blockState.with(AGE, spreadAge).with(PERMANENT, false), 3);
                             }
                         }
                     }
