@@ -48,8 +48,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.hitAreaWidthScale = 2F;
 
         // Boss:
-        this.damageMax = 25;
-        this.damageLimit = 40;
+        this.damageMax = BaseCreatureEntity.BOSS_DAMAGE_LIMIT;
+        this.damageLimit = BaseCreatureEntity.BOSS_DAMAGE_LIMIT;
     }
 
     // ========== Init AI ==========

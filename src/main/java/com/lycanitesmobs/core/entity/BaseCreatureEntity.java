@@ -149,6 +149,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 
 	// Boss Health:
+	public static int BOSS_DAMAGE_LIMIT = 50;
 	/** How much damage this creature has taken over the latest second. **/
 	public float damageTakenThisSec = 0;
 	/** How much health this creature had last tick. **/
