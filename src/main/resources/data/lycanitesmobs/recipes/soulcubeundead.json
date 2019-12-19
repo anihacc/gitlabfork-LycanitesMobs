@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "lycanitesmobs:soulcubeundead"
+  },
+  "pattern": [
+    "DDD",
+    "DSD",
+    "DDD"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "minecraft:rotten_flesh"
+    }
+  }
+}
