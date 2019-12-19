@@ -52,22 +52,22 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		if(this.damageCooldown > 0) {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.cooldown"))
-					.appendText(" " + this.damageCooldown);
+					.appendText(" " + String.format("%.1f", this.damageCooldown));
 		}
 		if(this.damageKnockback > 0) {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.knockback"))
-					.appendText(" " + this.damageKnockback);
+					.appendText(" " + String.format("%.0f", this.damageKnockback));
 		}
 		if(this.damageRange > 0) {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.range"))
-					.appendText(" " + this.damageRange);
+					.appendText(" " + String.format("%.1f", this.damageRange));
 		}
 		if(this.damageSweep > 0) {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.damage.sweep"))
-					.appendText(" " + this.damageSweep);
+					.appendText(" " + String.format("%.0f", this.damageSweep));
 		}
 		return description;
 	}
