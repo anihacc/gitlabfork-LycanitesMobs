@@ -39,6 +39,7 @@ public class EntitySpectralbolt extends BaseProjectileEntity {
     	this.setDamage(2);
     	
     	this.waterProof = true;
+    	this.weight = 0;
     }
     
     

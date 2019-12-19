@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockFireBase extends BlockBase {
-    public static final PropertyBool PERMANENT = PropertyBool.create("premanent");
+    public static final PropertyBool PERMANENT = PropertyBool.create("permanent");
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -69,6 +69,11 @@ public class BlockFireBase extends BlockBase {
         this.setTickRandomly(this.tickRandomly);
         this.setSoundType(SoundType.CLOTH);
         this.disableStats();
+    }
+
+    @Override
+    public BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UPPER);
     }
 
 
@@ -116,11 +121,6 @@ public class BlockFireBase extends BlockBase {
         return state.getValue(AGE);
     }
 
-    @Override
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, AGE, PERMANENT, NORTH, EAST, SOUTH, WEST, UPPER);
-    }
-
 
 
     // ==================================================
@@ -134,13 +134,11 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        if(state.getValue(PERMANENT)) {
-            return;
-        }
+    public void updateTick(World world, BlockPos pos, IBlockState blockState, Random rand) {
+        boolean permanent = blockState.getValue(PERMANENT);
 
         if (!world.getGameRules().getBoolean("doFireTick")) {
-            if(this.removeOnNoFireTick)
+            if(this.removeOnNoFireTick && !permanent)
                 world.setBlockToAir(pos);
             return;
         }
@@ -150,8 +148,8 @@ public class BlockFireBase extends BlockBase {
             world.setBlockToAir(pos);
 
         Block blockBelow = world.getBlockState(pos.down()).getBlock();
-        boolean isOnFireSource = this.isBlockFireSource(blockBelow, world, pos.down(), EnumFacing.UP);
-        int age = state.getValue(AGE);
+        boolean isOnFireSource = permanent || this.isBlockFireSource(blockBelow, world, pos.down(), EnumFacing.UP);
+        int age = blockState.getValue(AGE);
 
         // Environmental Extinguish:
         if (!isOnFireSource && this.canDie(world, pos) && rand.nextFloat() < 0.2F + (float)age * 0.03F) {
@@ -161,8 +159,8 @@ public class BlockFireBase extends BlockBase {
 
         // Increase Age:
         if (age < 15) {
-            state = state.withProperty(AGE, Math.max(age + Math.round((float)rand.nextInt(this.agingRate) / 2), 15));
-            world.setBlockState(pos, state, 4);
+            blockState = blockState.withProperty(AGE, Math.max(age + Math.round((float)rand.nextInt(this.agingRate) / 2), 15));
+            world.setBlockState(pos, blockState, 4);
         }
 
         // Schedule Next Update:
@@ -193,7 +191,7 @@ public class BlockFireBase extends BlockBase {
         }
 
         // Spread Fire:
-        if(this.spreadChance <= 0)
+        if(this.spreadChance <= 0 || permanent)
             return;
         boolean highHumidity = world.isBlockinHighHumidity(pos);
         int humidityChance = 0;
@@ -227,7 +225,7 @@ public class BlockFireBase extends BlockBase {
                                 int spreadAge = age + rand.nextInt(5) / 4;
                                 if (spreadAge > 15)
                                     spreadAge = 15;
-                                world.setBlockState(spreadPos, state.withProperty(AGE, Integer.valueOf(spreadAge)), 3);
+                                world.setBlockState(spreadPos, blockState.withProperty(AGE, spreadAge).withProperty(PERMANENT, false), 3);
                             }
                         }
                     }

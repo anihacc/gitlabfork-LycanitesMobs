@@ -110,7 +110,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
    	// ==================================================
     /** Returns true if this mob should be damaged by the sun. **/
     @Override
-    public boolean daylightBurns() { return !this.isMinion(); }
+    public boolean daylightBurns() { return !this.isMinion() && !this.hasMaster(); }
     
     @Override
     public float getFallResistance() { return 100; }

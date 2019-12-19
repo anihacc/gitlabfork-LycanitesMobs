@@ -1,11 +1,15 @@
 package com.lycanitesmobs.core.block.effect;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.PotionBase;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.info.ElementInfo;
+import com.lycanitesmobs.core.info.ElementManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -88,22 +92,29 @@ public class BlockShadowfire extends BlockFireBase {
     @Override
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollidedWithBlock(world, pos, state, entity);
+
         if(entity instanceof EntityItem)
             return;
-        PotionEffect effectBlindness = new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0);
-        PotionEffect effectDecay = null;
-        if(ObjectManager.getEffect("decay") != null)
-            effectDecay = new PotionEffect(ObjectManager.getEffect("decay"), 5 * 20, 0);
+
         if(entity instanceof EntityLivingBase) {
-            EntityLivingBase entityLiving = (EntityLivingBase)entity;
-            if(!entityLiving.isPotionApplicable(effectBlindness) || (effectDecay != null && !entityLiving.isPotionApplicable(effectDecay)))
-                return;
-            if(this.blindness) {
+			EntityLivingBase entityLiving = (EntityLivingBase)entity;
+
+			PotionBase decay = ObjectManager.getEffect("decay");
+			if(decay != null) {
+				PotionEffect effectDecay = new PotionEffect(decay, 5 * 20, 0);
+				if(entityLiving.isPotionApplicable(effectDecay))
+					entityLiving.addPotionEffect(effectDecay);
+			}
+
+			PotionEffect effectBlindness = new PotionEffect(MobEffects.BLINDNESS, 5 * 20, 0);
+            if(this.blindness && entityLiving.isPotionApplicable(effectBlindness)) {
 				entityLiving.addPotionEffect(effectBlindness);
 			}
-            if(effectDecay != null)
-                entityLiving.addPotionEffect(effectDecay);
         }
+
+        if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasElement(ElementManager.getInstance().getElement("shadow")))
+        	return;
+
         entity.attackEntityFrom(DamageSource.WITHER, 1);
     }
     

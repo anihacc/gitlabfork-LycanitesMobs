@@ -59,7 +59,8 @@
 	],
 	"elements": [
 		"nether",
-		"phase"
+		"phase",
+		"shadow"
 	],
 	"diets": [
 		"carnivore",
