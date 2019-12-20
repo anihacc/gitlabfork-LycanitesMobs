@@ -42,11 +42,17 @@ public class ModelDarkling extends ModelTemplateInsect {
     public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
     	super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
 
-        // Latching:
+        // Bobbing/Latching:
         if(partName.equals("body") && entity instanceof EntityDarkling) {
             if(((EntityDarkling)entity).hasLatchTarget()) {
                 this.rotate(-90F, 0, 0);
             }
+            else {
+				float bob = MathHelper.cos(time * 0.6662F + (float) Math.PI) * 0.3F * distance;
+				if (bob < 0)
+					bob += -bob * 2;
+				translate(0, bob, 0);
+			}
         }
     }
 }
