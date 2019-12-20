@@ -1933,5 +1933,6 @@
     "mobevent.wintersgrasp.name": "Winters Grasp",
     "_comment": "#############################",
     "entity.lycanitesmobs.ember": "Ember",
-    "entity.lycanitesmobs.venomshot": "Venomshot"
+    "entity.lycanitesmobs.venomshot": "Venomshot",
+    "entity.lycanitesmobs.devilstar": "Devilstar"
 }

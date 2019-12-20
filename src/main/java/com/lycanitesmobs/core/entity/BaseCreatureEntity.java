@@ -1049,7 +1049,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
 			ITextComponent name = this.getTitle();
-            name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
+			if(this.isBossAlways())
+				name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
         }
     }

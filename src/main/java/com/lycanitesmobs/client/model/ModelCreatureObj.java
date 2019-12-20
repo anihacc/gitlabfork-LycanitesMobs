@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -238,6 +239,9 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 
         // Generate Animation Frames:
 		if(animate) {
+			if(entity.hasPerchTarget()) {
+				distance = 0;
+			}
 			this.generateAnimationFrames(entity, time, distance, loop, lookY, lookX, scale, layer, renderAsTrophy);
 		}
 

@@ -158,6 +158,9 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 
             // Animate (Part is centered and then animated):
             this.centerPart(partName);
+			if(entity.hasPerchTarget()) {
+				distance = 0;
+			}
             this.animatePart(partName, entity, time, distance, loop, -lookY, lookX, scale);
 
             // Trophy - Positioning:

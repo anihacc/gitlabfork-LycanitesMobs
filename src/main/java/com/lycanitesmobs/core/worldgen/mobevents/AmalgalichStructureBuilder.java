@@ -59,7 +59,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
 				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
-				baseProjectileEntity.projectileLife = 9 * 20;
+				baseProjectileEntity.projectileLife = 15 * 20;
 				world.addEntity(baseProjectileEntity);
 			}
 		}

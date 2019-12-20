@@ -37,6 +37,8 @@ public class EntityBloodleech extends BaseProjectileEntity {
     	this.setDamage(2);
 		this.setProjectileScale(1F);
         this.knockbackChance = 0.5D;
+		this.weight = 0.1D;
+
     	this.waterProof = true;
     }
     
@@ -47,8 +49,12 @@ public class EntityBloodleech extends BaseProjectileEntity {
     //========== On Damage ==========
     @Override
     public void onDamage(LivingEntity target, float damage, boolean attackSuccess) {
-    	if(this.getThrower() != null)
-            this.getThrower().heal(damage);
+		if(this.getThrower() != null) {
+			this.getThrower().heal(damage);
+			if(this.getThrower().getRidingEntity() instanceof LivingEntity) {
+				((LivingEntity)this.getThrower().getRidingEntity()).heal(damage * 0.1F);
+			}
+		}
     	super.onDamage(target, damage, attackSuccess);
     }
     

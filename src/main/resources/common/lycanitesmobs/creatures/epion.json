@@ -27,7 +27,7 @@
 		"despawnNatural": true,
 		"despawnForced": false
 	},
-	"width": 0.8,
+	"width": 1.8,
 	"height": 0.8,
 	"experience": 10,
 	"health": 15,
@@ -54,6 +54,11 @@
 			"index": 2,
 			"name": "russet",
 			"type": "uncommon"
+		},
+		{
+			"index": 3,
+			"name": "crimson",
+			"type": "rare"
 		}
 	],
 	"element": "void",
@@ -86,6 +91,13 @@
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25
+		},
+		{
+			"item": "lycanitesmobs:soulstoneshadow",
+			"minAmount": 1,
+			"maxAmount": 1,
+			"chance": 1,
+			"subspecies": 3
 		}
 	],
 	"sizeScale": 1,
