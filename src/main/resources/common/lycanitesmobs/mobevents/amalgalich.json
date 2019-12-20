@@ -24,6 +24,10 @@
 			"type": "structure",
 			"structureBuilderName": "amalgalich",
 			"eventTicksMax": 600 
+		},
+		{
+			"type": "world",
+			"dayTime": 20000
 		}
 	]
 }
