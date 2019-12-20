@@ -1,6 +1,5 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
@@ -82,7 +81,7 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			return this.screen.playerExt.selectedSubspecies == ((Entry)this.getEntry(index)).subspeciesIndex;
 		}
 		else {
-			return this.screen.playerExt.getSelectedSummonSet().getSubspecies() == index;
+			return this.screen.playerExt.getSelectedSummonSet().getSubspecies() == ((Entry)this.getEntry(index)).subspeciesIndex;
 		}
 	}
 
