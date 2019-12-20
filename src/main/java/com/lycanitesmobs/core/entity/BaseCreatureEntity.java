@@ -3863,7 +3863,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			}
 			int quantity = itemDrop.getQuantity(this.rand, 0, multiplier);
 			if(quantity <= 0) {
-				return;
+				continue;
 			}
 			this.dropItem(itemDrop.getEntityDropItemStack(this, quantity));
     	}

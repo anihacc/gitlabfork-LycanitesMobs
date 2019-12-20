@@ -5,7 +5,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
+import com.lycanitesmobs.core.entity.projectile.EntityShadowfireBarrier;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
 import com.lycanitesmobs.core.mobevent.effects.StructureBuilder;
 import net.minecraft.block.Block;
@@ -56,7 +56,7 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 		// Hellfire Pillar Effect:
 		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
-				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(world, originX, originY + (10 * i), originZ);
+				BaseProjectileEntity baseProjectileEntity = new EntityShadowfireBarrier(world, originX, originY + (10 * i), originZ);
 				baseProjectileEntity.projectileLife = 15 * 20;
 				world.spawnEntity(baseProjectileEntity);
 			}
