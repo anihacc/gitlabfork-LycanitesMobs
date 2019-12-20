@@ -3,17 +3,17 @@
     "item": "lycanitesmobs:soulcubeundead"
   },
   "pattern": [
-    "DDD",
-    "DSD",
-    "DDD"
+    "BBB",
+    "BSB",
+    "BBB"
   ],
   "type": "minecraft:crafting_shaped",
   "key": {
     "S": {
       "item": "minecraft:nether_star"
     },
-    "D": {
-      "item": "minecraft:rotten_flesh"
+    "B": {
+      "item": "lycanitesmobs:shadowstone"
     }
   }
 }
