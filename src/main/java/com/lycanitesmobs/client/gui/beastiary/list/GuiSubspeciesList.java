@@ -78,7 +78,7 @@ public class GuiSubspeciesList extends GuiScrollingList {
 			this.parentGui.playerExt.selectedSubspecies = this.subspeciesList.get(index);
 		}
 		else {
-			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(index);
+			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(this.subspeciesList.get(index));
 			this.parentGui.playerExt.sendSummonSetToServer((byte)this.parentGui.playerExt.selectedSummonSet);
 		}
 	}
@@ -90,7 +90,7 @@ public class GuiSubspeciesList extends GuiScrollingList {
 			return this.parentGui.playerExt.selectedSubspecies == this.subspeciesList.get(index);
 		}
 		else {
-			return this.parentGui.playerExt.getSelectedSummonSet().getSubspecies() == index;
+			return this.parentGui.playerExt.getSelectedSummonSet().getSubspecies() == this.subspeciesList.get(index);
 		}
 	}
 	

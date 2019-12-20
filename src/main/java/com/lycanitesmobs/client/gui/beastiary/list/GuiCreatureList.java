@@ -118,7 +118,13 @@ public class GuiCreatureList extends GuiScrollingList {
 		}
 		else if(this.listType == Type.SUMMONABLE) {
 			this.parentGui.playerExt.getSelectedSummonSet().setSummonType(this.creatureList.get(index).getName());
-			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(this.parentGui.playerExt.getSelectedSummonSet().getSubspecies());
+
+			int subspeciesId = this.parentGui.playerExt.getSelectedSummonSet().getSubspecies();
+			if(!this.parentGui.playerExt.getBeastiary().hasKnowledgeRank(this.creatureList.get(index).getName(), 2)) {
+				subspeciesId = 0;
+			}
+
+			this.parentGui.playerExt.getSelectedSummonSet().setSubspecies(subspeciesId);
 			this.parentGui.playerExt.sendSummonSetToServer((byte)this.parentGui.playerExt.selectedSummonSet);
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this.parentGui.playerExt);
 			LycanitesMobs.packetHandler.sendToServer(message);
