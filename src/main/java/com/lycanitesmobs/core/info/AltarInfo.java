@@ -111,6 +111,12 @@ public class AltarInfo {
 
         AltarInfo lunarGrueAltar = new AltarInfoLunarGrue("LunarGrueAltar");
         addAltar(lunarGrueAltar);
+
+        AltarInfo mottledAbaiaAltar = new AltarInfoMottleAbaia("MottledAbaia");
+        addAltar(mottledAbaiaAltar);
+
+        AltarInfo crimsonEpionAltar = new AltarInfoCrimsonEpion("CrimsonEpion");
+        addAltar(crimsonEpionAltar);
     }
 
 

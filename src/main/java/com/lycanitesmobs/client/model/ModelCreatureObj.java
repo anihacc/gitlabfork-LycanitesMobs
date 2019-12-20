@@ -253,6 +253,9 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 
         // Generate Animation Frames:
 		if(animate) {
+			if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPerchTarget()) {
+				distance = 0;
+			}
 			this.generateAnimationFrames(entity, time, distance, loop, lookY, lookX, scale, layer, renderAsTrophy);
 		}
 

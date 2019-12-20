@@ -1,11 +1,13 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
@@ -40,9 +42,9 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         
         // Setup:
         this.attribute = EnumCreatureAttribute.UNDEAD;
-        this.hasAttackSound = false;
+        this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
-        this.hasJumpSound = true;
+        this.hasJumpSound = false;
         this.entityCollisionReduction = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;
@@ -66,13 +68,13 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(60).setVelocity(1.6F).setScale(8F));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(60).setVelocity(1.0F).setScale(8F));
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false));
 
         // Phase 1:
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("reaper").setSummonRate(20 * 5).setSummonCap(5).setPhase(0).setPerPlayer(true));
-        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(0);
+        this.consumptionGoalP0 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(0);
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(0));
         this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP0);
 
@@ -81,7 +83,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("epion").setSummonRate(20 * 5).setSummonCap(3).setPhase(1).setPerPlayer(true));
 
         // Phase 3:
-        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-1F).setPhase(2);
+        this.consumptionGoalP2 = new ForceGoal(this).setRange(64F).setCooldown(consumptionCooldown).setDuration(this.consumptionDuration).setWindUp(this.consumptionWindUp).setForce(-0.75F).setPhase(2);
         this.tasks.addTask(this.nextIdleGoalIndex, this.consumptionGoalP2);
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setRange(1F).setCooldown(consumptionCooldown + this.consumptionWindUp).setDuration(this.consumptionDuration - this.consumptionWindUp).setTickRate(5).setDamageAmount(1000).setCheckSight(false).setTargetAll(true).setPhase(2));
         this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("lobdarklings").setFireRate(10 * 20).setVelocity(0.8F).setScale(2F).setRandomCount(3).setAngle(360).setPhase(2));
@@ -187,6 +189,10 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         if(this.consumptionAnimationTime > windUpThreshhold) {
             return 1F - (float)(this.consumptionAnimationTime - windUpThreshhold) / this.consumptionWindUp;
         }
+        float finishingTime = (float)this.consumptionWindUp / 2;
+        if(this.consumptionAnimationTime < finishingTime) {
+            return (float)this.consumptionAnimationTime / finishingTime;
+        }
         return 1F;
     }
 
@@ -212,10 +218,13 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public boolean addMinion(EntityLivingBase minion) {
         boolean minionAdded = super.addMinion(minion);
-        if(minionAdded && minion instanceof EntityGeist) {
-            BaseCreatureEntity minionCreature = (BaseCreatureEntity)minion;
-            minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new GrowGoal(minionCreature).setGrowthAmount(0.1F).setTickRate(20));
-            minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new SuicideGoal(minionCreature).setCountdown(20 * 20));
+        if(minionAdded && minion instanceof BaseCreatureEntity) {
+            BaseCreatureEntity minionCreature = (BaseCreatureEntity) minion;
+            minionCreature.targetTasks.addTask(minionCreature.nextFindTargetIndex++, new CopyMasterAttackTargetGoal(minionCreature));
+            if (minion instanceof EntityGeist) {
+                minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new GrowGoal(minionCreature).setGrowthAmount(0.1F).setTickRate(20));
+                minionCreature.tasks.addTask(minionCreature.nextIdleGoalIndex++, new SuicideGoal(minionCreature).setCountdown(20 * 20));
+            }
         }
         return minionAdded;
     }

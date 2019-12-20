@@ -175,6 +175,9 @@ public class ModelObjOld extends ModelCustom {
 
             // Animate (Part is centered and then animated):
             this.centerPart(partName);
+			if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasPerchTarget()) {
+				distance = 0;
+			}
             this.animatePart(partName, (EntityLiving)entity, time, distance, loop, -lookY, lookX, scale);
 
             // Trophy - Positioning:

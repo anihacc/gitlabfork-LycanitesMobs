@@ -99,7 +99,7 @@ public class EntityErepede extends RideableCreatureEntity {
     }
     
     public int getStaminaRecoveryWarmup() {
-    	return 5 * 20;
+    	return 0;
     }
     
     public float getStaminaRecoveryMax() {

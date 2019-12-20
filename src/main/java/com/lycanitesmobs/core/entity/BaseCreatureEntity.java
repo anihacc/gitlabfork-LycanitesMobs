@@ -1091,7 +1091,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
             String name = this.getFullName();
-            name += " (Phase " + (this.getBattlePhase() + 1) + ")";
+			if(this.isBossAlways())
+				name += " (Phase " + (this.getBattlePhase() + 1) + ")";
             this.bossInfo.setName(new TextComponentString(name));
         }
     }

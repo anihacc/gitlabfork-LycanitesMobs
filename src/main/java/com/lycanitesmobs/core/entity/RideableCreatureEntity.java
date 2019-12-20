@@ -183,6 +183,10 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         if(!this.getEntityWorld().isRemote)
         	entity.startRiding(this);
     }
+
+	public float getStafeSpeed() {
+		return 0.5F;
+	}
     
     // ========== Move with Heading ==========
     @Override
@@ -203,7 +207,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
             this.rotationPitch = rider.rotationPitch * 0.5F;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-            strafe = rider.moveStrafing * 0.5F;
+            strafe = rider.moveStrafing * this.getStafeSpeed();
             forward = rider.moveForward;
         }
 
