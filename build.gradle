@@ -20,7 +20,7 @@ archivesBaseName = 'lycanitesmobs'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190721-1.14.3'
+    mappings channel: 'snapshot', version: '20191221-1.14.3'
     // makeObfSourceJar = false
     // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
 

@@ -81,7 +81,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             villagerentity.remove();
             zombievillagerentity.onInitialSpawn(this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos(zombievillagerentity)), SpawnReason.CONVERSION, null, null);
             zombievillagerentity.func_213792_a(villagerentity.getVillagerData());
-            zombievillagerentity.func_213790_g(villagerentity.getOffers().func_222199_a());
+            zombievillagerentity.func_213790_g(villagerentity.getOffers().write());
             zombievillagerentity.func_213789_a(villagerentity.getXp());
             zombievillagerentity.setChild(villagerentity.isChild());
             zombievillagerentity.setNoAI(villagerentity.isAIDisabled());

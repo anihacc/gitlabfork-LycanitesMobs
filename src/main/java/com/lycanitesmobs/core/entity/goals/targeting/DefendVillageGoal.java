@@ -38,7 +38,7 @@ public class DefendVillageGoal extends FindAttackTargetGoal {
 
 			while(playerIter.hasNext()) {
 				PlayerEntity playerEntity = (PlayerEntity)playerIter.next();
-				int reputation = villagerEntity.func_223107_f(playerEntity);
+				int reputation = villagerEntity.getPlayerReputation(playerEntity);
 				if (reputation <= -100) {
 					this.target = playerEntity;
 				}

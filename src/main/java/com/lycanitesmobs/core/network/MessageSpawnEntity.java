@@ -62,7 +62,7 @@ public class MessageSpawnEntity {
 				LycanitesMobs.logWarning("", "Unable to create client entity from packet: " + message.entityTypeName);
 				return;
 			}
-			entity.func_213312_b(message.x, message.y, message.z);
+			entity.setPosition(message.x, message.y, message.z);
 			entity.rotationPitch = message.pitch;
 			entity.rotationYaw = message.yaw;
 			entity.setEntityId(message.entityId);

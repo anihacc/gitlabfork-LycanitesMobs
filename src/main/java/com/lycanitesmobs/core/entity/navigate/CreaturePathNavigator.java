@@ -509,7 +509,7 @@ public class CreaturePathNavigator extends PathNavigator {
                 }
             }
 
-            DebugPacketSender.func_218803_a(this.world, this.entity, this.currentPath, this.maxDistanceToWaypoint);
+            DebugPacketSender.sendPath(this.world, this.entity, this.currentPath, this.maxDistanceToWaypoint);
             if (!this.noPath()) {
                 Vec3d vec3d2 = this.currentPath.getPosition(this.entity);
                 BlockPos blockpos = new BlockPos(vec3d2);
