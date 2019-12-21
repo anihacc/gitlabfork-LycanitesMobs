@@ -38,7 +38,7 @@
 	"attackSpeed": 1,
 	"rangedSpeed": 1,
 	"effectDuration": 5,
-	"effectAmplifier": 0,
+	"effectAmplifier": 1,
 	"pierce": 1,
 	"sight": 24,
 	"knockbackResistance": 1,

@@ -11,6 +11,7 @@ import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
+import com.lycanitesmobs.core.entity.creature.EntityPinky;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
@@ -58,7 +59,6 @@ import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -143,6 +143,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     protected int growingAge;
 
 	// Boss Health:
+	public static int BOSS_DAMAGE_LIMIT = 50;
 	/** How much damage this creature has taken over the latest second. **/
 	public float damageTakenThisSec = 0;
 	/** How much health this creature had last tick. **/
@@ -263,7 +264,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** An extra animation boolean. **/
     public boolean extraAnimation01 = false;
     /** Holds Information for this mobs boss health should it be displayed in the boss health bar. Used by bosses and rare subspecies. **/
-    public BossInfo bossInfo;
+    public ServerBossInfo bossInfo;
     /** If positive, this creature entity is only being used for rendering in a GUI, etc and should play animation based off of this instead. **/
     public float onlyRenderTicks = -1;
 
@@ -505,7 +506,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		if(this instanceof IFusable)
 			this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
 		this.targetSelector.addGoal(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
-		this.targetSelector.addGoal(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
+		this.targetSelector.addGoal(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true).setCheckSight(true));
 
 		// Greater Actions:
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, new PaddleGoal(this));
@@ -836,8 +837,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double radius = this.creatureInfo.width;
 		double height = this.creatureInfo.height;
 		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
-		if(!this.spawnsInBlock && this.getEntityWorld().checkBlockCollision(spawnBoundries)) {//!this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
-			return false; // TODO Voxel shape!
+		if(!this.spawnsInBlock && !this.getEntityWorld().isCollisionBoxesEmpty(this, spawnBoundries)) {//!this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
+			return false;
 		}
 		return true;
 	}
@@ -1031,9 +1032,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		ITextComponent name = this.getName();
         if(this.isBossAlways())
             name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
-        //this.bossInfo = (BossInfo)(new BossInfo(this.getUniqueID(), name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
-    	// TODO Boss Info
-	}
+        this.bossInfo = (ServerBossInfo)(new ServerBossInfo(name, color, BossInfo.Overlay.PROGRESS)).setDarkenSky(darkenSky);
+    }
 
     public BossInfo getBossInfo() {
         if(this.bossInfo == null && this.showBossInfo() && !this.getEntityWorld().isRemote) {
@@ -1049,7 +1049,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void refreshBossHealthName() {
         if(this.bossInfo != null) {
 			ITextComponent name = this.getTitle();
-            name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
+			if(this.isBossAlways())
+				name.appendText(" (Phase " + (this.getBattlePhase() + 1) + ")");
             this.bossInfo.setName(name);
         }
     }
@@ -1066,12 +1067,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
     public void summonMinion(LivingEntity minion, double angle, double distance) {
         double angleRadians = Math.toRadians(angle);
-        double x = this.getPosition().getX() + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
-        double y = this.getPosition().getY() + 1;
+        double x = this.posX + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
+        double y = this.posY + 1;
 		if(minion instanceof BaseCreatureEntity && ((BaseCreatureEntity)minion).isFlying()) {
 			y += this.getSize(this.getPose()).height / 2;
 		}
-        double z = this.getPosition().getZ() + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
+        double z = this.posZ + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		this.getEntityWorld().addEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
@@ -1359,6 +1360,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return this.getSubspecies().elements;
 		}
 		return this.creatureInfo.elements;
+	}
+
+	/**
+	 * Returns true if this creature has the provided element.
+	 * @param element The element to check for.
+	 * @return True if this creature has the provided element.
+	 */
+	public boolean hasElement(ElementInfo element) {
+		return this.getElements().contains(element);
 	}
 
 
@@ -1813,7 +1823,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
   	// ==================================================
 	@Override
 	public void setPosition(double x, double y, double z) {
-    	super.func_226288_n_(x, y, z);
+		this.posX = x;
+		this.posY = y;
+		this.posZ = z;
 		if (this.isAddedToWorld() && !this.world.isRemote && world instanceof ServerWorld) ((ServerWorld)this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
 		double radius = this.getSize(Pose.STANDING).width / 2.0D;
 		double height = this.getSize(Pose.STANDING).height;
@@ -1917,8 +1929,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Updates limb swing animation, used when flying or swimming as their movements don't update it like the standard walking movement. **/
     public void updateLimbSwing() {
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double distanceX = this.getPosition().getX() - this.prevPosX;
-        double distanceZ = this.getPosition().getZ() - this.prevPosZ;
+        double distanceX = this.posX - this.prevPosX;
+        double distanceZ = this.posZ - this.prevPosZ;
         float distance = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
         if (distance > 1.0F) {
             distance = 1.0F;
@@ -1975,7 +1987,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         super.updateLeashedState();
         if(this.getLeashed() && this.getLeashHolder().getEntityWorld() == this.getEntityWorld()) {
             Entity entity = this.getLeashHolder();
-            this.setHome((int)entity.getPosition().getX(), (int)entity.getPosition().getY(), (int)entity.getPosition().getZ(), 5);
+            this.setHome((int)entity.posX, (int)entity.posY, (int)entity.posZ, 5);
             float distance = this.getDistance(entity);
             this.testLeash(distance);
             
@@ -1990,9 +2002,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 this.getNavigator().tryMoveToEntityLiving(entity, 1.0D);
 
             if(distance > 6.0F) {
-                double d0 = (entity.getPosition().getX() - this.getPosition().getX()) / (double)distance;
-                double d1 = (entity.getPosition().getY() - this.getPosition().getY()) / (double)distance;
-                double d2 = (entity.getPosition().getZ() - this.getPosition().getZ()) / (double)distance;
+                double d0 = (entity.posX - this.posX) / (double)distance;
+                double d1 = (entity.posY - this.posY) / (double)distance;
+                double d2 = (entity.posZ - this.posZ) / (double)distance;
                 this.setMotion(this.getMotion().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.4D, d2 * Math.abs(d2) * 0.4D));
             }
 
@@ -2623,29 +2635,27 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return null;
 		}
 
-		projectile.func_226288_n_(
-			projectile.getPosition().getX() + offset.x * this.sizeScale,
-			projectile.getPosition().getY() - (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
-			projectile.getPosition().getZ() + offset.z * this.sizeScale
-		);
+		projectile.posX += offset.x * this.sizeScale;
+		projectile.posY -= (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale);
+		projectile.posZ += offset.z * this.sizeScale;
 		projectile.setProjectileScale(scale);
 
-		Vec3d facing = this.getFacingPositionDouble(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), range, angle);
-		double distanceX = facing.x - this.getPosition().getX();
-		double distanceZ = facing.z - this.getPosition().getZ();
+		Vec3d facing = this.getFacingPositionDouble(this.posX, this.posY, this.posZ, range, angle);
+		double distanceX = facing.x - this.posX;
+		double distanceZ = facing.z - this.posZ;
 		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
 		double distanceY = distanceXZ;
 		if(target != null) {
-			double targetX = target.getPosition().getX() - this.getPosition().getX();
-			double targetZ = target.getPosition().getZ() - this.getPosition().getZ();
+			double targetX = target.posX - this.posX;
+			double targetZ = target.posZ - this.posZ;
 			double newX = targetX * Math.cos(angle) - targetZ * Math.sin(angle);
 			double newY = targetX * Math.sin(angle) + targetZ * Math.cos(angle);
-			targetX = newX + this.getPosition().getX();
-			targetZ = newY + this.getPosition().getZ();
+			targetX = newX + this.posX;
+			targetZ = newY + this.posZ;
 
-			distanceX = targetX - this.getPosition().getX();
-			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.getPosition().getY();
-			distanceZ = targetZ - this.getPosition().getZ();
+			distanceX = targetX - this.posX;
+			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.posY;
+			distanceZ = targetZ - this.posZ;
 		}
 
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
@@ -3034,9 +3044,10 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		return true;
 	}
 
-	/** Returns true if this entity can see through walls. **/
-	public boolean canSeeThroughWalls() {
-		return false;
+	/** Returns true if this entity can see the provided entity. **/
+	@Override
+	public boolean canEntityBeSeen(Entity target) {
+		return super.canEntityBeSeen(target);
 	}
 
     /** Returns this entity's Owner Target. **/
@@ -3124,7 +3135,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the BlockPos in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public BlockPos getFacingPosition(Entity entity, double distance, double angleOffset) {
-        return this.getFacingPosition(entity.getPosition().getX(), entity.getPosition().getY(), entity.getPosition().getZ(), distance, entity.rotationYaw + angleOffset);
+        return this.getFacingPosition(entity.posX, entity.posY, entity.posZ, distance, entity.rotationYaw + angleOffset);
     }
 
     /** Returns the BlockPos in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
@@ -3299,7 +3310,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Transformed Entity:
-		transformedEntity.setLocationAndAngles(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), this.rotationYaw, this.rotationPitch);
+		transformedEntity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 		this.getEntityWorld().addEntity(transformedEntity);
 
 		// Remove Parts:
@@ -3492,13 +3503,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * getFallResistance() is used to reduce falling damage, if it is at or above 100 no falling damage is taken at all.
      * **/
     @Override
-    public boolean func_225503_b_(float fallDistance, float damageMultiplier) {
+    public void fall(float fallDistance, float damageMultiplier) {
         if(this.isFlying())
-    		return false;
+    		return;
     	fallDistance -= this.getFallResistance();
     	if(this.getFallResistance() >= 100)
     		fallDistance = 0;
-    	return super.func_225503_b_(fallDistance, damageMultiplier);
+    	super.fall(fallDistance, damageMultiplier);
     }
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/
@@ -3547,6 +3558,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return false;
         if(ObjectManager.getEffect("weight") != null)
             if((entity).isPotionActive(ObjectManager.getEffect("weight")))
+                return false;
+        if(ObjectManager.getEffect("repulsion") != null)
+            if((entity).isPotionActive(ObjectManager.getEffect("repulsion")))
                 return false;
 		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof FearEntity;
     }
@@ -3685,7 +3699,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
     		int quantity = itemDrop.getQuantity(this.rand, 0, multiplier);
     		if(quantity <= 0) {
-    			return;
+				continue;
 			}
 			this.dropItem(itemDrop.getEntityDropItemStack(this, quantity));
     	}
@@ -3705,7 +3719,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
     public ItemEntity entityDropItem(ItemStack itemStack, float heightOffset) {
         if(itemStack.getCount() != 0) {
-            CustomItemEntity entityItem = new CustomItemEntity(this.getEntityWorld(), this.getPosition().getX(), this.getPosition().getY() + (double)heightOffset, this.getPosition().getZ(), itemStack);
+            CustomItemEntity entityItem = new CustomItemEntity(this.getEntityWorld(), this.posX, this.posY + (double)heightOffset, this.posZ, itemStack);
             entityItem.setPickupDelay(10);
             this.applyDropEffects(entityItem);
 
@@ -4237,7 +4251,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean waterContact() {
     	if(this.isInWaterRainOrBubbleColumn())
     		return true;
-    	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.getPosition().getX(), (int)this.getPosition().getY(), (int)this.getPosition().getZ()))
+    	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.posX, (int)this.posY, (int)this.posZ))
     		return true;
     	return false;
     }
@@ -4720,17 +4734,15 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
     public void addTrackingPlayer(ServerPlayerEntity player) {
         super.addTrackingPlayer(player);
-        if(this.getBossInfo() != null) {
-			//this.bossInfo.addPlayer(player); TODO Boss Info
-		}
+        if(this.getBossInfo() != null)
+            this.bossInfo.addPlayer(player);
     }
 
     @Override
     public void removeTrackingPlayer(ServerPlayerEntity player) {
         super.removeTrackingPlayer(player);
-        if(this.getBossInfo() != null) {
-			//this.bossInfo.removePlayer(player); TODO Boss Info
-		}
+        if(this.getBossInfo() != null)
+            this.bossInfo.removePlayer(player);
     }
     
     

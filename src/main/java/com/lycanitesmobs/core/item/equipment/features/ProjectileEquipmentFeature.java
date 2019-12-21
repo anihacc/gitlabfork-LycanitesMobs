@@ -112,6 +112,15 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		return description;
 	}
 
+	@Override
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
+		return projectileInfo.getTitle();
+	}
+
 	/**
 	 * Called when a player right click begins to use their equipment.
 	 * @param world The world the player is in.

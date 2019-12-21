@@ -4,7 +4,7 @@ import com.lycanitesmobs.ExtendedWorld;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireWall;
+import com.lycanitesmobs.core.entity.projectile.EntityShadowfireBarrier;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerServer;
@@ -58,8 +58,8 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 		// Hellfire Pillar Effect:
 		if(ticks == 15 * 20) {
 			for(int i = 0; i < 5; i++) {
-				BaseProjectileEntity baseProjectileEntity = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), world, originX, originY + (10 * i), originZ);
-				baseProjectileEntity.projectileLife = 9 * 20;
+				BaseProjectileEntity baseProjectileEntity = new EntityShadowfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityShadowfireBarrier.class), world, originX, originY + (10 * i), originZ);
+				baseProjectileEntity.projectileLife = 15 * 20;
 				world.addEntity(baseProjectileEntity);
 			}
 		}
@@ -142,48 +142,43 @@ public class AmalgalichStructureBuilder extends StructureBuilder {
 	/** Builds an actual pillar. **/
 	public int[] buildPillar(World world, int originX, int originY, int originZ) {
 		int radiusMax = 5;
-		int height = 20 + Math.round(20 * world.rand.nextFloat());
+		int height = 30;
 		Block primaryBlock = ObjectManager.getBlock("shadowstonebrick");
 		Block secondaryBlock = ObjectManager.getBlock("shadowstone");
 		Block tetriaryBlock = ObjectManager.getBlock("shadowstonechiseled");
-		Block pillarBlock = ObjectManager.getBlock("shadowstonepillar");
+		Block capBlock = Blocks.OBSIDIAN;
+		Block hazardBlock = ObjectManager.getBlock("shadowfire");
 		double secondaryChance = 0.4D;
 		double tetriaryChance = 0.05D;
 		int[] decorationCoord = new int[] {originX, originY, originZ};
 
 		int radius = radiusMax;
-		int radiusHeight = radiusMax;
+		int radiusHeight = height - 10;
 		for(int y = originY; y <= originY + height; y++) {
-			if(y <= originY + (radiusMax * radiusMax)) {
-				int stripNumber = 1;
-				for (int x = originX - radius; x <= originX + radius; x++) {
-					float stripNormal = (float)stripNumber / (float)radius;
-					if(stripNumber > radius)
-						stripNormal = (float)(radius - (stripNumber - radius)) / (float)radius;
-					int stripRadius = Math.round(radius * (float) Math.sin(Math.toRadians(90 * stripNormal)));
+			boolean lowerRadius = --radiusHeight <= 0;
+			int stripNumber = 1;
+			for(int x = originX - radius; x <= originX + radius; x++) {
+				float stripNormal = (float)stripNumber / (float)radius;
+				if(stripNumber > radius)
+					stripNormal = (float)(radius - (stripNumber - radius)) / (float)radius;
+				int stripRadius = Math.round(radius * (float) Math.sin(Math.toRadians(90 * stripNormal)));
 
-					for (int z = originZ - stripRadius; z <= originZ + stripRadius; z++) {
-						if(x == originX && z == originZ) {
-							world.setBlockState(new BlockPos(x, y, z), pillarBlock.getDefaultState(), 2);
-						}
-						else {
-							if (world.rand.nextDouble() > secondaryChance)
-								world.setBlockState(new BlockPos(x, y, z), primaryBlock.getDefaultState(), 2);
-							else if (world.rand.nextDouble() > tetriaryChance)
-								world.setBlockState(new BlockPos(x, y, z), secondaryBlock.getDefaultState(), 2);
-							else
-								world.setBlockState(new BlockPos(x, y, z), tetriaryBlock.getDefaultState(), 2);
-						}
-					}
-
-					stripNumber++;
+				for(int z = originZ - stripRadius; z <= originZ + stripRadius; z++) {
+					if(lowerRadius || y == originY + height)
+						world.setBlockState(new BlockPos(x, y, z), hazardBlock.getDefaultState(), 2);
+					else if(radiusHeight - 1 <= 0 || y == originY + height - 1)
+						world.setBlockState(new BlockPos(x, y, z), capBlock.getDefaultState(), 2);
+					else if(world.rand.nextDouble() > secondaryChance)
+						world.setBlockState(new BlockPos(x, y, z), primaryBlock.getDefaultState(), 2);
+					else if(world.rand.nextDouble() > tetriaryChance)
+						world.setBlockState(new BlockPos(x, y, z), secondaryBlock.getDefaultState(), 2);
+					else
+						world.setBlockState(new BlockPos(x, y, z), tetriaryBlock.getDefaultState(), 2);
 				}
+
+				stripNumber++;
 			}
-			else {
-				world.setBlockState(new BlockPos(originX, y, originZ), pillarBlock.getDefaultState(), 2);
-				decorationCoord = new int[] {originX, y, originZ};
-			}
-			if(--radiusHeight <= 0) {
+			if(lowerRadius) {
 				radiusHeight = radiusMax;
 				radius--;
 			}

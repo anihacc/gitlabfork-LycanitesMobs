@@ -83,4 +83,12 @@ public class EquipmentFeature {
 		}
 		return new StringTextComponent("");
 	}
+
+	/** Returns a description of this feature. Returns null if the feature is not active. **/
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		return new StringTextComponent(this.featureType);
+	}
 }

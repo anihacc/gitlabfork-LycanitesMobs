@@ -6,6 +6,7 @@ import com.lycanitesmobs.api.IGroupHeavy;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
+import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
 import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
@@ -38,16 +39,16 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         
         // Setup:
         this.attribute = CreatureAttribute.UNDEAD;
-        this.hasAttackSound = false;
+        this.hasAttackSound = true;
         this.setAttackCooldownMax(30);
-        this.hasJumpSound = true;
+        this.hasJumpSound = false;
         this.entityCollisionReduction = 1.0F;
         this.setupMob();
         this.hitAreaWidthScale = 2F;
 
         // Boss:
-        this.damageMax = 25;
-        this.damageLimit = 40;
+        this.damageMax = BaseCreatureEntity.BOSS_DAMAGE_LIMIT;
+        this.damageLimit = BaseCreatureEntity.BOSS_DAMAGE_LIMIT;
     }
 
     @Override
@@ -182,6 +183,10 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         if(this.consumptionAnimationTime > windUpThreshhold) {
             return 1F - (float)(this.consumptionAnimationTime - windUpThreshhold) / this.consumptionWindUp;
         }
+        float finishingTime = (float)this.consumptionWindUp / 2;
+        if(this.consumptionAnimationTime < finishingTime) {
+            return (float)this.consumptionAnimationTime / finishingTime;
+        }
         return 1F;
     }
 
@@ -207,10 +212,13 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     @Override
     public boolean addMinion(LivingEntity minion) {
         boolean minionAdded = super.addMinion(minion);
-        if(minionAdded && minion instanceof EntityGeist) {
-            BaseCreatureEntity minionCreature = (BaseCreatureEntity)minion;
-            minionCreature.goalSelector.addGoal(minionCreature.nextIdleGoalIndex++, new GrowGoal(minionCreature).setGrowthAmount(0.1F).setTickRate(20));
-            minionCreature.goalSelector.addGoal(minionCreature.nextIdleGoalIndex++, new SuicideGoal(minionCreature).setCountdown(20 * 20));
+        if(minionAdded && minion instanceof BaseCreatureEntity) {
+            BaseCreatureEntity minionCreature = (BaseCreatureEntity) minion;
+            minionCreature.targetSelector.addGoal(minionCreature.nextFindTargetIndex++, new CopyMasterAttackTargetGoal(minionCreature));
+            if (minion instanceof EntityGeist) {
+                minionCreature.goalSelector.addGoal(minionCreature.nextIdleGoalIndex++, new GrowGoal(minionCreature).setGrowthAmount(0.1F).setTickRate(20));
+                minionCreature.goalSelector.addGoal(minionCreature.nextIdleGoalIndex++, new SuicideGoal(minionCreature).setCountdown(20 * 20));
+            }
         }
         return minionAdded;
     }

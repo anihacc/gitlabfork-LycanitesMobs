@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
@@ -80,7 +81,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             villagerentity.remove();
             zombievillagerentity.onInitialSpawn(this.getEntityWorld(), this.getEntityWorld().getDifficultyForLocation(new BlockPos(zombievillagerentity)), SpawnReason.CONVERSION, null, null);
             zombievillagerentity.func_213792_a(villagerentity.getVillagerData());
-            zombievillagerentity.func_213790_g(villagerentity.getOffers().func_222199_a());
+            zombievillagerentity.func_213790_g(villagerentity.getOffers().write());
             zombievillagerentity.func_213789_a(villagerentity.getXp());
             zombievillagerentity.setChild(villagerentity.isChild());
             zombievillagerentity.setNoAI(villagerentity.isAIDisabled());
@@ -102,7 +103,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
     @Override
     public void onDeath(DamageSource damageSource) {
         try {
-            int shadowfireWidth = (int)Math.floor(this.getSize(this.getPose()).height) + 1;
+            int shadowfireWidth = (int)Math.floor(this.getSize(this.getPose()).width) + 1;
             int shadowfireHeight = (int)Math.floor(this.getSize(this.getPose()).height) + 1;
             boolean permanent = false;
             if(damageSource.getTrueSource() == this) {
@@ -119,7 +120,7 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
                                 BlockPos placePos = new BlockPos(x, y + 1, z);
                                 Block upperBlock = this.getEntityWorld().getBlockState(placePos).getBlock();
                                 if(upperBlock == Blocks.AIR) {
-                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().with(BlockFireBase.PERMANENT, permanent), 3);
+                                    this.getEntityWorld().setBlockState(placePos, ObjectManager.getBlock("shadowfire").getDefaultState().with(BlockFireBase.PERMANENT, permanent));
                                 }
                             }
                         }

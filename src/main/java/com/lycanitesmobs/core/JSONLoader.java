@@ -31,6 +31,7 @@ public abstract class JSONLoader {
 	 * @param dataPath The path to load json files from relative to the group data folder and the config folder.
 	 * @param mapKey The json value to use as the map key, usually the "name" field.
 	 * @param loadCustom If true, additional custom json files will also be loaded from the config directory for adding custom entries.
+	 * @param jsonType If set, a "type" value is checked in the JSON and must match.
 	 * @param fileLoader The file loader to get paths from.
 	 * @param streamLoader The stream loader to get jar files from.
 	 */

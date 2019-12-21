@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "lycanitesmobs:soulcubeundead"
+  },
+  "pattern": [
+    "BBB",
+    "BSB",
+    "BBB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "S": {
+      "item": "minecraft:nether_star"
+    },
+    "B": {
+      "item": "lycanitesmobs:shadowstone"
+    }
+  }
+}

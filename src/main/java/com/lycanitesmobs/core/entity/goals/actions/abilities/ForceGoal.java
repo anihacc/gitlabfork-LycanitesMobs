@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.goals.actions.abilities;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
@@ -116,6 +117,10 @@ public class ForceGoal extends Goal {
 			return;
 		}
 
+		if(this.abilityTime == this.windUp) {
+			this.host.playAttackSound();
+		}
+
 		if(this.abilityTime++ >= this.duration && this.cooldownDuration > 0) {
 			this.cooldownTime = this.cooldownDuration;
 			return;
@@ -127,6 +132,9 @@ public class ForceGoal extends Goal {
 			factor *= this.abilityTime / this.windUp;
 		}
 		for(Entity entity : this.host.getNearbyEntities(Entity.class, null, this.range)) {
+			if(!(entity instanceof LivingEntity)) {
+				continue;
+			}
 			double xDist = this.host.posX - entity.posX;
 			double zDist = this.host.posZ - entity.posZ;
 			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);

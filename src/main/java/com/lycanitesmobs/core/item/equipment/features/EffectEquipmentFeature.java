@@ -1,12 +1,14 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -44,15 +46,10 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-				.appendText(" ")
-				.appendText(this.effectType + " (" + this.effectTarget + ")");
 
-		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
-				.appendText(" " + ((float)this.effectDuration / 20));
-		}
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
+				.appendText(" ").appendSibling(this.getEffectTypeName())
+				.appendText(" (" + this.effectTarget + ")");
 
 		if(this.effectStrength > 0) {
 			description.appendText("\n")
@@ -60,7 +57,41 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 					.appendText(" " + this.effectStrength);
 		}
 
+		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
+			description.appendText("\n")
+				.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
+				.appendText(" " + ((float)this.effectDuration / 20));
+		}
+
 		return description;
+	}
+
+	@Override
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+
+		ITextComponent summary = this.getEffectTypeName().appendText(" (" + this.effectTarget + ")");
+		if(this.effectStrength > 0) {
+			summary.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
+		}
+		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
+			summary.appendText(" " + ((float)this.effectDuration / 20));
+		}
+
+		return summary;
+	}
+
+	public ITextComponent getEffectTypeName() {
+		if("burning".equals(this.effectType)) {
+			return new TranslationTextComponent("effect.burning");
+		}
+		Effect effect = GameRegistry.findRegistry(Effect.class).getValue(new ResourceLocation(this.effectType));
+		if(effect == null) {
+			return new StringTextComponent(this.effectType);
+		}
+		return effect.getDisplayName();
 	}
 
 	/**
@@ -79,8 +110,8 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			effectTarget = attacker;
 		}
 
-		// Fire:
-		if("fire".equalsIgnoreCase(this.effectType)) {
+		// Burning:
+		if("burning".equalsIgnoreCase(this.effectType)) {
 			effectTarget.setFire(Math.round(((float)this.effectDuration) / 20));
 			return;
 		}

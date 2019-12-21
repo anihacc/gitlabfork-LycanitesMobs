@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -88,6 +89,14 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		}
 
 		return description;
+	}
+
+	@Override
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		if(!this.isActive(itemStack, level)) {
+			return null;
+		}
+		return new TranslationTextComponent("entity." + this.summonMobId + ".name");
 	}
 
 	/**

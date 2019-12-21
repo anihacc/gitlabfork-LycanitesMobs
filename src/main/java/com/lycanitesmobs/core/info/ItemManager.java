@@ -93,7 +93,7 @@ public class ItemManager extends JSONLoader {
 			this.loadedGroups.add(modInfo);
 		}
 		this.loadAllJson(modInfo, "Items", "items", "name", true, null, FileLoader.COMMON, StreamLoader.COMMON);
-		LycanitesMobs.logDebug("Items", "Complete! " + this.items.size() + " JSON Equipment Parts Loaded In Total.");
+		LycanitesMobs.logDebug("Items", "Complete! " + this.items.size() + " JSON Items Loaded In Total.");
 	}
 
 	@Override

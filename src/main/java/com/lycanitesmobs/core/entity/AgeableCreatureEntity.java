@@ -267,11 +267,11 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     }
 
 	/**
-	 * Returns if this creature should follow and find parents. By default only returns true if this creature is a baby.
+	 * Returns if this creature should follow parents. By default only returns true if this creature is a baby.
 	 * @return Returns true if parents should be searched for and followed.
 	 */
 	public boolean shouldFollowParent() {
-		return !this.isChild();
+		return this.isChild();
 	}
 
 	/**

@@ -1,14 +1,17 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -16,7 +19,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-public class EntityEpion extends TameableCreatureEntity implements IMob {
+public class EntityEpion extends RideableCreatureEntity implements IMob {
     
 	public boolean griefing = true;
 	
@@ -46,7 +49,11 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 	public void loadCreatureFlags() {
 		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 	}
-	
+
+	@Override
+	public float getStafeSpeed() {
+		return 1F;
+	}
 	
     // ==================================================
     //                      Updates
@@ -57,7 +64,7 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
         super.livingTick();
         
         // Sunlight Explosions:
-        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion()) {
+        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion() && !this.isRareSubspecies()) {
         	if(!this.isFlying() && (this.onGround || this.isInWater()) && this.isAlive()) {
         		int explosionRadius = 2;
 				if(this.subspecies != null)
@@ -75,6 +82,14 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
 	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
+
+	@Override
+	public boolean canEntityBeSeen(Entity target) {
+		if(this.isRareSubspecies()) {
+			return true;
+		}
+		return super.canEntityBeSeen(target);
+	}
     
     
     // ==================================================
@@ -114,10 +129,46 @@ public class EntityEpion extends TameableCreatureEntity implements IMob {
    	// ==================================================
     /** Returns true if this mob should be damaged by the sun. **/
     @Override
-    public boolean daylightBurns() { return !this.isMinion(); }
+	public boolean daylightBurns() {
+		return !this.isMinion() && !this.hasMaster() && !this.isTamed() && !this.isRareSubspecies();
+	}
     
     @Override
     public float getFallResistance() { return 100; }
+
+
+	// ==================================================
+	//                   Mount Ability
+	// ==================================================
+	public void mountAbility(Entity rider) {
+		if(this.getEntityWorld().isRemote)
+			return;
+
+		if(this.getStamina() < this.getStaminaCost())
+			return;
+
+		if(rider instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity)rider;
+			EntityBloodleech projectile = new EntityBloodleech(ProjectileManager.getInstance().oldProjectileTypes.get(EntityBloodleech.class), this.getEntityWorld(), player);
+			this.getEntityWorld().addEntity(projectile);
+			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+			this.triggerAttackCooldown();
+		}
+
+		this.applyStaminaCost();
+	}
+
+	public float getStaminaCost() {
+		return 5;
+	}
+
+	public int getStaminaRecoveryWarmup() {
+		return 0;
+	}
+
+	public float getStaminaRecoveryMax() {
+		return 1.0F;
+	}
 
 
 	// ==================================================

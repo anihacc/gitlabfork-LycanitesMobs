@@ -30,7 +30,7 @@
 	"width": 18.0,
 	"height": 24.0,
 	"experience": 1000,
-	"health": 5000,
+	"health": 4000,
 	"defense": 2,
 	"armor": 0,
 	"speed": 32,
@@ -59,7 +59,8 @@
 	],
 	"elements": [
 		"nether",
-		"phase"
+		"phase",
+		"shadow"
 	],
 	"diets": [
 		"carnivore",
@@ -108,13 +109,13 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:doomfirecharge",
+			"item": "lycanitesmobs:spectralboltcharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:hellfirecharge",
+			"item": "lycanitesmobs:lobdarklingscharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
@@ -147,12 +148,6 @@
 			"item": "lycanitesmobs:soulstoneshadow",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 1
-		},
-		{
-			"item": "lycanitesmobs:lobdarklingscharge",
-			"minAmount": 10,
-			"maxAmount": 20,
 			"chance": 1
 		}
 	],

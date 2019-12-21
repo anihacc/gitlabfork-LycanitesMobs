@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFireBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.info.ElementManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -46,15 +48,6 @@ public class BlockShadowfire extends BlockFireBase {
 
 
 	// ==================================================
-	//                       Break
-	// ==================================================
-	/*@Override
-	public Item getItemDropped(BlockState state, Random random, int zero) {
-		return ObjectManager.getItem("spectralboltcharge");
-	}*/
-
-
-	// ==================================================
 	//                       Fire
 	// ==================================================
     protected boolean canNeighborCatchFire(World worldIn, BlockPos pos) {
@@ -73,7 +66,7 @@ public class BlockShadowfire extends BlockFireBase {
 	public boolean isBlockFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side) {
 		if(state.getBlock() == Blocks.OBSIDIAN)
 			return true;
-		return false;
+		return true; // TODO Figure out why the PERMANENT property isn't working consistently.
 	}
 
     protected boolean canDie(World world, BlockPos pos) {
@@ -88,21 +81,26 @@ public class BlockShadowfire extends BlockFireBase {
 	public void onEntityCollision(BlockState blockState, World world, BlockPos pos, Entity entity) {
 		super.onEntityCollision(blockState, world, pos, entity);
 
+		if(entity instanceof ItemEntity)
+			return;
+
 		if(entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity)entity;
+
 			Effect decay = ObjectManager.getEffect("decay");
 			if(decay != null) {
 				EffectInstance effect = new EffectInstance(decay, 5 * 20, 0);
 				if(livingEntity.isPotionApplicable(effect))
 					livingEntity.addPotionEffect(effect);
 			}
+
 			EffectInstance blindness = new EffectInstance(Effects.BLINDNESS, 5 * 20, 0);
 			if(this.blindness && livingEntity.isPotionApplicable(blindness)) {
 				livingEntity.addPotionEffect(blindness);
 			}
 		}
 
-		if(entity instanceof ItemEntity)
+		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).hasElement(ElementManager.getInstance().getElement("shadow")))
 			return;
 
 		entity.attackEntityFrom(DamageSource.WITHER, 1);

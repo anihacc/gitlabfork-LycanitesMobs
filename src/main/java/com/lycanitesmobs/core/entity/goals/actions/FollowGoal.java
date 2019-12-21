@@ -49,11 +49,11 @@ public abstract class FollowGoal extends Goal {
     	return this;
     }
     public FollowGoal setStrayDistance(double setDist) {
-    	this.strayDistance = setDist * setDist;
+    	this.strayDistance = setDist;
     	return this;
     }
     public FollowGoal setLostDistance(double setDist) {
-    	this.lostDistance = setDist * setDist;
+    	this.lostDistance = setDist;
     	return this;
     }
     public FollowGoal setFollowBehind(double setDist) {
@@ -96,7 +96,7 @@ public abstract class FollowGoal extends Goal {
         if(!target.isAlive())
         	return false;
         
-        double distance = this.host.getDistanceSq(target);
+        double distance = this.host.getDistance(target);
         if(distance > this.lostDistance && this.lostDistance != 0) {
 			this.setTarget(null);
 			return false;

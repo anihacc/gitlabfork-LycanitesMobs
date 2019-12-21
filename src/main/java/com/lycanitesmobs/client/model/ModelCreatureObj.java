@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -238,6 +239,9 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 
         // Generate Animation Frames:
 		if(animate) {
+			if(entity.hasPerchTarget()) {
+				distance = 0;
+			}
 			this.generateAnimationFrames(entity, time, distance, loop, lookY, lookX, scale, layer, renderAsTrophy);
 		}
 
@@ -261,7 +265,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
             // Child Scaling:
             if(isChild && !renderAsTrophy) {
                 this.childScale(partName);
-                if(this.bigChildHead && (partName.equals("head") || partName.equals("mouth")))
+                if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
                     this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
             }
 
@@ -442,7 +446,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
    	//                  Child Scale
    	// ==================================================
     public void childScale(String partName) {
-		if(this.bigChildHead && ("head".equals(partName) || "mouth".equals(partName)))
+		if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
 			return;
     	this.animator.doScale(0.5F, 0.5F, 0.5F);
     }
