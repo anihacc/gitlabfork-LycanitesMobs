@@ -84,11 +84,11 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     }
 
 	@Override
-	public boolean canSeeThroughWalls() {
-		if(!this.isRareSubspecies()) {
-			return super.canSeeThroughWalls();
+	public boolean canEntityBeSeen(Entity target) {
+		if(this.isRareSubspecies()) {
+			return true;
 		}
-		return true;
+		return super.canEntityBeSeen(target);
 	}
     
     

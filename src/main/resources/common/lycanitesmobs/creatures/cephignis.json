@@ -78,7 +78,7 @@
 			"item": "minecraft:magma_cream",
 			"minAmount": 1,
 			"maxAmount": 2,
-			"chance": 0.25
+			"chance": 0.5
 		}
 	],
 	"sizeScale": 1,

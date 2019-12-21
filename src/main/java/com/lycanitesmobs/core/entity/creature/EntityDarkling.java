@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
@@ -142,6 +143,13 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
         if(entity == null) {
             this.getDataManager().set(LATCH_TARGET, 0);
             return;
+        }
+        if(ObjectManager.getEffect("repulsion") != null) {
+            if ((entity).isPotionActive(ObjectManager.getEffect("repulsion"))) {
+                this.getDataManager().set(LATCH_TARGET, 0);
+                this.latchEntity = null;
+                return;
+            }
         }
         this.getDataManager().set(LATCH_TARGET, entity.getEntityId());
         this.latchHeight = 0.25D + (0.75D * this.getRNG().nextDouble());

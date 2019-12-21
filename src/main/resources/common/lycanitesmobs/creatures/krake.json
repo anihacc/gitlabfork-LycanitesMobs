@@ -1,22 +1,24 @@
 {
-	"name": "aspid",
-	"creatureType": "beast",
+	"name": "krake",
+	"creatureType": "aberration",
 	"groups": [
-		"animal"
+		"animal",
+		"monster",
+		"opportunist"
 	],
-	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityAspid",
-	"modelClass": "com.lycanitesmobs.client.model.creature.ModelAspid",
+	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityKrake",
+	"modelClass": "com.lycanitesmobs.client.model.creature.ModelKrake",
 	"loadDefault": true,
 	"enabled": true,
 	"spawning": {
 		"enabled": true,
-		"spawners": ["creature", "animal"],
+		"spawners": ["creature", "animal", "wateranimal"],
 		"disableSubspecies": false,
 		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end"],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["swamp", "spooky", "mushroom"],
-		"spawnWeight": 16,
+		"biomes": ["forest", "river", "-mountain", "-snowy"],
+		"spawnWeight": 8,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 5,
 		"spawnGroupMin": 1,
@@ -29,36 +31,43 @@
 	},
 	"width": 0.9,
 	"height": 2.2,
-	"experience": 10,
+	"experience": 5,
 	"health": 10,
-	"defense": 2,
+	"defense": 0,
 	"armor": 0,
-	"speed": 32,
+	"speed": 38,
 	"damage": 2,
-	"attackSpeed": 1,
+	"attackSpeed": 2,
 	"rangedSpeed": 1,
 	"effectDuration": 5,
-	"effectAmplifier": 0,
+	"effectAmplifier": -1,
 	"pierce": 1,
 	"sight": 24,
 	"knockbackResistance": 0.25,
-	"eggBackColor": "#009944",
-	"eggForeColor": "#446600",
+	"eggBackColor": "#BC532E",
+	"eggForeColor": "#3D6999",
 	"subspecies": [
 		{
 			"index": 1,
-			"name": "dark",
+			"name": "keppel",
 			"type": "uncommon"
 		},
 		{
 			"index": 2,
-			"name": "violet",
+			"name": "lux",
 			"type": "uncommon"
 		}
 	],
-	"element": "poison",
+	"elements": [
+		"water",
+		"quake"
+	],
 	"diets": [
-		"fungivore"
+		"carnivore",
+		"piscivore",
+		"insectivore",
+		"frugivore",
+		"detritivore"
 	],
 	"peaceful": true,
 	"farmable": true,
@@ -66,26 +75,20 @@
 	"tameable": false,
 	"mountable": false,
 	"summonCost": 2,
-	"dungeonLevel": 0,
+	"dungeonLevel": 1,
 	"drops": [
 		{
-			"item": "minecraft:slime_ball",
-			"minAmount": 1,
-			"maxAmount": 3,
-			"chance": 1
-		},
-		{
-			"item": "lycanitesmobs:raw_aspid_meat",
-			"burningItem": "lycanitesmobs:cooked_aspid_meat",
-			"minAmount": 1,
-			"maxAmount": 3,
-			"chance": 1
-		},
-		{
-			"item": "lycanitesmobs:poisongland",
+			"item": "lycanitesmobs:raw_krake_meat",
+			"burningItem": "lycanitesmobs:cooked_krake_meat",
 			"minAmount": 1,
 			"maxAmount": 2,
-			"chance": 0.25
+			"chance": 1
+		},
+		{
+			"item": "lycanitesmobs:clay_ball",
+			"minAmount": 1,
+			"maxAmount": 2,
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

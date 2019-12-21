@@ -89,7 +89,7 @@ public class ItemInfo {
 						effect = ObjectManager.getEffect(effectIds[1]);
 					EffectInstance effectInstance = new EffectInstance(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
 
-					Float chance = 1F;
+					float chance = 1F;
 					if(foodEffectJson.has("chance"))
 						chance = foodEffectJson.get("chance").getAsFloat();
 

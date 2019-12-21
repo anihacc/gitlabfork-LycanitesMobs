@@ -46,13 +46,28 @@ public class RevengeGoal extends FindAttackTargetGoal {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
     }
+
+
+	// ==================================================
+	//                    Host Target
+	// ==================================================
+	@Override
+	protected LivingEntity getTarget() {
+		return super.getTarget();
+	}
+
+	@Override
+	protected void setTarget(LivingEntity newTarget) {
+		super.setTarget(newTarget);
+	}
 	
     
 	// ==================================================
  	//                  Should Execute
  	// ==================================================
+	@Override
     public boolean shouldExecute() {
-    	if(this.host.getRevengeTarget() == null || !this.isEntityTargetable(this.target, false))
+    	if(this.host.getRevengeTarget() == null || !this.isEntityTargetable(this.host.getRevengeTarget(), false))
     		return false;
 
 		this.target = this.host.getRevengeTarget();
@@ -83,6 +98,7 @@ public class RevengeGoal extends FindAttackTargetGoal {
 	// ==================================================
  	//                 Start Executing
  	// ==================================================
+	@Override
     public void startExecuting() {
         super.startExecuting();
     }

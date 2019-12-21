@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.monster.IMob;
@@ -74,7 +75,7 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
 	}
 
 	@Override
-	public boolean canSeeThroughWalls() {
+	public boolean canEntityBeSeen(Entity target) {
 		return true;
 	}
     

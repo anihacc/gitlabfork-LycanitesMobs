@@ -49,11 +49,11 @@ public abstract class FollowGoal extends Goal {
     	return this;
     }
     public FollowGoal setStrayDistance(double setDist) {
-    	this.strayDistance = setDist * setDist;
+    	this.strayDistance = setDist;
     	return this;
     }
     public FollowGoal setLostDistance(double setDist) {
-    	this.lostDistance = setDist * setDist;
+    	this.lostDistance = setDist;
     	return this;
     }
     public FollowGoal setFollowBehind(double setDist) {

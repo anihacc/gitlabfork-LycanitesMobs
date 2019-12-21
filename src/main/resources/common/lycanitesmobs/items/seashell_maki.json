@@ -11,7 +11,7 @@
 		"meat": true,
 		"effects": [
 			{
-				"effectId": "lycanitesmobs:swiftswimming",
+				"effectId": "minecraft:dolphins_grace",
 				"duration": 120,
 				"amplifier": 2,
 				"chance": 1.0
