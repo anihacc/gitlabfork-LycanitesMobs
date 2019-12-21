@@ -75,8 +75,8 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:concapedemeatraw",
-			"burningItem": "lycanitesmobs:concapedemeatcooked",
+			"item": "lycanitesmobs:raw_concapede_meat",
+			"burningItem": "lycanitesmobs:cooked_concapede_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

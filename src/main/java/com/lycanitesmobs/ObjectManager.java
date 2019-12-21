@@ -164,11 +164,11 @@ public class ObjectManager {
 			return null;
 		}
 
-        PotionBase potion = new PotionBase(name, isBad, color);
-		effects.put(name, potion);
-		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", potion);
+        PotionBase effect = new PotionBase(name, isBad, color);
+		effects.put(name, effect);
+		ObjectLists.addEffect(goodEffect ? "buffs" : "debuffs", effect, name);
 
-		return potion;
+		return effect;
 	}
 
 	// ========== Special Entity ==========

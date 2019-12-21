@@ -943,6 +943,11 @@ entity.lycanitesmobs.kobold.description=Small rodents that can't resist stealing
 entity.lycanitesmobs.kobold.habitat=These rodents can usually be found in the plains at night.
 entity.lycanitesmobs.kobold.combat=Kobolds usually flee from other creatures but are known to attack people who are low on health.
 # ========================================================================
+entity.lycanitesmobs.krake.name=Krake
+entity.lycanitesmobs.krake.description=Bizarre amphibious creatures, Krakes are both deaf and blind, they taste the air with their mouths and are sensitive to vibrations.
+entity.lycanitesmobs.krake.habitat=These aberrations are often found lurking by rivers or lakes as well as deep within forests.
+entity.lycanitesmobs.krake.combat=Krakes are neutral and will only attack if agitated, sprinting near them will threaten them so be sure to avoid sprinting near these creatures as they are incredibly fast!
+# ========================================================================
 entity.lycanitesmobs.lacedon.name=Lacedon
 entity.lycanitesmobs.lacedon.description=Strange humanoid aquatic creatures, they are able to come onto land for a small amount of time and indefinitely if it is raining.
 entity.lycanitesmobs.lacedon.habitat=Lacedon can be found in saltwater oceans.
@@ -1567,116 +1572,125 @@ item.vapulacrystal.name=Vapula Crystal
 item.reiverhorns.name=Reiver Horns
 item.eechetikarm.name=Eechetik Arm
 # ========================================================================
-item.arisaurmeatraw.name=Raw Arisaur Meat
-item.arisaurmeatraw.description=Is it really meat though? Stunningly good to eat raw!
+item.raw_arisaur_meat.name=Raw Arisaur Meat
+item.raw_arisaur_meat.description=Is it really meat though? Stunningly good to eat raw!
 #
-item.joustmeatcooked.name=Cooked Joust Meat
-item.joustmeatcooked.description=Tastes like spicy peri peri chicken!
+item.cooked_joust_meat.name=Cooked Joust Meat
+item.cooked_joust_meat.description=Tastes like spicy peri peri chicken!
 #
-item.ambercake.name=Amber Cake
-item.ambercake.description=A spicy cake full of sugar! Applies a speed boost!
+item.amber_cake.name=Amber Cake
+item.amber_cake.description=A spicy cake full of sugar! Applies a speed boost!
 #
-item.silexmeatraw.name=Raw Silex Meat
-item.silexmeatraw.description=Very sharp and boney!
+item.raw_silex_meat.name=Raw Silex Meat
+item.raw_silex_meat.description=Very sharp and boney!
 #
-item.devillasagna.name=Devil Lasagna
-item.devillasagna.description=A delicous meaty pasta dish that surges with demonic strength.
+item.devil_lasagna.name=Devil Lasagna
+item.devil_lasagna.description=A delicous meaty pasta dish that surges with demonic strength.
 #
-item.pinkymeatraw.name=Raw Pinky Meat
-item.pinkymeatraw.description=Withering demonic energy pulses through this meat, it must be cleansed by fire.
+item.raw_pinky_meat.name=Raw Pinky Meat
+item.raw_pinky_meat.description=Withering demonic energy pulses through this meat, it must be cleansed by fire.
 #
-item.yalemeatraw.name=Raw Yale Meat
-item.yalemeatraw.description=Tastes a bit like mutton. Very chewy when raw, causes dig speed slowdown.
+item.raw_yale_meat.name=Raw Yale Meat
+item.raw_yale_meat.description=Tastes a bit like mutton. Very chewy when raw, causes dig speed slowdown.
 #
-item.cephignismeatcooked.name=Cooked Cephignis Meat
-item.cephignismeatcooked.description=Very spicy fish!
+item.cooked_cephignis_meat.name=Cooked Cephignis Meat
+item.cooked_cephignis_meat.description=Very spicy fish!
 #
-item.battleburrito.name=Battle Burrito
-item.battleburrito.description=A powerful fusion of many tasty meats! Applies: Strength, Resistance, Absorption, Health Boost and Heals!
+item.battle_burrito.name=Battle Burrito
+item.battle_burrito.description=A powerful fusion of many tasty meats! Applies: Strength, Resistance, Absorption, Health Boost and Heals!
 #
-item.concapedemeatraw.name=Raw Concapede Meat
-item.concapedemeatraw.description=Close your eyes and pretend that it is chicken!
+item.raw_concapede_meat.name=Raw Concapede Meat
+item.raw_concapede_meat.description=Close your eyes and pretend that it is chicken!
 #
-item.yalemeatcooked.name=Cooked Yale Meat
-item.yalemeatcooked.description=Tastes like minty roast lamb.
+item.cooked_yale_meat.name=Cooked Yale Meat
+item.cooked_yale_meat.description=Tastes like minty roast lamb.
 #
-item.peakskebab.name=Peaks Kebab
-item.peakskebab.description=The food of the mountains, increases arm strength for mining speed, the best a miner could eat!
+item.peaks_kebab.name=Peaks Kebab
+item.peaks_kebab.description=The food of the mountains, increases arm strength for mining speed, the best a miner could eat!
 #
-item.lapisfishandchips.name=Lapis Fish and Chips
-item.lapisfishandchips.description=Swim through the water with the grace of a Silex after eating this delicacy. The chips are chunky fries rather than thin crispy potato wafers.
+item.lapis_fish_and_chips.name=Lapis Fish and Chips
+item.lapis_fish_and_chips.description=Swim through the water with the grace of a Silex after eating this delicacy. The chips are chunky fries rather than thin crispy potato wafers.
 #
-item.pinkymeatcooked.name=Cooked Pinky Meat
-item.pinkymeatcooked.description=Tastes like very rich, salty beef. Provides strength.
+item.cooked_pinky_meat.name=Cooked Pinky Meat
+item.cooked_pinky_meat.description=Tastes like very rich, salty beef. Provides strength.
 #
-item.bulwarkburger.name=Bulwark Burger
-item.bulwarkburger.description=Take on the tough defense of the mighty Maka! Applies absorption.
+item.bulwark_burger.name=Bulwark Burger
+item.bulwark_burger.description=Take on the tough defense of the mighty Maka! Applies absorption.
 #
-item.explorersrisotto.name=Explorers Risotto
-item.explorersrisotto.description=A mighty dish bursting with power! Applies: Movement Speed, Dig Speed, Water Breathing and Jump Boost!
+item.explorers_risotto.name=Explorers Risotto
+item.explorers_risotto.description=A mighty dish bursting with power! Applies: Movement Speed, Dig Speed, Water Breathing and Jump Boost!
 #
-item.paleosalad.name=Paleo Salad
-item.paleosalad.description=The healthiest food you can eat! Increases all healing received.
+item.paleo_salad.name=Paleo Salad
+item.paleo_salad.description=The healthiest food you can eat! Increases all healing received.
 #
-item.bloodchili.name=Blood Chili
-item.bloodchili.description=An intense chili that empowers the consumer allowing them to consume the life force of any creature they attack, healing them.
+item.blood_chili.name=Blood Chili
+item.blood_chili.description=An intense chili that empowers the consumer allowing them to consume the life force of any creature they attack, healing them.
 #
-item.ikameatraw.name=Raw Ika Meat
-item.ikameatraw.description=Fishy seafood! It feels very heavy.
+item.raw_ika_meat.name=Raw Ika Meat
+item.raw_ika_meat.description=Fishy seafood! It feels very heavy.
 #
-item.seashellmaki.name=Seashell Maki
-item.seashellmaki.description=A taste infusion from the deep blue sea! Applies water breathing!
+item.seashell_maki.name=Seashell Maki
+item.seashell_maki.description=A taste infusion from the deep blue sea! Applies water breathing!
 #
-item.chupacabrameatcooked.name=Cooked Chupacabra Meat
-item.chupacabrameatcooked.description=While the creature it comes from is disgusting, once cooked, this rich meat is absolutely delicious!
+item.cooked_chupacabra_meat.name=Cooked Chupacabra Meat
+item.cooked_chupacabra_meat.description=While the creature it comes from is disgusting, once cooked, this rich meat is absolutely delicious!
 #
-item.searingtaco.name=Searing Taco
-item.searingtaco.description=So spicy that it makes you immune to fire!
+item.searing_taco.name=Searing Taco
+item.searing_taco.description=So spicy that it makes you immune to fire!
 #
-item.mosspie.name=Moss Pie
-item.mosspie.description=A healthy, rich meaty pie! Applies regeneration.
+item.moss_pie.name=Moss Pie
+item.moss_pie.description=A healthy, rich meaty pie! Applies regeneration.
 #
-item.aspidmeatcooked.name=Cooked Aspid Meat
-item.aspidmeatcooked.description=Crumbles apart in the mouth, delicious, a bit like slow cooked beef!
+item.cooked_aspid_meat.name=Cooked Aspid Meat
+item.cooked_aspid_meat.description=Crumbles apart in the mouth, delicious, a bit like slow cooked beef!
 #
-item.yetimeatcooked.name=Cooked Yeti Meat
-item.yetimeatcooked.description=Tastes a bit like pork.
+item.cooked_yeti_meat.name=Cooked Yeti Meat
+item.cooked_yeti_meat.description=Tastes a bit like pork.
 #
-item.chupacabrameatraw.name=Raw Chupacabra Meat
-item.chupacabrameatraw.description=Scaley flesh that oozes with blood. Eating it raw can cause terrifying hallucinations!
+item.raw_chupacabra_meat.name=Raw Chupacabra Meat
+item.raw_chupacabra_meat.description=Scaley flesh that oozes with blood. Eating it raw can cause terrifying hallucinations!
 #
-item.makameatraw.name=Raw Maka Meat
-item.makameatraw.description=Very chewy and pork like. Eating this raw will cause weakness.
+item.raw_maka_meat.name=Raw Maka Meat
+item.raw_maka_meat.description=Very chewy and pork like. Eating this raw will cause weakness.
 #
-item.aspidmeatraw.name=Raw Aspid Meat
-item.aspidmeatraw.description=Smells like beef seasoned with cumin. Looks poisonous.
+item.raw_aspid_meat.name=Raw Aspid Meat
+item.raw_aspid_meat.description=Smells like beef seasoned with cumin. Looks poisonous.
 #
-item.silexmeatcooked.name=Cooked Silex Meat
-item.silexmeatcooked.description=Very refreshing!
+item.cooked_silex_meat.name=Cooked Silex Meat
+item.cooked_silex_meat.description=Very refreshing!
 #
-item.yetimeatraw.name=Raw Yeti Meat
-item.yetimeatraw.description=It feels very cold...
+item.raw_yeti_meat.name=Raw Yeti Meat
+item.raw_yeti_meat.description=It feels very cold...
 #
-item.concapedemeatcooked.name=Cooked Concapede Meat
-item.concapedemeatcooked.description=Tastes like BBQ chicken! Does not look like it though!
+item.cooked_concapede_meat.name=Cooked Concapede Meat
+item.cooked_concapede_meat.description=Tastes like BBQ chicken! Does not look like it though!
 #
-item.arisaurmeatcooked.name=Cooked Arisaur Meat
-item.arisaurmeatcooked.description=Imbued with the gift of nature with impurities cooked out, increases all healing received.
+item.cooked_arisaur_meat.name=Cooked Arisaur Meat
+item.cooked_arisaur_meat.description=Imbued with the gift of nature with impurities cooked out, increases all healing received.
 #
-item.joustmeatraw.name=Raw Joust Meat
-item.joustmeatraw.description=Looks chewy and smells like feet, applies movement slowdown, best cook it.
+item.raw_joust_meat.name=Raw Joust Meat
+item.raw_joust_meat.description=Looks chewy and smells like feet, applies movement slowdown, best cook it.
 #
-item.palesoup.name=Pale Soup
-item.palesoup.description=A milky soup that bolsters resistance.
+item.pale_soup.name=Pale Soup
+item.pale_soup.description=A milky soup that bolsters resistance.
 #
-item.makameatcooked.name=Cooked Maka Meat
-item.makameatcooked.description=Has a subtle bacon like taste.
+item.cooked_maka_meat.name=Cooked Maka Meat
+item.cooked_maka_meat.description=Has a subtle bacon like taste.
 #
-item.tropicalcurry.name=Tropical Curry
-item.tropicalcurry.description=Bursting full of exotic flavours! Bouncy!
+item.tropical_curry.name=Tropical Curry
+item.tropical_curry.description=Bursting full of exotic flavours! Bouncy!
 #
-item.ikameatcooked.name=Cooked Ika Meat
-item.ikameatcooked.description=Crispy seafood! Cooking it has made it much lighter!
+item.cooked_ika_meat.name=Cooked Ika Meat
+item.cooked_ika_meat.description=Crispy seafood! Cooking it has made it much lighter!
+#
+item.raw_krake_meat.name=Raw Krake Meat
+item.raw_krake_meat.description=It seems to still be moving slightly, probably not safe to eat.
+#
+item.cooked_krake_meat.name=Cooked Krake Meat
+item.cooked_krake_meat.description=Has a strong texture and a rich savory taste, seems to be vibrating slightly.
+#
+item.caecilian_ramen.name=Caecilian Ramen
+item.caecilian_ramen.description=A delightful dish with a fresh fried egg on top, the noodles seem to be vibrating!
 #
 # ========================================================================
 item.soulgazer.name=Soulgazer

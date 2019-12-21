@@ -109,13 +109,13 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:doomfirecharge",
+			"item": "lycanitesmobs:spectralboltcharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:hellfirecharge",
+			"item": "lycanitesmobs:lobdarklingscharge",
 			"minAmount": 10,
 			"maxAmount": 20,
 			"chance": 1
@@ -148,12 +148,6 @@
 			"item": "lycanitesmobs:soulstoneshadow",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 1
-		},
-		{
-			"item": "lycanitesmobs:lobdarklingscharge",
-			"minAmount": 10,
-			"maxAmount": 20,
 			"chance": 1
 		}
 	],

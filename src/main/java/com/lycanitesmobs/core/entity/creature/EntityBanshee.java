@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.EnumParticleTypes;
@@ -72,7 +73,7 @@ public class EntityBanshee extends TameableCreatureEntity implements IMob {
 	}
 
 	@Override
-	public boolean canSeeThroughWalls() {
+	public boolean canEntityBeSeen(Entity target) {
 		return true;
 	}
     

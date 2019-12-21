@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:ambercake"
+    "item": "lycanitesmobs:amber_cake"
   },
   "ingredients": [
     {
@@ -11,7 +11,7 @@
       "data": 2
     },
     {
-      "item": "lycanitesmobs:joustmeatcooked"
+      "item": "lycanitesmobs:cooked_joust_meat"
     }
   ],
   "type": "forge:ore_shapeless"

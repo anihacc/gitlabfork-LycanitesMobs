@@ -3,9 +3,7 @@ package com.lycanitesmobs.core.entity.goals.targeting;
 import com.google.common.base.Predicate;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.TargetSorterNearest;
-import com.lycanitesmobs.core.info.CreatureGroup;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -184,7 +182,7 @@ public abstract class TargetingGoal extends EntityAIBase {
                     if (possibleAlly instanceof BaseCreatureEntity) {
                         BaseCreatureEntity possibleCreatureAlly = (BaseCreatureEntity) possibleAlly;
                         if (possibleCreatureAlly.getAttackTarget() == null && possibleCreatureAlly.canAttackEntity(this.target) && possibleCreatureAlly.shouldCreatureGroupRevenge(this.target))
-                            possibleCreatureAlly.setAttackTarget(this.target);
+                            possibleCreatureAlly.setRevengeTarget(this.target);
                     }
                     else {
                         if (possibleAlly.getRevengeTarget() == null)
@@ -255,7 +253,7 @@ public abstract class TargetingGoal extends EntityAIBase {
      * @return True if sight should be checked.
      */
     protected boolean shouldCheckSight() {
-        return this.checkSight && !this.host.canSeeThroughWalls();
+        return this.checkSight;
     }
 
 	/**

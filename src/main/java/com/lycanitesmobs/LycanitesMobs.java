@@ -36,8 +36,6 @@ import com.lycanitesmobs.core.worldgen.WorldGeneratorFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -68,7 +66,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.5.0";
+	public static final String versionNumber = "2.0.5.1";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -172,11 +170,10 @@ public class LycanitesMobs {
 		this.potionEffects.init(config);
 
 		// Blocks and Items:
-		ItemManager.getInstance().loadConfig();
-		ItemManager.getInstance().loadItems();
-		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
+		ObjectLists.createVanillaLists();
 		ObjectLists.createCustomItems();
-		ObjectLists.createLists();
+		ItemManager.getInstance().startup(modInfo);
+		EquipmentPartManager.getInstance().loadAllFromJSON(modInfo);
 
 		// Tile Entities:
 		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);

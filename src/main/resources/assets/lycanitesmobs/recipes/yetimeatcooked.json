@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:yetimeatcooked"
+    "item": "lycanitesmobs:cooked_yeti_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:palesoup"
+      "item": "lycanitesmobs:pale_soup"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -72,11 +72,11 @@
 			"item": "minecraft:slime_ball",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 0.5
+			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:aspidmeatraw",
-			"burningItem": "lycanitesmobs:aspidmeatcooked",
+			"item": "lycanitesmobs:raw_aspid_meat",
+			"burningItem": "lycanitesmobs:cooked_aspid_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

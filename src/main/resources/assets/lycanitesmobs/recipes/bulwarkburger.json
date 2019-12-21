@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:bulwarkburger"
+    "item": "lycanitesmobs:bulwark_burger"
   },
   "ingredients": [
     {
       "item": "minecraft:bread"
     },
     {
-      "item": "lycanitesmobs:makameatcooked"
+      "item": "lycanitesmobs:cooked_maka_meat"
     },
     {
       "item": "minecraft:bread"

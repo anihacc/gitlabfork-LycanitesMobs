@@ -40,6 +40,8 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
         Block bodyBlock = Blocks.OBSIDIAN;
 
         // Upper:
+        if(world.getBlockState(pos.add(0, 2, 0)).getBlock() != Blocks.AIR)
+            return false;
         if(world.getBlockState(pos.add(0, 1, 0)).getBlock() != bodyBlock)
             return false;
 

@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:pinkymeatcooked"
+    "item": "lycanitesmobs:cooked_pinky_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:devillasagna"
+      "item": "lycanitesmobs:devil_lasagna"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -66,7 +66,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
             return false;
         }
         if(this.entityCreature.isInWater()) {
-            return this.entityCreature.isStrongSwimmer() || (this.entityCreature.canWade() && this.entityCreature.canDive());
+            return this.entityCreature.isStrongSwimmer();
         }
         return false;
     }

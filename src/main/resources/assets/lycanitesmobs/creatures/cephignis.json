@@ -69,7 +69,7 @@
 	"dungeonLevel": 0,
 	"drops": [
 		{
-			"item": "lycanitesmobs:cephignismeatcooked",
+			"item": "lycanitesmobs:cooked_cephignis_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 0.25
@@ -78,7 +78,7 @@
 			"item": "minecraft:magma_cream",
 			"minAmount": 1,
 			"maxAmount": 2,
-			"chance": 0.25
+			"chance": 0.5
 		}
 	],
 	"sizeScale": 1,

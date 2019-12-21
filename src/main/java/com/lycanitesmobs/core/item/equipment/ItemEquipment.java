@@ -1,12 +1,9 @@
 package com.lycanitesmobs.core.item.equipment;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Multimap;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.goals.targeting.TargetingGoal;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.equipment.features.*;
 import net.minecraft.block.state.IBlockState;
@@ -66,7 +63,7 @@ public class ItemEquipment extends ItemBase {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, descriptionWidth);
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, DESCRIPTION_WIDTH);
 			for (Object formattedDescription : formattedDescriptionList) {
 				if (formattedDescription instanceof String)
 					tooltip.add("\u00a73" + formattedDescription);

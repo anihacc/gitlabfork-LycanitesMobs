@@ -1,10 +1,10 @@
 {
   "result": {
-    "item": "lycanitesmobs:yalemeatcooked"
+    "item": "lycanitesmobs:cooked_yale_meat"
   },
   "ingredients": [
     {
-      "item": "lycanitesmobs:peakskebab"
+      "item": "lycanitesmobs:peaks_kebab"
     }
   ],
   "type": "forge:ore_shapeless"

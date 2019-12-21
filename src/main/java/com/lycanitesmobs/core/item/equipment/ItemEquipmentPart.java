@@ -126,7 +126,7 @@ public class ItemEquipmentPart extends ItemBase {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, descriptionWidth);
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, DESCRIPTION_WIDTH);
 			for (Object formattedDescription : formattedDescriptionList) {
 				if (formattedDescription instanceof String)
 					tooltip.add("\u00a73" + formattedDescription);

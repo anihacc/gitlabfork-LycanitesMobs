@@ -1,13 +1,13 @@
 {
   "result": {
-    "item": "lycanitesmobs:lapisfishandchips"
+    "item": "lycanitesmobs:lapis_fish_and_chips"
   },
   "ingredients": [
     {
       "item": "minecraft:potato"
     },
     {
-      "item": "lycanitesmobs:silexmeatcooked"
+      "item": "lycanitesmobs:cooked_silex_meat"
     }
   ],
   "type": "forge:ore_shapeless"

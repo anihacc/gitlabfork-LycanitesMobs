@@ -27,6 +27,7 @@ public class ObjectLists {
 	public static Map<String, List<ItemStack>> itemLists = new HashMap<>();
 	public static Map<String, List<Class>> entityLists = new HashMap<>();
 	public static Map<String, List<Potion>> effectLists = new HashMap<>();
+	public static Map<String, Potion> allEffects = new HashMap<>();
 	
 	
     // ==================================================
@@ -75,13 +76,14 @@ public class ObjectLists {
 		}
 	}
 	
-	public static void addEffect(String list, Potion potion) {
-		if(potion == null)
+	public static void addEffect(String list, Potion effect, String effectName) {
+		if(effect == null)
 			return;
+		allEffects.put(effectName, effect);
 		list = list.toLowerCase();
 		if(!effectLists.containsKey(list))
 			effectLists.put(list, new ArrayList<>());
-		effectLists.get(list).add(potion);
+		effectLists.get(list).add(effect);
 	}
 	
 
@@ -179,7 +181,7 @@ public class ObjectLists {
     // ==================================================
     //                   Create Lists
     // ==================================================
-	public static void createLists() {
+	public static void createVanillaLists() {
 		// ========== Item Lists ==========
 		// Raw Meat:
 		ObjectLists.addItem("diet_carnivore", Items.BEEF);
@@ -251,35 +253,35 @@ public class ObjectLists {
 		
 		// ========== Effects ==========
 		// Buffs:
-		ObjectLists.addEffect("buffs", MobEffects.STRENGTH);
-		ObjectLists.addEffect("buffs", MobEffects.HASTE);
-		ObjectLists.addEffect("buffs", MobEffects.FIRE_RESISTANCE);
-		ObjectLists.addEffect("buffs", MobEffects.INSTANT_HEALTH);
-		ObjectLists.addEffect("buffs", MobEffects.INVISIBILITY);
-		ObjectLists.addEffect("buffs", MobEffects.JUMP_BOOST);
-		ObjectLists.addEffect("buffs", MobEffects.SPEED);
-		ObjectLists.addEffect("buffs", MobEffects.NIGHT_VISION);
-		ObjectLists.addEffect("buffs", MobEffects.REGENERATION);
-		ObjectLists.addEffect("buffs", MobEffects.RESISTANCE);
-		ObjectLists.addEffect("buffs", MobEffects.WATER_BREATHING);
-		ObjectLists.addEffect("buffs", MobEffects.HEALTH_BOOST);
-		ObjectLists.addEffect("buffs", MobEffects.ABSORPTION);
-		ObjectLists.addEffect("buffs", MobEffects.SATURATION);
-        ObjectLists.addEffect("buffs", MobEffects.GLOWING);
-        ObjectLists.addEffect("buffs", MobEffects.LEVITATION);
-        ObjectLists.addEffect("buffs", MobEffects.LUCK);
-		
+		ObjectLists.addEffect("buffs", MobEffects.STRENGTH, "strength");
+		ObjectLists.addEffect("buffs", MobEffects.HASTE, "haste");
+		ObjectLists.addEffect("buffs", MobEffects.FIRE_RESISTANCE, "fire_resistance");
+		ObjectLists.addEffect("buffs", MobEffects.INSTANT_HEALTH, "instant_health");
+		ObjectLists.addEffect("buffs", MobEffects.INVISIBILITY, "invisibility");
+		ObjectLists.addEffect("buffs", MobEffects.JUMP_BOOST, "jump_boost");
+		ObjectLists.addEffect("buffs", MobEffects.SPEED, "speed");
+		ObjectLists.addEffect("buffs", MobEffects.NIGHT_VISION, "night_vision");
+		ObjectLists.addEffect("buffs", MobEffects.REGENERATION, "regeneration");
+		ObjectLists.addEffect("buffs", MobEffects.RESISTANCE, "resistance");
+		ObjectLists.addEffect("buffs", MobEffects.WATER_BREATHING, "water_breathing");
+		ObjectLists.addEffect("buffs", MobEffects.HEALTH_BOOST, "health_boost");
+		ObjectLists.addEffect("buffs", MobEffects.ABSORPTION, "absorption");
+		ObjectLists.addEffect("buffs", MobEffects.SATURATION, "saturation");
+		ObjectLists.addEffect("buffs", MobEffects.GLOWING, "glowing");
+		ObjectLists.addEffect("buffs", MobEffects.LEVITATION, "levitation");
+		ObjectLists.addEffect("buffs", MobEffects.LUCK, "luck");
+
 		// Debuffs:
-        ObjectLists.addEffect("buffs", MobEffects.BLINDNESS);
-        ObjectLists.addEffect("buffs", MobEffects.NAUSEA);
-        ObjectLists.addEffect("buffs", MobEffects.MINING_FATIGUE);
-        ObjectLists.addEffect("buffs", MobEffects.INSTANT_DAMAGE);
-        ObjectLists.addEffect("buffs", MobEffects.HUNGER);
-        ObjectLists.addEffect("buffs", MobEffects.SLOWNESS);
-        ObjectLists.addEffect("buffs", MobEffects.POISON);
-        ObjectLists.addEffect("buffs", MobEffects.WEAKNESS);
-        ObjectLists.addEffect("buffs", MobEffects.WITHER);
-        ObjectLists.addEffect("buffs", MobEffects.UNLUCK);
+		ObjectLists.addEffect("debuffs", MobEffects.BLINDNESS, "blindness");
+		ObjectLists.addEffect("debuffs", MobEffects.NAUSEA, "nausea");
+		ObjectLists.addEffect("debuffs", MobEffects.MINING_FATIGUE, "mining_fatigue");
+		ObjectLists.addEffect("debuffs", MobEffects.INSTANT_DAMAGE, "instant_damage");
+		ObjectLists.addEffect("debuffs", MobEffects.HUNGER, "hunger");
+		ObjectLists.addEffect("debuffs", MobEffects.SLOWNESS, "slowness");
+		ObjectLists.addEffect("debuffs", MobEffects.POISON, "poison");
+		ObjectLists.addEffect("debuffs", MobEffects.WEAKNESS, "weakness");
+		ObjectLists.addEffect("debuffs", MobEffects.WITHER, "wither");
+		ObjectLists.addEffect("debuffs", MobEffects.UNLUCK, "unluck");
 	}
 	
 	// ========== Add From Config Value ==========

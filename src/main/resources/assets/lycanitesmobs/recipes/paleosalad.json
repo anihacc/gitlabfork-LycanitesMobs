@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:paleosalad"
+    "item": "lycanitesmobs:paleo_salad"
   },
   "ingredients": [
     {
@@ -11,7 +11,7 @@
       "item": "minecraft:carrot"
     },
     {
-      "item": "lycanitesmobs:arisaurmeatcooked"
+      "item": "lycanitesmobs:cooked_arisaur_meat"
     }
   ],
   "type": "forge:ore_shapeless"

@@ -499,7 +499,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(this instanceof IFusable)
 			this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindFuseTargetGoal(this));
 		this.targetTasks.addTask(this.nextFindTargetIndex++, new AvoidIfHitGoal(this).setHelpCall(true));
-		this.targetTasks.addTask(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true));
+		this.targetTasks.addTask(this.nextFindTargetIndex++, new RevengeGoal(this).setHelpCall(true).setCheckSight(true));
 
 		// Greater Actions:
 		this.tasks.addTask(this.nextPriorityGoalIndex++, new PaddleGoal(this));
@@ -3371,9 +3371,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		return true;
 	}
 
-	/** Returns true if this entity can see through walls. **/
-	public boolean canSeeThroughWalls() {
-		return false;
+	/** Returns true if this entity can see the provided entity. **/
+	@Override
+	public boolean canEntityBeSeen(Entity target) {
+		return super.canEntityBeSeen(target);
 	}
 
     /** Returns this entity's Owner Target. **/
@@ -3717,6 +3718,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         if(ObjectManager.getEffect("weight") != null)
             if((entity).isPotionActive(ObjectManager.getEffect("weight")))
                 return false;
+		if(ObjectManager.getEffect("repulsion") != null)
+			if((entity).isPotionActive(ObjectManager.getEffect("repulsion")))
+				return false;
 		return extendedEntity.pickedUpByEntity == null || extendedEntity.pickedUpByEntity instanceof FearEntity;
     }
     

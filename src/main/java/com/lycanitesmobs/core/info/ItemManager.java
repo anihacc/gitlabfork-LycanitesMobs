@@ -1,9 +1,11 @@
 package com.lycanitesmobs.core.info;
 
-import com.lycanitesmobs.client.AssetManager;
+import com.google.gson.JsonObject;
 import com.lycanitesmobs.BlockMaker;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.block.BlockEquipmentForge;
 import com.lycanitesmobs.core.block.BlockSoulcube;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
@@ -20,16 +22,24 @@ import com.lycanitesmobs.core.item.special.*;
 import com.lycanitesmobs.core.item.temp.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemManager {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ItemManager extends JSONLoader {
 	public static ItemManager INSTANCE;
+
+	public Map<String, ItemInfo> items = new HashMap<>();
+
+	/** A list of mod groups that have loaded with this manager. **/
+	public List<ModInfo> loadedGroups = new ArrayList<>();
 
 	/** Handles all global item general config settings. **/
 	public ItemConfig config;
@@ -41,6 +51,44 @@ public class ItemManager {
 			INSTANCE = new ItemManager();
 		}
 		return INSTANCE;
+	}
+
+	/**
+	 * Called during startup and initially loads everything in this manager.
+	 * @param modInfo The mod loading this manager.
+	 */
+	public void startup(ModInfo modInfo) {
+		this.loadConfig();
+		this.loadAllFromJson(modInfo);
+
+		// Food Cooking Smelting Recipes:
+		for(ItemInfo itemInfo : this.items.values()) {
+			if(itemInfo.name.contains("raw_")) {
+				String cookedName = itemInfo.name.replace("raw_", "cooked_");
+				if(this.items.containsKey(cookedName)) {
+					GameRegistry.addSmelting(itemInfo.item, new ItemStack(this.items.get(cookedName).item, 1), 0.5f);
+				}
+			}
+		}
+
+		this.loadItems();
+	}
+
+	/** Loads all JSON Items. **/
+	public void loadAllFromJson(ModInfo modInfo) {
+		if(!this.loadedGroups.contains(modInfo)) {
+			this.loadedGroups.add(modInfo);
+		}
+		this.loadAllJson(modInfo, "Items", "items", "name", true);
+		LycanitesMobs.logDebug("Items", "Complete! " + this.items.size() + " JSON Items Loaded In Total.");
+	}
+
+	@Override
+	public void parseJson(ModInfo modInfo, String loadGroup, JsonObject json) {
+		ItemInfo itemInfo = new ItemInfo(modInfo);
+		itemInfo.loadFromJSON(json);
+		this.items.put(itemInfo.name, itemInfo);
+		ObjectManager.addItem(itemInfo.name, itemInfo.getItem());
 	}
 
 
@@ -87,167 +135,6 @@ public class ItemManager {
 		ObjectManager.addItem("halloweentreat", new ItemHalloweenTreat());
 		ObjectManager.addItem("wintergift", new ItemWinterGift());
 		ObjectManager.addItem("wintergiftlarge", new ItemWinterGiftLarge());
-
-
-		// Foods:
-		ObjectManager.addItem("battleburrito", new ItemFoodBattleBurrito("battleburrito", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
-		ObjectManager.addItem("explorersrisotto", new ItemFoodExplorersRisotto("explorersrisotto", group, 6, 0.7F).setAlwaysEdible().setMaxStackSize(16));
-
-		ObjectManager.addItem("yetimeatraw", new ItemCustomFood("yetimeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.SLOWNESS, 45, 1, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("yetimeatraw"));
-
-		ObjectManager.addItem("yetimeatcooked", new ItemCustomFood("yetimeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.RESISTANCE, 60, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("yetimeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("yetimeatraw"), new ItemStack(ObjectManager.getItem("yetimeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("palesoup", new ItemCustomFood("palesoup", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.RESISTANCE, 60, 1, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("palesoup"));
-
-		ObjectManager.addItem("pinkymeatraw", new ItemCustomFood("pinkymeatraw", group, 4, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.WITHER, 30, 0, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("pinkymeatraw"));
-
-		ObjectManager.addItem("pinkymeatcooked", new ItemCustomFood("pinkymeatcooked", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.STRENGTH, 60, 0, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("pinkymeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("pinkymeatraw"), new ItemStack(ObjectManager.getItem("pinkymeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("devillasagna", new ItemCustomFood("devillasagna", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.STRENGTH, 60, 0, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("devillasagna"));
-
-		ObjectManager.addItem("joustmeatraw", new ItemCustomFood("joustmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.SLOWNESS, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("joustmeatraw"));
-		ObjectLists.addItem("diet_insectivore", ObjectManager.getItem("joustmeatraw"));
-
-		ObjectManager.addItem("joustmeatcooked", new ItemCustomFood("joustmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.SPEED, 20, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("joustmeatcooked"));
-		ObjectLists.addItem("diet_insectivore", ObjectManager.getItem("joustmeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("joustmeatraw"), new ItemStack(ObjectManager.getItem("joustmeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("ambercake", new ItemCustomFood("ambercake", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.SPEED, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("ambercake"));
-
-		ItemCustomFood arisaurRaw =  new ItemCustomFood("arisaurmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.SATURATION, 45, 2, 0.8F);
-		if(ObjectManager.getEffect("paralysis") != null) {
-			arisaurRaw.setPotionEffect(ObjectManager.getEffect("paralysis"), 10, 2, 0.8F);
-		}
-		ObjectManager.addItem("arisaurmeatraw", arisaurRaw);
-		ObjectLists.addItem("diet_herbivore", ObjectManager.getItem("arisaurmeatraw"));
-
-		ItemCustomFood arisaurCooked = new ItemCustomFood("arisaurmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setAlwaysEdible();
-		if(ObjectManager.getEffect("rejuvenation") != null) {
-			arisaurCooked.setPotionEffect(ObjectManager.getEffect("rejuvenation"), 30, 1, 1.0F);
-		}
-		ObjectManager.addItem("arisaurmeatcooked", arisaurCooked);
-		ObjectLists.addItem("diet_herbivore", ObjectManager.getItem("arisaurmeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("arisaurmeatraw"), new ItemStack(ObjectManager.getItem("arisaurmeatcooked"), 1), 0.5f);
-
-		ItemCustomFood paleosalad = new ItemCustomFood("paleosalad", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
-		if(ObjectManager.getEffect("rejuvenation") != null) {
-			paleosalad.setPotionEffect(ObjectManager.getEffect("rejuvenation"), 60, 1, 1.0F);
-		}
-		ObjectManager.addItem("paleosalad", paleosalad.setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_herbivore", ObjectManager.getItem("paleosalad"));
-
-		Potion rawFoodEffectID = MobEffects.WEAKNESS;
-		if(ObjectManager.getEffect("penetration") != null) {
-			rawFoodEffectID = ObjectManager.getEffect("penetration");
-		}
-		ObjectManager.addItem("silexmeatraw", new ItemCustomFood("silexmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(rawFoodEffectID, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("silexmeatraw"));
-
-		Potion cookedFoodEffectID = MobEffects.SPEED;
-		if(ObjectManager.getEffect("swiftswimming") != null) {
-			cookedFoodEffectID = ObjectManager.getEffect("swiftswimming");
-		}
-		ObjectManager.addItem("silexmeatcooked", new ItemCustomFood("silexmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(cookedFoodEffectID, 20, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("silexmeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("silexmeatraw"), new ItemStack(ObjectManager.getItem("silexmeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("lapisfishandchips", new ItemCustomFood("lapisfishandchips", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(cookedFoodEffectID, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("lapisfishandchips"));
-
-		ObjectManager.addItem("cephignismeatcooked", new ItemCustomFood("cephignismeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.FIRE_RESISTANCE, 20, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("cephignismeatcooked"));
-
-		ObjectManager.addItem("searingtaco", new ItemCustomFood("searingtaco", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.FIRE_RESISTANCE, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("searingtaco"));
-
-		ObjectManager.addItem("concapedemeatraw", new ItemCustomFood("concapedemeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.SLOWNESS, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("concapedemeatraw"));
-		ObjectLists.addItem("diet_insectivore", ObjectManager.getItem("concapedemeatraw"));
-
-		ObjectManager.addItem("concapedemeatcooked", new ItemCustomFood("concapedemeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.JUMP_BOOST, 20, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("concapedemeatcooked"));
-		ObjectLists.addItem("diet_insectivore", ObjectManager.getItem("concapedemeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("concapedemeatraw"), new ItemStack(ObjectManager.getItem("concapedemeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("tropicalcurry", new ItemCustomFood("tropicalcurry", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.JUMP_BOOST, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("tropicalcurry"));
-
-		ObjectManager.addItem("yalemeatraw", new ItemCustomFood("yalemeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.MINING_FATIGUE, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("yalemeatraw"));
-
-		ObjectManager.addItem("yalemeatcooked", new ItemCustomFood("yalemeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.HASTE, 20, 1, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("yalemeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("yalemeatraw"), new ItemStack(ObjectManager.getItem("yalemeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("peakskebab", new ItemCustomFood("peakskebab", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.HASTE, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("peakskebab"));
-
-		ObjectManager.addItem("makameatraw", new ItemCustomFood("makameatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.WEAKNESS, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("makameatraw"));
-
-		ObjectManager.addItem("makameatcooked", new ItemCustomFood("makameatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.ABSORPTION, 20, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("makameatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("makameatraw"), new ItemStack(ObjectManager.getItem("makameatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("bulwarkburger", new ItemCustomFood("bulwarkburger", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.ABSORPTION, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("bulwarkburger"));
-
-		Potion ikaRawFoodEffect = MobEffects.BLINDNESS;
-		if(ObjectManager.getEffect("weight") != null) {
-			ikaRawFoodEffect = ObjectManager.getEffect("weight");
-		}
-		ObjectManager.addItem("ikameatraw", new ItemCustomFood("ikameatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(ikaRawFoodEffect, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("ikameatraw"));
-
-		ObjectManager.addItem("ikameatcooked", new ItemCustomFood("ikameatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.WATER_BREATHING, 60, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("ikameatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("ikameatraw"), new ItemStack(ObjectManager.getItem("ikameatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("seashellmaki", new ItemCustomFood("seashellmaki", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.WATER_BREATHING, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_piscivore", ObjectManager.getItem("seashellmaki"));
-
-		ItemCustomFood rawChupacabraMeat = new ItemCustomFood("chupacabrameatraw", group, 4, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.HUNGER, 45, 2, 0.8F);
-		if(ObjectManager.getEffect("fear") != null) {
-			rawChupacabraMeat.setPotionEffect(ObjectManager.getEffect("fear"), 10, 2, 0.8F);
-		}
-		ObjectManager.addItem("chupacabrameatraw", rawChupacabraMeat);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("chupacabrameatraw"));
-
-		ItemCustomFood chupacabrameatRaw = new ItemCustomFood("chupacabrameatcooked", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setAlwaysEdible();
-		if(ObjectManager.getEffect("leech") != null) {
-			chupacabrameatRaw.setPotionEffect(ObjectManager.getEffect("leech"), 30, 1, 1.0F);
-		}
-		ObjectManager.addItem("chupacabrameatcooked", chupacabrameatRaw);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("chupacabrameatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("chupacabrameatraw"), new ItemStack(ObjectManager.getItem("chupacabrameatcooked"), 1), 0.5f);
-
-		ItemCustomFood meal = new ItemCustomFood("bloodchili", group, 7, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setAlwaysEdible();
-		meal.setMaxStackSize(16);
-		if(ObjectManager.getEffect("leech") != null) {
-			meal.setPotionEffect(ObjectManager.getEffect("leech"), 60, 1, 1.0F);
-		}
-		ObjectManager.addItem("bloodchili", meal, 3, 1, 6);
-
-		ObjectManager.addItem("aspidmeatraw", new ItemCustomFood("aspidmeatraw", group, 2, 0.5F, ItemCustomFood.FOOD_CLASS.RAW).setPotionEffect(MobEffects.POISON, 45, 2, 0.8F));
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("aspidmeatraw"));
-
-		ObjectManager.addItem("aspidmeatcooked", new ItemCustomFood("aspidmeatcooked", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.COOKED).setPotionEffect(MobEffects.REGENERATION, 10, 2, 1.0F).setAlwaysEdible());
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("aspidmeatcooked"));
-		GameRegistry.addSmelting(ObjectManager.getItem("aspidmeatraw"), new ItemStack(ObjectManager.getItem("aspidmeatcooked"), 1), 0.5f);
-
-		ObjectManager.addItem("mosspie", new ItemCustomFood("mosspie", group, 6, 0.7F, ItemCustomFood.FOOD_CLASS.MEAL).setPotionEffect(MobEffects.REGENERATION, 60, 2, 1.0F).setAlwaysEdible().setMaxStackSize(16), 3, 1, 6);
-		ObjectLists.addItem("diet_carnivore", ObjectManager.getItem("mosspie"));
 
 
 		// Special:
@@ -401,29 +288,31 @@ public class ItemManager {
 		OreDictionary.registerOre("listAllEntomo", Items.FERMENTED_SPIDER_EYE);
 		OreDictionary.registerOre("listAllRotten", Items.ROTTEN_FLESH);
 
-		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("yetimeatraw"));
-		OreDictionary.registerOre("listAllporkcooked", ObjectManager.getItem("yetimeatcooked"));
-		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("pinkymeatraw"));
-		OreDictionary.registerOre("listAllbeefcooked", ObjectManager.getItem("pinkymeatcooked"));
-		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("joustmeatraw"));
-		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("joustmeatcooked"));
-		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("silexmeatraw"));
-		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("silexmeatcooked"));
-		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cephignismeatcooked"));
-		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("concapedemeatraw"));
-		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("concapedemeatcooked"));
-		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("concapedemeatraw"));
-		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("concapedemeatcooked"));
-		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("yalemeatraw"));
-		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("yalemeatcooked"));
-		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("makameatraw"));
-		OreDictionary.registerOre("listAllporkcooked", ObjectManager.getItem("makameatcooked"));
-		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("ikameatraw"));
-		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("ikameatcooked"));
-		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("chupacabrameatraw"));
-		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("chupacabrameatcooked"));
-		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("aspidmeatraw"));
-		OreDictionary.registerOre("listAllbeefcooked", ObjectManager.getItem("aspidmeatcooked"));
+		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("raw_yeti_meat"));
+		OreDictionary.registerOre("listAllporkcooked", ObjectManager.getItem("cooked_yeti_meat"));
+		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("raw_pinky_meat"));
+		OreDictionary.registerOre("listAllbeefcooked", ObjectManager.getItem("cooked_pinky_meat"));
+		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("raw_joust_meat"));
+		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("cooked_joust_meat"));
+		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("raw_silex_meat"));
+		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_silex_meat"));
+		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("raw_krake_meat"));
+		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_krake_meat"));
+		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_cephignis_meat"));
+		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("raw_concapede_meat"));
+		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("cooked_concapede_meat"));
+		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("raw_concapede_meat"));
+		OreDictionary.registerOre("listAllEntomo", ObjectManager.getItem("cooked_concapede_meat"));
+		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("raw_yale_meat"));
+		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("cooked_yale_meat"));
+		OreDictionary.registerOre("listAllporkraw", ObjectManager.getItem("raw_maka_meat"));
+		OreDictionary.registerOre("listAllporkcooked", ObjectManager.getItem("cooked_maka_meat"));
+		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("raw_ika_meat"));
+		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_ika_meat"));
+		OreDictionary.registerOre("listAllmuttonraw", ObjectManager.getItem("raw_chupacabra_meat"));
+		OreDictionary.registerOre("listAllmuttoncooked", ObjectManager.getItem("cooked_chupacabra_meat"));
+		OreDictionary.registerOre("listAllbeefraw", ObjectManager.getItem("raw_aspid_meat"));
+		OreDictionary.registerOre("listAllbeefcooked", ObjectManager.getItem("cooked_aspid_meat"));
 		OreDictionary.registerOre("listAllRotten", ObjectManager.getItem("geistliver"));
 	}
 

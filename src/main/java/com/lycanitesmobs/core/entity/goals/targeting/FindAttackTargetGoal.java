@@ -159,11 +159,15 @@ public class FindAttackTargetGoal extends TargetingGoal {
         double heightDistance = 4.0D + this.host.height;
         if(this.host.useDirectNavigator())
             heightDistance = distance;
+
         this.target = this.getNewTarget(distance, heightDistance, distance);
+        if(this.target == null || !this.host.rollAttackTargetChance(this.target)) {
+        	return false;
+		}
         if(this.callForHelp)
             this.callNearbyForHelp();
 
-        return this.target != null && this.host.rollAttackTargetChance(this.target);
+        return true;
     }
 
     @Override

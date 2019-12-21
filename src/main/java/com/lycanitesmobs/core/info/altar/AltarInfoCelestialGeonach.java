@@ -71,13 +71,13 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
             return false;
         if(world.getBlockState(new BlockPos(x - 2, y + 1, z)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x - 3, y + 1, z)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(new BlockPos(x - 1, y, z)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x - 2, y, z)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x - 3, y, z)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(new BlockPos(x - 1, y - 1, z)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
@@ -87,13 +87,13 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
             return false;
         if(world.getBlockState(new BlockPos(x + 2, y + 1, z)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x + 3, y + 1, z)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(new BlockPos(x + 1, y, z)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x + 2, y, z)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x + 3, y, z)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(new BlockPos(x + 1, y - 1, z)).getBlock() != bodyBlock)
             return false;
 
         return true;
@@ -108,13 +108,13 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
             return false;
         if(world.getBlockState(new BlockPos(x, y + 1, z - 2)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 1, z - 3)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(new BlockPos(x, y, z - 1)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x, y, z - 2)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x, y, z - 3)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(new BlockPos(x, y - 1, z - 1)).getBlock() != bodyBlock)
             return false;
 
         // Right Arm:
@@ -124,13 +124,13 @@ public class AltarInfoCelestialGeonach extends AltarInfo {
             return false;
         if(world.getBlockState(new BlockPos(x, y + 1, z + 2)).getBlock() != bodyBlock)
             return false;
-        if(world.getBlockState(new BlockPos(x, y + 1, z + 3)).getBlock() != bodyBlock)
-            return false;
         if(world.getBlockState(new BlockPos(x, y, z + 1)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x, y, z + 2)).getBlock() != bodyBlock)
             return false;
         if(world.getBlockState(new BlockPos(x, y, z + 3)).getBlock() != bodyBlock)
+            return false;
+        if(world.getBlockState(new BlockPos(x, y - 1, z + 1)).getBlock() != bodyBlock)
             return false;
 
         return true;

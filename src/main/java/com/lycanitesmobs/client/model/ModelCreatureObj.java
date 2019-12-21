@@ -279,7 +279,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
             // Child Scaling:
             if(this.isChild && !renderAsTrophy) {
                 this.childScale(partName);
-                if(this.bigChildHead && (partName.equals("head") || partName.equals("mouth")))
+                if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
                     this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
             }
 
@@ -460,7 +460,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
    	//                  Child Scale
    	// ==================================================
     public void childScale(String partName) {
-    	if(this.bigChildHead && ("head".equals(partName) || "mouth".equals(partName)))
+    	if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
     		return;
     	this.animator.doScale(0.5F, 0.5F, 0.5F);
     }

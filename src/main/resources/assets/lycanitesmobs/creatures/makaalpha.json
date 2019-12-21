@@ -74,8 +74,8 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:makameatraw",
-			"burningItem": "lycanitesmobs:makameatcooked",
+			"item": "lycanitesmobs:raw_maka_meat",
+			"burningItem": "lycanitesmobs:cooked_maka_meat",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

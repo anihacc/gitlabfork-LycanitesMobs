@@ -1671,6 +1671,26 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/khalk/eat", "stream": false}]
     },
+    "entity.krake.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/krake/say", "stream": false}]
+    },
+    "entity.krake.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/krake/hurt", "stream": false}]
+    },
+    "entity.krake.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/krake/death", "stream": false}]
+    },
+    "entity.krake.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/krake/attack", "stream": false}]
+    },
+    "entity.krake.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/krake/step", "stream": false}]
+    },
     "entity.salamander.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/salamander/say", "stream": false}]

@@ -18,6 +18,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -66,6 +67,7 @@ public class PotionEffects {
 			ObjectManager.addEffect("rejuvenation", config, false, 0x99FFBB, true);
 			ObjectManager.addEffect("immunization", config, false, 0x66FFBB, true);
 			ObjectManager.addEffect("cleansed", config, false, 0x66BBFF, true);
+			ObjectManager.addEffect("repulsion", config, false, 0xBC532E, true);
 			ObjectManager.addEffect("heataura", config, false, 0x996600, true); // TODO Implement
 			ObjectManager.addEffect("staticaura", config, false, 0xFFBB551, true); // TODO Implement
 			ObjectManager.addEffect("freezeaura", config, false, 0x55BBFF, true); // TODO Implement
@@ -162,7 +164,7 @@ public class PotionEffects {
 		if(instability != null && !entity.getEntityWorld().isRemote && !(entity instanceof IGroupBoss)) {
 			if(!invulnerable && entity.isPotionActive(instability)) {
 				if(entity.getEntityWorld().rand.nextDouble() <= 0.1) {
-					double strength = 1 + entity.getActivePotionEffect(instability).getAmplifier();
+					double strength = (1 + entity.getActivePotionEffect(instability).getAmplifier()) * 0.5D;
 					entity.motionX += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					entity.motionY += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
 					entity.motionZ += strength * (entity.getEntityWorld().rand.nextDouble() - 0.5D);
@@ -399,6 +401,8 @@ public class PotionEffects {
 
         if(event.getEntityLiving() == null)
             return;
+		EntityLivingBase target = event.getEntityLiving();
+		Entity attacker = event.getSource().getTrueSource();
 
 
 		// ========== Debuffs ==========
@@ -443,11 +447,30 @@ public class PotionEffects {
                 EntityLivingBase attackingEntity = (EntityLivingBase)(event.getSource().getTrueSource());
                 if(attackingEntity.isPotionActive(leech)) {
                     float damage = event.getAmount();
-                    float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier();
+                    float multiplier = attackingEntity.getActivePotionEffect(leech).getAmplifier() + 1;
                     attackingEntity.heal(Math.max(damage * multiplier * 0.25F, 1));
                 }
             }
         }
+
+		// Repulsion
+		PotionBase repulsion = ObjectManager.getEffect("repulsion");
+		if(repulsion != null) {
+			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
+				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
+				double xDist = target.posX - attacker.posX;
+				double zDist = target.posZ - attacker.posZ;
+				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
+				double motionCap = 10;
+				if (attacker.motionX < motionCap && attacker.motionX > -motionCap && attacker.motionZ < motionCap && attacker.motionZ > -motionCap) {
+					attacker.addVelocity(
+							(xDist / xzDist * knockback - attacker.motionX * knockback),
+							0,
+							(zDist / xzDist * knockback - attacker.motionZ * knockback)
+					);
+				}
+			}
+		}
     }
 
 

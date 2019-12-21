@@ -81,7 +81,7 @@ public class EntityReaper extends TameableCreatureEntity implements IMob {
     }
 
     @Override
-    public boolean canSeeThroughWalls() {
+    public boolean canEntityBeSeen(Entity target) {
         return true;
     }
     

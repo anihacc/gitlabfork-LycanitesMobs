@@ -1,22 +1,26 @@
 package com.lycanitesmobs.core.info;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.client.model.ModelBase;
+import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.item.GenericFoodItem;
+import com.lycanitesmobs.core.item.GenericItem;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import com.lycanitesmobs.client.localisation.LanguageManager;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+
+import java.util.Iterator;
 
 public class ItemInfo {
+	/** The Item based on this Item Info. **/
+	public Item item;
 
 	// Core Info:
-	/** The name of this projectile. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
+	/** The name of this item. Lowercase, no space, used for language entries and for generating the projectile id, etc. Required. **/
 	protected String name;
-
-	/** The entity class used by this item. Defaults to ItemGeneric but can be changed to special classes for unique behaviour, etc. **/
-	public Class<? extends Item> itemClass;
-	/** The model class used by this item. If null, the default vanilla json model loading is used. **/
-	public Class<? extends ModelBase> modelClass;
 
 	/** The group that this item belongs to. **/
 	public ModInfo group;
@@ -33,66 +37,102 @@ public class ItemInfo {
 	/** Loads this item from a JSON object. **/
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
-		try {
-			this.itemClass = (Class<? extends Item>) Class.forName(json.get("itemClass").getAsString());
+		LycanitesMobs.logDebug("", "Loading item " + this.name + " from JSON...");
+
+		// Model (Optional):
+		String modelName = null;
+		if(json.has("model")) {
+			modelName = json.get("model").getAsString();
 		}
-		catch(Exception e) {
-			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Item Class: " + json.get("itemClass").getAsString() + " for " + this.getName());
+
+		// Group:
+		CreativeTabs group = LycanitesMobs.itemsTab;
+		if(json.has("group")) {
+			String groupName = json.get("group").getAsString();
+			if("blocks".equalsIgnoreCase(groupName))
+				group = LycanitesMobs.blocksTab;
+			if("creatures".equalsIgnoreCase(groupName))
+				group = LycanitesMobs.creaturesTab;
 		}
-		try {
-			this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
+
+		// Stack Size:
+		int maxStackSize = 64;
+		if(json.has("maxStackSize"))
+			maxStackSize = json.get("maxStackSize").getAsInt();
+
+		// Food:
+		FoodInfo food = null;
+		if(json.has("food")) {
+			JsonObject foodJson = json.get("food").getAsJsonObject();
+			food = new FoodInfo();
+			food.hunger(foodJson.get("hunger").getAsInt());
+			food.saturation(foodJson.get("saturation").getAsFloat());
+
+			if(!foodJson.has("alwaysEdible") || foodJson.get("alwaysEdible").getAsBoolean())
+				food.setAlwaysEdible();
+
+			if(foodJson.has("fast") && foodJson.get("fast").getAsBoolean())
+				food.fastToEat();
+
+			if(foodJson.has("meat") && foodJson.get("meat").getAsBoolean())
+				food.meat();
+
+			if(foodJson.has("effects")) {
+				JsonArray effectsJson = foodJson.getAsJsonArray("effects");
+				Iterator<JsonElement> jsonIterator = effectsJson.iterator();
+				while (jsonIterator.hasNext()) {
+					JsonObject foodEffectJson = jsonIterator.next().getAsJsonObject();
+					String effectId = foodEffectJson.get("effectId").getAsString();
+					String[] effectIds = effectId.split(":");
+					Potion effect;
+					if("minecraft".equals(effectIds[0]))
+						effect = ObjectLists.allEffects.get(effectIds[1]);
+					else
+						effect = ObjectManager.getEffect(effectIds[1]);
+					if(effect == null) {
+						LycanitesMobs.logWarning("", "[Items] Unable to add food effect: " + effectId + " to food item: " + this.name);
+						continue;
+					}
+					PotionEffect effectInstance = new PotionEffect(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
+
+					float chance = 1F;
+					if(foodEffectJson.has("chance"))
+						chance = foodEffectJson.get("chance").getAsFloat();
+
+					food.effect(effectInstance, chance);
+				}
+			}
 		}
-		catch(Exception e) {
-			LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
+
+		// Create Item Properties:
+		ItemProperties properties = new ItemProperties();
+		properties.group(group);
+		properties.maxStackSize(maxStackSize);
+
+		// Create Item:
+		if(food != null) {
+			properties.food(food);
+			this.item = new GenericFoodItem(properties, this.name);
+		}
+		else {
+			this.item = new GenericItem(properties, this.name);
+			((GenericItem)this.item).modelName = modelName;
 		}
 	}
 
+	/**
+	 * Gets the Item based on this ItemInfo/
+	 * @return The item.
+	 */
+	public Item getItem() {
+		return this.item;
+	}
 
 	/**
-	 * Returns the name of this item, this is the unformatted lowercase name. Ex: cleansingcrystal
+	 * Returns the name of this item info, this is the unformatted lowercase name. Ex: cleansingcrystal
 	 * @return Item name.
 	 */
 	public String getName() {
 		return this.name;
-	}
-
-	/**
-	 * Returns the registry id of this item. Ex: elementalmobs:cleansingcrystal
-	 * @return Item registry entity id.
-	 */
-	public String getEntityId() {
-		return this.group.modid + ":" + this.getName();
-	}
-
-	/**
-	 * Returns the resource location for this item.
-	 * @return Item resource location.
-	 */
-	public ResourceLocation getResourceLocation() {
-		return new ResourceLocation(this.group.modid, this.getName());
-	}
-
-	/**
-	 * Returns the language key for this item. Ex: elementalmobs.cleansingcrystal
-	 * @return Item language key.
-	 */
-	public String getLocalisationKey() {
-		return this.group.modid + "." + this.getName();
-	}
-
-	/**
-	 * Returns a translated title for this item. Ex: Cleansing Crystal
-	 * @return The display name of this item.
-	 */
-	public String getTitle() {
-		return LanguageManager.translate("item." + this.getLocalisationKey() + ".name");
-	}
-
-	/**
-	 * Returns a translated description for this item.
-	 * @return The display description of this item.
-	 */
-	public String getDescription() {
-		return LanguageManager.translate("item." + this.getLocalisationKey() + ".description");
 	}
 }

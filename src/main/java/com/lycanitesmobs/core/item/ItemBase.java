@@ -31,7 +31,7 @@ import java.util.List;
 
 @Optional.Interface(iface=Thaumcraft.interfaceScanThing, modid=Thaumcraft.modid, striprefs=true)
 public class ItemBase extends Item {//implements IScanThing {
-	public static int descriptionWidth = 200;
+	public static int DESCRIPTION_WIDTH = 200;
 	
 	public String itemName = "unamed_item";
 	public ModInfo modInfo = LycanitesMobs.modInfo;
@@ -64,7 +64,7 @@ public class ItemBase extends Item {//implements IScanThing {
     	String description = this.getDescription(stack, worldIn, tooltip, flagIn);
     	if(!"".equalsIgnoreCase(description)) {
     		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-    		List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, descriptionWidth);
+    		List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, DESCRIPTION_WIDTH);
     		for(Object formattedDescription : formattedDescriptionList) {
     			if(formattedDescription instanceof String)
                     tooltip.add("\u00a7a" + formattedDescription);

@@ -13,8 +13,8 @@ public abstract class FollowGoal extends EntityAIBase {
     double speed = 1.0D;
     Class targetClass;
     private int updateRate;
-    double strayDistance = 4 * 4;
-    double lostDistance = 32 * 32;
+    double strayDistance = 4;
+    double lostDistance = 32;
     double behindDistance = 0;
     
 	
@@ -47,11 +47,11 @@ public abstract class FollowGoal extends EntityAIBase {
     	return this;
     }
     public FollowGoal setStrayDistance(double setDist) {
-    	this.strayDistance = setDist * setDist;
+    	this.strayDistance = setDist;
     	return this;
     }
     public FollowGoal setLostDistance(double setDist) {
-    	this.lostDistance = setDist * setDist;
+    	this.lostDistance = setDist;
     	return this;
     }
     public FollowGoal setFollowBehind(double setDist) {

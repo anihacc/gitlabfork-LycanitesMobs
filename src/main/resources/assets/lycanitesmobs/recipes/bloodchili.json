@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "lycanitesmobs:bloodchili"
+    "item": "lycanitesmobs:blood_chili"
   },
   "ingredients": [
     {
@@ -11,7 +11,7 @@
       "data": 3
     },
     {
-      "item": "lycanitesmobs:chupacabrameatcooked"
+      "item": "lycanitesmobs:cooked_chupacabra_meat"
     }
   ],
   "type": "forge:ore_shapeless"

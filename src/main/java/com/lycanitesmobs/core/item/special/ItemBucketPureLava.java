@@ -50,7 +50,7 @@ public class ItemBucketPureLava extends ItemBucket {
         String description = this.getDescription(stack, worldIn, tooltip, flagIn);
         if(!"".equalsIgnoreCase(description) && !("item." + this.itemName + ".description").equals(description)) {
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.descriptionWidth);
+            List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, ItemBase.DESCRIPTION_WIDTH);
             for(Object formattedDescription : formattedDescriptionList) {
                 if(formattedDescription instanceof String)
                     tooltip.add("\u00a7a" + formattedDescription);
