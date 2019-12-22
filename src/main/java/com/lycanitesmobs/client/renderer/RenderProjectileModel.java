@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.google.common.collect.Lists;
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.TextureManager;
@@ -13,6 +14,7 @@ import com.lycanitesmobs.client.model.ModelProjectileObj;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -74,15 +76,15 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 			}
 		}
 
-		GlStateManager.pushMatrix();
-		GlStateManager.disableCull();
+		RenderSystem.pushMatrix();
+		RenderSystem.disableCull();
 
 		try {
-			GlStateManager.enableAlphaTest();
+			RenderSystem.enableAlphaTest();
 			if (this.bindEntityTexture(entity)) {
-				GlStateManager.translatef((float) x, (float) y - 0.25F, (float) z);
-				GlStateManager.scalef(0.25F, 0.25F, 0.25F);
-				GlStateManager.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+				RenderSystem.translatef((float) x, (float) y - 0.25F, (float) z);
+				RenderSystem.scalef(0.25F, 0.25F, 0.25F);
+				RenderSystem.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
 
 				if (!(this.renderModel instanceof ModelProjectileObj)) {
 					this.renderModel.render(entity, 0, 0, partialTicks, 0, 0, 1); //render
@@ -96,8 +98,8 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 					}
 					((ModelProjectileObj) this.renderModel).clearAnimationFrames();
 				}
-				GlStateManager.depthMask(true);
-				GlStateManager.disableRescaleNormal();
+				RenderSystem.depthMask(true);
+				RenderSystem.disableRescaleNormal();
 			}
 		}
 		catch (Exception exception)
@@ -105,11 +107,11 @@ public class RenderProjectileModel extends EntityRenderer<BaseProjectileEntity> 
 			exception.printStackTrace();
 		}
 
-		GlStateManager.activeTexture(GLX.GL_TEXTURE1);
-		GlStateManager.enableTexture();
-		GlStateManager.activeTexture(GLX.GL_TEXTURE0);
-		GlStateManager.enableCull();
-		GlStateManager.popMatrix();
+		RenderSystem.activeTexture(ClientManager.GL_TEXTURE1);
+		RenderSystem.enableTexture();
+		RenderSystem.activeTexture(ClientManager.GL_TEXTURE0);
+		RenderSystem.enableCull();
+		RenderSystem.popMatrix();
 	}
 
 	public ModelProjectileBase getMainModel() {

@@ -1,13 +1,13 @@
 package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.beastiary.lists.CreatureList;
 import com.lycanitesmobs.client.gui.beastiary.lists.SubspeciesList;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.client.gui.buttons.CreatureButton;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.SummonSet;
@@ -330,6 +330,6 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
 	}
 }

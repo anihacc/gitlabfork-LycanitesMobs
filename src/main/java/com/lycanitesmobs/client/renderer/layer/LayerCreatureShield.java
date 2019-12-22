@@ -1,14 +1,13 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureShield extends LayerCreatureBase {

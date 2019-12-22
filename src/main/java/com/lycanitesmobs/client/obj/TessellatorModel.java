@@ -132,7 +132,7 @@ public class TessellatorModel extends ObjModel
                 Vertex v = obj.mesh.vertices[indices[i + iv]];
 				bufferBuilder
                         .func_225582_a_(v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
-                        .func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //text
+                        .func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //tex
                         .func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
                         //.normal(v.getNormal().getX(), v.getNormal().getY(), v.getNormal().getZ())
 						.func_225584_a_(normal.getX(), normal.getY(), normal.getZ()) //normal

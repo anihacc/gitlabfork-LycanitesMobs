@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.ClientManager;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IGuiEventListener;
@@ -78,9 +79,9 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	 */
 	public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
-			GlStateManager.translatef(0.5f,0.5f, 0);
+			RenderSystem.translatef(0.5f,0.5f, 0);
 			this.getFontRenderer().drawSplitString(str, x, y, wrapWidth, 0x444444);
-			GlStateManager.translatef(-0.5f,-0.5f, 0);
+			RenderSystem.translatef(-0.5f,-0.5f, 0);
 		}
 		this.getFontRenderer().drawSplitString(str, x,  y, wrapWidth, textColor);
 	}
@@ -97,26 +98,26 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 	 * @param height The height of the texture.
 	 */
 	public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
-		GlStateManager.enableBlend();
-		GlStateManager.disableDepthTest();
-		GlStateManager.depthMask(false);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.disableDepthTest();
+		RenderSystem.depthMask(false);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableAlphaTest();
 
 		Minecraft.getInstance().getTextureManager().bindTexture(texture);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x, y + height, z).tex(0, v).endVertex();
-		buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
-		buffer.pos(x + width, y, z).tex(u, 0).endVertex();
-		buffer.pos(x, y, z).tex(0, 0).endVertex();
+		buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
+		buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
+		buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
+		buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
 		tessellator.draw();
 
-		GlStateManager.enableAlphaTest();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableDepthTest();
-		GlStateManager.disableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.depthMask(true);
+		RenderSystem.enableDepthTest();
+		RenderSystem.disableBlend();
 	}
 }

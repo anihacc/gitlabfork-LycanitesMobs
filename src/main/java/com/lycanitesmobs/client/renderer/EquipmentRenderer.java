@@ -1,10 +1,10 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.client.model.ModelEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
@@ -25,11 +25,11 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		Hand hand = null;
 
 		// Position:
-		GlStateManager.pushMatrix();
-		GlStateManager.translatef(0.5F, 0.35F, 0.6F);
-		GlStateManager.rotatef(90, 1, 0, 0);
-		GlStateManager.rotatef(-100, 0, 0, 1);
-		GlStateManager.translatef(0F, -1.5F, 0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.translatef(0.5F, 0.35F, 0.6F);
+		RenderSystem.rotatef(90, 1, 0, 0);
+		RenderSystem.rotatef(-100, 0, 0, 1);
+		RenderSystem.translatef(0F, -1.5F, 0F);
 		ModelEquipment modelEquipment = ModelManager.getInstance().getEquipmentModel();
 
 		float loop = 0;
@@ -38,7 +38,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		}
 		modelEquipment.render(itemStack, hand, this, loop);
 
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	@Override

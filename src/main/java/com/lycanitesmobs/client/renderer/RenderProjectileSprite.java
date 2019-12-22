@@ -4,12 +4,14 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,7 +24,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     
     // Laser Box:
     protected Model laserModel = new Model() {};
-    private RendererModel laserBox;
+    private ModelRenderer laserBox;
     
     // ==================================================
     //                     Constructor
@@ -59,16 +61,16 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
             y += entity.getTextureOffsetY();
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef((float) x, (float) y, (float) z);
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.scaled(scale, scale, scale);
+        RenderSystem.pushMatrix();
+		RenderSystem.translatef((float) x, (float) y, (float) z);
+		RenderSystem.enableRescaleNormal();
+		RenderSystem.scaled(scale, scale, scale);
 
         this.bindTexture(this.getEntityTexture(entity));
         this.renderTexture(Tessellator.getInstance(), entity);
 
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.popMatrix();
+		RenderSystem.disableRescaleNormal();
+		RenderSystem.popMatrix();
     }
 
 
@@ -76,10 +78,10 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     //                  Render Texture
     // ==================================================
     private void renderTexture(Tessellator tessellator, BaseProjectileEntity entity) {
-        double minU = 0;
-        double maxU = 1;
-        double minV = 0;
-        double maxV = 1;
+        float minU = 0;
+		float maxU = 1;
+		float minV = 0;
+		float maxV = 1;
         double textureWidth = 0.5D;
         double textureHeight = 0.5D;
         double offsetY = 0;
@@ -93,12 +95,12 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
             }
         }
 
-        //GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        //GlStateManager.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotatef((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
-        //GlStateManager.translatef(-scale / 2, -scale / 2, -scale / 2);
+        //RenderSystem.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        //RenderSystem.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		RenderSystem.rotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		RenderSystem.rotatef((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		RenderSystem.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
+        //RenderSystem.translatef(-scale / 2, -scale / 2, -scale / 2);
 
         if(this.renderOutlines) {
             GlStateManager.enableColorMaterial();
@@ -106,20 +108,24 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
         }
 
         BufferBuilder vertexbuffer = tessellator.getBuffer();
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 
-        vertexbuffer.pos(-textureWidth, -textureHeight + (textureHeight / 2) + offsetY, 0.0D)
-                .tex(minU, maxV)
-                .normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(textureWidth, -textureHeight + (textureHeight / 2) + offsetY, 0.0D)
-                .tex(maxU, maxV)
-                .normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(textureWidth, textureHeight + (textureHeight / 2) + offsetY, 0.0D)
-                .tex(maxU, minV)
-                .normal(0.0F, 1.0F, 0.0F).endVertex();
-        vertexbuffer.pos(-textureWidth, textureHeight + (textureHeight / 2) + offsetY, 0.0D)
-                .tex(minU, minV)
-                .normal(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.func_225582_a_(-textureWidth, -textureHeight + (textureHeight / 2) + offsetY, 0.0D)
+                .func_225583_a_(minU, maxV)
+				.func_227885_a_(1, 1, 1, 1)
+                .func_225584_a_(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.func_225582_a_(textureWidth, -textureHeight + (textureHeight / 2) + offsetY, 0.0D)
+                .func_225583_a_(maxU, maxV)
+				.func_227885_a_(1, 1, 1, 1)
+                .func_225584_a_(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.func_225582_a_(textureWidth, textureHeight + (textureHeight / 2) + offsetY, 0.0D)
+                .func_225583_a_(maxU, minV)
+				.func_227885_a_(1, 1, 1, 1)
+                .func_225584_a_(0.0F, 1.0F, 0.0F).endVertex();
+        vertexbuffer.func_225582_a_(-textureWidth, textureHeight + (textureHeight / 2) + offsetY, 0.0D)
+                .func_225583_a_(minU, minV)
+				.func_227885_a_(1, 1, 1, 1)
+                .func_225584_a_(0.0F, 1.0F, 0.0F).endVertex();
 
         tessellator.draw();
     }
@@ -133,7 +139,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     	
     	// Create Laser Model If Null:
     	if(this.laserBox == null) {
-			this.laserBox = new RendererModel(laserModel, 0, 0);
+			this.laserBox = new ModelRenderer(this.laserModel, 0, 0);
 			this.laserBox.addBox(-(scale / 2), -(scale / 2), 0, (int)scale, (int)scale, 16);
 			this.laserBox.rotationPointX = 0;
 			this.laserBox.rotationPointY = 0;
@@ -147,28 +153,28 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
             return;
     	
     	// Render Laser Beam:
-        GlStateManager.pushMatrix();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.color4f(1, 1, 1, entity.getLaserAlpha());
-        GlStateManager.translated(x, y, z);
+		RenderSystem.pushMatrix();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.color4f(1, 1, 1, entity.getLaserAlpha());
+		RenderSystem.translated(x, y, z);
     	this.bindTexture(this.getLaserTexture(entity));
         
         // Rotation:
         float[] angles = entity.getBeamAngles();
-        GlStateManager.rotatef(angles[1], 0, 1, 0);
-        GlStateManager.rotatef(angles[3], 1, 0, 0);
+		RenderSystem.rotatef(angles[1], 0, 1, 0);
+		RenderSystem.rotatef(angles[3], 1, 0, 0);
     	
     	// Length:
         for(float segment = 0; segment <= laserSize - 1; ++segment) {
                 this.laserBox.render(factor);
-                GlStateManager.translatef(0, 0, 1);
+			RenderSystem.translatef(0, 0, 1);
                 lastSegment = segment;
         }
         lastSegment++;
-        GlStateManager.scalef((laserSize - lastSegment), 1, 1);
+		RenderSystem.scalef((laserSize - lastSegment), 1, 1);
         this.laserBox.render(factor);
 
-        GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
     }
     
     

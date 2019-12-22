@@ -1,18 +1,19 @@
 package com.lycanitesmobs.client.model;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
+import com.lycanitesmobs.client.renderer.layer.LayerEquipment;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
@@ -23,8 +24,8 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
     public ModelCreatureBase() {
         this(1.0F);
     }
-    
-    public ModelCreatureBase(float shadowSize) {
+
+	public ModelCreatureBase(float shadowSize) {
     	// Texture:
     	textureWidth = 128;
         textureHeight = 128;
@@ -44,8 +45,8 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
    	//                  Render Model
    	// ==================================================
     @Override
-    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-        this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
+    public void func_225597_a_(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {
+        this.render(entity, time, distance, loop, lookY, lookX, 0.0625F, null, true);
     }
 
 	/**
@@ -68,6 +69,11 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
     	GL11.glScalef(sizeScale, sizeScale, sizeScale);
     	GL11.glTranslatef(0, 0.5f - sizeScale / 2, 0);
     }
+
+	@Override
+	public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {
+
+	}
 
 
     // ==================================================
@@ -108,14 +114,14 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
 	//              Get Part Texture Offset
 	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
+	public Vec2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
 		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-		return new Vector2f(0, 0);
+	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+		return new Vec2f(0, 0);
 	}
 }

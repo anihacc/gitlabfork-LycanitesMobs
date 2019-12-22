@@ -1,11 +1,10 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.model.ModelItemBase;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
@@ -39,21 +38,21 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 			loop = Minecraft.getInstance().player.ticksExisted;
 		}
 
-		GlStateManager.translatef(0.5F, 0.35F, 0.5F);
+		RenderSystem.translatef(0.5F, 0.35F, 0.5F);
 
-		GlStateManager.rotatef(190, 1, 0, 0);
-		GlStateManager.rotatef(-45, 0, 1, 0);
-		GlStateManager.rotatef(10, 0, 0, 1);
+		RenderSystem.rotatef(190, 1, 0, 0);
+		RenderSystem.rotatef(-45, 0, 1, 0);
+		RenderSystem.rotatef(10, 0, 0, 1);
 
-		GlStateManager.translatef(0F, -1.7F, 0F);
+		RenderSystem.translatef(0F, -1.7F, 0F);
 		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
-			GlStateManager.translatef(0F, 0F, 0.5F);
+			RenderSystem.translatef(0F, 0F, 0.5F);
 		}
 		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType)) {
-			GlStateManager.translatef(0F, 0F, 1F);
+			RenderSystem.translatef(0F, 0F, 1F);
 		}
 
-		GlStateManager.pushMatrix();
+		RenderSystem.pushMatrix();
 
 		modelItemBase.generateAnimationFrames(itemStack, null, loop, null);
 		modelItemBase.render(itemStack, hand, this, null, null, loop, false);
@@ -62,7 +61,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		}
 		modelItemBase.clearAnimationFrames();
 
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 	}
 
 	@Override

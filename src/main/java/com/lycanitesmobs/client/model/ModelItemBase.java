@@ -10,16 +10,17 @@ import com.lycanitesmobs.client.obj.TessellatorModel;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -192,7 +193,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 			this.currentAnimationPart = this.animationParts.get(partName);
 
 			// Begin Rendering Part:
-			GlStateManager.pushMatrix();
+			RenderSystem.pushMatrix();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
@@ -212,7 +213,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 			this.onRenderStart(layer, itemStack);
 			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
 			this.onRenderFinish(layer, itemStack);
-			GlStateManager.popMatrix();
+			RenderSystem.popMatrix();
 		}
 
 		// Clear Animation Frames:
@@ -224,9 +225,9 @@ public abstract class ModelItemBase implements IAnimationModel {
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerItem layer, ItemStack itemStack) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.enableBlend();
+			RenderSystem.enableBlend();
 		}
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		if(layer != null) {
 			layer.onRenderStart(itemStack);
 		}
@@ -235,7 +236,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	/** Called just after a layer is rendered. **/
 	public void onRenderFinish(LayerItem layer, ItemStack itemStack) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.disableBlend();
+			RenderSystem.disableBlend();
 		}
 		if(layer != null) {
 			layer.onRenderFinish(itemStack);
@@ -328,12 +329,12 @@ public abstract class ModelItemBase implements IAnimationModel {
 	//             Get Part Texture Offset
 	// ==================================================
 	//	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
+	public Vec2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(layer != null) {
 			return layer.getTextureOffset(partName, itemStack, loop);
 		}
 
-		return new Vector2f(0, 0);
+		return new Vec2f(0, 0);
 	}
 
 

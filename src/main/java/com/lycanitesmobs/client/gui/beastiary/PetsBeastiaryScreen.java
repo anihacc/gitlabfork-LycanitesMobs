@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.gui.beastiary;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.beastiary.lists.CreatureFilterList;
 import com.lycanitesmobs.client.gui.beastiary.lists.CreatureList;
 import com.lycanitesmobs.client.gui.beastiary.lists.PetTypeList;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.gui.widget.Widget;
@@ -392,6 +392,6 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.posX, this.player.posY, this.player.posZ, ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
 	}
 }

@@ -39,7 +39,7 @@ public class ProjectileManager extends JSONLoader {
 	/** A map of old projectiles that use the obj model renderer. Newer json based projectiles provide their model class in their ProjectileInfo definition instead. **/
 	public Map<String, Class<? extends Entity>> oldModelProjectiles = new HashMap<>();
 
-	/** A map of old projectile classes to types for creating enw instances. **/
+	/** A map of old projectile classes to types for creating new instances. **/
 	public Map<Class<? extends Entity>, EntityType<? extends BaseProjectileEntity>> oldProjectileTypes = new HashMap<>();
 
 	/** Returns the main Projectile Manager instance or creates it and returns it. **/

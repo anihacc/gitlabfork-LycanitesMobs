@@ -31,6 +31,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 public class ClientManager {
+	public static int GL_TEXTURE0 = 33984;
+	public static int GL_TEXTURE1 = 33986;
+
 	protected static ClientManager INSTANCE;
 	public static ClientManager getInstance() {
 		if(INSTANCE == null) {

@@ -1,12 +1,11 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.renderer.EquipmentRenderer;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;

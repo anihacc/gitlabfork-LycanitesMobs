@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.model.animation;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.core.helpers.JSONHelper;
 import com.lycanitesmobs.client.model.IAnimationModel;
+import com.lycanitesmobs.core.helpers.JSONHelper;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.LivingEntity;
 
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,16 +159,16 @@ public class ModelPartAnimation {
 		}
 
 		// Translate:
-		model.translate(this.translate.x * progress, this.translate.y * progress, this.translate.z * progress);
+		model.translate(this.translate.getX() * progress, this.translate.getY() * progress, this.translate.getZ() * progress);
 
 		// Angle:
-		model.angle(this.angle.w * progress, this.angle.x, this.angle.y, this.angle.z);
+		model.angle(this.angle.getW() * progress, this.angle.getX(), this.angle.getY(), this.angle.getZ());
 
 		// Rotate:
-		model.rotate(this.rotate.x * progress, this.rotate.y * progress, this.rotate.z * progress);
+		model.rotate(this.rotate.getX() * progress, this.rotate.getY() * progress, this.rotate.getZ() * progress);
 
 		// Scale:
-		model.scale(1 + this.scale.x * progress, 1 + this.scale.y * progress, 1 + this.scale.z * progress);
+		model.scale(1 + this.scale.getX() * progress, 1 + this.scale.getY() * progress, 1 + this.scale.getZ() * progress);
 	}
 
 

@@ -2,16 +2,17 @@ package com.lycanitesmobs.client.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.obj.ObjObject;
+import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.client.obj.ObjObject;
-import com.lycanitesmobs.client.obj.TessellatorModel;
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
-import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.JSONUtils;
@@ -213,7 +214,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 			}
 
             // Begin Rendering Part:
-            GlStateManager.pushMatrix();
+			RenderSystem.pushMatrix();
 
             // Apply Initial Offsets: (To Match Blender OBJ Export)
             this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
@@ -229,7 +230,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 			this.onRenderStart(layer, entity);
             this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			this.onRenderFinish(layer, entity);
-			GlStateManager.popMatrix();
+			RenderSystem.popMatrix();
 		}
 
 		// Clear Animation Frames:
@@ -241,9 +242,9 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerProjectileBase layer, BaseProjectileEntity entity) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.enableBlend();
+			RenderSystem.enableBlend();
 		}
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		if(layer != null) {
 			layer.onRenderStart(entity);
 		}
@@ -252,7 +253,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	/** Called just after a layer is rendered. **/
 	public void onRenderFinish(LayerProjectileBase layer, BaseProjectileEntity entity) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.disableBlend();
+			RenderSystem.disableBlend();
 		}
 		if(layer != null) {
 			layer.onRenderFinish(entity);

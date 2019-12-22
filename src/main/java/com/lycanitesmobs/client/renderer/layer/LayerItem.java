@@ -1,16 +1,15 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerItem {
@@ -29,7 +28,7 @@ public class LayerItem {
 	}
 	public int blending = 0;
 
-	public Vector2f scrollSpeed;
+	public Vec2f scrollSpeed;
 
 	public Vector4f colorFadeSpeed;
 
@@ -107,10 +106,10 @@ public class LayerItem {
 		}
 	}
 
-	public Vector2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
+	public Vec2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
     	if(this.scrollSpeed == null) {
-			this.scrollSpeed = new Vector2f(0, 0);
+			this.scrollSpeed = new Vec2f(0, 0);
 		}
-		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 }

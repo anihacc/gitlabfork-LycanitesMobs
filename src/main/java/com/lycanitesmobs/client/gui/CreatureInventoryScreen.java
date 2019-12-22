@@ -151,7 +151,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         int creatureWidth = 54;
         int creatureHeight = 54;
         this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
-		InventoryScreen.drawEntityOnScreen(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature);
+		InventoryScreen.func_228187_a_(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature); // drawEntityOnScreen()
 	}
 
 	protected void drawHealth(int backX, int backY) {

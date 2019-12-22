@@ -1,16 +1,15 @@
 package com.lycanitesmobs.client.renderer.layer.specific;
 
 import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerDjinn extends LayerCreatureBase {
@@ -44,8 +43,8 @@ public class LayerDjinn extends LayerCreatureBase {
     }
 
 	@Override
-	public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
-		return new Vector2f(-loop * 25, 0);
+	public Vec2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
+		return new Vec2f(-loop * 25, 0);
 	}
 
 	@Override

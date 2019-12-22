@@ -5,12 +5,11 @@ import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelCinder extends ModelTemplateElemental {
@@ -47,11 +46,11 @@ public class ModelCinder extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
     	if(partName.contains("effect")) {
     		return super.getBaseTextureOffset(partName, entity, trophy, loop);
 		}
-		return new Vector2f(loop, 0);
+		return new Vec2f(loop, 0);
 	}
 
 
@@ -61,12 +60,12 @@ public class ModelCinder extends ModelTemplateElemental {
 	@Override
 	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
-		GlStateManager.disableLighting();
+		RenderSystem.disableLighting();
 	}
 
 	@Override
 	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
-		GlStateManager.enableLighting();
+		RenderSystem.enableLighting();
 	}
 }

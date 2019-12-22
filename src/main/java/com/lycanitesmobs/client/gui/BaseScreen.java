@@ -4,6 +4,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -114,7 +115,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	public int getScaledX(float x) {
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.minecraft.mainWindow;
+			this.scaledResolution = this.minecraft.func_228018_at_(); // getMainWindow()
 		}
 
 		// Aspect Ratio:
@@ -171,9 +172,9 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
     public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor, boolean shadow) {
 		if(shadow) {
-			GlStateManager.translatef(0.5f,0.5f, 0);
+			RenderSystem.translatef(0.5f,0.5f, 0);
 			this.getFontRenderer().drawSplitString(str, x, y, wrapWidth, 0x444444);
-			GlStateManager.translatef(-0.5f,-0.5f, 0);
+			RenderSystem.translatef(-0.5f,-0.5f, 0);
 		}
 		this.getFontRenderer().drawSplitString(str, x,  y, wrapWidth, textColor);
 	}
@@ -190,27 +191,27 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param height The height of the texture.
 	 */
     public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
-		GlStateManager.enableBlend();
-		GlStateManager.disableDepthTest();
-		GlStateManager.depthMask(false);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.disableDepthTest();
+		RenderSystem.depthMask(false);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableAlphaTest();
 
 		this.getMinecraft().getTextureManager().bindTexture(texture);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x, y + height, z).tex(0, v).endVertex();
-		buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
-		buffer.pos(x + width, y, z).tex(u, 0).endVertex();
-		buffer.pos(x, y, z).tex(0, 0).endVertex();
+		buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
+		buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
+		buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
+		buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
 		tessellator.draw();
 
-		GlStateManager.enableAlphaTest();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableDepthTest();
-		GlStateManager.disableBlend();
+		RenderSystem.enableAlphaTest();
+		RenderSystem.depthMask(true);
+		RenderSystem.enableDepthTest();
+		RenderSystem.disableBlend();
     }
 
 	/**
@@ -226,12 +227,12 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 * @param resolution The resolution (width or height) of the texture.
 	 */
 	public void drawTexturedTiled(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height, float resolution) {
-		GlStateManager.enableBlend();
-		GlStateManager.disableDepthTest();
-		GlStateManager.depthMask(false);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableAlphaTest();
+		RenderSystem.enableBlend();
+		RenderSystem.disableDepthTest();
+		RenderSystem.depthMask(false);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.disableAlphaTest();
 
 		this.getMinecraft().getTextureManager().bindTexture(texture);
 		float scaleX = 0.00390625F * resolution;
@@ -239,10 +240,14 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos((double)(x + 0), (double)(y + height), z).tex((double)((u + 0) * scaleX), (double)((v + height) * scaleY)).endVertex();
-		buffer.pos((double)(x + width), (double)(y + height), z).tex((double)((u + width) * scaleX), (double)((v + height) * scaleY)).endVertex();
-		buffer.pos((double)(x + width), (double)(y + 0), z).tex((double)((u + width) * scaleX), (double)((v + 0) * scaleY)).endVertex();
-		buffer.pos((double)(x + 0), (double)(y + 0), z).tex((double)((u + 0) * scaleX), (double)((v + 0) * scaleY)).endVertex();
+		buffer.func_225582_a_((double)(x + 0), (double)(y + height), z) // pos()
+				.func_225583_a_(((u + 0) * scaleX), (v + height) * scaleY).endVertex(); // tex()
+		buffer.func_225582_a_((double)(x + width), (double)(y + height), z)
+				.func_225583_a_(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
+		buffer.func_225582_a_((double)(x + width), (double)(y + 0), z)
+				.func_225583_a_(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
+		buffer.func_225582_a_((double)(x + 0), (double)(y + 0), z)
+				.func_225583_a_(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
 		tessellator.draw();
 	}
 
@@ -302,10 +307,14 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+				.func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
+        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + height), (double)this.zLevel)
+				.func_225583_a_(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + 0), (double)this.zLevel)
+				.func_225583_a_(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+				.func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 }

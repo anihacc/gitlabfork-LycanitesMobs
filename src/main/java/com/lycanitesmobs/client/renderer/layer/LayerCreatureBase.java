@@ -1,17 +1,16 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCreatureBase> {
@@ -70,8 +69,8 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCr
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public Vector2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
-        return new Vector2f(0, 0);
+    public Vec2f getTextureOffset(String partName, BaseCreatureEntity entity, boolean trophy, float loop) {
+        return new Vec2f(0, 0);
     }
 
     /** Called just before this layer is rendered. **/

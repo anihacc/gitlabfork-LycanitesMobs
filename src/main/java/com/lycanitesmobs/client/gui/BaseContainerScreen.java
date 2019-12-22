@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.gui;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -147,27 +148,27 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
      * @param height The height of the texture.
      */
     public void drawTexture(ResourceLocation texture, float x, float y, float z, float u, float v, float width, float height) {
-        GlStateManager.enableBlend();
-        GlStateManager.disableDepthTest();
-        GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.disableDepthTest();
+        RenderSystem.depthMask(false);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableAlphaTest();
 
         this.getMinecraft().getTextureManager().bindTexture(texture);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x, y + height, z).tex(0, v).endVertex();
-        buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
-        buffer.pos(x + width, y, z).tex(u, 0).endVertex();
-        buffer.pos(x, y, z).tex(0, 0).endVertex();
+        buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
+        buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
+        buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
+        buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
         tessellator.draw();
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepthTest();
-        GlStateManager.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.depthMask(true);
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
     }
 
     public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
@@ -180,10 +181,14 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        bufferBuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        bufferBuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
-        bufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
+        bufferBuilder.func_225582_a_((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
+        bufferBuilder.func_225582_a_((double)(x + width), (double)(y + height), (double)this.zLevel)
+                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+        bufferBuilder.func_225582_a_((double)(x + width), (double)(y + 0), (double)this.zLevel)
+                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        bufferBuilder.func_225582_a_((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 }

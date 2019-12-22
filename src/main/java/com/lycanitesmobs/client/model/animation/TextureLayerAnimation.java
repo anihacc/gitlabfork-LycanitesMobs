@@ -1,15 +1,14 @@
 package com.lycanitesmobs.client.model.animation;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.RenderProjectileModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileEffect;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
+import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.util.math.Vec2f;
 
 public class TextureLayerAnimation {
 
@@ -29,7 +28,7 @@ public class TextureLayerAnimation {
 	public String blending = "normal";
 
 	/** The scrolling speeds to use, if 0 the texture isn't scrolled in that direction. **/
-	public Vector2f scrollSpeed = new Vector2f(0, 0);
+	public Vec2f scrollSpeed = new Vec2f(0, 0);
 
 	/** The color fading speeds to use, if 0 the color isn't faded. **/
 	public Vector4f colorFadeSpeed;
@@ -60,7 +59,7 @@ public class TextureLayerAnimation {
 		float scrollSpeedY = 0;
 		if(json.has("scrollSpeedY"))
 			scrollSpeedY = json.get("scrollSpeedY").getAsFloat();
-		this.scrollSpeed = new Vector2f(scrollSpeedX, scrollSpeedY);
+		this.scrollSpeed = new Vec2f(scrollSpeedX, scrollSpeedY);
 
 		float colorFadeRed = 0;
 		if(json.has("colorFadeRed"))

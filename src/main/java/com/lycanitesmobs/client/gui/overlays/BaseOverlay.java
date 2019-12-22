@@ -9,6 +9,7 @@ import com.lycanitesmobs.client.gui.BaseGui;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tags.FluidTags;
@@ -47,25 +48,25 @@ public class BaseOverlay extends BaseGui {
 		if(event.isCancelable() || event.getType() != ElementType.EXPERIENCE)
 	      return;
 
-		GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.pushMatrix();
+		RenderSystem.disableLighting();
+		RenderSystem.enableBlend();
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		int sWidth = Minecraft.getInstance().mainWindow.getScaledWidth();
-        int sHeight = Minecraft.getInstance().mainWindow.getScaledHeight();
+		int sWidth = Minecraft.getInstance().func_228018_at_().getScaledWidth(); // getMainWindow()
+        int sHeight = Minecraft.getInstance().func_228018_at_().getScaledHeight();
 
         // ========== Mob/World Events Title ==========
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(player.getEntityWorld());
         if(worldExt != null) {
             for(MobEventPlayerClient mobEventPlayerClient : worldExt.clientMobEventPlayers.values()) {
-				GlStateManager.pushMatrix();
+				RenderSystem.pushMatrix();
 				mobEventPlayerClient.onGUIUpdate(this, sWidth, sHeight);
-				GlStateManager.popMatrix();
+				RenderSystem.popMatrix();
 			}
             if(worldExt.clientWorldEventPlayer != null) {
-				GlStateManager.pushMatrix();
+				RenderSystem.pushMatrix();
 				worldExt.clientWorldEventPlayer.onGUIUpdate(this, sWidth, sHeight);
 				GL11.glPopMatrix();
 			}
@@ -145,7 +146,7 @@ public class BaseOverlay extends BaseGui {
 		else
 			this.mountMessageTime = this.mountMessageTimeMax;
 
-		GlStateManager.popMatrix();
+		RenderSystem.popMatrix();
 		this.mc.getTextureManager().bindTexture(GUI_ICONS_LOCATION);
 	}
 }

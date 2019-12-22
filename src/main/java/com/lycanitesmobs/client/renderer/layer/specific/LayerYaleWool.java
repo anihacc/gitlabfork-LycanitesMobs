@@ -1,14 +1,13 @@
 package com.lycanitesmobs.client.renderer.layer.specific;
 
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntityYale;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityYale;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerYaleWool extends LayerCreatureBase {

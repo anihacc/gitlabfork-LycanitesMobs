@@ -12,6 +12,7 @@ import com.lycanitesmobs.client.obj.TessellatorModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -256,7 +257,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			}
 
             // Begin Rendering Part:
-            GlStateManager.pushMatrix();
+            RenderSystem.pushMatrix();
 
             // Apply Initial Offsets: (To Match Blender OBJ Export)
             this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
@@ -283,7 +284,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			this.onRenderStart(layer, entity, renderAsTrophy);
             this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			this.onRenderFinish(layer, entity, renderAsTrophy);
-			GlStateManager.popMatrix();
+			RenderSystem.popMatrix();
 		}
 
 		// Clear Animation Frames:
@@ -295,9 +296,9 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.enableBlend();
+			RenderSystem.enableBlend();
 		}
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		if(layer != null) {
 			layer.onRenderStart(entity, renderAsTrophy);
 		}
@@ -306,7 +307,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 	/** Called just after a layer is rendered. **/
 	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			GlStateManager.disableBlend();
+			RenderSystem.disableBlend();
 		}
 		if(layer != null) {
 			layer.onRenderFinish(entity, renderAsTrophy);

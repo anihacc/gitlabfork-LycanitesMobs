@@ -1,16 +1,17 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerProjectileEffect extends LayerProjectileBase {
@@ -29,7 +30,7 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 	}
 	public int blending = 0;
 
-	public Vector2f scrollSpeed;
+	public Vec2f scrollSpeed;
 
 
     // ==================================================

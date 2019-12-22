@@ -23,10 +23,14 @@ public class BaseGui extends AbstractGui {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + width) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
-        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
+        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + height), (double)this.zLevel)
+                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + 0), (double)this.zLevel)
+                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 }
