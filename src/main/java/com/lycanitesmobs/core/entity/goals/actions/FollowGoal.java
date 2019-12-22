@@ -139,7 +139,7 @@ public abstract class FollowGoal extends Goal {
         	}
         	else {
         		if(this.behindDistance == 0 || !(target instanceof BaseCreatureEntity))
-        			this.host.directNavigator.setTargetPosition(new BlockPos((int)target.posX, (int)target.posY, (int)target.posZ), this.speed);
+        			this.host.directNavigator.setTargetPosition(new BlockPos((int)target.getPositionVec().getX(), (int)target.getPositionVec().getY(), (int)target.getPositionVec().getZ()), this.speed);
         		else {
                     BlockPos pos = ((BaseCreatureEntity)target).getFacingPosition(-this.behindDistance);
         			this.host.directNavigator.setTargetPosition(pos, this.speed);

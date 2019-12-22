@@ -1,6 +1,8 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.*;
+import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
@@ -72,9 +74,11 @@ public class PortalEntity extends BaseProjectileEntity {
         super(entityType, world);
         this.summoningPedestal = summoningPedestal;
         this.setStats();
-        this.posX = summoningPedestal.getPos().getX() + 0.5D;
-        this.posY = summoningPedestal.getPos().getY() + 3D;
-        this.posZ = summoningPedestal.getPos().getZ() + 0.5D;
+        this.setPosition(
+				summoningPedestal.getPos().getX() + 0.5D,
+				summoningPedestal.getPos().getY() + 3D,
+				summoningPedestal.getPos().getZ() + 0.5D
+		);
     }
     
     public void setStats() {
@@ -204,9 +208,9 @@ public class PortalEntity extends BaseProjectileEntity {
                 double x = distance * Math.cos(angle) + Math.sin(angle);
                 double z = distance * Math.sin(angle) - Math.cos(angle);
                 this.getEntityWorld().addParticle(ParticleTypes.PORTAL,
-                        this.posX + x,
-                        this.posY + (4.0F * this.rand.nextFloat()) - 2.0F,
-                        this.posZ + z,
+                        this.getPositionVec().getX() + x,
+                        this.getPositionVec().getY() + (4.0F * this.rand.nextFloat()) - 2.0F,
+                        this.getPositionVec().getZ() + z,
                         0.0D, 0.0D, 0.0D);
             }
             return;
@@ -230,7 +234,7 @@ public class PortalEntity extends BaseProjectileEntity {
 	    	if(entity == null) {
 				return 0;
 			}
-	    	entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rand.nextFloat() * 360.0F, 0.0F);
+	    	entity.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rand.nextFloat() * 360.0F, 0.0F);
 
 	    	if(entity instanceof BaseCreatureEntity) {
                 BaseCreatureEntity entityCreature = (BaseCreatureEntity) entity;
@@ -286,12 +290,12 @@ public class PortalEntity extends BaseProjectileEntity {
     	if(this.shootingEntity != null && this.summoningPedestal == null) {
     		// Get Look Target
 	        Vec3d lookDirection = this.shootingEntity.getLookVec();
-			this.targetX = this.shootingEntity.posX + (lookDirection.x * this.portalRange);
-			this.targetY = this.shootingEntity.posY + (lookDirection.y * this.portalRange);
-			this.targetZ = this.shootingEntity.posZ + (lookDirection.z * this.portalRange);
+			this.targetX = this.shootingEntity.getPositionVec().getX() + (lookDirection.x * this.portalRange);
+			this.targetY = this.shootingEntity.getPositionVec().getY() + (lookDirection.y * this.portalRange);
+			this.targetZ = this.shootingEntity.getPositionVec().getZ() + (lookDirection.z * this.portalRange);
 	        
 			// Apply Raytrace to Look Target:
-			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.posX, this.shootingEntity.posY, this.shootingEntity.posZ, this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
+			RayTraceResult target = Utilities.raytrace(this.getEntityWorld(), this.shootingEntity.getPositionVec().getX(), this.shootingEntity.getPositionVec().getY(), this.shootingEntity.getPositionVec().getZ(), this.targetX, this.targetY, this.targetZ, 1.0F, this, null);
 	        if(target != null) {
 				this.targetX = target.getHitVec().x;
 				this.targetY = target.getHitVec().y;
@@ -301,9 +305,7 @@ public class PortalEntity extends BaseProjectileEntity {
 	        this.targetY += 1.0D;
 			
 			// Update Position to Target:
-	    	this.posX = this.targetX;
-	    	this.posY = this.targetY;
-	    	this.posZ = this.targetZ;
+			this.setPosition(this.targetX, this.targetY, this.targetZ);
         }
     }
     
@@ -314,9 +316,9 @@ public class PortalEntity extends BaseProjectileEntity {
     	double xAmount = -Math.sin(angle);
     	double zAmount = Math.cos(angle);
     	double[] coords = new double[3];
-        coords[0] = entity.posX + (distance * xAmount);
-        coords[1] = entity.posY;
-        coords[2] = entity.posZ + (distance * zAmount);
+        coords[0] = entity.getPositionVec().getX() + (distance * xAmount);
+        coords[1] = entity.getPositionVec().getY();
+        coords[2] = entity.getPositionVec().getZ() + (distance * zAmount);
         return coords;
     }
     

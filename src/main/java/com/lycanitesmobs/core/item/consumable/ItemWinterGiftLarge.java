@@ -69,7 +69,7 @@ public class ItemWinterGiftLarge extends BaseItem {
         if(entityType != null) {
             Entity entity = entityType.create(world);
             if (entity != null) {
-                entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+                entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {

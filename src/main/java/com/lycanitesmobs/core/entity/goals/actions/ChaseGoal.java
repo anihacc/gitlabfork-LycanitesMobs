@@ -53,7 +53,7 @@ public class ChaseGoal extends Goal {
         //else if(this.host.getDistance(this.target) > (double)(this.maxTargetDistance * this.maxTargetDistance))
             //return false;
 
-		Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.posX, this.target.posY, this.target.posZ));
+		Vec3d vec3 = RandomPositionGenerator.findRandomTargetTowards(this.host, 16, 7, new Vec3d(this.target.getPositionVec().getX(), this.target.getPositionVec().getY(), this.target.getPositionVec().getZ()));
 		if (vec3 == null)
 			return false;
 		this.movePos = new BlockPos(vec3.x, vec3.y, vec3.z);

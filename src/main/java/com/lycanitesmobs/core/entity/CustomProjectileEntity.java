@@ -196,11 +196,10 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		return 1.0F;
 	}
 
-	@Override
-	@OnlyIn(Dist.CLIENT)
+	@OnlyIn(Dist.CLIENT) // TODO This is now gone.
 	public int getBrightnessForRender() {
 		if(this.projectileInfo == null || !this.projectileInfo.glow)
-			return super.getBrightnessForRender();
+			return super.func_226263_P_();
 		return 15728880;
 	}
 

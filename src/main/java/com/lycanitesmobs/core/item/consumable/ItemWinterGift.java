@@ -74,7 +74,7 @@ public class ItemWinterGift extends BaseItem {
 			return;
 		ItemStack dropStack = dropStacks.get(player.getRNG().nextInt(dropStacks.size()));
 		dropStack.setCount(1 + player.getRNG().nextInt(4));
-		CustomItemEntity entityItem = new CustomItemEntity(world, player.posX, player.posY, player.posZ, dropStack);
+		CustomItemEntity entityItem = new CustomItemEntity(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), dropStack);
 		entityItem.setPickupDelay(10);
 		world.addEntity(entityItem);
     }
@@ -96,7 +96,7 @@ public class ItemWinterGift extends BaseItem {
 		if(entityType != null) {
 			Entity entity = entityType.create(world);
             if(entity != null) {
-	            entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+	            entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {

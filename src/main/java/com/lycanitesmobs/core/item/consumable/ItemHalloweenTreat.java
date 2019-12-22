@@ -66,7 +66,7 @@ public class ItemHalloweenTreat extends BaseItem {
     public void openGood(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".good");
 		player.sendMessage(message);
-        this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_good"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// Three Random Treats:
 		List<ItemStack> dropStacks = ObjectLists.getItems("halloween_treats");
@@ -74,7 +74,7 @@ public class ItemHalloweenTreat extends BaseItem {
 			return;
 		ItemStack dropStack = dropStacks.get(player.getRNG().nextInt(dropStacks.size()));
 		dropStack.setCount(1 + player.getRNG().nextInt(4));
-		CustomItemEntity entityItem = new CustomItemEntity(world, player.posX, player.posY, player.posZ, dropStack);
+		CustomItemEntity entityItem = new CustomItemEntity(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), dropStack);
 		entityItem.setPickupDelay(10);
 		world.addEntity(entityItem);
     }
@@ -86,7 +86,7 @@ public class ItemHalloweenTreat extends BaseItem {
     public void openBad(ItemStack itemStack, World world, PlayerEntity player) {
 		ITextComponent message = new TranslationTextComponent("item.lycanitesmobs." + this.itemName + ".bad");
 		player.sendMessage(message);
-        this.playSound(world, player.posX, player.posY, player.posZ, ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
+        this.playSound(world, player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), ObjectManager.getSound(this.itemName + "_bad"), SoundCategory.AMBIENT, 5.0F, 1.0F);
 		
 		// One Random Trick:
 		List<EntityType> entityTypes = ObjectLists.getEntites("halloween_tricks");
@@ -96,7 +96,7 @@ public class ItemHalloweenTreat extends BaseItem {
 		if(entityType != null) {
 			Entity entity = entityType.create(world);
             if(entity != null) {
-	            entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+	            entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
 
                 // Themed Names:
                 if (entity instanceof BaseCreatureEntity) {

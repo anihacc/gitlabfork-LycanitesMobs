@@ -112,9 +112,9 @@ public class EntityGeist extends AgeableCreatureEntity implements IMob {
             }
 
             if(!this.getEntityWorld().isRemote && (permanent || (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.shadowfireDeath))) {
-                for(int x = (int)this.posX - shadowfireWidth; x <= (int)this.posX + shadowfireWidth; x++) {
-                    for(int y = (int)this.posY - shadowfireHeight; y <= (int)this.posY + shadowfireHeight; y++) {
-                        for(int z = (int)this.posZ - shadowfireWidth; z <= (int)this.posZ + shadowfireWidth; z++) {
+                for(int x = (int)this.getPositionVec().getX() - shadowfireWidth; x <= (int)this.getPositionVec().getX() + shadowfireWidth; x++) {
+                    for(int y = (int)this.getPositionVec().getY() - shadowfireHeight; y <= (int)this.getPositionVec().getY() + shadowfireHeight; y++) {
+                        for(int z = (int)this.getPositionVec().getZ() - shadowfireWidth; z <= (int)this.getPositionVec().getZ() + shadowfireWidth; z++) {
                             Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                             if(block != Blocks.AIR) {
                                 BlockPos placePos = new BlockPos(x, y + 1, z);

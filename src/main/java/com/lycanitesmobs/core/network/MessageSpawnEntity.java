@@ -6,11 +6,9 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -37,9 +35,9 @@ public class MessageSpawnEntity {
 			this.uuid = serverEntity.getUniqueID();
 			this.pitch = serverEntity.rotationPitch;
 			this.yaw = serverEntity.rotationYaw;
-			this.x = serverEntity.posX;
-			this.y = serverEntity.posY;
-			this.z = serverEntity.posZ;
+			this.x = serverEntity.getPositionVec().getX();
+			this.y = serverEntity.getPositionVec().getY();
+			this.z = serverEntity.getPositionVec().getZ();
 		}
 	}
 	

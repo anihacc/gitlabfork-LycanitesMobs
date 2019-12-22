@@ -231,7 +231,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param livingEntity The entity that destroyed the block.
 	 */
 	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
-		if(livingEntity == null || livingEntity.isSneaking()) {
+		if(livingEntity == null || livingEntity.func_225608_bj_()) {
 			return;
 		}
 

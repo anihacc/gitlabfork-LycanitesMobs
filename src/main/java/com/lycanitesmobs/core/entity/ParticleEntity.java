@@ -22,9 +22,7 @@ public class ParticleEntity extends ThrowableEntity {
     // ==================================================
 	public ParticleEntity(World world, double x, double y, double z, String texture, ModInfo group) {
 		super(EntityType.SNOWBALL, world);
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
+		this.setPosition(x, y, z);
         this.lastTickPosX = x;
         this.lastTickPosY = y;
         this.lastTickPosZ = z;
@@ -42,9 +40,9 @@ public class ParticleEntity extends ThrowableEntity {
 	@Override
     public void tick() {
 		System.out.println("Doing something!");
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+        this.prevPosX = this.getPositionVec().getX();
+        this.prevPosY = this.getPositionVec().getY();
+        this.prevPosZ = this.getPositionVec().getZ();
 
         if(this.particleAge++ >= this.particleAgeMax)
             this.remove();

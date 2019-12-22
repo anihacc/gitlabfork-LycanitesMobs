@@ -101,7 +101,7 @@ public class FearEntity extends BaseCreatureEntity {
         
         // Follow Fear Target If Not Picked Up:
         if(this.getPickupEntity() == null) {
-        	this.setPosition(this.fearedEntity.posX, this.fearedEntity.posY, this.fearedEntity.posZ);
+        	this.setPosition(this.fearedEntity.getPositionVec().getX(), this.fearedEntity.getPositionVec().getY(), this.fearedEntity.getPositionVec().getZ());
 			this.setMotion(this.fearedEntity.getMotion());
 			this.fallDistance = 0;
         }
@@ -141,7 +141,7 @@ public class FearEntity extends BaseCreatureEntity {
         //this.setSize(feared.width, feared.height); TODO Entity Type Size
         this.noClip = feared.noClip;
         this.stepHeight = feared.stepHeight;
-		this.setLocationAndAngles(feared.posX, feared.posY, feared.posZ, feared.rotationYaw, feared.rotationPitch);
+		this.setLocationAndAngles(feared.getPositionVec().getX(), feared.getPositionVec().getY(), feared.getPositionVec().getZ(), feared.rotationYaw, feared.rotationPitch);
 		
         if(!(feared instanceof PlayerEntity)) {
 	        this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(feared.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue());

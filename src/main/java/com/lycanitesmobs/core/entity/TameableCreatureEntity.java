@@ -276,16 +276,16 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	commands.putAll(super.getInteractCommands(player, itemStack));
 
 		// Perch:
-		if(this.canPerch(player) && !player.isSneaking() && !this.getEntityWorld().isRemote)
+		if(this.canPerch(player) && !player.func_225608_bj_() && !this.getEntityWorld().isRemote) // isSneaking()
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isSneaking()) && player == this.getPlayerOwner()) {
+		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.func_225608_bj_()) && player == this.getPlayerOwner()) { // isSneaking()
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	
     	// Server Item Commands:
-    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isSneaking()) {
+    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.func_225608_bj_()) { // isSneaking()
     		
     		// Taming:
     		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled) {
@@ -349,7 +349,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 for(int i = 0; i < 25; i++)
-                	this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                	this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
     		this.consumePlayersItem(player, itemStack);
             return true;
@@ -849,7 +849,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
         byte tamedStatus = this.getByteFromDataManager(TAMED);
         if(set) {
             this.dataManager.set(TAMED, (byte) (tamedStatus | TAMED_ID.MOVE_SIT.id));
-            this.setHome((int)this.posX, (int)this.posY, (int)this.posZ, this.sittingGuardRange);
+            this.setHome((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), this.sittingGuardRange);
         }
         else {
             this.dataManager.set(TAMED, (byte) (tamedStatus - (tamedStatus & TAMED_ID.MOVE_SIT.id)));
@@ -1075,7 +1075,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+            this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
         }
     }
     

@@ -63,9 +63,9 @@ public class EatBlockGoal extends Goal {
     	 if(this.host.getRNG().nextInt(this.host.isChild() ? 50 : 1000) != 0)
              return false;
     	 
-    	 int i = MathHelper.floor(this.host.posX);
-         int j = MathHelper.floor(this.host.posY);
-         int k = MathHelper.floor(this.host.posZ);
+    	 int i = MathHelper.floor(this.host.getPositionVec().getX());
+         int j = MathHelper.floor(this.host.getPositionVec().getY());
+         int k = MathHelper.floor(this.host.getPositionVec().getZ());
 
          BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
          return this.isValidBlock(blockState);
@@ -126,9 +126,9 @@ public class EatBlockGoal extends Goal {
     public void tick() {
          if(--this.eatTime != 0) return;
          
-         int i = MathHelper.floor(this.host.posX);
-         int j = MathHelper.floor(this.host.posY);
-         int k = MathHelper.floor(this.host.posZ);
+         int i = MathHelper.floor(this.host.getPositionVec().getX());
+         int j = MathHelper.floor(this.host.getPositionVec().getY());
+         int k = MathHelper.floor(this.host.getPositionVec().getZ());
          BlockState blockState = this.host.getEntityWorld().getBlockState(new BlockPos(i, j - 1, k));
          
          if(this.isValidBlock(blockState)) {

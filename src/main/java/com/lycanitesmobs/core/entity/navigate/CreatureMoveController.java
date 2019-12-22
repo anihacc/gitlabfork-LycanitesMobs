@@ -88,7 +88,7 @@ public class CreatureMoveController extends MovementController {
             moveZ = moveStrafe * yawCos + moveForward * yawSin;
             PathNavigator pathNavigator = this.mob.getNavigator();
             NodeProcessor nodeProcessor = pathNavigator.getNodeProcessor();
-            if (nodeProcessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.posX + (double) moveX), MathHelper.floor(this.mob.posY), MathHelper.floor(this.mob.posZ + (double) moveZ)) != PathNodeType.WALKABLE) {
+            if (nodeProcessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.getPositionVec().getX() + (double) moveX), MathHelper.floor(this.mob.getPositionVec().getY()), MathHelper.floor(this.mob.getPositionVec().getZ() + (double) moveZ)) != PathNodeType.WALKABLE) {
                 this.moveForward = 1.0F;
                 this.moveStrafe = 0.0F;
                 scaledSpeed = moveSpeed;
@@ -101,9 +101,9 @@ public class CreatureMoveController extends MovementController {
         }
         else if (this.action == MovementController.Action.MOVE_TO) {
             this.action = MovementController.Action.WAIT;
-            double distanceX = this.posX - this.mob.posX;
-            double distanceZ = this.posZ - this.mob.posZ;
-            double distanceY = this.posY - this.mob.posY;
+            double distanceX = this.getPositionVec().getX() - this.mob.getPositionVec().getX();
+            double distanceZ = this.getPositionVec().getZ() - this.mob.getPositionVec().getZ();
+            double distanceY = this.getPositionVec().getY() - this.mob.getPositionVec().getY();
             double distanceXZ = distanceX * distanceX + distanceZ * distanceZ;
             double distance = distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ;
             if (distance < 2.500000277905201E-7D) {
@@ -120,7 +120,7 @@ public class CreatureMoveController extends MovementController {
             BlockState blockState = this.mob.world.getBlockState(entityPos);
             VoxelShape collisionShape = blockState.getCollisionShape(this.mob.world, entityPos);
             double jumpRange = (double)Math.max(1.0F, this.mob.getSize(Pose.STANDING).width + 0.25F);
-            if (distanceY > (double)this.mob.stepHeight && distanceXZ < jumpRange || !collisionShape.isEmpty() && this.mob.posY < collisionShape.getEnd(Direction.Axis.Y) + (double)entityPos.getY()) {
+            if (distanceY > (double)this.mob.stepHeight && distanceXZ < jumpRange || !collisionShape.isEmpty() && this.mob.getPositionVec().getY() < collisionShape.getEnd(Direction.Axis.Y) + (double)entityPos.getY()) {
                 this.mob.getJumpController().setJumping();
                 this.action = MovementController.Action.JUMPING;
             }
@@ -139,9 +139,9 @@ public class CreatureMoveController extends MovementController {
     /** Used by strong swimmers for fast, smooth movement. **/
     public void tickSwimming() {
         if (this.action == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
-            double x = this.posX - this.entityCreature.posX;
-            double y = this.posY - this.entityCreature.posY;
-            double z = this.posZ - this.entityCreature.posZ;
+            double x = this.getPositionVec().getX() - this.entityCreature.getPositionVec().getX();
+            double y = this.getPositionVec().getY() - this.entityCreature.getPositionVec().getY();
+            double z = this.getPositionVec().getZ() - this.entityCreature.getPositionVec().getZ();
             double distance = x * x + y * y + z * z;
             distance = (double) MathHelper.sqrt(distance);
             y = y / distance;
@@ -162,9 +162,9 @@ public class CreatureMoveController extends MovementController {
             this.entityCreature.setMotion(this.entityCreature.getMotion().add(motionX, motionY, motionZ));
 
             LookController lookController = this.entityCreature.getLookController();
-            double d7 = this.entityCreature.posX + x / distance * 2.0D;
-            double d8 = (double)this.entityCreature.getEyeHeight() + this.entityCreature.posY + y / distance;
-            double d9 = this.entityCreature.posZ + z / distance * 2.0D;
+            double d7 = this.entityCreature.getPositionVec().getX() + x / distance * 2.0D;
+            double d8 = (double)this.entityCreature.getEyeHeight() + this.entityCreature.getPositionVec().getY() + y / distance;
+            double d9 = this.entityCreature.getPositionVec().getZ() + z / distance * 2.0D;
             double d10 = lookController.getLookPosX();
             double d11 = lookController.getLookPosY();
             double d12 = lookController.getLookPosZ();
@@ -185,9 +185,9 @@ public class CreatureMoveController extends MovementController {
     /** Used by flyers for swift, fast air movement. **/
     public void tickFlying() {
         if (this.action == MovementController.Action.MOVE_TO) {
-            double xDistance = this.posX - this.entityCreature.posX;
-            double yDistance = this.posY - this.entityCreature.posY;
-            double zDistance = this.posZ - this.entityCreature.posZ;
+            double xDistance = this.getPositionVec().getX() - this.entityCreature.getPositionVec().getX();
+            double yDistance = this.getPositionVec().getY() - this.entityCreature.getPositionVec().getY();
+            double zDistance = this.getPositionVec().getZ() - this.entityCreature.getPositionVec().getZ();
             double distance = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
 
             if (this.courseChangeCooldown-- <= 0) {
@@ -210,8 +210,8 @@ public class CreatureMoveController extends MovementController {
         // Look At Target or Movement Direction:
         if (this.entityCreature.getAttackTarget() != null) {
             LivingEntity entitylivingbase = this.entityCreature.getAttackTarget();
-            double distanceX = entitylivingbase.posX - this.entityCreature.posX;
-            double distanceZ = entitylivingbase.posZ - this.entityCreature.posZ;
+            double distanceX = entitylivingbase.getPositionVec().getX() - this.entityCreature.getPositionVec().getX();
+            double distanceZ = entitylivingbase.getPositionVec().getZ() - this.entityCreature.getPositionVec().getZ();
             this.entityCreature.renderYawOffset = this.entityCreature.rotationYaw = -((float)MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
         }
         else if(this.action == MovementController.Action.MOVE_TO) {

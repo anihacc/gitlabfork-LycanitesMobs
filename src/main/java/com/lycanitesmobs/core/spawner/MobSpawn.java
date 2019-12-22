@@ -404,7 +404,7 @@ public class MobSpawn {
 				entityCreature.setFixateTarget(player);
 			}
 			if(this.home >= 0) {
-				entityCreature.setHome((int)entityCreature.posX, (int)entityCreature.posY, (int)entityCreature.posZ, (float)this.home);
+				entityCreature.setHome((int)entityCreature.getPositionVec().getX(), (int)entityCreature.getPositionVec().getY(), (int)entityCreature.getPositionVec().getZ(), (float)this.home);
 			}
 			if(this.mobLevel > 0) {
 				entityCreature.addLevel(this.mobLevel);

@@ -60,7 +60,7 @@ public class EntityGorgomite extends BaseCreatureEntity implements IMob {
 		if(this.swarmLimit > 0 && this.countAllies(64D) < this.swarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.25F)
-				this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
+				this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
 		}
 	}
 	

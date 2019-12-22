@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.math.Vec3d;
 
-import javax.vecmath.Vector3d;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
     // Safe Position:
     /** The last coordinates the entity was at where it wasn't inside an opaque block. (Helps prevent suffocation). **/
-    Vector3d lastSafePos;
+    Vec3d lastSafePos;
     private boolean playerAllowFlyingSnapshot;
     private boolean playerIsFlyingSnapshot;
 
@@ -143,10 +142,10 @@ public class ExtendedEntity implements IExtendedEntity {
 
         // Safe Position:
 		if (this.lastSafePos == null) {
-			this.lastSafePos = new Vector3d(this.entity.posX, this.entity.posY, this.entity.posZ);
+			this.lastSafePos = new Vec3d(this.entity.getPositionVec().getX(), this.entity.getPositionVec().getY(), this.entity.getPositionVec().getZ());
 		}
 		if (!this.entity.getEntityWorld().getBlockState(this.entity.getPosition()).getMaterial().isSolid()) {
-			this.lastSafePos.set(Math.floor(this.entity.posX) + 0.5D, this.entity.getPosition().getY(), Math.floor(this.entity.posZ) + 0.5D);
+			this.lastSafePos = new Vec3d(Math.floor(this.entity.getPositionVec().getX()) + 0.5D, this.entity.getPosition().getY(), Math.floor(this.entity.getPositionVec().getZ()) + 0.5D);
 		}
 
         // Fear Entity:
@@ -210,7 +209,7 @@ public class ExtendedEntity implements IExtendedEntity {
         // Movement:
 		if(this.pickedUpByEntity != null) {
 			double[] pickupOffset = this.getPickedUpOffset();
-			this.entity.setPosition(this.pickedUpByEntity.posX + pickupOffset[0], this.pickedUpByEntity.posY + pickupOffset[1], this.pickedUpByEntity.posZ + pickupOffset[2]);
+			this.entity.setPosition(this.pickedUpByEntity.getPositionVec().getX() + pickupOffset[0], this.pickedUpByEntity.getPositionVec().getY() + pickupOffset[1], this.pickedUpByEntity.getPositionVec().getZ() + pickupOffset[2]);
 			this.entity.setMotion(this.pickedUpByEntity.getMotion());
 			this.entity.fallDistance = 0;
 			if (!this.entity.getEntityWorld().isRemote && this.entity instanceof PlayerEntity) {
@@ -247,7 +246,7 @@ public class ExtendedEntity implements IExtendedEntity {
             // Teleport To Initial Pickup Position:
             if(this.pickedUpByEntity != null && !(this.entity instanceof PlayerEntity)) {
                 double[] pickupOffset = this.getPickedUpOffset();
-                this.entity.teleportKeepLoaded(this.pickedUpByEntity.posX + pickupOffset[0], this.pickedUpByEntity.posY + pickupOffset[1], this.pickedUpByEntity.posZ + pickupOffset[2]);
+                this.entity.teleportKeepLoaded(this.pickedUpByEntity.getPositionVec().getX() + pickupOffset[0], this.pickedUpByEntity.getPositionVec().getY() + pickupOffset[1], this.pickedUpByEntity.getPositionVec().getZ() + pickupOffset[2]);
             }
 
 			MessageEntityPickedUp message = new MessageEntityPickedUp(this.entity, pickedUpByEntity);
@@ -331,8 +330,8 @@ public class ExtendedEntity implements IExtendedEntity {
 		double entityHeight = this.entity.getSize(this.entity.getPose()).height;
 
 		double angle = Math.toRadians(this.entity.rotationYaw) + 90;
-		double xPerchPos = this.entity.posX;
-		double zPerchPos = this.entity.posZ;
+		double xPerchPos = this.entity.getPositionVec().getX();
+		double zPerchPos = this.entity.getPositionVec().getZ();
 		double distance = entityWidth * 0.7D;
 		if(distance != 0) {
 			xPerchPos += distance * -Math.sin(angle);
@@ -341,7 +340,7 @@ public class ExtendedEntity implements IExtendedEntity {
 
 		return new Vec3d(
 				xPerchPos,
-				this.entity.posY + entityHeight * 0.78D,
+				this.entity.getPositionVec().getY() + entityHeight * 0.78D,
 				zPerchPos
 		);
 	}

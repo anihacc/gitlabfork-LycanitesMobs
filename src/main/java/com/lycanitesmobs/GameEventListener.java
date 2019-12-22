@@ -158,7 +158,7 @@ public class GameEventListener {
     // ==================================================
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		PlayerEntity player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayer();
 		Entity entity = event.getTarget();
         if(player == null || !(entity instanceof LivingEntity))
 			return;
@@ -302,7 +302,7 @@ public class GameEventListener {
 
             if(seasonalItem != null && !noSeaonalDrop && (alwaysDrop || event.getEntityLiving().getRNG().nextFloat() < ItemConfig.seasonalItemDropChance)) {
                 ItemStack dropStack = new ItemStack(seasonalItem, 1);
-                CustomItemEntity entityItem = new CustomItemEntity(world, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, dropStack);
+                CustomItemEntity entityItem = new CustomItemEntity(world, event.getEntityLiving().getPositionVec().getX(), event.getEntityLiving().getPositionVec().getY(), event.getEntityLiving().getPositionVec().getZ(), dropStack);
                 entityItem.setPickupDelay(10);
                 world.addEntity(entityItem);
             }
@@ -375,7 +375,7 @@ public class GameEventListener {
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof PlayerEntity) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().isSneaking());
+		event.setCanceled(event.getEntityMounting().func_225608_bj_()); //isSneaking()
 	}
 
 

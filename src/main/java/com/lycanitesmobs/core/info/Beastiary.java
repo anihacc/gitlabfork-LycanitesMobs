@@ -101,9 +101,9 @@ public class Beastiary {
 		if(this.extendedPlayer.player.getEntityWorld().isRemote) {
 			for(int i = 0; i < 32; ++i) {
 				entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
-						entity.posX + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.posY + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
-						entity.posZ + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getX() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getY() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getZ() + (4.0F * this.extendedPlayer.player.getRNG().nextFloat()) - 2.0F,
 						0.0D, 0.0D, 0.0D);
 			}
 		}

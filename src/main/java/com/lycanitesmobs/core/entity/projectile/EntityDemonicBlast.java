@@ -71,7 +71,7 @@ public class EntityDemonicBlast extends BaseProjectileEntity {
 	    	rapidTicks++;
     	}
     	
-    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
@@ -88,12 +88,12 @@ public class EntityDemonicBlast extends BaseProjectileEntity {
 		BaseProjectileEntity projectile;
 		if(this.getThrower() != null) {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getThrower());
-			projectile.posX = this.posX;
-			projectile.posY = this.posY;
-			projectile.posZ = this.posZ;
+			projectile.getPositionVec().getX() = this.getPositionVec().getX();
+			projectile.getPositionVec().getY() = this.getPositionVec().getY();
+			projectile.getPositionVec().getZ() = this.getPositionVec().getZ();
 		}
 		else {
-			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.posX, this.posY, this.posZ);
+			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
 		}
 
 		float velocity = 1.2F;
@@ -157,7 +157,7 @@ public class EntityDemonicBlast extends BaseProjectileEntity {
 					explosionRadius = 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
+			this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.BREAK);
 		}
     	for(int i = 0; i < 8; ++i) {
 			fireProjectile();
@@ -168,7 +168,7 @@ public class EntityDemonicBlast extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
     }
     
     

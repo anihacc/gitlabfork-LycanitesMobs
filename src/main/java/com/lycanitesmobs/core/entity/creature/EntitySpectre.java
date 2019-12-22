@@ -79,8 +79,8 @@ public class EntitySpectre extends TameableCreatureEntity implements IMob, IGrou
 						if (player.abilities.isCreativeMode)
 							continue;
 					}
-					double xDist = this.posX - entity.posX;
-					double zDist = this.posZ - entity.posZ;
+					double xDist = this.getPositionVec().getX() - entity.getPositionVec().getX();
+					double zDist = this.getPositionVec().getZ() - entity.getPositionVec().getZ();
 					double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 					double factor = 0.1D;
 					double motionCap = 10;
@@ -104,7 +104,7 @@ public class EntitySpectre extends TameableCreatureEntity implements IMob, IGrou
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 

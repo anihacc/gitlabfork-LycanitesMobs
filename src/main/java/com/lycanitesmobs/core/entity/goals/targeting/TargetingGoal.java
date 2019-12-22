@@ -47,7 +47,7 @@ public abstract class TargetingGoal extends Goal {
 
         this.targetSelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+            if(this.shouldCheckSight() && !entity.func_225510_bt_() && !this.host.canEntityBeSeen(entity)) { // isGlowing()
                 return false;
             }
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isEntityTargetable(entity, false);
@@ -55,7 +55,7 @@ public abstract class TargetingGoal extends Goal {
 
         this.allySelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-			if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+			if(this.shouldCheckSight() && !entity.func_225510_bt_() && !this.host.canEntityBeSeen(entity)) { // isGlowing()
 				return false;
 			}
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isAllyTarget(entity);
@@ -228,7 +228,7 @@ public abstract class TargetingGoal extends Goal {
         }
         
         // Home Check:
-        if(!this.host.positionNearHome(MathHelper.floor(checkTarget.posX), MathHelper.floor(checkTarget.posY), MathHelper.floor(checkTarget.posZ)))
+        if(!this.host.positionNearHome(MathHelper.floor(checkTarget.getPositionVec().getX()), MathHelper.floor(checkTarget.getPositionVec().getY()), MathHelper.floor(checkTarget.getPositionVec().getZ())))
             return false;
         
         // Sight Check:
@@ -310,8 +310,8 @@ public abstract class TargetingGoal extends Goal {
             if(pathpoint == null)
                 return false;
             else {
-                int i = pathpoint.x - MathHelper.floor(target.posX);
-                int j = pathpoint.z - MathHelper.floor(target.posZ);
+                int i = pathpoint.x - MathHelper.floor(target.getPositionVec().getX());
+                int j = pathpoint.z - MathHelper.floor(target.getPositionVec().getZ());
                 return (double)(i * i + j * j) <= 2.25D;
             }
         }

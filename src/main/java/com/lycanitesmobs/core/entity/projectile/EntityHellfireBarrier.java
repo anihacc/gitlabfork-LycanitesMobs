@@ -87,19 +87,19 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
                     }
                     else {
                         if(this.wall) {
-                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
+                            hellfireWalls[row][col] = new EntityHellfireWall(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWall.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (this.hellfireSize * row), this.getPositionVec().getZ());
                         }
                         else {
-                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.posX, this.posY + (this.hellfireSize * row), this.posZ);
+                            hellfireWalls[row][col] = new EntityHellfireBarrierPart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrierPart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (this.hellfireSize * row), this.getPositionVec().getZ());
                         }
                     }
 
                     double rotationRadians = Math.toRadians(this.rotation);
                     double x = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
                     double z = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-                    hellfireWalls[row][col].posX = this.posX + x;
-                    hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
-                    hellfireWalls[row][col].posZ = this.posZ + z;
+                    hellfireWalls[row][col].getPositionVec().getX() = this.getPositionVec().getX() + x;
+                    hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
+                    hellfireWalls[row][col].getPositionVec().getZ() = this.getPositionVec().getZ() + z;
                     hellfireWalls[row][col].projectileLife = 2 * 20;
 
                     this.getEntityWorld().addEntity(hellfireWalls[row][col]);
@@ -115,9 +115,9 @@ public class EntityHellfireBarrier extends BaseProjectileEntity {
                 double rotationRadians = Math.toRadians(this.rotation);
                 double x = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
                 double z = (((float)col / this.hellfireWidth) * (this.hellfireSize * (this.hellfireWidth - 1))) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-                hellfireWalls[row][col].posX = this.posX + x;
-                hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
-                hellfireWalls[row][col].posZ = this.posZ + z;
+                hellfireWalls[row][col].getPositionVec().getX() = this.getPositionVec().getX() + x;
+                hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
+                hellfireWalls[row][col].getPositionVec().getZ() = this.getPositionVec().getZ() + z;
                 hellfireWalls[row][col].projectileLife = 2 * 20;
 
                 if(!this.isAlive())

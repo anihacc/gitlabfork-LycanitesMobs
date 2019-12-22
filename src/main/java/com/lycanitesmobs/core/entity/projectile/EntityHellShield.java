@@ -49,7 +49,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     @Override
     public void tick() {
     	super.tick();
-    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     }
 	
@@ -71,7 +71,7 @@ public class EntityHellShield extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
     }
 
     @Override

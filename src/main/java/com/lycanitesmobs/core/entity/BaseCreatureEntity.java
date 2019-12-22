@@ -11,7 +11,6 @@ import com.lycanitesmobs.api.Targeting;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.CreatureContainerProvider;
-import com.lycanitesmobs.core.entity.creature.EntityPinky;
 import com.lycanitesmobs.core.entity.damagesources.ElementDamageSource;
 import com.lycanitesmobs.core.entity.goals.actions.*;
 import com.lycanitesmobs.core.entity.goals.targeting.*;
@@ -59,10 +58,12 @@ import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -837,7 +838,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		double radius = this.creatureInfo.width;
 		double height = this.creatureInfo.height;
 		AxisAlignedBB spawnBoundries = new AxisAlignedBB(pos.getX() - radius, pos.getY(), pos.getZ() - radius, pos.getX() + radius, pos.getY() + height, pos.getZ() + radius);
-		if(!this.spawnsInBlock && !this.getEntityWorld().isCollisionBoxesEmpty(this, spawnBoundries)) {//!this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
+		if(!this.spawnsInBlock && !this.getEntityWorld().checkNoEntityCollision(this, VoxelShapes.create(spawnBoundries))) {
 			return false;
 		}
 		return true;
@@ -1067,12 +1068,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
     public void summonMinion(LivingEntity minion, double angle, double distance) {
         double angleRadians = Math.toRadians(angle);
-        double x = this.posX + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
-        double y = this.posY + 1;
+        double x = this.getPositionVec().getX() + ((this.getSize(this.getPose()).width + distance) * Math.cos(angleRadians) - Math.sin(angleRadians));
+        double y = this.getPositionVec().getY() + 1;
 		if(minion instanceof BaseCreatureEntity && ((BaseCreatureEntity)minion).isFlying()) {
 			y += this.getSize(this.getPose()).height / 2;
 		}
-        double z = this.posZ + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
+        double z = this.getPositionVec().getZ() + ((this.getSize(this.getPose()).width + distance) * Math.sin(angleRadians) + Math.cos(angleRadians));
         minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		this.getEntityWorld().addEntity(minion);
         if(minion instanceof BaseCreatureEntity) {
@@ -1823,13 +1824,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
   	// ==================================================
 	@Override
 	public void setPosition(double x, double y, double z) {
-		this.posX = x;
-		this.posY = y;
-		this.posZ = z;
-		if (this.isAddedToWorld() && !this.world.isRemote && world instanceof ServerWorld) ((ServerWorld)this.world).chunkCheck(this); // Forge - Process chunk registration after moving.
-		double radius = this.getSize(Pose.STANDING).width / 2.0D;
-		double height = this.getSize(Pose.STANDING).height;
-		this.setBoundingBox(new AxisAlignedBB(x - radius, y, z - radius, x + radius, y + height, z + radius));
+		super.setPosition(x, y, z);
 	}
 
 	/**
@@ -1929,8 +1924,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     /** Updates limb swing animation, used when flying or swimming as their movements don't update it like the standard walking movement. **/
     public void updateLimbSwing() {
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double distanceX = this.posX - this.prevPosX;
-        double distanceZ = this.posZ - this.prevPosZ;
+        double distanceX = this.getPositionVec().getX() - this.prevPosX;
+        double distanceZ = this.getPositionVec().getZ() - this.prevPosZ;
         float distance = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 4.0F;
         if (distance > 1.0F) {
             distance = 1.0F;
@@ -1987,7 +1982,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         super.updateLeashedState();
         if(this.getLeashed() && this.getLeashHolder().getEntityWorld() == this.getEntityWorld()) {
             Entity entity = this.getLeashHolder();
-            this.setHome((int)entity.posX, (int)entity.posY, (int)entity.posZ, 5);
+            this.setHome((int)entity.getPositionVec().getX(), (int)entity.getPositionVec().getY(), (int)entity.getPositionVec().getZ(), 5);
             float distance = this.getDistance(entity);
             this.testLeash(distance);
             
@@ -2002,9 +1997,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
                 this.getNavigator().tryMoveToEntityLiving(entity, 1.0D);
 
             if(distance > 6.0F) {
-                double d0 = (entity.posX - this.posX) / (double)distance;
-                double d1 = (entity.posY - this.posY) / (double)distance;
-                double d2 = (entity.posZ - this.posZ) / (double)distance;
+                double d0 = (entity.getPositionVec().getX() - this.getPositionVec().getX()) / (double)distance;
+                double d1 = (entity.getPositionVec().getY() - this.getPositionVec().getY()) / (double)distance;
+                double d2 = (entity.getPositionVec().getZ() - this.getPositionVec().getZ()) / (double)distance;
                 this.setMotion(this.getMotion().add(d0 * Math.abs(d0) * 0.4D, d1 * Math.abs(d1) * 0.4D, d2 * Math.abs(d2) * 0.4D));
             }
 
@@ -2635,27 +2630,29 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			return null;
 		}
 
-		projectile.posX += offset.x * this.sizeScale;
-		projectile.posY -= (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale);
-		projectile.posZ += offset.z * this.sizeScale;
+		projectile.setPosition(
+				projectile.getPositionVec().getX() + offset.x * this.sizeScale,
+				projectile.getPositionVec().getY() - (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
+				projectile.getPositionVec().getZ() + offset.z * this.sizeScale
+		);
 		projectile.setProjectileScale(scale);
 
-		Vec3d facing = this.getFacingPositionDouble(this.posX, this.posY, this.posZ, range, angle);
-		double distanceX = facing.x - this.posX;
-		double distanceZ = facing.z - this.posZ;
+		Vec3d facing = this.getFacingPositionDouble(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), range, angle);
+		double distanceX = facing.x - this.getPositionVec().getX();
+		double distanceZ = facing.z - this.getPositionVec().getZ();
 		double distanceXZ = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ) * 0.1D;
 		double distanceY = distanceXZ;
 		if(target != null) {
-			double targetX = target.posX - this.posX;
-			double targetZ = target.posZ - this.posZ;
+			double targetX = target.getPositionVec().getX() - this.getPositionVec().getX();
+			double targetZ = target.getPositionVec().getZ() - this.getPositionVec().getZ();
 			double newX = targetX * Math.cos(angle) - targetZ * Math.sin(angle);
 			double newY = targetX * Math.sin(angle) + targetZ * Math.cos(angle);
-			targetX = newX + this.posX;
-			targetZ = newY + this.posZ;
+			targetX = newX + this.getPositionVec().getX();
+			targetZ = newY + this.getPositionVec().getZ();
 
-			distanceX = targetX - this.posX;
-			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.posY;
-			distanceZ = targetZ - this.posZ;
+			distanceX = targetX - this.getPositionVec().getX();
+			distanceY = target.getBoundingBox().minY + (target.getSize(Pose.STANDING).height * 0.5D) - projectile.getPositionVec().getY();
+			distanceZ = targetZ - this.getPositionVec().getZ();
 		}
 
 		projectile.shoot(distanceX, distanceY, distanceZ, velocity, inaccuracy);
@@ -3135,7 +3132,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Returns the BlockPos in front or behind the provided entity with the given distance and angle offset (in degrees), use a negative distance for behind. **/
     public BlockPos getFacingPosition(Entity entity, double distance, double angleOffset) {
-        return this.getFacingPosition(entity.posX, entity.posY, entity.posZ, distance, entity.rotationYaw + angleOffset);
+        return this.getFacingPosition(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ(), distance, entity.rotationYaw + angleOffset);
     }
 
     /** Returns the BlockPos in front or behind the provided XYZ coords with the given distance and angle (in degrees), use a negative distance for behind. **/
@@ -3310,7 +3307,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
 		// Transformed Entity:
-		transformedEntity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+		transformedEntity.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rotationYaw, this.rotationPitch);
 		this.getEntityWorld().addEntity(transformedEntity);
 
 		// Remove Parts:
@@ -3503,13 +3500,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * getFallResistance() is used to reduce falling damage, if it is at or above 100 no falling damage is taken at all.
      * **/
     @Override
-    public void fall(float fallDistance, float damageMultiplier) {
+    public boolean func_225503_b_(float fallDistance, float damageMultiplier) { // fall()
         if(this.isFlying())
-    		return;
+    		return false;
     	fallDistance -= this.getFallResistance();
     	if(this.getFallResistance() >= 100)
     		fallDistance = 0;
-    	super.fall(fallDistance, damageMultiplier);
+    	return super.func_225503_b_(fallDistance, damageMultiplier);
     }
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/
@@ -3719,7 +3716,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     @Override
     public ItemEntity entityDropItem(ItemStack itemStack, float heightOffset) {
         if(itemStack.getCount() != 0) {
-            CustomItemEntity entityItem = new CustomItemEntity(this.getEntityWorld(), this.posX, this.posY + (double)heightOffset, this.posZ, itemStack);
+            CustomItemEntity entityItem = new CustomItemEntity(this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + (double)heightOffset, this.getPositionVec().getZ(), itemStack);
             entityItem.setPickupDelay(10);
             this.applyDropEffects(entityItem);
 
@@ -4251,7 +4248,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public boolean waterContact() {
     	if(this.isInWaterRainOrBubbleColumn())
     		return true;
-    	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.posX, (int)this.posY, (int)this.posZ))
+    	if(this.getEntityWorld().isRaining() && !this.isBlockUnderground((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ()))
     		return true;
     	return false;
     }

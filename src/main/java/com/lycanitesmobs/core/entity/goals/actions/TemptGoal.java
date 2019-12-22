@@ -181,9 +181,9 @@ public class TemptGoal extends Goal {
                     return false;
             }
             else {
-                this.targetX = this.player.posX;
-                this.targetY = this.player.posY;
-                this.targetZ = this.player.posZ;
+                this.targetX = this.player.getPositionVec().getX();
+                this.targetY = this.player.getPositionVec().getY();
+                this.targetZ = this.player.getPositionVec().getZ();
             }
 
             this.targetPitch = (double)this.player.rotationPitch;
@@ -198,9 +198,9 @@ public class TemptGoal extends Goal {
   	// ==================================================
 	@Override
     public void startExecuting() {
-        this.targetX = this.player.posX;
-        this.targetY = this.player.posY;
-        this.targetZ = this.player.posZ;
+        this.targetX = this.player.getPositionVec().getX();
+        this.targetY = this.player.getPositionVec().getY();
+        this.targetZ = this.player.getPositionVec().getZ();
         this.isRunning = true;
         if (this.host.getNavigator() instanceof GroundPathNavigator || this.host.getNavigator() instanceof CreaturePathNavigator) {
             PathNavigator navigateGround = this.host.getNavigator();
@@ -252,7 +252,7 @@ public class TemptGoal extends Goal {
                 this.host.getNavigator().tryMoveToEntityLiving(this.player, this.speed);
             }
         	else {
-                this.host.directNavigator.setTargetPosition(new BlockPos((int) this.player.posX, (int) this.player.posY, (int) this.player.posZ), speed);
+                this.host.directNavigator.setTargetPosition(new BlockPos((int) this.player.getPositionVec().getX(), (int) this.player.getPositionVec().getY(), (int) this.player.getPositionVec().getZ()), speed);
             }
         }
     }

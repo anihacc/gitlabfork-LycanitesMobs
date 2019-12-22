@@ -112,7 +112,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 		// Set Home In Hive:
 		if(!this.getEntityWorld().isRemote && !this.hasHome()) {
 			if(this.hiveFoundationsSet()) {
-				this.setHome((int)this.posX, (int)this.posY, (int)this.posZ, 16F);
+				this.setHome((int)this.getPositionVec().getX(), (int)this.getPositionVec().getY(), (int)this.getPositionVec().getZ(), 16F);
 			}
 		}
 
@@ -143,7 +143,7 @@ public class EntityVespidQueen extends AgeableCreatureEntity implements IMob {
 		if(this.swarmLimit > 0 && this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("vespid").getEntityType(), 32D) < this.swarmLimit) {
 			float random = this.rand.nextFloat();
 			if(random <= 0.05F) {
-				LivingEntity minion = this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
+				LivingEntity minion = this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
 				if(minion instanceof AgeableCreatureEntity) {
 		    		((AgeableCreatureEntity)minion).setGrowingAge(((AgeableCreatureEntity) minion).growthTime);
 		    	}

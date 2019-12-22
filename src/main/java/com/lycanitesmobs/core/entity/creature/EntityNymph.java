@@ -86,15 +86,15 @@ public class EntityNymph extends TameableCreatureEntity {
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 1; ++i) {
                 this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
-                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-                        this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+                        this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
                         0.0D, 0.0D, 0.0D,
                         Blocks.RED_FLOWER.getStateId(Blocks.RED_FLOWER.getStateFromMeta(2)));
 				this.getEntityWorld().addParticle(ParticleTypes.BLOCK_CRACK,
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
 						0.0D, 0.0D, 0.0D,
 						Blocks.RED_FLOWER.getStateId(Blocks.RED_FLOWER.getStateFromMeta(8)));
             }*/

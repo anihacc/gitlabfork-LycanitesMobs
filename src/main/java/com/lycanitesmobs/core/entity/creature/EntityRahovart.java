@@ -139,13 +139,13 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         // Arena Snapping:
         if(this.hasArenaCenter()) {
             BlockPos arenaPos = this.getArenaCenter();
-            double arenaY = this.posY;
+            double arenaY = this.getPositionVec().getY();
             if (this.getEntityWorld().isAirBlock(arenaPos))
                 arenaY = arenaPos.getY();
             else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
                 arenaY = arenaPos.add(0, 1, 0).getY();
 
-            if (this.posX != arenaPos.getX() || this.posY != arenaY || this.posZ != arenaPos.getZ())
+            if (this.getPositionVec().getX() != arenaPos.getX() || this.getPositionVec().getY() != arenaY || this.getPositionVec().getZ() != arenaPos.getZ())
                 this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
         }
 
@@ -189,7 +189,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 if(target.abilities.disableDamage || target.isSpectator())
                     continue;
                 this.attackRanged(target, 1F);
-                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
+                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
                     for(int i = 0; i < 3; i++) {
                         EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
@@ -237,7 +237,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
                         this.onMinionDeath(minion, null);
-                        this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, Explosion.Mode.NONE);
+                        this.getEntityWorld().createExplosion(minion, minion.getPositionVec().getX(), minion.getPositionVec().getY(), minion.getPositionVec().getZ(), 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
                         continue;
@@ -250,8 +250,8 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                 this.hellfireEnergy = 0;
                 double angle = this.getRNG().nextFloat() * 360;
                 if(this.hasAttackTarget()) {
-                    double deltaX = this.getAttackTarget().posX - this.posX;
-                    double deltaZ = this.getAttackTarget().posZ - this.posZ;
+                    double deltaX = this.getAttackTarget().getPositionVec().getX() - this.getPositionVec().getX();
+                    double deltaZ = this.getAttackTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
                     angle = Math.atan2(deltaZ, deltaX) * 180 / Math.PI;
                 }
                 this.hellfireWaveAttack(angle);
@@ -292,7 +292,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
                     if (minion.hellfireEnergy >= 100) {
                         this.hellfireEnergy += 20;
                         this.onMinionDeath(minion, null);
-                        this.getEntityWorld().createExplosion(minion, minion.posX, minion.posY, minion.posZ, 1, Explosion.Mode.NONE);
+                        this.getEntityWorld().createExplosion(minion, minion.getPositionVec().getX(), minion.getPositionVec().getY(), minion.getPositionVec().getZ(), 1, Explosion.Mode.NONE);
                         minion.hellfireEnergy = 0;
                         minion.remove();
                         continue;
@@ -474,10 +474,10 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             double rotationRadians = Math.toRadians((hellfireOrbAngle + (hellfireOrbAngleOffset * i)) % 360);
             double x = (entity.getSize(Pose.STANDING).width * 1.25D) * Math.cos(rotationRadians) + Math.sin(rotationRadians);
             double z = (entity.getSize(Pose.STANDING).width * 1.25D) * Math.sin(rotationRadians) - Math.cos(rotationRadians);
-            hellfireOrb.posX = entity.posX - x;
-            hellfireOrb.posY = entity.posY + (entity.getSize(Pose.STANDING).height * 0.75F);
-            hellfireOrb.posZ = entity.posZ - z;
-            hellfireOrb.setPosition(entity.posX - x, entity.posY + (entity.getSize(Pose.STANDING).height * 0.75F), entity.posZ - z);
+            hellfireOrb.getPositionVec().getX() = entity.getPositionVec().getX() - x;
+            hellfireOrb.getPositionVec().getY() = entity.getPositionVec().getY() + (entity.getSize(Pose.STANDING).height * 0.75F);
+            hellfireOrb.getPositionVec().getZ() = entity.getPositionVec().getZ() - z;
+            hellfireOrb.setPosition(entity.getPositionVec().getX() - x, entity.getPositionVec().getY() + (entity.getSize(Pose.STANDING).height * 0.75F), entity.getPositionVec().getZ() - z);
             hellfireOrb.projectileLife = 5;
         }
     }
@@ -508,7 +508,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         this.triggerAttackCooldown();
         this.playAttackSound();
         EntityHellfireWave hellfireWave = new EntityHellfireWave(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWave.class), this.getEntityWorld(), this);
-        hellfireWave.posY = this.posY;
+        hellfireWave.getPositionVec().getY() = this.getPositionVec().getY();
         hellfireWave.rotation = angle;
         this.getEntityWorld().addEntity(hellfireWave);
     }
@@ -537,9 +537,9 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             this.getEntityWorld().addEntity(this.hellfireWallLeft);
         }
         this.hellfireWallLeft.time = 0;
-        this.hellfireWallLeft.posX = this.posX;
-        this.hellfireWallLeft.posY = this.posY;
-        this.hellfireWallLeft.posZ = this.posZ;
+        this.hellfireWallLeft.getPositionVec().getX() = this.getPositionVec().getX();
+        this.hellfireWallLeft.getPositionVec().getY() = this.getPositionVec().getY();
+        this.hellfireWallLeft.getPositionVec().getZ() = this.getPositionVec().getZ();
         this.hellfireWallLeft.rotation = hellfireWallNormal * hellfireWallAngle;
 
         // Right (Negative) Wall:
@@ -549,9 +549,9 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
             this.getEntityWorld().addEntity(this.hellfireWallRight);
         }
         this.hellfireWallRight.time = 0;
-        this.hellfireWallRight.posX = this.posX;
-        this.hellfireWallRight.posY = this.posY;
-        this.hellfireWallRight.posZ = this.posZ;
+        this.hellfireWallRight.getPositionVec().getX() = this.getPositionVec().getX();
+        this.hellfireWallRight.getPositionVec().getY() = this.getPositionVec().getY();
+        this.hellfireWallRight.getPositionVec().getZ() = this.getPositionVec().getZ();
         this.hellfireWallRight.rotation = 180 + (hellfireWallNormal * hellfireWallAngle);
     }
 
@@ -577,9 +577,9 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         EntityHellfireBarrier hellfireBarrier = new EntityHellfireBarrier(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireBarrier.class), this.getEntityWorld(), this);
         this.getEntityWorld().addEntity(hellfireBarrier);
         hellfireBarrier.time = 0;
-        hellfireBarrier.posX = this.posX;
-        hellfireBarrier.posY = this.posY;
-        hellfireBarrier.posZ = this.posZ;
+        hellfireBarrier.getPositionVec().getX() = this.getPositionVec().getX();
+        hellfireBarrier.getPositionVec().getY() = this.getPositionVec().getY();
+        hellfireBarrier.getPositionVec().getZ() = this.getPositionVec().getZ();
         hellfireBarrier.rotation = angle;
         this.hellfireBarriers.add(hellfireBarrier);
     }
@@ -595,9 +595,9 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
         for(EntityHellfireBarrier hellfireBarrier : this.hellfireBarriers) {
             hellfireBarrier.time = 0;
-            hellfireBarrier.posX = this.posX;
-            hellfireBarrier.posY = this.posY;
-            hellfireBarrier.posZ = this.posZ;
+            hellfireBarrier.getPositionVec().getX() = this.getPositionVec().getX();
+            hellfireBarrier.getPositionVec().getY() = this.getPositionVec().getY();
+            hellfireBarrier.getPositionVec().getZ() = this.getPositionVec().getZ();
         }
     }
 
@@ -650,7 +650,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.abilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.disableDamage && player.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }

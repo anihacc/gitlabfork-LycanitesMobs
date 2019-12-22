@@ -14,7 +14,7 @@ public class MobEventSound extends SimpleSound implements ITickableSound {
     protected boolean donePlaying;
 
     public MobEventSound(SoundEvent soundEvent, SoundCategory categoryIn, Entity entity, float volume, float pitch) {
-        super(soundEvent, categoryIn, volume, pitch, (float)entity.posX, (float)entity.posY, (float)entity.posZ);
+        super(soundEvent, categoryIn, volume, pitch, (float)entity.getPositionVec().getX(), (float)entity.getPositionVec().getY(), (float)entity.getPositionVec().getZ());
         this.entity = entity;
         this.repeat = true;
         this.volume = volume;
@@ -28,9 +28,9 @@ public class MobEventSound extends SimpleSound implements ITickableSound {
             this.donePlaying = true;
         }
         else {
-            this.x = (float)this.entity.posX;
-            this.y = (float)this.entity.posY;
-            this.z = (float)this.entity.posZ;
+            this.x = (float)this.entity.getPositionVec().getX();
+            this.y = (float)this.entity.getPositionVec().getY();
+            this.z = (float)this.entity.getPositionVec().getZ();
         }
     }
 

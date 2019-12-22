@@ -63,7 +63,7 @@ public class ItemSoulstone extends BaseItem {
 		LivingEntity entity = creatureInfo.createEntity(world);
 
 		if(entity != null) {
-			entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+			entity.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), player.rotationYaw, player.rotationPitch);
 			world.addEntity(entity);
 			if (!player.getEntityWorld().isRemote && entity instanceof TameableCreatureEntity) {
 				((TameableCreatureEntity) entity).setPlayerOwner(player);
@@ -122,9 +122,9 @@ public class ItemSoulstone extends BaseItem {
 		if(player.getEntityWorld().isRemote) {
 			for(int i = 0; i < 32; ++i) {
 				entity.getEntityWorld().addParticle(ParticleTypes.HAPPY_VILLAGER,
-						entity.posX + (4.0F * player.getRNG().nextFloat()) - 2.0F,
-						entity.posY + (4.0F * player.getRNG().nextFloat()) - 2.0F,
-						entity.posZ + (4.0F * player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getX() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getY() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
+						entity.getPositionVec().getZ() + (4.0F * player.getRNG().nextFloat()) - 2.0F,
 						0.0D, 0.0D, 0.0D);
 			}
 		}

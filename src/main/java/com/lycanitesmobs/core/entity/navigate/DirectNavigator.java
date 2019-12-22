@@ -52,7 +52,7 @@ public class DirectNavigator {
 	}
 	
 	public boolean setTargetPosition(Entity targetEntity, double setSpeedMod) {
-		return this.setTargetPosition(new BlockPos((int)targetEntity.posX, (int)targetEntity.posY, (int)targetEntity.posZ), setSpeedMod);
+		return this.setTargetPosition(new BlockPos((int)targetEntity.getPositionVec().getX(), (int)targetEntity.getPositionVec().getY(), (int)targetEntity.getPositionVec().getZ()), setSpeedMod);
 	}
 
 	// ========== Clear Target Position ===========
@@ -109,11 +109,11 @@ public class DirectNavigator {
 		double speed = this.host.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue() * 2;
 
 		BlockPos pos = this.host.getFacingPosition(this.targetPosition.getX(), this.targetPosition.getY(), this.targetPosition.getZ(), 1.0D, this.randomStrafeAngle);
-		//double dirX = (double)this.targetPosition.getX() + 0.5D - this.host.posX;
-		double dirX = pos.getX() - this.host.posX;
-		double dirY = (double)this.targetPosition.getY() + 0.1D - this.host.posY;
-		//double dirZ = (double)this.targetPosition.getZ() + 0.5D - this.host.posZ;
-		double dirZ = pos.getZ() - this.host.posZ;
+		//double dirX = (double)this.targetPosition.getX() + 0.5D - this.host.getPositionVec().getX();
+		double dirX = pos.getX() - this.host.getPositionVec().getX();
+		double dirY = (double)this.targetPosition.getY() + 0.1D - this.host.getPositionVec().getY();
+		//double dirZ = (double)this.targetPosition.getZ() + 0.5D - this.host.getPositionVec().getZ();
+		double dirZ = pos.getZ() - this.host.getPositionVec().getZ();
 
 		double motionX = ((Math.signum(dirX) * speed - this.host.getMotion().getX()) * 0.10000000149011612D*0.3D) * this.speedModifier;
 		double motionY = ((Math.signum(dirY) * speed - this.host.getMotion().getY()) * 0.10000000149011612D*0.3D) * this.speedModifier;
@@ -150,8 +150,8 @@ public class DirectNavigator {
   	// ==================================================
 	// ========== Rotate to Waypoint ==========
     protected void adjustRotationToWaypoint() {		
-		double distX = targetPosition.getX() - this.host.posX;
-		double distZ = targetPosition.getZ() - this.host.posZ;
+		double distX = targetPosition.getX() - this.host.getPositionVec().getX();
+		double distZ = targetPosition.getZ() - this.host.getPositionVec().getZ();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI);// - 90.0F;
 		float angle = MathHelper.wrapDegrees(fullAngle - this.host.rotationYaw);
 		if(angle > 30.0F) angle = 30.0F;
@@ -161,8 +161,8 @@ public class DirectNavigator {
 
 	// ========== Rotate to Target ==========
     public void adjustRotationToTarget(BlockPos target) {
-		double distX = target.getX() - this.host.posX;
-		double distZ = target.getZ() - this.host.posZ;
+		double distX = target.getX() - this.host.getPositionVec().getX();
+		double distZ = target.getZ() - this.host.getPositionVec().getZ();
 		float fullAngle = (float)(Math.atan2(distZ, distX) * 180.0D / Math.PI) - 90.0F;
 		float angle = MathHelper.wrapDegrees(fullAngle - this.host.rotationYaw);
 		this.host.rotationYaw += angle; 

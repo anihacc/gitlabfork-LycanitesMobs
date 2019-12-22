@@ -61,9 +61,9 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
         //this.setSize(projectileWidth, projectileHeight);
         this.projectileClass = entityClass;
         this.shootingEntity = entityLivingBase;
-        this.offsetX = this.posX - entityLivingBase.posX;
-        this.offsetY = this.posY - entityLivingBase.posY;
-        this.offsetZ = this.posZ - entityLivingBase.posZ;
+        this.offsetX = this.getPositionVec().getX() - entityLivingBase.getPositionVec().getX();
+        this.offsetY = this.getPositionVec().getY() - entityLivingBase.getPositionVec().getY();
+        this.offsetZ = this.getPositionVec().getZ() - entityLivingBase.getPositionVec().getZ();
         this.rapidTime = setTime;
         this.rapidDelay = setDelay;
         this.noClip = true;
@@ -83,9 +83,9 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 		//this.setSize(projectileWidth, projectileHeight);
 		this.projectileInfo = projectileInfo;
 		this.shootingEntity = entityLivingBase;
-		this.offsetX = this.posX - entityLivingBase.posX;
-		this.offsetY = this.posY - entityLivingBase.posY;
-		this.offsetZ = this.posZ - entityLivingBase.posZ;
+		this.offsetX = this.getPositionVec().getX() - entityLivingBase.getPositionVec().getX();
+		this.offsetY = this.getPositionVec().getY() - entityLivingBase.getPositionVec().getY();
+		this.offsetZ = this.getPositionVec().getZ() - entityLivingBase.getPositionVec().getZ();
 		this.rapidTime = setTime;
 		this.rapidDelay = setDelay;
 		this.noClip = true;
@@ -103,9 +103,11 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
     @Override
     public void tick() {
     	if(this.shootingEntity != null) {
-    		this.posX = shootingEntity.posX + this.offsetX;
-    		this.posY = shootingEntity.posY + this.offsetY;
-    		this.posZ = shootingEntity.posZ + this.offsetZ;
+    		this.setPosition(
+					shootingEntity.getPositionVec().getX() + this.offsetX,
+					shootingEntity.getPositionVec().getY() + this.offsetY,
+					shootingEntity.getPositionVec().getZ() + this.offsetZ
+			);
     	}
     	if(rapidTime > 0) {
 	    	if(projectileClass == null && this.projectileInfo == null) {
@@ -145,11 +147,11 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 
 	        if(this.shootingEntity == null) {
 				if(this.projectileInfo != null) {
-					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.posX, this.posY, this.posZ);
+					projectile = this.projectileInfo.createProjectile(this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
 					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, (float)this.projectileInfo.velocity, 0);
 				}
 				else {
-					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.posX, this.posY, this.posZ);
+					projectile = ProjectileManager.getInstance().createOldProjectile(this.projectileClass, world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
 					projectile.shoot(this.getMotion().x, this.getMotion().y, this.getMotion().z, 1, 1);
 				}
 	        }
@@ -164,7 +166,7 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
 				}
                 if(projectile instanceof ThrowableEntity) {
                     ThrowableEntity entityThrowable = (ThrowableEntity)projectile;
-                    entityThrowable.setPosition(this.shootingEntity.posX + this.offsetX, this.shootingEntity.posY + this.offsetY, this.shootingEntity.posZ + this.offsetZ);
+                    entityThrowable.setPosition(this.shootingEntity.getPositionVec().getX() + this.offsetX, this.shootingEntity.getPositionVec().getY() + this.offsetY, this.shootingEntity.getPositionVec().getZ() + this.offsetZ);
                 }
 	        }
 	        
@@ -194,9 +196,9 @@ public class RapidFireProjectileEntity extends BaseProjectileEntity {
     public void setPosition(double x, double y, double z) {
         super.setPosition(x, y, z);
         if(this.shootingEntity != null) {
-            this.offsetX = x - this.shootingEntity.posX;
-            this.offsetY = y - this.shootingEntity.posY;
-            this.offsetZ = z - this.shootingEntity.posZ;
+            this.offsetX = x - this.shootingEntity.getPositionVec().getX();
+            this.offsetY = y - this.shootingEntity.getPositionVec().getY();
+            this.offsetZ = z - this.shootingEntity.getPositionVec().getZ();
         }
     }
     

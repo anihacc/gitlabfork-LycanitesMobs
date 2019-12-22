@@ -78,7 +78,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
             if (this.nearbyCreatureCount(CreatureManager.getInstance().getCreature("wraith").getEntityType(), 64D) < 10) {
                 float random = this.rand.nextFloat();
                 if (random <= 0.1F) {
-                    this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
+                    this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
                 }
             }
         }

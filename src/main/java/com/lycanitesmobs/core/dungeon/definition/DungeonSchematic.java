@@ -236,7 +236,7 @@ public class DungeonSchematic {
 			}
 		}
 
-		if(!this.isValidBiome(world.getBiome(pos))) {
+		if(!this.isValidBiome(world.func_225523_d_().func_226836_a_(pos))) { //getBiomeManager().getBiome()
 			return false;
 		}
 

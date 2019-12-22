@@ -66,7 +66,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     		AgeableCreatureEntity parentSegment = this;
         	for(int segment = 0; segment < segmentCount; segment++) {
         		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
-        		segmentEntity.setLocationAndAngles(parentSegment.posX, parentSegment.posY, parentSegment.posZ, 0.0F, 0.0F);
+        		segmentEntity.setLocationAndAngles(parentSegment.getPositionVec().getX(), parentSegment.getPositionVec().getY(), parentSegment.getPositionVec().getZ(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
 				segmentEntity.setSubspecies(this.getSubspeciesIndex());
 				segmentEntity.setSizeScale(this.sizeScale);
@@ -118,7 +118,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 
 			if(size < CONCAPEDE_SIZE_MAX) {
 				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(lastSegment.getEntityWorld());
-	    		segmentEntity.setLocationAndAngles(lastSegment.posX, lastSegment.posY, lastSegment.posZ, 0.0F, 0.0F);
+	    		segmentEntity.setLocationAndAngles(lastSegment.getPositionVec().getX(), lastSegment.getPositionVec().getY(), lastSegment.getPositionVec().getZ(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(lastSegment);
 				segmentEntity.applySubspecies(this.getSubspeciesIndex());
 				segmentEntity.setSizeScale(this.sizeScale);

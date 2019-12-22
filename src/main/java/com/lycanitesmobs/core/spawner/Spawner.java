@@ -422,7 +422,7 @@ public class Spawner {
 		if(!this.ignoreBiomes) {
 			biomes = new ArrayList<>();
 			for(BlockPos spawnPos : spawnPositions) {
-				Biome biome = world.getBiome(spawnPos);
+				Biome biome = world.func_225523_d_().func_226836_a_(spawnPos); //getBiomeManager().getBiome()
 				if(!biomes.contains(biome))
 					biomes.add(biome);
 			}
@@ -449,7 +449,7 @@ public class Spawner {
 
 			// Choose Mob To Spawn:
 			MobSpawn mobSpawn = null;
-			Biome spawnBiome = world.getBiome(spawnPos);
+			Biome spawnBiome = world.func_225523_d_().func_226836_a_(spawnPos); //getBiomeManager().getBiome()
 			if(mobSpawns.containsKey(null)) {
 				mobSpawn = this.chooseMobToSpawn(world, mobSpawns.get(null));
 			}
@@ -732,7 +732,7 @@ public class Spawner {
 			entityCreature.forceNoDespawn = this.forceNoDespawn;
 			entityCreature.spawnedRare = level > 0;
 			if (this.blockBreakRadius > -1 && chain == 0) {
-				entityCreature.destroyArea((int) entityLiving.posX, (int) entityLiving.posY, (int) entityLiving.posZ - 1, 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
+				entityCreature.destroyArea((int) entityLiving.getPositionVec().getX(), (int) entityLiving.getPositionVec().getY(), (int) entityLiving.getPositionVec().getZ() - 1, 100, true, this.blockBreakRadius, this.chainSpawning ? player : null, chain + 1);
 			}
 
 			// Apply Mob Event:

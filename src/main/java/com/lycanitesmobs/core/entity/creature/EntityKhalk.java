@@ -118,13 +118,13 @@ public class EntityKhalk extends TameableCreatureEntity implements IMob, IGroupH
 		if(!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.lavaDeath && !this.isTamed()) {
 			int lavaWidth = (int)Math.floor(this.getSize(Pose.STANDING).width) - 1;
 			int lavaHeight = (int)Math.floor(this.getSize(Pose.STANDING).height) - 1;
-			for(int x = (int)this.posX - lavaWidth; x <= (int)this.posX + lavaWidth; x++) {
-				for(int y = (int)this.posY; y <= (int)this.posY + lavaHeight; y++) {
-					for(int z = (int)this.posZ - lavaWidth; z <= (int)this.posZ + lavaWidth; z++) {
+			for(int x = (int)this.getPositionVec().getX() - lavaWidth; x <= (int)this.getPositionVec().getX() + lavaWidth; x++) {
+				for(int y = (int)this.getPositionVec().getY(); y <= (int)this.getPositionVec().getY() + lavaHeight; y++) {
+					for(int z = (int)this.getPositionVec().getZ() - lavaWidth; z <= (int)this.getPositionVec().getZ() + lavaWidth; z++) {
 						Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
 						if(block == Blocks.AIR) {
 							BlockState blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 4);
-							if(x == (int)this.posX && y == (int)this.posY && z == (int)this.posZ)
+							if(x == (int)this.getPositionVec().getX() && y == (int)this.getPositionVec().getY() && z == (int)this.getPositionVec().getZ())
 								blockState = blockState = Blocks.LAVA.getDefaultState().with(FlowingFluidBlock.LEVEL, 5);
 							this.getEntityWorld().setBlockState(new BlockPos(x, y, z), blockState, 3);
 						}

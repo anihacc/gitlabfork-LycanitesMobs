@@ -116,7 +116,7 @@ public class AttackMeleeGoal extends Goal {
             return false;
         if(!this.attackTarget.isAlive())
             return false;
-        if(this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
+        if(this.host.getDistanceSq(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPositionVec().getZ()) > this.maxChaseDistance)
         	return false;
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.attackTarget.getClass()))
             return false;
@@ -125,7 +125,7 @@ public class AttackMeleeGoal extends Goal {
             // Set Path:
         	if(!this.host.useDirectNavigator()) {
 				if(this.host.isFlying()) {
-					this.pathToTarget = this.host.getNavigator().func_225466_a(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, 0);
+					this.pathToTarget = this.host.getNavigator().func_225466_a(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.getPositionVec().getZ(), 0);
 				}
 				else {
 					this.pathToTarget = this.host.getNavigator().getPathToEntityLiving(this.attackTarget, 0);
@@ -137,7 +137,7 @@ public class AttackMeleeGoal extends Goal {
 
             // Set Direct Target:
         	else {
-				return this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.posX, (int) attackTarget.posY + this.host.getFlightOffset(), (int) attackTarget.posZ), this.speed);
+				return this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.getPositionVec().getX(), (int) attackTarget.getPositionVec().getY() + this.host.getFlightOffset(), (int) attackTarget.getPositionVec().getZ()), this.speed);
 			}
         }
 
@@ -160,14 +160,14 @@ public class AttackMeleeGoal extends Goal {
         	return false;
 		if(!this.host.isAlive() || !this.attackTarget.isAlive())
         	return false;
-        if(this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) > this.maxChaseDistance)
+        if(this.host.getDistanceSq(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPositionVec().getZ()) > this.maxChaseDistance)
         	return false;
         if(!this.longMemory)
         	if(!this.host.useDirectNavigator() && this.host.getNavigator().noPath())
         		return false;
         	else if(this.host.useDirectNavigator() && (this.host.directNavigator.atTargetPosition() || !this.host.directNavigator.isTargetPositionValid()))
         		return false;
-        return this.host.positionNearHome(MathHelper.floor(attackTarget.posX), MathHelper.floor(attackTarget.posY), MathHelper.floor(attackTarget.posZ));
+        return this.host.positionNearHome(MathHelper.floor(attackTarget.getPositionVec().getX()), MathHelper.floor(attackTarget.getPositionVec().getY()), MathHelper.floor(attackTarget.getPositionVec().getZ()));
     }
 	
     
@@ -180,7 +180,7 @@ public class AttackMeleeGoal extends Goal {
 			this.host.getNavigator().setPath(this.pathToTarget, this.speed);
 		}
     	else if(attackTarget != null) {
-			this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.posX, (int) (attackTarget.getBoundingBox().minY + this.host.getFlightOffset()), (int) attackTarget.posZ), speed);
+			this.host.directNavigator.setTargetPosition(new BlockPos((int) attackTarget.getPositionVec().getX(), (int) (attackTarget.getBoundingBox().minY + this.host.getFlightOffset()), (int) attackTarget.getPositionVec().getZ()), speed);
 		}
         this.repathTime = 0;
     }
@@ -209,7 +209,7 @@ public class AttackMeleeGoal extends Goal {
 			if(!this.host.useDirectNavigator() && --this.repathTime <= 0) {
 				this.repathTime = this.failedPathFindingPenalty + 4 + this.host.getRNG().nextInt(7);
 				if(this.host.isFlying()) {
-					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.posZ, this.speed);
+					this.host.getNavigator().tryMoveToXYZ(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.getPositionVec().getZ(), this.speed);
 				}
 				else {
 					this.host.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.speed);
@@ -228,13 +228,13 @@ public class AttackMeleeGoal extends Goal {
 				}
         	}
 			else if(this.host.useDirectNavigator()) {
-        		this.host.directNavigator.setTargetPosition(new BlockPos((int) this.attackTarget.posX, (int) (this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset()), (int) this.attackTarget.posZ), speed);
+        		this.host.directNavigator.setTargetPosition(new BlockPos((int) this.attackTarget.getPositionVec().getX(), (int) (this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset()), (int) this.attackTarget.getPositionVec().getZ()), speed);
         	}
         }
         
         // Damage Target:
-		LycanitesMobs.logDebug("Attack", "Attack range: " + this.host.getMeleeAttackRange(this.attackTarget, this.attackRange) + "/" + this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ));
-        if(this.host.getDistanceSq(this.attackTarget.posX, this.attackTarget.getBoundingBox().minY, this.attackTarget.posZ) <= this.host.getMeleeAttackRange(this.attackTarget, this.attackRange)) {
+		LycanitesMobs.logDebug("Attack", "Attack range: " + this.host.getMeleeAttackRange(this.attackTarget, this.attackRange) + "/" + this.host.getDistanceSq(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPositionVec().getZ()));
+        if(this.host.getDistanceSq(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPositionVec().getZ()) <= this.host.getMeleeAttackRange(this.attackTarget, this.attackRange)) {
             if(--this.attackTime <= 0) {
                 this.attackTime = this.host.getMeleeCooldown();
                 if(!this.host.getHeldItemMainhand().isEmpty())
@@ -243,8 +243,8 @@ public class AttackMeleeGoal extends Goal {
             }
 
             // Move helper won't change the Yaw if the target is already close by
-            double d0 = this.host.posX - this.attackTarget.posX;
-            double d1 = this.host.posZ - this.attackTarget.posZ;
+            double d0 = this.host.getPositionVec().getX() - this.attackTarget.getPositionVec().getX();
+            double d1 = this.host.getPositionVec().getZ() - this.attackTarget.getPositionVec().getZ();
             float f = (float)(Math.atan2(d1, d0) * 180.0D / Math.PI) + 90.0F;
             f = MathHelper.wrapDegrees(f - this.host.rotationYaw);
             if(f < -30f) f = -30f;

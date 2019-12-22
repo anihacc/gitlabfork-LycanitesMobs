@@ -81,9 +81,9 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
         	this.farmingTick++;
 	        int farmingRange = 16;
 	        int farmingHeight = 4;
-	        for(int x = (int)this.posX - farmingRange; x <= (int)this.posX + farmingRange; x++) {
-	        	for(int y = (int)this.posY - farmingHeight; y <= (int)this.posY + farmingHeight; y++) {
-	        		for(int z = (int)this.posZ - farmingRange; z <= (int)this.posZ + farmingRange; z++) {
+	        for(int x = (int)this.getPositionVec().getX() - farmingRange; x <= (int)this.getPositionVec().getX() + farmingRange; x++) {
+	        	for(int y = (int)this.getPositionVec().getY() - farmingHeight; y <= (int)this.getPositionVec().getY() + farmingHeight; y++) {
+	        		for(int z = (int)this.getPositionVec().getZ() - farmingRange; z <= (int)this.getPositionVec().getZ() + farmingRange; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
 	        			Block farmingBlock = this.getEntityWorld().getBlockState(pos).getBlock();
 	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS) {
@@ -119,9 +119,9 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
         if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles)
             for(int i = 0; i < 2; ++i) {
                 this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.TALL_GRASS.getDefaultState()),
-                        this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-                        this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-                        this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+                        this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+                        this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
                         0.0D, 0.0D, 0.0D);
             }
     }

@@ -130,11 +130,11 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         int posY;
         if (this.getCanSwim() && this.entity.canSwim()) { // If can swim and is swimming underwater
             posY = (int)this.entity.getBoundingBox().minY;
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
+            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
 
             for (IFluidState fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos); fluidState.isTagged(FluidTags.WATER); fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos)) {
                 ++posY;
-                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.posX), posY, MathHelper.floor(this.entity.posZ));
+                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
             }
         }
 

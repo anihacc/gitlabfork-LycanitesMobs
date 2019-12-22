@@ -98,8 +98,8 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         // Particles:
         if(this.getEntityWorld().isRemote)
             for(int i = 0; i < 2; ++i) {
-                this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-                this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             }
     }
 
@@ -206,15 +206,15 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.posY -= this.getSize(Pose.STANDING).height / 4;
+            projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
 
             // Accuracy:
             float accuracy = 4.0F * (this.getRNG().nextFloat() - 0.5F);
 
             // Set Velocities:
-            double d0 = target.posX - this.posX + accuracy;
-            double d1 = target.posY + (double)target.getEyeHeight() - 1.100000023841858D - projectile.posY + accuracy;
-            double d2 = target.posZ - this.posZ + accuracy;
+            double d0 = target.getPositionVec().getX() - this.getPositionVec().getX() + accuracy;
+            double d1 = target.getPositionVec().getY() + (double)target.getEyeHeight() - 1.100000023841858D - projectile.getPositionVec().getY() + accuracy;
+            double d2 = target.getPositionVec().getZ() - this.getPositionVec().getZ() + accuracy;
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
             float velocity = 1.2F;
             projectile.shoot(d0, d1 + (double)f1, d2, velocity, 6.0F);
@@ -331,7 +331,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
                 projectile.setProjectileScale(1f);
 
                 // Y Offset:
-                projectile.posY -= this.getSize(Pose.STANDING).height / 4;
+                projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
 
                 // Launch:
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

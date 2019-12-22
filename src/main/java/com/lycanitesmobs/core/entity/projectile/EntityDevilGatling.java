@@ -55,7 +55,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     public void tick() {
     	super.tick();
 
-    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
@@ -110,7 +110,7 @@ public class EntityDevilGatling extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(ParticleTypes.EXPLOSION, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.EXPLOSION, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
     }
     
     

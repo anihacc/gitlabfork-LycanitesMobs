@@ -105,7 +105,7 @@ public class WatchClosestGoal extends Goal {
    	// ==================================================
 	@Override
     public void tick() {
-        this.host.getLookController().setLookPosition(this.closestEntity.posX, this.closestEntity.posY + (double)this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 10.0F, (float)this.host.getVerticalFaceSpeed());
+        this.host.getLookController().setLookPosition(this.closestEntity.getPositionVec().getX(), this.closestEntity.getPositionVec().getY() + (double)this.closestEntity.getEyeHeight(), this.closestEntity.getPositionVec().getZ(), 10.0F, (float)this.host.getVerticalFaceSpeed());
         this.lookTime--;
     }
 }

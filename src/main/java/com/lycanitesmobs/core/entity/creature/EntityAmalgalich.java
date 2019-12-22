@@ -112,13 +112,13 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         // Arena Snapping:
         if(this.hasArenaCenter()) {
             BlockPos arenaPos = this.getArenaCenter();
-            double arenaY = this.posY;
+            double arenaY = this.getPositionVec().getY();
             if (this.getEntityWorld().isAirBlock(arenaPos))
                 arenaY = arenaPos.getY();
             else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
                 arenaY = arenaPos.add(0, 1, 0).getY();
 
-            if (this.posX != arenaPos.getX() || this.posY != arenaY || this.posZ != arenaPos.getZ())
+            if (this.getPositionVec().getX() != arenaPos.getX() || this.getPositionVec().getY() != arenaY || this.getPositionVec().getZ() != arenaPos.getZ())
                 this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
         }
 
@@ -232,9 +232,9 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
             int extinguishWidth = 10;
             int extinguishHeight = 30;
             if(!this.getEntityWorld().isRemote) {
-                for(int x = (int)minion.posX - extinguishWidth; x <= (int)minion.posX + extinguishWidth; x++) {
-                    for(int y = (int)minion.posY - extinguishHeight; y <= (int)minion.posY + 2; y++) {
-                        for(int z = (int)minion.posZ - extinguishWidth; z <= (int)minion.posZ + extinguishWidth; z++) {
+                for(int x = (int)minion.getPositionVec().getX() - extinguishWidth; x <= (int)minion.getPositionVec().getX() + extinguishWidth; x++) {
+                    for(int y = (int)minion.getPositionVec().getY() - extinguishHeight; y <= (int)minion.getPositionVec().getY() + 2; y++) {
+                        for(int z = (int)minion.getPositionVec().getZ() - extinguishWidth; z <= (int)minion.getPositionVec().getZ() + extinguishWidth; z++) {
                             Block block = this.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                             if(block == ObjectManager.getBlock("shadowfire")) {
                                 BlockPos placePos = new BlockPos(x, y, z);
@@ -293,7 +293,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.abilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.disableDamage && player.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }

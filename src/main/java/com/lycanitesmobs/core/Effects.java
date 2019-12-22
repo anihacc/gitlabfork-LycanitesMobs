@@ -458,8 +458,8 @@ public class Effects {
 		if(repulsion != null) {
 			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
 				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
-				double xDist = target.posX - attacker.posX;
-				double zDist = target.posZ - attacker.posZ;
+				double xDist = target.getPositionVec().getX() - attacker.getPositionVec().getX();
+				double zDist = target.getPositionVec().getZ() - attacker.getPositionVec().getZ();
 				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 				double motionCap = 10;
 				if (attacker.getMotion().getX() < motionCap && attacker.getMotion().getX() > -motionCap && attacker.getMotion().getZ() < motionCap && attacker.getMotion().getZ() > -motionCap) {
@@ -507,7 +507,7 @@ public class Effects {
 	/** This uses the player sleep in bed event to spawn mobs. **/
 	@SubscribeEvent
 	public void onSleep(PlayerSleepInBedEvent event) {
-		PlayerEntity player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayer();
 		if(player == null || player.getEntityWorld().isRemote || event.isCanceled())
 			return;
 

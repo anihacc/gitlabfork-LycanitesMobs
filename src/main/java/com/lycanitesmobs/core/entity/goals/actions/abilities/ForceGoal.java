@@ -135,8 +135,8 @@ public class ForceGoal extends Goal {
 			if(!(entity instanceof LivingEntity)) {
 				continue;
 			}
-			double xDist = this.host.posX - entity.posX;
-			double zDist = this.host.posZ - entity.posZ;
+			double xDist = this.host.getPositionVec().getX() - entity.getPositionVec().getX();
+			double zDist = this.host.getPositionVec().getZ() - entity.getPositionVec().getZ();
 			double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 			ServerPlayerEntity player = null;
 			if (entity instanceof ServerPlayerEntity) {

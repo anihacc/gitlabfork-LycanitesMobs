@@ -189,7 +189,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             for(PlayerEntity target : this.playerTargets) {
                 if(target.abilities.disableDamage || target.isSpectator())
                     continue;
-                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
+                if(CreatureManager.getInstance().config.bossAntiFlight > 0 && target.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
                     for(int i = 0; i < 3; i++) {
                         EntityWraith minion = (EntityWraith)CreatureManager.getInstance().getCreature("wraith").createEntity(this.getEntityWorld());
                         this.summonMinion(minion, this.getRNG().nextDouble() * 360, 5);
@@ -291,9 +291,9 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
             this.arenaJumpingTime--;
             if(this.updateTick % 4 == 0) {
                 double dropForce = -0.5D;
-                this.noClip = this.posY > this.currentArenaNode.pos.getY() + 8;
-                if(this.posY < this.currentArenaNode.pos.getY()) {
-                    this.setPosition(this.posX, this.currentArenaNode.pos.getY(), this.posZ);
+                this.noClip = this.getPositionVec().getY() > this.currentArenaNode.pos.getY() + 8;
+                if(this.getPositionVec().getY() < this.currentArenaNode.pos.getY()) {
+                    this.setPosition(this.getPositionVec().getX(), this.currentArenaNode.pos.getY(), this.getPositionVec().getZ());
                     dropForce = 0;
                 }
                 this.leap(200, dropForce, this.currentArenaNode.pos); // Leap for XZ movement and negative height for increased weight on update.
@@ -305,13 +305,13 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Snap To Node:
         BlockPos arenaPos = this.currentArenaNode.pos;
-        double arenaY = this.posY;
+        double arenaY = this.getPositionVec().getY();
         if (this.getEntityWorld().isAirBlock(arenaPos))
             arenaY = arenaPos.getY();
         else if (this.getEntityWorld().isAirBlock(arenaPos.add(0, 1, 0)))
             arenaY = arenaPos.add(0, 1, 0).getY();
 
-        if(this.posX != arenaPos.getX() || this.posY != arenaY || this.posZ != arenaPos.getZ())
+        if(this.getPositionVec().getX() != arenaPos.getX() || this.getPositionVec().getY() != arenaY || this.getPositionVec().getZ() != arenaPos.getZ())
             this.setPosition(arenaPos.getX(), arenaY, arenaPos.getZ());
     }
 
@@ -378,7 +378,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 for (int i = 0; i < 5 * playerCount; i++) {
                     EntityCacodemon minion = (EntityCacodemon)CreatureManager.getInstance().getCreature("cacodemon").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
-                    minion.posY += 10 + this.getRNG().nextInt(20);
+                    minion.getPositionVec().getY() += 10 + this.getRNG().nextInt(20);
                     this.cacodemonMinions.add(minion);
                 }
             }
@@ -441,16 +441,16 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Y Offset:
         BlockPos offset = this.getFacingPosition(this, 8, angle);
-        projectile.posX = offset.getX();
-        projectile.posY = offset.getY() + (this.getSize(Pose.STANDING).height * 0.5D);
-        projectile.posZ = offset.getZ();
+        projectile.getPositionVec().getX() = offset.getX();
+        projectile.getPositionVec().getY() = offset.getY() + (this.getSize(Pose.STANDING).height * 0.5D);
+        projectile.getPositionVec().getZ() = offset.getZ();
 
         // Set Velocities:
         float range = 20 + (20 * this.getRNG().nextFloat());
         BlockPos target = this.getFacingPosition(this, range, angle);
-        double d0 = target.getX() - projectile.posX;
-        double d1 = target.getY() - projectile.posY;
-        double d2 = target.getZ() - projectile.posZ;
+        double d0 = target.getX() - projectile.getPositionVec().getX();
+        double d1 = target.getY() - projectile.getPositionVec().getY();
+        double d2 = target.getZ() - projectile.getPositionVec().getZ();
         float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.1F;
         float velocity = 1.2F;
         projectile.shoot(d0, d1 + (double) f1, d2, velocity, 0.0F);
@@ -472,7 +472,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 EntityTrite trite = (EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
-                trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
+                trite.setLocationAndAngles(this.getPositionVec().getX() + (double)f, this.getPositionVec().getY() + 0.5D, this.getPositionVec().getZ() + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());
                 this.getEntityWorld().addEntity(trite);
@@ -534,7 +534,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
         }
         if(entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity)entity;
-            if (!player.abilities.disableDamage && player.posY > this.posY + CreatureManager.getInstance().config.bossAntiFlight) {
+            if (!player.abilities.disableDamage && player.getPositionVec().getY() > this.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight) {
                 return false;
             }
         }

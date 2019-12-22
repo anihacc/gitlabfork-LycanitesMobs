@@ -52,16 +52,16 @@ public class PaddleGoal extends Goal {
 	@Override
     public void tick() {
     	if(this.sink) {
-	    	double targetY = this.host.posY;
+	    	double targetY = this.host.getPositionVec().getY();
 	    	if(!this.host.useDirectNavigator()) {
 	    		if(!this.host.getNavigator().noPath()) {
                     targetY = this.host.getNavigator().getPath().getFinalPathPoint().y;
                     if(this.host.hasAttackTarget())
-                        targetY = this.host.getAttackTarget().posY;
+                        targetY = this.host.getAttackTarget().getPositionVec().getY();
                     else if(this.host.hasParent())
-                        targetY = this.host.getParentTarget().posY;
+                        targetY = this.host.getParentTarget().getPositionVec().getY();
                     else if(this.host.hasMaster())
-                        targetY = this.host.getMasterTarget().posY;
+                        targetY = this.host.getMasterTarget().getPositionVec().getY();
                 }
 	    	}
 	    	else {
@@ -70,7 +70,7 @@ public class PaddleGoal extends Goal {
                 }
 	    	}
 
-			if (this.host.posY < targetY) {
+			if (this.host.getPositionVec().getY() < targetY) {
 				this.host.getJumpController().setJumping();
 			}
 			else {

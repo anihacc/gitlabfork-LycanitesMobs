@@ -83,7 +83,7 @@ public class EntityPoop extends BaseProjectileEntity {
 		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
 			for (int i = 0; i < 8; ++i)
 				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.PODZOL.getDefaultState()),
-						this.posX, this.posY, this.posZ,
+						this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(),
 						0.0D, 0.0D, 0.0D);
 		}
     }

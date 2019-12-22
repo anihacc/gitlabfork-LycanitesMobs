@@ -85,9 +85,9 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 	        	int distance = 2;
 	        	String targetName = "torch";
 	        	List possibleTargets = new ArrayList<BlockPos>();
-	            for(int x = (int)this.posX - distance; x < (int)this.posX + distance; x++) {
-	            	for(int y = (int)this.posY - distance; y < (int)this.posY + distance; y++) {
-	            		for(int z = (int)this.posZ - distance; z < (int)this.posZ + distance; z++) {
+	            for(int x = (int)this.getPositionVec().getX() - distance; x < (int)this.getPositionVec().getX() + distance; x++) {
+	            	for(int y = (int)this.getPositionVec().getY() - distance; y < (int)this.getPositionVec().getY() + distance; y++) {
+	            		for(int z = (int)this.getPositionVec().getZ() - distance; z < (int)this.getPositionVec().getZ() + distance; z++) {
                             BlockPos pos = new BlockPos(x, y, z);
 	            			Block searchBlock = this.getEntityWorld().getBlockState(pos).getBlock();
 	                    	if(searchBlock != null && searchBlock != Blocks.AIR) {

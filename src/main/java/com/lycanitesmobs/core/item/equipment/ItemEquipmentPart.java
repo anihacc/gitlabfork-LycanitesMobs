@@ -20,6 +20,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -28,7 +29,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Vector4f;
 import java.util.*;
 
 public class ItemEquipmentPart extends BaseItem {
@@ -231,21 +231,21 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	/** Returns the dyed color for the provided ItemStack. **/
-	public Vector4f getColor(ItemStack itemStack) {
+	public Vec3d getColor(ItemStack itemStack) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
-		float r = 1;
-		float g = 1;
-		float b = 1;
+		double r = 1;
+		double g = 1;
+		double b = 1;
 		if(nbt.contains("equipmentColorR")) {
 			r = nbt.getFloat("equipmentColorR");
 		}
 		if(nbt.contains("equipmentColorG")) {
-			r = nbt.getFloat("equipmentColorG");
+			g = nbt.getFloat("equipmentColorG");
 		}
 		if(nbt.contains("equipmentColorB")) {
-			r = nbt.getFloat("equipmentColorB");
+			b = nbt.getFloat("equipmentColorB");
 		}
-		return new Vector4f(r, g, b, 1);
+		return new Vec3d(r, g, b);
 	}
 
 

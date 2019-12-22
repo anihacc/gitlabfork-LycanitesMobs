@@ -81,8 +81,8 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 
                 // Drop Creeper On Target:
                 if(this.getPickupEntity() instanceof CreeperEntity && this.hasAttackTarget() && !(this.getAttackTarget() instanceof CreeperEntity)) {
-                    double distance = new Vec3d(this.posX, 0, this.posZ).distanceTo(new Vec3d(this.getAttackTarget().posX, 0, this.getAttackTarget().posZ));
-                    if(distance <= 2D && this.posY > this.getAttackTarget().posY) {
+                    double distance = new Vec3d(this.getPositionVec().getX(), 0, this.getPositionVec().getZ()).distanceTo(new Vec3d(this.getAttackTarget().getPositionVec().getX(), 0, this.getAttackTarget().getPositionVec().getZ()));
+                    if(distance <= 2D && this.getPositionVec().getY() > this.getAttackTarget().getPositionVec().getY()) {
                         this.getPickupEntity().setRevengeTarget(this.getAttackTarget());
                         this.dropPickupEntity();
                         this.creeperDropCooldown = 6 * 20;
@@ -94,7 +94,7 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
                     if (this.ticksExisted % 100 == 0 && this.getRNG().nextBoolean()) {
                         if (this.getPickupEntity() instanceof PlayerEntity) {
                             for (int distToGround = 0; distToGround < 8; distToGround++) {
-                                Block searchBlock = this.getEntityWorld().getBlockState(new BlockPos((int) this.posX, (int) this.posY - distToGround, (int) this.posZ)).getBlock();
+                                Block searchBlock = this.getEntityWorld().getBlockState(new BlockPos((int) this.getPositionVec().getX(), (int) this.getPositionVec().getY() - distToGround, (int) this.getPositionVec().getZ())).getBlock();
                                 if (searchBlock != null && searchBlock != Blocks.AIR) {
                                     this.dropPickupEntity();
                                     this.leap(1.0F, 2.0D);
@@ -109,9 +109,9 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
 	    	
 	    	/*/ Random Swooping:
 	    	else if(this.hasAttackTarget() && !this.hasPickupEntity() && this.getDistance(this.getAttackTarget()) > 2 && this.getRNG().nextInt(20) == 0) {
-	    		if(this.posY - 1 > this.getAttackTarget().posY)
+	    		if(this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())
 	    			this.leap(6.0F, -1.0D, this.getAttackTarget());
-	    		else if(this.posY + 1 < this.getAttackTarget().posY)
+	    		else if(this.getPositionVec().getY() + 1 < this.getAttackTarget().getPositionVec().getY())
 	    			this.leap(6.0F, 1.0D, this.getAttackTarget());
 	    		else
 	    			this.leap(6.0F, 0D, this.getAttackTarget());

@@ -99,9 +99,9 @@ public class EntityRaiko extends RideableCreatureEntity implements IMob {
     	    	
     	    	/*/ Random Swooping:
     	    	else if(this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 2 && this.getRNG().nextInt(20) == 0) {
-    	    		if(this.posY - 1 > this.getAttackTarget().posY)
+    	    		if(this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())
     	    			this.leap(1.0F, -1.0D, this.getAttackTarget());
-    	    		else if(this.posY + 1 < this.getAttackTarget().posY)
+    	    		else if(this.getPositionVec().getY() + 1 < this.getAttackTarget().getPositionVec().getY())
     	    			this.leap(1.0F, 1.0D, this.getAttackTarget());
     	    	}*/
             }

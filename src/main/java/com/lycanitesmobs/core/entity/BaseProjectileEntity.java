@@ -78,7 +78,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
     public BaseProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world, LivingEntity entityLiving) {
 	   this(entityType, world);
-	   this.setPosition(entityLiving.posX, entityLiving.posY + entityLiving.getEyeHeight(), entityLiving.posZ);
+	   this.setPosition(entityLiving.getPositionVec().getX(), entityLiving.getPositionVec().getY() + entityLiving.getEyeHeight(), entityLiving.getPositionVec().getZ());
 	   this.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0F, 1.1F, 1.0F);
 	   this.owner = entityLiving;
 	   this.setup();
@@ -136,18 +136,16 @@ public class BaseProjectileEntity extends ThrowableEntity {
 		  this.inGround = false;
 		  this.timeUntilPortal = this.getPortalCooldown();
 	   }
-	   double initX = this.posX;
-	   double initY = this.posY;
-	   double initZ = this.posZ;
+	   double initX = this.getPositionVec().getX();
+	   double initY = this.getPositionVec().getY();
+	   double initZ = this.getPositionVec().getZ();
 
 		super.tick();
 
 	   if(!this.movement) {
-		  this.posX = initX;
-		  this.posY = initY;
-		  this.posZ = initZ;
+		  this.setPosition(initX, initY, initZ);
 		  this.setMotion(0, 0, 0);
-		  this.setPosition(this.posX, this.posY, this.posZ);
+		  this.setPosition(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());
 	   }
     	
     	// Terrain Destruction
@@ -457,7 +455,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	//========== On Impact Particles/Sounds Client Side ==========
 	public void onImpactVisuals() {
     	 //for(int i = 0; i < 8; ++i)
-    		 //this.getEntityWorld().addParticle("particlename", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		 //this.getEntityWorld().addParticle("particlename", this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
 	}
 	
 	
@@ -560,9 +558,9 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	   double xAmount = -Math.sin(angle);
 	   double zAmount = Math.cos(angle);
 	   double[] coords = new double[3];
-	   coords[0] = entity.posX + (distance * xAmount);
-	   coords[1] = entity.posY;
-	   coords[2] = entity.posZ + (distance * zAmount);
+	   coords[0] = entity.getPositionVec().getX() + (distance * xAmount);
+	   coords[1] = entity.getPositionVec().getY();
+	   coords[2] = entity.getPositionVec().getZ() + (distance * zAmount);
 	   return coords;
     }
 

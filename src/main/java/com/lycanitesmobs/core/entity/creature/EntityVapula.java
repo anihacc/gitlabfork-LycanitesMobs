@@ -67,14 +67,14 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
 			if (this.getSubspeciesIndex() == 3 && !this.isPetType("familiar")){
 				// Random Charging:
 				if (this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
-					if (this.posY - 1 > this.getAttackTarget().posY)
+					if (this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())
 						this.leap(6.0F, -1.0D, this.getAttackTarget());
-					else if (this.posY + 1 < this.getAttackTarget().posY)
+					else if (this.getPositionVec().getY() + 1 < this.getAttackTarget().getPositionVec().getY())
 						this.leap(6.0F, 1.0D, this.getAttackTarget());
 					else
 						this.leap(6.0F, 0D, this.getAttackTarget());
 					if (this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.blockBreakRadius > -1 && !this.isTamed()) {
-						this.destroyArea((int) this.posX, (int) this.posY, (int) this.posZ, 10, true, this.blockBreakRadius);
+						this.destroyArea((int) this.getPositionVec().getX(), (int) this.getPositionVec().getY(), (int) this.getPositionVec().getZ(), 10, true, this.blockBreakRadius);
 					}
 				}
 			}
@@ -84,9 +84,9 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
 		if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
 			for(int i = 0; i < 2; ++i) {
 				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.DIAMOND_BLOCK.getDefaultState()),
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
 						0.0D, 0.0D, 0.0D);
 			}
 		}

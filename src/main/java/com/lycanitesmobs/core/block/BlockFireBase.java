@@ -1,18 +1,16 @@
 package com.lycanitesmobs.core.block;
 
 
-import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.block.effect.BlockShadowfire;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -133,7 +131,7 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void tick(BlockState blockState, World world, BlockPos pos, Random rand) {
+    public void func_225534_a_(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) { //tick()
         if (!world.isAreaLoaded(pos, 2)) {
             return;
         }
@@ -322,8 +320,8 @@ public class BlockFireBase extends BlockBase {
     // ==================================================
     //                      Rendering
     // ==================================================
-    @Override
+    /*@Override Redundant?
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
-    }
+    }*/
 }

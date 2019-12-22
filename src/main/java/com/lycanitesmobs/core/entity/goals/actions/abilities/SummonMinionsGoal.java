@@ -119,7 +119,7 @@ public class SummonMinionsGoal extends Goal {
 			for (PlayerEntity target : this.host.playerTargets) {
 				if(target.abilities.disableDamage || target.isSpectator())
 					continue;
-				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.posY > this.host.posY + CreatureManager.getInstance().config.bossAntiFlight + 1) {
+				if (CreatureManager.getInstance().config.bossAntiFlight > 0 && target.getPositionVec().getY() > this.host.getPositionVec().getY() + CreatureManager.getInstance().config.bossAntiFlight + 1) {
 					this.summonMinion(target);
 				}
 			}

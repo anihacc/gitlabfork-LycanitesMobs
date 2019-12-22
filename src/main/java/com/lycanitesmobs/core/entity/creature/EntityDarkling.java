@@ -78,10 +78,10 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
             this.noClip = true;
 
             // Movement:
-            Vec3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().posX, this.getLatchTarget().posY + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().posZ, this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
+            Vec3d latchPos = this.getFacingPositionDouble(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY() + (this.getLatchTarget().getSize(Pose.STANDING).height * this.latchHeight), this.getLatchTarget().getPositionVec().getZ(), this.getLatchTarget().getSize(Pose.STANDING).width * 0.5D, this.latchAngle);
             this.setPosition(latchPos.x, latchPos.y, latchPos.z);
-            double distanceX = this.getLatchTarget().posX - this.posX;
-            double distanceZ = this.getLatchTarget().posZ - this.posZ;
+            double distanceX = this.getLatchTarget().getPositionVec().getX() - this.getPositionVec().getX();
+            double distanceZ = this.getLatchTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
             this.renderYawOffset = this.rotationYaw = -((float) MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
 
             // Server:
@@ -94,7 +94,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
                     }
                 }
                 else {
-                    this.setPosition(this.getLatchTarget().posX, this.getLatchTarget().posY, this.getLatchTarget().posZ);
+                    this.setPosition(this.getLatchTarget().getPositionVec().getX(), this.getLatchTarget().getPositionVec().getY(), this.getLatchTarget().getPositionVec().getZ());
                     this.setLatchTarget(null);
                     this.noClip = false;
                 }
@@ -103,7 +103,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
             // Client:
             else {
                 for(int i = 0; i < 2; ++i) {
-                    this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                    this.getEntityWorld().addParticle(RedstoneParticleData.REDSTONE_DUST, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }
@@ -233,7 +233,7 @@ public class EntityDarkling extends TameableCreatureEntity implements IMob {
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
             for(int i = 0; i < 100; i++)
-                this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
         }
         super.startStealth();
     }

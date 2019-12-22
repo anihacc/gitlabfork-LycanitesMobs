@@ -12,6 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.Random;
 
@@ -65,13 +66,13 @@ public class BlockVeswax extends BlockBase {
 	}
 
     // ========== Tick Update ==========
-    @Override
-    public void randomTick(BlockState state, World world, BlockPos pos, Random random) {
+	@Override
+	public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
         if(world.isRemote)
             return;
         double range = 32D;
         if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
             return;
-        super.tick(state, world, pos, random);
+        super.func_225534_a_(state, world, pos, random);
     }
 }

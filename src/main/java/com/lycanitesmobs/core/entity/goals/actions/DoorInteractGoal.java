@@ -55,7 +55,7 @@ public abstract class DoorInteractGoal extends Goal {
                 this.entityPosY = pathpoint.y + 1;
                 this.entityPosZ = pathpoint.z;
 
-                if(this.host.getDistanceSq((double)this.entityPosX, this.host.posY, (double)this.entityPosZ) <= 2.25D) {
+                if(this.host.getDistanceSq((double)this.entityPosX, this.host.getPositionVec().getY(), (double)this.entityPosZ) <= 2.25D) {
                     BlockPos possibleDoorPos = new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ);
                     if(this.isDoor(possibleDoorPos)) {
                         this.doorPosition = possibleDoorPos;
@@ -65,9 +65,9 @@ public abstract class DoorInteractGoal extends Goal {
                 }
             }
 
-            this.entityPosX = MathHelper.floor(this.host.posX);
-            this.entityPosY = MathHelper.floor(this.host.posY + 1.0D);
-            this.entityPosZ = MathHelper.floor(this.host.posZ);
+            this.entityPosX = MathHelper.floor(this.host.getPositionVec().getX());
+            this.entityPosY = MathHelper.floor(this.host.getPositionVec().getY() + 1.0D);
+            this.entityPosZ = MathHelper.floor(this.host.getPositionVec().getZ());
             BlockPos possibleDoorPos = new BlockPos(this.entityPosX, this.entityPosY, this.entityPosZ);
             if(this.isDoor(possibleDoorPos)) {
                 this.doorPosition = possibleDoorPos;
@@ -87,8 +87,8 @@ public abstract class DoorInteractGoal extends Goal {
 	@Override
     public void startExecuting() {
         this.hasStoppedDoorInteraction = false;
-        this.entityPositionX = (float)((double)((float)this.entityPosX + 0.5F) - this.host.posX);
-        this.entityPositionZ = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.posZ);
+        this.entityPositionX = (float)((double)((float)this.entityPosX + 0.5F) - this.host.getPositionVec().getX());
+        this.entityPositionZ = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.getPositionVec().getZ());
     }
 
 	
@@ -106,8 +106,8 @@ public abstract class DoorInteractGoal extends Goal {
  	// ==================================================
 	@Override
     public void tick() {
-        float f = (float)((double)((float)this.entityPosX + 0.5F) - this.host.posX);
-        float f1 = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.posZ);
+        float f = (float)((double)((float)this.entityPosX + 0.5F) - this.host.getPositionVec().getX());
+        float f1 = (float)((double)((float)this.entityPosZ + 0.5F) - this.host.getPositionVec().getZ());
         float f2 = this.entityPositionX * f + this.entityPositionZ * f1;
 
         if(f2 < 0.0F)

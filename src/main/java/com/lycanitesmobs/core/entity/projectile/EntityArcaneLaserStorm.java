@@ -64,7 +64,7 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
 	    	updateLasers();
     	}
     	
-    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     	
     	if(this.ticksExisted >= this.expireTime * 20)
@@ -84,12 +84,12 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
             LaserProjectileEntity laser;
             if(this.getThrower() != null) {
                 laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getThrower(), 20, 10, this);
-                laser.posX = this.posX;
-                laser.posY = this.posY;
-                laser.posZ = this.posZ;
+                laser.getPositionVec().getX() = this.getPositionVec().getX();
+                laser.getPositionVec().getY() = this.getPositionVec().getY();
+                laser.getPositionVec().getZ() = this.getPositionVec().getZ();
             }
             else
-                laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.posX, this.posY, this.posZ, 20, 10, this);
+                laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 20, 10, this);
             laser.useEntityAttackTarget = false;
             this.lasers.add(laser);
             world.addEntity(laser);
@@ -98,7 +98,7 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
         int laserCount = 0;
         for(LaserProjectileEntity laser : this.lasers) {
             laser.setTime(20);
-            double[] target = new double[]{this.posX, this.posY, this.posZ};
+            double[] target = new double[]{this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ()};
 
             if(laserCount == 0)
                 target = this.getFacingPosition(this, laser.laserLength, 135);
@@ -169,7 +169,7 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
 					explosionRadius += 2;
 				}
 			}
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
+			this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.BREAK);
 		}
     	super.onImpactComplete(this.getPosition());
     }
@@ -178,7 +178,7 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i)
-    		this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
     }
     
     

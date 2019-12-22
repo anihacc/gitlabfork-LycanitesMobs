@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -93,8 +94,8 @@ public class BlockSummoningPedestal extends BlockBase {
         }
     }
 
-    @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    @Override //onBlockActivated()
+    public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if(!world.isRemote() && player instanceof ServerPlayerEntity) {
             TileEntity tileEntity = world.getTileEntity(pos);
             if(tileEntity instanceof TileEntitySummoningPedestal) {
@@ -102,7 +103,7 @@ public class BlockSummoningPedestal extends BlockBase {
                 NetworkHooks.openGui((ServerPlayerEntity)player, new SummoningPedestalContainerProvider((TileEntitySummoningPedestal)tileEntity), buf -> buf.writeBlockPos(pos));
             }
         }
-        return true;
+        return super.func_225533_a_(state, world, pos, player, handIn, hit);
     }
 
     @Override

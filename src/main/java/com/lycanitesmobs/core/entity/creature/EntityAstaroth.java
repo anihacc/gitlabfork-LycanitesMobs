@@ -52,10 +52,10 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
             if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((BaseCreatureEntity)this.getMasterTarget()).getBattlePhase() > 0) {
                 EntityHellShield projectile = new EntityHellShield(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellShield.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
-                projectile.posY -= this.getSize(Pose.STANDING).height * 0.35D;
-                double dX = this.getMasterTarget().posX - this.posX;
-                double dY = this.getMasterTarget().posY + (this.getMasterTarget().getSize(Pose.STANDING).height * 0.75D) - projectile.posY;
-                double dZ = this.getMasterTarget().posZ - this.posZ;
+                projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height * 0.35D;
+                double dX = this.getMasterTarget().getPositionVec().getX() - this.getPositionVec().getX();
+                double dY = this.getMasterTarget().getPositionVec().getY() + (this.getMasterTarget().getSize(Pose.STANDING).height * 0.75D) - projectile.getPositionVec().getY();
+                double dZ = this.getMasterTarget().getPositionVec().getZ() - this.getPositionVec().getZ();
                 double distance = MathHelper.sqrt(dX * dX + dZ * dZ) * 0.1F;
                 float velocity = 0.8F;
                 projectile.shoot(dX, dY + distance, dZ, velocity, 0.0F);
@@ -94,7 +94,7 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
                 float f = ((float)(k % 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 float f1 = ((float)(k / 2) - 0.5F) * this.getSize(Pose.STANDING).width / 4.0F;
                 EntityTrite trite =(EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
-                trite.setLocationAndAngles(this.posX + (double)f, this.posY + 0.5D, this.posZ + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
+                trite.setLocationAndAngles(this.getPositionVec().getX() + (double)f, this.getPositionVec().getY() + 0.5D, this.getPositionVec().getZ() + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
                 trite.applySubspecies(this.getSubspeciesIndex());
                 this.getEntityWorld().addEntity(trite);

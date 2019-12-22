@@ -511,8 +511,8 @@ public class ItemEquipment extends BaseItem {
 					}
 
 					// Check Angle:
-					double targetXDist = possibleTarget.posX - attacker.posX;
-					double targetZDist = attacker.posZ - possibleTarget.posZ;
+					double targetXDist = possibleTarget.getPositionVec().getX() - attacker.getPositionVec().getX();
+					double targetZDist = attacker.getPositionVec().getZ() - possibleTarget.getPositionVec().getZ();
 					double targetAngleAbsolute = 180 + Math.toDegrees(Math.atan2(targetXDist, targetZDist));
 					double targetAngle = Math.abs(targetAngleAbsolute - attacker.rotationYaw);
 					if(targetAngle > 180) {
@@ -536,15 +536,15 @@ public class ItemEquipment extends BaseItem {
 		if(attacker instanceof PlayerEntity && targets.size() > 1) {
 			PlayerEntity playerAttacker = (PlayerEntity)attacker;
 			playerAttacker.spawnSweepParticles();
-			attacker.getEntityWorld().playSound(null, attacker.posX, attacker.posY, attacker.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, attacker.getSoundCategory(), 1.0F, 1.0F);
+			attacker.getEntityWorld().playSound(null, attacker.getPositionVec().getX(), attacker.getPositionVec().getY(), attacker.getPositionVec().getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, attacker.getSoundCategory(), 1.0F, 1.0F);
 		}
 
 		for(LivingEntity target : targets) {
 			// Knockback:
 			double knockback = this.getDamageKnockback(itemStack);
 			if (knockback != 0 && attacker != null && target != null) {
-				double xDist = attacker.posX - target.posX;
-				double zDist = attacker.posZ - target.posZ;
+				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
+				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
 				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 				double motionCap = 10;
 				if (target.getMotion().getX() < motionCap && target.getMotion().getX() > -motionCap && target.getMotion().getZ() < motionCap && target.getMotion().getZ() > -motionCap) {

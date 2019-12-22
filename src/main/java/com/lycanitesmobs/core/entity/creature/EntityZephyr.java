@@ -61,13 +61,13 @@ public class EntityZephyr extends TameableCreatureEntity implements IMob {
         
         // Particles:
         if(this.getEntityWorld().isRemote && this.hasAttackTarget()) {
-            //this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+            //this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
             
             List aoeTargets = this.getNearbyEntities(LivingEntity.class, null, 4);
             for(Object entityObj : aoeTargets) {
                 LivingEntity target = (LivingEntity)entityObj;
                 if(this.canAttack(target.getType()) && this.canAttack(target) && this.getEntitySenses().canSee(target)) {
-                    this.getEntityWorld().addParticle(ParticleTypes.CRIT, target.posX + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, target.posY + this.rand.nextDouble() * (double) target.getSize(Pose.STANDING).height, target.posZ + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+                    this.getEntityWorld().addParticle(ParticleTypes.CRIT, target.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, target.getPositionVec().getY() + this.rand.nextDouble() * (double) target.getSize(Pose.STANDING).height, target.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) target.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
                 }
             }
         }

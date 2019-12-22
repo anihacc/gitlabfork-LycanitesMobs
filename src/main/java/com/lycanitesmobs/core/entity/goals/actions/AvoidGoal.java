@@ -76,7 +76,7 @@ public class AvoidGoal extends Goal {
         	return false;
         }*/
         
-        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, 16, 7, new Vec3d(this.avoidTarget.posX, this.avoidTarget.posY, this.avoidTarget.posZ));
+        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, 16, 7, new Vec3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
         if(avoidVector == null)
             return false;
         

@@ -71,7 +71,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
                 if(this.getEntityWorld().getGameRules().getBoolean(GameRules.MOB_GRIEFING) && this.griefing)
-	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.NONE);
+	        	    this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.NONE);
 	        	this.remove();
         	}
         }
@@ -79,7 +79,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
         // Particles:
         if(this.getEntityWorld().isRemote)
 	        for(int i = 0; i < 2; ++i) {
-	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+	            this.getEntityWorld().addParticle(ParticleTypes.WITCH, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 	        }
     }
 

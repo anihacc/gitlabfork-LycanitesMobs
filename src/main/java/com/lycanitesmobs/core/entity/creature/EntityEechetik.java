@@ -91,8 +91,8 @@ public class EntityEechetik extends TameableCreatureEntity implements IMob {
 		// Particles:
 		if(this.getEntityWorld().isRemote) {
 			for(int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.MYCELIUM, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.posY + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.PORTAL, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.MYCELIUM, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, this.getPositionVec().getY() + this.rand.nextDouble() * (double)this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double)this.getSize(Pose.STANDING).width * 2, 0.0D, 0.0D, 0.0D);
 			}
 		}
     }

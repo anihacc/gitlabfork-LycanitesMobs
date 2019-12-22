@@ -24,11 +24,11 @@ public class RandomPositionGenerator {
 
     // ========== Find Random Waypoint to Target ==========
     public static Vec3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vec3d par3Vec3d) {
-        staticVector = new Vec3d(par3Vec3d.x - entity.posX, par3Vec3d.y - entity.posY, par3Vec3d.z - entity.posZ);
+        staticVector = new Vec3d(par3Vec3d.x - entity.getPositionVec().getX(), par3Vec3d.y - entity.getPositionVec().getY(), par3Vec3d.z - entity.getPositionVec().getZ());
         return findRandomTargetTowards(entity, range, height, staticVector, 0);
     }
     public static Vec3d findRandomTargetTowards(BaseCreatureEntity entity, int range, int height, Vec3d par3Vec3d, int heightLevel) {
-        staticVector = new Vec3d(par3Vec3d.x - entity.posX, par3Vec3d.y - entity.posY, par3Vec3d.z - entity.posZ);
+        staticVector = new Vec3d(par3Vec3d.x - entity.getPositionVec().getX(), par3Vec3d.y - entity.getPositionVec().getY(), par3Vec3d.z - entity.getPositionVec().getZ());
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
@@ -37,7 +37,7 @@ public class RandomPositionGenerator {
         return findRandomTargetAwayFrom(entity, range, height, avoidTarget, 0);
     }
     public static Vec3d findRandomTargetAwayFrom(BaseCreatureEntity entity, int range, int height, Vec3d avoidTarget, int heightLevel) {
-        staticVector = new Vec3d(entity.posX, entity.posY, entity.posZ).subtract(avoidTarget);
+        staticVector = new Vec3d(entity.getPositionVec().getX(), entity.getPositionVec().getY(), entity.getPositionVec().getZ()).subtract(avoidTarget);
         return getTargetBlock(entity, range, height, staticVector, heightLevel);
     }
 
@@ -67,16 +67,16 @@ public class RandomPositionGenerator {
 
             // Random Height:
             if(entity.isFlying() || (entity.isStrongSwimmer() && entity.isInWater())) {
-	            if(entity.posY > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + (heightLevel * 1.25))
+	            if(entity.getPositionVec().getY() > entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + (heightLevel * 1.25))
 	        		possibleY = random.nextInt(2 * height) - height * 3 / 2;
-	            else if(entity.posY < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + heightLevel)
+	            else if(entity.getPositionVec().getY() < entity.getEntityWorld().getHeight(Heightmap.Type.OCEAN_FLOOR, entity.getPosition()).getY() + heightLevel)
 	            	possibleY = random.nextInt(2 * height) - height / 2;
             }
 
             if(target == null || (double)possibleX * target.x + (double)possibleZ * target.z >= 0.0D) {
-            	possibleX += MathHelper.floor(entity.posX);
-            	possibleY += MathHelper.floor(entity.posY);
-            	possibleZ += MathHelper.floor(entity.posZ);
+            	possibleX += MathHelper.floor(entity.getPositionVec().getX());
+            	possibleY += MathHelper.floor(entity.getPositionVec().getY());
+            	possibleZ += MathHelper.floor(entity.getPositionVec().getZ());
                 BlockPos possiblePos = new BlockPos(possibleX, possibleY, possibleZ);
 
                 if((!pastHome || entity.positionNearHome(possibleX, possibleY, possibleZ)) && (entity.useDirectNavigator() || pathNavigate.canEntityStandOnPos(possiblePos))) {

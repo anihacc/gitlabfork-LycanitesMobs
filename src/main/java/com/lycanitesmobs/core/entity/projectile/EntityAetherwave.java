@@ -52,7 +52,7 @@ public class EntityAetherwave extends ModelProjectileEntity {
     @Override
     public void tick() {
     	super.tick();
-    	if(this.posY > this.getEntityWorld().getActualHeight() + 20)
+    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20)
     		this.remove();
     }
 	

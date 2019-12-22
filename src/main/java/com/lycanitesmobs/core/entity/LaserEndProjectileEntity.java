@@ -53,13 +53,13 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
         this.setSpeed(1.0D);
         //this.setSize(projectileWidth, projectileHeight);
         if(laserEntity != null) {
-	        this.targetX = this.laserEntity.posX;
-	        this.targetY = this.laserEntity.posY;
-	        this.targetZ = this.laserEntity.posZ;
+	        this.targetX = this.laserEntity.getPositionVec().getX();
+	        this.targetY = this.laserEntity.getPositionVec().getY();
+	        this.targetZ = this.laserEntity.getPositionVec().getZ();
         }
-        this.dataManager.register(POS_X, (float) this.posX);
-        this.dataManager.register(POS_Y, (float) this.posY);
-        this.dataManager.register(POS_Z, (float)this.posZ);
+        this.dataManager.register(POS_X, (float) this.getPositionVec().getX());
+        this.dataManager.register(POS_Y, (float) this.getPositionVec().getY());
+        this.dataManager.register(POS_Z, (float)this.getPositionVec().getZ());
         this.noClip = true;
     }
     
@@ -71,9 +71,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     @Override
     public void tick() {
     	if(this.getEntityWorld().isRemote) {
-    		this.posX = this.dataManager.get(POS_X);
-    		this.posY = this.dataManager.get(POS_Y);
-    		this.posZ = this.dataManager.get(POS_Z);
+    		this.setPosition(this.dataManager.get(POS_X), this.dataManager.get(POS_Y), this.dataManager.get(POS_Z));
     		return;
     	}
     	
@@ -83,9 +81,9 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     	if(this.isAlive())
     		this.moveToTarget();
     	
-    	this.dataManager.set(POS_X, (float) this.posX);
-    	this.dataManager.set(POS_Y, (float) this.posY);
-    	this.dataManager.set(POS_Z, (float) this.posZ);
+    	this.dataManager.set(POS_X, (float) this.getPositionVec().getX());
+    	this.dataManager.set(POS_Y, (float) this.getPositionVec().getY());
+    	this.dataManager.set(POS_Z, (float) this.getPositionVec().getZ());
     }
     
     // ========== End Update ==========
@@ -113,9 +111,11 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     
     // ========== Move to Target ==========
     public void moveToTarget() {
-    	this.posX = moveCoordToTarget(this.posX, this.targetX, this.laserEntity.posX);
-    	this.posY = moveCoordToTarget(this.posY, this.targetY, this.laserEntity.posY);
-    	this.posZ = moveCoordToTarget(this.posZ, this.targetZ, this.laserEntity.posZ);
+    	this.setPosition(
+    			this.moveCoordToTarget(this.getPositionVec().getX(), this.targetX, this.laserEntity.getPositionVec().getX()),
+    			this.moveCoordToTarget(this.getPositionVec().getY(), this.targetY, this.laserEntity.getPositionVec().getY()),
+    			this.moveCoordToTarget(this.getPositionVec().getZ(), this.targetZ, this.laserEntity.getPositionVec().getZ())
+		);
     }
     
     // ========== Move Coord ==========

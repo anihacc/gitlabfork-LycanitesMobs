@@ -73,14 +73,14 @@ public class EntityFaeBolt extends BaseProjectileEntity {
     	if(this.getEntityWorld().isRemote && !CreatureManager.getInstance().config.disableBlockParticles) {
 			for (int i = 0; i < 8; ++i) {
 				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.SUNFLOWER.getDefaultState()),
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
 						0.0D, 0.0D, 0.0D);
 				this.getEntityWorld().addParticle(new BlockParticleData(ParticleTypes.BLOCK, Blocks.ROSE_BUSH.getDefaultState()),
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
-						this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
+						this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height,
+						this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width,
 						0.0D, 0.0D, 0.0D);
 			}
 		}

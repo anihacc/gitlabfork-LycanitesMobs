@@ -161,7 +161,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 	                double d0 = this.rand.nextGaussian() * 0.02D;
 	                double d1 = this.rand.nextGaussian() * 0.02D;
 	                double d2 = this.rand.nextGaussian() * 0.02D;
-	                this.getEntityWorld().addParticle(particle, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+	                this.getEntityWorld().addParticle(particle, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
 	            }
             }
         }
@@ -216,7 +216,7 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 					AgeableCreatureEntity baby = this.createChild(this);
 					if (baby != null) {
 						baby.setGrowingAge(baby.growthTime);
-						baby.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+						baby.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0F, 0.0F);
 						baby.setFarmed();
 						this.getEntityWorld().addEntity(baby);
 						if (itemStack.hasDisplayName()) {
@@ -370,13 +370,13 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
             baby.setGrowingAge(baby.growthTime);
             Subspecies babySubspecies = this.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partner.getSubspecies());
             baby.applySubspecies(babySubspecies != null ? babySubspecies.index : 0);
-            baby.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+            baby.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rotationYaw, this.rotationPitch);
 
             for(int i = 0; i < 7; ++i) {
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
-                this.getEntityWorld().addParticle(ParticleTypes.HEART, this.posX + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.posZ + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
+                this.getEntityWorld().addParticle(ParticleTypes.HEART, this.getPositionVec().getX() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + 0.5D + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).height), this.getPositionVec().getZ() + (double)(this.rand.nextFloat() * this.getSize(Pose.STANDING).width * 2.0F) - (double)this.getSize(Pose.STANDING).width, d0, d1, d2);
             }
 
             this.onCreateBaby(partner, baby);

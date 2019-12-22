@@ -76,7 +76,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
 			float random = this.rand.nextFloat();
 			float spawnChance = 0.25F;
 			if(random <= spawnChance)
-				this.spawnAlly(this.posX - 2 + (random * 4), this.posY, this.posZ - 2 + (random * 4));
+				this.spawnAlly(this.getPositionVec().getX() - 2 + (random * 4), this.getPositionVec().getY(), this.getPositionVec().getZ() - 2 + (random * 4));
 		}
 	}
 	

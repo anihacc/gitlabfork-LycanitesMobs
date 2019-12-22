@@ -91,7 +91,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 			// Mount Melee:
 			if(!this.getEntityWorld().isRemote && this.hasAttackTarget() && this.updateTick % 20 == 0) {
 				LivingEntity mountedAttackTarget = this.getAttackTarget();
-				if(mountedAttackTarget != null && this.canAttack(mountedAttackTarget) && this.getDistanceSq(mountedAttackTarget.posX, mountedAttackTarget.getBoundingBox().minY, mountedAttackTarget.posZ) <= this.getMeleeAttackRange(mountedAttackTarget, 1)) {
+				if(mountedAttackTarget != null && this.canAttack(mountedAttackTarget) && this.getDistanceSq(mountedAttackTarget.getPositionVec().getX(), mountedAttackTarget.getBoundingBox().minY, mountedAttackTarget.getPositionVec().getZ()) <= this.getMeleeAttackRange(mountedAttackTarget, 1)) {
 					this.attackMelee(this.getAttackTarget(), 1);
 				}
 			}
@@ -129,11 +129,11 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
     public void onDismounted(Entity entity) {
 		if(this.isSitting()) {
-			int homeY = MathHelper.floor(this.posY);
+			int homeY = MathHelper.floor(this.getPositionVec().getY());
 			if(!this.isFlying()) {
 				homeY = this.getGroundY(this.getPosition());
 			}
-			this.setHomePosition(MathHelper.floor(this.posX), homeY, MathHelper.floor(this.posZ));
+			this.setHomePosition(MathHelper.floor(this.getPositionVec().getX()), homeY, MathHelper.floor(this.getPositionVec().getZ()));
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         		zOffset = 0.00001D;
 			}
 			Vec3d mountOffset = this.getFacingPositionDouble(0, 0, 0, zOffset, this.rotationYaw);
-            this.getControllingPassenger().setPosition(this.posX + mountOffset.x, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + mountOffset.z);
+            this.getControllingPassenger().setPosition(this.getPositionVec().getX() + mountOffset.x, this.getPositionVec().getY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPositionVec().getZ() + mountOffset.z);
         }
     }
 
@@ -218,7 +218,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
                 if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                     verticalMotion = this.creatureStats.getSpeed() * 20;
                 }
-				else if(player.isSneaking()) {
+				else if(player.func_225608_bj_()) { // isSneaking()
                     verticalMotion = -this.creatureStats.getSpeed() * 20;
                 }
                 else {
@@ -330,8 +330,8 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 
         // Animate Limbs:
         this.prevLimbSwingAmount = this.limbSwingAmount;
-        double d0 = this.posX - this.prevPosX;
-        double d1 = this.posZ - this.prevPosZ;
+        double d0 = this.getPositionVec().getX() - this.prevPosX;
+        double d1 = this.getPositionVec().getZ() - this.prevPosZ;
         float f4 = MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0F;
         if (f4 > 1.0F)
             f4 = 1.0F;
@@ -401,7 +401,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         boolean mountingAllowed = CreatureManager.getInstance().config.mountingEnabled;
         if(mountingAllowed && this.isFlying())
             mountingAllowed = CreatureManager.getInstance().config.mountingFlightEnabled;
-    	if(this.canBeMounted(player) && !player.isSneaking() && !this.getEntityWorld().isRemote && mountingAllowed)
+    	if(this.canBeMounted(player) && !player.func_225608_bj_() && !this.getEntityWorld().isRemote && mountingAllowed) // isSneaking()
     		commands.put(COMMAND_PIORITIES.MAIN.id, "Mount");
     	
     	return commands;

@@ -174,7 +174,7 @@ public class LycanitesMobs {
 		CapabilityManager.INSTANCE.register(IExtendedEntity.class, new ExtendedEntityStorage(), ExtendedEntity::new);
 
 		// Change Health Limit:
-		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, 1); // maximumValue
+		LMReflectionHelper.setPrivateFinalValue(RangedAttribute.class, (RangedAttribute)SharedMonsterAttributes.MAX_HEALTH, 100000, "maximumValue");
 
 		// Mod Support:
 		DLDungeons.init();

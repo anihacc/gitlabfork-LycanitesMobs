@@ -81,7 +81,7 @@ public class ItemStaffSummoning extends BaseItem {
 			if(summonSet.isUseable()) {
 				if(!player.getEntityWorld().isRemote) {
 					playerExt.staffPortal = new PortalEntity((EntityType<? extends PortalEntity>)ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), world, player, summonSet.getCreatureType(), this);
-					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
+					playerExt.staffPortal.setLocationAndAngles(player.getPositionVec().getX(), player.getPositionVec().getY(), player.getPositionVec().getZ(), world.rand.nextFloat() * 360.0F, 0.0F);
 					world.addEntity(playerExt.staffPortal);
 				}
 			}

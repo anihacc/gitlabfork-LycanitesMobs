@@ -110,9 +110,9 @@ public class FollowOwnerGoal extends FollowGoal {
 				return;
 			}
 
-	    	int i = MathHelper.floor(this.getTarget().posX) - 2;
+	    	int i = MathHelper.floor(this.getTarget().getPositionVec().getX()) - 2;
 	        int j = MathHelper.floor(this.getTarget().getBoundingBox().minY);
-	        int k = MathHelper.floor(this.getTarget().posZ) - 2;
+	        int k = MathHelper.floor(this.getTarget().getPositionVec().getZ()) - 2;
 
             if(this.host.isFlying() || this.getTarget().isInWater()) {
                 this.host.setLocationAndAngles(i, j + 1, k, this.host.rotationYaw, this.host.rotationPitch);

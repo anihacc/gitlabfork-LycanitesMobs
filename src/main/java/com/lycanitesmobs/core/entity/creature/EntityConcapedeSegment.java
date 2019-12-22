@@ -132,24 +132,24 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
         		double segmentDistance = 0.65D;
         		Vec3d pos;
         		if(this.getParentTarget() instanceof BaseCreatureEntity)
-        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ, -0.25D, 0);
+        			pos = ((BaseCreatureEntity)this.getParentTarget()).getFacingPositionDouble(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ(), -0.25D, 0);
         		else
-					pos = new Vec3d(this.getParentTarget().posX, this.getParentTarget().posY, this.getParentTarget().posZ);
+					pos = new Vec3d(this.getParentTarget().getPositionVec().getX(), this.getParentTarget().getPositionVec().getY(), this.getParentTarget().getPositionVec().getZ());
 
-        		if(this.posX - pos.x > segmentDistance)
-        			this.posX = pos.x + segmentDistance;
-        		else if(this.posX - pos.x < -segmentDistance)
-        			this.posX = pos.x - segmentDistance;
+        		if(this.getPositionVec().getX() - pos.x > segmentDistance)
+        			this.getPositionVec().getX() = pos.x + segmentDistance;
+        		else if(this.getPositionVec().getX() - pos.x < -segmentDistance)
+        			this.getPositionVec().getX() = pos.x - segmentDistance;
         		
-        		if(this.posY - pos.y > segmentDistance)
-        			this.posY = pos.y;
-        		else if(this.posY - pos.y < -(segmentDistance / 2))
-        			this.posY = pos.y;
+        		if(this.getPositionVec().getY() - pos.y > segmentDistance)
+        			this.getPositionVec().getY() = pos.y;
+        		else if(this.getPositionVec().getY() - pos.y < -(segmentDistance / 2))
+        			this.getPositionVec().getY() = pos.y;
         		
-        		if(this.posZ - pos.z > segmentDistance)
-        			this.posZ = pos.z + segmentDistance;
-        		else if(this.posZ - pos.z < -segmentDistance)
-        			this.posZ = pos.z - segmentDistance;
+        		if(this.getPositionVec().getZ() - pos.z > segmentDistance)
+        			this.getPositionVec().getZ() = pos.z + segmentDistance;
+        		else if(this.getPositionVec().getZ() - pos.z < -segmentDistance)
+        			this.getPositionVec().getZ() = pos.z - segmentDistance;
         	}
 
 			// Look at parent:
@@ -227,7 +227,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     public double getFallingMod() {
     	if(this.getEntityWorld().isRemote)
     		return 0.0D;
-    	if(this.hasParent() && this.getParentTarget().posY > this.posY)
+    	if(this.hasParent() && this.getParentTarget().getPositionVec().getY() > this.getPositionVec().getY())
     		return 0.0D;
     	return super.getFallingMod();
     }

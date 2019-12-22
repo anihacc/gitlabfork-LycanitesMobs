@@ -12,6 +12,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -37,7 +38,7 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	}
 
 	@Override
-	public boolean hasStartAt(@Nonnull ChunkGenerator<?> chunkGenerator, @Nonnull Random random, int chunkX, int chunkZ) {
+	public boolean func_225558_a_(BiomeManager biomeManager, @Nonnull ChunkGenerator<?> chunkGenerator, @Nonnull Random random, int chunkX, int chunkZ, Biome biome) { //hasStartAt()
 		return true;
 	}
 
@@ -90,8 +91,8 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 	 */
 	public static class Start extends StructureStart {
 
-		public Start(Structure<?> structure, int chunkX, int chunkZ, Biome biome, MutableBoundingBox boundingBox, int reference, long seed) {
-			super(structure, chunkX, chunkZ, biome, boundingBox, reference, seed);
+		public Start(Structure<?> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
+			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
 		}
 
 		@Override
@@ -124,7 +125,7 @@ public class DungeonStructure extends Structure<NoFeatureConfig> {
 		}
 
 		@Override
-		public boolean addComponentParts(IWorld worldWriter, @Nonnull Random random, @Nonnull MutableBoundingBox structureBoundingBoxIn, @Nonnull ChunkPos chunkPos) {
+		public boolean func_225577_a_(IWorld worldWriter, ChunkGenerator<?> chunkGenerator, Random random, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPos) { //addComponentParts()
 			boolean enabled = ConfigDungeons.INSTANCE.dungeonsEnabled.get();
 			LycanitesMobs.logDebug("", "Dungeon Component At Chunk: X" + chunkPos.x + " Z" + chunkPos.z);
 

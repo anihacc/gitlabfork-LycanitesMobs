@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.pets;
 
 
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -16,7 +16,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -299,7 +298,7 @@ public class PetEntry {
                     if (this.teleportEntity) {
                         if (this.entity.getEntityWorld() != this.host.getEntityWorld())
                             this.entity.changeDimension(this.host.getEntityWorld().getDimension().getType());
-                        this.entity.setPosition(this.host.posX, this.host.posY, this.host.posZ);
+                        this.entity.setPosition(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ());
                     }
                 }
                 catch(Exception e) {
@@ -383,7 +382,7 @@ public class PetEntry {
         this.loadEntityNBT();
 
         // Spawn Location:
-        this.entity.setLocationAndAngles(this.host.posX, this.host.posY, this.host.posZ, this.host.rotationYaw, 0.0F);
+        this.entity.setLocationAndAngles(this.host.getPositionVec().getX(), this.host.getPositionVec().getY(), this.host.getPositionVec().getZ(), this.host.rotationYaw, 0.0F);
 
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;

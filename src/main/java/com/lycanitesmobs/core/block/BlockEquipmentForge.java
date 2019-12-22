@@ -15,15 +15,13 @@ import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockEquipmentForge extends BlockBase {
@@ -95,15 +93,15 @@ public class BlockEquipmentForge extends BlockBase {
 		return tileEntityEquipmentForge;
 	}
 
-	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	@Override //onBlockActivated()
+	public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!world.isRemote() && player instanceof ServerPlayerEntity) {
 			TileEntity tileEntity = world.getTileEntity(pos);
 			if(tileEntity instanceof TileEntityEquipmentForge) {
 				NetworkHooks.openGui((ServerPlayerEntity) player, new EquipmentForgeContainerProvider((TileEntityEquipmentForge)tileEntity), buf -> buf.writeBlockPos(pos));
 			}
 		}
-		return true;
+		return super.func_225533_a_(state, world, pos, player, handIn, hit);
 	}
 
     @Override

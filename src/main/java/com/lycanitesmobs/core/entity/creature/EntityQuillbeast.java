@@ -67,15 +67,15 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
             EntityQuill projectile = new EntityQuill(ProjectileManager.getInstance().oldProjectileTypes.get(EntityQuill.class), this.getEntityWorld(), this);
 
             // Y Offset:
-            projectile.posY -= this.getSize(Pose.STANDING).height / 4;
+            projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
 
             // Accuracy:
             float accuracy = i * 1.0F * (this.getRNG().nextFloat() - 0.5F);
 
             // Set Velocities:
-            double d0 = target.posX - this.posX + accuracy;
-            double d1 = target.posY - projectile.posY + accuracy;
-            double d2 = target.posZ - this.posZ + accuracy;
+            double d0 = target.getPositionVec().getX() - this.getPositionVec().getX() + accuracy;
+            double d1 = target.getPositionVec().getY() - projectile.getPositionVec().getY() + accuracy;
+            double d2 = target.getPositionVec().getZ() - this.getPositionVec().getZ() + accuracy;
             float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
             float velocity = 1.2F;
             projectile.shoot(d0, d1 + (double) f1, d2, velocity, 6.0F);

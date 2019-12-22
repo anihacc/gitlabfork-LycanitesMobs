@@ -180,7 +180,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		World world = shooter.getEntityWorld();
 		BaseProjectileEntity mainProjectile = null;
-		Vec3d firePos = new Vec3d(shooter.posX, shooter.posY + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.posZ);
+		Vec3d firePos = new Vec3d(shooter.getPositionVec().getX(), shooter.getPositionVec().getY() + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.getPositionVec().getZ());
 		double offsetX = 0;
 		/*if(shooter.isHandActive()) {
 			offsetX = 0.75D;
@@ -237,6 +237,6 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		angle = Math.toRadians(angle);
 		double xAmount = -Math.sin(angle);
 		double zAmount = Math.cos(angle);
-		return new Vec3d(entity.posX + (distance * xAmount), entity.posY, entity.posZ + (distance * zAmount));
+		return new Vec3d(entity.getPositionVec().getX() + (distance * xAmount), entity.getPositionVec().getY(), entity.getPositionVec().getZ() + (distance * zAmount));
 	}
 }

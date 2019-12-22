@@ -81,8 +81,8 @@ public class EntityHellfireWave extends BaseProjectileEntity {
                     if(this.getThrower() != null)
                         hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getThrower());
                     else
-                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.posX, this.posY + 5 + (this.hellfireSize * row), this.posZ);
-                    hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
+                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + 5 + (this.hellfireSize * row), this.getPositionVec().getZ());
+                    hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
                     this.getEntityWorld().addEntity(hellfireWalls[row][col]);
                     hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);
                 }
@@ -95,9 +95,9 @@ public class EntityHellfireWave extends BaseProjectileEntity {
                 double rotationRadians = Math.toRadians(((((float)col / this.hellfireWidth) * this.angle) - (this.angle / 2) + this.rotation) % 360);
                 double x = (((float)this.time / this.timeMax) * 200) * Math.cos(rotationRadians) - Math.sin(rotationRadians);
                 double z = (((float)this.time / this.timeMax) * 200) * Math.sin(rotationRadians) + Math.cos(rotationRadians);
-                hellfireWalls[row][col].posX = this.posX + x;
-                hellfireWalls[row][col].posY = this.posY + (this.hellfireSize * row);
-                hellfireWalls[row][col].posZ = this.posZ + z;
+                hellfireWalls[row][col].getPositionVec().getX() = this.getPositionVec().getX() + x;
+                hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
+                hellfireWalls[row][col].getPositionVec().getZ() = this.getPositionVec().getZ() + z;
                 hellfireWalls[row][col].projectileLife = 2 * 20;
                 if(!this.isAlive())
                     hellfireWalls[row][col].remove();

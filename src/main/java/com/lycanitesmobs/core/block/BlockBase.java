@@ -20,6 +20,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.TickPriority;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -114,7 +115,7 @@ public class BlockBase extends Block {
 
     // ========== Tick Update ==========
     @Override
-    public void tick(BlockState state, World world, BlockPos pos, Random random) {
+    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
         if (world.isRemote)
             return;
 

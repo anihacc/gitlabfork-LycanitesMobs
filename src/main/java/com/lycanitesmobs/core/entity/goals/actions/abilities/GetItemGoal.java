@@ -151,7 +151,7 @@ public class GetItemGoal extends Goal {
         	if(!this.host.useDirectNavigator())
         		this.host.getNavigator().tryMoveToEntityLiving(this.target, this.speed);
         	else
-        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.target.posX, (int)this.target.posY, (int)this.target.posZ), this.speed);
+        		this.host.directNavigator.setTargetPosition(new BlockPos((int)this.target.getPositionVec().getX(), (int)this.target.getPositionVec().getY(), (int)this.target.getPositionVec().getZ()), this.speed);
         }
     }
 }

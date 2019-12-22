@@ -168,7 +168,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		}
         if(targetWidth <= 4 && targetHeight <= 4)
             return false;
-        double heightOffset = this.player.posY - targetEntity.posY;
+        double heightOffset = this.player.getPositionVec().getY() - targetEntity.getPositionVec().getY();
         double heightCompensation = 0;
         if(heightOffset > 0)
             heightCompensation = Math.min(heightOffset, targetHeight);

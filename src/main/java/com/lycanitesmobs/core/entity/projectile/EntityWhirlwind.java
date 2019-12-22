@@ -66,8 +66,8 @@ public class EntityWhirlwind extends BaseProjectileEntity {
     @Override
     public void onImpactVisuals() {
     	for(int i = 0; i < 8; ++i) {
-    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
-    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
+    		this.getEntityWorld().addParticle(ParticleTypes.CLOUD, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 0.0D, 0.0D, 0.0D);
     	}
     }
 }

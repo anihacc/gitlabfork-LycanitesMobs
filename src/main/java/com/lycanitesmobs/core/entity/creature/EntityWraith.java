@@ -52,7 +52,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         // Detonate:
         if(!this.getEntityWorld().isRemote) {
             if(this.detonateTimer == 0) {
-                this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, 1, Explosion.Mode.BREAK);
+                this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 1, Explosion.Mode.BREAK);
                 this.remove();
             }
             else if(this.detonateTimer > 0) {
@@ -79,8 +79,8 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
         // Particles:
         if(this.getEntityWorld().isRemote && this.detonateTimer <= 5) {
 			for (int i = 0; i < 2; ++i) {
-				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
-				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.posY + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.SMOKE, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
+				this.getEntityWorld().addParticle(ParticleTypes.FLAME, this.getPositionVec().getX() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, this.getPositionVec().getY() + this.rand.nextDouble() * (double) this.getSize(Pose.STANDING).height, this.getPositionVec().getZ() + (this.rand.nextDouble() - 0.5D) * (double) this.getSize(Pose.STANDING).width, 0.0D, 0.0D, 0.0D);
 			}
 		}
         
@@ -114,7 +114,7 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
 			if(this.subspecies != null)
 				explosionRadius = 3;
 			explosionRadius = Math.max(1, Math.round((float)explosionRadius * (float)this.sizeScale));
-			this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, Explosion.Mode.BREAK);
+			this.getEntityWorld().createExplosion(this, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), explosionRadius, Explosion.Mode.BREAK);
 		}
         super.onDeath(par1DamageSource);
     }

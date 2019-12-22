@@ -105,9 +105,9 @@ public class GetBlockGoal extends Goal {
     	
         int heightDistance = 2;
         List<BlockPos> possibleTargets = new ArrayList<BlockPos>();
-        for(int x = (int)this.host.posX - this.distanceMax; x < (int)this.host.posX + this.distanceMax; x++) {
-        	for(int y = (int)this.host.posY - heightDistance; y < (int)this.host.posY + heightDistance; y++) {
-        		for(int z = (int)this.host.posZ - this.distanceMax; z < (int)this.host.posZ + this.distanceMax; z++) {
+        for(int x = (int)this.host.getPositionVec().getX() - this.distanceMax; x < (int)this.host.getPositionVec().getX() + this.distanceMax; x++) {
+        	for(int y = (int)this.host.getPositionVec().getY() - heightDistance; y < (int)this.host.getPositionVec().getY() + heightDistance; y++) {
+        		for(int z = (int)this.host.getPositionVec().getZ() - this.distanceMax; z < (int)this.host.getPositionVec().getZ() + this.distanceMax; z++) {
         			Block searchBlock = this.host.getEntityWorld().getBlockState(new BlockPos(x, y, z)).getBlock();
                 	if(searchBlock != null && searchBlock != Blocks.AIR) {
                         BlockPos possibleTarget = null;
