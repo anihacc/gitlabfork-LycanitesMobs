@@ -1,5 +1,7 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
@@ -8,12 +10,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderNone extends EntityRenderer<Entity> {
+public class NoneRenderer extends EntityRenderer<Entity> {
     
     // ==================================================
     //                     Constructor
     // ==================================================
-    public RenderNone(EntityRendererManager renderManager) {
+    public NoneRenderer(EntityRendererManager renderManager) {
     	super(renderManager);
     }
     
@@ -22,7 +24,7 @@ public class RenderNone extends EntityRenderer<Entity> {
     //                     Do Render
     // ==================================================
     @Override
-    public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par9) {
+	public void func_225623_a_(Entity entity, float p_225623_2_, float p_225623_3_, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int p_225623_6_) {
     	return;
     }
     
@@ -32,7 +34,7 @@ public class RenderNone extends EntityRenderer<Entity> {
     // ==================================================
     // ========== Get Texture ==========
     @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
+	public ResourceLocation getEntityTexture(Entity entity) {
     	return null;
     }
 }

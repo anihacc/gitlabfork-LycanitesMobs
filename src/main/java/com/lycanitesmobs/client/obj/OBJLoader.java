@@ -1,15 +1,14 @@
 package com.lycanitesmobs.client.obj;
 
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.util.math.Vec2f;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public class OBJLoader
 {
@@ -71,11 +70,11 @@ public class OBJLoader
             int indicesOffset = 0;
             int texOffset = 0;
             int normOffset = 0;
-            ArrayList<Vector3f> positions = new ArrayList<Vector3f>();
-            ArrayList<Vector2f> texCoords = new ArrayList<Vector2f>();
-            ArrayList<Vector3f> normals = new ArrayList<Vector3f>();
-            ArrayList<OBJIndex> indices = new ArrayList<OBJIndex>();
-            ArrayList<Material> materials = new ArrayList<Material>();
+            ArrayList<Vector3f> positions = new ArrayList<>();
+            ArrayList<Vec2f> texCoords = new ArrayList<>();
+            ArrayList<Vector3f> normals = new ArrayList<>();
+            ArrayList<OBJIndex> indices = new ArrayList<>();
+            ArrayList<Material> materials = new ArrayList<>();
             HashMapWithDefault<OBJIndex, Integer> resultIndexMap = new HashMapWithDefault<OBJIndex, Integer>();
             HashMapWithDefault<Integer, Integer> normalIndexMap = new HashMapWithDefault<Integer, Integer>();
             HashMapWithDefault<Integer, Integer> indexMap = new HashMapWithDefault<Integer, Integer>();
@@ -83,10 +82,10 @@ public class OBJLoader
             normalIndexMap.setDefault(-1);
             indexMap.setDefault(-1);
             
-            HashMap<ObjObject, IndexedModel> map = new HashMap<ObjObject, IndexedModel>();
+            HashMap<ObjObject, IndexedModel> map = new HashMap<>();
             
-            ObjObject currentObject = null;
-            HashMap<ObjObject, IndexedModel[]> objects = new HashMap<ObjObject, IndexedModel[]>();
+            ObjObject currentObject;
+            HashMap<ObjObject, IndexedModel[]> objects = new HashMap<>();
             objects.put(currentObject = new ObjObject("main"), new IndexedModel[]{result, normalModel});
             for(String line : lines)
             {
@@ -118,7 +117,7 @@ public class OBJLoader
                     }
                     else if(parts[0].equals(TEX_COORDS))
                     {
-                        texCoords.add(new Vector2f(Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
+                        texCoords.add(new Vec2f(Float.parseFloat(parts[1]), Float.parseFloat(parts[2])));
                     }
                     else if(parts[0].equals(NEW_MATERIAL))
                     {
@@ -161,14 +160,14 @@ public class OBJLoader
                 {
                     OBJIndex current = indices.get(i);
                     Vector3f pos = positions.get(current.positionIndex);
-                    Vector2f texCoord;
+                    Vec2f texCoord;
                     if(hasTexCoords)
                     {
                         texCoord = texCoords.get(current.texCoordsIndex);
                     }
                     else
                     {
-                        texCoord = new Vector2f();
+                        texCoord = new Vec2f(0, 0);
                     }
                     Vector3f normal;
                     if(hasNormals)

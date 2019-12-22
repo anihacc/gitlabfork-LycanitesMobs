@@ -16,8 +16,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +82,11 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
             LaserProjectileEntity laser;
             if(this.getThrower() != null) {
                 laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getThrower(), 20, 10, this);
-                laser.getPositionVec().getX() = this.getPositionVec().getX();
-                laser.getPositionVec().getY() = this.getPositionVec().getY();
-                laser.getPositionVec().getZ() = this.getPositionVec().getZ();
+                laser.setPosition(
+						this.getPositionVec().getX(),
+						this.getPositionVec().getY(),
+						this.getPositionVec().getZ()
+				);
             }
             else
                 laser = new EntityArcaneLaser(ProjectileManager.getInstance().oldProjectileTypes.get(EntityArcaneLaser.class), world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), 20, 10, this);
@@ -197,11 +197,5 @@ public class EntityArcaneLaserStorm extends BaseProjectileEntity {
     @Override
     public float getBrightness() {
         return 1.0F;
-    }
-    
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public int getBrightnessForRender() {
-        return 15728880;
     }
 }

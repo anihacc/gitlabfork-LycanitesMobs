@@ -14,7 +14,7 @@ public class RenderFactoryNone<T extends Entity> implements IRenderFactory {
 
     @Override
     public EntityRenderer<? super T> createRenderFor(EntityRendererManager manager) {
-        return new RenderNone(manager);
+        return new NoneRenderer(manager);
     }
 
 }

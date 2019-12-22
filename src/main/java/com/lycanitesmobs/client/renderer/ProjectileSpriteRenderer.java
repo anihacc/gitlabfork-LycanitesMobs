@@ -3,13 +3,13 @@ package com.lycanitesmobs.client.renderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -18,18 +18,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity> {
+public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntity> {
     private int renderTime = 0;
     Class projectileClass;
     
     // Laser Box:
-    protected Model laserModel = new Model() {};
+    protected Model laserModel;
     private ModelRenderer laserBox;
     
     // ==================================================
     //                     Constructor
     // ==================================================
-    public RenderProjectileSprite(EntityRendererManager renderManager, Class projectileClass) {
+    public ProjectileSpriteRenderer(EntityRendererManager renderManager, Class projectileClass) {
     	super(renderManager);
         this.projectileClass = projectileClass;
     }
@@ -39,19 +39,25 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     //                     Do Render
     // ==================================================
     @Override
-	public void doRender(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	protected void func_225629_a_(BaseProjectileEntity entity, String someString, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks) {
     	if(this.renderTime++ > Integer.MAX_VALUE - 1)
             this.renderTime = 0;
-        this.renderProjectile(entity, x, y, z, entityYaw, partialTicks);
+
+    	float x = 0;
+    	float y = 0;
+    	float z = 0;
+    	float yaw = 0;
+
+        this.renderProjectile(entity, x, y, z, yaw, ticks);
     	if(entity instanceof LaserProjectileEntity)
-    		this.renderLaser((LaserProjectileEntity)entity, x, y, z, entityYaw, partialTicks);
+    		this.renderLaser((LaserProjectileEntity)entity, x, y, z, yaw, ticks);
     }
     
     
     // ==================================================
     //                 Render Projectile
     // ==================================================
-    public void renderProjectile(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void renderProjectile(BaseProjectileEntity entity, double x, double y, double z, float entityYaw, int ticks) {
     	double scale = 0.5d;
     	if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
     		return;
@@ -95,17 +101,15 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
             }
         }
 
-        //RenderSystem.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        //RenderSystem.rotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		RenderSystem.rotatef(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		RenderSystem.rotatef((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		//RenderSystem.rotatef(-this.renderManager.getRenderer().playerViewY, 0.0F, 1.0F, 0.0F); TODO Figure out how to do sprites again...
+		//RenderSystem.rotatef((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		RenderSystem.rotatef(180.0F, 0.0F, 1.0F, 0.0F);
         //RenderSystem.translatef(-scale / 2, -scale / 2, -scale / 2);
 
-        if(this.renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
-        }
+        /*if(this.renderOutlines) {
+            RenderSystem.enableColorMaterial();
+			RenderSystem.setupSolidRenderingTextureCombine(this.getTeamColor(entity));
+        }*/
 
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
@@ -137,14 +141,14 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     public void renderLaser(LaserProjectileEntity entity, double x, double y, double z, float par8, float par9) {
     	float scale = entity.getLaserWidth();
     	
-    	// Create Laser Model If Null:
+    	/*/ Create Laser Model If Null:
     	if(this.laserBox == null) {
 			this.laserBox = new ModelRenderer(this.laserModel, 0, 0);
 			this.laserBox.addBox(-(scale / 2), -(scale / 2), 0, (int)scale, (int)scale, 16);
 			this.laserBox.rotationPointX = 0;
 			this.laserBox.rotationPointY = 0;
 			this.laserBox.rotationPointZ = 0;
-    	}
+    	} TODO Laser */
         
     	float factor = (float)(1.0 / 16.0);
     	float lastSegment = 0;
@@ -166,13 +170,13 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     	
     	// Length:
         for(float segment = 0; segment <= laserSize - 1; ++segment) {
-                this.laserBox.render(factor);
+        	//this.laserBox.render(factor); TODO Laser
 			RenderSystem.translatef(0, 0, 1);
                 lastSegment = segment;
         }
         lastSegment++;
 		RenderSystem.scalef((laserSize - lastSegment), 1, 1);
-        this.laserBox.render(factor);
+        //this.laserBox.render(factor); TODO Laser
 
 		RenderSystem.popMatrix();
     }
@@ -183,7 +187,7 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     // ==================================================
     // ========== Get Texture ==========
     @Override
-    protected ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
+    public ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
 		return entity.getTexture();
 	}
 
@@ -191,4 +195,8 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     protected ResourceLocation getLaserTexture(LaserProjectileEntity entity) {
     	return entity.getBeamTexture();
     }
+
+	public void bindTexture(ResourceLocation texture) {
+		this.renderManager.textureManager.bindTexture(texture);
+	}
 }

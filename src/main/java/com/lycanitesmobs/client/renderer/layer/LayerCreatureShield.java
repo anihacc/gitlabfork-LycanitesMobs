@@ -1,9 +1,10 @@
 package com.lycanitesmobs.client.renderer.layer;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,15 +51,15 @@ public class LayerCreatureShield extends LayerCreatureBase {
         int i = 15728880;
         int j = i % 65536;
         int k = i / 65536;
-        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+        RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 
-        GlStateManager.enableCull();
+        RenderSystem.enableCull();
     }
 
     @Override
     public void onRenderFinish(Entity entity, boolean trophy) {
-        GlStateManager.disableCull();
+        RenderSystem.disableCull();
     }
 }

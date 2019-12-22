@@ -1,9 +1,11 @@
 package com.lycanitesmobs.client.renderer.layer;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -84,25 +86,25 @@ public class LayerItem {
 	public void onRenderStart(ItemStack itemStack) {
 		// Glow In Dark:
 		if(this.glow) {
-			GlStateManager.disableLighting();
+			RenderSystem.disableLighting();
 			int i = 0xf000f0;
 			int j = i % 65536;
 			int k = i / 65536;
-			GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+			RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 		}
 
 		// Blending:
     	if(this.blending == BLEND.ADD.id) {
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 		}
 		else if(this.blending == BLEND.SUB.id) {
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		}
 	}
 
 	public void onRenderFinish(ItemStack itemStack) {
     	if(this.glow) {
-			GlStateManager.enableLighting();
+			RenderSystem.enableLighting();
 		}
 	}
 

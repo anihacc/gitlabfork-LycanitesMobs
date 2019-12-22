@@ -5,8 +5,6 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Vector2f;
-
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureScrolling extends LayerCreatureEffect {
 

@@ -6,15 +6,14 @@ import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelSylph extends ModelTemplateElemental {
@@ -44,7 +43,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(0, 1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vec2f(0, 1)));
 	}
 
 
@@ -140,7 +139,7 @@ public class ModelSylph extends ModelTemplateElemental {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
-		GlStateManager.disableLighting();
+		RenderSystem.disableLighting();
 	}
 
 	@Override
@@ -148,6 +147,6 @@ public class ModelSylph extends ModelTemplateElemental {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
-		GlStateManager.enableLighting();
+		RenderSystem.enableLighting();
 	}
 }

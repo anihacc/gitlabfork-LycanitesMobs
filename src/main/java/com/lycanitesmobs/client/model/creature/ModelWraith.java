@@ -1,21 +1,22 @@
 package com.lycanitesmobs.client.model.creature;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.platform.GLX;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelWraith extends ModelTemplateElemental {
@@ -46,7 +47,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "skull", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(-8, 0)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vec2f(-8, 0)));
 	}
 
 
@@ -95,8 +96,8 @@ public class ModelWraith extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
-    	return new Vector2f(-loop * 8, 0);
+	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+    	return new Vec2f(-loop * 8, 0);
 	}
 
 
@@ -131,7 +132,7 @@ public class ModelWraith extends ModelTemplateElemental {
 		int i = 15728880;
 		int j = i % 65536;
 		int k = i / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 	}
 
 	@Override
@@ -139,9 +140,9 @@ public class ModelWraith extends ModelTemplateElemental {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
-		int i = entity.getBrightnessForRender();
+		int i = ClientManager.FULL_BRIGHT;
 		int j = i % 65536;
 		int k = i / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 	}
 }

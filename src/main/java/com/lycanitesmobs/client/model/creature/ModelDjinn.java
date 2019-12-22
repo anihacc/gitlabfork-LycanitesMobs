@@ -2,15 +2,13 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.specific.LayerDjinn;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDjinn extends ModelTemplateElemental {
@@ -69,9 +67,9 @@ public class ModelDjinn extends ModelTemplateElemental {
 	//              Get Part Texture Offset
 	// ==================================================
 	@Override
-	public Vector2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
+	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
 		if(partName.contains("ribbon")) {
-			return new Vector2f(-loop * 25, 0);
+			return new Vec2f(-loop * 25, 0);
 		}
 		return super.getBaseTextureOffset(partName, entity, trophy, loop);
 	}

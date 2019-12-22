@@ -1,17 +1,16 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.ClientManager;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector2f;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerProjectileEffect extends LayerProjectileBase {
@@ -36,13 +35,13 @@ public class LayerProjectileEffect extends LayerProjectileBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerProjectileEffect(RenderProjectileModel renderer, String textureSuffix) {
+    public LayerProjectileEffect(ProjectileModelRenderer renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;
         this.textureSuffix = textureSuffix;
     }
 
-	public LayerProjectileEffect(RenderProjectileModel renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+	public LayerProjectileEffect(ProjectileModelRenderer renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
 		super(renderer);
 		this.name = textureSuffix;
 		this.textureSuffix = textureSuffix;
@@ -68,36 +67,36 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 	@Override
 	public void onRenderStart(Entity entity) {
 		// Glow In Dark:
-		int i = entity.getBrightnessForRender();
+		int i = ClientManager.FULL_BRIGHT;
 		if(this.glow) {
-			GlStateManager.disableLighting();
+			RenderSystem.disableLighting();
 			i = 0xf000f0;
 		}
 		int j = i % 65536;
 		int k = i / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 
 		// Blending:
     	if(this.blending == BLEND.ADD.id) {
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 		}
 		else if(this.blending == BLEND.SUB.id) {
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		}
 	}
 
 	@Override
 	public void onRenderFinish(Entity entity) {
     	if(this.glow) {
-			GlStateManager.enableLighting();
+			RenderSystem.enableLighting();
 		}
 	}
 
 	@Override
-	public Vector2f getTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
+	public Vec2f getTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
     	if(this.scrollSpeed == null) {
-			this.scrollSpeed = new Vector2f(0, 0);
+			this.scrollSpeed = new Vec2f(0, 0);
 		}
-		return new Vector2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
 	}
 }

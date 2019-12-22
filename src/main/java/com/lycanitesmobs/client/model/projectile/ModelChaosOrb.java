@@ -1,14 +1,14 @@
 package com.lycanitesmobs.client.model.projectile;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.client.model.ModelProjectileObj;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
-import com.mojang.blaze3d.platform.GLX;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelChaosOrb extends ModelProjectileObj {
@@ -59,15 +59,15 @@ public class ModelChaosOrb extends ModelProjectileObj {
 		int i = 15728880;
 		int j = i % 65536;
 		int k = i / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 	}
 
 	@Override
 	public void onRenderFinish(LayerProjectileBase layer, BaseProjectileEntity entity) {
 		super.onRenderFinish(layer, entity);
-		int i = entity.getBrightnessForRender();
+		int i = ClientManager.FULL_BRIGHT;
 		int j = i % 65536;
 		int k = i / 65536;
-		GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (float) j, (float) k);
+		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
 	}
 }

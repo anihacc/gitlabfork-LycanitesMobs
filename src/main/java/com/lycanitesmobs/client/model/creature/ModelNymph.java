@@ -5,14 +5,13 @@ import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelNymph extends ModelTemplateElemental {
@@ -102,7 +101,7 @@ public class ModelNymph extends ModelTemplateElemental {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
-		GlStateManager.disableLighting();
+		RenderSystem.disableLighting();
 	}
 
 	@Override
@@ -110,6 +109,6 @@ public class ModelNymph extends ModelTemplateElemental {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
-		GlStateManager.enableLighting();
+		RenderSystem.enableLighting();
 	}
 }

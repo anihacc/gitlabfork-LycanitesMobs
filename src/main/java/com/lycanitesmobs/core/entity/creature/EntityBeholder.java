@@ -208,13 +208,4 @@ public class EntityBeholder extends RideableCreatureEntity {
         else
         	return super.getBrightness();
     }
-    
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public int getBrightnessForRender() {
-        if(isAttackOnCooldown())
-        	return 15728880;
-        else
-        	return super.getBrightnessForRender();
-    }
 }

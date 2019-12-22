@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 
 public class EntitySpriggan extends TameableCreatureEntity implements IMob {
@@ -89,7 +90,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 	        			if(farmingBlock instanceof IPlantable && farmingBlock instanceof IGrowable && farmingBlock != Blocks.TALL_GRASS) {
 	        				
 		        			// Boost Crops Every X Seconds:
-		        			if(!this.getEntityWorld().isRemote && this.farmingTick % (currentFarmingRate) == 0) {
+		        			if(!this.getEntityWorld().isRemote && this.getEntityWorld() instanceof ServerWorld && this.farmingTick % (currentFarmingRate) == 0) {
                                 /*if(farmingBlock.getTickRandomly()) {
                                     this.getEntityWorld().scheduleBlockUpdate(pos, farmingBlock, currentFarmingRate, 1);
                                 }*/
@@ -97,7 +98,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 		    	        		IGrowable growableBlock = (IGrowable)farmingBlock;
 		    	        		if(growableBlock.canGrow(this.getEntityWorld(), pos, this.getEntityWorld().getBlockState(pos), this.getEntityWorld().isRemote())) {
 	    	                        if(growableBlock.canUseBonemeal(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos))) {
-	    	                        	growableBlock.grow(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
+	    	                        	growableBlock.func_225535_a_((ServerWorld)this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
 	    	                        }
 		    	                }
 		        			}

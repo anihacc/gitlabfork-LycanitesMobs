@@ -4,7 +4,7 @@ import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -169,7 +169,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	//             Add Custom Render Layers
 	// ==================================================
 	@Override
-	public void addCustomLayers(RenderProjectileModel renderer) {
+	public void addCustomLayers(ProjectileModelRenderer renderer) {
 		super.addCustomLayers(renderer);
 		if(this.animation != null) {
 			this.animation.addProjectileLayers(renderer);

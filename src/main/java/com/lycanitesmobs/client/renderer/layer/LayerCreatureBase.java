@@ -3,7 +3,9 @@ package com.lycanitesmobs.client.renderer.layer;
 import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
@@ -31,7 +33,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCr
     //                  Render Layer
     // ==================================================
     @Override
-    public void render(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void func_225628_a_(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {
@@ -83,7 +85,6 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCr
 
     }
 
-    @Override
     public boolean shouldCombineTextures() {
         return true;
     }

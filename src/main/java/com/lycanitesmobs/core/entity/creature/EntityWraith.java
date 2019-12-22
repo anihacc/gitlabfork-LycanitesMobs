@@ -136,11 +136,6 @@ public class EntityWraith extends TameableCreatureEntity implements IMob {
     public float getBrightness() {
         return super.getBrightness();
     }
-    
-    @OnlyIn(Dist.CLIENT)
-    public int getBrightnessForRender() {
-        return super.getBrightnessForRender();
-    }
 
 
 	// ==================================================

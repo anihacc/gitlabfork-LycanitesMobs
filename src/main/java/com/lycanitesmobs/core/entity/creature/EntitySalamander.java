@@ -256,12 +256,6 @@ public class EntitySalamander extends RideableCreatureEntity implements IMob {
     public float getBrightness() {
         return 1.0F;
     }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public int getBrightnessForRender() {
-        return 15728880;
-    }
     
     
     // ==================================================

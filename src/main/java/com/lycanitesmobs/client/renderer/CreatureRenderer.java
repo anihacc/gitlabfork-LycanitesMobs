@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -21,7 +22,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     // ==================================================
   	//                    Constructor
   	// ==================================================
-    public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
 		
     	this.defaultModel = this.entityModel;
@@ -29,26 +30,14 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 		if(modelCreatureBase == null)
 			return;
 		modelCreatureBase.addCustomLayers(this);
-
-        //this.multipass = ConfigClient.INSTANCE.modelMultipass.get();
     }
 
 
 	// ==================================================
 	//                     Render
 	// ==================================================
-	/**
-	 * Returns if this renderer should render multiple passes.
-	 * @return True for multi pass rendering.
-	 */
 	@Override
-	public boolean isMultipass() {
-		//return this.multipass;
-		return false; // Disabled as this doesn't have the desired effect.
-	}
-
-	@Override
-	public void doRender(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void func_225621_a_(BaseCreatureEntity entity, MatrixStack matrixStack, float entityYaw, float partialTicks, float something) {
 		this.entityModel = this.defaultModel;
 		try {
 			this.entityModel = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
@@ -60,15 +49,10 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 			return;
 		}
 
-    	super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    	super.func_225621_a_(entity, matrixStack, entityYaw, partialTicks, something);
 	}
 
-	@Override
-	public void renderMultipass(BaseCreatureEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		//super.doRender(entity, x, y, z, entityYaw, partialTicks);
-	}
-
-	@Override
+	/*@Override
 	protected void renderModel(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
@@ -76,7 +60,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	@Override
 	protected void renderLayers(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		super.renderLayers(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-	}
+	}*/
 
 	public ModelCreatureBase getMainModel() {
 		return this.entityModel;
@@ -87,8 +71,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
  	//                     Visuals
  	// ==================================================
     // ========== Main ==========
-    @Override
-    protected boolean bindEntityTexture(BaseCreatureEntity entity) {
+    public boolean bindEntityTexture(BaseCreatureEntity entity) {
         ResourceLocation texture = this.getEntityTexture(entity);
         if(texture == null)
             return false;
@@ -97,30 +80,18 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     }
     
     @Override
-    protected ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
+    public ResourceLocation getEntityTexture(BaseCreatureEntity entity) {
 		return entity.getTexture();
 	}
-    
-    // ========== Equipment ==========
-    protected void bindEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
-        this.bindTexture(this.getEquipmentTexture(entity, equipmentName));
-    }
-    
-    protected ResourceLocation getEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
-    	if(entity != null)
-    		return entity.getEquipmentTexture(equipmentName);
-        return null;
-    }
+
+	public void bindTexture(ResourceLocation texture) {
+		this.renderManager.textureManager.bindTexture(texture);
+	}
     
     
     // ==================================================
   	//                     Effects
   	// ==================================================
-    @Override
-    protected void preRenderCallback(BaseCreatureEntity entity, float particleTickTime) {
-        // No effects.
-    }
-    
     /** If true, display the name of the entity above it. **/
     @Override
     protected boolean canRenderName(BaseCreatureEntity entity) {

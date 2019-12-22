@@ -52,7 +52,11 @@ public class EntityAstaroth extends TameableCreatureEntity implements IMob {
             if (this.getMasterTarget() != null && this.getMasterTarget() instanceof EntityAsmodeus && ((BaseCreatureEntity)this.getMasterTarget()).getBattlePhase() > 0) {
                 EntityHellShield projectile = new EntityHellShield(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellShield.class), this.getEntityWorld(), this);
                 projectile.setProjectileScale(3f);
-                projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height * 0.35D;
+                projectile.setPosition(
+                        projectile.getPositionVec().getX(),
+                        projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height * 0.35D,
+                        projectile.getPositionVec().getZ()
+                );
                 double dX = this.getMasterTarget().getPositionVec().getX() - this.getPositionVec().getX();
                 double dY = this.getMasterTarget().getPositionVec().getY() + (this.getMasterTarget().getSize(Pose.STANDING).height * 0.75D) - projectile.getPositionVec().getY();
                 double dZ = this.getMasterTarget().getPositionVec().getZ() - this.getPositionVec().getZ();

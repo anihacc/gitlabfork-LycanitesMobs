@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.navigate;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -101,9 +100,9 @@ public class CreatureMoveController extends MovementController {
         }
         else if (this.action == MovementController.Action.MOVE_TO) {
             this.action = MovementController.Action.WAIT;
-            double distanceX = this.getPositionVec().getX() - this.mob.getPositionVec().getX();
-            double distanceZ = this.getPositionVec().getZ() - this.mob.getPositionVec().getZ();
-            double distanceY = this.getPositionVec().getY() - this.mob.getPositionVec().getY();
+            double distanceX = this.posX - this.mob.getPositionVec().getX();
+            double distanceZ = this.posZ - this.mob.getPositionVec().getZ();
+            double distanceY = this.posY - this.mob.getPositionVec().getY();
             double distanceXZ = distanceX * distanceX + distanceZ * distanceZ;
             double distance = distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ;
             if (distance < 2.500000277905201E-7D) {
@@ -139,9 +138,9 @@ public class CreatureMoveController extends MovementController {
     /** Used by strong swimmers for fast, smooth movement. **/
     public void tickSwimming() {
         if (this.action == MovementController.Action.MOVE_TO && !this.entityCreature.getNavigator().noPath()) {
-            double x = this.getPositionVec().getX() - this.entityCreature.getPositionVec().getX();
-            double y = this.getPositionVec().getY() - this.entityCreature.getPositionVec().getY();
-            double z = this.getPositionVec().getZ() - this.entityCreature.getPositionVec().getZ();
+            double x = this.posX - this.entityCreature.getPositionVec().getX();
+            double y = this.posY - this.entityCreature.getPositionVec().getY();
+            double z = this.posZ - this.entityCreature.getPositionVec().getZ();
             double distance = x * x + y * y + z * z;
             distance = (double) MathHelper.sqrt(distance);
             y = y / distance;
@@ -185,9 +184,9 @@ public class CreatureMoveController extends MovementController {
     /** Used by flyers for swift, fast air movement. **/
     public void tickFlying() {
         if (this.action == MovementController.Action.MOVE_TO) {
-            double xDistance = this.getPositionVec().getX() - this.entityCreature.getPositionVec().getX();
-            double yDistance = this.getPositionVec().getY() - this.entityCreature.getPositionVec().getY();
-            double zDistance = this.getPositionVec().getZ() - this.entityCreature.getPositionVec().getZ();
+            double xDistance = this.posX - this.entityCreature.getPositionVec().getX();
+            double yDistance = this.posY - this.entityCreature.getPositionVec().getY();
+            double zDistance = this.posZ - this.entityCreature.getPositionVec().getZ();
             double distance = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
 
             if (this.courseChangeCooldown-- <= 0) {

@@ -88,9 +88,11 @@ public class EntityDemonicBlast extends BaseProjectileEntity {
 		BaseProjectileEntity projectile;
 		if(this.getThrower() != null) {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getThrower());
-			projectile.getPositionVec().getX() = this.getPositionVec().getX();
-			projectile.getPositionVec().getY() = this.getPositionVec().getY();
-			projectile.getPositionVec().getZ() = this.getPositionVec().getZ();
+			projectile.setPosition(
+					this.getPositionVec().getX(),
+					this.getPositionVec().getY(),
+					this.getPositionVec().getZ()
+			);
 		}
 		else {
 			projectile = new EntityDemonicSpark(ProjectileManager.getInstance().oldProjectileTypes.get(EntityDemonicSpark.class), world, this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ());

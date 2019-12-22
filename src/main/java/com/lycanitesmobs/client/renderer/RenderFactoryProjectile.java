@@ -28,7 +28,7 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 		// Old Projectile Obj Models:
 		if(this.oldModel) {
 			try {
-				return new RenderProjectileModel(manager, this.oldProjectileName);
+				return new ProjectileModelRenderer(manager, this.oldProjectileName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -36,18 +36,18 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 
 		// Old Projectile Item Sprite Models:
 		if(this.oldProjectileClass != null) {
-			return new RenderProjectileSprite(manager, this.oldProjectileClass);
+			return new ProjectileSpriteRenderer(manager, this.oldProjectileClass);
 		}
 
 		// New JSON Projectile:
 		if(this.hasModel) {
 			try {
-				return new RenderProjectileModel(manager);
+				return new ProjectileModelRenderer(manager);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return new RenderProjectileSprite(manager, CustomProjectileEntity.class);
+		return new ProjectileSpriteRenderer(manager, CustomProjectileEntity.class);
     }
 
 }

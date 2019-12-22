@@ -1,9 +1,11 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.model.ModelProjectileBase;
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.Entity;
@@ -14,13 +16,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ModelProjectileBase> {
-    public RenderProjectileModel renderer;
+    public ProjectileModelRenderer renderer;
     public String name;
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerProjectileBase(RenderProjectileModel renderer) {
+    public LayerProjectileBase(ProjectileModelRenderer renderer) {
         super(renderer);
         this.renderer = renderer;
         this.name = "Layer";
@@ -30,8 +32,8 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Mod
     // ==================================================
     //                  Render Layer
     // ==================================================
-    @Override //render
-    public void render(BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    @Override
+    public void func_225628_a_(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         if(!this.canRenderLayer(entity, scale))
             return;
         if(this.renderer.getMainModel() != null) {
@@ -83,7 +85,6 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Mod
 
     }
 
-    @Override
     public boolean shouldCombineTextures() {
         return true;
     }

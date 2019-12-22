@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.creature.EntityRahovart;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -75,16 +75,20 @@ public class EntityHellfireWave extends BaseProjectileEntity {
 
         // Populate:
         if(this.hellfireWalls == null) {
-            hellfireWalls = new EntityHellfireWall[this.hellfireHeight][this.hellfireWidth];
+            this.hellfireWalls = new EntityHellfireWall[this.hellfireHeight][this.hellfireWidth];
             for(int row = 0; row < this.hellfireHeight; row++) {
                 for(int col = 0; col < this.hellfireWidth; col++) {
                     if(this.getThrower() != null)
-                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getThrower());
+                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getThrower());
                     else
-                        hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + 5 + (this.hellfireSize * row), this.getPositionVec().getZ());
-                    hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
+                        this.hellfireWalls[row][col] = new EntityHellfireWavePart(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireWavePart.class), this.getEntityWorld(), this.getPositionVec().getX(), this.getPositionVec().getY() + 5 + (this.hellfireSize * row), this.getPositionVec().getZ());
+                    this.hellfireWalls[row][col].setPosition(
+                            this.hellfireWalls[row][col].getPositionVec().getX(),
+                            this.getPositionVec().getY() + (this.hellfireSize * row),
+                            this.hellfireWalls[row][col].getPositionVec().getZ()
+                    );
                     this.getEntityWorld().addEntity(hellfireWalls[row][col]);
-                    hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);
+                    this.hellfireWalls[row][col].setProjectileScale(this.hellfireSize * 2);
                 }
             }
         }
@@ -95,12 +99,14 @@ public class EntityHellfireWave extends BaseProjectileEntity {
                 double rotationRadians = Math.toRadians(((((float)col / this.hellfireWidth) * this.angle) - (this.angle / 2) + this.rotation) % 360);
                 double x = (((float)this.time / this.timeMax) * 200) * Math.cos(rotationRadians) - Math.sin(rotationRadians);
                 double z = (((float)this.time / this.timeMax) * 200) * Math.sin(rotationRadians) + Math.cos(rotationRadians);
-                hellfireWalls[row][col].getPositionVec().getX() = this.getPositionVec().getX() + x;
-                hellfireWalls[row][col].getPositionVec().getY() = this.getPositionVec().getY() + (this.hellfireSize * row);
-                hellfireWalls[row][col].getPositionVec().getZ() = this.getPositionVec().getZ() + z;
-                hellfireWalls[row][col].projectileLife = 2 * 20;
+                this.hellfireWalls[row][col].setPosition(
+                        this.getPositionVec().getX() + x,
+                        this.getPositionVec().getY() + (this.hellfireSize * row),
+                        this.getPositionVec().getZ() + z
+                );
+                this.hellfireWalls[row][col].projectileLife = 2 * 20;
                 if(!this.isAlive())
-                    hellfireWalls[row][col].remove();
+                    this.hellfireWalls[row][col].remove();
             }
         }
     }

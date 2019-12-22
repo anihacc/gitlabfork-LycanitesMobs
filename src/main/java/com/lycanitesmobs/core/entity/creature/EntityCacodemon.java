@@ -212,13 +212,4 @@ public class EntityCacodemon extends RideableCreatureEntity {
         else
             return super.getBrightness();
     }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public int getBrightnessForRender() {
-        if(isAttackOnCooldown())
-            return 15728880;
-        else
-            return super.getBrightnessForRender();
-    }
 }

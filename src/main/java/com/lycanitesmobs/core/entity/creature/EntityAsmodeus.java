@@ -378,7 +378,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 for (int i = 0; i < 5 * playerCount; i++) {
                     EntityCacodemon minion = (EntityCacodemon)CreatureManager.getInstance().getCreature("cacodemon").createEntity(this.getEntityWorld());
                     this.summonMinion(minion, this.getRNG().nextDouble() * 360, 10);
-                    minion.getPositionVec().getY() += 10 + this.getRNG().nextInt(20);
+                    minion.setPosition(
+                            minion.getPositionVec().getX(),
+                            minion.getPositionVec().getY() + 10 + this.getRNG().nextInt(20),
+                            minion.getPositionVec().getZ()
+                    );
                     this.cacodemonMinions.add(minion);
                 }
             }
@@ -441,9 +445,11 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
 
         // Y Offset:
         BlockPos offset = this.getFacingPosition(this, 8, angle);
-        projectile.getPositionVec().getX() = offset.getX();
-        projectile.getPositionVec().getY() = offset.getY() + (this.getSize(Pose.STANDING).height * 0.5D);
-        projectile.getPositionVec().getZ() = offset.getZ();
+        projectile.setPosition(
+                offset.getX(),
+                offset.getY() + (this.getSize(Pose.STANDING).height * 0.5D),
+                offset.getZ()
+        );
 
         // Set Velocities:
         float range = 20 + (20 * this.getRNG().nextFloat());

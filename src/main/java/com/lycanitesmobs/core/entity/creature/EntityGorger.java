@@ -76,7 +76,11 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy 
         projectile.setProjectileScale(2f);
 
         // Y Offset:
-        projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
+        projectile.setPosition(
+                projectile.getPositionVec().getX(),
+                projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
+                projectile.getPositionVec().getZ()
+        );
 
         // Accuracy:
         float accuracy = 1.0F * (this.getRNG().nextFloat() - 0.5F);

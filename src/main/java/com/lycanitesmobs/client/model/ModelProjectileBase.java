@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.model;
 
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -32,7 +32,7 @@ public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> {
     // ==================================================
     //             Add Custom Render Layers
     // ==================================================
-    public void addCustomLayers(RenderProjectileModel renderer) {
+    public void addCustomLayers(ProjectileModelRenderer renderer) {
 
     }
     

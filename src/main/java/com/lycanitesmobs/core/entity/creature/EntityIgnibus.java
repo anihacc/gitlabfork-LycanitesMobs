@@ -5,12 +5,10 @@ import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
-import com.lycanitesmobs.core.info.ObjectLists;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -18,8 +16,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,7 +202,11 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             projectile.setProjectileScale(1f);
 
             // Y Offset:
-            projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
+            projectile.setPosition(
+                    projectile.getPositionVec().getX(),
+                    projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
+                    projectile.getPositionVec().getZ()
+            );
 
             // Accuracy:
             float accuracy = 4.0F * (this.getRNG().nextFloat() - 0.5F);
@@ -331,7 +331,11 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
                 projectile.setProjectileScale(1f);
 
                 // Y Offset:
-                projectile.getPositionVec().getY() -= this.getSize(Pose.STANDING).height / 4;
+                projectile.setPosition(
+                        projectile.getPositionVec().getX(),
+                        projectile.getPositionVec().getY() - this.getSize(Pose.STANDING).height / 4,
+                        projectile.getPositionVec().getZ()
+                );
 
                 // Launch:
                 this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -365,14 +369,5 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             return 1.0F;
         else
             return super.getBrightness();
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public int getBrightnessForRender() {
-        if(isAttackOnCooldown())
-            return 15728880;
-        else
-            return super.getBrightnessForRender();
     }
 }

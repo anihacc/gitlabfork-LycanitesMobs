@@ -33,6 +33,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientManager {
 	public static int GL_TEXTURE0 = 33984;
 	public static int GL_TEXTURE1 = 33986;
+	public static int FULL_BRIGHT = 15728880;
 
 	protected static ClientManager INSTANCE;
 	public static ClientManager getInstance() {

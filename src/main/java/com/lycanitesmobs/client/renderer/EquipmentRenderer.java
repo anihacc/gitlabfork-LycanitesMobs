@@ -4,8 +4,10 @@ import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ModelEquipment;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -17,7 +19,7 @@ import java.util.List;
 public class EquipmentRenderer extends ItemStackTileEntityRenderer implements IItemModelRenderer {
 
 	@Override
-	public void renderByItem(ItemStack itemStack) {
+	public void func_228364_a_(ItemStack itemStack, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticksA, int ticksB) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}

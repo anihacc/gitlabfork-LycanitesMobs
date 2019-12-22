@@ -6,7 +6,7 @@ import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.client.model.animation.TextureLayerAnimation;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 
 import java.util.*;
@@ -64,7 +64,7 @@ public class ModelAnimation {
 	 * Adds projectile layers from this Animation to the provided renderer.
 	 * @param renderer The renderer to add the layers to.
 	 */
-	public void addProjectileLayers(RenderProjectileModel renderer) {
+	public void addProjectileLayers(ProjectileModelRenderer renderer) {
 		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
 			renderer.addLayer(textureLayer.createProjectileLayer(renderer));
 		}

@@ -1,10 +1,8 @@
 package com.lycanitesmobs.core.entity.navigate;
 
 import com.google.common.collect.Sets;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.creature.EntitySilex;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -20,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.Region;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -38,9 +36,9 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
     }
 
     // ==================== Setup ====================
-    @Override
-    public void init(IWorldReader sourceIn, MobEntity mob) {
-        super.init(sourceIn, mob);
+    @Override // init()
+    public void func_225578_a_(Region region, MobEntity mob) {
+        super.func_225578_a_(region, mob);
         this.avoidsWater = mob.getPathPriority(PathNodeType.WATER);
         if(mob instanceof BaseCreatureEntity)
             this.entityCreature = (BaseCreatureEntity)mob;
@@ -130,11 +128,11 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         int posY;
         if (this.getCanSwim() && this.entity.canSwim()) { // If can swim and is swimming underwater
             posY = (int)this.entity.getBoundingBox().minY;
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
+            BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
 
-            for (IFluidState fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos); fluidState.isTagged(FluidTags.WATER); fluidState = this.blockaccess.getFluidState(blockpos$mutableblockpos)) {
+            for (IFluidState fluidState = this.blockaccess.getFluidState(blockpos$mutable); fluidState.isTagged(FluidTags.WATER); fluidState = this.blockaccess.getFluidState(blockpos$mutable)) {
                 ++posY;
-                blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
+                blockpos$mutable.setPos(MathHelper.floor(this.entity.getPositionVec().getX()), posY, MathHelper.floor(this.entity.getPositionVec().getZ()));
             }
         }
 
@@ -285,7 +283,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
                 double offsetX = (double)(x - direction.getXOffset()) + 0.5D;
                 double offsetZ = (double)(z - direction.getZOffset()) + 0.5D;
                 AxisAlignedBB axisalignedbb = new AxisAlignedBB(offsetX - entityRadius, getGroundY(this.blockaccess, new BlockPos(offsetX, (double)(y + 1), offsetZ)) + 0.001D, offsetZ - entityRadius, offsetX + entityRadius, (double)this.entity.getHeight() + getGroundY(this.blockaccess, new BlockPos(safePoint.x, safePoint.y, safePoint.z)) - 0.002D, offsetZ + entityRadius);
-                if (!this.blockaccess.isCollisionBoxesEmpty(this.entity, axisalignedbb)) {
+                if (!this.blockaccess.func_226665_a__(this.entity, axisalignedbb)) { // isCollisionBoxesEmpty()
                     safePoint = null;
                 }
             }
@@ -313,7 +311,7 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
         if (pathnodetype == PathNodeType.OPEN) {
             AxisAlignedBB pathingCollision = new AxisAlignedBB((double)x - entityRadius + 0.5D, (double)y + 0.001D, (double)z - entityRadius + 0.5D, (double)x + entityRadius + 0.5D, (double)((float)y + this.entity.getSize(Pose.STANDING).height), (double)z + entityRadius + 0.5D);
 
-            if (!this.blockaccess.isCollisionBoxesEmpty(this.entity, pathingCollision)) {
+            if (!this.blockaccess.func_226665_a__(this.entity, pathingCollision)) { // isCollisionBoxesEmpty()
                 return null;
             }
 
@@ -484,13 +482,13 @@ public class CreatureNodeProcessor extends NodeProcessor implements ICreatureNod
 
     public PathNodeType checkNeighborBlocks(IBlockReader blockaccessIn, int x, int y, int z, PathNodeType nodeType) {
         if (nodeType == PathNodeType.WALKABLE) {
-            try (BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain()) {
+            try (BlockPos.PooledMutable blockpos$pooledmutable = BlockPos.PooledMutable.retain()) {
                 for(int i = -1; i <= 1; ++i) {
                     for(int j = -1; j <= 1; ++j) {
                         if (i != 0 || j != 0) {
-                            BlockState state = blockaccessIn.getBlockState(blockpos$pooledmutableblockpos.setPos(i + x, y, j + z));
+                            BlockState state = blockaccessIn.getBlockState(blockpos$pooledmutable.setPos(i + x, y, j + z));
                             Block block = state.getBlock();
-                            PathNodeType type = block.getAiPathNodeType(state, blockaccessIn, blockpos$pooledmutableblockpos, this.entity);
+                            PathNodeType type = block.getAiPathNodeType(state, blockaccessIn, blockpos$pooledmutable, this.entity);
                             if (block == Blocks.CACTUS || type == PathNodeType.DAMAGE_CACTUS) {
                                 nodeType = PathNodeType.DANGER_CACTUS;
                             } else if (block == Blocks.FIRE || type == PathNodeType.DAMAGE_FIRE) {

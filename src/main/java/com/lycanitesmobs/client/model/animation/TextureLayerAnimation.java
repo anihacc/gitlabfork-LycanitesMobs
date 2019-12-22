@@ -3,7 +3,7 @@ package com.lycanitesmobs.client.model.animation;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import com.lycanitesmobs.client.renderer.RenderProjectileModel;
+import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileEffect;
@@ -104,7 +104,7 @@ public class TextureLayerAnimation {
 	 * @param renderer The projectile renderer to use for the layer.
 	 * @return A new Layer Renderer.
 	 */
-	public LayerProjectileEffect createProjectileLayer(RenderProjectileModel renderer) {
+	public LayerProjectileEffect createProjectileLayer(ProjectileModelRenderer renderer) {
 		int blendingId = LayerProjectileEffect.BLEND.NORMAL.id;
 		if("add".equals(this.blending)) {
 			blendingId = LayerProjectileEffect.BLEND.ADD.id;

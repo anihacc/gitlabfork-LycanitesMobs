@@ -41,7 +41,7 @@ public class StructureSpawnLocation extends RandomSpawnLocation {
 
 		BlockPos structurePos = null;
 		try {
-			structurePos = world.findNearestStructure(this.structureType, triggerPos, this.structureRange, false);
+			structurePos = ((ServerWorld)world).findNearestStructure(this.structureType, triggerPos, this.structureRange, false);
 		}
 		catch (Exception e) {}
 
