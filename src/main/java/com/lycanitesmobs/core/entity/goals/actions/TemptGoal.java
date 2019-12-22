@@ -23,7 +23,6 @@ public class TemptGoal extends Goal {
     // Properties:
     private double speed = 1.0D;
     private ItemStack temptItemStack = null;
-    private boolean ignoreTemptMeta = false;
     private String temptList = null;
     private int retemptTime;
     private int retemptTimeMax = 0; // Lowered from 100 because it's just annoying!
@@ -32,7 +31,8 @@ public class TemptGoal extends Goal {
     private boolean scaredByPlayerMovement = false;
     private boolean stopAttack = false;
     private boolean includeTreats = true;
-    
+    private boolean includeDiet = false;
+
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -61,10 +61,6 @@ public class TemptGoal extends Goal {
     	this.temptItemStack = item;
     	return this;
     }
-    public TemptGoal setIgnoreMeta(boolean ignore) {
-    	this.ignoreTemptMeta = ignore;
-    	return this;
-    }
     public TemptGoal setItemList(String list) {
     	this.temptList = list;
     	return this;
@@ -91,6 +87,10 @@ public class TemptGoal extends Goal {
     }
     public TemptGoal setIncludeTreats(boolean includeTreats) {
         this.includeTreats = includeTreats;
+        return this;
+    }
+    public TemptGoal setIncludeDiet(boolean includeDiet) {
+        this.includeDiet = includeDiet;
         return this;
     }
     
@@ -148,6 +148,11 @@ public class TemptGoal extends Goal {
             if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
                 return true;
             }
+        }
+
+        // Creature Diet:
+        if(this.includeDiet && this.host.creatureInfo.canEat(itemStack)) {
+            return true;
         }
 
         // Tempt List:
