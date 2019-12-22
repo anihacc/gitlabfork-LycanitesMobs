@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
+import com.lycanitesmobs.core.entity.goals.actions.TemptGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
@@ -36,6 +37,7 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
         this.goalSelector.addGoal(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false).setRange(1));
     }
 
@@ -85,6 +87,14 @@ public class EntityKrake extends AgeableCreatureEntity implements IMob {
 	@Override
 	public boolean isPushedByWater() {
         return false;
+    }
+
+    // ========== Can leash ==========
+    @Override
+    public boolean canBeLeashedTo(PlayerEntity player) {
+        if(!this.hasAttackTarget())
+            return true;
+        return super.canBeLeashedTo(player);
     }
 
 
