@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.obj;
 
-import com.google.common.collect.ImmutableList;
 import com.lycanitesmobs.LycanitesMobs;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -60,7 +60,7 @@ public class TessellatorModel extends ObjModel
 
 
     @Override
-    public void renderImpl()
+    public void renderImpl(IVertexBuilder vertexBuilder)
     {
         Collections.sort(objObjects, (a, b) -> {
 			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
@@ -70,28 +70,33 @@ public class TessellatorModel extends ObjModel
 		});
         for(ObjObject object : objObjects)
         {
-            renderGroup(object);
+            renderGroup(vertexBuilder, object);
         }
     }
 
 
     @Override
-    public void renderGroupsImpl(String group)
+    public void renderGroupsImpl(IVertexBuilder vertexBuilder, String group)
     {
         for(ObjObject object : objObjects)
         {
             if(object.getName().equals(group))
             {
-                renderGroup(object);
+                renderGroup(vertexBuilder, object);
             }
         }
     }
 
 
     @Override
-    public void renderGroupImpl(ObjObject obj, Vector4f color, Vec2f textureOffset) {
+    public void renderGroupImpl(IVertexBuilder vertexBuilder, ObjObject obj, Vector4f color, Vec2f textureOffset) {
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tess.getBuffer();
+		vertexBuilder = tess.getBuffer();
+		if (VERTEX_FORMAT == null) {
+			//VERTEX_FORMAT = new VertexFormat(ImmutableList.builder().add(DefaultVertexFormats.POSITION_3F).add(DefaultVertexFormats.TEX_2F).add(DefaultVertexFormats.COLOR_4UB).add(DefaultVertexFormats.NORMAL_3B).add(DefaultVertexFormats.PADDING_1B).build());
+		}
+		((BufferBuilder)vertexBuilder).begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+
         if(obj.mesh == null) {
             return;
         }
@@ -114,11 +119,7 @@ public class TessellatorModel extends ObjModel
 			obj.mesh.normals = new Vector3f[indices.length];
 		}
 
-		// Build Buffer:
-		if(VERTEX_FORMAT == null) {
-			//VERTEX_FORMAT = new VertexFormat(ImmutableList.builder().add(DefaultVertexFormats.POSITION_3F).add(DefaultVertexFormats.TEX_2F).add(DefaultVertexFormats.COLOR_4UB).add(DefaultVertexFormats.NORMAL_3B).add(DefaultVertexFormats.PADDING_1B).build());
-		}
-        bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+		// Build:
         for(int i = 0; i < indices.length; i += 3) {
 
         	// Normal:
@@ -130,7 +131,7 @@ public class TessellatorModel extends ObjModel
 
             for(int iv = 0; iv < 3; iv++) {
                 Vertex v = obj.mesh.vertices[indices[i + iv]];
-				bufferBuilder
+				vertexBuilder
                         .func_225582_a_(v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
                         .func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //tex
                         .func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color

@@ -8,8 +8,10 @@ import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -98,7 +100,9 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
    	//                  Render Model
    	// ==================================================
     @Override
-	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+	public void animate(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+    	if(true) return;
+
 		boolean isChild = false;
 		if(entity != null) {
 			isChild = entity.isChild();
@@ -190,10 +194,15 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
             // Render:
             this.uncenterPart(partName);
 			this.onRenderStart(layer, entity, trophyModel);
-            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+            this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
 			this.onRenderFinish(layer, entity, trophyModel);
 			RenderSystem.popMatrix();
 		}
+	}
+
+	@Override
+	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD, LayerCreatureBase layer, boolean animate) {
+
 	}
 
 	/** Called just before a layer is rendered. **/

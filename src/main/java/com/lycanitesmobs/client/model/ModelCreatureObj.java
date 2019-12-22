@@ -3,7 +3,6 @@ package com.lycanitesmobs.client.model;
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -11,8 +10,10 @@ import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -34,9 +35,9 @@ import java.util.Map;
 public class ModelCreatureObj extends ModelCreatureBase implements IAnimationModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
-    public static float modelXRotOffset = 180F;
+    public static float MODEL_OFFSET_ROT_X = 180F;
     /** An initial y offset applied to make Blender models match Minecraft. **/
-    public static float modelYPosOffset = -1.5F;
+    public static float MODEL_OFFSET_POS_Y = -1.5F;
 
 	// Model:
     /** An INSTANCE of the model, the model should only be set once and not during every tick or things will get very laggy! **/
@@ -207,7 +208,7 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
    	//                  Render Model
    	// ==================================================
     @Override
-	public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
+	public void animate(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
 		boolean isChild = false;
@@ -247,42 +248,43 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 		}
 
 		// Render Parts:
-        for(ObjObject part : this.wavefrontParts) {
-            String partName = part.getName().toLowerCase();
-            if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
-                continue;
-            this.currentAnimationPart = this.animationParts.get(partName);
-            if(this.currentAnimationPart == null) {
-            	continue;
+		for(ObjObject part : this.wavefrontParts) {
+			String partName = part.getName().toLowerCase();
+			if (!this.canRenderPart(partName, entity, layer, renderAsTrophy))
+				continue;
+
+			this.currentAnimationPart = this.animationParts.get(partName);
+			if(this.currentAnimationPart == null) {
+				continue;
 			}
 
-            // Begin Rendering Part:
-            RenderSystem.pushMatrix();
+			// Begin Rendering Part:
+			RenderSystem.pushMatrix();
 
-            // Apply Initial Offsets: (To Match Blender OBJ Export)
-            this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
-            this.animator.doTranslate(0F, modelYPosOffset, 0F);
+			// Apply Initial Offsets: (To Match Blender OBJ Export)
+			this.animator.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
+			this.animator.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
 
-            // Child Scaling:
-            if(isChild && !renderAsTrophy) {
-                this.childScale(partName);
-                if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
-                    this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
-            }
+			// Child Scaling:
+			if(isChild && !renderAsTrophy) {
+				this.childScale(partName);
+				if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
+					this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
+			}
 
-            // Trophy Scaling:
-            if(renderAsTrophy)
-                this.animator.doScale(this.trophyScale, this.trophyScale, this.trophyScale);
+			// Trophy Scaling:
+			if(renderAsTrophy)
+				this.animator.doScale(this.trophyScale, this.trophyScale, this.trophyScale);
 
-            // Apply Entity Scaling:
-            this.animator.doScale(scale, scale, scale);
+			// Apply Entity Scaling:
+			this.animator.doScale(scale, scale, scale);
 
-            // Apply Animation Frames:
-            this.currentAnimationPart.applyAnimationFrames(this.animator);
+			// Apply Animation Frames:
+			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
-            // Render Part:
+			// Render Part:
 			this.onRenderStart(layer, entity, renderAsTrophy);
-            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			this.onRenderFinish(layer, entity, renderAsTrophy);
 			RenderSystem.popMatrix();
 		}
@@ -292,6 +294,11 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			this.clearAnimationFrames();
 		}
     }
+
+	@Override
+	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD, LayerCreatureBase layer, boolean animate) {
+
+	}
 
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
@@ -318,8 +325,6 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 	public void generateAnimationFrames(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean renderAsTrophy) {
 		for(ObjObject part : this.wavefrontParts) {
 			String partName = part.getName().toLowerCase();
-			//if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
-			//continue;
 			this.currentAnimationPart = this.animationParts.get(partName);
 			if(this.currentAnimationPart == null)
 				continue;

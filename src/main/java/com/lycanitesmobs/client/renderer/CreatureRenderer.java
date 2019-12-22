@@ -1,11 +1,15 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.creature.EntityWraamon;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -37,7 +41,10 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	//                     Render
 	// ==================================================
 	@Override
-	public void func_225621_a_(BaseCreatureEntity entity, MatrixStack matrixStack, float entityYaw, float partialTicks, float something) {
+	public void func_225623_a_(BaseCreatureEntity entity, float somethingA, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+    	if(entity.isTamed()) {
+			//LycanitesMobs.logDebug("", "Render: " + somethingA + " " + somethingB + " " + brightness);
+		}
 		this.entityModel = this.defaultModel;
 		try {
 			this.entityModel = ModelManager.getInstance().getCreatureModel(entity.creatureInfo, entity.subspecies);
@@ -49,8 +56,10 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 			return;
 		}
 
-    	super.func_225621_a_(entity, matrixStack, entityYaw, partialTicks, something);
-	}
+		RenderSystem.pushMatrix();
+    	super.func_225623_a_(entity, somethingA, yaw, matrixStack, renderTypeBuffer, brightness);
+		RenderSystem.popMatrix();
+    }
 
 	/*@Override
 	protected void renderModel(BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {

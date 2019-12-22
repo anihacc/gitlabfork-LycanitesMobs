@@ -16,7 +16,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
+public abstract class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
+
+	public float loop = 0;
+	public float scale = 1F;
+	public BaseCreatureEntity entity;
+
+	// States:
+	public boolean renderAsTrophy = false;
     
 	// ==================================================
   	//                    Constructors
@@ -46,11 +53,11 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
    	// ==================================================
     @Override
     public void func_225597_a_(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX) {
-        this.render(entity, time, distance, loop, lookY, lookX, 0.0625F, null, true);
+        this.animate(entity, time, distance, loop, lookY, lookX, 0.0625F, null, true);
     }
 
 	/**
-	 * Renders this model. Can be rendered as a trophy (just head, mouth, etc) too, use scale for this.
+	 * Animates this model. Can be rendered as a trophy (just head, mouth, etc) too, use scale for this.
 	 * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityCreatureBase is used more animations will be used.
 	 * @param time How long the model has been displayed for? This is currently unused.
 	 * @param distance Used for movement animations, this should just count up form 0 every tick and stop back at 0 when not moving.
@@ -61,19 +68,17 @@ public class ModelCreatureBase extends EntityModel<BaseCreatureEntity> {
 	 * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
 	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
 	 */
-    public void render(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
-        float sizeScale = 1F;
-		if(entity != null) {
-            sizeScale *= entity.getRenderScale();
-        }
-    	GL11.glScalef(sizeScale, sizeScale, sizeScale);
-    	GL11.glTranslatef(0, 0.5f - sizeScale / 2, 0);
-    }
+    public abstract void animate(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate);
 
 	@Override
-	public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {
-
+	public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD) {
+		this.render(matrixStack, vertexBuilder, someIntA, someIntB, someFloatA, someFloatB, someFloatC, someFloatD, null, true);
 	}
+
+	/**
+	 * Renders this model. Can be rendered as a trophy (just head, mouth, etc) too, use scale for this.
+	 */
+	public abstract void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD, LayerCreatureBase layer, boolean animate);
 
 
     // ==================================================

@@ -211,7 +211,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 
 			// Render Part:
 			this.onRenderStart(layer, itemStack);
-			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
 			this.onRenderFinish(layer, itemStack);
 			RenderSystem.popMatrix();
 		}

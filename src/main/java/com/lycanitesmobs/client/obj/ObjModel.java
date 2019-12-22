@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.obj;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.util.math.Vec2f;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -42,33 +43,33 @@ public abstract class ObjModel extends Model
         return out.toByteArray();
     }
 
-    public void renderGroup(ObjObject group) {
-        this.renderGroup(group, new Vector4f(1, 1, 1, 1), new Vec2f(0, 0));
+    public void renderGroup(IVertexBuilder vertexBuilder, ObjObject group) {
+        this.renderGroup(vertexBuilder, group, new Vector4f(1, 1, 1, 1), new Vec2f(0, 0));
     }
 
-    public void renderGroup(ObjObject group, Vector4f color, Vec2f textureOffset) {
+    public void renderGroup(IVertexBuilder vertexBuilder, ObjObject group, Vector4f color, Vec2f textureOffset) {
         //if(fireEvent(new ObjEvent(this, ObjEvent.EventType.PRE_RENDER_GROUP).setData(group, group)))
-            this.renderGroupImpl(group, color, textureOffset);
+            this.renderGroupImpl(vertexBuilder, group, color, textureOffset);
         //fireEvent(new ObjEvent(this, ObjEvent.EventType.POST_RENDER_GROUP).setData(group, group));
     }
     
-    public void renderGroups(String groupsName) {
+    public void renderGroups(IVertexBuilder vertexBuilder, String groupsName) {
         if(fireEvent(new ObjEvent(this, ObjEvent.EventType.PRE_RENDER_GROUPS).setData(groupsName)))
-            this.renderGroupsImpl(groupsName);
+            this.renderGroupsImpl(vertexBuilder, groupsName);
         fireEvent(new ObjEvent(this, ObjEvent.EventType.POST_RENDER_GROUPS).setData(groupsName));
     }
     
-    public void render() {
+    public void render(IVertexBuilder vertexBuilder) {
         if(fireEvent(new ObjEvent(this, ObjEvent.EventType.PRE_RENDER_ALL)))
-            this.renderImpl();
+            this.renderImpl(vertexBuilder);
         fireEvent(new ObjEvent(this, ObjEvent.EventType.POST_RENDER_ALL));
     }
     
-    protected abstract void renderGroupsImpl(String groupsName);
+    protected abstract void renderGroupsImpl(IVertexBuilder vertexBuilder, String groupsName);
     
-    protected abstract void renderGroupImpl(ObjObject objGroup, Vector4f color, Vec2f textureOffset);
+    protected abstract void renderGroupImpl(IVertexBuilder vertexBuilder, ObjObject objGroup, Vector4f color, Vec2f textureOffset);
 
-    protected abstract void renderImpl();
+    protected abstract void renderImpl(IVertexBuilder vertexBuilder);
     
     public abstract boolean fireEvent(ObjEvent event);
 }

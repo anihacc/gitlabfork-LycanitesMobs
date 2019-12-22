@@ -228,7 +228,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 
             // Render Part:
 			this.onRenderStart(layer, entity);
-            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+            this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			this.onRenderFinish(layer, entity);
 			RenderSystem.popMatrix();
 		}
