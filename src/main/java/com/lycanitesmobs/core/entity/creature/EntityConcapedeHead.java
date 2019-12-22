@@ -42,7 +42,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_frugivore"));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
 		this.targetTasks.addTask(this.nextSpecialTargetIndex++, new DefendEntitiesGoal(this, EntityConcapedeSegment.class));
     }

@@ -35,7 +35,7 @@ public class EntitySilex extends AgeableCreatureEntity {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemStack(new ItemStack(Items.DYE, 1, 4)));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 

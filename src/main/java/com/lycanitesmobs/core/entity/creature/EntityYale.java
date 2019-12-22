@@ -74,7 +74,7 @@ public class EntityYale extends AgeableCreatureEntity implements IShearable {
     protected void initEntityAI() {
 		this.tasks.addTask(this.nextIdleGoalIndex++, new EatBlockGoal(this).setBlocks(Blocks.GRASS).setReplaceBlock(Blocks.DIRT));
         super.initEntityAI();
-		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setItemList("diet_herbivore"));
+		this.tasks.addTask(this.nextDistractionGoalIndex++, new TemptGoal(this).setIncludeDiet(true));
 		this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(false));
     }
 	

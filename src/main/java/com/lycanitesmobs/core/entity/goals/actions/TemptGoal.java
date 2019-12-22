@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
@@ -20,7 +19,6 @@ public class TemptGoal extends EntityAIBase {
     // Properties:
     private double speed = 1.0D;
     private ItemStack temptItemStack = null;
-    private boolean ignoreTemptMeta = false;
     private String temptList = null;
     private int retemptTime;
     private int retemptTimeMax = 0; // Lowered from 100 because it's just annoying!
@@ -29,6 +27,7 @@ public class TemptGoal extends EntityAIBase {
     private boolean scaredByPlayerMovement = false;
     private boolean stopAttack = false;
     private boolean includeTreats = true;
+    private boolean includeDiet = false;
     
     private double targetX;
     private double targetY;
@@ -58,10 +57,6 @@ public class TemptGoal extends EntityAIBase {
     	this.temptItemStack = item;
     	return this;
     }
-    public TemptGoal setIgnoreMeta(boolean ignore) {
-    	this.ignoreTemptMeta = ignore;
-    	return this;
-    }
     public TemptGoal setItemList(String list) {
     	this.temptList = list;
     	return this;
@@ -88,6 +83,10 @@ public class TemptGoal extends EntityAIBase {
     }
     public TemptGoal setIncludeTreats(boolean includeTreats) {
         this.includeTreats = includeTreats;
+        return this;
+    }
+    public TemptGoal setIncludeDiet(boolean includeDiet) {
+        this.includeDiet = includeDiet;
         return this;
     }
     
@@ -145,6 +144,11 @@ public class TemptGoal extends EntityAIBase {
             if(this.host.creatureInfo.creatureType == itemTreat.getCreatureType()) {
                 return true;
             }
+        }
+
+        // Creature Diet:
+        if(this.includeDiet && this.host.creatureInfo.canEat(itemStack)) {
+            return true;
         }
 
         // Tempt List:
