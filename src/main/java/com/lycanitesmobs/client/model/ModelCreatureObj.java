@@ -208,12 +208,14 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
    	//                  Render Model
    	// ==================================================
     @Override
-	public void animate(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
-        // Assess Scale and Check if Trophy:
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean animate) {
+    	this.animator.matrixStack = matrixStack;
+
+    	// Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
-		boolean isChild = false;
+		this.isChild = false;
 		if(entity != null) {
-			isChild = entity.isChild();
+			this.isChild = entity.isChild();
 		}
 		if(scale < 0) {
             renderAsTrophy = true;
@@ -259,14 +261,14 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			}
 
 			// Begin Rendering Part:
-			RenderSystem.pushMatrix();
+			matrixStack.func_227860_a_();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.animator.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
 			this.animator.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
 
 			// Child Scaling:
-			if(isChild && !renderAsTrophy) {
+			if(this.isChild && !renderAsTrophy) {
 				this.childScale(partName);
 				if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
 					this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
@@ -284,9 +286,9 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 
 			// Render Part:
 			this.onRenderStart(layer, entity, renderAsTrophy);
-			this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			this.wavefrontObject.renderGroup(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), brightness, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			this.onRenderFinish(layer, entity, renderAsTrophy);
-			RenderSystem.popMatrix();
+			matrixStack.func_227865_b_();
 		}
 
 		// Clear Animation Frames:
@@ -294,11 +296,6 @@ public class ModelCreatureObj extends ModelCreatureBase implements IAnimationMod
 			this.clearAnimationFrames();
 		}
     }
-
-	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD, LayerCreatureBase layer, boolean animate) {
-
-	}
 
 	/** Called just before a layer is rendered. **/
 	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {

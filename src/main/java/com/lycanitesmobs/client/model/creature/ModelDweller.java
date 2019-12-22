@@ -87,7 +87,7 @@ public class ModelDweller extends ModelCreatureObjOld {
     		rotation += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
     		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
     			rotation = 20;
-        	rotate(rotation, angleX, angleY, angleZ);
+        	angle(rotation, angleX, angleY, angleZ);
         	rotation = 0F;
     	}
     	if(partName.equals("mouth"))
@@ -163,7 +163,7 @@ public class ModelDweller extends ModelCreatureObjOld {
     	
     	// Apply Animations:
     	translate(posX, posY, posZ);
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	scale(scaleX, scaleY, scaleZ);
     }

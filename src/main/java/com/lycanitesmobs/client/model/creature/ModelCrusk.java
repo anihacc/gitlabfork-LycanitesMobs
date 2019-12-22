@@ -105,7 +105,7 @@ public class ModelCrusk extends ModelCreatureObjOld {
     			rotation = -20;
     		if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting())
     			rotation += 20;
-        	rotate(rotation, angleX, angleY, angleZ);
+        	angle(rotation, angleX, angleY, angleZ);
         	rotation = 0F;
     	}
     	if(partName.equals("topleftmouth"))
@@ -182,7 +182,7 @@ public class ModelCrusk extends ModelCreatureObjOld {
     	
     	// Apply Animations:
     	translate(posX, posY, posZ);
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	scale(scaleX, scaleY, scaleZ);
     }

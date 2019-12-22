@@ -91,7 +91,7 @@ public class ModelVespid extends ModelCreatureObjOld {
 		
     	// Apply Animations:
     	translate(posX, posY, posZ);
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     }
 }

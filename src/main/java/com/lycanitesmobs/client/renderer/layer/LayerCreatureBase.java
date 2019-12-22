@@ -40,7 +40,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, ModelCr
             ResourceLocation layerTexture = this.getLayerTexture(entity);
             if(layerTexture != null)
                 this.renderer.bindTexture(layerTexture);
-            this.renderer.getMainModel().animate(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
+            //this.renderer.getMainModel().animate(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, this, true);
         }
     }
 

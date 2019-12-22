@@ -136,7 +136,7 @@ public class ModelJoust extends ModelCreatureObjOld {
 		}
 		
     	// Apply Animations:
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	translate(posX, posY, posZ);
     }

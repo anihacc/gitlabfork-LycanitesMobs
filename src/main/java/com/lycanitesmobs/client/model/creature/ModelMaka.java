@@ -72,7 +72,7 @@ public class ModelMaka extends ModelCreatureObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 		
     	// Apply Animations:
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	translate(posX, posY, posZ);
     }

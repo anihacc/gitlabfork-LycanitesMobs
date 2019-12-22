@@ -110,7 +110,7 @@ public class ModelWendigo extends ModelCreatureObjOld {
 		}
     	
     	// Apply Animations:
-		this.rotate(rotation, angleX, angleY, angleZ);
+		this.angle(rotation, angleX, angleY, angleZ);
     	this.rotate(rotX, rotY, rotZ);
     	this.translate(posX, posY, posZ);
     }

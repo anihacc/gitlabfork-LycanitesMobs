@@ -1,23 +1,23 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.obj.ObjObject;
+import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.client.obj.ObjObject;
-import com.lycanitesmobs.client.obj.TessellatorModel;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +44,9 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	public Map<String, float[]> partSubCenters = new HashMap<>();
     /** A map to be used on the fly, this allows one part to apply a position offset to another part. This is no longer used though and will be made redundant when the new model code is created. **/
 	public Map<String, float[]> offsets = new HashMap<>();
+
+	// Matrix:
+	MatrixStack matrixStack;
 
     // Head:
     /** If true, head pieces will ignore the x look rotation when animating. **/
@@ -100,10 +103,10 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
    	//                  Render Model
    	// ==================================================
     @Override
-	public void animate(BaseCreatureEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
-    	if(true) return;
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean animate) {
+    	this.matrixStack = matrixStack;
 
-		boolean isChild = false;
+    	boolean isChild = false;
 		if(entity != null) {
 			isChild = entity.isChild();
 		}
@@ -145,11 +148,10 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
                 continue;
 
             // Begin Rendering Part:
-			RenderSystem.pushMatrix();
-			RenderSystem.enableAlphaTest();
+			matrixStack.func_227860_a_();
 
             // Apply Initial Offsets: (To Match Blender OBJ Export)
-            this.rotate(modelXRotOffset, 1F, 0F, 0F);
+            this.angle(modelXRotOffset, 1F, 0F, 0F);
             this.translate(0F, modelYPosOffset, 0F);
 
             // Baby Heads:
@@ -179,11 +181,11 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
                 if(partName.contains("head")) {
                 	if(!partName.contains("left")) {
                 			this.translate(-0.3F, 0, 0);
-                			this.rotate(5F, 0, 1, 0);
+                			this.angle(5F, 0, 1, 0);
                 	}
                 	if(!partName.contains("right")) {
                 			this.translate(0.3F, 0, 0);
-                			this.rotate(-5F, 0, 1, 0);
+                			this.angle(-5F, 0, 1, 0);
                 	}
                 }
                 this.uncenterPart(partName);
@@ -194,15 +196,10 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
             // Render:
             this.uncenterPart(partName);
 			this.onRenderStart(layer, entity, trophyModel);
-            this.wavefrontObject.renderGroup(null, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+            this.wavefrontObject.renderGroup(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), brightness, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
 			this.onRenderFinish(layer, entity, trophyModel);
-			RenderSystem.popMatrix();
+			matrixStack.func_227865_b_();
 		}
-	}
-
-	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder vertexBuilder, int someIntA, int someIntB, float someFloatA, float someFloatB, float someFloatC, float someFloatD, LayerCreatureBase layer, boolean animate) {
-
 	}
 
 	/** Called just before a layer is rendered. **/
@@ -277,7 +274,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     	}
     	
     	// Apply Animations:
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	translate(posX, posY, posZ);
     }
@@ -295,18 +292,18 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
    	//              Rotate and Translate
    	// ==================================================
     public void rotate(float rotX, float rotY, float rotZ) {
-    	GL11.glRotatef(rotX, 1F, 0F, 0F);
-    	GL11.glRotatef(rotY, 0F, 1F, 0F);
-    	GL11.glRotatef(rotZ, 0F, 0F, 1F);
+    	this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
+    	this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
+    	this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
     }
-    public void rotate(float rotation, float angleX, float angleY, float angleZ) {
-    	GL11.glRotatef(rotation, angleX, angleY, angleZ);
+    public void angle(float rotation, float angleX, float angleY, float angleZ) {
+		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
     }
     public void translate(float posX, float posY, float posZ) {
-    	GL11.glTranslatef(posX, posY, posZ);
+		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
     }
     public void scale(float scaleX, float scaleY, float scaleZ) {
-    	GL11.glScalef(scaleX, scaleY, scaleZ);
+		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
     }
     
     

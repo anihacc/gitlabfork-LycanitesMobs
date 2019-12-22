@@ -80,7 +80,7 @@ public class ModelCryptkeeper extends ModelCreatureObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * walkSwing) * 1.4F * distance);
     	
     	// Apply Animations:
-    	rotate(rotation, angleX, angleY, angleZ);
+    	angle(rotation, angleX, angleY, angleZ);
     	rotate(rotX, rotY, rotZ);
     	translate(posX, posY, posZ);
     }

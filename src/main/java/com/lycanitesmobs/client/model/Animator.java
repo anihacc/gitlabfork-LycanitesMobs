@@ -1,24 +1,23 @@
 package com.lycanitesmobs.client.model;
 
-import org.lwjgl.opengl.GL11;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.Vector3f;
 
 public class Animator {
+	public MatrixStack matrixStack;
 
-	// ==================================================
-	//                  GLL Actions
-	// ==================================================
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		GL11.glRotatef(rotation, angleX, angleY, angleZ);
+		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
 	}
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		GL11.glRotatef(rotX, 1F, 0F, 0F);
-		GL11.glRotatef(rotY, 0F, 1F, 0F);
-		GL11.glRotatef(rotZ, 0F, 0F, 1F);
+		this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
 	}
 	public void doTranslate(float posX, float posY, float posZ) {
-		GL11.glTranslatef(posX, posY, posZ);
+		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
 	}
 	public void doScale(float scaleX, float scaleY, float scaleZ) {
-		GL11.glScalef(scaleX, scaleY, scaleZ);
+		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
 	}
 }

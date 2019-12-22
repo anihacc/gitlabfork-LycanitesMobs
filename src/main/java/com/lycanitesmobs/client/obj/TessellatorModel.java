@@ -1,12 +1,10 @@
 package com.lycanitesmobs.client.obj;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.Vector4f;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
@@ -60,7 +58,7 @@ public class TessellatorModel extends ObjModel
 
 
     @Override
-    public void renderImpl(IVertexBuilder vertexBuilder)
+    public void renderImpl(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness)
     {
         Collections.sort(objObjects, (a, b) -> {
 			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
@@ -70,56 +68,73 @@ public class TessellatorModel extends ObjModel
 		});
         for(ObjObject object : objObjects)
         {
-            renderGroup(vertexBuilder, object);
+            renderGroup(vertexBuilder, matrix3f, matrix4f, brightness, object);
         }
     }
 
 
     @Override
-    public void renderGroupsImpl(IVertexBuilder vertexBuilder, String group)
+    public void renderGroupsImpl(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, String group)
     {
         for(ObjObject object : objObjects)
         {
             if(object.getName().equals(group))
             {
-                renderGroup(vertexBuilder, object);
+                renderGroup(vertexBuilder, matrix3f, matrix4f, brightness, object);
             }
         }
     }
 
 
     @Override
-    public void renderGroupImpl(IVertexBuilder vertexBuilder, ObjObject obj, Vector4f color, Vec2f textureOffset) {
-        Tessellator tess = Tessellator.getInstance();
-		vertexBuilder = tess.getBuffer();
-		if (VERTEX_FORMAT == null) {
-			//VERTEX_FORMAT = new VertexFormat(ImmutableList.builder().add(DefaultVertexFormats.POSITION_3F).add(DefaultVertexFormats.TEX_2F).add(DefaultVertexFormats.COLOR_4UB).add(DefaultVertexFormats.NORMAL_3B).add(DefaultVertexFormats.PADDING_1B).build());
-		}
-		((BufferBuilder)vertexBuilder).begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+    public void renderGroupImpl(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, ObjObject obj, Vector4f color, Vec2f textureOffset) {
 
-        if(obj.mesh == null) {
-            return;
-        }
+		// Mesh data:
+		if(obj.mesh == null) {
+			return;
+		}
 		int[] indices = obj.mesh.indices;
 		Vertex[] vertices = obj.mesh.vertices;
-
-        // Colors From OBJ:
-        //Vector4f color = new Vector4f(1, 1, 1, 1);
-        /*if(obj.material != null) {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.material.diffuseTexture);
-            color = new Vector3f(
-                    obj.material.diffuseColor.x * obj.material.ambientColor.x,
-                    obj.material.diffuseColor.y * obj.material.ambientColor.y,
-                    obj.material.diffuseColor.z * obj.material.ambientColor.z);
-            alpha = obj.material.transparency;
-        }*/
-
-		// Get/Create Normals:
 		if(obj.mesh.normals == null) {
 			obj.mesh.normals = new Vector3f[indices.length];
 		}
 
-		// Build:
+    	// New Builder:
+    	if(vertexBuilder instanceof BufferBuilder) {
+			for(int i = 0; i < indices.length; i += 3) {
+
+				// Normal:
+				Vector3f normal = obj.mesh.normals[i];
+				if(normal == null) {
+					normal = this.getNormal(vertices[indices[i]].getPos(), vertices[indices[i + 1]].getPos(), vertices[indices[i + 2]].getPos());
+					obj.mesh.normals[i] = normal;
+				}
+
+				for(int iv = 0; iv < 3; iv++) {
+					Vertex v = obj.mesh.vertices[indices[i + iv]];
+					vertexBuilder
+							.func_227888_a_(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
+							.func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
+							.func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //uv
+							.func_225585_a_(0, 10) //color fade
+							.func_227886_a_(brightness) //brightness 240 = full
+							.func_227887_a_(matrix3f, normal.getX(), normal.getY(), normal.getZ()) //normal
+							.endVertex();
+				}
+			}
+
+			return;
+		}
+
+    	// Fallback Builder:
+        Tessellator tess = Tessellator.getInstance();
+		vertexBuilder = tess.getBuffer();
+		if (VERTEX_FORMAT == null) {
+			VERTEX_FORMAT = DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL;
+			//VERTEX_FORMAT = new VertexFormat(ImmutableList.builder().add(DefaultVertexFormats.POSITION_3F).add(DefaultVertexFormats.TEX_2F).add(DefaultVertexFormats.COLOR_4UB).add(DefaultVertexFormats.NORMAL_3B).add(DefaultVertexFormats.PADDING_1B).build());
+		}
+		((BufferBuilder)vertexBuilder).begin(GL11.GL_TRIANGLES, VERTEX_FORMAT);
+
         for(int i = 0; i < indices.length; i += 3) {
 
         	// Normal:
@@ -141,56 +156,13 @@ public class TessellatorModel extends ObjModel
             }
         }
 
-
-
         // Draw Buffer:
 		tess.draw();
-		/*bufferBuilder.finishDrawing();
-		if (bufferBuilder.getVertexCount() > 0) {
-			VertexFormat vertexformat = bufferBuilder.getVertexFormat();
-			int i = vertexformat.getSize() + 1;
-			ByteBuffer bytebuffer = bufferBuilder.getByteBuffer();
-			List<VertexFormatElement> list = vertexformat.getElements();
-
-			for (int j = 0; j < list.size(); ++j) {
-				VertexFormatElement vertexformatelement = list.get(j);
-				bytebuffer.position(vertexformat.getOffset(j));
-				vertexformatelement.getUsage().preDraw(vertexformat, j, i, bytebuffer);
-			}
-
-			GlStateManager.drawArrays(bufferBuilder.getDrawMode(), 0, bufferBuilder.getVertexCount());
-			int i1 = 0;
-
-			for (int j1 = list.size(); i1 < j1; ++i1) {
-				VertexFormatElement vertexformatelement1 = list.get(i1);
-				vertexformatelement1.getUsage().postDraw(vertexformat, i1, i, bytebuffer);
-			}
-		}
-		bufferBuilder.reset();*/
     }
 
 
     @Override
     public boolean fireEvent(ObjEvent event) {
-        /*Event evt = null;
-        if(event.type == ObjEvent.EventType.PRE_RENDER_GROUP)
-        {
-            evt = new TessellatorModelEvent.RenderGroupEvent.Pre(((ObjObject) event.data[1]).getName(), this);
-        }
-        else if(event.type == ObjEvent.EventType.POST_RENDER_GROUP)
-        {
-            evt = new TessellatorModelEvent.RenderGroupEvent.Post(((ObjObject) event.data[1]).getName(), this);
-        }
-        else if(event.type == ObjEvent.EventType.PRE_RENDER_ALL)
-        {
-            evt = new TessellatorModelEvent.RenderPre(this);
-        }
-        else if(event.type == ObjEvent.EventType.POST_RENDER_ALL)
-        {
-            evt = new TessellatorModelEvent.RenderPost(this);
-        }
-        if(evt != null)
-            return !MODEL_RENDERING_BUS.post(evt);*/
         return true;
     }
 
