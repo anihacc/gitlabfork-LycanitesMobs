@@ -61,15 +61,15 @@ public class ModelConba extends ModelCreatureObjOld {
     	if(partName.equals("mouth")) {
     		this.centerPartToPart("mouth", "head");
     		if(!lockHeadX)
-    			this.rotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
+    			this.doRotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
     		if(!lockHeadY)
-    			this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+    			this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
     		this.uncenterPartToPart("mouth", "head");
     	}
     	
     	// Idle:
     	if(partName.equals("mouth")) {
-    		this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     	}
     	
     	// Walking:
@@ -82,14 +82,14 @@ public class ModelConba extends ModelCreatureObjOld {
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("armleft"))
-	    		rotate(-135.0F, 0.0F, 0.0F);
+	    		doRotate(-135.0F, 0.0F, 0.0F);
 	    	if(partName.equals("armright"))
-	    		rotate(-135.0F, 0.0F, 0.0F);
+	    		doRotate(-135.0F, 0.0F, 0.0F);
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

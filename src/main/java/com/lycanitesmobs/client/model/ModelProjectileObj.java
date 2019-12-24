@@ -2,17 +2,16 @@ package com.lycanitesmobs.client.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.obj.ObjObject;
-import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.obj.ObjModel;
+import com.lycanitesmobs.client.obj.ObjPart;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.JSONUtils;
@@ -30,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelProjectileObj extends ModelProjectileBase implements IAnimationModel {
+public class ModelProjectileObj extends ModelProjectileBase {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -39,23 +38,19 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 
 	// Model:
     /** An INSTANCE of the model, the model should only be set once and not during every tick or things will get very laggy! **/
-    public TessellatorModel wavefrontObject;
+    public ObjModel wavefrontObject;
 
     /** A list of all parts that belong to this model's wavefront obj. **/
-    public List<ObjObject> wavefrontParts;
+    public List<ObjPart> objParts;
 
     /** A list of all part definitions that this model will use when animating. **/
-    public Map<String, ModelObjPart> animationParts = new HashMap<>();
-
-    // Coloring:
-	/** If true, no color effects will be applied, this is usually used for when the model is rendered as a red damage overlay, etc. **/
-    public boolean dontColor = false;
+    public Map<String, AnimationPart> animationParts = new HashMap<>();
 
     // Animating:
     /** The animator INSTANCE, this is a helper class that performs actual GL11 functions, etc. **/
     protected Animator animator;
 	/** The current animation part that is having an animation frame generated for. **/
-	protected ModelObjPart currentAnimationPart;
+	protected AnimationPart currentAnimationPart;
 	/** The animation data for this model. **/
 	protected ModelAnimation animation;
     /** A list of models states that hold unique render/animation data for a specific entity INSTANCE. **/
@@ -64,9 +59,6 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     protected ModelObjState currentModelState;
 
 
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
     public ModelProjectileObj() {
         this(1.0F);
     }
@@ -75,11 +67,14 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     	// Here a model should get its model, collect its parts into a list and then create ModelObjPart objects for each part.
     }
 
-
-    // ==================================================
-    //                    Init Model
-    // ==================================================
-    public ModelProjectileObj initModel(String name, ModInfo groupInfo, String path) {
+	/**
+	 * Initializes this model, loading model data, etc.
+	 * @param name The unique name this model should have.
+	 * @param modInfo The mod this model belongs to.
+	 * @param path The path to load the model data from (no extension).
+	 * @return This model instance.
+	 */
+	public ModelProjectileObj initModel(String name, ModInfo modInfo, String path) {
     	// Check If Enabled:
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(name);
 		if(projectileInfo != null && !projectileInfo.enabled) {
@@ -87,16 +82,16 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 		}
 
         // Load Obj Model:
-        this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
-        this.wavefrontParts = this.wavefrontObject.objObjects;
-        if(this.wavefrontParts.isEmpty())
+        this.wavefrontObject = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.objParts = this.wavefrontObject.objParts;
+        if(this.objParts.isEmpty())
             LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
 
         // Create Animator:
-		this.animator = new Animator();
+		this.animator = new Animator(this);
 
         // Load Model Parts:
-        ResourceLocation modelPartsLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_parts.json");
+        ResourceLocation modelPartsLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_parts.json");
         try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
             InputStream in = Minecraft.getInstance().getResourceManager().getResource(modelPartsLocation).getInputStream();
@@ -106,7 +101,7 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
                 Iterator<JsonElement> jsonIterator = jsonArray.iterator();
                 while (jsonIterator.hasNext()) {
                     JsonObject partJson = jsonIterator.next().getAsJsonObject();
-					ModelObjPart animationPart = new ModelObjPart();
+					AnimationPart animationPart = new AnimationPart();
 					animationPart.loadFromJson(partJson);
 					this.addAnimationPart(animationPart);
                 }
@@ -121,12 +116,12 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         }
 
         // Assign Model Part Children:
-        for(ModelObjPart part : this.animationParts.values()) {
-            part.addChildren(this.animationParts.values().toArray(new ModelObjPart[this.animationParts.size()]));
+        for(AnimationPart part : this.animationParts.values()) {
+            part.addChildren(this.animationParts.values().toArray(new AnimationPart[this.animationParts.size()]));
         }
 
 		// Load Animations:
-		ResourceLocation animationLocation = new ResourceLocation(groupInfo.modid, "models/" + path + "_animation.json");
+		ResourceLocation animationLocation = new ResourceLocation(modInfo.modid, "models/" + path + "_animation.json");
 		try {
 			Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 			InputStream in = Minecraft.getInstance().getResourceManager().getResource(animationLocation).getInputStream();
@@ -147,12 +142,11 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         return this;
     }
 
-
-    // ==================================================
-    //                      Parts
-    // ==================================================
-    // ========== Add Animation Part ==========
-    public void addAnimationPart(ModelObjPart animationPart) {
+	/**
+	 * Adds an animation part, these are used to animate each model part.
+	 * @param animationPart The animation part to add.
+	 */
+	public void addAnimationPart(AnimationPart animationPart) {
         if(this.animationParts.containsKey(animationPart.name)) {
             LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
             return;
@@ -164,10 +158,6 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         this.animationParts.put(animationPart.name, animationPart);
     }
 
-
-	// ==================================================
-	//             Add Custom Render Layers
-	// ==================================================
 	@Override
 	public void addCustomLayers(ProjectileModelRenderer renderer) {
 		super.addCustomLayers(renderer);
@@ -175,94 +165,11 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 			this.animation.addProjectileLayers(renderer);
 		}
 	}
-    
-    
-    // ==================================================
-   	//                  Render Model
-   	// ==================================================
-    @Override
-	public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
-        // Assess Scale and Check if Trophy:
-		boolean renderAsTrophy = false;
-		if(scale < 0) {
-            renderAsTrophy = true;
-			scale = -scale;
-		}
-		else {
-			if(entity != null) {
-				scale *= 4;
-				scale *= entity.getProjectileScale();
-			}
-		}
-
-		// Animation States:
-        this.currentModelState = this.getModelState(entity);
-
-        // Generate Animation Frames:
-		if(animate) {
-			this.generateAnimationFrames(entity, time, distance, loop, lookY, lookX, scale);
-		}
-
-		// Render Parts:
-        for(ObjObject part : this.wavefrontParts) {
-            String partName = part.getName().toLowerCase();
-            if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
-                continue;
-            this.currentAnimationPart = this.animationParts.get(partName);
-            if(this.currentAnimationPart == null) {
-            	continue;
-			}
-
-            // Begin Rendering Part:
-			RenderSystem.pushMatrix();
-
-            // Apply Initial Offsets: (To Match Blender OBJ Export)
-            this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
-            this.animator.doTranslate(0F, modelYPosOffset, 0F);
-
-            // Apply Entity Scaling:
-            this.animator.doScale(scale, scale, scale);
-
-            // Apply Animation Frames:
-            this.currentAnimationPart.applyAnimationFrames(this.animator);
-
-            // Render Part:
-			this.onRenderStart(layer, entity);
-            this.wavefrontObject.renderGroup(null, null, null, 240, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
-			this.onRenderFinish(layer, entity);
-			RenderSystem.popMatrix();
-		}
-
-		// Clear Animation Frames:
-		if(animate) {
-			this.clearAnimationFrames();
-		}
-    }
-
-	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerProjectileBase layer, BaseProjectileEntity entity) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.enableBlend();
-		}
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		if(layer != null) {
-			layer.onRenderStart(entity);
-		}
-	}
-
-	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerProjectileBase layer, BaseProjectileEntity entity) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.disableBlend();
-		}
-		if(layer != null) {
-			layer.onRenderFinish(entity);
-		}
-	}
 
 	/** Generates all animation frames for a render tick. **/
-	public void generateAnimationFrames(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-		for(ObjObject part : this.wavefrontParts) {
+	@Override
+	public void generateAnimationFrames(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+		for(ObjPart part : this.objParts) {
 			String partName = part.getName().toLowerCase();
 			//if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
 			//continue;
@@ -275,20 +182,84 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 		}
 	}
 
+	/**
+	 * Animates the individual part.
+	 * @param partName The name of the part (should be made all lowercase).
+	 * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityCreatureBase is used more animations will be used.
+	 * @param time How long the model has been displayed for? This is currently unused.
+	 * @param distance Used for movement animations, this should just count up from 0 every tick and stop back at 0 when not moving.
+	 * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
+	 * @param lookY A y looking rotation used by the head, etc.
+	 * @param lookX An x looking rotation used by the head, etc.
+	 * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
+	 */
+	public void animatePart(String partName, BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
+		float rotX = 0F;
+		float rotY = 0F;
+		float rotZ = 0F;
+
+		// Create Animation Frames:
+		this.rotate(rotX, rotY, rotZ);
+	}
+
 	/** Clears all animation frames that were generated for a render tick. **/
+	@Override
 	public void clearAnimationFrames() {
-		for(ModelObjPart animationPart : this.animationParts.values()) {
+		for(AnimationPart animationPart : this.animationParts.values()) {
 			animationPart.animationFrames.clear();
 		}
 	}
 
+	@Override
+	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+		this.matrixStack = matrixStack;
 
-    // ==================================================
-    //                Can Render Part
-    // ==================================================
-    /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
+		// Assess Scale:
+		if(scale < 0) {
+			scale = -scale;
+		}
+		else {
+			if(entity != null) {
+				scale *= 4;
+				scale *= entity.getProjectileScale();
+			}
+		}
+
+		// Animation States:
+		this.currentModelState = this.getModelState(entity);
+
+		// Render Parts:
+		for(ObjPart part : this.objParts) {
+			String partName = part.getName().toLowerCase();
+			if(!this.canRenderPart(partName, entity, layer))
+				continue;
+			this.currentAnimationPart = this.animationParts.get(partName);
+			if(this.currentAnimationPart == null) {
+				continue;
+			}
+
+			// Begin Rendering Part:
+			matrixStack.func_227860_a_();
+
+			// Apply Initial Offsets: (To Match Blender OBJ Export)
+			this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
+			this.animator.doTranslate(0F, modelYPosOffset, 0F);
+
+			// Apply Entity Scaling:
+			this.animator.doScale(scale, scale, scale);
+
+			// Apply Animation Frames:
+			this.currentAnimationPart.applyAnimationFrames(this.animator);
+
+			// Render Part:
+			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
+			matrixStack.func_227865_b_();
+		}
+	}
+
+	/** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
     @Override
-    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer) {
         if(partName == null)
             return false;
         partName = partName.toLowerCase();
@@ -297,32 +268,36 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
         if(!this.animationParts.containsKey(partName))
             return false;
 
-        return super.canRenderPart(partName, entity, layer, trophy);
+        return super.canRenderPart(partName, entity, layer);
     }
-    
-    
-    // ==================================================
-   	//                   Animate Part
-   	// ==================================================
-    /**
-     * Animates the individual part.
-     * @param partName The name of the part (should be made all lowercase).
-     * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityCreatureBase is used more animations will be used.
-     * @param time How long the model has been displayed for? This is currently unused.
-     * @param distance Used for movement animations, this should just count up from 0 every tick and stop back at 0 when not moving.
-     * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
-     * @param lookY A y looking rotation used by the head, etc.
-     * @param lookX An x looking rotation used by the head, etc.
-     * @param scale Used for scale based changes during animation but not to actually apply the scale as it is applied in the renderer method.
-     */
-    public void animatePart(String partName, BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
-    	float rotX = 0F;
-    	float rotY = 0F;
-    	float rotZ = 0F;
 
-        // Create Animation Frames:
-        this.rotate(rotX, rotY, rotZ);
-    }
+	/**
+	 * Moves the animation origin to a different part origin.
+	 * @param fromPartName The part name to move the origin from.
+	 * @param toPartName The part name to move the origin to.
+	 */
+	public void shiftOrigin(String fromPartName,  String toPartName) {
+		AnimationPart fromPart = this.animationParts.get(fromPartName);
+		AnimationPart toPart = this.animationParts.get(toPartName);
+		float offsetX = toPart.centerX - fromPart.centerX;
+		float offsetY = toPart.centerY - fromPart.centerY;
+		float offsetZ = toPart.centerZ - fromPart.centerZ;
+		this.translate(offsetX, offsetY, offsetZ);
+	}
+
+	/**
+	 * Moves the animation origin back from a different part origin.
+	 * @param fromPartName The part name that the origin moved from.
+	 * @param toPartName The part name that the origin was moved to.
+	 */
+	public void shiftOriginBack(String fromPartName,  String toPartName) {
+		AnimationPart fromPart = this.animationParts.get(fromPartName);
+		AnimationPart toPart = this.animationParts.get(toPartName);
+		float offsetX = toPart.centerX - fromPart.centerX;
+		float offsetY = toPart.centerY - fromPart.centerY;
+		float offsetZ = toPart.centerZ - fromPart.centerZ;
+		this.translate(-offsetX, -offsetY, -offsetZ);
+	}
 
     /** Returns an existing or new model state for the given entity. **/
     public ModelObjState getModelState(BaseProjectileEntity entity) {
@@ -341,9 +316,6 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
     }
 
 
-	// ==================================================
-	//                  Create Frames
-	// ==================================================
 	@Override
 	public void angle(float rotation, float angleX, float angleY, float angleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("angle", rotation, angleX, angleY, angleZ));
@@ -362,69 +334,5 @@ public class ModelProjectileObj extends ModelProjectileBase implements IAnimatio
 	@Override
 	public void scale(float scaleX, float scaleY, float scaleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("scale", 1, scaleX, scaleY, scaleZ));
-	}
-
-
-	// ==================================================
-	//                  Rotate to Point
-	// ==================================================
-	@Override
-	public double rotateToPoint(double aTarget, double bTarget) {
-		return rotateToPoint(0, 0, aTarget, bTarget);
-	}
-
-	@Override
-	public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
-		if(aTarget - aCenter == 0)
-			if(aTarget > aCenter) return 0;
-			else if(aTarget < aCenter) return 180;
-		if(bTarget - bCenter == 0)
-			if(bTarget > bCenter) return 90;
-			else if(bTarget < bCenter) return -90;
-		if(aTarget - aCenter == 0 && bTarget - bCenter == 0)
-			return 0;
-		return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
-	}
-
-	@Override
-	public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
-		double[] rotations = new double[3];
-		rotations[0] = this.rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
-		rotations[1] = this.rotateToPoint(-zCenter, xCenter, -zTarget, xTarget);
-		rotations[2] = this.rotateToPoint(yCenter, xCenter, yTarget, xTarget);
-		return rotations;
-	}
-
-
-	// ==================================================
-	//                   Shift Origin
-	// ==================================================
-
-	/**
-	 * Moves the animation origin to a different part origin.
-	 * @param fromPartName The part name to move the origin from.
-	 * @param toPartName The part name to move the origin to.
-	 */
-	public void shiftOrigin(String fromPartName,  String toPartName) {
-		ModelObjPart fromPart = this.animationParts.get(fromPartName);
-		ModelObjPart toPart = this.animationParts.get(toPartName);
-		float offsetX = toPart.centerX - fromPart.centerX;
-		float offsetY = toPart.centerY - fromPart.centerY;
-		float offsetZ = toPart.centerZ - fromPart.centerZ;
-		this.translate(offsetX, offsetY, offsetZ);
-	}
-
-	/**
-	 * Moves the animation origin back from a different part origin.
-	 * @param fromPartName The part name that the origin moved from.
-	 * @param toPartName The part name that the origin was moved to.
-	 */
-	public void shiftOriginBack(String fromPartName,  String toPartName) {
-		ModelObjPart fromPart = this.animationParts.get(fromPartName);
-		ModelObjPart toPart = this.animationParts.get(toPartName);
-		float offsetX = toPart.centerX - fromPart.centerX;
-		float offsetY = toPart.centerY - fromPart.centerY;
-		float offsetZ = toPart.centerZ - fromPart.centerZ;
-		this.translate(-offsetX, -offsetY, -offsetZ);
 	}
 }

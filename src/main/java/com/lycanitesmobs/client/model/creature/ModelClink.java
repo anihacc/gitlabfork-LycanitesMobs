@@ -76,7 +76,7 @@ public class ModelClink extends ModelCreatureObjOld {
     	// Idle:
     	if(partName.equals("mouth")) {
     		subCenterPart("mouth");
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		unsubCenterPart("mouth");
     	}
     	if(partName.equals("leftarm")) {
@@ -103,7 +103,7 @@ public class ModelClink extends ModelCreatureObjOld {
     	if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
 	    		subCenterPart("mouth");
-	    		rotate(30.0F, 0.0F, 0.0F);
+	    		doRotate(30.0F, 0.0F, 0.0F);
 	    		unsubCenterPart("mouth");
 	    	}
 	    	if(partName.equals("rightarm")) {
@@ -133,8 +133,8 @@ public class ModelClink extends ModelCreatureObjOld {
     	}
     	
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

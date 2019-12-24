@@ -63,9 +63,9 @@ public class ModelWendigo extends ModelCreatureObjOld {
         if(partName.equals("mouth")) {
             this.centerPartToPart("mouth", "head");
             if(!this.lockHeadX)
-                this.rotate((float)Math.toDegrees(lookX / (180F / (float) Math.PI)), 0, 0);
+                this.doRotate((float)Math.toDegrees(lookX / (180F / (float) Math.PI)), 0, 0);
             if(!this.lockHeadY)
-                this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+                this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
             this.uncenterPartToPart("mouth", "head");
         }
     	
@@ -110,8 +110,8 @@ public class ModelWendigo extends ModelCreatureObjOld {
 		}
     	
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 }

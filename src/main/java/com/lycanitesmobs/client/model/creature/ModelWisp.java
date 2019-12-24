@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.model.creature;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
@@ -7,7 +8,6 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -46,6 +46,11 @@ public class ModelWisp extends ModelTemplateElemental {
 		renderer.addLayer(new LayerCreatureEffect(renderer, "ball", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "ball_glow",  "ball", true, LayerCreatureEffect.BLEND.ADD.id, true));
 		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, LayerCreatureEffect.BLEND.NORMAL.id, true, new Vec2f(0, 4)));
+	}
+
+	@Override
+	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
+		return ClientManager.FULL_BRIGHT;
 	}
 
 
@@ -136,21 +141,5 @@ public class ModelWisp extends ModelTemplateElemental {
 		}
 
 		return super.getPartColor(partName, entity, layer, trophy, loop);
-	}
-
-
-	// ==================================================
-	//                   On Render
-	// ==================================================
-	@Override
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
-		RenderSystem.disableLighting();
-	}
-
-	@Override
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
-		RenderSystem.enableLighting();
 	}
 }

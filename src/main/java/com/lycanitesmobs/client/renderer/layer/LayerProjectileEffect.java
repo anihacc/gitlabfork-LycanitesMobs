@@ -32,9 +32,6 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 	public Vec2f scrollSpeed;
 
 
-    // ==================================================
-    //                   Constructor
-    // ==================================================
     public LayerProjectileEffect(ProjectileModelRenderer renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;
@@ -50,12 +47,8 @@ public class LayerProjectileEffect extends LayerProjectileBase {
 		this.subspecies = subspecies;
 	}
 
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
     @Override
-    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, boolean trophy) {
+    public Vector4f getPartColor(String partName, BaseProjectileEntity entity) {
         return new Vector4f(1, 1, 1, 1);
     }
 
@@ -65,38 +58,18 @@ public class LayerProjectileEffect extends LayerProjectileBase {
     }
 
 	@Override
-	public void onRenderStart(Entity entity) {
-		// Glow In Dark:
-		int i = ClientManager.FULL_BRIGHT;
-		if(this.glow) {
-			RenderSystem.disableLighting();
-			i = 0xf000f0;
-		}
-		int j = i % 65536;
-		int k = i / 65536;
-		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
-
-		// Blending:
-    	if(this.blending == BLEND.ADD.id) {
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		}
-		else if(this.blending == BLEND.SUB.id) {
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		}
-	}
-
-	@Override
-	public void onRenderFinish(Entity entity) {
-    	if(this.glow) {
-			RenderSystem.enableLighting();
-		}
-	}
-
-	@Override
-	public Vec2f getTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
+	public Vec2f getTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
     	if(this.scrollSpeed == null) {
 			this.scrollSpeed = new Vec2f(0, 0);
 		}
 		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+	}
+
+	@Override
+	public int getBrightness(String partName, BaseProjectileEntity entity, int brightness) {
+		if(this.glow) {
+			return 240;
+		}
+		return brightness;
 	}
 }

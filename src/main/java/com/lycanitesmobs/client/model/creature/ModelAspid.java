@@ -85,9 +85,9 @@ public class ModelAspid extends ModelCreatureObjOld {
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
     
     
@@ -97,7 +97,7 @@ public class ModelAspid extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
     	if(partName.equals("head"))
-    		translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+    		doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
     	else
         	super.childScale(partName);
     }

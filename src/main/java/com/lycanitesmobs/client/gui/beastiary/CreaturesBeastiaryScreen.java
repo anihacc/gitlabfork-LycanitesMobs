@@ -56,7 +56,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 		// Selected Creature Model:
 		if(this.playerExt.selectedCreature != null) {
 			int marginX = this.getScaledX(240F / 1920F) + 8;
-			this.renderCreature(this.playerExt.selectedCreature, this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + 100, mouseX, mouseY, partialTicks);
+			this.renderCreature(this.playerExt.selectedCreature, this.colRightX + (marginX / 2) + (this.colRightWidth / 2), this.colRightY + (this.colRightHeight / 2), mouseX, mouseY, partialTicks);
 		}
 	}
 

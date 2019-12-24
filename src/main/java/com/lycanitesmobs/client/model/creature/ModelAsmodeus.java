@@ -1,12 +1,11 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelCreatureObjOld;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureAttack;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureShield;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -62,8 +61,22 @@ public class ModelAsmodeus extends ModelCreatureObjOld {
     @Override
     public void addCustomLayers(CreatureRenderer renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerCreatureAttack(renderer));
-        renderer.addLayer(new LayerCreatureShield(renderer));
+        renderer.addLayer(new LayerCreatureEffect(renderer, "fire", "fire", true, LayerCreatureEffect.BLEND.ADD.id, true));
+        renderer.addLayer(new LayerCreatureEffect(renderer, "shield", "shield", true, LayerCreatureEffect.BLEND.ADD.id, true));
+    }
+
+    @Override
+    public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
+        if(layer != null && entity instanceof BaseCreatureEntity) {
+            BaseCreatureEntity creatureEntity = (BaseCreatureEntity)entity;
+            if(layer.name.equals("fire")) {
+                return layer.canRenderPart(partName, creatureEntity, trophy) && !creatureEntity.isAttackOnCooldown();
+            }
+            if(layer.name.equals("shield")) {
+                return layer.canRenderPart(partName, creatureEntity, trophy) && creatureEntity.isBlocking();
+            }
+        }
+        return super.canRenderPart(partName, entity, layer, trophy);
     }
 
 
@@ -159,7 +172,7 @@ public class ModelAsmodeus extends ModelCreatureObjOld {
                 if(((BaseCreatureEntity)entity).hasAttackTarget())
                     xRotation = (float) Math.toDegrees(lookX / (180F / Math.PI)) - 25F;
             }
-            this.rotate(xRotation, (float) Math.toDegrees(lookY / (180F / Math.PI)), 0);
+            this.doRotate(xRotation, (float) Math.toDegrees(lookY / (180F / Math.PI)), 0);
             if(partName.contains("weapon"))
                 this.uncenterPartToPart("weapon", "turret");
         }
@@ -179,12 +192,12 @@ public class ModelAsmodeus extends ModelCreatureObjOld {
         if(partName.contains("shield")) {
             rotY += loop * 30;
             float shieldScale = 1.05F + ((0.5F + (MathHelper.sin(loop / 4) / 2)) / 8);
-            this.scale(shieldScale, shieldScale, shieldScale);
+            this.doScale(shieldScale, shieldScale, shieldScale);
         }
 		
     	// Apply Animations:
-    	this.angle(rotation, angleX, angleY, angleZ);
-        this.rotate(rotX, rotY, rotZ);
-        this.translate(posX, posY, posZ);
+    	this.doAngle(rotation, angleX, angleY, angleZ);
+        this.doRotate(rotX, rotY, rotZ);
+        this.doTranslate(posX, posY, posZ);
     }
 }

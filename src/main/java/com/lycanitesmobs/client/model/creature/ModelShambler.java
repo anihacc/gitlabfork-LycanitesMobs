@@ -73,14 +73,14 @@ public class ModelShambler extends ModelCreatureObjOld {
     	// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("leftarm"))
-	    		rotate(0.0F, -25.0F, 0.0F);
+	    		doRotate(0.0F, -25.0F, 0.0F);
 	    	if(partName.equals("rightarm"))
-	    		rotate(0.0F, 25.0F, 0.0F);
+	    		doRotate(0.0F, 25.0F, 0.0F);
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

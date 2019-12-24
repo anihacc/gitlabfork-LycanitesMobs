@@ -35,7 +35,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 
 	@Override
 	protected int getScrollbarPosition() {
-		return this.getLeft() - this.getScrollbarWidth();
+		return this.getRight() - this.getScrollbarWidth();
 	}
 
 	/**
@@ -60,7 +60,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		// Scissor Start:
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		double scaleFactor = Minecraft.getInstance().func_228018_at_().getGuiScaleFactor(); // getMainWindow()
-		int scissorX = (int)((double)this.getRight() * scaleFactor);
+		int scissorX = (int)((double)this.getLeft() * scaleFactor);
 		int scissorTop = Minecraft.getInstance().func_228018_at_().getHeight() - (int)((double)this.getTop() * scaleFactor);
 		int scissorBottom = Minecraft.getInstance().func_228018_at_().getHeight() - (int)((double)this.getBottom() * scaleFactor);
 		int scissorWidth = (int)((double)this.getWidth() * scaleFactor);
@@ -82,18 +82,18 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y1, 0.0D).func_227885_a_(32, 32, 32, 64).endVertex(); // pos().color()
-		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y1, 0.0D).func_227885_a_(32, 32, 32, 64).endVertex();
-		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y0, 0.0D).func_227885_a_(32, 32, 32, 64).endVertex();
-		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y0, 0.0D).func_227885_a_(32, 32, 32, 64).endVertex();
+		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y1, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex(); // pos().color()
+		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y1, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
+		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y0, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
+		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y0, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
 		tessellator.draw();
 
-		/*/ Test Box:
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.pos(0, 10000, 0.0D).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(10000, 10000, 0.0D).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(10000, 0, 0.0D).color(32, 255, 32, 128).endVertex();
-		bufferbuilder.pos(0, 0, 0.0D).color(32, 255, 32, 128).endVertex();
+		// Test Box:
+		/*bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		bufferbuilder.func_225582_a_(0, 10000, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
+		bufferbuilder.func_225582_a_(10000, 10000, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
+		bufferbuilder.func_225582_a_(10000, 0, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
+		bufferbuilder.func_225582_a_(0, 0, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
 		tessellator.draw();*/
 
 		// Render Entries:
@@ -108,7 +108,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		// Draw Gradients:
 		RenderSystem.disableTexture();
 
-		if(this.getScrollAmount() > 0) {
+		/*if(this.getScrollAmount() > 0) {
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
 			bufferbuilder.func_225582_a_((double) this.x0, (double) (this.y0 + 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
 			bufferbuilder.func_225582_a_((double) this.x1, (double) (this.y0 + 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
@@ -124,7 +124,7 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 			bufferbuilder.func_225582_a_((double) this.x1, (double) (this.y1 - 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
 			bufferbuilder.func_225582_a_((double) this.x0, (double) (this.y1 - 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
 			tessellator.draw();
-		}
+		}*/
 
 		// Draw Scrollbar:
 		int maxScroll = this.getMaxScroll();

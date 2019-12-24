@@ -7,7 +7,7 @@ public class TessellatorModelEvent extends Event
 
     public static class RenderPre extends TessellatorModelEvent
     {
-        public RenderPre(TessellatorModel model)
+        public RenderPre(ObjModel model)
         {
             super(model);
         }
@@ -15,15 +15,15 @@ public class TessellatorModelEvent extends Event
 
     public static class RenderPost extends TessellatorModelEvent
     {
-        public RenderPost(TessellatorModel model)
+        public RenderPost(ObjModel model)
         {
             super(model);
         }
     }
 
-    public TessellatorModel model;
+    public ObjModel model;
 
-    public TessellatorModelEvent(TessellatorModel model)
+    public TessellatorModelEvent(ObjModel model)
     {
         this.model = model;
     }
@@ -33,7 +33,7 @@ public class TessellatorModelEvent extends Event
 
         public String group;
 
-        public RenderGroupEvent(String groupName, TessellatorModel model)
+        public RenderGroupEvent(String groupName, ObjModel model)
         {
             super(model);
             this.group = groupName;
@@ -41,7 +41,7 @@ public class TessellatorModelEvent extends Event
 
         public static class Pre extends RenderGroupEvent
         {
-            public Pre(String g, TessellatorModel m)
+            public Pre(String g, ObjModel m)
             {
                 super(g, m);
             }
@@ -49,7 +49,7 @@ public class TessellatorModelEvent extends Event
 
         public static class Post extends RenderGroupEvent
         {
-            public Post(String g, TessellatorModel m)
+            public Post(String g, ObjModel m)
             {
                 super(g, m);
             }

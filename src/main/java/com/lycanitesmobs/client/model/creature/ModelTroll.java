@@ -61,7 +61,7 @@ public class ModelTroll extends ModelCreatureObjOld {
     	
     	// Idle:
     	if(partName.equals("mouth")) {
-    		this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     	}
     	if(partName.equals("leftarm")) {
 	        rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
@@ -100,8 +100,8 @@ public class ModelTroll extends ModelCreatureObjOld {
 		}
     	
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 }

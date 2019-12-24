@@ -93,18 +93,18 @@ public class ModelJoust extends ModelCreatureObjOld {
     	
     	// Idle:
     	if(partName.equals("mouth")) {
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		centerPartToPart("mouth", "neck");
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		uncenterPartToPart("mouth", "neck");
     	}
     	if(partName.equals("head")) {
     		centerPartToPart("head", "neck");
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		uncenterPartToPart("head", "neck");
     	}
     	if(partName.equals("neck"))
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
 		
     	// Leg Angles:
     	if(partName.equals("frontleftleg") || partName.equals("backleftleg")
@@ -131,14 +131,14 @@ public class ModelJoust extends ModelCreatureObjOld {
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
-	    		rotate(30.0F, 0.0F, 0.0F);
+	    		doRotate(30.0F, 0.0F, 0.0F);
 	    	}
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
     
     
@@ -148,7 +148,7 @@ public class ModelJoust extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
     	if(partName.equals("head") || partName.equals("mouth"))
-    		translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+    		doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
     	else
         	super.childScale(partName);
     }

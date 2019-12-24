@@ -51,10 +51,4 @@ public class LayerDjinn extends LayerCreatureBase {
 	public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
 		return new Vector4f(1, 1, 1, 0.75f);
 	}
-
-	@Override
-	public void onRenderStart(Entity entity, boolean trophy) {}
-
-	@Override
-	public void onRenderFinish(Entity entity, boolean trophy) {}
 }

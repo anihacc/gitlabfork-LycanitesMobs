@@ -113,8 +113,8 @@ public class ModelGeken extends ModelCreatureObjOld {
 		}
     	
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 }

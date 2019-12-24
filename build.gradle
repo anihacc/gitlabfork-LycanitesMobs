@@ -20,7 +20,7 @@ archivesBaseName = 'lycanitesmobs'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191221-1.14.3'
+    mappings channel: 'snapshot', version: '20191224-1.14.3'
     // makeObfSourceJar = false
     // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
 
@@ -64,7 +64,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.15'
+    minecraft 'net.minecraftforge:forge:1.15.1-30.0.16'
     
     // Examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env

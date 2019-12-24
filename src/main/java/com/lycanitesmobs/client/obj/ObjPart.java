@@ -3,14 +3,14 @@ package com.lycanitesmobs.client.obj;
 
 import net.minecraft.client.renderer.Vector3f;
 
-public class ObjObject {
+public class ObjPart {
 
     private String name;
     public Mesh mesh;
     public Material material;
     public Vector3f center;
 
-    public ObjObject(String name)
+    public ObjPart(String name)
     {
         this.name = name;
     }

@@ -64,41 +64,41 @@ public class ModelCacodemon extends ModelCreatureObjOld {
 		}
 		else {
 			this.centerPartToPart(partName, "head");
-			this.rotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
-			this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+			this.doRotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
+			this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
 			this.uncenterPartToPart(partName, "head");
 		}
 		
     	// Mouth:
 		float mouthIdle = (float)Math.toDegrees(MathHelper.cos(loop * 0.05F) * 0.1F);
     	if(partName.equals("topmouth")) {
-			rotate(-5F - mouthIdle, rotY, rotZ);
+			doRotate(-5F - mouthIdle, rotY, rotZ);
 		}
 		if(partName.equals("bottommouth")) {
-			rotate(5F + mouthIdle, rotY, rotZ);
+			doRotate(5F + mouthIdle, rotY, rotZ);
 		}
     	
 		// Attack:
     	if((entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
     			|| (entity instanceof AgeableCreatureEntity && ((AgeableCreatureEntity)entity).isInLove())) {
 			if(partName.equals("topmouth"))
-				rotate(-25F, rotY, rotZ);
+				doRotate(-25F, rotY, rotZ);
 			if(partName.equals("bottommouth"))
-				rotate(25F, rotY, rotZ);
-			rotate(25F / 2, rotY, rotZ);
+				doRotate(25F, rotY, rotZ);
+			doRotate(25F / 2, rotY, rotZ);
 		}
 		
 		// Sit:
     	if((entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting())) {
 			if(partName.equals("topmouth"))
-				rotate(5F, rotY, rotZ);
+				doRotate(5F, rotY, rotZ);
 			if(partName.equals("bottommouth"))
-				rotate(-5F, rotY, rotZ);
+				doRotate(-5F, rotY, rotZ);
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

@@ -9,20 +9,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
 public class ModelEquipmentPart extends ModelItemBase {
-
-
-
-	// ==================================================
-	//                    Constructor
-	// ==================================================
+	/**
+	 * Constructor
+	 * @param equipmentPart The equipment part item to render.
+	 */
 	public ModelEquipmentPart(ItemEquipmentPart equipmentPart) {
 		this.initModel(equipmentPart.itemName, equipmentPart.modInfo, "equipment/" + equipmentPart.itemName.replace("equipmentpart_", ""));
 	}
 
-
-	// ==================================================
-	//                   Get Texture
-	// ==================================================
+	/**
+	 * Gets the texture for the provided item and layer.
+	 * @param itemStack The item to get the texture for.
+	 * @param layer The later to get the texture for, null for the base layer.
+	 * @return The texture to render.
+	 */
 	@Override
 	public ResourceLocation getTexture(ItemStack itemStack, LayerItem layer) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
@@ -41,10 +41,14 @@ public class ModelEquipmentPart extends ModelItemBase {
 		return TextureManager.getTexture(textureName);
 	}
 
-
-	// ==================================================
-	//                Get Part Color
-	// ==================================================
+	/**
+	 * Gets the render color for the provided item and layer.
+	 * @param partName The name of the model part to render.
+	 * @param itemStack The item to get the texture for.
+	 * @param layer The later to get the texture for, null for the base layer.
+	 * @param loop The render animation tick for looping effects.
+	 * @return The part color to render.
+	 */
 	@Override
 	public Vector4f getPartColor(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {

@@ -65,9 +65,9 @@ public class ModelRahovart extends ModelCreatureObjOld {
         if(partName.equals("mouth")) {
             this.centerPartToPart("mouth", "head");
             if(!this.lockHeadX)
-                this.rotate((float)Math.toDegrees(lookX / (180F / (float) Math.PI)), 0, 0);
+                this.doRotate((float)Math.toDegrees(lookX / (180F / (float) Math.PI)), 0, 0);
             if(!this.lockHeadY)
-                this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+                this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
             this.uncenterPartToPart("mouth", "head");
         }
     	
@@ -102,12 +102,12 @@ public class ModelRahovart extends ModelCreatureObjOld {
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("armleft"))
-	    		rotate(-40.0F, 0.0F, 0.0F);
+	    		doRotate(-40.0F, 0.0F, 0.0F);
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

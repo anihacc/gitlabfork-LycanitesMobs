@@ -75,8 +75,8 @@ public class ModelKhalk extends ModelCreatureObjOld {
     		rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
     	
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 }

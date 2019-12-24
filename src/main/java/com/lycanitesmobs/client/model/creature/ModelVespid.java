@@ -90,8 +90,8 @@ public class ModelVespid extends ModelCreatureObjOld {
 		posY += bob;
 		
     	// Apply Animations:
-    	translate(posX, posY, posZ);
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
     }
 }

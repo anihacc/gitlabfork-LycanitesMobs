@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.model.creature;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureGlow;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,20 +33,17 @@ public class ModelVolcan extends ModelTemplateElemental {
 		this.trophyMouthOffset = new float[] {0.0F, -0.25F, 0.0F};
     }
 
-
-	// ==================================================
-	//             Add Custom Render Layers
-	// ==================================================
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureGlow(renderer));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", "glow", true, LayerCreatureEffect.BLEND.ADD.getValue(), true));
 	}
 
+	@Override
+	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
+		return ClientManager.FULL_BRIGHT;
+	}
 
-	// ==================================================
-	//                 Animate Part
-	// ==================================================
 	@Override
 	public void animatePart(String partName, LivingEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
@@ -70,21 +67,5 @@ public class ModelVolcan extends ModelTemplateElemental {
 		if(partName.equals("effect02") || partName.equals("effect04")) {
 			this.rotate(0, loop * -8, 0);
 		}
-	}
-
-
-	// ==================================================
-	//                   On Render
-	// ==================================================
-	@Override
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
-		RenderSystem.disableLighting();
-	}
-
-	@Override
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
-		RenderSystem.enableLighting();
 	}
 }

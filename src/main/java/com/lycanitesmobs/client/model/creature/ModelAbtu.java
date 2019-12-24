@@ -75,7 +75,7 @@ public class ModelAbtu extends ModelCreatureObjOld {
 		}
     	if(partName.equals("mouth")) {
     		this.subCenterPart("mouth");
-    		this.rotate(15F - (float)-Math.toDegrees(MathHelper.cos(loop * -0.1F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		this.doRotate(15F - (float)-Math.toDegrees(MathHelper.cos(loop * -0.1F) * 0.05F - 0.05F), 0.0F, 0.0F);
     		this.unsubCenterPart("mouth");
     	}
     	
@@ -89,14 +89,14 @@ public class ModelAbtu extends ModelCreatureObjOld {
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("mouth")) {
-	    		this.rotate(30.0F, 0.0F, 0.0F);
+	    		this.doRotate(30.0F, 0.0F, 0.0F);
 	    	}
 		}
 		
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
     
     
@@ -106,7 +106,7 @@ public class ModelAbtu extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
     	if(partName.equals("head") || partName.equals("mouth"))
-    		translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+    		doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
     	else
         	super.childScale(partName);
     }

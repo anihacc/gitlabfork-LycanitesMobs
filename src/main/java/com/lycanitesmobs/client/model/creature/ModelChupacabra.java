@@ -70,15 +70,15 @@ public class ModelChupacabra extends ModelCreatureObjOld {
         if(partName.equals("mouth")) {
             this.centerPartToPart("mouth", "head");
             if(!lockHeadX)
-                this.rotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
+                this.doRotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
             if(!lockHeadY)
-                this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+                this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
             this.uncenterPartToPart("mouth", "head");
         }
     	
     	// Idle:
         if(partName.equals("mouth")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
+            this.doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.1F - 0.1F), 0.0F, 0.0F);
         }
     	if(partName.equals("tailleft")) {
     		rotX = (float)-Math.toDegrees(MathHelper.cos(loop * 0.1F) * 0.05F - 0.05F);
@@ -99,15 +99,15 @@ public class ModelChupacabra extends ModelCreatureObjOld {
         // Attack:
         if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
             if(partName.equals("armleft"))
-                rotate(-75.0F, 0.0F, 0.0F);
+                doRotate(-75.0F, 0.0F, 0.0F);
             if(partName.equals("armright"))
-                rotate(-75.0F, 0.0F, 0.0F);
+                doRotate(-75.0F, 0.0F, 0.0F);
         }
     	
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 
 
@@ -117,7 +117,7 @@ public class ModelChupacabra extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
         if(partName.equals("head"))
-            translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+            doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
         else
             super.childScale(partName);
     }

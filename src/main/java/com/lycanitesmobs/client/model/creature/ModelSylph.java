@@ -1,12 +1,13 @@
 package com.lycanitesmobs.client.model.creature;
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -44,6 +45,11 @@ public class ModelSylph extends ModelTemplateElemental {
 		super.addCustomLayers(renderer);
 		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vec2f(0, 1)));
+	}
+
+	@Override
+	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
+		return ClientManager.FULL_BRIGHT;
 	}
 
 
@@ -128,25 +134,5 @@ public class ModelSylph extends ModelTemplateElemental {
 		}
 
 		return super.getPartColor(partName, entity, layer, trophy, loop);
-	}
-
-
-	// ==================================================
-	//                      Visuals
-	// ==================================================
-	@Override
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
-		if(layer != null)
-			return;
-		RenderSystem.disableLighting();
-	}
-
-	@Override
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
-		if(layer != null)
-			return;
-		RenderSystem.enableLighting();
 	}
 }

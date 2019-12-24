@@ -10,10 +10,15 @@ import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -261,12 +266,12 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 			// Render:
 			if(this.creaturePreviewEntity != null) {
-				int creatureSize = 70;
+				int creatureSize = Math.round((float)this.windowHeight / 6);
 				double creatureWidth = creatureInfo.width;
 				double creatureHeight = creatureInfo.height;
 				int scale = (int)Math.round((1.8F / Math.max(creatureWidth, creatureHeight)) * creatureSize);
 				int posX = x;
-				int posY = y + 32 + creatureSize;
+				int posY = y;
 				float lookX = (float)posX - mouseX;
 				float lookY = (float)posY - mouseY;
 				this.creaturePreviewTicks += partialTicks;
@@ -275,16 +280,10 @@ public abstract class BeastiaryScreen extends BaseScreen {
 					previewCreatureBase.onlyRenderTicks = this.creaturePreviewTicks;
 				}
 
-				//GlStateManager.enableDepthTest();
-				//GlStateManager.enableColorMaterial();
-
-				InventoryScreen.func_228187_a_(posX, posY, 20, lookX, lookY, this.creaturePreviewEntity); // drawEntityOnScreen()?
-
-				RenderHelper.disableStandardItemLighting();
-				RenderSystem.disableRescaleNormal();
-				RenderSystem.activeTexture(ClientManager.GL_TEXTURE1);
-				RenderSystem.disableTexture();
-				RenderSystem.activeTexture(ClientManager.GL_TEXTURE0);
+				RenderSystem.pushMatrix();
+				RenderSystem.translatef(0, 0, -1000);
+				InventoryScreen.func_228187_a_(posX, posY, scale, lookX, lookY, this.creaturePreviewEntity); // drawEntityOnScreen()?
+				RenderSystem.popMatrix();
 			}
 		}
 		catch (Exception e) {

@@ -96,9 +96,9 @@ public class ModelEyewig extends ModelCreatureObjOld {
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
     
     
@@ -109,8 +109,8 @@ public class ModelEyewig extends ModelCreatureObjOld {
     public void childScale(String partName) {
     	super.childScale(partName);
     	if(partName.equals("head") || partName.equals("mouth")) {
-    		scale(2F, 2F, 2F);
-    		translate(0F, -(getPartCenter(partName)[1] / 2), 0F);
+    		doScale(2F, 2F, 2F);
+    		doTranslate(0F, -(getPartCenter(partName)[1] / 2), 0F);
     	}
     }
 }

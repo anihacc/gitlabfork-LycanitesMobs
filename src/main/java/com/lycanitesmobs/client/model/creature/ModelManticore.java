@@ -89,8 +89,8 @@ public class ModelManticore extends ModelCreatureObjOld {
 	    		rotX -= 20;
 		
     	// Apply Animations:
-    	translate(posX, posY, posZ);
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
     }
 }

@@ -1,7 +1,6 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.google.common.collect.Lists;
-import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.ModelProjectileBase;
 import com.lycanitesmobs.client.model.ModelProjectileObj;
@@ -11,8 +10,9 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -21,7 +21,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -58,7 +57,8 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	//                    Do Render
 	// ==================================================
 	@Override
-	protected void func_225629_a_(BaseProjectileEntity entity, String someString, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks) {
+	protected void func_225629_a_(BaseProjectileEntity entity, String someString, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+		// Get Model:
 		if(this.renderModel == null) {
 			if(entity instanceof CustomProjectileEntity) {
 				ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
@@ -73,81 +73,108 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 			}
 		}
 
-		RenderSystem.pushMatrix();
-		RenderSystem.disableCull();
+		// Model States:
+		float time = 0;
+		float distance = 0;
+		float loop = entity.ticksExisted;
+		float lookYaw = 0;
+		float lookPitch = 0;
+		float scale = 1;
+		boolean invisible = false;
+		boolean allyInvisible = false;
 
-		float x = 0; // TODO
-		float y = 0;
-		float z = 0;
-
+		// Render Model and Layers:
 		try {
-			RenderSystem.enableAlphaTest();
-			if (this.bindEntityTexture(entity)) {
-				RenderSystem.translatef(x, y - 0.25F, z);
-				RenderSystem.scalef(0.25F, 0.25F, 0.25F);
-				RenderSystem.rotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+			matrixStack.func_227861_a_(0, -0.25F, 0); // translate
+			matrixStack.func_227862_a_(0.25F, 0.25F, 0.25F); // scale
+			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(entity.rotationYaw)); // rotate
 
-				if (!(this.renderModel instanceof ModelProjectileObj)) {
-					this.renderModel.func_225597_a_(entity, 0, 0, ticks, 0, 0); //render
+			if (!(this.renderModel instanceof ModelProjectileObj)) {
+				ResourceLocation texture = this.getEntityTexture(entity);
+				if(texture == null) {
+					return;
 				}
-				else {
-					((ModelProjectileObj) this.renderModel).generateAnimationFrames(entity, 0, 0, ticks, 0, 0, 1);
-					this.renderModel.render(entity, 0, 0, ticks, 0, 0, 1, null, false);
-					for (LayerRenderer<BaseProjectileEntity, ModelProjectileBase> renderLayer : this.renderLayers) {
-						if (renderLayer instanceof LayerProjectileBase)
-							this.renderModel.render(entity, 0, 0, ticks, 0, 0, 1, (LayerProjectileBase) renderLayer, false);
+				RenderType renderType = ObjRenderState.getObjRenderType(texture);
+				this.renderModel.render(entity, matrixStack, renderTypeBuffer.getBuffer(renderType), null, 0, 0, loop, 0, 0, scale, brightness);
+			}
+			else {
+
+				this.getEntityModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
+				this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, invisible, allyInvisible);
+				for(LayerRenderer<BaseProjectileEntity, ModelProjectileBase> layer : this.renderLayers) {
+					if(!(layer instanceof LayerProjectileBase)) {
+						continue;
 					}
-					((ModelProjectileObj) this.renderModel).clearAnimationFrames();
+					LayerProjectileBase layerCreatureBase = (LayerProjectileBase)layer;
+					if(!layerCreatureBase.canRenderLayer(entity, scale)) {
+						continue;
+					}
+					this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, invisible, allyInvisible);
 				}
-				RenderSystem.depthMask(true);
-				RenderSystem.disableRescaleNormal();
+				this.getEntityModel().clearAnimationFrames();
 			}
 		}
-		catch (Exception exception)
-		{
+		catch (Exception exception) {
 			exception.printStackTrace();
 		}
-
-		RenderSystem.activeTexture(ClientManager.GL_TEXTURE1);
-		RenderSystem.enableTexture();
-		RenderSystem.activeTexture(ClientManager.GL_TEXTURE0);
-		RenderSystem.enableCull();
-		RenderSystem.popMatrix();
 	}
 
-	public ModelProjectileBase getMainModel() {
-		return this.renderModel;
+	/**
+	 * Renders the main model.
+	 * @param entity The entity to render.
+	 * @param matrixStack The matrix stack for animation.
+	 * @param renderTypeBuffer  The render type buffer for rendering with.
+	 * @param layer The layer to render, the base layer is null.
+	 * @param time The current movement time for walk cycles, etc.
+	 * @param distance The current movement amount for walk cycles, etc.
+	 * @param loop A constant tick for looping animations.
+	 * @param lookY The entity's yaw looking position for head rotation, etc.
+	 * @param lookX The entity's pitch looking position for head rotation, etc.
+	 * @param scale The base scale to render the model at, usually just 1 which scales 1m unit in Blender to a 1m block unit in Minecraft.
+	 * @param brightness The brightness of the mob based on block location, etc.
+	 * @param invisible If true, the entity has invisibility or some form of stealth.
+	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
+	 */
+	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
+		ResourceLocation texture = this.getEntityTexture(entity, layer);
+		RenderType rendertype;
+		if (allyInvisible) {
+			rendertype = RenderType.func_228644_e_(texture);
+		}
+		else if (invisible) {
+			rendertype = RenderType.func_228654_j_(texture);
+		}
+		else {
+			rendertype = ObjRenderState.getObjRenderType(texture);
+		}
+		this.getEntityModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
 	}
 
 	@Override
 	public ModelProjectileBase getEntityModel() {
-    	return this.getMainModel();
+		return this.renderModel;
 	}
 
 	public final boolean addLayer(LayerRenderer<BaseProjectileEntity, ModelProjectileBase> layer) {
 		return this.renderLayers.add(layer);
 	}
-    
-    
-    // ==================================================
- 	//                     Visuals
- 	// ==================================================
-    // ========== Main ==========
-    public boolean bindEntityTexture(BaseProjectileEntity entity) {
-        ResourceLocation texture = this.getEntityTexture(entity);
-        if(texture == null)
-            return false;
-        this.bindTexture(texture);
-        return true;
-    }
 
-	@Nullable
+	/**
+	 * Gets the texture to use.
+	 * @param entity The entity to get the texture from.
+	 * @param layer The layer to get the texture for.
+	 * @return The texture to bind.
+	 */
+	public ResourceLocation getEntityTexture(BaseProjectileEntity entity, LayerProjectileBase layer) {
+		if(layer == null) {
+			return this.getEntityTexture(entity);
+		}
+		ResourceLocation layerTexture = layer.getLayerTexture(entity);
+		return layerTexture != null ? layerTexture : this.getEntityTexture(entity);
+	}
+
 	@Override
 	public ResourceLocation getEntityTexture(BaseProjectileEntity entity) {
 		return entity.getTexture();
-	}
-
-	public void bindTexture(ResourceLocation texture) {
-		this.renderManager.textureManager.bindTexture(texture);
 	}
 }

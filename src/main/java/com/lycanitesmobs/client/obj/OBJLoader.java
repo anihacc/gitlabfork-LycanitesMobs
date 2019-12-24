@@ -56,7 +56,7 @@ public class OBJLoader
     private boolean hasNormals = false;
     private boolean hasTexCoords = false;
 
-    public HashMap<ObjObject, IndexedModel> loadModel(String startPath, String res) throws Exception
+    public HashMap<ObjPart, IndexedModel> loadModel(String startPath, String res) throws Exception
     {
         try
         {
@@ -82,11 +82,11 @@ public class OBJLoader
             normalIndexMap.setDefault(-1);
             indexMap.setDefault(-1);
             
-            HashMap<ObjObject, IndexedModel> map = new HashMap<>();
+            HashMap<ObjPart, IndexedModel> map = new HashMap<>();
             
-            ObjObject currentObject;
-            HashMap<ObjObject, IndexedModel[]> objects = new HashMap<>();
-            objects.put(currentObject = new ObjObject("main"), new IndexedModel[]{result, normalModel});
+            ObjPart currentObject;
+            HashMap<ObjPart, IndexedModel[]> objects = new HashMap<>();
+            objects.put(currentObject = new ObjPart("main"), new IndexedModel[]{result, normalModel});
             for(String line : lines)
             {
                 if(line != null && !line.trim().equals(""))
@@ -140,17 +140,17 @@ public class OBJLoader
                         result = new IndexedModel();
                         normalModel = new IndexedModel();
                         indices.clear();
-                        objects.put(currentObject = new ObjObject(parts[1]), new IndexedModel[]{result, normalModel});
+                        objects.put(currentObject = new ObjPart(parts[1]), new IndexedModel[]{result, normalModel});
                     }
                 }
             }
             result.getObjIndices().addAll(indices);
             normalModel.getObjIndices().addAll(indices);
             
-            Iterator<ObjObject> it = objects.keySet().iterator();
+            Iterator<ObjPart> it = objects.keySet().iterator();
             while(it.hasNext())
             {
-                ObjObject object = it.next();
+                ObjPart object = it.next();
                 result = objects.get(object)[0];
                 normalModel = objects.get(object)[1];
                 indices = result.getObjIndices();

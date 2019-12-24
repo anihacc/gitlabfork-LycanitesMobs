@@ -3,9 +3,14 @@ package com.lycanitesmobs.client.model;
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.renderer.EquipmentRenderer;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
+import com.lycanitesmobs.client.renderer.ObjRenderState;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
@@ -21,18 +26,20 @@ public class ModelEquipment implements IItemModelRenderer {
 	/**
 	 * Constructor
 	 */
-	public ModelEquipment() {
-
-	}
+	public ModelEquipment() {}
 
 
 	/**
 	 * Renders an Equipment Item Stack.
-	 * @param itemStack The Equipment Item Stack to render models from.
-	 * @param hand The hand that the equipment is held in.
-	 * @param renderer The renderer to render with.
+	 * @param itemStack The itemstack to render.
+	 * @param hand The hand that is holding the item or null if in the inventory instead.
+	 * @param matrixStack The matrix stack for animation.
+	 * @param renderTypeBuffer  The render buffer to render with.
+	 * @param renderer The renderer that is rendering this model, needed for texture binding.
+	 * @param loop The animation tick for looping animations, etc.
+	 * @param brightness The base brightness to render at.
 	 */
-	public void render(ItemStack itemStack, Hand hand, EquipmentRenderer renderer, float loop) {
+	public void render(ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, float loop, int brightness) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
@@ -47,7 +54,7 @@ public class ModelEquipment implements IItemModelRenderer {
 
 			// Base:
 			if(slotId == 0) {
-				modelPartBase = this.renderPart(partStack, hand, renderer, null, loop);
+				modelPartBase = this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, null, loop, brightness);
 			}
 
 			// Head:
@@ -55,7 +62,7 @@ public class ModelEquipment implements IItemModelRenderer {
 				if(modelPartBase == null || !modelPartBase.animationParts.containsKey("head")) {
 					continue;
 				}
-				modelPartHead = this.renderPart(partStack, hand, renderer, modelPartBase.animationParts.get("head"), loop);
+				modelPartHead = this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, modelPartBase.animationParts.get("head"), loop, brightness);
 			}
 
 			// Tip A:
@@ -63,7 +70,7 @@ public class ModelEquipment implements IItemModelRenderer {
 				if(modelPartHead == null || !modelPartHead.animationParts.containsKey("tipa")) {
 					continue;
 				}
-				this.renderPart(partStack, hand, renderer, modelPartHead.animationParts.get("tipa"), loop);
+				this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, modelPartHead.animationParts.get("tipa"), loop, brightness);
 			}
 
 			// Tip B:
@@ -71,7 +78,7 @@ public class ModelEquipment implements IItemModelRenderer {
 				if(modelPartHead == null || !modelPartHead.animationParts.containsKey("tipb")) {
 					continue;
 				}
-				this.renderPart(partStack, hand, renderer, modelPartHead.animationParts.get("tipb"), loop);
+				this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, modelPartHead.animationParts.get("tipb"), loop, brightness);
 			}
 
 			// Tip C:
@@ -79,7 +86,7 @@ public class ModelEquipment implements IItemModelRenderer {
 				if(modelPartHead == null || !modelPartHead.animationParts.containsKey("tipc")) {
 					continue;
 				}
-				this.renderPart(partStack, hand, renderer, modelPartHead.animationParts.get("tipc"), loop);
+				this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, modelPartHead.animationParts.get("tipc"), loop, brightness);
 			}
 
 			// Pommel:
@@ -87,7 +94,7 @@ public class ModelEquipment implements IItemModelRenderer {
 				if(modelPartBase == null || !modelPartBase.animationParts.containsKey("pommel")) {
 					continue;
 				}
-				this.renderPart(partStack, hand, renderer, modelPartBase.animationParts.get("pommel"), loop);
+				this.renderPart(partStack, hand, matrixStack, renderTypeBuffer, renderer, modelPartBase.animationParts.get("pommel"), loop, brightness);
 			}
 		}
 
@@ -101,11 +108,16 @@ public class ModelEquipment implements IItemModelRenderer {
 
 	/**
 	 * Renders an Equipment Part.
-	 * @param partStack The ItemStack to render the part from.
-	 * @param hand The hand that the part is held in.
-	 * @param renderer The renderer to render with.
+	 * @param partStack The equipment part item stack to render.
+	 * @param hand The hand that is holding the item or null if in the inventory instead.
+	 * @param matrixStack The matrix stack for animation.
+	 * @param renderTypeBuffer  The render buffer to render with.
+	 * @param renderer The renderer that is rendering this model, needed for texture binding.
+	 * @param offsetPart A ModelObjPart, if not null this model is offset by it, used by assembled equipment pieces to create a full model.
+	 * @param loop The animation tick for looping animations, etc.
+	 * @param brightness The base brightness to render at.
 	 */
-	public ModelItemBase renderPart(ItemStack partStack, Hand hand, EquipmentRenderer renderer, ModelObjPart offsetPart, float loop) {
+	public ModelItemBase renderPart(ItemStack partStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, AnimationPart offsetPart, float loop, int brightness) {
 		if(partStack.isEmpty() || !(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}
@@ -123,9 +135,13 @@ public class ModelEquipment implements IItemModelRenderer {
 		this.renderLayers.clear();
 		modelItemBase.addCustomLayers(this);
 		modelItemBase.generateAnimationFrames(partStack, null, loop, offsetPart);
-		modelItemBase.render(partStack, hand, renderer, offsetPart, null, loop, false);
-		for(LayerItem renderLayer : renderLayers) {
-			modelItemBase.render(partStack, hand, renderer, offsetPart, renderLayer, loop, false);
+		ResourceLocation texture = modelItemBase.getTexture(partStack, null);
+		RenderType renderType = ObjRenderState.getObjRenderType(texture);
+		modelItemBase.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, null, loop, brightness);
+		for(LayerItem layer : this.renderLayers) {
+			texture = modelItemBase.getTexture(partStack, layer);
+			renderType = ObjRenderState.getObjRenderType(texture);
+			modelItemBase.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, layer, loop, brightness);
 		}
 		this.renderedModels.add(modelItemBase);
 
@@ -134,9 +150,7 @@ public class ModelEquipment implements IItemModelRenderer {
 
 
 	@Override
-	public void bindItemTexture(ResourceLocation location) {
-
-	}
+	public void bindItemTexture(ResourceLocation location) {}
 
 
 	@Override

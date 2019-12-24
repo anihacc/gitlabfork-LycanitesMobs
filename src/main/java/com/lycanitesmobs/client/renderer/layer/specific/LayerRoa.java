@@ -51,10 +51,4 @@ public class LayerRoa extends LayerCreatureBase {
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getSubTexture("effect");
     }
-
-    @Override
-    public void onRenderStart(Entity entity, boolean trophy) {}
-
-    @Override
-    public void onRenderFinish(Entity entity, boolean trophy) {}
 }

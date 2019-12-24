@@ -137,18 +137,4 @@ public class ModelSpectre extends ModelTemplateElemental {
 			this.rotate(0, -(float) Math.cos(loop / 10) * 10 - (isPulling ? 90 : 0), 0);
 		}
 	}
-
-
-	// ==================================================
-	//                      Visuals
-	// ==================================================
-	@Override
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
-	}
-
-	@Override
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
-	}
 }

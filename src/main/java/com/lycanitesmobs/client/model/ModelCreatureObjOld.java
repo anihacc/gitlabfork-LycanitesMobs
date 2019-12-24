@@ -1,19 +1,15 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.obj.ObjObject;
-import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.obj.ObjModel;
+import com.lycanitesmobs.client.obj.ObjPart;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,10 +29,10 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	
 	// Model:
     /** An instance of the model, the model should only be set once and not during every tick or things will get very laggy! **/
-    public TessellatorModel wavefrontObject;
+    public ObjModel objModel;
 
     /** A list of all parts that belong to this model. **/
-    public List<ObjObject> wavefrontParts;
+    public List<ObjPart> wavefrontParts;
 
     /** A map containing the XYZ offset for each part to use when centering. **/
 	public Map<String, float[]> partCenters = new HashMap<>();
@@ -44,9 +40,6 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	public Map<String, float[]> partSubCenters = new HashMap<>();
     /** A map to be used on the fly, this allows one part to apply a position offset to another part. This is no longer used though and will be made redundant when the new model code is created. **/
 	public Map<String, float[]> offsets = new HashMap<>();
-
-	// Matrix:
-	MatrixStack matrixStack;
 
     // Head:
     /** If true, head pieces will ignore the x look rotation when animating. **/
@@ -68,10 +61,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	/** If true, no color effects will be applied, this is usually used for when the model is rendered as a red damage overlay, etc. **/
     public boolean dontColor = false;
 
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
-    public ModelCreatureObjOld() {
+	public ModelCreatureObjOld() {
         this(1.0F);
     }
     
@@ -79,31 +69,30 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     	// Here a model should get its model, collect its parts into a list and then set the centers for each part.
     }
 
-
-    // ==================================================
-    //                    Init Model
-    // ==================================================
-    public ModelCreatureObjOld initModel(String name, ModInfo groupInfo, String path) {
+	/**
+	 * Initializes this model, loading model data, etc.
+	 * @param name The unique name this model should have.
+	 * @param modInfo The mod this model belongs to.
+	 * @param path The path to load the model data from (no extension).
+	 * @return This model instance.
+	 */
+	public ModelCreatureObjOld initModel(String name, ModInfo modInfo, String path) {
 		// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {
 			return this;
 		}
 
-		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
-        this.wavefrontParts = this.wavefrontObject.objObjects;
+		this.objModel = new ObjModel(new ResourceLocation(modInfo.modid, "models/" + path + ".obj"));
+        this.wavefrontParts = this.objModel.objParts;
         if(this.wavefrontParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load (old format) model obj for: " + name + "");
 
         return this;
     }
     
-    
-    // ==================================================
-   	//                  Render Model
-   	// ==================================================
     @Override
-	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean animate) {
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
     	this.matrixStack = matrixStack;
 
     	boolean isChild = false;
@@ -118,7 +107,6 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 			scale = -scale;
 		}
 		else {
-			scale *= 16;
 			if(entity != null) {
                 scale *= entity.getRenderScale();
             }
@@ -132,7 +120,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 		}
 
         // Render and Animate Each Part:
-        for(ObjObject part : this.wavefrontParts) {
+        for(ObjPart part : this.wavefrontParts) {
     		if(part.getName() == null)
     			continue;
             String partName = part.getName().toLowerCase();
@@ -151,82 +139,57 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 			matrixStack.func_227860_a_();
 
             // Apply Initial Offsets: (To Match Blender OBJ Export)
-            this.angle(modelXRotOffset, 1F, 0F, 0F);
-            this.translate(0F, modelYPosOffset, 0F);
+            this.doAngle(modelXRotOffset, 1F, 0F, 0F);
+            this.doTranslate(0F, modelYPosOffset, 0F);
 
             // Baby Heads:
             if(isChild && !trophyModel)
                 this.childScale(partName);
 
             // Apply Scales:
-            this.scale(scale, scale, scale);
+            this.doScale(scale, scale, scale);
             if(trophyModel)
-                this.scale(this.trophyScale, this.trophyScale, this.trophyScale);
+                this.doScale(this.trophyScale, this.trophyScale, this.trophyScale);
+
+            // perching:
+			if(entity != null && entity.hasPerchTarget()) {
+				distance = 0;
+			}
 
             // Animate (Part is centered and then animated):
             this.centerPart(partName);
-			if(entity.hasPerchTarget()) {
-				distance = 0;
-			}
             this.animatePart(partName, entity, time, distance, loop, -lookY, lookX, scale);
 
             // Trophy - Positioning:
             if(trophyModel) {
                 if(!partName.contains("head") && !partName.contains("body")) {
                 	float[] mouthOffset = this.comparePartCenters(this.bodyIsTrophy ? "body" : "head", partName);
-                    this.translate(mouthOffset[0], mouthOffset[1], mouthOffset[2]);
+                    this.doTranslate(mouthOffset[0], mouthOffset[1], mouthOffset[2]);
                     if(this.trophyMouthOffset.length >= 3)
-                    	this.translate(this.trophyMouthOffset[0], this.trophyMouthOffset[1], this.trophyMouthOffset[2]);
+                    	this.doTranslate(this.trophyMouthOffset[0], this.trophyMouthOffset[1], this.trophyMouthOffset[2]);
                 }
                 if(partName.contains("head")) {
                 	if(!partName.contains("left")) {
-                			this.translate(-0.3F, 0, 0);
-                			this.angle(5F, 0, 1, 0);
+                			this.doTranslate(-0.3F, 0, 0);
+                			this.doAngle(5F, 0, 1, 0);
                 	}
                 	if(!partName.contains("right")) {
-                			this.translate(0.3F, 0, 0);
-                			this.angle(-5F, 0, 1, 0);
+                			this.doTranslate(0.3F, 0, 0);
+                			this.doAngle(-5F, 0, 1, 0);
                 	}
                 }
                 this.uncenterPart(partName);
                 if(this.trophyOffset.length >= 3)
-                    this.translate(this.trophyOffset[0], this.trophyOffset[1], this.trophyOffset[2]);
+                    this.doTranslate(this.trophyOffset[0], this.trophyOffset[1], this.trophyOffset[2]);
             }
 
             // Render:
             this.uncenterPart(partName);
-			this.onRenderStart(layer, entity, trophyModel);
-            this.wavefrontObject.renderGroup(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), brightness, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
-			this.onRenderFinish(layer, entity, trophyModel);
+			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
 			matrixStack.func_227865_b_();
 		}
 	}
 
-	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.enableBlend();
-		}
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		if(layer != null) {
-			layer.onRenderStart(entity, renderAsTrophy);
-		}
-	}
-
-	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.disableBlend();
-		}
-		if(layer != null) {
-			layer.onRenderFinish(entity, renderAsTrophy);
-		}
-	}
-    
-    
-    // ==================================================
-   	//                     Trophy
-   	// ==================================================
     /** Returns true if the provided part name should be shown for the trophy model. **/
     public boolean isTrophyPart(String partName) {
     	if(partName == null)
@@ -236,11 +199,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 			return true;
     	return false;
     }
-    
-    
-    // ==================================================
-   	//                 Animate Part
-   	// ==================================================
+
     /**
      * Animates the individual part.
      * @param partName The name of the part (should be made all lowercase).
@@ -274,44 +233,15 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     	}
     	
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
-    
-    
-    // ==================================================
-   	//              Rotate and Translate
-   	// ==================================================
+
     public void childScale(String partName) {
-    	scale(0.5F, 0.5F, 0.5F);
+    	doScale(0.5F, 0.5F, 0.5F);
     }
-    
-    
-    // ==================================================
-   	//              Rotate and Translate
-   	// ==================================================
-    public void rotate(float rotX, float rotY, float rotZ) {
-    	this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
-    	this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
-    	this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
-    }
-    public void angle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
-    }
-    public void translate(float posX, float posY, float posZ) {
-		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
-    }
-    public void scale(float scaleX, float scaleY, float scaleZ) {
-		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
-    }
-    
-    
-    // ==================================================
-   	//                   Part Centers
-   	// ==================================================
-    // ========== Add Animation Part ==========
-    // ========== Set and Get ==========
+
     public void setPartCenter(String partName, float centerX, float centerY, float centerZ) {
     	if(this.isTrophyPart(partName))
     		this.bodyIsTrophy = false;
@@ -325,34 +255,31 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     	if(!this.partCenters.containsKey(partName)) return new float[] {0.0F, 0.0F, 0.0F};
     	return this.partCenters.get(partName);
     }
-    
-    // ========== Apply Centers ==========
+
     public void centerPart(String partName) {
     	if(!this.partCenters.containsKey(partName)) return;
     	float[] partCenter = this.partCenters.get(partName);
-    	this.translate(partCenter[0], partCenter[1], partCenter[2]);
+    	this.doTranslate(partCenter[0], partCenter[1], partCenter[2]);
     }
     public void uncenterPart(String partName) {
     	if(!this.partCenters.containsKey(partName)) return;
     	float[] partCenter = this.partCenters.get(partName);
-    	this.translate(-partCenter[0], -partCenter[1], -partCenter[2]);
+    	this.doTranslate(-partCenter[0], -partCenter[1], -partCenter[2]);
     }
-    
-    // ========== Copy Centers to Other Parts ==========
+
     public void centerPartToPart(String part, String targetPart) {
     	this.uncenterPart(part);
     	float[] partCenter = this.partCenters.get(targetPart);
     	if(partCenter != null)
-    		this.translate(partCenter[0], partCenter[1], partCenter[2]);
+    		this.doTranslate(partCenter[0], partCenter[1], partCenter[2]);
     }
     public void uncenterPartToPart(String part, String targetPart) {
     	float[] partCenter = this.partCenters.get(targetPart);
     	if(partCenter != null)
-    		this.translate(-partCenter[0], -partCenter[1], -partCenter[2]);
+    		this.doTranslate(-partCenter[0], -partCenter[1], -partCenter[2]);
     	this.centerPart(part);
     }
-    
-    // ========== Compare Centers ==========
+
     public float[] comparePartCenters(String centerPartName, String targetPartName) {
     	float[] centerPart = getPartCenter(centerPartName);
     	float[] targetPart = getPartCenter(targetPartName);
@@ -363,11 +290,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     		partDifference[i] = targetPart[i] - centerPart[i];
     	return partDifference;
     }
-    
-    
-    // ==================================================
-   	//            Part Sub Centers and Offsets
-   	// ==================================================
+
     public void setPartSubCenter(String partName, float centerX, float centerY, float centerZ) {
     	partSubCenters.put(partName, new float[] {centerX, centerY, centerZ});
     }
@@ -378,12 +301,12 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     public void subCenterPart(String partName) {
     	float[] offset = getSubCenterOffset(partName);
     	if(offset == null) return;
-    	translate(offset[0], offset[1], offset[2]);
+    	doTranslate(offset[0], offset[1], offset[2]);
     }
     public void unsubCenterPart(String partName) {
     	float[] offset = getSubCenterOffset(partName);
     	if(offset == null) return;
-    	translate(-offset[0], -offset[1], -offset[2]);
+    	doTranslate(-offset[0], -offset[1], -offset[2]);
     }
     public float[] getSubCenterOffset(String partName) {
     	if(!partCenters.containsKey(partName)) return null;
@@ -402,31 +325,5 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     public float[] getOffset(String offsetName) {
     	if(!offsets.containsKey(offsetName)) return new float[] { 0.0F, 0.0F, 0.0F };
     	return offsets.get(offsetName);
-    }
-    
-    
-    // ==================================================
-   	//                  Rotate to Point
-   	// ==================================================
-    public double rotateToPoint(double aTarget, double bTarget) {
-    	return rotateToPoint(0, 0, aTarget, bTarget);
-    }
-    public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
-    	if(aTarget - aCenter == 0)
-    		if(aTarget > aCenter) return 0;
-    		else if(aTarget < aCenter) return 180;
-    	if(bTarget - bCenter == 0)
-    		if(bTarget > bCenter) return 90;
-    		else if(bTarget < bCenter) return -90;
-    	if(aTarget - aCenter == 0 && bTarget - bCenter == 0)
-    		return 0;
-    	return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
-    }
-    public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
-    	double[] rotations = new double[3];
-    	rotations[0] = rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
-    	rotations[1] = rotateToPoint(-zCenter, xCenter, -zTarget, xTarget);
-    	rotations[2] = rotateToPoint(yCenter, xCenter, yTarget, xTarget);
-    	return rotations;
     }
 }

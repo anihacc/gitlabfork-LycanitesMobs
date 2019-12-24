@@ -73,9 +73,9 @@ public class ModelErepede extends ModelCreatureObjOld {
     	if(partName.equals("topmouth") || partName.equals("leftmouth") || partName.equals("rightmouth") || partName.equals("bottommouth")) {
     		this.centerPartToPart(partName, "head");
     		if(!lockHeadX)
-    			this.rotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
+    			this.doRotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
     		if(!lockHeadY)
-    			this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+    			this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
     		this.uncenterPartToPart(partName, "head");
     	}
     	if(partName.equals("topmouth")) {
@@ -115,9 +115,9 @@ public class ModelErepede extends ModelCreatureObjOld {
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
     
     
@@ -128,8 +128,8 @@ public class ModelErepede extends ModelCreatureObjOld {
     public void childScale(String partName) {
     	super.childScale(partName);
     	if(partName.equals("head") || partName.equals("topmouth") || partName.equals("leftmouth") || partName.equals("rightmouth") || partName.equals("bottommouth")) {
-    		scale(2F, 2F, 2F);
-    		translate(0F, -(getPartCenter(partName)[1] / 2), 0F);
+    		doScale(2F, 2F, 2F);
+    		doTranslate(0F, -(getPartCenter(partName)[1] / 2), 0F);
     	}
     }
 }

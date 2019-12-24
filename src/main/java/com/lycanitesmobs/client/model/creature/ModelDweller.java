@@ -80,18 +80,18 @@ public class ModelDweller extends ModelCreatureObjOld {
     	
     	// Mouth (Idle and Attack):
     	if(partName.equals("mouth")) {
-    		translate(0.0F, -0.2F, 0.0F);
+    		doTranslate(0.0F, -0.2F, 0.0F);
     		angleX = -1.0F;
     	}
     	if(partName.equals("mouth")) {
     		rotation += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F);
     		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown())
     			rotation = 20;
-        	angle(rotation, angleX, angleY, angleZ);
+        	doAngle(rotation, angleX, angleY, angleZ);
         	rotation = 0F;
     	}
     	if(partName.equals("mouth"))
-    		translate(-0.0F, 0.2F, 0.0F);
+    		doTranslate(-0.0F, 0.2F, 0.0F);
     	
     	// Arms (Idle and Attack):
     	if(partName.equals("leftarm")) {
@@ -126,15 +126,15 @@ public class ModelDweller extends ModelCreatureObjOld {
     	float walkOffset = 0.1F;
     	time *= 4;
     	if(partName.equals("leftarm"))
-    		translate(-0.4F, 0.0F, 0.2F);
+    		doTranslate(-0.4F, 0.0F, 0.2F);
     	if(partName.equals("rightarm"))
-    		translate(0.4F, 0.0F, 0.2F);
+    		doTranslate(0.4F, 0.0F, 0.2F);
     	if(partName.equals("leftarm") || partName.equals("rightarm"))
-    		rotate(0.0F, 0.0F, (float)rotateToPoint(0, 0, -0.5F, MathHelper.sin(time * walkSwing) * walkSwing));
+    		doRotate(0.0F, 0.0F, (float)rotateToPoint(0, 0, -0.5F, MathHelper.sin(time * walkSwing) * walkSwing));
     	if(partName.equals("leftarm"))
-    		translate(0.4F, 0.0F, -0.2F);
+    		doTranslate(0.4F, 0.0F, -0.2F);
     	if(partName.equals("rightarm"))
-    		translate(-0.4F, 0.0F, -0.2F);
+    		doTranslate(-0.4F, 0.0F, -0.2F);
     	
     	// Body and Tail (Walking):
     	if(partName.equals("body")) {
@@ -162,10 +162,10 @@ public class ModelDweller extends ModelCreatureObjOld {
     		
     	
     	// Apply Animations:
-    	translate(posX, posY, posZ);
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	scale(scaleX, scaleY, scaleZ);
+    	doTranslate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doScale(scaleX, scaleY, scaleZ);
     }
     
     public double[] getTailRotation(String tailName, String targetName, int tailID, float walkSwing, float walkOffset, float time) {

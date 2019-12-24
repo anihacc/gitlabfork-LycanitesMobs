@@ -75,13 +75,13 @@ public class ModelIka extends ModelCreatureObjOld {
 		
 		// Shell:
 		if(entity != null && partName.equals("shell") && entity.getHealth() <= entity.getMaxHealth() / 2) {
-	    	this.scale(0, 0, 0);
+	    	this.doScale(0, 0, 0);
 		}
 		
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 
 
@@ -91,7 +91,7 @@ public class ModelIka extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
         if(partName.equals("head"))
-            translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+            doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
         else
             super.childScale(partName);
     }

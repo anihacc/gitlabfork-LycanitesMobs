@@ -86,19 +86,19 @@ public class ModelSkylus extends ModelCreatureObjOld {
 		// Attack:
 		if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isAttackOnCooldown()) {
 	    	if(partName.equals("tentaclem") || partName.equals("tentaclel2") || partName.equals("tentacler2"))
-	    		rotate(0.0F, -25.0F, 0.0F);
+	    		doRotate(0.0F, -25.0F, 0.0F);
 	    	if(partName.equals("tentaclel1") || partName.equals("tentacler1"))
-	    		rotate(0.0F, 25.0F, 0.0F);
+	    		doRotate(0.0F, 25.0F, 0.0F);
 		}
 		
 		// Shell:
 		if(entity != null && partName.equals("shell") && entity.getHealth() <= entity.getMaxHealth() / 2) {
-	    	this.scale(0, 0, 0);
+	    	this.doScale(0, 0, 0);
 		}
 		
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
 }

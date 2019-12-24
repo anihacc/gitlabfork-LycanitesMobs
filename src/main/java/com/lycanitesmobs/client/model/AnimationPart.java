@@ -7,17 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModelObjPart {
+public class AnimationPart {
     /** The name of this model part. **/
     public String name;
     /** The parent part of this model part, null if this part has no parent. This will do all animations that the parent does. **/
-    public ModelObjPart parent;
+    public AnimationPart parent;
 	/** The offet part of this model part, null if this part has no offset. Offsets are similar to parents but are owned by other models, used by Equipment pieces. **/
-	public ModelObjPart offset;
+	public AnimationPart offset;
     /** The parent name of this model part, used for initial setup and null if this part has no parent. **/
     public String parentName;
     /** The child parts connected to this part, these will all do the animations that this does. **/
-    public Map<String, ModelObjPart> children = new HashMap<>();
+    public Map<String, AnimationPart> children = new HashMap<>();
     /** The x center location of this part for rotating around. **/
     public float centerX;
     /** The y center location of this part for rotating around. **/
@@ -60,8 +60,8 @@ public class ModelObjPart {
 	 * Adds child parts to this part.
 	 * @param parts An array of child parts to add.
 	 */
-	public void addChildren(ModelObjPart[] parts) {
-        for(ModelObjPart part : parts) {
+	public void addChildren(AnimationPart[] parts) {
+        for(AnimationPart part : parts) {
             if(part == null || part == this || part.parentName == null)
                 continue;
             if(this.children.containsKey(part.parentName))
@@ -78,7 +78,7 @@ public class ModelObjPart {
 	 * Searches for the root parent (the first parent, of parent, etc that has no parent).
 	 * @return The root parent part.
 	 */
-    public ModelObjPart getRootParent() {
+    public AnimationPart getRootParent() {
 		if(this.parent == null) {
 			return this;
 		}
@@ -130,7 +130,7 @@ public class ModelObjPart {
 	 * @param offsetPart The part to set as the offset.
 	 * @return This part instance for chaining.
 	 */
-	public ModelObjPart setOffset(ModelObjPart offsetPart) {
+	public AnimationPart setOffset(AnimationPart offsetPart) {
 		this.offset = offsetPart;
 		return this;
 

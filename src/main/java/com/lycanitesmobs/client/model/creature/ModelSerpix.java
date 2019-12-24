@@ -81,9 +81,9 @@ public class ModelSerpix extends ModelCreatureObjOld {
         if(partName.contains("mouth")) {
             this.centerPartToPart(partName, "head");
             if(!lockHeadX)
-                this.rotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
+                this.doRotate((float)Math.toDegrees(lookX / (180F / (float)Math.PI)), 0, 0);
             if(!lockHeadY)
-                this.rotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
+                this.doRotate(0, (float)Math.toDegrees(lookY / (180F / (float)Math.PI)), 0);
             this.uncenterPartToPart(partName, "head");
         }
 
@@ -93,7 +93,7 @@ public class ModelSerpix extends ModelCreatureObjOld {
         if(partName.equals("mouthright"))
             rotY -= (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
         if(partName.equals("mouthbottom")) {
-            this.rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+            this.doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
         }
 
         // Attack:
@@ -170,9 +170,9 @@ public class ModelSerpix extends ModelCreatureObjOld {
     		posY -= (2 * ((BaseCreatureEntity)entity).getStealth());
     	
     	// Apply Animations:
-    	translate(posX, posY, posZ);
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	scale(scaleX, scaleY, scaleZ);
+    	doTranslate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doScale(scaleX, scaleY, scaleZ);
     }
 }

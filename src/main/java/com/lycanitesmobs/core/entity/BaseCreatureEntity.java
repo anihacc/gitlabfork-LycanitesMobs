@@ -2021,7 +2021,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      */
     @Override
 	public boolean isPushedByWater() {
-        return !this.isStrongSwimmer();
+        return !this.isStrongSwimmer() && !this.isBoss();
     }
     
     // ========== Is Moving ==========

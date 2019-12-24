@@ -9,18 +9,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureSaddle extends LayerCreatureBase {
-
-    // ==================================================
-    //                   Constructor
-    // ==================================================
     public LayerCreatureSaddle(CreatureRenderer renderer) {
         super(renderer);
     }
 
-
-    // ==================================================
-    //                  Render Layer
-    // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
         if(!super.canRenderLayer(entity, scale) || !(entity instanceof RideableCreatureEntity))
@@ -28,10 +20,6 @@ public class LayerCreatureSaddle extends LayerCreatureBase {
         return ((RideableCreatureEntity)entity).hasSaddle();
     }
 
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
     @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
         return entity.getEquipmentTexture("saddle");

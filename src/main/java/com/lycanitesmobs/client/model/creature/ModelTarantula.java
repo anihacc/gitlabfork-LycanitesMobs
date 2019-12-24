@@ -71,9 +71,9 @@ public class ModelTarantula extends ModelCreatureObjOld {
     	
     	// Idle:
     	if(partName.equals("innerleftmouth"))
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F + (float) Math.PI) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F + (float) Math.PI) * 0.05F - 0.05F), 0.0F, 0.0F);
     	if(partName.equals("innerrightmouth"))
-    		rotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
+    		doRotate((float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F - 0.05F), 0.0F, 0.0F);
     	if(partName.equals("outerleftmouth"))
     		rotY += (float)-Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.1F - 0.05F);
     	if(partName.equals("outerrightmouth"))
@@ -102,8 +102,8 @@ public class ModelTarantula extends ModelCreatureObjOld {
 		}
 		
     	// Apply Animations:
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	translate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doTranslate(posX, posY, posZ);
     }
 }

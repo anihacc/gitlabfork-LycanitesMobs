@@ -1,11 +1,7 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -35,19 +31,23 @@ public class LayerItem {
 	public Vector4f colorFadeSpeed;
 
 
-    // ==================================================
-    //                   Constructor
-    // ==================================================
+	/**
+	 * Constructor
+	 * @param renderer The renderer that is rendering this layer.
+	 */
 	public LayerItem(IItemModelRenderer renderer, String name) {
 		this.renderer = renderer;
 		this.name = name;
 	}
 
-
-    // ==================================================
-    //                      Visuals
-    // ==================================================
-    public Vector4f getPartColor(String partName, ItemStack itemStack, float loop) {
+	/**
+	 *  Returns the color that this layer should render the provided part at.
+	 * @param partName The name of the model part.
+	 * @param itemStack The item stack to render.
+	 * @param loop The animation loop to use.
+	 * @return The part color.
+	 */
+	public Vector4f getPartColor(String partName, ItemStack itemStack, float loop) {
 		if(this.colorFadeSpeed != null) {
 			float red = 1;
 			if(this.colorFadeSpeed.getX() != 0)
@@ -79,33 +79,22 @@ public class LayerItem {
         return new Vector4f(1, 1, 1, 1);
     }
 
-    public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
-		return entity.getTexture(this.textureSuffix);
+    public ResourceLocation getLayerTexture(ItemStack itemStack) {
+		return null;
     }
 
-	public void onRenderStart(ItemStack itemStack) {
-		// Glow In Dark:
+	/**
+	 *  Returns the brightness that this layer should use.
+	 * @param partName The name of the model part.
+	 * @param itemStack The item stack to render.
+	 * @param brightness The base brightness.
+	 * @return The brightness to render at.
+	 */
+	public int getBrightness(String partName, ItemStack itemStack, int brightness) {
 		if(this.glow) {
-			RenderSystem.disableLighting();
-			int i = 0xf000f0;
-			int j = i % 65536;
-			int k = i / 65536;
-			RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
+			return 240;
 		}
-
-		// Blending:
-    	if(this.blending == BLEND.ADD.id) {
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		}
-		else if(this.blending == BLEND.SUB.id) {
-			RenderSystem.blendFunc(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		}
-	}
-
-	public void onRenderFinish(ItemStack itemStack) {
-    	if(this.glow) {
-			RenderSystem.enableLighting();
-		}
+		return brightness;
 	}
 
 	public Vec2f getTextureOffset(String partName, ItemStack itemStack, float loop) {

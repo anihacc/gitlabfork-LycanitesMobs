@@ -71,9 +71,9 @@ public class ModelSilex extends ModelCreatureObjOld {
     	}
 		
     	// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
-    	this.rotate(rotX, rotY, rotZ);
-    	this.translate(posX, posY, posZ);
+		this.doAngle(rotation, angleX, angleY, angleZ);
+    	this.doRotate(rotX, rotY, rotZ);
+    	this.doTranslate(posX, posY, posZ);
     }
     
     
@@ -83,7 +83,7 @@ public class ModelSilex extends ModelCreatureObjOld {
     @Override
     public void childScale(String partName) {
     	if(partName.equals("head") || partName.equals("mouth"))
-    		translate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
+    		doTranslate(-(getPartCenter(partName)[0] / 2), -(getPartCenter(partName)[1] / 2), -(getPartCenter(partName)[2] / 2));
     	else
         	super.childScale(partName);
     }

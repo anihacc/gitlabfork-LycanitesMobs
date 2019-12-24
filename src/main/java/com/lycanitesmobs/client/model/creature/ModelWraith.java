@@ -8,8 +8,6 @@ import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -48,6 +46,11 @@ public class ModelWraith extends ModelTemplateElemental {
 		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureEffect(renderer, "skull", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
 		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vec2f(-8, 0)));
+	}
+
+	@Override
+	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
+		return ClientManager.FULL_BRIGHT;
 	}
 
 
@@ -120,29 +123,4 @@ public class ModelWraith extends ModelTemplateElemental {
 		return super.getPartColor(partName, entity, layer, trophy, loop);
 	}
 
-
-	// ==================================================
-	//                      Visuals
-	// ==================================================
-	@Override
-	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderStart(layer, entity, renderAsTrophy);
-		if(layer != null)
-			return;
-		int i = 15728880;
-		int j = i % 65536;
-		int k = i / 65536;
-		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
-	}
-
-	@Override
-	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
-		super.onRenderFinish(layer, entity, renderAsTrophy);
-		if(layer != null)
-			return;
-		int i = ClientManager.FULL_BRIGHT;
-		int j = i % 65536;
-		int k = i / 65536;
-		RenderSystem.glMultiTexCoord2f(ClientManager.GL_TEXTURE1, (float) j, (float) k);
-	}
 }

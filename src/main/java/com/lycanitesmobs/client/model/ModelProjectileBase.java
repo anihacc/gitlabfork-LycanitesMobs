@@ -5,6 +5,7 @@ import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.math.Vec2f;
@@ -13,111 +14,183 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> {
-    
-	// ==================================================
-  	//                    Constructors
-  	// ==================================================
+public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> implements IAnimationModel {
+	public MatrixStack matrixStack;
+
     public ModelProjectileBase() {
         this(1.0F);
     }
     
     public ModelProjectileBase(float shadowSize) {
-    	// Texture:
-    	textureWidth = 128;
-        textureHeight = 128;
-    }
-
-
-    // ==================================================
-    //             Add Custom Render Layers
-    // ==================================================
-    public void addCustomLayers(ProjectileModelRenderer renderer) {
-
-    }
-    
-    
-    // ==================================================
-   	//                  Render Model
-   	// ==================================================
-    @Override
-	public void func_225597_a_(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {
-        this.render(entity, time, distance, loop, lookY, lookX, 0.0625F, null, true);
-    }
-
-	/**
-	 * Renders this model. Can be rendered as a trophy (just head, mouth, etc) too, use scale for this.
-	 * @param entity Can't be null but can be any entity. If the mob's exact entity or an EntityProjectileBase is used more animations will be used.
-	 * @param time How long the model has been displayed for? This is currently unused.
-	 * @param distance Used for movement animations, this should just count up form 0 every tick and stop back at 0 when not moving.
-	 * @param loop A continuous loop counting every tick, used for constant idle animations, etc.
-	 * @param lookY A y looking rotation used by the head, etc.
-	 * @param lookX An x looking rotation used by the head, etc.
-	 * @param layer The layer that is being rendered, if null the default base layer is being rendered.
-	 * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
-	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
-	 */
-    public void render(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerProjectileBase layer, boolean animate) {
-        float sizeScale = 1F;
-		if(entity != null) {
-            sizeScale *= entity.getProjectileScale();
-        }
-    	GL11.glScalef(sizeScale, sizeScale, sizeScale);
-    	GL11.glTranslatef(0, 0.5f - sizeScale / 2, 0);
+    	this.textureWidth = 128;
+		this.textureHeight = 128;
     }
 
 	@Override
-	public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {
+	public void func_225597_a_(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX) {}
 
+	@Override
+	public void func_225598_a_(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int i, int i1, float v, float v1, float v2, float v3) {}
+
+	/**
+	 * Called by the renderer to add custom layers to it.
+	 * @param renderer The renderer to add layers to.
+	 */
+	public void addCustomLayers(ProjectileModelRenderer renderer) {}
+
+	/**
+	 * Generates all animation frames for a render tick.
+	 * @param entity The entity to render.
+	 * @param time The current movement time for walk cycles, etc.
+	 * @param distance The current movement amount for walk cycles, etc.
+	 * @param loop A constant tick for looping animations.
+	 * @param lookY The entity's yaw looking position for head rotation, etc.
+	 * @param lookX The entity's pitch looking position for head rotation, etc.
+	 * @param scale The base scale to render the model at, usually just 0.0625F which scales 1m unit in Blender to a 1m block unit in Minecraft.
+	 * @param brightness The brightness of the mob based on block location, etc.
+	 */
+	public void generateAnimationFrames(BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {}
+
+	/**
+	 * Clears all animation frames that were generated for a render tick.
+	 */
+	public void clearAnimationFrames() {}
+
+	/**
+	 * Renders this model based on an entity.
+	 * @param entity The entity to render.
+	 * @param matrixStack The matrix stack for animation.
+	 * @param vertexBuilder The vertex builder for rendering the model.
+	 * @param layer The layer to render, the base layer is null.
+	 * @param time The current movement time for walk cycles, etc.
+	 * @param distance The current movement amount for walk cycles, etc.
+	 * @param loop A constant tick for looping animations.
+	 * @param lookY The entity's yaw looking position for head rotation, etc.
+	 * @param lookX The entity's pitch looking position for head rotation, etc.
+	 * @param scale The base scale to render the model at, usually just 0.0625F which scales 1m unit in Blender to a 1m block unit in Minecraft.
+	 * @param brightness The brightness of the mob based on block location, etc.
+	 */
+	public void render(BaseProjectileEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+		this.matrixStack = matrixStack;
+		float sizeScale = 1F;
+		if(entity != null) {
+			sizeScale *= entity.getProjectileScale();
+		}
+		this.doScale(sizeScale, sizeScale, sizeScale);
+		this.doTranslate(0, 0.5f - sizeScale / 2, 0);
 	}
 
-
-    // ==================================================
-    //                Can Render Part
-    // ==================================================
     /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
-    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, BaseProjectileEntity entity, LayerProjectileBase layer) {
         if(layer == null)
-            return this.canBaseRenderPart(partName, entity, trophy);
+            return this.canBaseRenderPart(partName, entity);
         if(entity != null)
-            return layer.canRenderPart(partName, entity, trophy);
+            return layer.canRenderPart(partName, entity);
         return false;
     }
 
     /** Returns true if the part can be rendered on the base layer. **/
-    public boolean canBaseRenderPart(String partName, BaseProjectileEntity entity, boolean trophy) {
+    public boolean canBaseRenderPart(String partName, BaseProjectileEntity entity) {
         return true;
     }
 
-
-    // ==================================================
-    //                Get Part Color
-    // ==================================================
-    /** Returns the coloring to be used for this part and layer. **/
-    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy, float loop) {
+	/** Returns the coloring to be used for this part and layer. **/
+    public Vector4f getPartColor(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
         if(layer == null || entity == null)
-            return this.getBasePartColor(partName, entity, trophy, loop);
-        return layer.getPartColor(partName, entity, trophy);
+            return this.getBasePartColor(partName, entity, loop);
+        return layer.getPartColor(partName, entity);
     }
 
     /** Returns the coloring to be used for this part on the base layer. **/
-    public Vector4f getBasePartColor(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
+    public Vector4f getBasePartColor(String partName, BaseProjectileEntity entity, float loop) {
         return new Vector4f(1, 1, 1, 1);
     }
 
-
-	// ==================================================
-	//              Get Part Texture Offset
-	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vec2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, boolean trophy, float loop) {
+	public Vec2f getPartTextureOffset(String partName, BaseProjectileEntity entity, LayerProjectileBase layer, float loop) {
 		if(layer == null || !(entity instanceof BaseProjectileEntity))
-			return this.getBaseTextureOffset(partName, entity, trophy, loop);
-		return layer.getTextureOffset(partName, entity, trophy, loop);
+			return this.getBaseTextureOffset(partName, entity, loop);
+		return layer.getTextureOffset(partName, entity, loop);
 	}
 
 	/** Returns the texture offset to be used for this part on the base layer (for scrolling, etc). **/
-	public Vec2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, boolean trophy, float loop) {
+	public Vec2f getBaseTextureOffset(String partName, BaseProjectileEntity entity, float loop) {
 		return new Vec2f(0, 0);
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param partName The name of the part to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @param entity The entity to render.
+	 * @param brightness The base brightness of the entity based on location.
+	 * @return The brightness to render at.
+	 */
+	public int getBrightness(String partName, LayerProjectileBase layer, BaseProjectileEntity entity, int brightness) {
+		if(layer != null) {
+			return layer.getBrightness(partName, entity, brightness);
+		}
+		return brightness;
+	}
+
+	@Override
+	public void rotate(float rotX, float rotY, float rotZ) {}
+
+	@Override
+	public void angle(float rotation, float angleX, float angleY, float angleZ) {}
+
+	@Override
+	public void translate(float posX, float posY, float posZ) {}
+
+	@Override
+	public void scale(float scaleX, float scaleY, float scaleZ) {}
+
+	@Override
+	public void doRotate(float rotX, float rotY, float rotZ) {
+		this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
+	}
+
+	@Override
+	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
+		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
+	}
+
+	@Override
+	public void doTranslate(float posX, float posY, float posZ) {
+		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
+	}
+
+	@Override
+	public void doScale(float scaleX, float scaleY, float scaleZ) {
+		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
+	}
+
+	@Override
+	public double rotateToPoint(double aTarget, double bTarget) {
+		return rotateToPoint(0, 0, aTarget, bTarget);
+	}
+
+	@Override
+	public double rotateToPoint(double aCenter, double bCenter, double aTarget, double bTarget) {
+		if(aTarget - aCenter == 0)
+			if(aTarget > aCenter) return 0;
+			else if(aTarget < aCenter) return 180;
+		if(bTarget - bCenter == 0)
+			if(bTarget > bCenter) return 90;
+			else if(bTarget < bCenter) return -90;
+		if(aTarget - aCenter == 0 && bTarget - bCenter == 0)
+			return 0;
+		return Math.toDegrees(Math.atan2(aCenter - aTarget, bCenter - bTarget) - Math.PI / 2);
+	}
+
+	@Override
+	public double[] rotateToPoint(double xCenter, double yCenter, double zCenter, double xTarget, double yTarget, double zTarget) {
+		double[] rotations = new double[3];
+		rotations[0] = this.rotateToPoint(yCenter, -zCenter, yTarget, -zTarget);
+		rotations[1] = this.rotateToPoint(-zCenter, xCenter, -zTarget, xTarget);
+		rotations[2] = this.rotateToPoint(yCenter, xCenter, yTarget, xTarget);
+		return rotations;
 	}
 }

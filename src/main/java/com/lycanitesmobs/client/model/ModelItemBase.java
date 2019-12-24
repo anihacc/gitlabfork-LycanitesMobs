@@ -2,16 +2,16 @@ package com.lycanitesmobs.client.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
-import com.lycanitesmobs.client.obj.ObjObject;
-import com.lycanitesmobs.client.obj.TessellatorModel;
+import com.lycanitesmobs.client.obj.ObjModel;
+import com.lycanitesmobs.client.obj.ObjPart;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.lycanitesmobs.core.info.ModInfo;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -33,45 +33,49 @@ public abstract class ModelItemBase implements IAnimationModel {
 
 	// Global:
 	/** An initial x rotation applied to make Blender models match Minecraft. **/
-	public static float modelXRotOffset = 180F;
+	public static float ROT_OFFSET_X = 180F;
 	/** An initial y offset applied to make Blender models match Minecraft. **/
-	public static float modelYPosOffset = -1.5F;
+	public static float POS_OFFSET_Y = -1.5F;
 
 	// Model:
 	/** An INSTANCE of the model, the model should only be set once and not during every tick or things will get very laggy! **/
-	public TessellatorModel wavefrontObject;
+	public ObjModel objModel;
 
 	/** A list of all parts that belong to this model's wavefront obj. **/
-	public List<ObjObject> wavefrontParts;
+	public List<ObjPart> objParts;
 
 	/** A list of all part definitions that this model will use when animating. **/
-	public Map<String, ModelObjPart> animationParts = new HashMap<>();
+	public Map<String, AnimationPart> animationParts = new HashMap<>();
 
 	// Animating:
+	public MatrixStack matrixStack;
 	/** The animator INSTANCE, this is a helper class that performs actual GL11 functions, etc. **/
 	protected Animator animator;
 	/** The animation data for this model. **/
 	protected ModelAnimation animation;
 	/** The current animation part that is having an animation frame generated for. **/
-	protected ModelObjPart currentAnimationPart;
+	protected AnimationPart currentAnimationPart;
 	/** A list of models states that hold unique render/animation data for a specific itemstack INSTANCE. **/
 	protected Map<ItemStack, ModelObjState> modelStates = new HashMap<>();
 	/** The current model state for the entity that is being animated and rendered. **/
 	protected ModelObjState currentModelState;
 
-
-	// ==================================================
-	//                    Init Model
-	// ==================================================
+	/**
+	 * Constructor
+	 * @param name The unique model name.
+	 * @param groupInfo The group, used for submods.
+	 * @param path The path to find the model obj in such as equipment/darklingskull (obj is already appended).
+	 * @return
+	 */
 	public ModelItemBase initModel(String name, ModInfo groupInfo, String path) {
 		// Load Obj Model:
-		this.wavefrontObject = new TessellatorModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
-		this.wavefrontParts = this.wavefrontObject.objObjects;
-		if(this.wavefrontParts.isEmpty())
+		this.objModel = new ObjModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
+		this.objParts = this.objModel.objParts;
+		if(this.objParts.isEmpty())
 			LycanitesMobs.logWarning("", "Unable to load any parts for the " + name + " model!");
 
 		// Create Animator:
-		this.animator = new Animator();
+		this.animator = new Animator(this);
 
 		// Load Model Parts:
 		ResourceLocation animPartsLoc = new ResourceLocation(groupInfo.modid, "models/" + path + "_parts.json");
@@ -84,7 +88,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 				Iterator<JsonElement> jsonIterator = jsonArray.iterator();
 				while (jsonIterator.hasNext()) {
 					JsonObject partJson = jsonIterator.next().getAsJsonObject();
-					ModelObjPart animationPart = new ModelObjPart();
+					AnimationPart animationPart = new AnimationPart();
 					animationPart.loadFromJson(partJson);
 					this.addAnimationPart(animationPart);
 				}
@@ -99,8 +103,8 @@ public abstract class ModelItemBase implements IAnimationModel {
 		}
 
 		// Assign Model Part Children:
-		for(ModelObjPart part : this.animationParts.values()) {
-			part.addChildren(this.animationParts.values().toArray(new ModelObjPart[this.animationParts.size()]));
+		for(AnimationPart part : this.animationParts.values()) {
+			part.addChildren(this.animationParts.values().toArray(new AnimationPart[this.animationParts.size()]));
 		}
 
 		// Load Animations:
@@ -125,12 +129,11 @@ public abstract class ModelItemBase implements IAnimationModel {
 		return this;
 	}
 
-
-	// ==================================================
-	//                      Parts
-	// ==================================================
-	// ========== Add Animation Part ==========
-	public void addAnimationPart(ModelObjPart animationPart) {
+	/**
+	 * Adds an animation part, these are used to animate each model part.
+	 * @param animationPart The animation part to add.
+	 */
+	public void addAnimationPart(AnimationPart animationPart) {
 		if(this.animationParts.containsKey(animationPart.name)) {
 			LycanitesMobs.logWarning("", "Tried to add an animation part that already exists: " + animationPart.name + ".");
 			return;
@@ -142,10 +145,6 @@ public abstract class ModelItemBase implements IAnimationModel {
 		this.animationParts.put(animationPart.name, animationPart);
 	}
 
-
-	// ==================================================
-	//             Add Custom Render Layers
-	// ==================================================
 	/**
 	 * Adds extra texture layers to the renderer.
 	 * @param renderer
@@ -156,48 +155,40 @@ public abstract class ModelItemBase implements IAnimationModel {
 		}
 	}
 
-
-	// ==================================================
-	//                     Render
-	// ==================================================
 	/**
 	 * Renders this model based on an itemstack.
 	 * @param itemStack The itemstack to render.
 	 * @param hand The hand that is holding the item or null if in the inventory instead.
+	 * @param matrixStack The matrix stack for animation.
+	 * @param vertexBuilder  The vertex builder to render with.
 	 * @param renderer The renderer that is rendering this model, needed for texture binding.
 	 * @param offsetObjPart A ModelObjPart, if not null this model is offset by it, used by assembled equipment pieces to create a full model.
-	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually, used by Equipment Pieces so that multiple parts can share their animations with each other..
+	 * @param loop The animation tick for looping animations, etc.
+	 * @param brightness The base brightness to render at.
 	 */
-	public void render(ItemStack itemStack, Hand hand, IItemModelRenderer renderer, ModelObjPart offsetObjPart, LayerItem layer, float loop, boolean animate) {
+	public void render(ItemStack itemStack, Hand hand, MatrixStack matrixStack, IVertexBuilder vertexBuilder, IItemModelRenderer renderer, AnimationPart offsetObjPart, LayerItem layer, float loop, int brightness) {
 		if(itemStack == null) {
 			return;
 		}
+		this.matrixStack = matrixStack;
 
 		if(layer == null && this.animation != null) {
 			layer = this.animation.getBaseLayer(renderer);
 		}
 
-		// Bind Texture:
-		renderer.bindItemTexture(this.getTexture(itemStack, layer));
-
-		// Generate Animation Frames:
-		if(animate) {
-			this.generateAnimationFrames(itemStack, layer, loop, offsetObjPart);
-		}
-
 		// Render Parts:
-		for(ObjObject part : this.wavefrontParts) {
+		for(ObjPart part : this.objParts) {
 			String partName = part.getName().toLowerCase();
 			if(!this.canRenderPart(partName, itemStack, layer))
 				continue;
 			this.currentAnimationPart = this.animationParts.get(partName);
 
 			// Begin Rendering Part:
-			RenderSystem.pushMatrix();
+			matrixStack.func_227860_a_();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
-			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
-			this.doTranslate(0F, modelYPosOffset, 0F);
+			this.doAngle(ROT_OFFSET_X, 1F, 0F, 0F);
+			this.doTranslate(0F, POS_OFFSET_Y, 0F);
 
 			/*/ Animate and Offset By Equipment Piece Slot:
 			if(offsetObjPart != null) {
@@ -210,42 +201,29 @@ public abstract class ModelItemBase implements IAnimationModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.onRenderStart(layer, itemStack);
-			this.wavefrontObject.renderGroup(null, null, null, 240, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
-			this.onRenderFinish(layer, itemStack);
-			RenderSystem.popMatrix();
-		}
-
-		// Clear Animation Frames:
-		if(animate) {
-			this.clearAnimationFrames();
+			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, itemStack, brightness), part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			matrixStack.func_227865_b_();
 		}
 	}
 
-	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerItem layer, ItemStack itemStack) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.enableBlend();
-		}
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param partName The name of the part to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @param itemStack The item stack to render.
+	 * @param brightness The base brightness.
+	 * @return The brightness to render at.
+	 */
+	public int getBrightness(String partName, LayerItem layer, ItemStack itemStack, int brightness) {
 		if(layer != null) {
-			layer.onRenderStart(itemStack);
+			return layer.getBrightness(partName, itemStack, brightness);
 		}
-	}
-
-	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerItem layer, ItemStack itemStack) {
-		if(!CreatureManager.getInstance().config.disableModelAlpha) {
-			RenderSystem.disableBlend();
-		}
-		if(layer != null) {
-			layer.onRenderFinish(itemStack);
-		}
+		return brightness;
 	}
 
 	/** Generates all animation frames for a render tick. **/
-	public void generateAnimationFrames(ItemStack itemStack, LayerItem layer, float loop, ModelObjPart offsetObjPart) {
-		for(ObjObject part : this.wavefrontParts) {
+	public void generateAnimationFrames(ItemStack itemStack, LayerItem layer, float loop, AnimationPart offsetObjPart) {
+		for(ObjPart part : this.objParts) {
 			String partName = part.getName().toLowerCase();
 			if(!this.canRenderPart(partName, itemStack, layer))
 				continue;
@@ -258,15 +236,11 @@ public abstract class ModelItemBase implements IAnimationModel {
 
 	/** Clears all animation frames that were generated for a render tick. **/
 	public void clearAnimationFrames() {
-		for(ModelObjPart animationPart : this.animationParts.values()) {
+		for(AnimationPart animationPart : this.animationParts.values()) {
 			animationPart.animationFrames.clear();
 		}
 	}
 
-
-	// ==================================================
-	//                Can Render Part
-	// ==================================================
 	/** Returns true if the part can be rendered for the given stack. **/
 	public boolean canRenderPart(String partName, ItemStack itemStack, LayerItem layer) {
 		if(partName == null)
@@ -285,10 +259,6 @@ public abstract class ModelItemBase implements IAnimationModel {
 		return true;
 	}
 
-
-	// ==================================================
-	//                   Animate Part
-	// ==================================================
 	/**
 	 * Animates the individual part.
 	 * @param partName The name of the part (should be made all lowercase).
@@ -303,19 +273,11 @@ public abstract class ModelItemBase implements IAnimationModel {
 		}
 	}
 
-
-	// ==================================================
-	//                   Get Texture
-	// ==================================================
 	/** Returns a texture ResourceLocation for the provided itemstack. **/
 	public ResourceLocation getTexture(ItemStack itemStack, LayerItem layer) {
 		return null;
 	}
 
-
-	// ==================================================
-	//                Get Part Color
-	// ==================================================
 	/** Returns the coloring to be used for this part for the given itemstack. **/
 	public Vector4f getPartColor(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(layer != null) {
@@ -324,11 +286,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 		return new Vector4f(1, 1, 1, 1);
 	}
 
-
-	// ==================================================
-	//             Get Part Texture Offset
-	// ==================================================
-	//	/** Returns the texture offset to be used for this part and layer. **/
+	/** Returns the texture offset to be used for this part and layer. **/
 	public Vec2f getPartTextureOffset(String partName, ItemStack itemStack, LayerItem layer, float loop) {
 		if(layer != null) {
 			return layer.getTextureOffset(partName, itemStack, loop);
@@ -337,29 +295,28 @@ public abstract class ModelItemBase implements IAnimationModel {
 		return new Vec2f(0, 0);
 	}
 
-
-	// ==================================================
-	//                  GLL Actions
-	// ==================================================
-	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		GL11.glRotatef(rotation, angleX, angleY, angleZ);
-	}
+	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		GL11.glRotatef(rotX, 1F, 0F, 0F);
-		GL11.glRotatef(rotY, 0F, 1F, 0F);
-		GL11.glRotatef(rotZ, 0F, 0F, 1F);
+		this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
+		this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
 	}
+
+	@Override
+	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
+		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
+	}
+
+	@Override
 	public void doTranslate(float posX, float posY, float posZ) {
-		GL11.glTranslatef(posX, posY, posZ);
+		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
 	}
+
+	@Override
 	public void doScale(float scaleX, float scaleY, float scaleZ) {
-		GL11.glScalef(scaleX, scaleY, scaleZ);
+		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
 	}
 
-
-	// ==================================================
-	//                  Create Frames
-	// ==================================================
 	@Override
 	public void angle(float rotation, float angleX, float angleY, float angleZ) {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("angle", rotation, angleX, angleY, angleZ));
@@ -380,10 +337,6 @@ public abstract class ModelItemBase implements IAnimationModel {
 		this.currentAnimationPart.addAnimationFrame(new ModelObjAnimationFrame("scale", 1, scaleX, scaleY, scaleZ));
 	}
 
-
-	// ==================================================
-	//                  Rotate to Point
-	// ==================================================
 	@Override
 	public double rotateToPoint(double aTarget, double bTarget) {
 		return rotateToPoint(0, 0, aTarget, bTarget);

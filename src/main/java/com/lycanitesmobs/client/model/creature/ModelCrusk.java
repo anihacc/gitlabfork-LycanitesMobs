@@ -80,22 +80,22 @@ public class ModelCrusk extends ModelCreatureObjOld {
     	
     	// Mouth (Idle, Attack, Sitting):
     	if(partName.equals("topleftmouth")) {
-    		translate(0.3F, 0.3F, 0.7F);
+    		doTranslate(0.3F, 0.3F, 0.7F);
     		angleX = -0.5F;
     		angleY = 0.5F;
     	}
     	if(partName.equals("toprightmouth")) {
-    		translate(-0.3F, 0.3F, 0.7F);
+    		doTranslate(-0.3F, 0.3F, 0.7F);
     		angleX = -0.5F;
     		angleY = -0.5F;
     	}
     	if(partName.equals("bottomleftmouth")) {
-    		translate(0.3F, -0.3F, 0.7F);
+    		doTranslate(0.3F, -0.3F, 0.7F);
     		angleX = 0.5F;
     		angleY = 0.5F;
     	}
     	if(partName.equals("bottomrightmouth")) {
-    		translate(-0.3F, -0.3F, 0.7F);
+    		doTranslate(-0.3F, -0.3F, 0.7F);
     		angleX = 0.5F;
     		angleY = -0.5F;
     	}
@@ -105,17 +105,17 @@ public class ModelCrusk extends ModelCreatureObjOld {
     			rotation = -20;
     		if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).isSitting())
     			rotation += 20;
-        	angle(rotation, angleX, angleY, angleZ);
+        	doAngle(rotation, angleX, angleY, angleZ);
         	rotation = 0F;
     	}
     	if(partName.equals("topleftmouth"))
-    		translate(-0.3F, -0.3F, -0.7F);
+    		doTranslate(-0.3F, -0.3F, -0.7F);
     	if(partName.equals("toprightmouth"))
-    		translate(0.3F, -0.3F, -0.7F);
+    		doTranslate(0.3F, -0.3F, -0.7F);
     	if(partName.equals("bottomleftmouth"))
-    		translate(-0.3F, 0.3F, -0.7F);
+    		doTranslate(-0.3F, 0.3F, -0.7F);
     	if(partName.equals("bottomrightmouth"))
-    		translate(0.3F, 0.3F, -0.7F);
+    		doTranslate(0.3F, 0.3F, -0.7F);
     	
     	// Walking:
     	float walkSwing = 0.8F;
@@ -181,9 +181,9 @@ public class ModelCrusk extends ModelCreatureObjOld {
     		posY -= (2 * ((BaseCreatureEntity)entity).getStealth());
     	
     	// Apply Animations:
-    	translate(posX, posY, posZ);
-    	angle(rotation, angleX, angleY, angleZ);
-    	rotate(rotX, rotY, rotZ);
-    	scale(scaleX, scaleY, scaleZ);
+    	doTranslate(posX, posY, posZ);
+    	doAngle(rotation, angleX, angleY, angleZ);
+    	doRotate(rotX, rotY, rotZ);
+    	doScale(scaleX, scaleY, scaleZ);
     }
 }
