@@ -6,7 +6,7 @@ import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.network.MessageSpawnEntity;
+import com.lycanitesmobs.core.network.EntitySpawnPacket;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
@@ -32,6 +32,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
@@ -100,8 +101,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	@Override
 	public IPacket<?> createSpawnPacket() {
-    	LycanitesMobs.packetHandler.sendToWorld(new MessageSpawnEntity(this), this.getEntityWorld());
-    	return super.createSpawnPacket();
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
     
     // ========== Setup Projectile ==========
@@ -179,6 +179,12 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	   }
     }
 
+    @Override
+	protected void outOfWorld() {
+    	LycanitesMobs.logDebug("", "Projectile out of world!!!");
+		super.outOfWorld();
+	}
+
 	/**
 	 * This is an expensive check for when there are a lot of projectiles. The isLavaProof death check is checked on impact instead for significantly greater performance.
 	 * @return Always false for performance.
@@ -212,7 +218,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
   	// ==================================================
 	@Override
 	protected void onImpact(RayTraceResult rayTraceResult) {
-		 boolean collided = false;
+		boolean collided = false;
 	    boolean entityCollision = false;
 		boolean doDamage = true;
 		boolean blockCollision = false;

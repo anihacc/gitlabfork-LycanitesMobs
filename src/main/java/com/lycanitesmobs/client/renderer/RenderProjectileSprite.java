@@ -154,9 +154,9 @@ public class RenderProjectileSprite extends EntityRenderer<BaseProjectileEntity>
     	this.bindTexture(this.getLaserTexture(entity));
         
         // Rotation:
-        float[] angles = entity.getBeamAngles();
-        GlStateManager.rotatef(angles[1], 0, 1, 0);
-        GlStateManager.rotatef(angles[3], 1, 0, 0);
+		float[] angles = entity.getBeamAngles();
+		GlStateManager.rotatef(angles[1], 0, 1, 0);
+		GlStateManager.rotatef(angles[3], 1, 0, 0);
     	
     	// Length:
         for(float segment = 0; segment <= laserSize - 1; ++segment) {

@@ -6,11 +6,9 @@ import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.EntityFactory;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -74,7 +72,7 @@ public class MessageSpawnEntity {
 				if(entity instanceof CustomProjectileEntity) {
 					ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(message.entityTypeName);
 					if(projectileInfo != null) {
-						((CustomProjectileEntity) entity).projectileInfo = projectileInfo;
+						((CustomProjectileEntity) entity).setProjectileInfo(projectileInfo);
 					}
 				}
 			}

@@ -105,7 +105,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
     protected void bindEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
         this.bindTexture(this.getEquipmentTexture(entity, equipmentName));
     }
-    
+
     protected ResourceLocation getEquipmentTexture(BaseCreatureEntity entity, String equipmentName) {
     	if(entity != null)
     		return entity.getEquipmentTexture(equipmentName);
