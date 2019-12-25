@@ -111,11 +111,12 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
     
     // ========== Move to Target ==========
     public void moveToTarget() {
-    	this.setPosition(
+    	this.setPosition(this.targetX, this.targetY, this.targetZ);
+    	/*this.setPosition(
     			this.moveCoordToTarget(this.getPositionVec().getX(), this.targetX, this.laserEntity.getPositionVec().getX()),
     			this.moveCoordToTarget(this.getPositionVec().getY(), this.targetY, this.laserEntity.getPositionVec().getY()),
     			this.moveCoordToTarget(this.getPositionVec().getZ(), this.targetZ, this.laserEntity.getPositionVec().getZ())
-		);
+		);*/
     }
     
     // ========== Move Coord ==========

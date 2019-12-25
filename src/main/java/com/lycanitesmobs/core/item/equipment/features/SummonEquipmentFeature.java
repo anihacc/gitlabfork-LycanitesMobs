@@ -159,6 +159,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 						BlockPos spawnPos = entityCreature.getFacingPosition(attacker, -1, randomAngle);
 						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), attacker.rotationYaw, 0.0F);
 						entityCreature.setAttackTarget(target);
+						entity.getEntityWorld().addEntity(entity);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

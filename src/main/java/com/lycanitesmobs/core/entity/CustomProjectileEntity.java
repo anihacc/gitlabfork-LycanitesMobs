@@ -103,6 +103,9 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		this.knockbackChance = this.projectileInfo.knockbackChance;
 		this.weight = this.projectileInfo.weight;
 
+		// Visual:
+		this.spinSpeed = this.projectileInfo.spinSpeed;
+
 		// Flags:
 		this.waterProof = this.projectileInfo.waterproof;
 		this.lavaProof = this.projectileInfo.lavaproof;

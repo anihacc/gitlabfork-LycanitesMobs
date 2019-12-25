@@ -68,11 +68,12 @@ public class MessageSpawnEntity {
 
 			// Projectiles:
 			if(entity instanceof BaseProjectileEntity) {
-				((BaseProjectileEntity)entity).entityName = message.entityTypeName;
+				BaseProjectileEntity projectileEntity = (BaseProjectileEntity)entity;
+				projectileEntity.entityName = message.entityTypeName;
 				if(entity instanceof CustomProjectileEntity) {
 					ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(message.entityTypeName);
 					if(projectileInfo != null) {
-						((CustomProjectileEntity) entity).projectileInfo = projectileInfo;
+						((CustomProjectileEntity)entity).setProjectileInfo(projectileInfo);
 					}
 				}
 			}

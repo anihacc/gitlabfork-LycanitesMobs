@@ -1,23 +1,26 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements IRenderFactory {
+public class ProjectileRenderFactory<T extends BaseProjectileEntity> implements IRenderFactory {
+	protected ProjectileInfo projectileInfo;
+
     protected String oldProjectileName;
     protected Class oldProjectileClass;
     protected boolean oldModel;
 
-	protected boolean hasModel;
 
-	public RenderFactoryProjectile(boolean hasModel) {
-		this.hasModel = hasModel;
+	public ProjectileRenderFactory(ProjectileInfo projectileInfo) {
+		this.projectileInfo = projectileInfo;
 	}
 
-	public RenderFactoryProjectile(String projectileName, Class projectileClass, boolean hasModel) {
+	public ProjectileRenderFactory(String projectileName, Class projectileClass, boolean hasModel) {
 		this.oldProjectileName = projectileName;
 		this.oldProjectileClass = projectileClass;
 		this.oldModel = hasModel;
@@ -29,7 +32,9 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 		if(this.oldModel) {
 			try {
 				return new ProjectileModelRenderer(manager, this.oldProjectileName);
-			} catch (Exception e) {
+			}
+			catch(Exception e) {
+				LycanitesMobs.logWarning("", "An exception occurred when creating an old projectile renderer:");
 				e.printStackTrace();
 			}
 		}
@@ -40,10 +45,12 @@ public class RenderFactoryProjectile<T extends BaseProjectileEntity> implements 
 		}
 
 		// New JSON Projectile:
-		if(this.hasModel) {
+		if(this.projectileInfo != null && this.projectileInfo.modelClassName != null) {
 			try {
-				return new ProjectileModelRenderer(manager);
-			} catch (Exception e) {
+				return new ProjectileModelRenderer(manager, this.projectileInfo);
+			}
+			catch(Exception e) {
+				LycanitesMobs.logWarning("", "An exception occurred when creating a projectile renderer:");
 				e.printStackTrace();
 			}
 		}

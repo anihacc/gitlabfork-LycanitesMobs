@@ -52,9 +52,6 @@ public class EntityChaosOrb extends ModelProjectileEntity {
     @Override
     public void tick() {
     	super.tick();
-    	if(this.getPositionVec().getY() > this.getEntityWorld().getActualHeight() + 20) {
-			this.remove();
-		}
 		if(!this.getEntityWorld().isRemote && this.updateTick % 5 == 0) {
     		this.addVelocity((0.5D - this.rand.nextDouble()) * 0.5D, (0.5D - this.rand.nextDouble()) * 1D, (0.5D - this.rand.nextDouble()) * 0.5D);
 		}

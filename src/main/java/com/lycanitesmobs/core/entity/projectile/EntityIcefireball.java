@@ -41,6 +41,7 @@ public class EntityIcefireball extends BaseProjectileEntity {
     	this.setDamage(2);
     	this.setProjectileScale(2F);
         this.knockbackChance = 0.5D;
+        this.spinSpeed = 2;
     }
     
     

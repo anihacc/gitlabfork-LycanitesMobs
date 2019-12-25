@@ -43,6 +43,7 @@ public class EntityScorchfireball extends BaseProjectileEntity {
     	this.setDamage(1);
     	this.setProjectileScale(2F);
         this.knockbackChance = 0.5D;
+		this.spinSpeed = 2;
     }
     
     

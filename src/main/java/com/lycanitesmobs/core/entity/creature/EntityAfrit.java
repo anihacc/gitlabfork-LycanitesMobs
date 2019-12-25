@@ -169,9 +169,6 @@ public class EntityAfrit extends TameableCreatureEntity implements IMob {
     public boolean canBurn() { return false; }
 
     @Override
-    public boolean waterDamage() { return true; }
-
-    @Override
     public boolean canBreatheUnderlava() {
         return true;
     }

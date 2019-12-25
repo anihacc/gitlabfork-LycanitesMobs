@@ -358,6 +358,6 @@ public class PortalEntity extends BaseProjectileEntity {
 
     @Override
     public float getTextureOffsetY() {
-        return this.getSize(Pose.STANDING).height / 2;
+        return this.getSize(Pose.STANDING).height + 0.5F;
     }
 }

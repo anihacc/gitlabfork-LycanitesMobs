@@ -7,11 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ModelProjectileEntity extends BaseProjectileEntity {
-
-
-	// ==================================================
-	//                   Constructors
-	// ==================================================
 	public ModelProjectileEntity(EntityType<? extends BaseProjectileEntity> entityType, World world) {
 		super(entityType, world);
 	}
@@ -24,10 +19,6 @@ public class ModelProjectileEntity extends BaseProjectileEntity {
 		super(entityType, world, x, y, z);
 	}
 
-
-	// ==================================================
-	//                      Visuals
-	// ==================================================
 	@Override
 	public String getTextureName() {
 	return this.entityName.toLowerCase();

@@ -22,5 +22,6 @@
 	"impactSound": false,
 	"ripper": false,
 	"pierceBlocks": false,
-	"glow": true
+	"glow": true,
+	"spinSpeed": 4
 }

@@ -91,6 +91,8 @@ public class ProjectileInfo {
 	public double velocity = 1.1D;
 	/** How much gravity affects this projectile. **/
 	public double weight = 1.0D;
+	/** How fast the projectile sprite spins. **/
+	public float spinSpeed = 0;
 
 	// Elements:
 	/** The Elements of this projectile, affects buffs and debuffs amongst other things. **/
@@ -176,6 +178,10 @@ public class ProjectileInfo {
 			this.weight = json.get("weight").getAsDouble();
 		if(json.has("lifetime"))
 			this.lifetime = json.get("lifetime").getAsInt();
+
+		// Visual:
+		if(json.has("spinSpeed"))
+			this.spinSpeed = json.get("spinSpeed").getAsFloat();
 
 		// Elements:
 		List<String> elementNames = new ArrayList<>();
@@ -279,6 +285,7 @@ public class ProjectileInfo {
 			entityTypeBuilder.setUpdateInterval(3);
 			entityTypeBuilder.setShouldReceiveVelocityUpdates(true);
 			entityTypeBuilder.size(this.width, this.height);
+			entityTypeBuilder.disableSummoning();
 			this.entityType = entityTypeBuilder.build(this.getName());
 			this.entityType.setRegistryName(this.modInfo.modid, this.getName());
 			EntityFactory.getInstance().addEntityType(this.entityType, this.entityConstructor, this.getName());

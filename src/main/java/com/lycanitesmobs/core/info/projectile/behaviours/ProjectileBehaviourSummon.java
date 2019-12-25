@@ -106,6 +106,7 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 						}
 						BlockPos spawnPos = entityCreature.getFacingPosition(projectile, -1, randomAngle);
 						entity.setLocationAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), projectile.rotationYaw, 0.0F);
+						entity.getEntityWorld().addEntity(entity);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

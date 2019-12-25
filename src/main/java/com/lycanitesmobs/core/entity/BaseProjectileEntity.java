@@ -1,12 +1,11 @@
 package com.lycanitesmobs.core.entity;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.network.MessageSpawnEntity;
+import com.lycanitesmobs.core.network.EntitySpawnPacket;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TallGrassBlock;
@@ -32,6 +31,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BaseProjectileEntity extends ThrowableEntity {
 	public String entityName = "projectile";
@@ -63,6 +63,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
     public float textureScale = 1;
     public float textureOffsetY = 0;
     public boolean clientOnly = false;
+    public float spinSpeed = 0;
 
     // Data Manager:
     protected static final DataParameter<Float> SCALE = EntityDataManager.createKey(BaseProjectileEntity.class, DataSerializers.FLOAT);
@@ -100,8 +101,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 
 	@Override
 	public IPacket<?> createSpawnPacket() {
-    	LycanitesMobs.packetHandler.sendToWorld(new MessageSpawnEntity(this), this.getEntityWorld());
-    	return super.createSpawnPacket();
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
     
     // ========== Setup Projectile ==========
@@ -130,7 +130,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
  	// ==================================================
     @Override
     public void tick() {
-    	this.updateTick++;
+		this.updateTick++;
 
 	   if(!this.movement) {
 		  this.inGround = false;
@@ -149,7 +149,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	   }
     	
     	// Terrain Destruction
-    	if(!this.getEntityWorld().isRemote) {
+    	if(!this.getEntityWorld().isRemote || this.clientOnly) {
     		if(!this.waterProof && this.isInWater())
     			this.remove();
     		else if(!this.lavaProof && this.isInLava())
@@ -210,7 +210,9 @@ public class BaseProjectileEntity extends ThrowableEntity {
   	// ==================================================
 	@Override
 	protected void onImpact(RayTraceResult rayTraceResult) {
-		 boolean collided = false;
+		if(this.getEntityWorld().isRemote)
+			return;
+		boolean collided = false;
 	    boolean entityCollision = false;
 		boolean doDamage = true;
 		boolean blockCollision = false;
@@ -363,7 +365,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
  		   // Remove Projectile:
 		  boolean entityPierced = this.ripper && entityCollision;
 		  boolean blockPierced = this.pierceBlocks && blockCollision;
- 		   if(!this.getEntityWorld().isRemote && !entityPierced && !blockPierced) {
+		  if((!this.getEntityWorld().isRemote || this.clientOnly) && !entityPierced && !blockPierced) {
  			  this.remove();
 				if(this.getImpactSound() != null) {
 					this.playSound(this.getImpactSound(), 1.0F, 1.0F / (this.getEntityWorld().rand.nextFloat() * 0.4F + 0.8F));
