@@ -2301,7 +2301,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
      */
     @Override
 	public boolean isPushedByWater() {
-        return !this.isStrongSwimmer();
+        return !this.isStrongSwimmer() && !this.isBoss();
     }
     
     // ========== Is Moving ==========

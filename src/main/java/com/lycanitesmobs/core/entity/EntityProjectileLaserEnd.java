@@ -112,9 +112,10 @@ public class EntityProjectileLaserEnd extends BaseProjectileEntity {
     
     // ========== Move to Target ==========
     public void moveToTarget() {
-    	this.posX = moveCoordToTarget(this.posX, this.targetX, this.laserEntity.posX);
+		this.setPosition(this.targetX, this.targetY, this.targetZ);
+    	/*this.posX = moveCoordToTarget(this.posX, this.targetX, this.laserEntity.posX);
     	this.posY = moveCoordToTarget(this.posY, this.targetY, this.laserEntity.posY);
-    	this.posZ = moveCoordToTarget(this.posZ, this.targetZ, this.laserEntity.posZ);
+    	this.posZ = moveCoordToTarget(this.posZ, this.targetZ, this.laserEntity.posZ);*/
     }
     
     // ========== Move Coord ==========
