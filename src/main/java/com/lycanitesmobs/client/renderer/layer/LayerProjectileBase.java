@@ -1,6 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
-import com.lycanitesmobs.client.model.ModelProjectileBase;
+import com.lycanitesmobs.client.model.ProjectileModel;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ModelProjectileBase> {
+public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ProjectileModel> {
     public ProjectileModelRenderer renderer;
     public String name;
 

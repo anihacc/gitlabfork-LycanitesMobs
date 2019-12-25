@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCreatureObjOld extends ModelCreatureBase {
+public class CreatureObjModelOld extends CreatureModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -61,11 +61,11 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	/** If true, no color effects will be applied, this is usually used for when the model is rendered as a red damage overlay, etc. **/
     public boolean dontColor = false;
 
-	public ModelCreatureObjOld() {
+	public CreatureObjModelOld() {
         this(1.0F);
     }
     
-    public ModelCreatureObjOld(float shadowSize) {
+    public CreatureObjModelOld(float shadowSize) {
     	// Here a model should get its model, collect its parts into a list and then set the centers for each part.
     }
 
@@ -76,7 +76,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 	 * @param path The path to load the model data from (no extension).
 	 * @return This model instance.
 	 */
-	public ModelCreatureObjOld initModel(String name, ModInfo modInfo, String path) {
+	public CreatureObjModelOld initModel(String name, ModInfo modInfo, String path) {
 		// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {
@@ -92,7 +92,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
     }
     
     @Override
-	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
     	this.matrixStack = matrixStack;
 
     	boolean isChild = false;
@@ -185,7 +185,7 @@ public class ModelCreatureObjOld extends ModelCreatureBase {
 
             // Render:
             this.uncenterPart(partName);
-			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
 			matrixStack.func_227865_b_();
 		}
 	}

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObjOld;
+import com.lycanitesmobs.client.model.CreatureObjModelOld;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCryptkeeper extends ModelCreatureObjOld {
+public class ModelCryptkeeper extends CreatureObjModelOld {
 	
 	// ==================================================
   	//                    Constructors

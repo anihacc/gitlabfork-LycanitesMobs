@@ -1,11 +1,11 @@
 package com.lycanitesmobs.client.model.template;
 
-import com.lycanitesmobs.client.model.ModelCreatureObj;
+import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTemplateBiped extends ModelCreatureObj {
+public class ModelTemplateBiped extends CreatureObjModel {
     protected float tailScaleX = 1F;
     protected float tailScaleY = 1F;
     protected float flightBobScale = 1F;

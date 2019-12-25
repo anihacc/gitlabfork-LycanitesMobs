@@ -1,7 +1,6 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObjOld;
 
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
 import com.lycanitesmobs.core.entity.creature.EntityDarkling;

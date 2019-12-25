@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.google.common.collect.Lists;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.client.model.ModelProjectileBase;
-import com.lycanitesmobs.client.model.ModelProjectileObj;
+import com.lycanitesmobs.client.model.ProjectileModel;
+import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -24,16 +24,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity> implements IEntityRenderer<BaseProjectileEntity, ModelProjectileBase> {
-	protected ModelProjectileBase renderModel;
-	protected ModelProjectileBase defaultModel;
-	protected final List<LayerRenderer<BaseProjectileEntity, ModelProjectileBase>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
+public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity> implements IEntityRenderer<BaseProjectileEntity, ProjectileModel> {
+	protected ProjectileModel renderModel;
+	protected ProjectileModel defaultModel;
+	protected final List<LayerRenderer<BaseProjectileEntity, ProjectileModel>> renderLayers = Lists.newArrayList(); // TODO Layers for projectiles.
 
-    // ==================================================
-  	//                    Constructor
-  	// ==================================================
-	public ProjectileModelRenderer(EntityRendererManager renderManager) {
+
+	public ProjectileModelRenderer(EntityRendererManager renderManager, ProjectileInfo projectileInfo) {
 		super(renderManager);
+		this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
+		this.defaultModel = this.renderModel;
+		this.renderModel.addCustomLayers(this);
 	}
 
     public ProjectileModelRenderer(EntityRendererManager renderManager, String projectileName) {
@@ -52,31 +53,12 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		this.renderModel.addCustomLayers(this);
     }
 
-
-	// ==================================================
-	//                    Do Render
-	// ==================================================
 	@Override
-	protected void func_225629_a_(BaseProjectileEntity entity, String someString, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
-		// Get Model:
-		if(this.renderModel == null) {
-			if(entity instanceof CustomProjectileEntity) {
-				ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
-				if(projectileInfo == null) {
-					return;
-				}
-				this.renderModel = ModelManager.getInstance().getProjectileModel(projectileInfo);
-				this.defaultModel = this.renderModel;
-			}
-			else {
-				return;
-			}
-		}
-
+	public void func_225623_a_(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		// Model States:
 		float time = 0;
 		float distance = 0;
-		float loop = entity.ticksExisted;
+		float loop = (float)entity.ticksExisted + partialTicks;
 		float lookYaw = 0;
 		float lookPitch = 0;
 		float scale = 1;
@@ -89,19 +71,22 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 			matrixStack.func_227862_a_(0.25F, 0.25F, 0.25F); // scale
 			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(entity.rotationYaw)); // rotate
 
-			if (!(this.renderModel instanceof ModelProjectileObj)) {
+			if(this.renderModel == null) {
+				LycanitesMobs.logWarning("", "Missing Projectile Model: " + entity);
+			}
+			else if (!(this.renderModel instanceof ProjectileObjModel)) {
 				ResourceLocation texture = this.getEntityTexture(entity);
 				if(texture == null) {
 					return;
 				}
-				RenderType renderType = ObjRenderState.getObjRenderType(texture);
+				RenderType renderType = CustomRenderStates.getObjRenderType(texture);
 				this.renderModel.render(entity, matrixStack, renderTypeBuffer.getBuffer(renderType), null, 0, 0, loop, 0, 0, scale, brightness);
 			}
 			else {
 
 				this.getEntityModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
 				this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, invisible, allyInvisible);
-				for(LayerRenderer<BaseProjectileEntity, ModelProjectileBase> layer : this.renderLayers) {
+				for(LayerRenderer<BaseProjectileEntity, ProjectileModel> layer : this.renderLayers) {
 					if(!(layer instanceof LayerProjectileBase)) {
 						continue;
 					}
@@ -137,6 +122,9 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 	 */
 	protected void renderModel(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerProjectileBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
+		if(texture == null) {
+			return;
+		}
 		RenderType rendertype;
 		if (allyInvisible) {
 			rendertype = RenderType.func_228644_e_(texture);
@@ -145,17 +133,17 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 			rendertype = RenderType.func_228654_j_(texture);
 		}
 		else {
-			rendertype = ObjRenderState.getObjRenderType(texture);
+			rendertype = CustomRenderStates.getObjRenderType(texture);
 		}
 		this.getEntityModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
 	}
 
 	@Override
-	public ModelProjectileBase getEntityModel() {
+	public ProjectileModel getEntityModel() {
 		return this.renderModel;
 	}
 
-	public final boolean addLayer(LayerRenderer<BaseProjectileEntity, ModelProjectileBase> layer) {
+	public final boolean addLayer(LayerRenderer<BaseProjectileEntity, ProjectileModel> layer) {
 		return this.renderLayers.add(layer);
 	}
 

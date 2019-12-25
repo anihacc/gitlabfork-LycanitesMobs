@@ -1,14 +1,12 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.client.renderer.EquipmentRenderer;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import com.lycanitesmobs.client.renderer.ObjRenderState;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.item.ItemStack;
@@ -19,14 +17,14 @@ import net.minecraft.util.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelEquipment implements IItemModelRenderer {
+public class EquipmentModel implements IItemModelRenderer {
 	protected List<LayerItem> renderLayers = new ArrayList<>();
-	protected List<ModelItemBase> renderedModels = new ArrayList<>();
+	protected List<ItemObjModel> renderedModels = new ArrayList<>();
 
 	/**
 	 * Constructor
 	 */
-	public ModelEquipment() {}
+	public EquipmentModel() {}
 
 
 	/**
@@ -47,8 +45,8 @@ public class ModelEquipment implements IItemModelRenderer {
 		NonNullList<ItemStack> equipmentPartStacks = itemEquipment.getEquipmentPartStacks(itemStack);
 
 		int slotId = -1;
-		ModelItemBase modelPartBase = null;
-		ModelItemBase modelPartHead = null;
+		ItemObjModel modelPartBase = null;
+		ItemObjModel modelPartHead = null;
 		for(ItemStack partStack : equipmentPartStacks) {
 			slotId++;
 
@@ -99,8 +97,8 @@ public class ModelEquipment implements IItemModelRenderer {
 		}
 
 		// Clear Animation Frames:
-		for(ModelItemBase modelItemBase : this.renderedModels) {
-			modelItemBase.clearAnimationFrames();
+		for(ItemObjModel itemObjModel : this.renderedModels) {
+			itemObjModel.clearAnimationFrames();
 		}
 		this.renderedModels.clear();
 	}
@@ -117,35 +115,35 @@ public class ModelEquipment implements IItemModelRenderer {
 	 * @param loop The animation tick for looping animations, etc.
 	 * @param brightness The base brightness to render at.
 	 */
-	public ModelItemBase renderPart(ItemStack partStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, AnimationPart offsetPart, float loop, int brightness) {
+	public ItemObjModel renderPart(ItemStack partStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, IItemModelRenderer renderer, AnimationPart offsetPart, float loop, int brightness) {
 		if(partStack.isEmpty() || !(partStack.getItem() instanceof ItemEquipmentPart)) {
 			return null;
 		}
 
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)partStack.getItem();
-		ModelItemBase modelItemBase = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
-		if(modelItemBase == null) {
+		ItemObjModel itemObjModel = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
+		if(itemObjModel == null) {
 			return null;
 		}
 
-		if(modelItemBase.animationParts.containsKey("base")) {
-			modelItemBase.animationParts.get("base").setOffset(offsetPart);
+		if(itemObjModel.animationParts.containsKey("base")) {
+			itemObjModel.animationParts.get("base").setOffset(offsetPart);
 		}
 
 		this.renderLayers.clear();
-		modelItemBase.addCustomLayers(this);
-		modelItemBase.generateAnimationFrames(partStack, null, loop, offsetPart);
-		ResourceLocation texture = modelItemBase.getTexture(partStack, null);
-		RenderType renderType = ObjRenderState.getObjRenderType(texture);
-		modelItemBase.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, null, loop, brightness);
+		itemObjModel.addCustomLayers(this);
+		itemObjModel.generateAnimationFrames(partStack, null, loop, offsetPart);
+		ResourceLocation texture = itemObjModel.getTexture(partStack, null);
+		RenderType renderType = CustomRenderStates.getObjRenderType(texture);
+		itemObjModel.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, null, loop, brightness);
 		for(LayerItem layer : this.renderLayers) {
-			texture = modelItemBase.getTexture(partStack, layer);
-			renderType = ObjRenderState.getObjRenderType(texture);
-			modelItemBase.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, layer, loop, brightness);
+			texture = itemObjModel.getTexture(partStack, layer);
+			renderType = CustomRenderStates.getObjRenderType(texture);
+			itemObjModel.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, layer, loop, brightness);
 		}
-		this.renderedModels.add(modelItemBase);
+		this.renderedModels.add(itemObjModel);
 
-		return modelItemBase;
+		return itemObjModel;
 	}
 
 

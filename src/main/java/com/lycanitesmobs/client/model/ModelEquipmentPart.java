@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 
-public class ModelEquipmentPart extends ModelItemBase {
+public class ModelEquipmentPart extends ItemObjModel {
 	/**
 	 * Constructor
 	 * @param equipmentPart The equipment part item to render.

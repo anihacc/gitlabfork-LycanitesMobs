@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelProjectileObj;
+import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.client.renderer.Vector4f;
@@ -10,15 +10,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelChaosOrb extends ModelProjectileObj {
-    public ModelChaosOrb() {
+public class CrystalShardModel extends ProjectileObjModel {
+    public CrystalShardModel() {
         this(1.0F);
     }
 
-    public ModelChaosOrb(float shadowSize) {
+    public CrystalShardModel(float shadowSize) {
 
 		// Load Model:
-		this.initModel("chaosorb", LycanitesMobs.modInfo, "projectile/chaosorb");
+		this.initModel("crystalshard", LycanitesMobs.modInfo, "projectile/crystalshard");
     }
 
 	@Override

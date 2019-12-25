@@ -1,12 +1,11 @@
 package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
-import com.lycanitesmobs.client.model.ModelCreatureBase;
+import com.lycanitesmobs.client.model.CreatureModel;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -22,7 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreatureBase> {
+public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureModel> {
     public CreatureRenderer(String entityID, EntityRendererManager renderManager, float shadowSize) {
     	super(renderManager, ModelManager.getInstance().getCreatureModel(CreatureManager.getInstance().getCreature(entityID), null), shadowSize);
 		if(this.entityModel == null)
@@ -32,14 +31,14 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	/**
 	 * Called by the main entity renderer to perform rendering.
 	 * @param entity The entity to render.
-	 * @param somethingA I'm not sure what this is for yet.
+	 * @param partialTicks The partial fraction of the animation tick.
 	 * @param yaw The yaw rotation of the entity.
 	 * @param matrixStack The entity matrix stack for animating with, etc.
 	 * @param renderTypeBuffer  The render type buff for rendering with.
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
 	@Override
-	public void func_225623_a_(BaseCreatureEntity entity, float somethingA, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void func_225623_a_(BaseCreatureEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		// Get Model and Layers:
 		try {
 			this.layerRenderers.clear();
@@ -97,7 +96,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 		}
 
 		// Animation Ticks:
-		float loop = this.handleRotationFloat(entity, yaw);
+		float loop = this.handleRotationFloat(entity, partialTicks);
 		this.func_225621_a_(entity, matrixStack, loop, renderYaw, yaw);
 		matrixStack.func_227862_a_(-1.0F, -1.0F, 1.0F);
 		this.func_225620_a_(entity, matrixStack, yaw);
@@ -116,14 +115,20 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 			}
 		}
 
+		// Damage Fade:
+		int fade = 0;
+		if(entity.hurtTime > 0) {
+			fade = 10;
+		}
+
 		// Entity Visibility:
 		boolean invisible = !this.func_225622_a_(entity, false);
 		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
 
 		// Render Model Layers:
 		this.getMainModel().generateAnimationFrames(entity, time, distance, loop, lookYaw, lookPitch, 1, brightness);
-		this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, invisible, allyInvisible);
-		for(LayerRenderer<BaseCreatureEntity, ModelCreatureBase> layer : this.layerRenderers) {
+		this.renderModel(entity, matrixStack, renderTypeBuffer, null, time, distance, loop, lookYaw, lookPitch, 1, brightness, fade, invisible, allyInvisible);
+		for(LayerRenderer<BaseCreatureEntity, CreatureModel> layer : this.layerRenderers) {
 			if(!(layer instanceof LayerCreatureBase)) {
 				continue;
 			}
@@ -131,7 +136,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 			if(!layerCreatureBase.canRenderLayer(entity, scale)) {
 				continue;
 			}
-			this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, invisible, allyInvisible);
+			this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, fade, invisible, allyInvisible);
 		}
 		this.getMainModel().clearAnimationFrames();
 		matrixStack.func_227865_b_();
@@ -150,10 +155,11 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 	 * @param lookX The entity's pitch looking position for head rotation, etc.
 	 * @param scale The base scale to render the model at, usually just 1 which scales 1m unit in Blender to a 1m block unit in Minecraft.
 	 * @param brightness The brightness of the mob based on block location, etc.
+	 * @param fade The damage fade to render (red flash when damaged).
 	 * @param invisible If true, the entity has invisibility or some form of stealth.
 	 * @param allyInvisible If true, the entity has invisibility or some form of stealth but is allied to the player so should be translucent, etc.
 	 */
-	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, boolean invisible, boolean allyInvisible) {
+	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
 		if (allyInvisible) {
@@ -163,16 +169,16 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, ModelCreat
 			rendertype = RenderType.func_228654_j_(texture);
 		}
 		else {
-			rendertype = ObjRenderState.getObjRenderType(texture);
+			rendertype = CustomRenderStates.getObjRenderType(texture);
 		}
-		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness);
+		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
     }
 
 	/**
 	 * Returns the main model used by this renderer.
 	 * @return The main model to render.
 	 */
-	public ModelCreatureBase getMainModel() {
+	public CreatureModel getMainModel() {
 		return this.entityModel;
 	}
 

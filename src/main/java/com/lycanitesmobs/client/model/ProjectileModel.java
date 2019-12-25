@@ -11,17 +11,16 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelProjectileBase extends EntityModel<BaseProjectileEntity> implements IAnimationModel {
+public class ProjectileModel extends EntityModel<BaseProjectileEntity> implements IAnimationModel {
 	public MatrixStack matrixStack;
 
-    public ModelProjectileBase() {
+    public ProjectileModel() {
         this(1.0F);
     }
     
-    public ModelProjectileBase(float shadowSize) {
+    public ProjectileModel(float shadowSize) {
     	this.textureWidth = 128;
 		this.textureHeight = 128;
     }

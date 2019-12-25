@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.client.ModelManager;
 import com.lycanitesmobs.client.model.AnimationPart;
-import com.lycanitesmobs.client.model.ModelItemBase;
+import com.lycanitesmobs.client.model.ItemObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -30,12 +30,12 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		Hand hand = null;
 
 		ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)itemStack.getItem();
-		ModelItemBase modelItemBase = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
-		if(modelItemBase == null) {
+		ItemObjModel itemObjModel = ModelManager.getInstance().getEquipmentPartModel(itemEquipmentPart);
+		if(itemObjModel == null) {
 			return;
 		}
 		this.renderLayers.clear();
-		modelItemBase.addCustomLayers(this);
+		itemObjModel.addCustomLayers(this);
 
 		float loop = 0;
 		if(Minecraft.getInstance().player != null) {
@@ -56,12 +56,12 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 			matrixStack.func_227861_a_(0F, 0F, 1F);
 		}
 
-		modelItemBase.generateAnimationFrames(itemStack, null, loop, null);
-		this.renderModel(modelItemBase, itemStack, hand, matrixStack, renderTypeBuffer, null,null, loop, brightness);
+		itemObjModel.generateAnimationFrames(itemStack, null, loop, null);
+		this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, null,null, loop, brightness);
 		for(LayerItem renderLayer : this.renderLayers) {
-			this.renderModel(modelItemBase, itemStack, hand, matrixStack, renderTypeBuffer, renderLayer, null, loop, brightness);
+			this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, renderLayer, null, loop, brightness);
 		}
-		modelItemBase.clearAnimationFrames();
+		itemObjModel.clearAnimationFrames();
 		matrixStack.func_227865_b_();
 	}
 
@@ -76,9 +76,9 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	 * @param loop A constant tick for looping animations.
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
-	protected void renderModel(ModelItemBase model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
+	protected void renderModel(ItemObjModel model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
 		ResourceLocation texture = model.getTexture(itemStack, layer);
-		RenderType renderType = ObjRenderState.getObjRenderType(texture);
+		RenderType renderType = CustomRenderStates.getObjRenderType(texture);
 		model.render(itemStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), this, offsetObjPart, layer, loop, brightness);
 	}
 

@@ -2,7 +2,6 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.client.ClientEventListener;
 import com.lycanitesmobs.client.KeyHandler;
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainer;
@@ -13,10 +12,8 @@ import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.item.ItemColorCustomSpawnEgg;
-import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.localisation.LanguageLoader;
 import com.lycanitesmobs.client.localisation.LanguageManager;
-import com.lycanitesmobs.client.model.ModelCreatureBase;
 import com.lycanitesmobs.client.renderer.RenderRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -24,11 +21,9 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 public class ClientManager {
 	public static int GL_TEXTURE0 = 33984;

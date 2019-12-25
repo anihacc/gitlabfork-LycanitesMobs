@@ -1,8 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObj;
-import com.lycanitesmobs.client.model.ModelCreatureObjOld;
+import com.lycanitesmobs.client.model.CreatureObjModel;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
@@ -10,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelEpion extends ModelCreatureObj {
+public class ModelEpion extends CreatureObjModel {
 	
 	// ==================================================
   	//                    Constructors

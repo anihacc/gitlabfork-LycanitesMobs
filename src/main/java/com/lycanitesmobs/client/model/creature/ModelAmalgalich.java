@@ -2,8 +2,7 @@ package com.lycanitesmobs.client.model.creature;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObj;
-import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
+import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
@@ -15,7 +14,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelAmalgalich extends ModelCreatureObj {
+public class ModelAmalgalich extends CreatureObjModel {
 
 	// ==================================================
   	//                    Constructors

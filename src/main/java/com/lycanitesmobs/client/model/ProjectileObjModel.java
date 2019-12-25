@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelProjectileObj extends ModelProjectileBase {
+public class ProjectileObjModel extends ProjectileModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float modelXRotOffset = 180F;
@@ -59,11 +59,11 @@ public class ModelProjectileObj extends ModelProjectileBase {
     protected ModelObjState currentModelState;
 
 
-    public ModelProjectileObj() {
+    public ProjectileObjModel() {
         this(1.0F);
     }
 
-    public ModelProjectileObj(float shadowSize) {
+    public ProjectileObjModel(float shadowSize) {
     	// Here a model should get its model, collect its parts into a list and then create ModelObjPart objects for each part.
     }
 
@@ -74,7 +74,7 @@ public class ModelProjectileObj extends ModelProjectileBase {
 	 * @param path The path to load the model data from (no extension).
 	 * @return This model instance.
 	 */
-	public ModelProjectileObj initModel(String name, ModInfo modInfo, String path) {
+	public ProjectileObjModel initModel(String name, ModInfo modInfo, String path) {
     	// Check If Enabled:
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(name);
 		if(projectileInfo != null && !projectileInfo.enabled) {
@@ -252,7 +252,7 @@ public class ModelProjectileObj extends ModelProjectileBase {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
+			this.wavefrontObject.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), 0, part, this.getPartColor(partName, entity, layer, loop), this.getPartTextureOffset(partName, entity, layer, loop));
 			matrixStack.func_227865_b_();
 		}
 	}

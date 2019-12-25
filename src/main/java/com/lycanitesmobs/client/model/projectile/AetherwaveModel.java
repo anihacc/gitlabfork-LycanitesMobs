@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelProjectileObj;
+import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.client.renderer.Vector4f;
@@ -10,21 +10,20 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCrystalShard extends ModelProjectileObj {
-    public ModelCrystalShard() {
+public class AetherwaveModel extends ProjectileObjModel {
+    public AetherwaveModel() {
         this(1.0F);
     }
 
-    public ModelCrystalShard(float shadowSize) {
+    public AetherwaveModel(float shadowSize) {
 
 		// Load Model:
-		this.initModel("crystalshard", LycanitesMobs.modInfo, "projectile/crystalshard");
+		this.initModel("aetherwave", LycanitesMobs.modInfo, "projectile/aetherwave");
     }
 
 	@Override
 	public void animatePart(String partName, BaseProjectileEntity entity, float time, float distance, float loop, float lookY, float lookX, float scale) {
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);
-		this.rotate(0, 0, loop * 8);
 	}
 
 	/** Returns the coloring to be used for this part and layer. **/

@@ -1,22 +1,22 @@
 package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelProjectileObj;
+import com.lycanitesmobs.client.model.ProjectileObjModel;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelLobDarklings extends ModelProjectileObj {
+public class LobDarklingsModel extends ProjectileObjModel {
 
 	// ==================================================
   	//                    Constructors
   	// ==================================================
-    public ModelLobDarklings() {
+    public LobDarklingsModel() {
         this(1.0F);
     }
 
-    public ModelLobDarklings(float shadowSize) {
+    public LobDarklingsModel(float shadowSize) {
 
 		// Load Model:
 		this.initModel("lobdarklings", LycanitesMobs.modInfo, "projectile/lobdarklings");

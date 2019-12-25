@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCreatureObj extends ModelCreatureBase {
+public class CreatureObjModel extends CreatureModel {
     // Global:
     /** An initial x rotation applied to make Blender models match Minecraft. **/
     public static float MODEL_OFFSET_ROT_X = 180F;
@@ -90,11 +90,11 @@ public class ModelCreatureObj extends ModelCreatureBase {
     protected ModelObjState currentModelState;
 
 
-    public ModelCreatureObj() {
+    public CreatureObjModel() {
         this(1.0F);
     }
 
-    public ModelCreatureObj(float shadowSize) {
+    public CreatureObjModel(float shadowSize) {
     	// Here a model should get its model, collect its parts into a list and then create ModelObjPart objects for each part.
     }
 
@@ -105,7 +105,7 @@ public class ModelCreatureObj extends ModelCreatureBase {
 	 * @param path The path to load the model data from (no extension).
 	 * @return This model instance.
 	 */
-	public ModelCreatureObj initModel(String name, ModInfo modInfo, String path) {
+	public CreatureObjModel initModel(String name, ModInfo modInfo, String path) {
     	// Check If Enabled:
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(name);
 		if(creatureInfo != null && !creatureInfo.enabled) {
@@ -296,7 +296,7 @@ public class ModelCreatureObj extends ModelCreatureBase {
 	}
 
     @Override
-	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness) {
+	public void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade) {
     	this.matrixStack = matrixStack;
 
 		// Assess Scale and Check if Trophy:
@@ -351,7 +351,7 @@ public class ModelCreatureObj extends ModelCreatureBase {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
 			matrixStack.func_227865_b_();
 		}
     }

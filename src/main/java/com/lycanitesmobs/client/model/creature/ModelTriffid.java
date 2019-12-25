@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureObj;
+import com.lycanitesmobs.client.model.CreatureObjModel;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelTriffid extends ModelCreatureObj {
+public class ModelTriffid extends CreatureObjModel {
 
     // ==================================================
     //                    Constructors

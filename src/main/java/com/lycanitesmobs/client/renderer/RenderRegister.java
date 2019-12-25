@@ -23,29 +23,29 @@ public class RenderRegister {
             if(creatureInfo.dummy) {
                 RenderingRegistry.registerEntityRenderingHandler(creatureInfo.getEntityType(), new RenderFactoryNone<BaseProjectileEntity>(creatureInfo.entityClass));
             }
-            RenderingRegistry.registerEntityRenderingHandler(creatureInfo.getEntityType(), new RenderFactoryCreature<BaseCreatureEntity>(creatureInfo));
+            RenderingRegistry.registerEntityRenderingHandler(creatureInfo.getEntityType(), new CreatureRenderFactory<BaseCreatureEntity>(creatureInfo));
         }
 
         // Projectiles:
         for(ProjectileInfo projectileInfo : ProjectileManager.getInstance().projectiles.values()){
             if(projectileInfo.modelClassName != null) {
-                RenderingRegistry.registerEntityRenderingHandler(projectileInfo.getEntityType(), new RenderFactoryProjectile<CustomProjectileEntity>(true));
+                RenderingRegistry.registerEntityRenderingHandler(projectileInfo.getEntityType(), new ProjectileRenderFactory<CustomProjectileEntity>(projectileInfo));
             }
             else {
-                RenderingRegistry.registerEntityRenderingHandler(projectileInfo.getEntityType(), new RenderFactoryProjectile<CustomProjectileEntity>(false));
+                RenderingRegistry.registerEntityRenderingHandler(projectileInfo.getEntityType(), new ProjectileRenderFactory<CustomProjectileEntity>(projectileInfo));
             }
         }
 
         // Old Sprite Projectiles:
         for(String projectileName : ProjectileManager.getInstance().oldSpriteProjectiles.keySet()) {
             Class projectileClass = ProjectileManager.getInstance().oldSpriteProjectiles.get(projectileName);
-            RenderingRegistry.registerEntityRenderingHandler(ProjectileManager.getInstance().oldProjectileTypes.get(projectileClass), new RenderFactoryProjectile<BaseProjectileEntity>(projectileName, projectileClass, false));
+            RenderingRegistry.registerEntityRenderingHandler(ProjectileManager.getInstance().oldProjectileTypes.get(projectileClass), new ProjectileRenderFactory<BaseProjectileEntity>(projectileName, projectileClass, false));
         }
 
         // Old Model Projectiles:
         for(String projectileName : ProjectileManager.getInstance().oldModelProjectiles.keySet()) {
             Class projectileClass = ProjectileManager.getInstance().oldModelProjectiles.get(projectileName);
-            RenderingRegistry.registerEntityRenderingHandler(ProjectileManager.getInstance().oldProjectileTypes.get(projectileClass), new RenderFactoryProjectile<BaseProjectileEntity>(projectileName, projectileClass, true));
+            RenderingRegistry.registerEntityRenderingHandler(ProjectileManager.getInstance().oldProjectileTypes.get(projectileClass), new ProjectileRenderFactory<BaseProjectileEntity>(projectileName, projectileClass, true));
         }
 
         // Special Entities:

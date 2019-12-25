@@ -75,7 +75,7 @@ public class ObjModel {
 		return output;
 	}
 
-    public void renderAll(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, Vector4f color, Vec2f textureOffset) {
+    public void renderAll(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset) {
         Collections.sort(this.objParts, (a, b) -> {
 			Vec3d v = Minecraft.getInstance().getRenderViewEntity().getPositionVector();
 			double aDist = v.distanceTo(new Vec3d(a.center.getX(), a.center.getY(), a.center.getZ()));
@@ -83,19 +83,19 @@ public class ObjModel {
 			return Double.compare(aDist, bDist);
 		});
         for(ObjPart objPart : this.objParts) {
-            this.renderPart(vertexBuilder, matrix3f, matrix4f, brightness, objPart, color, textureOffset);
+            this.renderPart(vertexBuilder, matrix3f, matrix4f, brightness, fade, objPart, color, textureOffset);
         }
     }
 
-    public void renderPartGroup(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, Vector4f color, Vec2f textureOffset, String group) {
+    public void renderPartGroup(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, Vector4f color, Vec2f textureOffset, String group) {
         for(ObjPart objPart : this.objParts) {
             if(objPart.getName().equals(group)) {
-                renderPart(vertexBuilder, matrix3f, matrix4f, brightness, objPart, color, textureOffset);
+                renderPart(vertexBuilder, matrix3f, matrix4f, brightness, fade, objPart, color, textureOffset);
             }
         }
     }
 
-    public void renderPart(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, ObjPart objPart, Vector4f color, Vec2f textureOffset) {
+    public void renderPart(IVertexBuilder vertexBuilder, Matrix3f matrix3f, Matrix4f matrix4f, int brightness, int fade, ObjPart objPart, Vector4f color, Vec2f textureOffset) {
 		// Mesh data:
 		if(objPart.mesh == null) {
 			return;
@@ -119,13 +119,11 @@ public class ObjModel {
 
 				for(int iv = 0; iv < 3; iv++) {
 					Vertex v = objPart.mesh.vertices[indices[i + iv]];
-					Vector4f vertexPos = new Vector4f(v.getPos().getX(), v.getPos().getY(), v.getPos().getZ(), 1.0F);
-					vertexPos.func_229372_a_(matrix4f);
 					vertexBuilder
-							.func_225582_a_(vertexPos.getX(), vertexPos.getY(), vertexPos.getZ()) //pos
+							.func_227888_a_(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
 							.func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
 							.func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //texture
-							.func_225585_a_(0, 10) //color fade
+							.func_225585_a_(0, 10 - fade) // fade
 							.func_227886_a_(brightness) //brightness 240 = full
 							.func_227887_a_(matrix3f, normal.getX(), normal.getY(), normal.getZ()) //normal
 							.endVertex();

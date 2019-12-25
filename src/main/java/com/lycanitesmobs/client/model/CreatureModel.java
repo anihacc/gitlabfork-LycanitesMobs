@@ -16,16 +16,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ModelCreatureBase extends EntityModel<BaseCreatureEntity> implements IAnimationModel {
+public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> implements IAnimationModel {
 
 	// Matrix:
 	public MatrixStack matrixStack;
 
-    public ModelCreatureBase() {
+    public CreatureModel() {
         this(1.0F);
     }
 
-	public ModelCreatureBase(float shadowSize) {
+	public CreatureModel(float shadowSize) {
     	// Texture:
     	this.textureWidth = 128;
 		this.textureHeight = 128;
@@ -68,8 +68,9 @@ public abstract class ModelCreatureBase extends EntityModel<BaseCreatureEntity> 
 	 * @param lookX The entity's pitch looking position for head rotation, etc.
 	 * @param scale The base scale to render the model at, usually just 0.0625F which scales 1m unit in Blender to a 1m block unit in Minecraft.
 	 * @param brightness The brightness of the mob based on block location, etc.
+	 * @param fade The damage fade to render (red flash when damaged).
 	 */
-	public abstract void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness);
+	public abstract void render(BaseCreatureEntity entity, MatrixStack matrixStack, IVertexBuilder vertexBuilder, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade);
 
 	/**
 	 * Called by the renderer to add custom layers to it.

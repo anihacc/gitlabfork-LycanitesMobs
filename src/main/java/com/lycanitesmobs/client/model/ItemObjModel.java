@@ -19,7 +19,6 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec2f;
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.opengl.GL11;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -29,7 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ModelItemBase implements IAnimationModel {
+public abstract class ItemObjModel implements IAnimationModel {
 
 	// Global:
 	/** An initial x rotation applied to make Blender models match Minecraft. **/
@@ -67,7 +66,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 	 * @param path The path to find the model obj in such as equipment/darklingskull (obj is already appended).
 	 * @return
 	 */
-	public ModelItemBase initModel(String name, ModInfo groupInfo, String path) {
+	public ItemObjModel initModel(String name, ModInfo groupInfo, String path) {
 		// Load Obj Model:
 		this.objModel = new ObjModel(new ResourceLocation(groupInfo.modid, "models/" + path + ".obj"));
 		this.objParts = this.objModel.objParts;
@@ -201,7 +200,7 @@ public abstract class ModelItemBase implements IAnimationModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, itemStack, brightness), part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
 			matrixStack.func_227865_b_();
 		}
 	}

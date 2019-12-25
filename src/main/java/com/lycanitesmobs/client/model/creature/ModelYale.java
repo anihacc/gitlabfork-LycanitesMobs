@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelCreatureObjOld;
+import com.lycanitesmobs.client.model.CreatureObjModelOld;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 
 import com.lycanitesmobs.client.renderer.layer.specific.LayerYaleWool;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelYale extends ModelCreatureObjOld {
+public class ModelYale extends CreatureObjModelOld {
 	
 	// ==================================================
   	//                    Constructors

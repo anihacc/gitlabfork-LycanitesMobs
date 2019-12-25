@@ -1,14 +1,14 @@
 package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.model.ModelCreatureBase;
-import com.lycanitesmobs.client.model.ModelEquipment;
+import com.lycanitesmobs.client.model.CreatureModel;
+import com.lycanitesmobs.client.model.EquipmentModel;
 import com.lycanitesmobs.client.model.ModelEquipmentPart;
-import com.lycanitesmobs.client.model.ModelProjectileBase;
-import com.lycanitesmobs.client.model.projectile.ModelAetherwave;
-import com.lycanitesmobs.client.model.projectile.ModelChaosOrb;
-import com.lycanitesmobs.client.model.projectile.ModelCrystalShard;
-import com.lycanitesmobs.client.model.projectile.ModelLightBall;
+import com.lycanitesmobs.client.model.ProjectileModel;
+import com.lycanitesmobs.client.model.projectile.AetherwaveModel;
+import com.lycanitesmobs.client.model.projectile.ChaosOrbModel;
+import com.lycanitesmobs.client.model.projectile.CrystalShardModel;
+import com.lycanitesmobs.client.model.projectile.LightBallModel;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -16,7 +16,6 @@ import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
@@ -32,11 +31,11 @@ public class ModelManager {
 		return INSTANCE;
 	}
 
-	public Map<CreatureInfo, ModelCreatureBase> creatureModels = new HashMap<>();
-	public Map<Subspecies, ModelCreatureBase> creatureSubspeciesModels = new HashMap<>();
-	public Map<ProjectileInfo, ModelProjectileBase> projectileModels = new HashMap<>();
-	public Map<String, ModelProjectileBase> oldProjectileModels = new HashMap<>();
-	public ModelEquipment equipmentModel;
+	public Map<CreatureInfo, CreatureModel> creatureModels = new HashMap<>();
+	public Map<Subspecies, CreatureModel> creatureSubspeciesModels = new HashMap<>();
+	public Map<ProjectileInfo, ProjectileModel> projectileModels = new HashMap<>();
+	public Map<String, ProjectileModel> oldProjectileModels = new HashMap<>();
+	public EquipmentModel equipmentModel;
 	public Map<ItemEquipmentPart, ModelEquipmentPart> equipmentPartModels = new HashMap<>();
 
 	/**
@@ -49,10 +48,10 @@ public class ModelManager {
 				if(creatureInfo.dummy) {
 					continue;
 				}
-				this.creatureModels.put(creatureInfo, (ModelCreatureBase)Class.forName(creatureInfo.modelClassName).getConstructor().newInstance());
+				this.creatureModels.put(creatureInfo, (CreatureModel)Class.forName(creatureInfo.modelClassName).getConstructor().newInstance());
 				for(Subspecies subspecies : creatureInfo.subspecies.values()) {
 					if(subspecies.modelClassName != null) {
-						this.creatureSubspeciesModels.put(subspecies, (ModelCreatureBase)Class.forName(subspecies.modelClassName).getConstructor().newInstance());
+						this.creatureSubspeciesModels.put(subspecies, (CreatureModel)Class.forName(subspecies.modelClassName).getConstructor().newInstance());
 					}
 				}
 			}
@@ -66,15 +65,15 @@ public class ModelManager {
 			// Projectile Models:
 			for(ProjectileInfo projectileInfo : ProjectileManager.getInstance().projectiles.values()) {
 				if(projectileInfo.modelClassName != null) {
-					this.projectileModels.put(projectileInfo, (ModelProjectileBase) Class.forName(projectileInfo.modelClassName).getConstructor().newInstance());
+					this.projectileModels.put(projectileInfo, (ProjectileModel) Class.forName(projectileInfo.modelClassName).getConstructor().newInstance());
 				}
 			}
 
 			// Old Model Projectiles:
-			this.oldProjectileModels.put("lightball", new ModelLightBall());
-			this.oldProjectileModels.put("crystalshard", new ModelCrystalShard());
-			this.oldProjectileModels.put("aetherwave", new ModelAetherwave());
-			this.oldProjectileModels.put("chaosorb", new ModelChaosOrb());
+			this.oldProjectileModels.put("lightball", new LightBallModel());
+			this.oldProjectileModels.put("crystalshard", new CrystalShardModel());
+			this.oldProjectileModels.put("aetherwave", new AetherwaveModel());
+			this.oldProjectileModels.put("chaosorb", new ChaosOrbModel());
 		}
 		catch(ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
 			LycanitesMobs.logError("Unable to load a Projectile model, check that the model class name is correct in the associated projectile json.");
@@ -82,7 +81,7 @@ public class ModelManager {
 		}
 
 		// Equipment Models:
-		this.equipmentModel = new ModelEquipment();
+		this.equipmentModel = new EquipmentModel();
 		for(ItemEquipmentPart equipmentPart : EquipmentPartManager.getInstance().equipmentParts.values()) {
 			this.equipmentPartModels.put(equipmentPart, new ModelEquipmentPart(equipmentPart));
 		}
@@ -94,7 +93,7 @@ public class ModelManager {
 	 * @param subspecies The creature's subspecies, can be null for default model.
 	 * @return The Creature Model.
 	 */
-	public ModelCreatureBase getCreatureModel(CreatureInfo creatureInfo, @Nullable Subspecies subspecies) {
+	public CreatureModel getCreatureModel(CreatureInfo creatureInfo, @Nullable Subspecies subspecies) {
 		if(subspecies != null && this.creatureSubspeciesModels.containsKey(subspecies)) {
 			return this.creatureSubspeciesModels.get(subspecies);
 		}
@@ -109,7 +108,7 @@ public class ModelManager {
 	 * @param projectileInfo The projectile info to get the model for.
 	 * @return The Projectile Model.
 	 */
-	public ModelProjectileBase getProjectileModel(ProjectileInfo projectileInfo) {
+	public ProjectileModel getProjectileModel(ProjectileInfo projectileInfo) {
 		if(this.projectileModels.containsKey(projectileInfo)) {
 			return this.projectileModels.get(projectileInfo);
 		}
@@ -122,7 +121,7 @@ public class ModelManager {
 	 * @return The Old Projectile Model.
 	 */
 	@Deprecated
-	public ModelProjectileBase getOldProjectileModel(String projectileName) {
+	public ProjectileModel getOldProjectileModel(String projectileName) {
 		if(this.oldProjectileModels.containsKey(projectileName)) {
 			return this.oldProjectileModels.get(projectileName);
 		}
@@ -133,7 +132,7 @@ public class ModelManager {
 	 * Gets the model used by assembled Equipment Pieces.
 	 * @return The Equipment Model, the same model should always be used.
 	 */
-	public ModelEquipment getEquipmentModel() {
+	public EquipmentModel getEquipmentModel() {
 		return this.equipmentModel;
 	}
 
