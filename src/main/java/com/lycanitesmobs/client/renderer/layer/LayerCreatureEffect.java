@@ -10,21 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class LayerCreatureEffect extends LayerCreatureBase {
-
 	public String textureSuffix;
-
 	public boolean subspecies = true;
-
-	public boolean glow = false;
-
-	public enum BLEND {
-		NORMAL(0), ADD(1), SUB(2);
-		public final int id;
-		BLEND(int value) { this.id = value; }
-		public int getValue() { return id; }
-	}
-	public int blending = 0;
-
 	public Vec2f scrollSpeed;
 
 

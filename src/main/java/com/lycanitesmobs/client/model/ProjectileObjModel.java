@@ -242,11 +242,11 @@ public class ProjectileObjModel extends ProjectileModel {
 			matrixStack.func_227860_a_();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
-			this.animator.doAngle(modelXRotOffset, 1F, 0F, 0F);
-			this.animator.doTranslate(0F, modelYPosOffset, 0F);
+			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
+			this.doTranslate(0F, modelYPosOffset, 0F);
 
 			// Apply Entity Scaling:
-			this.animator.doScale(scale, scale, scale);
+			this.doScale(scale, scale, scale);
 
 			// Apply Animation Frames:
 			this.currentAnimationPart.applyAnimationFrames(this.animator);

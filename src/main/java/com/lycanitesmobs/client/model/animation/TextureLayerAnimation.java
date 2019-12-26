@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.model.animation;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
@@ -84,12 +85,12 @@ public class TextureLayerAnimation {
 	 * @return A new Layer Renderer.
 	 */
 	public LayerCreatureEffect createCreatureLayer(CreatureRenderer renderer) {
-		int blendingId = LayerCreatureEffect.BLEND.NORMAL.id;
+		int blendingId = CustomRenderStates.BLEND.NORMAL.id;
 		if("add".equals(this.blending)) {
-			blendingId = LayerCreatureEffect.BLEND.ADD.id;
+			blendingId = CustomRenderStates.BLEND.ADD.id;
 		}
 		else if("sub".equals(this.blending)) {
-			blendingId = LayerCreatureEffect.BLEND.SUB.id;
+			blendingId = CustomRenderStates.BLEND.SUB.id;
 		}
 
 		LayerCreatureEffect renderLayer = new LayerCreatureEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
@@ -105,12 +106,12 @@ public class TextureLayerAnimation {
 	 * @return A new Layer Renderer.
 	 */
 	public LayerProjectileEffect createProjectileLayer(ProjectileModelRenderer renderer) {
-		int blendingId = LayerProjectileEffect.BLEND.NORMAL.id;
+		int blendingId = CustomRenderStates.BLEND.NORMAL.id;
 		if("add".equals(this.blending)) {
-			blendingId = LayerProjectileEffect.BLEND.ADD.id;
+			blendingId = CustomRenderStates.BLEND.ADD.id;
 		}
 		else if("sub".equals(this.blending)) {
-			blendingId = LayerProjectileEffect.BLEND.SUB.id;
+			blendingId = CustomRenderStates.BLEND.SUB.id;
 		}
 
 		LayerProjectileEffect renderLayer = new LayerProjectileEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
@@ -126,12 +127,12 @@ public class TextureLayerAnimation {
 	 * @return A new Layer Renderer.
 	 */
 	public LayerItem createItemLayer(IItemModelRenderer renderer) {
-		int blendingId = LayerCreatureEffect.BLEND.NORMAL.id;
+		int blendingId = CustomRenderStates.BLEND.NORMAL.id;
 		if("additive".equals(this.blending)) {
-			blendingId = LayerCreatureEffect.BLEND.ADD.id;
+			blendingId = CustomRenderStates.BLEND.ADD.id;
 		}
 		else if("subtractive".equals(this.blending)) {
-			blendingId = LayerCreatureEffect.BLEND.SUB.id;
+			blendingId = CustomRenderStates.BLEND.SUB.id;
 		}
 
 		LayerItem renderLayer = new LayerItem(renderer, this.name);

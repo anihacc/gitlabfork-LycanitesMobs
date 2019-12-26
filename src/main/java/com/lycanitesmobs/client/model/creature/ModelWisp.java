@@ -4,6 +4,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
@@ -43,14 +44,22 @@ public class ModelWisp extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "ball", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "ball_glow",  "ball", true, LayerCreatureEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, LayerCreatureEffect.BLEND.NORMAL.id, true, new Vec2f(0, 4)));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "ball", true, CustomRenderStates.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "ball_glow",  "ball", true, CustomRenderStates.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, CustomRenderStates.BLEND.NORMAL.id, true, new Vec2f(0, 4)));
 	}
 
 	@Override
 	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
 		return ClientManager.FULL_BRIGHT;
+	}
+
+	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+    	if(layer != null) {
+    		return super.getGlow(entity, layer);
+		}
+		return true;
 	}
 
 

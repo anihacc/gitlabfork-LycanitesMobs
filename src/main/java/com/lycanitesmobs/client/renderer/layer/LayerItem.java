@@ -1,7 +1,6 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -83,6 +82,13 @@ public class LayerItem {
 		return null;
     }
 
+	public Vec2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
+		if(this.scrollSpeed == null) {
+			this.scrollSpeed = new Vec2f(0, 0);
+		}
+		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+	}
+
 	/**
 	 *  Returns the brightness that this layer should use.
 	 * @param partName The name of the model part.
@@ -97,10 +103,21 @@ public class LayerItem {
 		return brightness;
 	}
 
-	public Vec2f getTextureOffset(String partName, ItemStack itemStack, float loop) {
-    	if(this.scrollSpeed == null) {
-			this.scrollSpeed = new Vec2f(0, 0);
-		}
-		return new Vec2f(loop * this.scrollSpeed.x, loop * this.scrollSpeed.y);
+	/**
+	 * Returns the blending type that this layer should use, see CustomRenderStates.BLEND.
+	 * @param itemStack The item stack to render.
+	 * @return The part blending type.
+	 */
+	public int getBlending(ItemStack itemStack) {
+		return this.blending;
+	}
+
+	/**
+	 * Returns if this layer should glow where it ignores shading.
+	 * @param itemStack The item stack to render.
+	 * @return True for glowing (shadeless rendering).
+	 */
+	public boolean getGlow(ItemStack itemStack) {
+		return this.glow;
 	}
 }

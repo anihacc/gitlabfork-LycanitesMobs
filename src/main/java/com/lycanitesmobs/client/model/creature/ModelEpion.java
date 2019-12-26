@@ -38,10 +38,6 @@ public class ModelEpion extends CreatureObjModel {
     	float posX = 0F;
     	float posY = 0F;
     	float posZ = 0F;
-    	float angleX = 0F;
-    	float angleY = 0F;
-    	float angleZ = 0F;
-    	float rotation = 0F;
     	float rotX = 0F;
     	float rotY = 0F;
     	float rotZ = 0F;
@@ -106,7 +102,6 @@ public class ModelEpion extends CreatureObjModel {
 
 		// Apply Animations:
 		translate(posX, posY, posZ);
-		angle(rotation, angleX, angleY, angleZ);
 		rotate(rotX, rotY, rotZ);
     }
 }

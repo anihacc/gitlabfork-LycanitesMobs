@@ -1,6 +1,7 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
@@ -43,7 +44,7 @@ public class ModelShade extends ModelTemplateBiped {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "eyes", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "eyes", true, CustomRenderStates.BLEND.ADD.id, true));
 	}
     
     

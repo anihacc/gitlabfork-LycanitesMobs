@@ -1,9 +1,10 @@
 package com.lycanitesmobs.client.model;
 
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEquipment;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -177,6 +178,32 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 		return brightness;
 	}
 
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param entity The entity to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public int getBlending(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return layer.getBlending(entity);
+		}
+		return CustomRenderStates.BLEND.NORMAL.getValue();
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param entity The entity to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return layer.getGlow(entity);
+		}
+		return false;
+	}
+
 	@Override
 	public void rotate(float rotX, float rotY, float rotZ) {}
 
@@ -203,12 +230,12 @@ public abstract class CreatureModel extends EntityModel<BaseCreatureEntity> impl
 
 	@Override
 	public void doTranslate(float posX, float posY, float posZ) {
-		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
+		this.matrixStack.func_227861_a_(posX, posY, posZ);
 	}
 
 	@Override
 	public void doScale(float scaleX, float scaleY, float scaleZ) {
-		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
+		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ);
 	}
 
 	@Override

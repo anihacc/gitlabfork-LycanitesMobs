@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.entity.Entity;
@@ -43,7 +43,7 @@ public class ModelReaper extends ModelTemplateBiped {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "cape", false, LayerCreatureEffect.BLEND.SUB.id, true, new Vec2f(0, -1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "cape", false, CustomRenderStates.BLEND.SUB.id, true, new Vec2f(0, -1)));
 	}
 
 

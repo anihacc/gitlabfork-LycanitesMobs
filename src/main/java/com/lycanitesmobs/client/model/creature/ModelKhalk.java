@@ -1,8 +1,11 @@
 package com.lycanitesmobs.client.model.creature;
 
 
+import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModelOld;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -40,6 +43,19 @@ public class ModelKhalk extends CreatureObjModelOld {
         this.trophyScale = 0.8F;
         this.trophyOffset = new float[] {0.0F, -0.2F, 0.0F};
     }
+
+	@Override
+	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
+		return ClientManager.FULL_BRIGHT;
+	}
+
+	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return super.getGlow(entity, layer);
+		}
+		return true;
+	}
     
     
  // ==================================================

@@ -20,10 +20,6 @@ public class ModelTemplateBiped extends CreatureObjModel {
         float posX = 0F;
         float posY = 0F;
         float posZ = 0F;
-        float angleX = 0F;
-        float angleY = 0F;
-        float angleZ = 0F;
-        float rotation = 0F;
         float rotX = 0F;
         float rotY = 0F;
         float rotZ = 0F;
@@ -177,7 +173,6 @@ public class ModelTemplateBiped extends CreatureObjModel {
         }
 
         // Apply Animations:
-        this.angle(rotation, angleX, angleY, angleZ);
         this.rotate(rotX, rotY, rotZ);
         this.translate(posX, posY, posZ);
     }

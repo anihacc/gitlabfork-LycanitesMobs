@@ -134,11 +134,11 @@ public class EquipmentModel implements IItemModelRenderer {
 		itemObjModel.addCustomLayers(this);
 		itemObjModel.generateAnimationFrames(partStack, null, loop, offsetPart);
 		ResourceLocation texture = itemObjModel.getTexture(partStack, null);
-		RenderType renderType = CustomRenderStates.getObjRenderType(texture);
+		RenderType renderType = CustomRenderStates.getObjRenderType(texture, itemObjModel.getBlending(partStack, null), itemObjModel.getGlow(partStack, null));
 		itemObjModel.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, null, loop, brightness);
 		for(LayerItem layer : this.renderLayers) {
 			texture = itemObjModel.getTexture(partStack, layer);
-			renderType = CustomRenderStates.getObjRenderType(texture);
+			renderType = CustomRenderStates.getObjRenderType(texture, itemObjModel.getBlending(partStack, layer), itemObjModel.getGlow(partStack, layer));
 			itemObjModel.render(partStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), renderer, offsetPart, layer, loop, brightness);
 		}
 		this.renderedModels.add(itemObjModel);

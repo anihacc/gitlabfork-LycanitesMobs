@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import net.minecraft.client.renderer.Vector4f;
@@ -37,10 +38,10 @@ public class ModelZephyr extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", true, LayerCreatureEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", true, LayerCreatureEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", true, LayerCreatureEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", true, CustomRenderStates.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", true, CustomRenderStates.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", true, CustomRenderStates.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", true, CustomRenderStates.BLEND.ADD.id, true));
 	}
     
     
@@ -60,7 +61,7 @@ public class ModelZephyr extends ModelTemplateElemental {
 			if(partName.equals("armeffectright")) {
 				angleX = -angleX;
 			}
-			this.angle(loop * 50F, angleX, angleY, angleZ);
+			this.angle(loop * 50F, angleX / 360, angleY / 360, angleZ / 360);
 		}
 
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);

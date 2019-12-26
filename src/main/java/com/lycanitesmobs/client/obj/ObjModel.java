@@ -3,13 +3,14 @@ package com.lycanitesmobs.client.obj;
 import com.lycanitesmobs.LycanitesMobs;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.Matrix3f;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.Vector4f;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,59 +107,32 @@ public class ObjModel {
 			objPart.mesh.normals = new Vector3f[indices.length];
 		}
 
-    	// New Builder:
-    	if(vertexBuilder instanceof BufferBuilder) {
-			for(int i = 0; i < indices.length; i += 3) {
-
-				// Normal:
-				Vector3f normal = objPart.mesh.normals[i];
-				if(normal == null) {
-					normal = this.getNormal(vertices[indices[i]].getPos(), vertices[indices[i + 1]].getPos(), vertices[indices[i + 2]].getPos());
-					objPart.mesh.normals[i] = normal;
-				}
-
-				for(int iv = 0; iv < 3; iv++) {
-					Vertex v = objPart.mesh.vertices[indices[i + iv]];
-					vertexBuilder
-							.func_227888_a_(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
-							.func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
-							.func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //texture
-							.func_225585_a_(0, 10 - fade) // fade
-							.func_227886_a_(brightness) //brightness 240 = full
-							.func_227887_a_(matrix3f, normal.getX(), normal.getY(), normal.getZ()) //normal
-							.endVertex();
-				}
-			}
-
-			return;
+    	// Invalid Builder:
+    	if(vertexBuilder == null) {
+    		return;
 		}
 
-    	/*/ Fallback Builder:
-        Tessellator tess = Tessellator.getInstance();
-		vertexBuilder = tess.getBuffer();
-		((BufferBuilder)vertexBuilder).begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
+    	// Build:
+		for(int i = 0; i < indices.length; i += 3) {
 
-        for(int i = 0; i < indices.length; i += 3) {
-
-        	// Normal:
+			// Normal:
 			Vector3f normal = objPart.mesh.normals[i];
 			if(normal == null) {
 				normal = this.getNormal(vertices[indices[i]].getPos(), vertices[indices[i + 1]].getPos(), vertices[indices[i + 2]].getPos());
 				objPart.mesh.normals[i] = normal;
 			}
 
-            for(int iv = 0; iv < 3; iv++) {
-                Vertex v = objPart.mesh.vertices[indices[i + iv]];
+			for(int iv = 0; iv < 3; iv++) {
+				Vertex v = objPart.mesh.vertices[indices[i + iv]];
 				vertexBuilder
-                        .func_225582_a_(v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
-                        .func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //tex
-                        .func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
-						.func_225584_a_(normal.getX(), normal.getY(), normal.getZ()) //normal
-                        .endVertex();
-            }
-        }
-
-        // Draw Buffer:
-		tess.draw();*/
+						.func_227888_a_(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
+						.func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
+						.func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //texture
+						.func_225585_a_(0, 10 - fade) // fade
+						.func_227886_a_(brightness) //brightness 240 = full
+						.func_227887_a_(matrix3f, normal.getX(), normal.getY(), normal.getZ()) //normal
+						.endVertex();
+			}
+		}
     }
 }

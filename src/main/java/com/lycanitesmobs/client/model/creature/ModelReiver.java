@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import net.minecraft.client.renderer.Vector4f;
@@ -38,9 +39,9 @@ public class ModelReiver extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
-		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", false, CustomRenderStates.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", false, CustomRenderStates.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", false, CustomRenderStates.BLEND.NORMAL.id, false));
 	}
     
     

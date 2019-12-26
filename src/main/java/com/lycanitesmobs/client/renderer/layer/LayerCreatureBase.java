@@ -17,6 +17,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, CreatureModel> {
     public CreatureRenderer renderer;
     public String name;
+    public boolean glow = false;
+    public int blending = 0;
 
     /**
      * Constructor
@@ -96,7 +98,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
     }
 
     /**
-     *  Returns the brightness that this layer should use.
+     * Returns the brightness that this layer should use.
      * @param partName The name of the model part.
      * @param entity The entity to render.
      * @param brightness The base brightness.
@@ -104,5 +106,23 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
      */
     public int getBrightness(String partName, BaseCreatureEntity entity, int brightness) {
         return brightness;
+    }
+
+    /**
+     * Returns the blending type that this layer should use, see CustomRenderStates.BLEND.
+     * @param entity The entity to render.
+     * @return The part blending type.
+     */
+    public int getBlending(BaseCreatureEntity entity) {
+        return this.blending;
+    }
+
+    /**
+     * Returns if this layer should glow where it ignores shading.
+     * @param entity The entity to render.
+     * @return True for glowing (shadeless rendering).
+     */
+    public boolean getGlow(BaseCreatureEntity entity) {
+        return this.glow;
     }
 }

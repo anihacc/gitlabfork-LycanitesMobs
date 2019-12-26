@@ -49,6 +49,14 @@ public class ModelNymph extends ModelTemplateElemental {
 		return ClientManager.FULL_BRIGHT;
 	}
 
+	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return super.getGlow(entity, layer);
+		}
+		return true;
+	}
+
 
 	// ==================================================
 	//                 Animate Part

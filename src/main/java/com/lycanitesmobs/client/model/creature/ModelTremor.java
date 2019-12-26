@@ -83,7 +83,7 @@ public class ModelTremor extends ModelTemplateElemental {
 					angleX = -angleX;
 				}
 			}
-			this.angle(loop * 50F, angleX, angleY, angleZ);
+			this.angle(loop * 50F, angleX / 360, angleY / 360, angleZ / 360);
 		}
 	}
 }

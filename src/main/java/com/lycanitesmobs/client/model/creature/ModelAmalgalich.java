@@ -4,6 +4,7 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.CreatureObjModel;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
@@ -45,7 +46,7 @@ public class ModelAmalgalich extends CreatureObjModel {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "fire", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "fire", true, CustomRenderStates.BLEND.ADD.id, true));
 	}
 
 	@Override
@@ -65,10 +66,6 @@ public class ModelAmalgalich extends CreatureObjModel {
 		float posX = 0F;
 		float posY = 0F;
 		float posZ = 0F;
-		float angleX = 0F;
-		float angleY = 0F;
-		float angleZ = 0F;
-		float rotation = 0F;
 		float rotX = 0F;
 		float rotY = 0F;
 		float rotZ = 0F;
@@ -158,7 +155,6 @@ public class ModelAmalgalich extends CreatureObjModel {
 			rotX += Math.toDegrees(MathHelper.cos(time * 0.6662F) * walkSwing * distance);
 
 		// Apply Animations:
-		this.angle(rotation, angleX, angleY, angleZ);
 		this.rotate(rotX, rotY, rotZ);
 		this.translate(posX, posY, posZ);
 	}

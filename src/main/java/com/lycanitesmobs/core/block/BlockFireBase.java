@@ -315,13 +315,4 @@ public class BlockFireBase extends BlockBase {
     protected boolean canDie(World world, BlockPos pos) {
         return world.isRainingAt(pos) || world.isRainingAt(pos.west()) || world.isRainingAt(pos.east()) || world.isRainingAt(pos.north()) || world.isRainingAt(pos.south());
     }
-
-
-    // ==================================================
-    //                      Rendering
-    // ==================================================
-    /*@Override Redundant?
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }*/
 }

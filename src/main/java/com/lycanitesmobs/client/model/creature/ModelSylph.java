@@ -4,6 +4,7 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
@@ -43,13 +44,21 @@ public class ModelSylph extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vec2f(0, 1)));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, CustomRenderStates.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, CustomRenderStates.BLEND.ADD.id, true, new Vec2f(0, 1)));
 	}
 
 	@Override
 	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
 		return ClientManager.FULL_BRIGHT;
+	}
+
+	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return super.getGlow(entity, layer);
+		}
+		return true;
 	}
 
 

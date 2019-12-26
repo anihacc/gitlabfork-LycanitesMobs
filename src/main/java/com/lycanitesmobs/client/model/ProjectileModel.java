@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.model;
 
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
@@ -130,6 +131,32 @@ public class ProjectileModel extends EntityModel<BaseProjectileEntity> implement
 			return layer.getBrightness(partName, entity, brightness);
 		}
 		return brightness;
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param entity The entity to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public int getBlending(BaseProjectileEntity entity, LayerProjectileBase layer) {
+		if(layer != null) {
+			return layer.getBlending(entity);
+		}
+		return CustomRenderStates.BLEND.NORMAL.getValue();
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param entity The entity to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public boolean getGlow(BaseProjectileEntity entity, LayerProjectileBase layer) {
+		if(layer != null) {
+			return layer.getGlow(entity);
+		}
+		return false;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.client.obj.ObjModel;
 import com.lycanitesmobs.client.obj.ObjPart;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.core.info.ModInfo;
@@ -218,6 +219,32 @@ public abstract class ItemObjModel implements IAnimationModel {
 			return layer.getBrightness(partName, itemStack, brightness);
 		}
 		return brightness;
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param itemStack The item stack to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public int getBlending(ItemStack itemStack, LayerItem layer) {
+		if(layer != null) {
+			return layer.getBlending(itemStack);
+		}
+		return CustomRenderStates.BLEND.NORMAL.getValue();
+	}
+
+	/**
+	 * Gets the brightness to render the given part at.
+	 * @param itemStack The item stack to render.
+	 * @param layer The layer to render, null for base layer.
+	 * @return The brightness to render at.
+	 */
+	public boolean getGlow(ItemStack itemStack, LayerItem layer) {
+		if(layer != null) {
+			return layer.getGlow(itemStack);
+		}
+		return false;
 	}
 
 	/** Generates all animation frames for a render tick. **/

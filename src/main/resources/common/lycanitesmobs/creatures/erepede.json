@@ -15,7 +15,7 @@
 		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end"],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["sandy", "wasteland", "mesa", "-cold"],
+		"biomes": ["sandy", "wasteland", "mesa", "-cold", "-snowy"],
 		"spawnWeight": 4,
 		"dungeonWeight": 200,
 		"spawnAreaLimit": 5,

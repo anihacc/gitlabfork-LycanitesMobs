@@ -16,6 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, ProjectileModel> {
     public ProjectileModelRenderer renderer;
     public String name;
+    public boolean glow = false;
+    public int blending = 0;
 
 
     public LayerProjectileBase(ProjectileModelRenderer renderer) {
@@ -79,5 +81,23 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
      */
     public int getBrightness(String partName, BaseProjectileEntity entity, int brightness) {
         return brightness;
+    }
+
+    /**
+     * Returns the blending type that this layer should use, see CustomRenderStates.BLEND.
+     * @param entity The entity to render.
+     * @return The part blending type.
+     */
+    public int getBlending(BaseProjectileEntity entity) {
+        return this.blending;
+    }
+
+    /**
+     * Returns if this layer should glow where it ignores shading.
+     * @param entity The entity to render.
+     * @return True for glowing (shadeless rendering).
+     */
+    public boolean getGlow(BaseProjectileEntity entity) {
+        return this.glow;
     }
 }

@@ -330,22 +330,22 @@ public class CreatureObjModel extends CreatureModel {
 			matrixStack.func_227860_a_();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
-			this.animator.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
-			this.animator.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
+			this.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
+			this.doTranslate(0F, MODEL_OFFSET_POS_Y, 0F);
 
 			// Child Scaling:
 			if(this.isChild && !renderAsTrophy) {
 				this.childScale(partName);
 				if(this.bigChildHead && (partName.contains("head") || partName.contains("mouth")))
-					this.animator.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
+					this.doTranslate(-(this.currentAnimationPart.centerX / 2), -(this.currentAnimationPart.centerY / 2), -(this.currentAnimationPart.centerZ / 2));
 			}
 
 			// Trophy Scaling:
 			if(renderAsTrophy)
-				this.animator.doScale(this.trophyScale, this.trophyScale, this.trophyScale);
+				this.doScale(this.trophyScale, this.trophyScale, this.trophyScale);
 
 			// Apply Entity Scaling:
-			this.animator.doScale(scale, scale, scale);
+			this.doScale(scale, scale, scale);
 
 			// Apply Animation Frames:
 			this.currentAnimationPart.applyAnimationFrames(this.animator);

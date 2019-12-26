@@ -78,7 +78,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	 */
 	protected void renderModel(ItemObjModel model, ItemStack itemStack, Hand hand, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerItem layer, AnimationPart offsetObjPart, float loop, int brightness) {
 		ResourceLocation texture = model.getTexture(itemStack, layer);
-		RenderType renderType = CustomRenderStates.getObjRenderType(texture);
+		RenderType renderType = CustomRenderStates.getObjRenderType(texture, model.getBlending(itemStack, layer), model.getGlow(itemStack, layer));
 		model.render(itemStack, hand, matrixStack, renderTypeBuffer.getBuffer(renderType), this, offsetObjPart, layer, loop, brightness);
 	}
 

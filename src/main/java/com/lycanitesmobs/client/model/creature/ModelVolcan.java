@@ -4,10 +4,10 @@ import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,12 +36,20 @@ public class ModelVolcan extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(CreatureRenderer renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", "glow", true, LayerCreatureEffect.BLEND.ADD.getValue(), true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", "glow", true, CustomRenderStates.BLEND.ADD.getValue(), true));
 	}
 
 	@Override
 	public int getBrightness(String partName, LayerCreatureBase layer, BaseCreatureEntity entity, int brightness) {
 		return ClientManager.FULL_BRIGHT;
+	}
+
+	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return super.getGlow(entity, layer);
+		}
+		return true;
 	}
 
 	@Override
@@ -57,7 +65,7 @@ public class ModelVolcan extends ModelTemplateElemental {
 				angleY = -angleY;
 				angleZ = -angleZ;
 			}
-			this.angle(loop * 10F, angleX, angleY, angleZ);
+			this.angle(loop * 10F, angleX / 360, angleY / 360, angleZ / 360);
 		}
 
 		// Effects:

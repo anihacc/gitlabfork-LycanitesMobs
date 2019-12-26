@@ -96,7 +96,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Animation Ticks:
-		float loop = this.handleRotationFloat(entity, partialTicks);
+		float loop = this.handleRotationFloat(entity, partialTicks % 1.0F); // partialTicks is increased when turning for some reason
 		this.func_225621_a_(entity, matrixStack, loop, renderYaw, yaw);
 		matrixStack.func_227862_a_(-1.0F, -1.0F, 1.0F);
 		this.func_225620_a_(entity, matrixStack, yaw);
@@ -162,15 +162,13 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	protected void renderModel(BaseCreatureEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, LayerCreatureBase layer, float time, float distance, float loop, float lookY, float lookX, float scale, int brightness, int fade, boolean invisible, boolean allyInvisible) {
 		ResourceLocation texture = this.getEntityTexture(entity, layer);
 		RenderType rendertype;
-		if (allyInvisible) {
-			rendertype = RenderType.func_228644_e_(texture);
-		}
-		else if (invisible) {
-			rendertype = RenderType.func_228654_j_(texture);
+		if (invisible && !allyInvisible) {
+			rendertype = CustomRenderStates.getObjOutlineRenderType(texture);
 		}
 		else {
-			rendertype = CustomRenderStates.getObjRenderType(texture);
+			rendertype = CustomRenderStates.getObjRenderType(texture, this.getMainModel().getBlending(entity, layer), this.getMainModel().getGlow(entity, layer));
 		}
+		// TODO allyInvisible lower color alpha
 		this.getMainModel().render(entity, matrixStack, renderTypeBuffer.getBuffer(rendertype), layer, time, distance, loop, lookY, lookX, 1, brightness, fade);
     }
 

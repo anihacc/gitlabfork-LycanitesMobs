@@ -40,6 +40,14 @@ public class ModelCinder extends ModelTemplateElemental {
 	}
 
 	@Override
+	public boolean getGlow(BaseCreatureEntity entity, LayerCreatureBase layer) {
+		if(layer != null) {
+			return super.getGlow(entity, layer);
+		}
+		return true;
+	}
+
+	@Override
 	public Vec2f getBaseTextureOffset(String partName, Entity entity, boolean trophy, float loop) {
     	if(partName.contains("effect")) {
     		return super.getBaseTextureOffset(partName, entity, trophy, loop);

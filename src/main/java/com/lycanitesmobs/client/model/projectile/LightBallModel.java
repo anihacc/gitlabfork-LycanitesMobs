@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.model.projectile;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ProjectileObjModel;
+import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 import com.lycanitesmobs.client.renderer.layer.LayerProjectileEffect;
@@ -27,7 +28,7 @@ public class LightBallModel extends ProjectileObjModel {
 	@Override
 	public void addCustomLayers(ProjectileModelRenderer renderer) {
 		super.addCustomLayers(renderer);
-		this.ballGlowLayer = new LayerProjectileEffect(renderer, "", true, LayerProjectileEffect.BLEND.ADD.id, true);
+		this.ballGlowLayer = new LayerProjectileEffect(renderer, "", true, CustomRenderStates.BLEND.ADD.id, true);
 		renderer.addLayer(this.ballGlowLayer);
 	}
 
