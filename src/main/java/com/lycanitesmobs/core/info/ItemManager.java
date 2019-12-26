@@ -216,7 +216,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addDamageSource("ooze", new DamageSource("ooze"));
 
 		this.addFluid("moglava", 0xFF5722, 3000, 5000, 1100, 15, true);
-		ObjectManager.addBlock("moglava", new BlockFluidMoglava(() -> ObjectManager.getFluid("moglava").get(), waterBlockProperties, "moglava"));
+		ObjectManager.addBlock("moglava", new BlockFluidMoglava(() -> ObjectManager.getFluid("moglava").get(), lavaBlockProperties, "moglava"));
 
 		this.addFluid("acid", 0x8BC34A, 1000, 10, 40, 10, true);
 		ObjectManager.addBlock("acid", new BlockFluidAcid(() -> ObjectManager.getFluid("acid").get(), waterBlockProperties, "acid"));
