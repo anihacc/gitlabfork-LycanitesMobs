@@ -38,7 +38,6 @@ public class BlockPoopCloud extends BlockBase {
 		
 		//this.noEntityCollision = true;
 		this.noBreakCollision = true;
-		this.isOpaque = false;
 
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
 		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));

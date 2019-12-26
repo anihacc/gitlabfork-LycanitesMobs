@@ -33,7 +33,6 @@ public class BlockFrostweb extends BlockBase {
 		this.canBeCrushed = false;
 
 		this.noBreakCollision = false;
-		this.isOpaque = false;
 
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
 		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));

@@ -58,7 +58,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		// Model States:
 		float time = 0;
 		float distance = 0;
-		float loop = (float)entity.ticksExisted + partialTicks;
+		float loop = (float)entity.ticksExisted + (partialTicks % 1.0F);
 		float lookYaw = 0;
 		float lookPitch = 0;
 		float scale = 1;

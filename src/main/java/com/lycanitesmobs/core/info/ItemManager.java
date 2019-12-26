@@ -180,7 +180,7 @@ public class ItemManager extends JSONLoader {
 
 
 		// Effect Blocks:
-		Block.Properties fireProperties = Block.Properties.create(Material.FIRE).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		Block.Properties fireProperties = Block.Properties.create(Material.FIRE).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).func_226896_b_(); //notSolid
 		ObjectManager.addSound("frostfire", modInfo, "block.frostfire");
 		ObjectManager.addBlock("frostfire", new BlockFrostfire(fireProperties));
 		ObjectManager.addSound("icefire", modInfo, "block.icefire");
@@ -194,7 +194,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addSound("shadowfire", modInfo, "block.shadowfire");
 		ObjectManager.addBlock("shadowfire", new BlockShadowfire(fireProperties));
 
-		Block.Properties cloudProperties = Block.Properties.create(Material.MISCELLANEOUS).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		Block.Properties cloudProperties = Block.Properties.create(Material.MISCELLANEOUS).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).func_226896_b_(); //notSolid
 		ObjectManager.addSound("frostcloud", modInfo, "block.frostcloud");
 		ObjectManager.addBlock("frostcloud", new BlockFrostCloud(cloudProperties));
 		ObjectManager.addSound("poisoncloud", modInfo, "block.poisoncloud");
@@ -202,7 +202,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addSound("poopcloud", modInfo, "block.poopcloud");
 		ObjectManager.addBlock("poopcloud", new BlockPoopCloud(cloudProperties));
 
-		Block.Properties webProperties = Block.Properties.create(Material.WEB).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH);
+		Block.Properties webProperties = Block.Properties.create(Material.WEB).tickRandomly().doesNotBlockMovement().variableOpacity().sound(SoundType.CLOTH).func_226896_b_(); //notSolid
 		ObjectManager.addBlock("quickweb", new BlockQuickWeb(webProperties));
 		ObjectManager.addBlock("frostweb", new BlockFrostweb(webProperties));
 

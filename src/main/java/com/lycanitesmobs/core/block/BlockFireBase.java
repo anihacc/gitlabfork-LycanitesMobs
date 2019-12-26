@@ -27,7 +27,6 @@ public class BlockFireBase extends BlockBase {
 
     public boolean dieInRain = true;
     public boolean triggerTNT = true;
-    public boolean tickRandomly = true;
     public int agingRate = 3;
     public float spreadChance = 1;
     public boolean removeOnNoFireTick;
@@ -45,7 +44,6 @@ public class BlockFireBase extends BlockBase {
         this.canBeCrushed = true;
 
         this.noBreakCollision = false;
-        this.isOpaque = false;
 
         this.tickRate = 30; // Default tick rate, configs can set this to 1 to remove this fire block from worlds.
 

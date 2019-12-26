@@ -48,8 +48,6 @@ public class BlockBase extends Block {
 
 	/** If true, this block cannot be broken or even hit like a solid block. **/
 	public boolean noBreakCollision = false;
-	/** Whether or not light can pass through this block, useful for blocks such as glass. Setting this to false will also stop blocks behind it from rendering. **/
-	public boolean isOpaque = true;
 	
 	// Rendering:
 	public static enum RENDER_TYPE {
