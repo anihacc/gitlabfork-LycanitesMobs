@@ -138,6 +138,9 @@ public class BlockBase extends Block {
 	// ==================================================
 	@Override
 	public VoxelShape getShape(BlockState blockState, IBlockReader world, BlockPos blockPos, ISelectionContext selectionContext) {
+    	if(this.noBreakCollision) {
+			return VoxelShapes.empty();
+		}
 		return super.getShape(blockState, world, blockPos, selectionContext);
 	}
 

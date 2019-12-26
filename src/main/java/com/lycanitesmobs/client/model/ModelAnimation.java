@@ -7,7 +7,9 @@ import com.lycanitesmobs.client.model.animation.TextureLayerAnimation;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.ProjectileModelRenderer;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
+import com.lycanitesmobs.client.renderer.layer.LayerProjectileBase;
 
 import java.util.*;
 
@@ -15,6 +17,15 @@ public class ModelAnimation {
 
 	/** A list of model texture layer definitions. **/
     public Map<String, TextureLayerAnimation> textureLayers = new HashMap<>();
+
+    /** The base item layer to use. **/
+	LayerCreatureBase baseCreatureLayer;
+
+    /** The base item layer to use. **/
+	LayerProjectileBase baseProjectileLayer;
+
+    /** The base item layer to use. **/
+	LayerItem baseItemLayer;
 
 	/** A list of part animations. **/
 	public List<ModelPartAnimation> partAnimations = new ArrayList<>();
@@ -55,6 +66,10 @@ public class ModelAnimation {
 	 */
 	public void addCreatureLayers(CreatureRenderer renderer) {
 		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
+			if(textureLayer.name.equals("base")) {
+				this.baseCreatureLayer = textureLayer.createCreatureLayer(renderer);
+				continue;
+			}
 			renderer.addLayer(textureLayer.createCreatureLayer(renderer));
 		}
 	}
@@ -66,6 +81,10 @@ public class ModelAnimation {
 	 */
 	public void addProjectileLayers(ProjectileModelRenderer renderer) {
 		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
+			if(textureLayer.name.equals("base")) {
+				this.baseProjectileLayer = textureLayer.createProjectileLayer(renderer);
+				continue;
+			}
 			renderer.addLayer(textureLayer.createProjectileLayer(renderer));
 		}
 	}
@@ -77,6 +96,10 @@ public class ModelAnimation {
 	 */
 	public void addItemLayers(IItemModelRenderer renderer) {
 		for(TextureLayerAnimation textureLayer : this.textureLayers.values()) {
+			if(textureLayer.name.equals("base")) {
+				this.baseItemLayer = textureLayer.createItemLayer(renderer);
+				continue;
+			}
 			renderer.addLayer(textureLayer.createItemLayer(renderer));
 		}
 	}
@@ -84,16 +107,27 @@ public class ModelAnimation {
 
 	/**
 	 * Returns a layer to use for the base texture or null if none is provided.
-	 * @param renderer The renderer to add the layers to.
 	 * @return Null or a base layer.
 	 */
-	public LayerItem getBaseLayer(IItemModelRenderer renderer) {
-		if(this.textureLayers.containsKey("base")) {
-			TextureLayerAnimation animationLayer = this.textureLayers.get("base");
-			if(animationLayer != null) {
-				return animationLayer.createItemLayer(renderer);
-			}
-		}
-		return null;
+	public LayerCreatureBase getBaseCreatureLayer() {
+		return this.baseCreatureLayer;
+	}
+
+
+	/**
+	 * Returns a layer to use for the base texture or null if none is provided.
+	 * @return Null or a base layer.
+	 */
+	public LayerProjectileBase getBaseProjectileLayer() {
+		return this.baseProjectileLayer;
+	}
+
+
+	/**
+	 * Returns a layer to use for the base texture or null if none is provided.
+	 * @return Null or a base layer.
+	 */
+	public LayerItem getBaseItemLayer() {
+		return this.baseItemLayer;
 	}
 }

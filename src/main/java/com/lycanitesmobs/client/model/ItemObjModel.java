@@ -173,7 +173,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 		this.matrixStack = matrixStack;
 
 		if(layer == null && this.animation != null) {
-			layer = this.animation.getBaseLayer(renderer);
+			layer = this.animation.getBaseItemLayer();
 		}
 
 		// Render Parts:
@@ -228,6 +228,9 @@ public abstract class ItemObjModel implements IAnimationModel {
 	 * @return The brightness to render at.
 	 */
 	public int getBlending(ItemStack itemStack, LayerItem layer) {
+		if(layer == null && this.animation != null) {
+			layer = this.animation.getBaseItemLayer();
+		}
 		if(layer != null) {
 			return layer.getBlending(itemStack);
 		}
@@ -241,6 +244,9 @@ public abstract class ItemObjModel implements IAnimationModel {
 	 * @return The brightness to render at.
 	 */
 	public boolean getGlow(ItemStack itemStack, LayerItem layer) {
+		if(layer == null && this.animation != null) {
+			layer = this.animation.getBaseItemLayer();
+		}
 		if(layer != null) {
 			return layer.getGlow(itemStack);
 		}
@@ -276,11 +282,6 @@ public abstract class ItemObjModel implements IAnimationModel {
 		// Check Animation Part:
 		if(!this.animationParts.containsKey(partName))
 			return false;
-
-		/*/ Check Layer:
-		if(layer != null) {
-			return layer.canRenderPart(partName);
-		}*/
 
 		return true;
 	}
