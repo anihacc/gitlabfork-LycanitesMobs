@@ -54,14 +54,11 @@ public class ModelZephyr extends ModelTemplateElemental {
 			this.rotate(-15, 0, 0);
 		}
 
-		if(partName.equals("armeffectleft") || partName.equals("armeffectright")) {
-			float angleX = 35f;
-			float angleY = -45f;
-			float angleZ = 140f;
-			if(partName.equals("armeffectright")) {
-				angleX = -angleX;
-			}
-			this.angle(loop * 50F, angleX / 360, angleY / 360, angleZ / 360);
+		if(partName.equals("armeffectleft")) {
+			this.angle(loop * 10F, 0, 0.6F, -0.8F);
+		}
+		if(partName.equals("armeffectright")) {
+			this.angle(loop * 10F, 0, -0.6F, 0.8F);
 		}
 
 		super.animatePart(partName, entity, time, distance, loop, lookY, lookX, scale);

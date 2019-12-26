@@ -63,7 +63,7 @@ public class ModelAsmodeus extends CreatureObjModelOld {
     public void addCustomLayers(CreatureRenderer renderer) {
         super.addCustomLayers(renderer);
         renderer.addLayer(new LayerCreatureEffect(renderer, "fire", "fire", true, CustomRenderStates.BLEND.ADD.id, true));
-        renderer.addLayer(new LayerCreatureEffect(renderer, "shield", "shield", true, CustomRenderStates.BLEND.ADD.id, true));
+        renderer.addLayer(new LayerCreatureEffect(renderer, "shield", "", true, CustomRenderStates.BLEND.ADD.id, true));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ModelAsmodeus extends CreatureObjModelOld {
         if(layer != null && entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity creatureEntity = (BaseCreatureEntity)entity;
             if(layer.name.equals("fire")) {
-                return layer.canRenderPart(partName, creatureEntity, trophy) && !creatureEntity.isAttackOnCooldown();
+                return layer.canRenderPart(partName, creatureEntity, trophy) && creatureEntity.isAttackOnCooldown();
             }
             if(layer.name.equals("shield")) {
                 return layer.canRenderPart(partName, creatureEntity, trophy) && creatureEntity.isBlocking();

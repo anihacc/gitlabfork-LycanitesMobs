@@ -51,39 +51,35 @@ public class ModelTremor extends ModelTemplateElemental {
 			float angleZ = 0;
 			if(!partName.contains("arm")) {
 				if (partName.contains("04")) {
-					angleY = 180f;
-					angleZ = 70f;
+					angleZ = 0.3f;
 				}
 				else if (partName.contains("05")) {
-					angleY = 180f;
-					angleZ = 180f;
+					angleY = 0.6f;
+					angleZ = 0.8f;
 				}
 				else if (partName.contains("06")) {
-					angleY = 180f;
-					angleZ = 60f;
+					angleZ = 0.3f;
 				}
 			}
 			else {
+				angleY = 1;
 				if (partName.contains("01")) {
-					angleX = -180f;
-					angleY = 180f;
-					angleZ = -60f;
+					angleX = 0.4f;
+					angleZ = -0.45f;
 				}
 				else if (partName.contains("02")) {
-					angleX = -60f;
-					angleY = 180f;
-					angleZ = -60f;
+					angleX = 0.4f;
+					angleZ = -0.45f;
 				}
 				else if (partName.contains("03")) {
-					angleX = -35f;
-					angleY = 180f;
-					angleZ = -60f;
+					angleX = 0.4f;
+					angleZ = -0.45f;
 				}
-				if(partName.contains("armright")) {
+				if(partName.contains("armleft")) {
 					angleX = -angleX;
 				}
 			}
-			this.angle(loop * 50F, angleX / 360, angleY / 360, angleZ / 360);
+			this.angle(loop * 50F, angleX, angleY, angleZ);
 		}
 	}
 }

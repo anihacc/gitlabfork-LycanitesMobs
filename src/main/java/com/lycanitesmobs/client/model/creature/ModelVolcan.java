@@ -58,14 +58,12 @@ public class ModelVolcan extends ModelTemplateElemental {
 
 		// Hands:
 		if(partName.contains("hand")) {
-			float angleX = 0;
-			float angleY = -90f;
-			float angleZ = 90f;
 			if(partName.contains("right")) {
-				angleY = -angleY;
-				angleZ = -angleZ;
+				this.angle(loop * 10F, 0, -0.9F, 0.5F);
 			}
-			this.angle(loop * 10F, angleX / 360, angleY / 360, angleZ / 360);
+			else {
+				this.angle(loop * 10F, 0, 0.9F, -0.5F);
+			}
 		}
 
 		// Effects:
