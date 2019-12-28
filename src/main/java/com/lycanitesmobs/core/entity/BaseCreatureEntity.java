@@ -2131,6 +2131,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	public void leap(float range, double leapHeight, BlockPos targetPos) {
 		if(targetPos == null)
 			return;
+		if(!this.isFlying()) {
+			this.playJumpSound();
+		}
 		double distance = targetPos.distanceSq(this.getPosition());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
 			double xDist = targetPos.getX() - this.getPosition().getX();

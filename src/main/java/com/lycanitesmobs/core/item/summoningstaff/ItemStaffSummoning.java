@@ -101,8 +101,9 @@ public class ItemStaffSummoning extends BaseItem {
 	// ========== Using ==========
 	@Override
 	public void onUsingTick(ItemStack itemStack, LivingEntity user, int useRemaining) {
-		if(user.isHandActive())
+		if(!user.isHandActive()) {
 			return;
+		}
 		int useTime = this.getUseDuration(itemStack) - useRemaining;
 		if(useTime >= this.getRapidTime(itemStack)) {
 			int rapidRemainder = useTime % this.getRapidTime(itemStack);
