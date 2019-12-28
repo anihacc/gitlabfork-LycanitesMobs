@@ -458,15 +458,15 @@ public class PotionEffects {
 		if(repulsion != null) {
 			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
 				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
-				double xDist = target.posX - attacker.posX;
-				double zDist = target.posZ - attacker.posZ;
+				double xDist = attacker.getPositionVector().x - target.getPositionVector().x;
+				double zDist = attacker.getPositionVector().z - target.getPositionVector().z;
 				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 				double motionCap = 10;
 				if (attacker.motionX < motionCap && attacker.motionX > -motionCap && attacker.motionZ < motionCap && attacker.motionZ > -motionCap) {
 					attacker.addVelocity(
-							(xDist / xzDist * knockback - attacker.motionX * knockback),
+							(xDist / xzDist * knockback - attacker.motionX),
 							0,
-							(zDist / xzDist * knockback - attacker.motionZ * knockback)
+							(zDist / xzDist * knockback - attacker.motionZ)
 					);
 				}
 			}

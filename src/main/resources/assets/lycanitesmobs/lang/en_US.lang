@@ -893,6 +893,11 @@ entity.lycanitesmobs.grue.description=When it is pitch black, you are likely to 
 entity.lycanitesmobs.grue.habitat=Being Shadow Elementals, Grues spawn where it is dark and usually deep underground.
 entity.lycanitesmobs.grue.combat=Grues have a nasty melee attack that inflicts blindness on top of this they will occasionally teleport behind their victim. Also, if their victim has any good effects active, Grues will devour these effects and heal!
 # ========================================================================
+entity.lycanitesmobs.gnekk.name=Gnekk
+entity.lycanitesmobs.gnekk.description=Lean pale Imps that cannot fly but use their wings to whip deadly poisonous.
+entity.lycanitesmobs.gnekk.habitat=Gnekks lurk deep in dark caverns, they have adapted very effectively to this environment.
+entity.lycanitesmobs.gnekk.combat=Gnekks are incredibly fast, can climb and glide and attack rapidly at melee range inflicting plague.
+# ========================================================================
 entity.lycanitesmobs.herma.name=Herma
 entity.lycanitesmobs.herma.description=Giant crabs that usually keep to themselves unless something gets too close!
 entity.lycanitesmobs.herma.habitat=These creatures are found in saltwater oceans and on beaches.
@@ -1299,6 +1304,9 @@ effect.plague.description=Instantly poisons the afflicted and then spreads Plagu
 #
 effect.aphagia=Aphagia
 effect.aphagia.description=Prevents eating and the use of various items.
+#
+effect.repulsion=Repulsion
+effect.repulsion.description=Pushes away attackers and also prevents being picked up or latched onto.
 #
 effect.smited=Smited
 effect.smited.description=Causes the afflicted to burn in sunlight.
