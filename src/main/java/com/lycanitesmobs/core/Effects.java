@@ -237,7 +237,7 @@ public class Effects {
 		// Bleed
 		EffectBase bleed = ObjectManager.getEffect("bleed");
 		if(bleed != null && !entity.getEntityWorld().isRemote) {
-			if(!invulnerable && entity.isPotionActive(bleed) && entity.getEntityWorld().getGameTime() % 20 == 0 && entity.getRidingEntity() != null) {
+			if(!invulnerable && entity.isPotionActive(bleed) && entity.getEntityWorld().getGameTime() % 20 == 0 && entity.getRidingEntity() == null) {
 				if(entity.prevDistanceWalkedModified != entity.distanceWalkedModified) {
 					entity.attackEntityFrom(DamageSource.MAGIC, entity.getActivePotionEffect(bleed).getAmplifier() + 1);
 				}
@@ -458,15 +458,15 @@ public class Effects {
 		if(repulsion != null) {
 			if(attacker != null && !(attacker instanceof IGroupBoss) && target.isPotionActive(repulsion)) {
 				float knockback = target.getActivePotionEffect(repulsion).getAmplifier() + 2;
-				double xDist = target.getPositionVec().getX() - attacker.getPositionVec().getX();
-				double zDist = target.getPositionVec().getZ() - attacker.getPositionVec().getZ();
+				double xDist = attacker.getPositionVec().getX() - target.getPositionVec().getX();
+				double zDist = attacker.getPositionVec().getZ() - target.getPositionVec().getZ();
 				double xzDist = MathHelper.sqrt(xDist * xDist + zDist * zDist);
 				double motionCap = 10;
 				if (attacker.getMotion().getX() < motionCap && attacker.getMotion().getX() > -motionCap && attacker.getMotion().getZ() < motionCap && attacker.getMotion().getZ() > -motionCap) {
 					attacker.addVelocity(
-							(xDist / xzDist * knockback - attacker.getMotion().getX() * knockback),
+							(xDist / xzDist * knockback - attacker.getMotion().getX()),
 							0,
-							(zDist / xzDist * knockback - attacker.getMotion().getZ() * knockback)
+							(zDist / xzDist * knockback - attacker.getMotion().getZ())
 					);
 				}
 			}

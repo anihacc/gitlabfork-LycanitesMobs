@@ -1048,6 +1048,34 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/grue/jump", "stream": false}]
     },
+    "entity.gnekk.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/say", "stream": false}]
+    },
+    "entity.gnekk.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/hurt", "stream": false}]
+    },
+    "entity.gnekk.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/death", "stream": false}]
+    },
+    "entity.gnekk.attack": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/attack", "stream": false}]
+    },
+    "entity.gnekk.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/beg", "stream": false}]
+    },
+    "entity.gnekk.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/tame", "stream": false}]
+    },
+    "entity.gnekk.jump": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/jump", "stream": false}]
+    },
     "entity.nymph.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/nymph/say", "stream": false}]
