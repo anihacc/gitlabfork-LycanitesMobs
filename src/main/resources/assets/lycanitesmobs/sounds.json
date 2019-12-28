@@ -220,6 +220,10 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/arix/eat", "stream": false}]
     },
+    "entity.arix.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/arix/step", "stream": false}]
+    },
     "entity.arix.fly": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/arix/fly", "stream": false}]
@@ -1064,6 +1068,10 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gnekk/attack", "stream": false}]
     },
+    "entity.gnekk.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/step", "stream": false}]
+    },
     "entity.gnekk.beg": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gnekk/beg", "stream": false}]
@@ -1071,6 +1079,10 @@
     "entity.gnekk.tame": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/gnekk/tame", "stream": false}]
+    },
+    "entity.gnekk.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/eat/jump", "stream": false}]
     },
     "entity.gnekk.jump": {
         "category": "hostile",
@@ -1662,6 +1674,10 @@
     "entity.afrit.eat": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/afrit/eat", "stream": false}]
+    },
+    "entity.afrit.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/afrit/step", "stream": false}]
     },
     "entity.afrit.fly": {
         "category": "hostile",

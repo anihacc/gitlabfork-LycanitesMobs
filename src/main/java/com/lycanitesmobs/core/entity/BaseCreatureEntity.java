@@ -2087,6 +2087,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * Tip: Use a negative height for flying and swimming mobs so that they can swoop down in the air or water.
     **/
     public void leap(double distance, double leapHeight) {
+    	if(!this.isFlying()) {
+    		this.playJumpSound();
+		}
     	float yaw = this.rotationYaw;
     	float pitch = this.rotationPitch;
     	double angle = Math.toRadians(yaw);
@@ -2517,14 +2520,20 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		}
 
     	if(this.attackEntityAsMob(target, damageScale)) {
-    		
-    		// Spread Fire:
-        	if(this.spreadFire && this.isBurning() && this.rand.nextFloat() < this.creatureStats.getEffect())
-        		target.setFire(this.getEffectDuration(4) / 20);
 
-        	// Element Effects:
-			if(target instanceof LivingEntity && this.creatureStats.getAmplifier() >= 0) {
-				this.applyDebuffs((LivingEntity)target, 1, 1);
+    		// Apply Melee Damage Effects If Not Blocked:
+			if(target instanceof LivingEntity) {
+				LivingEntity livingTarget = (LivingEntity)target;
+				if(!(livingTarget.isActiveItemStackBlocking() && livingTarget.getActiveItemStack().isShield(livingTarget))) {
+					// Spread Fire:
+					if (this.spreadFire && this.isBurning() && this.rand.nextFloat() < this.creatureStats.getEffect())
+						target.setFire(this.getEffectDuration(4) / 20);
+
+					// Element Effects:
+					if (this.creatureStats.getAmplifier() >= 0) {
+						this.applyDebuffs(livingTarget, 1, 1);
+					}
+				}
 			}
 
 			this.triggerAttackCooldown();
@@ -2702,8 +2711,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		boolean targetIsShielding = false;
 		if (target instanceof PlayerEntity) {
 			PlayerEntity targetPlayer = (PlayerEntity)target;
-			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
-			targetIsShielding = !playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer);
+			targetIsShielding = targetPlayer.isActiveItemStackBlocking() && targetPlayer.getActiveItemStack().isShield(targetPlayer);
 		}
 
 		// Attempt The Attack:
@@ -2716,10 +2724,12 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 		}
         else {
-        	int hurtResistantTimeBefore = target.hurtResistantTime;
-        	target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
-        	target.hurtResistantTime = hurtResistantTimeBefore;
-    		damage -= pierceDamage;
+        	if(pierceDamage > 0) {
+				int hurtResistantTimeBefore = target.hurtResistantTime;
+				target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+				target.hurtResistantTime = hurtResistantTimeBefore;
+				damage -= pierceDamage;
+			}
         	attackSuccess = target.attackEntityFrom(this.getDamageSource(null), damage);
         }
 
@@ -4079,6 +4089,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.damageLimit > 0) {
 			if (this.damageTakenThisSec >= this.damageLimit)
 				return true;
+		}
+
+    	// Fire Damage:
+		if(source.isFireDamage() && !this.canBurn()) {
+			return true;
 		}
 
     	// Element Damage:

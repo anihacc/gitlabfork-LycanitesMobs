@@ -358,7 +358,7 @@ public class ItemEquipment extends BaseItem {
 	// ==================================================
 	@Override
 	public UseAction getUseAction(ItemStack itemStack) {
-		return UseAction.BLOCK;
+		return UseAction.BOW;
 	}
 
 	@Override
@@ -381,7 +381,7 @@ public class ItemEquipment extends BaseItem {
 
 		if(active) {
 			player.setActiveHand(hand);
-			return new ActionResult<>(ActionResultType.PASS, itemStack);
+			return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
 		}
 		return new ActionResult<>(ActionResultType.FAIL, itemStack);
 	}

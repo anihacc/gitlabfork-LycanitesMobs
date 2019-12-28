@@ -13,7 +13,7 @@
 			{
 				"effectId": "minecraft:dolphins_grace",
 				"duration": 20,
-				"amplifier": 1,
+				"amplifier": 2,
 				"chance": 1.0
 			}
 		]

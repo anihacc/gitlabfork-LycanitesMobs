@@ -100,14 +100,14 @@ public class ItemStaffSummoning extends BaseItem {
 
 	// ========== Using ==========
 	@Override
-	public void onUsingTick(ItemStack itemStack, LivingEntity entity, int useRemaining) {
-		if(itemStack == null || entity == null)
+	public void onUsingTick(ItemStack itemStack, LivingEntity user, int useRemaining) {
+		if(user.isHandActive())
 			return;
 		int useTime = this.getUseDuration(itemStack) - useRemaining;
 		if(useTime >= this.getRapidTime(itemStack)) {
 			int rapidRemainder = useTime % this.getRapidTime(itemStack);
 			if(rapidRemainder == 0) {
-				if(this.rapidAttack(itemStack, entity.getEntityWorld(), entity)) {
+				if(this.rapidAttack(itemStack, user.getEntityWorld(), user)) {
 					this.weaponFlash = Math.max(20, this.getRapidTime(itemStack));
 				}
 			}
@@ -115,7 +115,7 @@ public class ItemStaffSummoning extends BaseItem {
 		if(useTime >= this.getChargeTime(itemStack))
 			this.weaponFlash = Math.max(20, this.getChargeTime(itemStack));
 
-		super.onUsingTick(itemStack, entity, useRemaining);
+		super.onUsingTick(itemStack, user, useRemaining);
 	}
 
 	// ========== Stop ==========

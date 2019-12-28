@@ -81,12 +81,17 @@ public class ItemInfo {
 				Iterator<JsonElement> jsonIterator = effectsJson.iterator();
 				while (jsonIterator.hasNext()) {
 					JsonObject foodEffectJson = jsonIterator.next().getAsJsonObject();
-					String[] effectIds = foodEffectJson.get("effectId").getAsString().split(":"); // Can't get effects from registry yet, this means no effects from other mods. :(
+					String effectId = foodEffectJson.get("effectId").getAsString();
+					String[] effectIds = effectId.split(":"); // Can't get effects from registry yet, this means no effects from other mods. :(
 					Effect effect;
 					if("minecraft".equals(effectIds[0]))
 						effect = ObjectLists.allEffects.get(effectIds[1]);
 					else
 						effect = ObjectManager.getEffect(effectIds[1]);
+					if(effect == null) {
+						LycanitesMobs.logWarning("", "Unable to add food effect: " + effectId);
+						continue;
+					}
 					EffectInstance effectInstance = new EffectInstance(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
 
 					float chance = 1F;

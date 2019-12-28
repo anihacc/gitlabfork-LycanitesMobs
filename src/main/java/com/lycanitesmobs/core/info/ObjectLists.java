@@ -222,7 +222,8 @@ public class ObjectLists {
         ObjectLists.addEffect("buffs", Effects.GLOWING, "glowing");
         ObjectLists.addEffect("buffs", Effects.LEVITATION, "levitation");
         ObjectLists.addEffect("buffs", Effects.LUCK, "luck");
-		
+        ObjectLists.addEffect("buffs", Effects.DOLPHINS_GRACE, "dolphins_grace");
+
 		// Debuffs:
         ObjectLists.addEffect("debuffs", Effects.BLINDNESS, "blindness");
         ObjectLists.addEffect("debuffs", Effects.NAUSEA, "nausea");

@@ -103,7 +103,7 @@ public class BlockSummoningPedestal extends BlockBase {
                 NetworkHooks.openGui((ServerPlayerEntity)player, new SummoningPedestalContainerProvider((TileEntitySummoningPedestal)tileEntity), buf -> buf.writeBlockPos(pos));
             }
         }
-        return super.func_225533_a_(state, world, pos, player, handIn, hit);
+        return ActionResultType.SUCCESS;
     }
 
     @Override
