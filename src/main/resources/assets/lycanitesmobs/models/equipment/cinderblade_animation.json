@@ -2,7 +2,8 @@
 	"textureLayers": [
 		{
 			"name": "base",
-			"scrollSpeedX": 16
+			"scrollSpeedX": 16,
+			"glow": true
 		}
 	]
 }
