@@ -348,7 +348,7 @@ public class ItemEquipment extends ItemBase {
 	// ==================================================
 	@Override
 	public EnumAction getItemUseAction(ItemStack itemStack) {
-		return EnumAction.NONE;
+		return EnumAction.BOW;
 	}
 
 	@Override
@@ -371,7 +371,7 @@ public class ItemEquipment extends ItemBase {
 
 		if(active) {
 			player.setActiveHand(hand);
-			return new ActionResult<>(EnumActionResult.PASS, itemStack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 		}
 		return new ActionResult<>(EnumActionResult.FAIL, itemStack);
 	}

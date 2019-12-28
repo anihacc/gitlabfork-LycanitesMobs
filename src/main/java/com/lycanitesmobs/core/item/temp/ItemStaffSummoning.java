@@ -155,8 +155,7 @@ public class ItemStaffSummoning extends ItemScepter {
     	return false;
     }
 
-    private void damage_item(ItemStack itemStack, int amountToDamage, EntityLivingBase entity)
-    {
+    private void damage_item(ItemStack itemStack, int amountToDamage, EntityLivingBase entity) {
         itemStack.damageItem(amountToDamage, entity);
         if (itemStack.getCount() == 0) {
             if (entity.getHeldItem(EnumHand.MAIN_HAND).equals(itemStack)) {

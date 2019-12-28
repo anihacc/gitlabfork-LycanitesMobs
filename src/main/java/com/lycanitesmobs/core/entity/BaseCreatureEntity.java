@@ -2367,6 +2367,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
      * Tip: Use a negative height for flying and swimming mobs so that they can swoop down in the air or water.
     **/
     public void leap(double distance, double leapHeight) {
+		if(!this.isFlying()) {
+			this.playJumpSound();
+		}
     	float yaw = this.rotationYaw;
     	float pitch = this.rotationPitch;
     	double angle = Math.toRadians(yaw);
@@ -2408,6 +2411,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	public void leap(float range, double leapHeight, BlockPos targetPos) {
 		if(targetPos == null)
 			return;
+		if(!this.isFlying()) {
+			this.playJumpSound();
+		}
 		double distance = targetPos.distanceSq(this.getPosition());
 		if(distance > 2.0F * 2.0F && distance <= range * range) {
 			double xDist = targetPos.getX() - this.getPosition().getX();
@@ -2843,14 +2849,20 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 
     	if(this.attackEntityAsMob(target, damageScale)) {
-    		
-    		// Spread Fire:
-        	if(this.spreadFire && this.isBurning() && this.rand.nextFloat() < this.creatureStats.getEffect())
-        		target.setFire(this.getEffectDuration(4) / 20);
 
-        	// Element Effects:
-			if(target instanceof EntityLivingBase && this.creatureStats.getAmplifier() >= 0) {
-				this.applyDebuffs((EntityLivingBase)target, 1, 1);
+			// Apply Melee Damage Effects If Not Blocked:
+			if(target instanceof EntityLivingBase) {
+				EntityLivingBase livingTarget = (EntityLivingBase)target;
+				if(!(livingTarget.isActiveItemStackBlocking() && livingTarget.getActiveItemStack().getItem().isShield(livingTarget.getActiveItemStack(), livingTarget))) {
+					// Spread Fire:
+					if (this.spreadFire && this.isBurning() && this.rand.nextFloat() < this.creatureStats.getEffect())
+						target.setFire(this.getEffectDuration(4) / 20);
+
+					// Element Effects:
+					if (this.creatureStats.getAmplifier() >= 0) {
+						this.applyDebuffs(livingTarget, 1, 1);
+					}
+				}
 			}
 
 			this.triggerAttackCooldown();
@@ -3032,8 +3044,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		boolean targetIsShielding = false;
 		if (target instanceof EntityPlayer) {
 			EntityPlayer targetPlayer = (EntityPlayer)target;
-			ItemStack playerActiveItemStack = targetPlayer.isHandActive() ? targetPlayer.getActiveItemStack() : ItemStack.EMPTY;
-			targetIsShielding = !playerActiveItemStack.isEmpty() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer);
+			ItemStack playerActiveItemStack = targetPlayer.getActiveItemStack();
+			targetIsShielding = targetPlayer.isActiveItemStackBlocking() && playerActiveItemStack.getItem().isShield(playerActiveItemStack, targetPlayer);
 		}
 
 		// Attempt The Attack:
@@ -3046,10 +3058,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			attackSuccess = target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 		}
         else {
-        	int hurtResistantTimeBefore = target.hurtResistantTime;
-        	target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float)pierceDamage);
-        	target.hurtResistantTime = hurtResistantTimeBefore;
-    		damage -= pierceDamage;
+			if(pierceDamage > 0) {
+				int hurtResistantTimeBefore = target.hurtResistantTime;
+				target.attackEntityFrom(this.getDamageSource(null).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+				target.hurtResistantTime = hurtResistantTimeBefore;
+				damage -= pierceDamage;
+			}
         	attackSuccess = target.attackEntityFrom(this.getDamageSource(null), damage);
         }
 

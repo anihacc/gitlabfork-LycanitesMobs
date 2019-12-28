@@ -213,52 +213,52 @@ public class BaseProjectileEntity extends EntityThrowable {
 			if(doDamage) {
  				if(rayTraceResult.entityHit instanceof EntityLivingBase) {
  					EntityLivingBase target = (EntityLivingBase)rayTraceResult.entityHit;
- 					if(this.onEntityLivingDamage(target)) {
- 						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((EntityLivingBase)movingObjectPosition.entityHit));
+ 					boolean attackSuccess;
+					float damage = this.getDamage(target);
 
-                        boolean attackSuccess = false;
- 						float damage = this.getDamage(target);
+					if(damage != 0) {
+						float damageInit = damage;
 
- 						if(damage != 0) {
-							float damageInit = damage;
-
-							// Prevent Knockback:
-							double targetKnockbackResistance = 0;
-							boolean stopKnockback = false;
-							if (this.knockbackChance < 1) {
-								if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-									if (target instanceof EntityLivingBase) {
-										targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
-										target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-										stopKnockback = true;
-									}
+						// Prevent Knockback:
+						double targetKnockbackResistance = 0;
+						boolean stopKnockback = false;
+						if (this.knockbackChance < 1) {
+							if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
+								if (target instanceof EntityLivingBase) {
+									targetKnockbackResistance = target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue();
+									target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+									stopKnockback = true;
 								}
 							}
+						}
 
-							// Deal Damage:
-							if (this.getThrower() instanceof BaseCreatureEntity) {
-								BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
-								attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
-							}
+						// Deal Damage:
+						if (this.getThrower() instanceof BaseCreatureEntity) {
+							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
+							attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
+						}
+						else {
+							double pierceDamage = this.pierce;
+							if (damage <= pierceDamage)
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
 							else {
-								double pierceDamage = this.pierce;
-								if (damage <= pierceDamage)
-									attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
-								else {
-									int hurtResistantTimeBefore = target.hurtResistantTime;
-									target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
-									target.hurtResistantTime = hurtResistantTimeBefore;
-									damage -= pierceDamage;
-									attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
-								}
+								int hurtResistantTimeBefore = target.hurtResistantTime;
+								target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+								target.hurtResistantTime = hurtResistantTimeBefore;
+								damage -= pierceDamage;
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
 							}
+						}
 
-							this.onDamage(target, damageInit, attackSuccess);
+						// Apply Damage Effects If Not Blocking:
+						if(!(target.isActiveItemStackBlocking() && target.getActiveItemStack().getItem().isShield(target.getActiveItemStack(), target))) {
+							this.onEntityLivingDamage(target); // Old Projectiles
+							this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
+						}
 
-							// Restore Knockback:
-							if (stopKnockback) {
-								target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
-							}
+						// Restore Knockback:
+						if (stopKnockback) {
+							target.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 						}
  					}
  				}
