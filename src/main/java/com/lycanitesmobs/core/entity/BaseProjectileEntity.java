@@ -246,54 +246,54 @@ public class BaseProjectileEntity extends ThrowableEntity {
 			if(doDamage) {
  				if(entityHit instanceof LivingEntity) {
  					LivingEntity target = (LivingEntity)entityHit;
- 					if(this.onEntityLivingDamage(target)) {
- 						//movingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getDamage((LivingEntity)movingObjectPosition.entityHit));
+ 					boolean attackSuccess;
+					float damage = this.getDamage(target);
 
-				    boolean attackSuccess = false;
- 						float damage = this.getDamage(target);
+					if(damage != 0) {
+						float damageInit = damage;
 
- 						if(damage != 0) {
-							float damageInit = damage;
-
-							// Prevent Knockback:
-							double targetKnockbackResistance = 0;
-							boolean stopKnockback = false;
-							if (this.knockbackChance < 1) {
-								if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
-									if (target instanceof LivingEntity) {
-										targetKnockbackResistance = target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
-										target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-										stopKnockback = true;
-									}
+						// Prevent Knockback:
+						double targetKnockbackResistance = 0;
+						boolean stopKnockback = false;
+						if (this.knockbackChance < 1) {
+							if (this.knockbackChance <= 0 || this.rand.nextDouble() <= this.knockbackChance) {
+								if (target instanceof LivingEntity) {
+									targetKnockbackResistance = target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getValue();
+									target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+									stopKnockback = true;
 								}
-							}
-
-							// Deal Damage:
-							if (this.getThrower() instanceof BaseCreatureEntity) {
-								BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
-								attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
-							}
-							else {
-								double pierceDamage = this.pierce;
-								if (damage <= pierceDamage)
-									attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
-								else {
-									int hurtResistantTimeBefore = target.hurtResistantTime;
-									target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
-									target.hurtResistantTime = hurtResistantTimeBefore;
-									damage -= pierceDamage;
-									attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
-								}
-							}
-
-							this.onDamage(target, damageInit, attackSuccess);
-
-							// Restore Knockback:
-							if (stopKnockback) {
-								target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
 							}
 						}
- 					}
+
+						// Deal Damage:
+						if (this.getThrower() instanceof BaseCreatureEntity) {
+							BaseCreatureEntity creatureThrower = (BaseCreatureEntity) this.getThrower();
+							attackSuccess = creatureThrower.doRangedDamage(target, this, damage);
+						}
+						else {
+							double pierceDamage = this.pierce;
+							if (damage <= pierceDamage)
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), damage);
+							else {
+								int hurtResistantTimeBefore = target.hurtResistantTime;
+								target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()).setDamageBypassesArmor().setDamageIsAbsolute(), (float) pierceDamage);
+								target.hurtResistantTime = hurtResistantTimeBefore;
+								damage -= pierceDamage;
+								attackSuccess = target.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), damage);
+							}
+						}
+
+						// Apply Damage Effects If Not Blocking:
+						if(!(target.isActiveItemStackBlocking() && target.getActiveItemStack().isShield(target))) {
+							this.onEntityLivingDamage(target); // Old Projectiles
+							this.onDamage(target, damageInit, attackSuccess); // JSON Projectiles
+						}
+
+						// Restore Knockback:
+						if (stopKnockback) {
+							target.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(targetKnockbackResistance);
+						}
+					}
  				}
  			}
  			collided = true;
@@ -442,7 +442,7 @@ public class BaseProjectileEntity extends ThrowableEntity {
 	//========== Entity Collision ==========
 	public void onEntityCollision(Entity entity) {}
 	
-	//========== Entity Living Collision ==========
+	//========== Entity Living Damage ==========
 	public boolean onEntityLivingDamage(LivingEntity entityLiving) {
     	 return true;
 	}
