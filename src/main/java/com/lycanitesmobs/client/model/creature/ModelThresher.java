@@ -2,9 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateAquatic;
-import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.CreatureRenderer;
-
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.specific.LayerThresher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

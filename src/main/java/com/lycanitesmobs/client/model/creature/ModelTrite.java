@@ -1,7 +1,6 @@
 package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
-
 import com.lycanitesmobs.client.model.template.ModelTemplateInsect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;

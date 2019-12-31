@@ -2,10 +2,10 @@ package com.lycanitesmobs.core.dungeon.definition;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
-import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class SectorLayer {
 	/** Sector Layers make up Sector Segments. **/

@@ -1,13 +1,11 @@
 package com.lycanitesmobs.core;
 
 import com.lycanitesmobs.LycanitesMobs;
-import net.minecraft.util.ResourceLocation;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.*;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.*;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;

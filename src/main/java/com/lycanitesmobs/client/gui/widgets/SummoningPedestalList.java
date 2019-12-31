@@ -1,11 +1,10 @@
 package com.lycanitesmobs.client.gui.widgets;
 
 import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.client.gui.SummoningPedestalScreen;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

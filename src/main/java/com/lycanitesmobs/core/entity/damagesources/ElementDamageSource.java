@@ -2,9 +2,7 @@ package com.lycanitesmobs.core.entity.damagesources;
 
 import com.lycanitesmobs.core.info.ElementInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.text.ITextComponent;
 
 public class ElementDamageSource extends EntityDamageSource {
     private ElementInfo element;

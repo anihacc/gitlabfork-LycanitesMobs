@@ -2,7 +2,6 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateDragon;
-
 import net.minecraft.entity.LivingEntity;
 
 public class ModelIgnibus extends ModelTemplateDragon {

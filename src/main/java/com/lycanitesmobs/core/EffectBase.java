@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.TextureManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.DisplayEffectsScreen;

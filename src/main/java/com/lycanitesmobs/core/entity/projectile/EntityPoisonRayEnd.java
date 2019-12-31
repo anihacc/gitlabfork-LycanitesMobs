@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.entity.projectile;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;

@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
 import com.lycanitesmobs.core.container.EquipmentSlot;

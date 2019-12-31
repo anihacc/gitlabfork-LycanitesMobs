@@ -1,10 +1,10 @@
 package com.lycanitesmobs.core.item.summoningstaff;
 
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.PortalEntity;
+import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.BaseItem;
 import com.lycanitesmobs.core.pets.SummonSet;

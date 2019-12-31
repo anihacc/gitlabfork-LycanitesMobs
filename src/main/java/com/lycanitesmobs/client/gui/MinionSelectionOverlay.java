@@ -1,10 +1,9 @@
 package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.client.TextureManager;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.client.gui.buttons.CreatureButton;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import net.minecraft.client.Minecraft;

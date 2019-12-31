@@ -1,7 +1,6 @@
 package com.lycanitesmobs;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 

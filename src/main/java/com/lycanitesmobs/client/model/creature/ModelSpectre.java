@@ -2,11 +2,10 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
+import com.lycanitesmobs.client.renderer.CreatureRenderer;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
-import com.lycanitesmobs.client.renderer.CreatureRenderer;
-
 import com.lycanitesmobs.core.entity.creature.EntitySpectre;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

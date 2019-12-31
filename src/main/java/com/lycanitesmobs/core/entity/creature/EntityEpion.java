@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityBloodleech;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;

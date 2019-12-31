@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.block;
 
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainerProvider;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import net.minecraft.block.Block;

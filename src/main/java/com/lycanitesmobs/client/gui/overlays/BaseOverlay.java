@@ -1,11 +1,11 @@
 package com.lycanitesmobs.client.gui.overlays;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.ExtendedWorld;
-import com.lycanitesmobs.core.entity.RideableCreatureEntity;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.BaseGui;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.item.summoningstaff.ItemStaffSummoning;
 import com.lycanitesmobs.core.mobevent.MobEventPlayerClient;
 import com.mojang.blaze3d.platform.GlStateManager;

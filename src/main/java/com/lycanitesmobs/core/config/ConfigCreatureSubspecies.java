@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.config;
 
 import com.lycanitesmobs.core.entity.CreatureStats;
-import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
 import net.minecraftforge.common.ForgeConfigSpec;
 

@@ -5,7 +5,6 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.passive.AnimalEntity;
 
 public class FindParentGoal extends TargetingGoal {
 	// Targets:

@@ -1,7 +1,5 @@
 package com.lycanitesmobs.core.info;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.helpers.JSONHelper;
@@ -13,7 +11,6 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DungeonHooks;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /** Contains default spawn conditions for a creature. **/

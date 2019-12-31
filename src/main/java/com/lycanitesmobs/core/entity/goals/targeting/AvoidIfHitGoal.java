@@ -1,13 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureGroup;
-import net.minecraft.entity.LivingEntity;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class AvoidIfHitGoal extends FindAvoidTargetGoal {
 

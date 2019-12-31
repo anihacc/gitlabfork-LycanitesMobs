@@ -1,12 +1,12 @@
 package com.lycanitesmobs.client.gui;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;

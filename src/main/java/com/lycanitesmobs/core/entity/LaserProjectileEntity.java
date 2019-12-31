@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity;
 import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;

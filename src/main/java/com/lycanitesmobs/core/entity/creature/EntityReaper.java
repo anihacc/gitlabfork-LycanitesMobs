@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;

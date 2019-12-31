@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.mobevent.trigger;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.mobevent.MobEvent;
-import net.minecraft.world.World;
 
 public class RandomMobEventTrigger extends MobEventTrigger {
 	/** The weight of this Trigger, higher weights means that it is most likely to get picked. **/

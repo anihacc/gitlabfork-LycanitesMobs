@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.mobevent.trigger;
 
 import com.google.gson.JsonObject;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.AltarInfo;
 import com.lycanitesmobs.core.mobevent.MobEvent;
 import net.minecraft.entity.Entity;

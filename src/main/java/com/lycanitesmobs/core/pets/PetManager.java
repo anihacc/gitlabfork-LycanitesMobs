@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.pets;
 
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;

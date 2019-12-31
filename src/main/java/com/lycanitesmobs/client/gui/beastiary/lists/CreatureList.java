@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client.gui.beastiary.lists;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.beastiary.BeastiaryScreen;
 import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
@@ -12,7 +12,10 @@ import com.lycanitesmobs.core.pets.PetEntry;
 
 import javax.annotation.Nullable;
 import java.text.Collator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 public class CreatureList extends BaseList<BeastiaryScreen> {
 	public enum Type {

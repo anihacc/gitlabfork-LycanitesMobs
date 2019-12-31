@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.network;
 
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.pets.PetEntry;
 import com.lycanitesmobs.core.pets.PetManager;
 import net.minecraft.entity.player.PlayerEntity;

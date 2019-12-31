@@ -1,7 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.goals.actions.PaddleGoal;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;

@@ -1,11 +1,11 @@
 package com.lycanitesmobs.core.mobevent;
 
-import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.MobEventSound;
+import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
+import com.lycanitesmobs.core.MobEventSound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.PlayerEntity;
