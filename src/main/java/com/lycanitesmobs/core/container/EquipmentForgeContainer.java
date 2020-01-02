@@ -49,33 +49,33 @@ public class EquipmentForgeContainer extends BaseContainer {
 			int y = 38;
 
 			// Crafted Piece:
-			EquipmentSlot equipmentSlotPiece = new EquipmentSlot(this, slots++, x + (slotSize * 6), y, "piece");
+			EquipmentForgeSlot equipmentSlotPiece = new EquipmentForgeSlot(this, slots++, x + (slotSize * 6), y, "piece");
 			this.addSlot(equipmentSlotPiece);
 
 			// Base:
-			EquipmentSlot equipmentSlotBase = new EquipmentSlot(this, slots++, x + slotSize, y, "base");
+			EquipmentForgeSlot equipmentSlotBase = new EquipmentForgeSlot(this, slots++, x + slotSize, y, "base");
 			this.addSlot(equipmentSlotBase);
 
 			// Head:
-			EquipmentSlot equipmentSlotHead = new EquipmentSlot(this, slots++, x + (slotSize * 2), y, "none");
+			EquipmentForgeSlot equipmentSlotHead = new EquipmentForgeSlot(this, slots++, x + (slotSize * 2), y, "none");
 			this.addSlot(equipmentSlotHead);
 			equipmentSlotBase.addChildSlot(equipmentSlotHead);
 
 			// Tips:
-			EquipmentSlot equipmentSlotTipA = new EquipmentSlot(this, slots++, x + (slotSize * 3), y, "none");
+			EquipmentForgeSlot equipmentSlotTipA = new EquipmentForgeSlot(this, slots++, x + (slotSize * 3), y, "none");
 			this.addSlot(equipmentSlotTipA);
 			equipmentSlotHead.addChildSlot(equipmentSlotTipA);
 
-			EquipmentSlot equipmentSlotTipB = new EquipmentSlot(this, slots++, x + (slotSize * 2), y - slotSize, "none");
+			EquipmentForgeSlot equipmentSlotTipB = new EquipmentForgeSlot(this, slots++, x + (slotSize * 2), y - slotSize, "none");
 			this.addSlot(equipmentSlotTipB);
 			equipmentSlotHead.addChildSlot(equipmentSlotTipB);
 
-			EquipmentSlot equipmentSlotTipC = new EquipmentSlot(this, slots++, x + (slotSize * 2), y + slotSize, "none");
+			EquipmentForgeSlot equipmentSlotTipC = new EquipmentForgeSlot(this, slots++, x + (slotSize * 2), y + slotSize, "none");
 			this.addSlot(equipmentSlotTipC);
 			equipmentSlotHead.addChildSlot(equipmentSlotTipC);
 
 			// Pommel:
-			EquipmentSlot equipmentSlotPommel = new EquipmentSlot(this, slots++, x, y, "none");
+			EquipmentForgeSlot equipmentSlotPommel = new EquipmentForgeSlot(this, slots++, x, y, "none");
 			this.addSlot(equipmentSlotPommel);
 			equipmentSlotBase.addChildSlot(equipmentSlotPommel);
 		}
@@ -97,20 +97,20 @@ public class EquipmentForgeContainer extends BaseContainer {
 	 * Called when an equipment piece slot's contents is changed.
 	 * @param equipmentSlot The equipment slot that changed. This must be a piece type slot.
 	 */
-	public void onEquipmentPieceSlotChanged(EquipmentSlot equipmentSlot) {
+	public void onEquipmentPieceSlotChanged(EquipmentForgeSlot equipmentSlot) {
 		if(this.equipmentForge == null) {
 			return;
 		}
 		this.clearPartSlots();
 
 		// Edit Equipment Piece:
-		EquipmentSlot slotBase = (EquipmentSlot)this.getSlot(this.inventoryStart + 1);
+		EquipmentForgeSlot slotBase = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 1);
 		if(equipmentSlot.getHasStack() && !slotBase.getHasStack() && equipmentSlot.getStack().getItem() instanceof ItemEquipment) { // Only edit if not already creating a new piece.
-			EquipmentSlot slotHead = (EquipmentSlot)this.getSlot(this.inventoryStart + 2);
-			EquipmentSlot slotTipA = (EquipmentSlot)this.getSlot(this.inventoryStart + 3);
-			EquipmentSlot slotTipB = (EquipmentSlot)this.getSlot(this.inventoryStart + 4);
-			EquipmentSlot slotTipC = (EquipmentSlot)this.getSlot(this.inventoryStart + 5);
-			EquipmentSlot slotPommel = (EquipmentSlot)this.getSlot(this.inventoryStart + 6);
+			EquipmentForgeSlot slotHead = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 2);
+			EquipmentForgeSlot slotTipA = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 3);
+			EquipmentForgeSlot slotTipB = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 4);
+			EquipmentForgeSlot slotTipC = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 5);
+			EquipmentForgeSlot slotPommel = (EquipmentForgeSlot)this.getSlot(this.inventoryStart + 6);
 
 			ItemEquipment itemEquipment = (ItemEquipment) equipmentSlot.getStack().getItem();
 			int axeIndex = 0;
@@ -148,7 +148,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 	 * Called when an equipment part slot's contents is changed.
 	 * @param equipmentSlot The equipment slot that changed. This must be any type of part slot.
 	 */
-	public void onEquipmentPartSlotChanged(EquipmentSlot equipmentSlot) {
+	public void onEquipmentPartSlotChanged(EquipmentForgeSlot equipmentSlot) {
 		if(this.equipmentForge == null) {
 			return;
 		}
@@ -197,8 +197,8 @@ public class EquipmentForgeContainer extends BaseContainer {
 	public void clearPartSlots() {
 		for(int i = 1; i <= 6; i++) {
 			Slot slot = this.getSlot(this.inventoryStart + i);
-			if(slot instanceof EquipmentSlot) {
-				EquipmentSlot equipmentSlot = (EquipmentSlot)slot;
+			if(slot instanceof EquipmentForgeSlot) {
+				EquipmentForgeSlot equipmentSlot = (EquipmentForgeSlot)slot;
 				equipmentSlot.putStackWithoutUpdate(ItemStack.EMPTY);
 			}
 		}

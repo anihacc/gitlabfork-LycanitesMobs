@@ -14,7 +14,6 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
@@ -124,8 +123,28 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawHealth(backX, backY);
+		this.drawBars(backX, backY);
     }
+
+	protected void drawBars(int backX, int backY) {
+		int barWidth = 100;
+		int barHeight = 11;
+		int barX = backX - barWidth;
+		int barY = backY + 54 + 18;
+		int barCenter = barX + (barWidth / 2);
+		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		float healthNormal = this.creature.getHealth() / this.creature.getMaxHealth();
+		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
+		String healthText = new TranslationTextComponent("entity.health").getFormattedText() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
+		this.fontRenderer.drawString(healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+
+		barY += barHeight + 1;
+		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		float experienceNormal = (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel();
+		this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+		String experienceText = new TranslationTextComponent("entity.experience").getFormattedText() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
+		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+	}
 
 	@Override
 	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
@@ -155,26 +174,6 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         int creatureHeight = 54;
         this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
 		InventoryScreen.func_228187_a_(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature); // drawEntityOnScreen()
-	}
-
-	protected void drawHealth(int backX, int backY) {
-        int barWidth = 100;
-        int barHeight = 11;
-        int barX = backX - barWidth;
-        int barY = backY + 54 + 18;
-        int barCenter = barX + (barWidth / 2);
-		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-		float healthNormal = this.creature.getHealth() / this.creature.getMaxHealth();
-		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
-		String healthText = new TranslationTextComponent("entity.health").getFormattedText() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
-		this.fontRenderer.drawString(healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
-
-		barY += barHeight + 1;
-		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-		float experienceNormal = (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel();
-		this.drawTexture(TextureManager.getTexture("GUIPetBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
-		String experienceText = new TranslationTextComponent("entity.experience").getFormattedText() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
-		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	protected void drawSlots(int backX, int backY) {

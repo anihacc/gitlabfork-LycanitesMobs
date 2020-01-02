@@ -3780,9 +3780,9 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     // ========== Drop Item ==========
     /** Tells this entity to drop the specified itemStack, used by DropRate and InventoryCreature, can be used by anything though. **/
     public void dropItem(ItemStack itemStack) {
-    	if(itemStack.getItem() instanceof ItemEquipmentPart) {
-			((ItemEquipmentPart)itemStack.getItem()).initializePart(this.world, itemStack);
-		}
+    	/*if(itemStack.getItem() instanceof ItemEquipmentPart) {
+			((ItemEquipmentPart)itemStack.getItem()).randomizeLevel(this.world, itemStack);
+		}*/
     	this.entityDropItem(itemStack, 0.0F);
     }
 

@@ -4,7 +4,7 @@ import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.core.container.BaseContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
-import com.lycanitesmobs.core.container.EquipmentSlot;
+import com.lycanitesmobs.core.container.EquipmentForgeSlot;
 import com.lycanitesmobs.core.network.MessageTileEntityButton;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import net.minecraft.entity.player.PlayerInventory;
@@ -32,6 +32,7 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
         this.ySize = 166;
 	}
 
+	@Override
 	protected void initWidgets() {
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
@@ -57,8 +58,6 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 	protected void renderBackground(int mouseX, int mouseY, float partialTicks) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIEquipmentForge"));
-		this.xSize = 176;
-		this.ySize = 166;
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(backX, backY, 0, 0, this.xSize, this.ySize);
@@ -86,8 +85,8 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 			int slotY = backY + forgeSlot.yPos - 1;
 			int slotV = slotVBase;
 
-			if(forgeSlot instanceof EquipmentSlot) {
-				EquipmentSlot equipmentSlot =(EquipmentSlot)forgeSlot;
+			if(forgeSlot instanceof EquipmentForgeSlot) {
+				EquipmentForgeSlot equipmentSlot =(EquipmentForgeSlot)forgeSlot;
 				if("base".equals(equipmentSlot.type)) {
 					slotV += slotHeight;
 				}
@@ -120,8 +119,8 @@ public class EquipmentForgeScreen extends BaseContainerScreen<EquipmentForgeCont
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.equipmentForge.getName().getFormattedText(), 8, 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.equipmentForge.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
     }
     
 	@Override

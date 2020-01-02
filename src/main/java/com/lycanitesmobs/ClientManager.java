@@ -4,6 +4,7 @@ import com.lycanitesmobs.client.ClientEventListener;
 import com.lycanitesmobs.client.KeyHandler;
 import com.lycanitesmobs.client.gui.CreatureInventoryScreen;
 import com.lycanitesmobs.client.gui.EquipmentForgeScreen;
+import com.lycanitesmobs.client.gui.EquipmentInfuserScreen;
 import com.lycanitesmobs.client.gui.SummoningPedestalScreen;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
@@ -12,6 +13,7 @@ import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.client.renderer.RenderRegister;
 import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.container.EquipmentForgeContainer;
+import com.lycanitesmobs.core.container.EquipmentInfuserContainer;
 import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.CreatureType;
@@ -57,6 +59,7 @@ public class ClientManager {
 		ScreenManager.registerFactory(CreatureContainer.TYPE, CreatureInventoryScreen::new);
 		ScreenManager.registerFactory(SummoningPedestalContainer.TYPE, SummoningPedestalScreen::new);
 		ScreenManager.registerFactory(EquipmentForgeContainer.TYPE, EquipmentForgeScreen::new);
+		ScreenManager.registerFactory(EquipmentInfuserContainer.TYPE, EquipmentInfuserScreen::new);
 	}
 
 	/**

@@ -6,10 +6,7 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
-import com.lycanitesmobs.core.block.BlockBase;
-import com.lycanitesmobs.core.block.BlockEquipmentForge;
-import com.lycanitesmobs.core.block.BlockMaker;
-import com.lycanitesmobs.core.block.BlockSummoningPedestal;
+import com.lycanitesmobs.core.block.*;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
 import com.lycanitesmobs.core.block.fluid.BlockFluidAcid;
@@ -140,6 +137,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(Block.Properties.create(Material.WOOD).hardnessAndResistance(5, 10).sound(SoundType.WOOD), modInfo, 1));
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(Block.Properties.create(Material.ROCK).hardnessAndResistance(5, 20).sound(SoundType.STONE), modInfo, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 1000).sound(SoundType.METAL), modInfo, 3));
+		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5, 1000).sound(SoundType.METAL), modInfo));
 
 
 		// Buff Items:

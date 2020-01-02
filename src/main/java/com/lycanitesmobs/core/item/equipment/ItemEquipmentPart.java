@@ -154,17 +154,23 @@ public class ItemEquipmentPart extends BaseItem {
 
 	@Override
 	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return new TranslationTextComponent("item.equipmentpart.description");
+		return new TranslationTextComponent("item.lycanitesmobs.equipmentpart.description");
 	}
 
 	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
 		List<ITextComponent> descriptions = new ArrayList<>();
 		int level = this.getLevel(itemStack);
+		int experience = this.getExperience(itemStack);
+		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
 		ITextComponent baseFeature = new TranslationTextComponent("equipment.slottype")
 				.appendText(" " + this.slotType)
 				.appendText("\n").appendSibling(new TranslationTextComponent("equipment.level"))
 				.appendText(" " + level + "/" + this.levelMax);
+		if(level < this.levelMax) {
+			baseFeature.appendText("\n").appendSibling(new TranslationTextComponent("entity.experience"))
+					.appendText(": " + experience + "/" + experienceMax);
+		}
 		descriptions.add(baseFeature);
 
 		if(!this.elements.isEmpty()) {
@@ -203,7 +209,7 @@ public class ItemEquipmentPart extends BaseItem {
 	}
 
 	/** Sets up this equipment part, this is called when the provided stack is dropped and needs to have its level randomized, etc. **/
-	public void initializePart(World world, ItemStack itemStack) {
+	public void randomizeLevel(World world, ItemStack itemStack) {
 		int level = this.levelMax;
 		if(this.levelMin < this.levelMax) {
 			level = this.levelMin + world.rand.nextInt(this.levelMax - this.levelMin + 1);
@@ -237,9 +243,7 @@ public class ItemEquipmentPart extends BaseItem {
 	/** Sets the level of the provided Equipment Item Stack. **/
 	public void setLevel(ItemStack itemStack, int level) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
-		if(!nbt.contains("equipmentLevel")) {
-			nbt.putInt("equipmentLevel", level);
-		}
+		nbt.putInt("equipmentLevel", level);
 		itemStack.setTag(nbt);
 	}
 
@@ -256,9 +260,7 @@ public class ItemEquipmentPart extends BaseItem {
 	/** Sets the experience of the provided Equipment Item Stack. **/
 	public void setExperience(ItemStack itemStack, int experience) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
-		if(!nbt.contains("equipmentExperience")) {
-			nbt.putInt("equipmentExperience", experience);
-		}
+		nbt.putInt("equipmentExperience", experience);
 		itemStack.setTag(nbt);
 	}
 
@@ -280,7 +282,7 @@ public class ItemEquipmentPart extends BaseItem {
 	/** Returns the Equipment Part Experience for the provided ItemStack. **/
 	public int getExperience(ItemStack itemStack) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
-		int experience = 1;
+		int experience = 0;
 		if(nbt.contains("equipmentExperience")) {
 			experience = nbt.getInt("equipmentExperience");
 		}
@@ -292,7 +294,7 @@ public class ItemEquipmentPart extends BaseItem {
 	 * @return Experience required for a level up.
 	 */
 	public int getExperienceForNextLevel(ItemStack itemStack) {
-		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * this.getLevel(itemStack) * 0.25F);
+		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.getLevel(itemStack) - 1) * 0.25F);
 	}
 
 	/**
@@ -346,6 +348,15 @@ public class ItemEquipmentPart extends BaseItem {
 			b = nbt.getFloat("equipmentColorB");
 		}
 		return new Vec3d(r, g, b);
+	}
+
+	/** Set the dyed color for the provided ItemStack. **/
+	public void setColor(ItemStack itemStack, float red, float green, float blue) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		nbt.putFloat("equipmentColorR", red);
+		nbt.putFloat("equipmentColorG", green);
+		nbt.putFloat("equipmentColorB", blue);
+		itemStack.setTag(nbt);
 	}
 
 	@Override

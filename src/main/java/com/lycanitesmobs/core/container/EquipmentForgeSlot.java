@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EquipmentSlot extends BaseSlot {
+public class EquipmentForgeSlot extends BaseSlot {
 	public String type;
 	public EquipmentForgeContainer containerForge;
-	public List<EquipmentSlot> childSlots = new ArrayList<>();
+	public List<EquipmentForgeSlot> childSlots = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -25,7 +25,7 @@ public class EquipmentSlot extends BaseSlot {
 	 * @param y The y display position.
 	 * @param type The Equipment item type for this slot. Can be any part slot type or "piece" for an assembled piece of equipment or "none" when unavailable.
 	 */
-	public EquipmentSlot(EquipmentForgeContainer containerForge, int slotIndex, int x, int y, String type) {
+	public EquipmentForgeSlot(EquipmentForgeContainer containerForge, int slotIndex, int x, int y, String type) {
 		super(containerForge.equipmentForge, slotIndex, x, y);
 		this.containerForge = containerForge;
 		this.type = type;
@@ -71,7 +71,7 @@ public class EquipmentSlot extends BaseSlot {
 		return true;
 	}
 
-	
+	@Override
 	public int getSlotStackLimit() {
 		if(this.inventory instanceof InventoryCreature)
 			if(((InventoryCreature)this.inventory).getTypeFromSlot(this.getSlotIndex()) != null)
@@ -93,7 +93,7 @@ public class EquipmentSlot extends BaseSlot {
 	 * Adds a child equipment slot to this slot. Child slots have their type updated by their parents based on what is made available by the parent.
 	 * @param slot The child slot to add. The first added should be the center, then left and then right (for all slots provided by Head pieces).
 	 */
-	public void addChildSlot(EquipmentSlot slot) {
+	public void addChildSlot(EquipmentForgeSlot slot) {
 		if(this.childSlots.contains(slot)) {
 			return;
 		}
@@ -180,7 +180,7 @@ public class EquipmentSlot extends BaseSlot {
 	@Override
 	public boolean canTakeStack(PlayerEntity player) {
 		if(!this.childSlots.isEmpty()) {
-			for(EquipmentSlot childSlot : this.childSlots) {
+			for(EquipmentForgeSlot childSlot : this.childSlots) {
 				if(!childSlot.getStack().isEmpty()) {
 					return false;
 				}

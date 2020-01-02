@@ -32,7 +32,7 @@ public class TextureManager {
 		addTexture("GUIPetSpiritFilling", modInfo, "textures/guis/beastiary/spirit_filling.png");
 		addTexture("GUIPetBarHealth", modInfo, "textures/guis/beastiary/bar_health.png");
 		addTexture("GUIPetBarRespawn", modInfo, "textures/guis/beastiary/bar_respawn.png");
-		addTexture("GUIPetBarExperience", modInfo, "textures/guis/beastiary/bar_experience.png");
+		addTexture("GUIBarExperience", modInfo, "textures/guis/beastiary/bar_experience.png");
 		addTexture("GUIPetBarEmpty", modInfo, "textures/guis/beastiary/bar_empty.png");
 
 		// Containers:
