@@ -20,6 +20,21 @@ public abstract class ProjectileBehaviour {
 		else if("summon".equals(type)) {
 			projectileBehaviour = new ProjectileBehaviourSummon();
 		}
+		else if("explosion".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourExplosion();
+		}
+		else if("fireProjectiles".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourFireProjectiles();
+		}
+		else if("drainHealth".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourDrainHealth();
+		}
+		else if("randomForce".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourRandomForce();
+		}
+		else if("laser".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourLaser();
+		}
 
 		if(projectileBehaviour == null) {
 			return null;
@@ -37,15 +52,11 @@ public abstract class ProjectileBehaviour {
 	 */
 	public abstract void loadFromJSON(JsonObject json);
 
-
 	/**
 	 * Called on the projectile with this behaviour's update.
 	 * @param projectile The projectile entity instance.
 	 */
-	public void onProjectileUpdate(BaseProjectileEntity projectile) {
-
-	}
-
+	public void onProjectileUpdate(BaseProjectileEntity projectile) {}
 
 	/**
 	 * Called when the projectile with this behaviour impacts and is destroyed.
@@ -53,7 +64,13 @@ public abstract class ProjectileBehaviour {
 	 * @param world The impact world.
 	 * @param pos The impact block position.
 	 */
-	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {
+	public void onProjectileImpact(BaseProjectileEntity projectile, World world, BlockPos pos) {}
 
-	}
+	/**
+	 * Called when the projectile deals damage to an entity.
+	 * @param projectile The projectile entity instance.
+	 * @param world The impact world.
+	 * @param damage The damage dealt.
+	 */
+	public void onProjectileDamage(BaseProjectileEntity projectile, World world, float damage) {}
 }

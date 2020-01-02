@@ -9,8 +9,8 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireBarrier;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireWave;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -177,11 +177,14 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
 
             // Random Projectiles:
             for(int i = 0; i < 3; i++) {
-                BaseProjectileEntity projectile = new EntityHellfireball(ProjectileManager.getInstance().oldProjectileTypes.get(EntityHellfireball.class), this.getEntityWorld(), this);
-                projectile.setProjectileScale(8f);
-                projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().addEntity(projectile);
+                ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("hellfireball");
+                if(projectileInfo != null) {
+                    BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+                    projectile.setProjectileScale(8f);
+                    projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 1.2F, 3.0F);
+                    this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+                    this.getEntityWorld().addEntity(projectile);
+                }
             }
 
             // Flying Player Wraith Attack:
@@ -501,7 +504,7 @@ public class EntityRahovart extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityHellfireball.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 8f, 1F);
+        this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 8f, 1F);
         super.attackRanged(target, range);
     }
 

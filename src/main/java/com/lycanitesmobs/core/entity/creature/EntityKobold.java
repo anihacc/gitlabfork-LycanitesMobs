@@ -41,7 +41,8 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 
     @Override
     protected void registerGoals() {
-		this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetItemGoal(this).setDistanceMax(8).setSpeed(1.2D));
+		if(this.theivery)
+			this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetItemGoal(this).setDistanceMax(8).setSpeed(1.2D));
 		if(this.griefing)
 			this.goalSelector.addGoal(this.nextIdleGoalIndex++, new GetBlockGoal(this).setDistanceMax(8).setSpeed(1.2D).setBlockName("torch").setTamedLooting(false));
 

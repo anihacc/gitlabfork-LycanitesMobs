@@ -9,6 +9,8 @@ import com.lycanitesmobs.core.entity.goals.targeting.CopyOwnerAttackTargetGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.DefendOwnerGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.RevengeOwnerGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ElementInfo;
+import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.core.item.special.ItemSoulstone;
 import net.minecraft.entity.Entity;
@@ -45,7 +47,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class TameableCreatureEntity extends AgeableCreatureEntity {
-	
 	// Stats:
 	public float hunger = this.getCreatureHungerMax();
 	public float stamina = this.getStaminaMax();
@@ -296,6 +297,16 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     		if(this.isTamed() && this.isHealingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
 				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Feed");
 			}
+
+			// Charges:
+			if(this.isTamed() && !this.isTemporary && (this.isPetType("pet") || this.isPetType("mount")) && itemStack.getItem() instanceof ChargeItem) {
+				if(this.isLevelingChargeItem(itemStack)) {
+					commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Charge");
+				}
+				else {
+					player.sendMessage(new TranslationTextComponent("item.lycanitesmobs.charge.creature.invalid"));
+				}
+			}
     		
     		// Equipment:
     		if(this.isTamed() && !this.isChild() && this.canEquip() && player == this.getPlayerOwner()) {
@@ -320,7 +331,6 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     // ========== Perform Command ==========
     @Override
     public boolean performCommand(String command, PlayerEntity player, ItemStack itemStack) {
-    	
     	// Open GUI:
     	if(command.equals("GUI")) {
     		this.playTameSound();
@@ -354,6 +364,13 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     		this.consumePlayersItem(player, itemStack);
             return true;
     	}
+
+    	// Charge Experience:
+		if(command.equals("Charge")) {
+			this.addExperience(this.getExperienceFromChargeItem(itemStack));
+			this.consumePlayersItem(player, itemStack);
+			return true;
+		}
     	
     	// Equip Armor:
     	if(command.equals("Equip Item")) {
@@ -796,10 +813,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 		super.onCreateBaby(partner, baby);
 	}
     
-    
-    // ==================================================
-    //                       Healing
-    // ==================================================
+
     @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte status) {
         if(status == 7)
@@ -809,11 +823,50 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
         else
             super.handleStatusUpdate(status);
     }
-    
-    // ========== Feeding Food ==========
-    public boolean isHealingItem(ItemStack itemStack) {
+
+	/**
+	 * Determines if the provided itemstack can be consumed to heal this entity.
+	 * @param itemStack The possible healing itemstack.
+	 * @return True if this entity should eat the itemstack and heal.
+	 */
+	public boolean isHealingItem(ItemStack itemStack) {
     	return this.creatureInfo.canEat(itemStack);
     }
+
+	/**
+	 * Determines if the provided itemstack can be consumed to add experience this entity.
+	 * @param itemStack The possible leveling itemstack.
+	 * @return True if this entity should eat the itemstack and gain experience.
+	 */
+	public boolean isLevelingChargeItem(ItemStack itemStack) {
+		if(itemStack.getItem() instanceof ChargeItem) {
+			ChargeItem chargeItem = (ChargeItem)itemStack.getItem();
+			for(ElementInfo elementInfo : this.getElements()) {
+				if (chargeItem.getElements().contains(elementInfo)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Determines how much experience the provided charge itemstack can grant this creature.
+	 * @param itemStack The possible leveling itemstack.
+	 * @return The amount of experience to gain.
+	 */
+	public int getExperienceFromChargeItem(ItemStack itemStack) {
+		int experience = 0;
+		if(itemStack.getItem() instanceof ChargeItem) {
+			ChargeItem chargeItem = (ChargeItem)itemStack.getItem();
+			for(ElementInfo elementInfo : this.getElements()) {
+				if (chargeItem.getElements().contains(elementInfo)) {
+					experience += ChargeItem.CHARGE_EXPERIENCE;
+				}
+			}
+		}
+		return experience;
+	}
 
 
 	// ==================================================

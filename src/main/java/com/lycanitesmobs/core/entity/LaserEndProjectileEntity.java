@@ -14,13 +14,10 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
 	private double targetX;
 	private double targetY;
 	private double targetZ;
-	private int posIDStart = 13;
 	
 	// Properties:
 	public LivingEntity shootingEntity;
-	public LaserProjectileEntity laserEntity;
-	private float projectileWidth = 0.2f;
-	private float projectileHeight = 0.2f;
+	public BaseProjectileEntity laserEntity;
 	private double projectileSpeed;
 
     // Datawatcher:

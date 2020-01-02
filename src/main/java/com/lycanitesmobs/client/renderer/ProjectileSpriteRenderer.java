@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.renderer;
 
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
+import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -30,27 +31,42 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
 			return;
 		}
+		if(entity.getClass() == LaserEndProjectileEntity.class) {
+			return;
+		}
 
 		// Render States:
-    	float loop = (float)entity.ticksExisted + partialTicks;
+    	float loop = (float)entity.ticksExisted + Math.min(1, partialTicks);
     	float scale = entity.projectileScale;
 
-    	// Render Projectile Sprite:
-		matrixStack.func_227860_a_();
-		matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
-		matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
-		matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.spinSpeed)); // Projectile Spinning
-		matrixStack.func_227862_a_(scale, scale, scale); // Projectile Scaling
-		matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
-		ResourceLocation texture = this.getEntityTexture(entity);
-		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
-		this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);
-		matrixStack.func_227865_b_();
-
 		// Render Laser:
+		LaserEndProjectileEntity laserEnd = null;
 		if(entity instanceof LaserProjectileEntity) {
+			laserEnd = ((LaserProjectileEntity)entity).laserEnd;
 			matrixStack.func_227860_a_();
-			this.renderLaser((LaserProjectileEntity)entity, matrixStack, renderTypeBuffer, ((LaserProjectileEntity)entity).laserWidth / 4);
+			this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((LaserProjectileEntity)entity).laserWidth / 4, loop);
+			matrixStack.func_227865_b_();
+		}
+		if(entity instanceof CustomProjectileEntity) {
+			laserEnd = ((CustomProjectileEntity)entity).getLaserEnd();
+			if(laserEnd != null) {
+				matrixStack.func_227860_a_();
+				this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((CustomProjectileEntity)entity).laserWidth / 4, loop);
+				matrixStack.func_227865_b_();
+			}
+		}
+
+    	// Render Projectile Sprite:
+		if(laserEnd == null) {
+			matrixStack.func_227860_a_();
+			matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
+			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
+			matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
+			matrixStack.func_227862_a_(scale, scale, scale); // Projectile Scaling
+			matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
+			ResourceLocation texture = this.getEntityTexture(entity);
+			RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
+			this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);
 			matrixStack.func_227865_b_();
 		}
     }
@@ -97,16 +113,19 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 				.endVertex();
     }
 
-    public void renderLaser(LaserProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, float scale) {
-		float laserSize = entity.getLength();
+    public void renderLaser(BaseProjectileEntity entity, LaserEndProjectileEntity laserEnd, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, float scale, float loop) {
+    	if(laserEnd == null) {
+    		return;
+		}
+		float laserSize = entity.getDistance(laserEnd);
 		float spacing = 1;
 		float factor = spacing / laserSize;
-		if(laserSize <= 0 || entity.getLaserEnd() == null) {
+		if(laserSize <= 0) {
 			return;
 		}
-		ResourceLocation texture = this.getEntityTexture(entity); // TODO Fancy laser textures.
+		ResourceLocation texture = this.getEntityTexture(entity);
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
-		Vec3d direction = entity.getLaserEnd().getPositionVec().subtract(entity.getPositionVec()).normalize();
+		Vec3d direction = laserEnd.getPositionVec().subtract(entity.getPositionVec()).normalize();
 		for(float segment = 0; segment <= laserSize; segment += factor) {
 			matrixStack.func_227860_a_();
 			matrixStack.func_227861_a_(segment * direction.getX() * spacing, segment * direction.getY() * spacing, segment * direction.getZ() * spacing);
@@ -114,6 +133,7 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 			matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
 			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
 			matrixStack.func_227862_a_(scale, scale, scale); // Laser Scaling
+			matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
 			this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, scale);
 			matrixStack.func_227865_b_();
 		}

@@ -56,7 +56,10 @@
 			"type": "uncommon"
 		}
 	],
-	"element": "order",
+	"elements": [
+		"air",
+		"order"
+	],
 	"diets": [
 		"carnivore",
 		"piscivore",

@@ -56,7 +56,10 @@
 			"type": "uncommon"
 		}
 	],
-	"element": "arbour",
+	"elements": [
+		"air",
+		"arbour"
+	],
 	"diets": [
 		"carnivore",
 		"piscivore",

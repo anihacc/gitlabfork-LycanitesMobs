@@ -2,10 +2,7 @@ package com.lycanitesmobs.core.pets;
 
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
+import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -61,6 +58,12 @@ public class PetEntry {
     public float entityHealth = 1;
     /** Entity Max Health **/
     public float entityMaxHealth = 1;
+    /** Entity Level **/
+    public int entityLevel = 1;
+    /** Entity Experience **/
+    public int entityExperience = 0;
+    /** Entity Max Experience **/
+    public int entityMaxExperience = CreatureStats.BASE_LEVELUP_EXPERIENCE;
 
     /** The name to use for the entity. Leave empty/null "" for no name. **/
     public String entityName = "";
@@ -115,10 +118,6 @@ public class PetEntry {
             this.temporary = true;
 	}
 
-
-    // ==================================================
-    //                     Set Values
-    // ==================================================
     public PetEntry setEntityName(String name) {
         this.entityName = name;
         return this;
@@ -168,10 +167,34 @@ public class PetEntry {
         return this;
     }
 
+    public void setLevel(int level) {
+        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+            ((BaseCreatureEntity)this.entity).setLevel(level);
+        this.entityLevel = level;
+    }
 
-    // ==================================================
-    //                     Get Values
-    // ==================================================
+    public int getLevel() {
+        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+            this.entityLevel = ((BaseCreatureEntity)this.entity).getLevel();
+        return this.entityLevel;
+    }
+
+    public int getExperience() {
+        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+            this.entityExperience = ((BaseCreatureEntity)this.entity).getExperience();
+        return this.entityExperience;
+    }
+
+    public void setExperience(int experience) {
+        if(this.entity != null && this.entity instanceof BaseCreatureEntity)
+            ((BaseCreatureEntity)this.entity).setExperience(experience);
+        this.entityExperience = experience;
+    }
+
+    public int getMaxExperience() {
+        return CreatureStats.BASE_LEVELUP_EXPERIENCE + Math.round(CreatureStats.BASE_LEVELUP_EXPERIENCE * this.getLevel() * 0.25F);
+    }
+
     public CreatureInfo getCreatureInfo() {
         if(this.summonSet == null || "".equals(this.summonSet.summonType))
             return null;
@@ -386,6 +409,8 @@ public class PetEntry {
 
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
+            entityCreature.setLevel(this.entityLevel);
+            entityCreature.setExperience(this.entityExperience);
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
 
@@ -596,9 +621,8 @@ public class PetEntry {
 
             baseCreatureEntity.inventory.write(this.entityNBT);
 
-            CompoundNBT extTagCompound = new CompoundNBT();
-            baseCreatureEntity.extraMobBehaviour.write(extTagCompound);
-            this.entityNBT.put("ExtraBehaviour", extTagCompound);
+            this.entityNBT.putInt("MobLevel", this.getLevel());
+            this.entityNBT.putInt("Experience", this.getExperience());
 
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
@@ -623,8 +647,12 @@ public class PetEntry {
 
             baseCreatureEntity.inventory.read(this.entityNBT);
 
-            if(this.entityNBT.contains("ExtraBehaviour"))
-                baseCreatureEntity.extraMobBehaviour.read(this.entityNBT.getCompound("ExtraBehaviour"));
+            if(this.entityNBT.contains("MobLevel")) {
+                this.setLevel(this.entityNBT.getInt("MobLevel"));
+            }
+            if(this.entityNBT.contains("Experience")) {
+                this.setExperience(this.entityNBT.getInt("Experience"));
+            }
 
             if(this.entity instanceof AgeableCreatureEntity) {
                 AgeableCreatureEntity ageableCreatureEntity = (AgeableCreatureEntity)this.entity;
@@ -634,6 +662,5 @@ public class PetEntry {
                     ageableCreatureEntity.setGrowingAge(0);
             }
         }
-//        this.entity.readFromNBT(this.entityNBT);
     }
 }

@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityMagma;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -108,11 +108,14 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
 
             // Random Projectiles:
             if(this.ticksExisted % 40 == 0) {
-                BaseProjectileEntity projectile = new EntityMagma(ProjectileManager.getInstance().oldProjectileTypes.get(EntityMagma.class), this.getEntityWorld(), this);
-                projectile.setProjectileScale(2f);
-                projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-                this.getEntityWorld().addEntity(projectile);
+				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("magma");
+				if(projectileInfo != null) {
+					BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+					projectile.setProjectileScale(2f);
+					projectile.shoot((2 * this.getRNG().nextFloat()) - 1, this.getRNG().nextFloat(), (2 * this.getRNG().nextFloat()) - 1, 1.2F, 6.0F);
+					this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+					this.getEntityWorld().addEntity(projectile);
+				}
             }
         }
         
@@ -170,7 +173,7 @@ public class EntityLobber extends BaseCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile(EntityMagma.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("magma", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     

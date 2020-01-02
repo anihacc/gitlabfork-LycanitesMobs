@@ -7,8 +7,12 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.core.helpers.JSONHelper;
+import com.lycanitesmobs.core.info.ElementInfo;
+import com.lycanitesmobs.core.info.ElementManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.BaseItem;
+import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.core.item.equipment.features.EquipmentFeature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -32,11 +36,18 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ItemEquipmentPart extends BaseItem {
+	/** The base amount of experience needed to level up, this is increased by the part's level scaled. **/
+	public static int BASE_LEVELUP_EXPERIENCE = 1000;
+
 	/** A map of mob classes and parts that they drop. **/
 	public static Map<String, List<ItemEquipmentPart>> MOB_PART_DROPS = new HashMap<>();
 
 	/** A list of all features this part has. **/
 	public List<EquipmentFeature> features = new ArrayList<>();
+
+	// Elements:
+	/** The Elements of this part, used to determine what charges can be used to upgrade this part along with other future features. **/
+	public List<ElementInfo> elements = new ArrayList<>();
 
 	/** The slot type that this part must fit into. Can be: base, head, blade, axe, pike or jewel. **/
 	public String slotType;
@@ -88,6 +99,20 @@ public class ItemEquipmentPart extends BaseItem {
 		if(json.has("levelMax"))
 			this.levelMax = json.get("levelMax").getAsInt();
 
+		// Elements:
+		List<String> elementNames = new ArrayList<>();
+		if(json.has("elements")) {
+			elementNames = JSONHelper.getJsonStrings(json.get("elements").getAsJsonArray());
+		}
+		this.elements.clear();
+		for(String elementName : elementNames) {
+			ElementInfo element = ElementManager.getInstance().getElement(elementName);
+			if (element == null) {
+				throw new RuntimeException("[Equipment] Unable to initialise Equipment Part " + this.getName().getFormattedText() + " as the element " + elementName + " cannot be found.");
+			}
+			this.elements.add(element);
+		}
+
 		// Features:
 		if(json.has("features")) {
 			JsonArray jsonArray = json.get("features").getAsJsonArray();
@@ -106,10 +131,6 @@ public class ItemEquipmentPart extends BaseItem {
 		TextureManager.addTexture(this.itemName, this.modInfo, "textures/equipment/" + this.itemName + ".png");
 	}
 
-
-	// ==================================================
-	//                      Info
-	// ==================================================
 	@Override
 	public ITextComponent getDisplayName(ItemStack itemStack) {
 		ITextComponent displayName = new TranslationTextComponent(this.getTranslationKey(itemStack).replace("equipmentpart_", ""));
@@ -124,7 +145,7 @@ public class ItemEquipmentPart extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
 				tooltip.add(new StringTextComponent(formattedDescription));
 			}
@@ -145,6 +166,12 @@ public class ItemEquipmentPart extends BaseItem {
 				.appendText("\n").appendSibling(new TranslationTextComponent("equipment.level"))
 				.appendText(" " + level + "/" + this.levelMax);
 		descriptions.add(baseFeature);
+
+		if(!this.elements.isEmpty()) {
+			ITextComponent elementFeature = new TranslationTextComponent("equipment.element")
+					.appendText(" ").appendSibling(this.getElementNames());
+			descriptions.add(elementFeature);
+		}
 
 		for(EquipmentFeature feature : this.features) {
 			ITextComponent featureDescription = feature.getDescription(itemStack, level);
@@ -175,10 +202,6 @@ public class ItemEquipmentPart extends BaseItem {
 		return ClientManager.getInstance().getFontRenderer();
 	}
 
-
-	// ==================================================
-	//                   Equipment Part
-	// ==================================================
 	/** Sets up this equipment part, this is called when the provided stack is dropped and needs to have its level randomized, etc. **/
 	public void initializePart(World world, ItemStack itemStack) {
 		int level = this.levelMax;
@@ -230,6 +253,83 @@ public class ItemEquipmentPart extends BaseItem {
 		return level;
 	}
 
+	/** Sets the experience of the provided Equipment Item Stack. **/
+	public void setExperience(ItemStack itemStack, int experience) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		if(!nbt.contains("equipmentExperience")) {
+			nbt.putInt("equipmentExperience", experience);
+		}
+		itemStack.setTag(nbt);
+	}
+
+	/** Increases the experience of the provided Equipment Item Stack. This will also level up the part if the experience is enough. **/
+	public void addExperience(ItemStack itemStack, int experience) {
+		int currentLevel = this.getLevel(itemStack);
+		if(currentLevel >= this.levelMax) {
+			this.setExperience(itemStack, 0);
+		}
+		int increasedExperience = this.getExperience(itemStack) + experience;
+		int nextLevelExperience = this.getExperienceForNextLevel(itemStack);
+		if(increasedExperience >= nextLevelExperience) {
+			increasedExperience = increasedExperience - nextLevelExperience;
+			this.setLevel(itemStack, currentLevel + 1);
+		}
+		this.setExperience(itemStack, increasedExperience);
+	}
+
+	/** Returns the Equipment Part Experience for the provided ItemStack. **/
+	public int getExperience(ItemStack itemStack) {
+		CompoundNBT nbt = this.getTagCompound(itemStack);
+		int experience = 1;
+		if(nbt.contains("equipmentExperience")) {
+			experience = nbt.getInt("equipmentExperience");
+		}
+		return experience;
+	}
+
+	/**
+	 * Determines how much experience the part needs in order to level up.
+	 * @return Experience required for a level up.
+	 */
+	public int getExperienceForNextLevel(ItemStack itemStack) {
+		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * this.getLevel(itemStack) * 0.25F);
+	}
+
+	/**
+	 * Determines if the provided itemstack can be consumed to add experience this part.
+	 * @param itemStack The possible leveling itemstack.
+	 * @return True if this part should consume the itemstack and gain experience.
+	 */
+	public boolean isLevelingChargeItem(ItemStack itemStack) {
+		if(itemStack.getItem() instanceof ChargeItem) {
+			ChargeItem chargeItem = (ChargeItem)itemStack.getItem();
+			for(ElementInfo elementInfo : this.elements) {
+				if (chargeItem.getElements().contains(elementInfo)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Determines how much experience the provided charge itemstack can grant this part.
+	 * @param itemStack The possible leveling itemstack.
+	 * @return The amount of experience to gain.
+	 */
+	public int getExperienceFromChargeItem(ItemStack itemStack) {
+		int experience = 0;
+		if(itemStack.getItem() instanceof ChargeItem) {
+			ChargeItem chargeItem = (ChargeItem)itemStack.getItem();
+			for(ElementInfo elementInfo : this.elements) {
+				if (chargeItem.getElements().contains(elementInfo)) {
+					experience += ChargeItem.CHARGE_EXPERIENCE;
+				}
+			}
+		}
+		return experience;
+	}
+
 	/** Returns the dyed color for the provided ItemStack. **/
 	public Vec3d getColor(ItemStack itemStack) {
 		CompoundNBT nbt = this.getTagCompound(itemStack);
@@ -248,10 +348,6 @@ public class ItemEquipmentPart extends BaseItem {
 		return new Vec3d(r, g, b);
 	}
 
-
-	// ==================================================
-	//                    Item Group
-	// ==================================================
 	@Override
 	public void fillItemGroup(ItemGroup tab, NonNullList<ItemStack> items) {
 		if(!this.isInGroup(tab)) {
@@ -263,5 +359,31 @@ public class ItemEquipmentPart extends BaseItem {
 			this.setLevel(itemStack, level);
 			items.add(itemStack);
 		}
+	}
+
+	/**
+	 * Returns if this Part has the provided element.
+	 * @param element The element to check for.
+	 * @return True if this part has the element.
+	 */
+	public boolean hasElement(ElementInfo element) {
+		return this.elements.contains(element);
+	}
+
+	/**
+	 * Returns a comma separated list of Elements used by this Part.
+	 * @return The Elements used by this Part.
+	 */
+	public ITextComponent getElementNames() {
+		ITextComponent elementNames = new StringTextComponent("");
+		boolean firstElement = true;
+		for(ElementInfo element : this.elements) {
+			if(!firstElement) {
+				elementNames.appendText(", ");
+			}
+			firstElement = false;
+			elementNames.appendSibling(element.getTitle());
+		}
+		return elementNames;
 	}
 }

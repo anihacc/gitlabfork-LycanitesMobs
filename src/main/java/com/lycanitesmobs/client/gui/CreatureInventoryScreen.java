@@ -14,6 +14,7 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
@@ -119,8 +120,11 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 
 	@Override
 	protected void renderForeground(int mouseX, int mouseY, float partialTicks) {
-		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.creatureInventory.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getName().getFormattedText(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		int backX = (this.width - this.xSize) / 2;
+		int backY = (this.height - this.ySize) / 2;
+		this.drawHealth(backX, backY);
     }
 
 	@Override
@@ -134,7 +138,6 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         this.drawTexturedModalRect(backX, backY, 0, 0, this.xSize, this.ySize);
 
 		this.drawFrames(backX, backY, mouseX, mouseY);
-		this.drawHealth(backX, backY);
 		this.drawSlots(backX, backY);
 	}
 
@@ -155,22 +158,23 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
 	}
 
 	protected void drawHealth(int backX, int backY) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.getMinecraft().getTextureManager().bindTexture(TextureManager.getTexture("GUIInventoryCreature"));
-        
-        // Empty:
-        int barWidth = 80;
+        int barWidth = 100;
         int barHeight = 11;
-        int barX = backX + 91;
-        int barY = backY + 5;
-        int barU = 144;
-        int barV = 256 - (barHeight * 2);
-        this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
-        
-        // Full:
-        barWidth = Math.round(barWidth * (this.creature.getHealth() / this.creature.getMaxHealth()));
-        barV = barV + barHeight;
-        this.drawTexturedModalRect(barX, barY, barU, barV, barWidth, barHeight);
+        int barX = backX - barWidth;
+        int barY = backY + 54 + 18;
+        int barCenter = barX + (barWidth / 2);
+		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		float healthNormal = this.creature.getHealth() / this.creature.getMaxHealth();
+		this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
+		String healthText = new TranslationTextComponent("entity.health").getFormattedText() + ": " + String.format("%.0f", this.creature.getHealth()) + "/" + String.format("%.0f", this.creature.getMaxHealth());
+		this.fontRenderer.drawString(healthText, barCenter - (this.fontRenderer.getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+
+		barY += barHeight + 1;
+		this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+		float experienceNormal = (float)this.creature.getExperience() / this.creature.creatureStats.getExperienceForNextLevel();
+		this.drawTexture(TextureManager.getTexture("GUIPetBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+		String experienceText = new TranslationTextComponent("entity.experience").getFormattedText() + ": " + this.creature.getExperience() + "/" + this.creature.creatureStats.getExperienceForNextLevel();
+		this.fontRenderer.drawString(experienceText, barCenter - (this.fontRenderer.getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 	}
 
 	protected void drawSlots(int backX, int backY) {

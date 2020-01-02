@@ -69,7 +69,7 @@ public class ModelManager {
 				}
 			}
 
-			// Old Model Projectiles:
+			// Old Model Projectiles:f
 			this.oldProjectileModels.put("lightball", new LightBallModel());
 			this.oldProjectileModels.put("crystalshard", new CrystalShardModel());
 			this.oldProjectileModels.put("aetherwave", new AetherwaveModel());

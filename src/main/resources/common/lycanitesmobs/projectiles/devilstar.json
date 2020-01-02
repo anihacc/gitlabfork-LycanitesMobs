@@ -1,9 +1,9 @@
 {
 	"name": "devilstar",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
-	"scale": 1.0,
+	"width": 0.5,
+	"height": 0.5,
+	"scale": 0.75,
 	"damage": 2,
 	"pierce": 1,
 	"knockbackChance": 0.125,
@@ -23,5 +23,5 @@
 	"ripper": true,
 	"pierceBlocks": false,
 	"glow": true,
-	"spinSpeed": 4
+	"rollSpeed": 4
 }

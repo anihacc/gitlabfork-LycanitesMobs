@@ -65,6 +65,7 @@ public class ItemManager extends JSONLoader {
 	public final ItemGroup itemsGroup = new LMItemsGroup(LycanitesMobs.MODID + ".items");
 	public final ItemGroup blocksGroup = new LMBlocksGroup(LycanitesMobs.MODID + ".blocks");
 	public final ItemGroup creaturesGroups = new LMCreaturesGroup(LycanitesMobs.MODID + ".creatures");
+	public final ItemGroup chargesGroup = new LMChargesGroup(LycanitesMobs.MODID + ".charges");
 	public final ItemGroup equipmentPartsGroup = new LMEquipmentPartsGroup(LycanitesMobs.MODID + ".equipmentparts");
 
 

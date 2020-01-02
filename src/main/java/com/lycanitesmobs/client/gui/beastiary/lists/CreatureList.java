@@ -130,6 +130,7 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		}
 		else if(this.listType == Type.PET || this.listType == Type.MOUNT || this.listType == Type.FAMILIAR) {
 			this.screen.playerExt.selectedPet = creatureEntry.petEntry;
+			this.screen.playerExt.sendPetEntryToPlayer(this.screen.playerExt.selectedPet);
 		}
 	}
 

@@ -105,8 +105,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			description.appendText("\n")
 					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern"))
 					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern."))
-					.appendText(this.projectilePattern);
+					.appendSibling(new TranslationTextComponent("equipment.feature.projectile.pattern." + this.projectilePattern));
 		}
 
 		return description;

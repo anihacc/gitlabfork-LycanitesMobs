@@ -54,7 +54,7 @@ public class LycanitesMobs {
 
 	public static final String MODID = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.2.0.3";
+	public static final String versionNumber = "2.2.1.0";
 	public static final String versionMC = "1.15.1";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
@@ -126,6 +126,9 @@ public class LycanitesMobs {
 
 	// Content Loading:
 	public void loadContent() {
+		// Elements:
+		ElementManager.getInstance().loadAllFromJson(modInfo);
+
 		// Vanilla Item Lists:
 		ObjectLists.createVanillaLists();
 
@@ -137,9 +140,6 @@ public class LycanitesMobs {
 
 		// Equipment Parts:
 		EquipmentPartManager.getInstance().loadAllFromJson(modInfo);
-
-		// Elements:
-		ElementManager.getInstance().loadAllFromJson(modInfo);
 
 		// Creatures:
 		CreatureManager.getInstance().startup(modInfo);

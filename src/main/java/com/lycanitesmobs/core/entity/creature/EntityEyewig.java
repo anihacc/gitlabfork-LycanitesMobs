@@ -1,9 +1,10 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityPoisonRay;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -44,11 +45,45 @@ public class EntityEyewig extends RideableCreatureEntity {
         return false;
     }
 
+
+	// ==================================================
+	//                      Attacks
+	// ==================================================
+	// ========== Ranged Attack ==========
+	BaseProjectileEntity projectile = null;
+	@Override
+	public void attackRanged(Entity target, float range) {
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("poisonray");
+		if(projectileInfo == null) {
+			return;
+		}
+
+		// Update Laser:
+		if(this.projectile != null && this.projectile.isAlive()) {
+			this.projectile.projectileLife = 20;
+		}
+		else {
+			this.projectile = null;
+		}
+
+		// Create New Laser:
+		if(this.projectile == null) {
+			// Type:
+			this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
+
+			// Launch:
+			this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+			this.getEntityWorld().addEntity(projectile);
+		}
+
+		super.attackRanged(target, range);
+	}
+
     
     // ==================================================
     //                   Mount Ability
     // ==================================================
-    EntityPoisonRay abilityProjectile = null;
+    BaseProjectileEntity abilityProjectile = null;
     public void mountAbility(Entity rider) {
     	if(this.getEntityWorld().isRemote)
     		return;
@@ -61,7 +96,7 @@ public class EntityEyewig extends RideableCreatureEntity {
 
     	// Update Laser:
     	if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
-    		this.abilityProjectile.setTime(20);
+    		this.abilityProjectile.projectileLife = 20;
     	}
     	else {
     		this.abilityProjectile = null;
@@ -69,12 +104,15 @@ public class EntityEyewig extends RideableCreatureEntity {
     	
     	// Create New Laser:
     	if(this.abilityProjectile == null) {
-	    	// Type:
-    		if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
+			// Type:
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("poisonray");
+			if(projectileInfo == null) {
+				return;
+			}
+			if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
     			return;
-    		
-    		this.abilityProjectile = new EntityPoisonRay(ProjectileManager.getInstance().oldProjectileTypes.get(EntityPoisonRay.class), this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
-    		this.abilityProjectile.setOffset(0, 0.5F, 0);
+
+			this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 	    	
 	    	// Launch:
 	        this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -82,35 +120,6 @@ public class EntityEyewig extends RideableCreatureEntity {
     	}
     	
     	this.applyStaminaCost();
-    }
-    
-    
-    // ==================================================
-    //                      Attacks
-    // ==================================================
-    // ========== Ranged Attack ==========
-    EntityPoisonRay projectile = null;
-    @Override
-    public void attackRanged(Entity target, float range) {
-    	// Update Laser:
-    	if(this.projectile != null && this.projectile.isAlive()) {
-    		this.projectile.setTime(20);
-    	}
-    	else {
-    		this.projectile = null;
-    	}
-    	
-    	// Create New Laser:
-    	if(this.projectile == null) {
-	    	// Type:
-	    	this.projectile = new EntityPoisonRay(ProjectileManager.getInstance().oldProjectileTypes.get(EntityPoisonRay.class), this.getEntityWorld(), this, 20, 10);
-	    	
-	    	// Launch:
-	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().addEntity(projectile);
-    	}
-
-    	super.attackRanged(target, range);
     }
     
     

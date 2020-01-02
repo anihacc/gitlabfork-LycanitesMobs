@@ -39,7 +39,7 @@ public class MessagePetEntry {
         this.summonType = summonSet.summonType;
         this.subspecies = petEntry.subspeciesID;
 		this.behaviour = summonSet.getBehaviourByte();
-		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getEntityId() : 0;
+		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getEntityId() : -1;
 		this.petEntryEntityName = petEntry.entityName;
 		this.respawnTime = petEntry.respawnTime;
 		this.respawnTimeMax = petEntry.respawnTimeMax;
@@ -86,7 +86,7 @@ public class MessagePetEntry {
 		SummonSet summonSet = petEntry.summonSet;
 		summonSet.readFromPacket(message.summonType, 0, message.behaviour);
         Entity entity = null;
-        if(message.petEntryEntityID != 0) {
+        if(message.petEntryEntityID != -1) {
             entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
         }
         petEntry.entity = entity;

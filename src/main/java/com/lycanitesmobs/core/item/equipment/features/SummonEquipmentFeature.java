@@ -65,7 +65,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		}
 		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
 				.appendText(" ")
-				.appendSibling(new TranslationTextComponent("entity." + this.summonMobId + ".name"))
+				.appendSibling(new TranslationTextComponent("entity." + this.summonMobId))
 				.appendText("\n")
 				.appendSibling(new TranslationTextComponent("equipment.feature.summon.chance"))
 				.appendText(" " + Math.round(this.summonChance * 100) + "%");

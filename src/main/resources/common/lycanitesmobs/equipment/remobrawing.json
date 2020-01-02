@@ -6,12 +6,33 @@
 	"dropChance": 0.1,
 	"levelMin": 1,
 	"levelMax": 3,
+	"elements": [
+		"poison"
+	],
 	"features": [
 		{
 			"featureType": "harvest",
+			"levelMax": 1,
 			"harvestType": "axe",
 			"harvestShape": "block",
 			"harvestRange": [1, 1, 1],
+			"harvestRangeLevelMultiplier": 0
+		},
+		{
+			"featureType": "harvest",
+			"levelMin": 2,
+			"levelMax": 2,
+			"harvestType": "axe",
+			"harvestShape": "block",
+			"harvestRange": [2, 3, 2],
+			"harvestRangeLevelMultiplier": 0
+		},
+		{
+			"featureType": "harvest",
+			"levelMin": 3,
+			"harvestType": "axe",
+			"harvestShape": "block",
+			"harvestRange": [3, 10, 3],
 			"harvestRangeLevelMultiplier": 0
 		},
 		{

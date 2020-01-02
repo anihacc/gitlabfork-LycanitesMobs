@@ -6,6 +6,10 @@
 	"dropChance": 0.3,
 	"levelMin": 1,
 	"levelMax": 3,
+	"elements": [
+		"air",
+		"arbour"
+	],
 	"features": [
 		{
 			"featureType": "slot",

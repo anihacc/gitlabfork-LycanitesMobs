@@ -3,7 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.CustomItemEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -129,7 +128,7 @@ public class EntityAfrit extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityScorchfireball.class, target, range, 0, new Vec3d(0, 0, 0), 0.8f, 2f, 6F);
+        this.fireProjectile("scorchfireball", target, range, 0, new Vec3d(0, 0, 0), 0.8f, 2f, 6F);
         super.attackRanged(target, range);
     }
     

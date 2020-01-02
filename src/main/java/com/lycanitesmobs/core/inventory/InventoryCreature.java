@@ -45,7 +45,7 @@ public class InventoryCreature implements IInventory {
 	
 	// Properties:
 	public BaseCreatureEntity creature;
-	public String inventoryName = "Creature Inventory";
+	public String inventoryName;
 	protected NonNullList<ItemStack> inventoryContents;
     protected boolean basicArmor = true;
     protected int nextEquipmentSlot = 0;
@@ -101,7 +101,7 @@ public class InventoryCreature implements IInventory {
   	//                     Details
   	// ==================================================
     public String getName() {
-        return this.inventoryName;
+        return this.inventoryName + new TranslationTextComponent("entity.level").getFormattedText() + " " + this.creature.getLevel();
     }
 
     public ITextComponent getDisplayName() {

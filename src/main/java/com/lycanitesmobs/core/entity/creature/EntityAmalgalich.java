@@ -7,7 +7,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
-import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.CreatureAttribute;
@@ -64,8 +63,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
-        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(60).setVelocity(1.6F).setScale(8F));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.6F).setScale(8F).setAllPlayers(true));
+        this.goalSelector.addGoal(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.6F).setScale(8F));
         this.goalSelector.addGoal(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false));
 
         // Phase 1:
@@ -170,7 +169,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
 
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntitySpectralbolt.class, target, range, 0, new Vec3d(0, -12, 0), 1.2f, 8f, 0F);
+        this.fireProjectile("spectralbolt", target, range, 0, new Vec3d(0, -12, 0), 1.2f, 8f, 0F);
         super.attackRanged(target, range);
     }
 

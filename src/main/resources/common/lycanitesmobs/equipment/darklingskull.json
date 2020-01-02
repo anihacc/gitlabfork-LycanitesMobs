@@ -6,6 +6,10 @@
 	"dropChance": 0.2,
 	"levelMin": 2,
 	"levelMax": 3,
+	"elements": [
+		"shadow",
+		"void"
+	],
 	"features": [
 		{
 			"featureType": "slot",

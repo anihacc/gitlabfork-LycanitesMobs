@@ -17,7 +17,7 @@ import com.lycanitesmobs.core.info.ElementManager;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
-import com.lycanitesmobs.core.item.ItemCharge;
+import com.lycanitesmobs.core.item.ChargeItem;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -65,6 +65,8 @@ public class ProjectileInfo {
 	public Item chargeItem;
 	/** The name of the charge item for this projectile. Can be automatically generated using the name of this projectile or overridden. **/
 	public String chargeItemName;
+	/** If true, no charge item is generated for this projectile. **/
+	public boolean noChargeItem = false;
 	/** The dispenser behaviour used by this projectile. If null, this item cannot be fired from a dispenser. **/
 	public BaseProjectileDispenseBehaviour dispenserBehaviour;
 
@@ -92,7 +94,7 @@ public class ProjectileInfo {
 	/** How much gravity affects this projectile. **/
 	public double weight = 1.0D;
 	/** How fast the projectile sprite spins. **/
-	public float spinSpeed = 0;
+	public float rollSpeed = 0;
 
 	// Elements:
 	/** The Elements of this projectile, affects buffs and debuffs amongst other things. **/
@@ -139,6 +141,10 @@ public class ProjectileInfo {
 			this.chargeItemName = this.name + "charge";
 		}
 
+		if(json.has("noChargeItem")) {
+			this.noChargeItem = json.get("noChargeItem").getAsBoolean();
+		}
+
 		try {
 			if(json.has("entityClass")) {
 				this.entityClass = (Class<? extends BaseProjectileEntity>) Class.forName(json.get("entityClass").getAsString());
@@ -180,8 +186,8 @@ public class ProjectileInfo {
 			this.lifetime = json.get("lifetime").getAsInt();
 
 		// Visual:
-		if(json.has("spinSpeed"))
-			this.spinSpeed = json.get("spinSpeed").getAsFloat();
+		if(json.has("rollSpeed"))
+			this.rollSpeed = json.get("rollSpeed").getAsFloat();
 
 		// Elements:
 		List<String> elementNames = new ArrayList<>();
@@ -192,7 +198,7 @@ public class ProjectileInfo {
 		for(String elementName : elementNames) {
 			ElementInfo element = ElementManager.getInstance().getElement(elementName);
 			if (element == null) {
-				throw new RuntimeException("[Creature] Unable to initialise Projectile Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
+				throw new RuntimeException("[Projectile] Unable to initialise Projectile Info for " + this.getName() + " as the element " + elementName + " cannot be found.");
 			}
 			this.elements.add(element);
 		}
@@ -235,17 +241,19 @@ public class ProjectileInfo {
 	 */
 	public void load() {
 		// Charge Item:
-		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
-		if(this.chargeItem == null) {
-			Item.Properties properties = new Item.Properties();
-			properties.group(ItemManager.getInstance().itemsGroup);
-			this.chargeItem = new ItemCharge(properties, this);
-			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
-		}
+		if(!this.noChargeItem) {
+			this.chargeItem = ObjectManager.getItem(this.chargeItemName);
+			if (this.chargeItem == null) {
+				Item.Properties properties = new Item.Properties();
+				properties.group(ItemManager.getInstance().chargesGroup);
+				this.chargeItem = new ChargeItem(properties, this);
+				ObjectManager.addItem(this.chargeItemName, this.chargeItem);
+			}
 
-		// Dispenser:
-		this.dispenserBehaviour = new BaseProjectileDispenseBehaviour(this);
-		DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
+			// Dispenser:
+			this.dispenserBehaviour = new BaseProjectileDispenseBehaviour(this);
+			DispenserBlock.registerDispenseBehavior(this.chargeItem, this.dispenserBehaviour);
+		}
 
 		// Sounds:
 		ObjectManager.addSound(name, modInfo, "projectile." + name);
@@ -314,7 +322,7 @@ public class ProjectileInfo {
 	 * @return The display name of this projectile.
 	 */
 	public ITextComponent getTitle() {
-		return new TranslationTextComponent("entity." + this.getLocalisationKey() + ".name");
+		return new TranslationTextComponent("entity." + this.getLocalisationKey());
 	}
 
 	/**
@@ -346,5 +354,14 @@ public class ProjectileInfo {
 
 	public SoundEvent getImpactSound() {
 		return ObjectManager.getSound(this.name + "_impact");
+	}
+
+	/**
+	 * Returns if this Projectile has the provided element.
+	 * @param element The element to check for.
+	 * @return True if this projectile has the element.
+	 */
+	public boolean hasElement(ElementInfo element) {
+		return this.elements.contains(element);
 	}
 }

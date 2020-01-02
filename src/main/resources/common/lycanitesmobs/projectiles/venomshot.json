@@ -3,7 +3,7 @@
 	"loadDefault": true,
 	"width": 1.0,
 	"height": 1.0,
-	"scale": 2.5,
+	"scale": 1,
 	"damage": 3,
 	"pierce": 1,
 	"knockbackChance": 0.5,
@@ -29,5 +29,6 @@
 	"impactSound": false,
 	"ripper": false,
 	"pierceBlocks": false,
-	"glow": false
+	"glow": false,
+	"rollSpeed": 2
 }

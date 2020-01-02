@@ -167,12 +167,12 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
     	if(this.laserTime > 0) {
 	    	this.updateEnd();
 	    	this.laserTime--;
-            double minX = 0;
-            double maxX = 0;
-            double minY = 0;
-            double maxY = 0;
-            double minZ = 0;
-            double maxZ = 0;
+            double minX;
+            double maxX;
+            double minY;
+            double maxY;
+            double minZ;
+            double maxZ;
 
 	    	if(this.laserEnd != null) {
 	    		if(this.getPositionVec().getX() - this.getSize(Pose.STANDING).width < this.laserEnd.getPositionVec().getX() - this.laserEnd.getSize(Pose.STANDING).width)
@@ -552,7 +552,8 @@ public class LaserProjectileEntity extends BaseProjectileEntity {
 	public SoundEvent getLaunchSound() {
 		return null;
 	}
-	
+
+	@Override
 	public SoundEvent getBeamSound() {
 		return null;
 	}

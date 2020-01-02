@@ -249,16 +249,35 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			int barWidth = (256 / 4) + 16;
 			int barHeight = (32 / 4) + 2;
 			barX = nextX + this.getFontRenderer().getStringWidth(text);
+			int barCenter = barX + (barWidth / 2);
 			this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
 			if(this.playerExt.selectedPet.respawnTime <= 0) {
 				float healthNormal = this.playerExt.selectedPet.getHealth() / this.playerExt.selectedPet.getMaxHealth();
 				this.drawTexture(TextureManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
+				String healthText = String.format("%.0f", this.playerExt.selectedPet.getHealth()) + "/" + String.format("%.0f", this.playerExt.selectedPet.getMaxHealth());
+				this.getFontRenderer().drawString(healthText, barCenter - (this.getFontRenderer().getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
 			}
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
 				this.drawTexture(TextureManager.getTexture("GUIPetBarRespawn"), barX, barY, 0, respawnNormal, 1, barWidth * respawnNormal, barHeight);
 				this.getFontRenderer().drawString("" + (this.playerExt.selectedPet.respawnTime / 20) + "s", barX + barWidth + 10, nextY, 0xFFFFFF);
 			}
+
+			// Experience:
+			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
+			text = "\u00A7l" + new TranslationTextComponent("creature.stat.experience").getFormattedText() + ": ";
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+
+			barY = nextY - 1;
+			barWidth = (256 / 4) + 16;
+			barHeight = (32 / 4) + 2;
+			barX = nextX + this.getFontRenderer().getStringWidth(text);
+			barCenter = barX + (barWidth / 2);
+			this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
+			float experienceNormal = this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
+			this.drawTexture(TextureManager.getTexture("GUIPetBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
+			String experienceText = this.playerExt.selectedPet.getExperience() + "/" + this.playerExt.selectedPet.getMaxExperience();
+			this.getFontRenderer().drawString(experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
 		}
 
 		// Base Display:
@@ -373,7 +392,10 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	@Override
 	public ITextComponent getTitle() {
 		if(this.playerExt.selectedPet != null) {
-			ITextComponent title = this.playerExt.selectedPet.getDisplayName();
+			ITextComponent title = this.playerExt.selectedPet.getDisplayName()
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.level"))
+					.appendText(" " + this.playerExt.selectedPet.getLevel());
 			if(this.playerExt.selectedPet.releaseEntity) {
 				title = new TranslationTextComponent("gui.pet.release").appendText(" ").appendSibling(title);
 			}

@@ -1,10 +1,11 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.WanderGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityWaterJet;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -118,12 +119,17 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
     //                      Attacks
     // ==================================================
     // ========== Ranged Attack ==========
-    EntityWaterJet projectile = null;
+    BaseProjectileEntity projectile = null;
     @Override
     public void attackRanged(Entity target, float range) {
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("waterjet");
+        if(projectileInfo == null) {
+            return;
+        }
+
         // Update Laser:
         if(this.projectile != null && this.projectile.isAlive()) {
-            this.projectile.setTime(20);
+            this.projectile.projectileLife = 20;
         }
         else {
             this.projectile = null;
@@ -132,8 +138,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
         // Create New Laser:
         if(this.projectile == null) {
             // Type:
-            this.projectile = new EntityWaterJet(ProjectileManager.getInstance().oldProjectileTypes.get(EntityWaterJet.class), this.getEntityWorld(), this, 20, 10);
-            this.projectile.setOffset(0, 0, 1);
+            this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 
             // Launch:
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
@@ -147,7 +152,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
     // ==================================================
     //                   Mount Ability
     // ==================================================
-    EntityWaterJet abilityProjectile = null;
+    BaseProjectileEntity abilityProjectile = null;
     public void mountAbility(Entity rider) {
         if(this.getEntityWorld().isRemote)
             return;
@@ -160,7 +165,7 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
 
         // Update Laser:
         if(this.abilityProjectile != null && this.abilityProjectile.isAlive()) {
-            this.abilityProjectile.setTime(20);
+            this.abilityProjectile.projectileLife = 20;
         }
         else {
             this.abilityProjectile = null;
@@ -169,11 +174,14 @@ public class EntityIoray extends RideableCreatureEntity implements IMob {
         // Create New Laser:
         if(this.abilityProjectile == null) {
             // Type:
+            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("waterjet");
+            if(projectileInfo == null) {
+                return;
+            }
             if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
                 return;
 
-            this.abilityProjectile = new EntityWaterJet(ProjectileManager.getInstance().oldProjectileTypes.get(EntityWaterJet.class), this.getEntityWorld(), (LivingEntity)this.getControllingPassenger(), 25, 20, this);
-            this.abilityProjectile.setOffset(0, 1, 1);
+            this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 
             // Launch:
             this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
