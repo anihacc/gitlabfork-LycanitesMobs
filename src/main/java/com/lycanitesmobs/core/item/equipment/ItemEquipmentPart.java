@@ -45,7 +45,6 @@ public class ItemEquipmentPart extends BaseItem {
 	/** A list of all features this part has. **/
 	public List<EquipmentFeature> features = new ArrayList<>();
 
-	// Elements:
 	/** The Elements of this part, used to determine what charges can be used to upgrade this part along with other future features. **/
 	public List<ElementInfo> elements = new ArrayList<>();
 

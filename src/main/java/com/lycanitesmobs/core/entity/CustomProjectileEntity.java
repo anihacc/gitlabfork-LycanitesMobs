@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomProjectileEntity extends BaseProjectileEntity {
-	/** Used to sync the Projectile Info's name to use. **/
-	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
-
 	/** The Projectile Info to base this projectile from. **/
 	public ProjectileInfo projectileInfo;
 
@@ -53,6 +50,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	public List<BaseProjectileEntity> spawnedProjectiles = new ArrayList<>();
 
 	// Data Parameters:
+	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
 	protected static final DataParameter<Integer> THROWING_ENTITY_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
 	protected static final DataParameter<Integer> PARENT_PROJECTILE_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
 	protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
@@ -134,7 +132,6 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 		// Stats:
 		this.setProjectileScale(this.projectileInfo.scale);
-		//this.setSize(this.projectileInfo.width * this.projectileScale, this.projectileInfo.height * this.projectileScale); TODO EntityType dynamic sizes.
 		this.projectileLife = this.projectileInfo.lifetime;
 		this.setDamage(this.projectileInfo.damage);
 		this.setPierce(this.projectileInfo.pierce);
@@ -170,7 +167,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		super.tick();
 
 		if(this.projectileInfo != null) {
-			for (ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
 				behaviour.onProjectileUpdate(this);
 			}
 		}

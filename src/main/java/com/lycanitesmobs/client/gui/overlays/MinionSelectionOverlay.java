@@ -1,6 +1,7 @@
-package com.lycanitesmobs.client.gui;
+package com.lycanitesmobs.client.gui.overlays;
 
 import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.client.gui.BaseScreen;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.client.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;

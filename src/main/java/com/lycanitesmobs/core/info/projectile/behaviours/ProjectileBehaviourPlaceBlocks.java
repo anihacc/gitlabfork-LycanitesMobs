@@ -3,6 +3,8 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -41,6 +43,10 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 		if(block == null) {
 			return;
 		}
+		BlockState blockState = block.getDefaultState();
+		if(block instanceof FlowingFluidBlock) {
+			blockState = blockState.with(FlowingFluidBlock.LEVEL, 8);
+		}
 
 		pos = pos.up();
 		for(int x = -this.radius + 1; x < this.radius; x++) {
@@ -48,7 +54,7 @@ public class ProjectileBehaviourPlaceBlocks extends ProjectileBehaviour {
 				for(int z = -this.radius + 1; z < this.radius; z++) {
 					BlockPos placePos = pos.add(x, y, z);
 					if(projectile.canDestroyBlock(placePos) && (this.chance >= 1 || this.chance >= world.rand.nextDouble())) {
-						world.setBlockState(placePos, block.getDefaultState());
+						world.setBlockState(placePos, blockState);
 					}
 				}
 			}

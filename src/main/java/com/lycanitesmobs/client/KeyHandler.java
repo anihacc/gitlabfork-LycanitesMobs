@@ -1,7 +1,7 @@
 package com.lycanitesmobs.client;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.gui.MinionSelectionOverlay;
+import com.lycanitesmobs.client.gui.overlays.MinionSelectionOverlay;
 import com.lycanitesmobs.client.gui.beastiary.CreaturesBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.IndexBeastiaryScreen;
 import com.lycanitesmobs.client.gui.beastiary.PetsBeastiaryScreen;

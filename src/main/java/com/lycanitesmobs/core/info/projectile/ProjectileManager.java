@@ -6,18 +6,13 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.FileLoader;
 import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.StreamLoader;
-import com.lycanitesmobs.core.dispenser.BaseProjectileDispenseBehaviour;
 import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.entity.projectile.*;
-import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.ModInfo;
-import com.lycanitesmobs.core.item.ChargeItem;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -203,23 +198,6 @@ public class ProjectileManager extends JSONLoader {
 			ObjectManager.addSound(name + "_impact", modInfo, "projectile." + name + ".impact");
 		}
 		this.addOldProjectile(name, entityClass);
-	}
-
-	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass, boolean createChargeItem, boolean createDispenserBehaviour) {
-		this.addOldProjectile(name, entityClass, createChargeItem, createDispenserBehaviour, false);
-	}
-
-	public void addOldProjectile(String name, Class<? extends BaseProjectileEntity> entityClass, boolean createChargeItem, boolean createDispenserBehaviour, boolean impactSound) {
-		this.addOldProjectile(name, entityClass, impactSound);
-		if(createChargeItem) {
-			Item.Properties itemProperties = new Item.Properties().group(ItemManager.getInstance().chargesGroup);
-			ChargeItem chargeItem = new ChargeItem(itemProperties, name + "charge", entityClass);
-			ObjectManager.addItem(name + "charge", chargeItem);
-			if (createDispenserBehaviour) {
-				BaseProjectileDispenseBehaviour dispenserBehaviour = new BaseProjectileDispenseBehaviour(entityClass, name);
-				DispenserBlock.registerDispenseBehavior(chargeItem, dispenserBehaviour);
-			}
-		}
 	}
 
 	public BaseProjectileEntity createOldProjectile(Class<? extends BaseProjectileEntity> projectileClass, World world, LivingEntity entity) {

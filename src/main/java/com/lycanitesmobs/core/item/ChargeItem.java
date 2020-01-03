@@ -5,7 +5,6 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
-import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -33,9 +32,6 @@ public class ChargeItem extends BaseItem {
     /** The projectile info that this projectile charge item belongs to. **/
     public ProjectileInfo projectileInfo;
 
-    /** Used for created charges of old projectiles, this is the class that is instantiated when spawning the projectile. **/
-    public Class<? extends BaseProjectileEntity> oldProjectileClass;
-
     /**
      * Constructor
      * @param projectileInfo The projectile info to base this charge off.
@@ -49,17 +45,6 @@ public class ChargeItem extends BaseItem {
             LycanitesMobs.logDebug("Projectile", "Created Charge Item: " + projectileInfo.chargeItemName);
             this.setup();
         }
-    }
-
-    /**
-     * Older constructor for hard coded projectiles.
-     */
-    public ChargeItem(Item.Properties properties, String itemName, Class<? extends BaseProjectileEntity> projectileClass) {
-        super(properties);
-        this.oldProjectileClass = projectileClass;
-        this.modInfo = LycanitesMobs.modInfo;
-        this.itemName = itemName;
-        this.setup();
     }
 
     @Override
@@ -139,9 +124,6 @@ public class ChargeItem extends BaseItem {
         if(this.projectileInfo != null) {
             return this.projectileInfo.createProjectile(world, entityPlayer);
         }
-        if(this.oldProjectileClass != null) {
-            return ProjectileManager.getInstance().createOldProjectile(this.oldProjectileClass, world, entityPlayer);
-        }
         return null;
     }
 
@@ -181,6 +163,6 @@ public class ChargeItem extends BaseItem {
         if(this.projectileInfo != null) {
             return this.projectileInfo.getTitle();
         }
-        return new TranslationTextComponent("entity.lycanitesmobs." + ProjectileManager.getInstance().oldProjectileNames.get(this.oldProjectileClass));
+        return new TranslationTextComponent("item.lycanitesmobs.charge");
     }
 }
