@@ -79,6 +79,15 @@
 			"effectTarget": "target",
 			"effectDuration": 80,
 			"effectStrength": 1
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 2,
+			"projectileName": "throwingscythe",
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 10,
+			"count": 1
 		}
 	]
 }
