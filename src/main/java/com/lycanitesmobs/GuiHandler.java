@@ -2,9 +2,10 @@ package com.lycanitesmobs;
 
 import com.lycanitesmobs.client.gui.*;
 import com.lycanitesmobs.client.gui.beastiary.*;
+import com.lycanitesmobs.client.gui.overlays.MinionSelectionOverlay;
 import com.lycanitesmobs.core.tileentity.TileEntityBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.inventory.ContainerCreature;
+import com.lycanitesmobs.core.container.CreatureContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -60,7 +61,7 @@ public class GuiHandler implements IGuiHandler {
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
 			if(entity instanceof BaseCreatureEntity)
-				return new ContainerCreature((BaseCreatureEntity)entity, player.inventory);
+				return new CreatureContainer((BaseCreatureEntity)entity, player.inventory);
 		}
 		
 		// ========== Item ==========
@@ -88,7 +89,7 @@ public class GuiHandler implements IGuiHandler {
 		else if(id == GuiType.ENTITY.id) {
 			Entity entity = world.getEntityByID(x);
 			if(entity instanceof BaseCreatureEntity)
-				return new GuiCreature((BaseCreatureEntity)entity, player.inventory);
+				return new CreatureInventoryScreen((BaseCreatureEntity)entity, player.inventory);
 		}
 		
 		// ========== Item ==========
@@ -99,26 +100,26 @@ public class GuiHandler implements IGuiHandler {
 		// ========== Beastiary ==========
 		else if(id == GuiType.BEASTIARY.id) {
 			if(x == Beastiary.INDEX.id) {
-				return new GuiBeastiaryIndex(player);
+				return new IndexBeastiaryScreen(player);
 			}
 			if(x == Beastiary.CREATURES.id) {
-				return new GuiBeastiaryCreatures(player);
+				return new CreaturesBeastiaryScreen(player);
 			}
 			if(x == Beastiary.PETS.id) {
-				return new GuiBeastiaryPets(player);
+				return new PetsBeastiaryScreen(player);
 			}
 			if(x == Beastiary.SUMMONING.id) {
-				return new GuiBeastiarySummoning(player);
+				return new SummoningBeastiaryScreen(player);
 			}
 			if(x == Beastiary.ELEMENTS.id) {
-				return new GuiBeastiaryElements(player);
+				return new ElementsBeastiaryScreen(player);
 			}
 		}
 
 		// ========== Player ==========
 		else if(id == GuiType.PLAYER.id) {
 			if(x == PlayerGuiType.MINION_SELECTION.id) {
-				return new GuiMinionSelection(player);
+				return new MinionSelectionOverlay(player);
 			}
 		}
 		

@@ -2,13 +2,12 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityAcidSplash;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,7 +50,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         super.onLivingUpdate();
 
 		if(!this.getEntityWorld().isRemote && this.updateTick % this.nextSplash == 0) {
-			this.fireProjectile(EntityAcidSplash.class, null, 0, 0, new Vec3d(0.5D - this.getRNG().nextDouble(), 0, 0.5D - this.getRNG().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
+			this.fireProjectile("acidsplash", null, 0, 0, new Vec3d(0.5D - this.getRNG().nextDouble(), 0, 0.5D - this.getRNG().nextDouble()), 0f, (float)this.nextSplash / 20, 1F);
 			this.nextSplash = 20 + this.getRNG().nextInt(20);
 		}
         
@@ -81,7 +80,7 @@ public class EntityXaphan extends TameableCreatureEntity implements IMob {
         for(int row = -1; row <= 1; row++) {
 			int projectileCount = 10;
 			for (int i = 0; i < projectileCount; i++) {
-				this.fireProjectile(EntityAcidSplash.class, target, range, (90 / projectileCount) * i, new Vec3d(0, 3 * row, 0), 0.6f, 2f, 1F);
+				this.fireProjectile("acidsplash", target, range, (90 / projectileCount) * i, new Vec3d(0, 3 * row, 0), 0.6f, 2f, 1F);
 			}
 		}
         super.attackRanged(target, range);

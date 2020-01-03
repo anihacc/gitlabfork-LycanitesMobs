@@ -6,9 +6,9 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityPortal;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
-import com.lycanitesmobs.core.container.ContainerSummoningPedestal;
+import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.gui.GuiSummoningPedestal;
+import com.lycanitesmobs.client.gui.SummoningPedestalScreen;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -560,7 +560,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	@Override
 	public Object getGUI(EntityPlayer player) {
 		if(this.getWorld().isRemote)
-			return new GuiSummoningPedestal(player, this);
-		return new ContainerSummoningPedestal(this, player.inventory);
+			return new SummoningPedestalScreen(player, this);
+		return new SummoningPedestalContainer(this, player.inventory);
 	}
 }

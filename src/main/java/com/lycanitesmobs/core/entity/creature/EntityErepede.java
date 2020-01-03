@@ -1,16 +1,15 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityMudshot;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -82,14 +81,17 @@ public class EntityErepede extends RideableCreatureEntity {
     		return;
     	if(this.getStamina() < this.getStaminaCost())
     		return;
-    	
-    	if(rider instanceof EntityPlayer) {
-    		EntityPlayer player = (EntityPlayer)rider;
-	    	EntityMudshot projectile = new EntityMudshot(this.getEntityWorld(), player);
-	    	this.getEntityWorld().spawnEntity(projectile);
-	    	this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	    	this.triggerAttackCooldown();
-    	}
+
+		if(rider instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)rider;
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("mudshot");
+			if(projectileInfo != null) {
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
+				this.getEntityWorld().spawnEntity(projectile);
+				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				this.triggerAttackCooldown();
+			}
+		}
     	
     	this.applyStaminaCost();
     }
@@ -112,7 +114,7 @@ public class EntityErepede extends RideableCreatureEntity {
    	// ==================================================
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile(EntityMudshot.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+		this.fireProjectile("mudshot", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
 		super.attackRanged(target, range);
 	}
     

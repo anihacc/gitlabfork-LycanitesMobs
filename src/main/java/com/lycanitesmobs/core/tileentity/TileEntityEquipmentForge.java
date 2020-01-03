@@ -1,8 +1,8 @@
 package com.lycanitesmobs.core.tileentity;
 
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.container.ContainerEquipmentForge;
-import com.lycanitesmobs.client.gui.GuiEquipmentForge;
+import com.lycanitesmobs.core.container.EquipmentForgeContainer;
+import com.lycanitesmobs.client.gui.EquipmentForgeScreen;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,18 +27,14 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	@Override
 	public void onRemove() {
 		// TODO Drop parts or piece.
+		super.onRemove();
 	}
-
 
 	@Override
 	public void update() {
 		super.update();
 	}
 
-
-	// ========================================
-	//                Inventory
-	// ========================================
 	@Override
 	public boolean isEmpty() {
 		for (ItemStack itemstack : this.itemStacks) {
@@ -211,14 +207,15 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 	// ========================================
 	//                Open GUI
 	// ========================================
+	@Override
 	public Object getGUI(EntityPlayer player) {
 		if(player.world.isRemote) {
-			return new GuiEquipmentForge(this, player.inventory);
+			return new EquipmentForgeScreen(this, player.inventory);
 		}
 		if(player instanceof EntityPlayerMP) {
 			((EntityPlayerMP)player).connection.sendPacket(this.getUpdatePacket());
 		}
-		return new ContainerEquipmentForge(this, player.inventory);
+		return new EquipmentForgeContainer(this, player.inventory);
 	}
 
 

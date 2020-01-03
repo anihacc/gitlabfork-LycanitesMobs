@@ -56,6 +56,7 @@ public class BaseProjectileEntity extends EntityThrowable {
     public float textureScale = 1;
     public float textureOffsetY = 0;
     public boolean clientOnly = false;
+	public float rollSpeed = 0;
 
     // Data Manager:
     protected static final DataParameter<Float> SCALE = EntityDataManager.<Float>createKey(BaseProjectileEntity.class, DataSerializers.FLOAT);
@@ -601,5 +602,9 @@ public class BaseProjectileEntity extends EntityThrowable {
 
 	public SoundEvent getImpactSound() {
 		return AssetManager.getSound(this.entityName + "_impact");
+	}
+
+	public SoundEvent getBeamSound() {
+		return this.getLaunchSound();
 	}
 }

@@ -1,6 +1,5 @@
 package com.lycanitesmobs.core.entity.creature;
 
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.api.IGroupBoss;
 import com.lycanitesmobs.api.IGroupHeavy;
@@ -8,7 +7,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.FindNearbyPlayersGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.*;
 import com.lycanitesmobs.core.entity.goals.targeting.CopyMasterAttackTargetGoal;
-import com.lycanitesmobs.core.entity.projectile.EntitySpectralbolt;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -68,8 +66,8 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
         this.tasks.addTask(this.nextIdleGoalIndex, new FaceTargetGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new HealWhenNoPlayersGoal(this));
         this.tasks.addTask(this.nextIdleGoalIndex, new SummonMinionsGoal(this).setMinionInfo("banshee").setAntiFlight(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true));
-        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile(EntitySpectralbolt.class).setFireRate(60).setVelocity(1.0F).setScale(8F));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(40).setVelocity(1.0F).setScale(8F).setAllPlayers(true));
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("spectralbolt").setFireRate(60).setVelocity(1.0F).setScale(8F));
         this.tasks.addTask(this.nextIdleGoalIndex, new EffectAuraGoal(this).setEffect("decay").setAmplifier(0).setEffectSeconds(5).setRange(52).setCheckSight(false));
 
         // Phase 1:
@@ -176,7 +174,7 @@ public class EntityAmalgalich extends BaseCreatureEntity implements IMob, IGroup
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntitySpectralbolt.class, target, range, 0, new Vec3d(0, 8, 0), 1.2f, 6f, 0F);
+        this.fireProjectile("spectralbolt", target, range, 0, new Vec3d(0, 8, 0), 1.2f, 6f, 0F);
         super.attackRanged(target, range);
     }
 

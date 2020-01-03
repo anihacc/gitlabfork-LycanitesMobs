@@ -5,12 +5,13 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityMagma;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -69,7 +70,11 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy 
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        BaseProjectileEntity projectile = new EntityMagma(this.getEntityWorld(), this);
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("magma");
+        if(projectileInfo == null) {
+            return;
+        }
+        BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
         projectile.setProjectileScale(2f);
 
         // Y Offset:
@@ -92,7 +97,7 @@ public class EntityGorger extends TameableCreatureEntity implements IGroupHeavy 
 
         // Random Projectiles:
         for(int i = 0; i < 10; i++) {
-            projectile = new EntityMagma(this.getEntityWorld(), this);
+            projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
             projectile.setProjectileScale(2f);
             projectile.shoot((this.getRNG().nextFloat()) - 0.5F, this.getRNG().nextFloat(), (this.getRNG().nextFloat()) - 0.5F, 0.5F, 3.0F);
             this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

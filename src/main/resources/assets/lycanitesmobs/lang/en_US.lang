@@ -2,6 +2,8 @@ lycanitesmobs.name=Lycanites Mobs
 #
 # ========== Entites ==========
 entity.level=Lvl
+entity.health=HP
+entity.experience=XP
 entity.lycanitesmobs.summoningportal.name=Summoning Portal
 entity.lycanitesmobs.fear.name=Feared
 #
@@ -54,6 +56,11 @@ subspecies.void.name=Void
 item.horsearmormetal.name=Iron Pet Armor
 item.horsearmorgold.name=Golden Pet Armor
 item.horsearmordiamond.name=Diamond Pet Armor
+item.lycanitesmobs.charge=Charge
+item.lycanitesmobs.charge.description=A charged orb of element energy. Can be used to level up Pets and Equipment Parts with matching Elements. Can also be used to throw a projectile or fired from a dispenser.
+item.lycanitesmobs.charge.projectile=Projectile:
+item.lycanitesmobs.charge.elements=Elements:
+item.lycanitesmobs.charge.creature.invalid=This charge does not have any elements that match the creature's elements.
 #
 #
 #
@@ -62,6 +69,7 @@ item.horsearmordiamond.name=Diamond Pet Armor
 itemGroup.lycanitesmobs.items=Lycanites Mobs: Items
 itemGroup.lycanitesmobs.blocks=Lycanites Mobs: Blocks
 itemGroup.lycanitesmobs.creatures=Lycanites Mobs: Creatures
+itemGroup.lycanitesmobs.charges=Lycanites Mobs: Charges
 itemGroup.lycanitesmobs.equipmentparts=Lycanites Mobs: Equipment Parts
 #
 # Beastiary:
@@ -328,6 +336,7 @@ key.minions=Minion Selection
 #
 # ========== Equipment ==========
 equipment.slottype=Slot Type:
+equipment.element=Charge Elements:
 equipment.level=Level:
 equipment.feature.slot=Adds Slot:
 equipment.feature.damage=Damage:
@@ -374,20 +383,25 @@ creature.stat.speed=Speed
 creature.stat.damage=Melee Damage
 creature.stat.pierce=Melee Pierce
 creature.stat.effect=Melee Effect
+creature.stat.level=Level
+creature.stat.experience=Experience
 # ========================================================================
 tile.summoningpedestal.name=Summoning Pedestal
 tile.summoningpedestal.description=This pedestal is able to create a constant summoning portal that will summon the selected minion. Some pedestals can be player owned and some not.
 #
 #
 # ========== Equipment Forges ==========
-tile.equipmentforge_lesser.name=Lesser Equipment Forge (Level 1)
+tile.equipmentforge_lesser.name=Lesser Equipment Forge (Lvl 1)
 tile.equipmentforge_lesser.description=This forge can be used to create new Equipment from Level 1 creature body parts (higher level parts will be downgraded if possible).
 #
-tile.equipmentforge_greater.name=Greater Equipment Forge (Level 2)
+tile.equipmentforge_greater.name=Greater Equipment Forge (Lvl 2)
 tile.equipmentforge_greater.description=This forge can be used to create new Equipment from Level 2 or below creature body parts (higher level parts will be downgraded if possible).
 #
-tile.equipmentforge_master.name=Master Equipment Forge (Level 3)
+tile.equipmentforge_master.name=Master Equipment Forge (Lvl 3)
 tile.equipmentforge_master.description=This forge can be used to create new Equipment from Level 3 or below creature body parts.
+#
+tile.lycanitesmobs.equipment_infuser=Equipment Infuser
+tile.lycanitesmobs.equipment_infuser.description=Used to infuse Charge items into Equipment Parts with matching Elements in order to level them up. Can also be used to apply dyes to equipment parts.
 #
 #
 # ========== Special ==========
@@ -1692,10 +1706,10 @@ item.cooked_ika_meat.name=Cooked Ika Meat
 item.cooked_ika_meat.description=Crispy seafood! Cooking it has made it much lighter!
 #
 item.raw_krake_meat.name=Raw Krake Meat
-item.raw_krake_meat.description=It seems to still be moving slightly, probably not safe to eat.
+item.raw_krake_meat.description=A rabbit-like meat. It seems to still be moving slightly, probably not safe to eat.
 #
 item.cooked_krake_meat.name=Cooked Krake Meat
-item.cooked_krake_meat.description=Has a strong texture and a rich savory taste, seems to be vibrating slightly.
+item.cooked_krake_meat.description=A rabbit-like meat. Has a strong texture and a rich savory taste, seems to be vibrating slightly.
 #
 item.caecilian_ramen.name=Caecilian Ramen
 item.caecilian_ramen.description=A delightful dish with a fresh fried egg on top, the noodles seem to be vibrating!
@@ -1994,5 +2008,38 @@ mobevent.wingedvenom.name=Winged Venom
 mobevent.wintersgrasp.name=Winters Grasp
 # ========================================================================
 entity.lycanitesmobs.ember.name=Ember
-entity.lycanitesmobs.venomshot.name=Venomshot
-entity.lycanitesmobs.devilstar.name=Devilstar
+entity.lycanitesmobs.whirlwind=Whirlwind
+entity.lycanitesmobs.lightball=Light Ball
+entity.lycanitesmobs.mudshot=Mudshot
+entity.lycanitesmobs.crystalshard=Crystal Shard
+entity.lycanitesmobs.magma=Magma
+entity.lycanitesmobs.frostbolt=Frostbolt
+entity.lycanitesmobs.tundra=Tundra
+entity.lycanitesmobs.spectralbolt=Spectral Bolt
+entity.lycanitesmobs.venomshot=Venomshot
+entity.lycanitesmobs.devilstar=Devilstar"
+entity.lycanitesmobs.boulderblast=Boulder Blast
+entity.lycanitesmobs.icefireball=Icefireball
+entity.lycanitesmobs.hellfireball=Hellfireball
+entity.lycanitesmobs.quill=Quill
+entity.lycanitesmobs.scorchfireball=Scorchfireball
+entity.lycanitesmobs.throwingscythe=Throwing Scythe
+entity.lycanitesmobs.demonicblast=Demonic Blast
+entity.lycanitesmobs.demonicspark=Demonic Spark
+entity.lycanitesmobs.bloodleech=Bloodleech
+entity.lycanitesmobs.acidsplash=Acid Splash
+entity.lycanitesmobs.lobdarklings=Lob Darklings
+entity.lycanitesmobs.faebolt=Faebolt
+entity.lycanitesmobs.frostweb=Frost Web
+entity.lycanitesmobs.chaosorb=Chaos Orb
+entity.lycanitesmobs.poisonray=Poison Ray
+entity.lycanitesmobs.ember=Ember
+entity.lycanitesmobs.blizzard=Blizzard
+entity.lycanitesmobs.doomfireball=Doomfireball
+entity.lycanitesmobs.waterjet=Water Jet
+entity.lycanitesmobs.poop=Poop
+entity.lycanitesmobs.lifedrain=Life Drain
+entity.lycanitesmobs.devilstar=Devilstar
+entity.lycanitesmobs.aquapulse=Aqua Pulse
+entity.lycanitesmobs.arcanelaserstorm=Arcane Laser Storm
+entity.lycanitesmobs.aetherwave=Aetherwave

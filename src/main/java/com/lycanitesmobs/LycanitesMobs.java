@@ -15,10 +15,7 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.helpers.LMReflectionHelper;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.item.CreativeTabBlocks;
-import com.lycanitesmobs.core.item.CreativeTabCreatures;
-import com.lycanitesmobs.core.item.CreativeTabEquipmentParts;
-import com.lycanitesmobs.core.item.CreativeTabItems;
+import com.lycanitesmobs.core.item.*;
 import com.lycanitesmobs.core.item.consumable.ItemHalloweenTreat;
 import com.lycanitesmobs.core.item.consumable.ItemWinterGift;
 import com.lycanitesmobs.core.item.equipment.EquipmentPartManager;
@@ -29,6 +26,7 @@ import com.lycanitesmobs.core.network.PacketHandler;
 import com.lycanitesmobs.core.pets.DonationFamiliars;
 import com.lycanitesmobs.core.spawner.SpawnerEventListener;
 import com.lycanitesmobs.core.spawner.SpawnerManager;
+import com.lycanitesmobs.core.tileentity.EquipmentInfuserTileEntity;
 import com.lycanitesmobs.core.tileentity.TileEntityEquipmentForge;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
 import com.lycanitesmobs.core.worldgen.WorldGeneratorDungeon;
@@ -66,7 +64,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.5.4";
+	public static final String versionNumber = "2.0.6.0";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "http://lycanitesmobs.com";
@@ -99,6 +97,7 @@ public class LycanitesMobs {
     public static final CreativeTabs itemsTab = new CreativeTabItems(CreativeTabs.getNextID(), modid + ".items");
     public static final CreativeTabs blocksTab = new CreativeTabBlocks(CreativeTabs.getNextID(), modid + ".blocks");
 	public static final CreativeTabs creaturesTab = new CreativeTabCreatures(CreativeTabs.getNextID(), modid + ".creatures");
+	public static final CreativeTabs chargesTab = new CreativeTabCharges(CreativeTabs.getNextID(), modid + ".charges");
 	public static final CreativeTabs equipmentPartsTab = new CreativeTabEquipmentParts(CreativeTabs.getNextID(), modid + ".equipmentparts");
 	
 	// Texture Path:
@@ -165,6 +164,10 @@ public class LycanitesMobs {
         }
         ExtendedEntity.FORCE_REMOVE_ENTITY_TICKS = config.getInt("Admin", "Force Remove Entity Ticks", 40, "How many ticks it takes for an entity to be forcefully removed (1 second = 20 ticks). This only applies to EntityLiving, other entities are instantly removed.");
 
+		// Elements:
+		ElementManager.getInstance().loadConfig();
+		ElementManager.getInstance().loadAllFromJSON(modInfo);
+
 		// Potion Effects:
 		this.potionEffects = new PotionEffects();
 		this.potionEffects.init(config);
@@ -178,10 +181,7 @@ public class LycanitesMobs {
 		// Tile Entities:
 		ObjectManager.addTileEntity("summoningpedestal", TileEntitySummoningPedestal.class);
 		ObjectManager.addTileEntity("equipmentforge", TileEntityEquipmentForge.class);
-
-        // Elements:
-		ElementManager.getInstance().loadConfig();
-		ElementManager.getInstance().loadAllFromJSON(modInfo);
+		ObjectManager.addTileEntity("equipment_infuser", EquipmentInfuserTileEntity.class);
 
 		// Special Entities:
 		ObjectManager.addSpecialEntity("hitarea", EntityHitArea.class);

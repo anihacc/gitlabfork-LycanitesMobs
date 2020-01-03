@@ -1,10 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityDemonicBlast;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -133,7 +135,7 @@ public class EntityCacodemon extends RideableCreatureEntity {
 	// ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDemonicBlast.class, target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("demonicblast", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -182,10 +184,13 @@ public class EntityCacodemon extends RideableCreatureEntity {
 
         if(rider instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)rider;
-            EntityDemonicBlast projectile = new EntityDemonicBlast(this.getEntityWorld(), player);
-            this.getEntityWorld().spawnEntity(projectile);
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.triggerAttackCooldown();
+            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("demonicblast");
+            if(projectileInfo != null) {
+                BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
+                this.getEntityWorld().spawnEntity(projectile);
+                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+                this.triggerAttackCooldown();
+            }
         }
 
         this.applyStaminaCost();

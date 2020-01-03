@@ -4,7 +4,7 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.EntityPortal;
-import com.lycanitesmobs.client.gui.beastiary.GuiBeastiarySummoning;
+import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -143,7 +143,7 @@ public class ItemStaffSummoning extends ItemScepter {
 				if(!player.getEntityWorld().isRemote)
 	    			playerExt.sendAllSummonSetsToPlayer();
 				if(player.getEntityWorld().isRemote)
-					GuiBeastiarySummoning.openToPlayer(player);
+					SummoningBeastiaryScreen.openToPlayer(player);
 			}
 		}
         return super.onItemRightClick(world, player, hand);

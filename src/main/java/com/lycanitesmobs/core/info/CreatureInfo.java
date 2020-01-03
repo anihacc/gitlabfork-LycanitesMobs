@@ -531,7 +531,7 @@ public class CreatureInfo {
 	public ResourceLocation getIcon() {
 		ResourceLocation texture = AssetManager.getTexture(this.getName() + "_icon");
 		if(texture == null) {
-			AssetManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/" + this.getName() + "_icon.png");
+			AssetManager.addTexture(this.getName() + "_icon", this.modInfo, "textures/guis/creatures/" + this.getName() + "_icon.png");
 			texture = AssetManager.getTexture(this.getName() + "_icon");
 		}
 		return texture;

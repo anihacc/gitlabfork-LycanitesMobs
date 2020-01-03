@@ -1,10 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
@@ -129,12 +131,17 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
     //                      Attacks
     // ==================================================
     // ========== Ranged Attack ==========
-    EntityLifeDrain projectile = null;
+	BaseProjectileEntity projectile = null;
     @Override
     public void attackRanged(Entity target, float range) {
-    	// Update Laser:
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("lifedrain");
+		if(projectileInfo == null) {
+			return;
+		}
+
+		// Update Laser:
     	if(this.projectile != null && this.projectile.isEntityAlive()) {
-    		this.projectile.setTime(20);
+    		this.projectile.projectileLife = 20;
     	}
     	else {
     		this.projectile = null;
@@ -143,7 +150,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
     	// Create New Laser:
     	if(this.projectile == null) {
 	    	// Type:
-	    	this.projectile = new EntityLifeDrain(this.getEntityWorld(), this, 25, 20);
+			this.projectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 	    	
 	    	// Launch:
 	        this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));

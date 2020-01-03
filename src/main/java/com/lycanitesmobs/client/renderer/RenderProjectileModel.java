@@ -30,11 +30,6 @@ public class RenderProjectileModel extends Render {
 
     public RenderProjectileModel(RenderManager renderManager, String projectileName) {
     	super(renderManager);
-    	this.mainModel = AssetManager.getModel(projectileName);
-        if(this.mainModel instanceof ModelCustom) {
-            //ModelCustom modelCustom = (ModelCustom)this.mainModel;
-            //modelCustom.addCustomLayers(this);
-        }
     }
 
 
@@ -42,22 +37,20 @@ public class RenderProjectileModel extends Render {
 	//                    Do Render
 	// ==================================================
 	public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if(this.mainModel == null) {
-			if(entity instanceof CustomProjectileEntity) {
-				ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
-				if(projectileInfo == null) {
-					return;
-				}
-				try {
-					this.mainModel = projectileInfo.modelClass.getConstructor().newInstance();
-				} catch (Exception e) {
-					e.printStackTrace();
-					return;
-				}
-			}
-			else {
+		if(entity instanceof CustomProjectileEntity) {
+			ProjectileInfo projectileInfo = ((CustomProjectileEntity)entity).projectileInfo;
+			if(projectileInfo == null) {
 				return;
 			}
+			try {
+				this.mainModel = projectileInfo.modelClass.getConstructor().newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		else {
+			return;
 		}
 
 		GlStateManager.pushMatrix();

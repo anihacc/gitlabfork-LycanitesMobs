@@ -6,6 +6,9 @@ import net.minecraft.world.EnumDifficulty;
 
 /** Manages the stats of an EntityCreature. This applies difficulty multipliers, subspecies, levels, etc also. **/
 public class CreatureStats {
+	/** The base amount of experience needed to level up, this is increased by the creature's level scaled. **/
+	public static int BASE_LEVELUP_EXPERIENCE = 1000;
+
 	/** A static array of all stat names used by configs, etc. **/
 	public static String[] STAT_NAMES = new String[] {"health", "defense", "armor", "speed", "damage", "attackSpeed", "rangedSpeed", "effect", "amplifier", "pierce", "sight"};
 
@@ -309,5 +312,13 @@ public class CreatureStats {
 	protected double getLevelMultiplier(String stat) {
 		double statLevel = Math.max(0, this.entity.getLevel() - 1);
 		return 1 + (statLevel * CreatureManager.getInstance().getLevelMultiplier(stat.toUpperCase()));
+	}
+
+	/**
+	 * Determines how much experience the creature needs in order to level up.
+	 * @return Experience required for a level up.
+	 */
+	public int getExperienceForNextLevel() {
+		return BASE_LEVELUP_EXPERIENCE + Math.round(BASE_LEVELUP_EXPERIENCE * (this.entity.getLevel() - 1) * 0.25F);
 	}
 }

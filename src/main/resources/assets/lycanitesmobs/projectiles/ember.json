@@ -1,8 +1,8 @@
 {
 	"name": "ember",
 	"loadDefault": true,
-	"width": 1.0,
-	"height": 1.0,
+	"width": 0.5,
+	"height": 0.5,
 	"scale": 0.5,
 	"damage": 1,
 	"pierce": 1,
@@ -20,7 +20,8 @@
 	"lavaproof": false,
 	"cutGrass": false,
 	"impactSound": false,
-	"ripper": false,
+	"ripper": true,
 	"pierceBlocks": false,
-	"glow": true
+	"glow": true,
+	"rollSpeed": 4
 }

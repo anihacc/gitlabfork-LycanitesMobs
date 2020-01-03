@@ -1,20 +1,20 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IGroupHeavy;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityScorchfireball;
-import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import net.minecraft.init.Blocks;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -167,42 +167,46 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+        if(projectileInfo == null) {
+            return;
+        }
+        List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-        EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectiles.add(projectileEntry);
 
-        EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry2.offsetX += 1.0D;
         projectileEntry2.setProjectileScale(0.25f);
         projectiles.add(projectileEntry2);
 
-        EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry3.offsetX -= 1.0D;
         projectileEntry3.setProjectileScale(0.25f);
         projectiles.add(projectileEntry3);
 
-        EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry4.offsetZ += 1.0D;
         projectileEntry4.setProjectileScale(0.25f);
         projectiles.add(projectileEntry4);
 
-        EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry5.offsetZ -= 1.0D;
         projectileEntry5.setProjectileScale(0.25f);
         projectiles.add(projectileEntry5);
 
-        EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry6.offsetY += 1.0D;
         projectileEntry6.setProjectileScale(0.25f);
         projectiles.add(projectileEntry6);
 
-        EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+        RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
         projectileEntry7.offsetY -= 1.0D;
         projectileEntry7.setProjectileScale(0.25f);
         projectiles.add(projectileEntry7);
 
-        for(EntityProjectileRapidFire projectile : projectiles) {
+        for(RapidFireProjectileEntity projectile : projectiles) {
             projectile.setProjectileScale(1f);
 
             // Y Offset:
@@ -292,42 +296,46 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
         if(rider instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)rider;
             // Type:
-            List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
+            ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+            if(projectileInfo == null) {
+                return;
+            }
+            List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 
-            EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), player, 15, 3);
+            RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), player, 15, 3);
             projectiles.add(projectileEntry);
 
-			EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry2.offsetX += 1.0D;
 			projectileEntry2.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry2);
 
-			EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry3.offsetX -= 1.0D;
 			projectileEntry3.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry3);
 
-			EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry4.offsetZ += 1.0D;
 			projectileEntry4.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry4);
 
-			EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry5.offsetZ -= 1.0D;
 			projectileEntry5.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry5);
 
-			EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry6.offsetY += 1.0D;
 			projectileEntry6.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry6);
 
-			EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire(EntityScorchfireball.class, this.getEntityWorld(), this, 15, 3);
+			RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
 			projectileEntry7.offsetY -= 10D;
 			projectileEntry7.setProjectileScale(0.25f);
 			projectiles.add(projectileEntry7);
 
-            for(EntityProjectileRapidFire projectile : projectiles) {
+            for(RapidFireProjectileEntity projectile : projectiles) {
                 projectile.setProjectileScale(1f);
 
                 // Y Offset:

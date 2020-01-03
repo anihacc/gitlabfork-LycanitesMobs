@@ -6,6 +6,10 @@
 	"dropChance": 0.3,
 	"levelMin": 1,
 	"levelMax": 3,
+	"elements": [
+		"air",
+		"arbour"
+	],
 	"features": [
 		{
 			"featureType": "slot",
@@ -35,7 +39,7 @@
 		},
 		{
 			"featureType": "effect",
-			"levelMax": 2,
+			"levelMax": 1,
 			"effectType": "minecraft:slowness",
 			"effectTarget": "target",
 			"effectDuration": 40,
@@ -43,7 +47,8 @@
 		},
 		{
 			"featureType": "effect",
-			"levelMin": 3,
+			"levelMin": 2,
+			"levelMax": 2,
 			"effectType": "minecraft:slowness",
 			"effectTarget": "target",
 			"effectDuration": 60,

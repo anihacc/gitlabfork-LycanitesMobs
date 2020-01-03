@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.entity.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.EntityProjectileLaser;
-import com.lycanitesmobs.core.entity.EntityProjectileLaserEnd;
+import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import com.lycanitesmobs.client.AssetManager;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityHellLaserEnd extends EntityProjectileLaserEnd {
+public class EntityHellLaserEnd extends LaserEndProjectileEntity {
     
     // ==================================================
  	//                   Constructors

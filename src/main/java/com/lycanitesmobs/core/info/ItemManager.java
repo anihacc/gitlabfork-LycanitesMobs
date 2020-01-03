@@ -9,6 +9,7 @@ import com.lycanitesmobs.core.JSONLoader;
 import com.lycanitesmobs.core.block.BlockEquipmentForge;
 import com.lycanitesmobs.core.block.BlockSoulcube;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
+import com.lycanitesmobs.core.block.EquipmentInfuserBlock;
 import com.lycanitesmobs.core.block.building.BlockPropolis;
 import com.lycanitesmobs.core.block.building.BlockVeswax;
 import com.lycanitesmobs.core.block.effect.*;
@@ -115,6 +116,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("equipmentforge_lesser", new BlockEquipmentForge(group, 1));
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
+		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(group));
 
 
 		// Soulstones:
@@ -160,54 +162,25 @@ public class ItemManager extends JSONLoader {
 
 
 		// Charges and Scepters:
-		ObjectManager.addItem("frostwebcharge", new ItemFrostwebCharge());
 		ObjectManager.addItem("frostwebscepter", new ItemScepterFrostweb(), 2, 1, 1);
-		ObjectManager.addItem("tundracharge", new ItemTundraCharge());
 		ObjectManager.addItem("tundrascepter", new ItemScepterTundra(), 2, 1, 1);
-		ObjectManager.addItem("icefirecharge", new ItemIcefireCharge());
 		ObjectManager.addItem("icefirescepter", new ItemScepterIcefire(), 2, 1, 1);
-		ObjectManager.addItem("blizzardcharge", new ItemBlizzardCharge());
 		ObjectManager.addItem("blizzardscepter", new ItemScepterBlizzard(), 2, 1, 1);
-		ObjectManager.addItem("doomfirecharge", new ItemDoomfireCharge());
-		ObjectManager.addItem("hellfirecharge", new ItemHellfireCharge());
-		ObjectManager.addItem("demoniclightningcharge", new ItemDemonicLightningCharge());
 		ObjectManager.addItem("doomfirescepter", new ItemScepterDoomfire(), 2, 1, 1);
 		ObjectManager.addItem("hellfirescepter", new ItemScepterHellfire(), 2, 1, 1);
 		ObjectManager.addItem("demoniclightningscepter", new ItemScepterDemonicLightning(), 2, 1, 1);
-		ObjectManager.addItem("throwingscythe", new ItemThrowingScythe());
-		ObjectManager.addItem("mudshotcharge", new ItemMudshotCharge());
-		ObjectManager.addItem("scythescepter", new ItemScepterScythe(), 2, 1, 1);
 		ObjectManager.addItem("mudshotscepter", new ItemScepterMudshot(), 2, 1, 1);
-		ObjectManager.addItem("aquapulsecharge", new ItemAquaPulseCharge());
 		ObjectManager.addItem("aquapulsescepter", new ItemScepterAquaPulse(), 2, 1, 1);
-		ObjectManager.addItem("whirlwindcharge", new ItemWhirlwindCharge());
-		ObjectManager.addItem("chaosorbcharge", new ItemChaosOrbCharge());
-		ObjectManager.addItem("acidsplashcharge", new ItemAcidSplashCharge());
-		ObjectManager.addItem("lightball", new ItemLightBall());
-		ObjectManager.addItem("lifedraincharge", new ItemLifeDrainCharge());
 		ObjectManager.addItem("lifedrainscepter", new ItemScepterLifeDrain(), 2, 1, 1);
-		ObjectManager.addItem("crystalshard", new ItemCrystalShard());
-		ObjectManager.addItem("frostboltcharge", new ItemFrostboltCharge());
 		ObjectManager.addItem("frostboltscepter", new ItemScepterFrostbolt(), 2, 1, 1);
-		ObjectManager.addItem("faeboltcharge", new ItemFaeboltCharge());
-		ObjectManager.addItem("aetherwavecharge", new ItemAetherwaveCharge());
-		ObjectManager.addItem("waterjetcharge", new ItemWaterJetCharge());
 		ObjectManager.addItem("waterjetscepter", new ItemScepterWaterJet(), 2, 1, 1);
-		ObjectManager.addItem("magmacharge", new ItemMagmaCharge());
 		ObjectManager.addItem("magmascepter", new ItemScepterMagma(), 2, 1, 1);
-		ObjectManager.addItem("scorchfirecharge", new ItemScorchfireCharge());
 		ObjectManager.addItem("scorchfirescepter", new ItemScepterScorchfire(), 2, 1, 1);
-		ObjectManager.addItem("poopcharge", new ItemPoopCharge());
 		ObjectManager.addItem("poopscepter", new ItemScepterPoop(), 2, 1, 1);
-		ObjectManager.addItem("boulderblastcharge", new ItemBoulderBlastCharge());
 		ObjectManager.addItem("boulderblastscepter", new ItemScepterBoulderBlast(), 2, 1, 1);
-		ObjectManager.addItem("arcanelaserstormcharge", new ItemArcaneLaserStormCharge());
 		ObjectManager.addItem("arcanelaserstormscepter", new ItemScepterArcaneLaserStorm(), 2, 1, 1);
-		ObjectManager.addItem("quill", new ItemQuill());
 		ObjectManager.addItem("quillscepter", new ItemScepterQuill(), 2, 1, 1);
-		ObjectManager.addItem("spectralboltcharge", new ItemSpectralboltCharge());
 		ObjectManager.addItem("spectralboltscepter", new ItemScepterSpectralbolt(), 2, 1, 1);
-		ObjectManager.addItem("bloodleechcharge", new ItemBloodleechCharge());
 		ObjectManager.addItem("bloodleechscepter", new ItemScepterBloodleech(), 2, 1, 1);
 		ObjectManager.addItem("poisonrayscepter", new ItemScepterPoisonRay(), 2, 1, 1);
 

@@ -2,7 +2,7 @@ package com.lycanitesmobs.core.mobevent;
 
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.client.gui.GuiOverlay;
+import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -91,7 +91,7 @@ public class MobEventPlayerClient {
     //                       GUI
     // ==================================================
     @SideOnly(Side.CLIENT)
-    public void onGUIUpdate(GuiOverlay gui, int sWidth, int sHeight) {
+    public void onGUIUpdate(BaseOverlay gui, int sWidth, int sHeight) {
     	EntityPlayer player = LycanitesMobs.proxy.getClientPlayer();
         if(player.capabilities.isCreativeMode && !MobEventPlayerServer.testOnCreative && "world".equalsIgnoreCase(this.mobEvent.channel)) {
 			return;

@@ -18,7 +18,7 @@ import com.lycanitesmobs.core.entity.navigate.ICreatureNodeProcessor;
 import com.lycanitesmobs.core.info.*;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
-import com.lycanitesmobs.core.inventory.ContainerCreature;
+import com.lycanitesmobs.core.container.CreatureContainer;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.core.pets.PetEntry;
@@ -130,7 +130,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	// Stats:
 	/** The level of this mob, higher levels increase the stat multipliers by a small amount. **/
 	protected int level = 1;
-    /** Which attack phase this mob is on. This will be replaced with a better system for boss mobs. **/
+
+	/** The current amount of experience this creature has. **/
+	protected int experience = 0;
+
+	/** Which attack phase this mob is on. This will be replaced with a better system for boss mobs. **/
 	public byte attackPhase = 0;
     /** How many attack phases this mob has. This will be replaced with a better system for boss mobs. **/
 	public byte attackPhaseMax = 0;
@@ -309,6 +313,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	protected static final DataParameter<Float> SIZE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.FLOAT);
 	/** Used to sync the stat level of this creature. **/
 	protected static final DataParameter<Integer> LEVEL = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
+	/** Used to sync the experience of this creature. **/
+	protected static final DataParameter<Integer> EXPERIENCE = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.VARINT);
 	/** Used to sync the subspecies ID used by this creature. **/
 	protected static final DataParameter<Byte> SUBSPECIES = EntityDataManager.createKey(BaseCreatureEntity.class, DataSerializers.BYTE);
 
@@ -586,6 +592,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         this.dataManager.register(COLOR, (byte) 0);
         this.dataManager.register(SIZE, (float) 1D);
 		this.dataManager.register(LEVEL, 1);
+		this.dataManager.register(EXPERIENCE, 0);
         this.dataManager.register(SUBSPECIES, (byte) 0);
 
         this.dataManager.register(ARENA, Optional.absent());
@@ -1319,6 +1326,46 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		this.applyLevel(this.level + level);
 	}
 
+	/**
+	 * Checks this creature's experience and performs a level up if it has enough to do so.
+	 */
+	public void updateLevelExperience() {
+		if(!this.getEntityWorld().isRemote) {
+			this.dataManager.set(EXPERIENCE, this.experience);
+		}
+		if(this.getExperience() >= this.creatureStats.getExperienceForNextLevel()) {
+			this.setExperience(this.getExperience() - this.creatureStats.getExperienceForNextLevel());
+			this.addLevel(1);
+		}
+	}
+
+	/**
+	 * Returns how much experience this creature has towards the next level.
+	 * @return How much experience this creature has.
+	 */
+	public int getExperience() {
+		if(this.getEntityWorld().isRemote) {
+			return this.getIntFromDataManager(EXPERIENCE);
+		}
+		return this.experience;
+	}
+
+	/**
+	 * Sets how much experience this creature has towards the next level.
+	 */
+	public void setExperience(int experience) {
+		this.experience = experience;
+		this.updateLevelExperience();
+	}
+
+	/**
+	 * Increases how much experience this creature has towards the next level.
+	 */
+	public void addExperience(int experience) {
+		this.experience += experience;
+		this.updateLevelExperience();
+	}
+
 
     // ========= Attack Speeds ==========
 	/**
@@ -1548,6 +1595,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 					if (owner != null) {
 						transformedCreature.applyLevel(transformedLevel);
 						fusionTameable.setPlayerOwner((EntityPlayer)owner);
+						if(this.hasPetEntry()) {
+							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						}
 					}
 
 					// Tamed Partner:
@@ -1559,6 +1609,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 						if (partnerOwner != null) {
 							transformedCreature.applyLevel(transformedLevel);
 							fusionTameable.setPlayerOwner((EntityPlayer) partnerOwner);
+							if(partnerCreature.hasPetEntry()) {
+								partnerCreature.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+							}
 
 							// Temporary:
 							if (partnerCreature.isTemporary) {
@@ -1588,6 +1641,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
 					if (this.getOwner() != null && this.getOwner() instanceof EntityPlayer) {
 						fusionTameable.setPlayerOwner((EntityPlayer) this.getOwner());
+						if(this.hasPetEntry()) {
+							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						}
 					}
 				}
 			}
@@ -3890,9 +3946,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== Drop Item ==========
     /** Tells this entity to drop the specified itemStack, used by DropRate and InventoryCreature, can be used by anything though. **/
     public void dropItem(ItemStack itemStack) {
-    	if(itemStack.getItem() instanceof ItemEquipmentPart) {
-			((ItemEquipmentPart)itemStack.getItem()).initializePart(this.world, itemStack);
-		}
+    	/*if(itemStack.getItem() instanceof ItemEquipmentPart) {
+			((ItemEquipmentPart)itemStack.getItem()).randomizeLevel(this.world, itemStack);
+		}*/
     	this.entityDropItem(itemStack, 0.0F);
     }
 
@@ -3980,8 +4036,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     		return;
     	if(this.guiViewers.size() > 0) {
         	for(EntityPlayer player : this.guiViewers.toArray(new EntityPlayer[this.guiViewers.size()])) {
-        		if(player.openContainer != null && player.openContainer instanceof ContainerCreature) {
-        			if(((ContainerCreature)player.openContainer).creature == this)
+        		if(player.openContainer != null && player.openContainer instanceof CreatureContainer) {
+        			if(((CreatureContainer)player.openContainer).creature == this)
         				this.openGUIToPlayer(player);
         			else
         				this.removeGUIViewer(player);
@@ -4143,12 +4199,21 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ==================================================
     //                     Equipment
     // ==================================================
-    /** Returns true if this mob is able to carry items. **/
-    public boolean canCarryItems() { return getInventorySize() > 0; }
-    /** Returns the current size of this mob's inventory. (Some mob inventories can vary in size such as mounts with and without bag items equipped.) **/
-    public int getInventorySize() { return this.inventory.getSizeInventory(); }
-    /** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailable.) **/
-    public int getInventorySizeMax() { return Math.max(this.getNoBagSize(), this.getBagSize()); }
+	/** Returns true if this mob is able to carry items. **/
+	public boolean canCarryItems() {
+		return getInventorySize() > 0;
+	}
+	/** Returns the current size of this mob's inventory. (Some mob inventories can vary in size such as mounts with and without bag items equipped.) **/
+	public int getInventorySize() {
+		return this.inventory.getSizeInventory();
+	}
+	/** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailable.) **/
+	public int getInventorySizeMax() {
+		if(this.isPetType("familiar")) {
+			return 0;
+		}
+		return Math.max(this.getNoBagSize(), this.getBagSize());
+	}
     /** Returns true if this mob is equipped with a bag item. **/
     public boolean hasBag() {
     	return this.inventory.getEquipmentStack("bag") != null;
@@ -4635,6 +4700,10 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			}
 		}
 
+		if(nbtTagCompound.hasKey("Experience")) {
+			this.setExperience(nbtTagCompound.getInteger("Experience"));
+		}
+
 		if(nbtTagCompound.hasKey("SpawnedAsBoss")) {
 			this.spawnedAsBoss = nbtTagCompound.getBoolean("SpawnedAsBoss");
 		}
@@ -4698,6 +4767,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
         nbtTagCompound.setByte("Subspecies", (byte) this.getSubspeciesIndex());
     	nbtTagCompound.setDouble("Size", this.sizeScale);
 		nbtTagCompound.setInteger("MobLevel", this.getLevel());
+		nbtTagCompound.setInteger("Experience", this.getExperience());
 		nbtTagCompound.setBoolean("SpawnedAsBoss", this.spawnedAsBoss);
     	
     	if(this.hasHome()) {

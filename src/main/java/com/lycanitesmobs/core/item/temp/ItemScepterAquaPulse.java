@@ -3,8 +3,8 @@ package com.lycanitesmobs.core.item.temp;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-
-import com.lycanitesmobs.core.entity.projectile.EntityAquaPulse;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -42,7 +42,11 @@ public class ItemScepterAquaPulse extends ItemScepter {
     @Override
     public boolean chargedAttack(ItemStack itemStack, World world, EntityLivingBase entity, float power) {
     	if(!world.isRemote) {
-    		BaseProjectileEntity projectile = new EntityAquaPulse(world, entity);
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("aquapulse");
+			if(projectileInfo == null) {
+				return true;
+			}
+			BaseProjectileEntity projectile = projectileInfo.createProjectile(world, entity);
     		projectile.setDamage((int)(projectile.getDamage(null) * power * 2));
         	world.spawnEntity(projectile);
             this.playSound(itemStack, world, entity, power, projectile);

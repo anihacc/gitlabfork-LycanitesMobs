@@ -4,9 +4,9 @@ import com.lycanitesmobs.CommonProxy;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockFluidBase;
-import com.lycanitesmobs.client.gui.GuiOverlay;
-import com.lycanitesmobs.client.gui.GuiTabMain;
-import com.lycanitesmobs.client.gui.TabManager;
+import com.lycanitesmobs.client.gui.overlays.BaseOverlay;
+import com.lycanitesmobs.client.gui.buttons.MainTab;
+import com.lycanitesmobs.client.gui.buttons.TabManager;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -17,10 +17,10 @@ import com.lycanitesmobs.client.localisation.LanguageLoader;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import com.lycanitesmobs.client.model.EquipmentPartModelLoader;
 import com.lycanitesmobs.client.model.ModelCustom;
-import com.lycanitesmobs.client.model.projectile.ModelAetherwave;
-import com.lycanitesmobs.client.model.projectile.ModelChaosOrb;
-import com.lycanitesmobs.client.model.projectile.ModelCrystalShard;
-import com.lycanitesmobs.client.model.projectile.ModelLightBall;
+import com.lycanitesmobs.client.model.projectile.AetherwaveModel;
+import com.lycanitesmobs.client.model.projectile.ChaosOrbModel;
+import com.lycanitesmobs.client.model.projectile.CrystalShardModel;
+import com.lycanitesmobs.client.model.projectile.LightBallModel;
 import com.lycanitesmobs.client.renderer.EquipmentPartRenderer;
 import com.lycanitesmobs.client.renderer.EquipmentRenderer;
 import com.lycanitesmobs.client.renderer.RenderRegister;
@@ -87,7 +87,7 @@ public class ClientProxy extends CommonProxy {
 	public void registerEvents() {
 		// Event Listeners:
 		FMLCommonHandler.instance().bus().register(new KeyHandler(Minecraft.getMinecraft()));
-		MinecraftForge.EVENT_BUS.register(new GuiOverlay(Minecraft.getMinecraft()));
+		MinecraftForge.EVENT_BUS.register(new BaseOverlay(Minecraft.getMinecraft()));
 		MinecraftForge.EVENT_BUS.register(new ClientEventListener());
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		if(resourceManager instanceof IReloadableResourceManager) {
@@ -100,7 +100,6 @@ public class ClientProxy extends CommonProxy {
     public void registerTextures() {
 		// ========== Add GUI Textures ==========
 		ModInfo group = LycanitesMobs.modInfo;
-		AssetManager.addTexture("GUIInventoryCreature", group, "textures/guis/inventory_creature.png");
 
 		// Beastiary:
 		AssetManager.addTexture("GUIBeastiaryBackground", group, "textures/guis/beastiary/background.png");
@@ -111,19 +110,16 @@ public class ClientProxy extends CommonProxy {
 		AssetManager.addTexture("GUIPetSpiritFilling", group, "textures/guis/beastiary/spirit_filling.png");
 		AssetManager.addTexture("GUIPetBarHealth", group, "textures/guis/beastiary/bar_health.png");
 		AssetManager.addTexture("GUIPetBarRespawn", group, "textures/guis/beastiary/bar_respawn.png");
+		AssetManager.addTexture("GUIBarExperience", group, "textures/guis/beastiary/bar_experience.png");
 		AssetManager.addTexture("GUIPetBarEmpty", group, "textures/guis/beastiary/bar_empty.png");
 
-		AssetManager.addTexture("GUILMMainMenu", group, "textures/guis/lmmainmenu.png");
-		AssetManager.addTexture("GUIBeastiary", group, "textures/guis/beastiary.png");
-		AssetManager.addTexture("GUIPet", group, "textures/guis/pet.png");
-		AssetManager.addTexture("GUIMount", group, "textures/guis/mount.png");
-        AssetManager.addTexture("GUIFamiliar", group, "textures/guis/familiar.png");
-        AssetManager.addTexture("GUIMinion", group, "textures/guis/minion.png");
+		// Containers:
+		AssetManager.addTexture("GUIInventoryCreature", group, "textures/guis/inventory_creature.png");
         AssetManager.addTexture("GUIMinionLg", group, "textures/guis/minion_lg.png");
 		AssetManager.addTexture("GUIEquipmentForge", group, "textures/guis/equipmentforge.png");
 
 		// ========== Add GUI Tabs ==========
-		TabManager.registerTab(new GuiTabMain(0));
+		TabManager.registerTab(new MainTab(0));
     }
 	
 	
@@ -131,10 +127,10 @@ public class ClientProxy extends CommonProxy {
 	@Override
     public void registerRenders(ModInfo modInfo) {
 		// Projectile Models:
-		AssetManager.addModel("lightball", new ModelLightBall());
-		AssetManager.addModel("crystalshard", new ModelCrystalShard());
-		AssetManager.addModel("aetherwave", new ModelAetherwave());
-		AssetManager.addModel("chaosorb", new ModelChaosOrb());
+		AssetManager.addModel("lightball", new LightBallModel());
+		AssetManager.addModel("crystalshard", new CrystalShardModel());
+		AssetManager.addModel("aetherwave", new AetherwaveModel());
+		AssetManager.addModel("chaosorb", new ChaosOrbModel());
 
         // Equipment Parts:
 		ModelLoaderRegistry.registerLoader(new EquipmentPartModelLoader());

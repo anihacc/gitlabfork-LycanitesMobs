@@ -4,11 +4,10 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityQuill;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
@@ -58,27 +57,7 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
     @Override
     public void attackRanged(Entity target, float range) {
         for(int i = -2; i < 12; i++) {
-            // Type:
-            EntityQuill projectile = new EntityQuill(this.getEntityWorld(), this);
-
-            // Y Offset:
-            projectile.posY -= this.height / 4;
-
-            // Accuracy:
-            float accuracy = i * 1.0F * (this.getRNG().nextFloat() - 0.5F);
-
-            // Set Velocities:
-            double d0 = target.posX - this.posX + accuracy;
-            double d1 = target.posY - projectile.posY + accuracy;
-            double d2 = target.posZ - this.posZ + accuracy;
-            float f1 = MathHelper.sqrt(d0 * d0 + d2 * d2) * 0.2F;
-            float velocity = 1.2F;
-            projectile.shoot(d0, d1 + (double) f1, d2, velocity, 6.0F);
-
-            // Launch:
-            if(i == 0)
-                this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.getEntityWorld().spawnEntity(projectile);
+            this.fireProjectile("quill", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, i * 1.0F * (this.getRNG().nextFloat() - 0.5F));
         }
 
         super.attackRanged(target, range);

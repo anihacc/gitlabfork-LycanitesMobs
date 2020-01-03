@@ -473,6 +473,7 @@ public class GameEventListener {
 					event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()));
 					event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
 					event.getLeft().add("Level: " + mouseOverCreature.getLevel());
+					event.getLeft().add("Experience: " + mouseOverCreature.getExperience() + "/" + mouseOverCreature.creatureStats.getExperienceForNextLevel());
 					event.getLeft().add("Size: " + mouseOverCreature.sizeScale);
 					event.getLeft().add("");
 					event.getLeft().add("Health: " + mouseOverCreature.getHealth() + "/" + mouseOverCreature.getMaxHealth() + " Fresh: " + mouseOverCreature.creatureStats.getHealth());

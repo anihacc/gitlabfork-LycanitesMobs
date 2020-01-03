@@ -5,12 +5,12 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.abilities.StealthGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityChaosOrb;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -79,7 +79,7 @@ public class EntityArgus extends TameableCreatureEntity implements IMob, IFusabl
 	// ========== Ranged Attack ==========
 	@Override
 	public void attackRanged(Entity target, float range) {
-		this.fireProjectile(EntityChaosOrb.class, target, range, 0, new Vec3d(0, 0, 0), 0.6f, 1f, 1F);
+		this.fireProjectile("chaosorb", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 1f, 1F);
 		super.attackRanged(target, range);
 	}
     

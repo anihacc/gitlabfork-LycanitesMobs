@@ -3,8 +3,6 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
-import com.lycanitesmobs.core.entity.projectile.EntityLightBall;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -152,10 +150,9 @@ public class EntityWisp extends TameableCreatureEntity {
     //                      Attacks
     // ==================================================
     // ========== Ranged Attack ==========
-    EntityLifeDrain projectile = null;
     @Override
     public void attackRanged(Entity target, float range) {
-		this.fireProjectile(EntityLightBall.class, target, range, 0, new Vec3d(0, 0, 0), 0.5f, 1f, 1F);
+		this.fireProjectile("lightball", target, range, 0, new Vec3d(0, 0, 0), 0.5f, 1f, 1F);
 		super.attackRanged(target, range);
     }
 

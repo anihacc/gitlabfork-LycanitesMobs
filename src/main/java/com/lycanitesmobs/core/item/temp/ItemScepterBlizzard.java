@@ -3,7 +3,9 @@ package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.projectile.EntityBlizzard;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -41,30 +43,34 @@ public class ItemScepterBlizzard extends ItemScepter {
     @Override
     public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
     	if(!world.isRemote) {
-        	EntityBlizzard projectile = new EntityBlizzard(world, entity);
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("aquapulse");
+			if(projectileInfo == null) {
+				return true;
+			}
+			BaseProjectileEntity projectile = projectileInfo.createProjectile(world, entity);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX + 1.0D, projectile.posY, projectile.posZ);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX - 1.0D, projectile.posY, projectile.posZ);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX, projectile.posY, projectile.posZ + 1.0D);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX, projectile.posY, projectile.posZ - 1.0D);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX, projectile.posY + 1.0D, projectile.posZ);
         	world.spawnEntity(projectile);
         	
-        	projectile = new EntityBlizzard(world, entity);
+        	projectile = projectileInfo.createProjectile(world, entity);
         	projectile.setPosition(projectile.posX, projectile.posY - 1.0D, projectile.posZ);
         	world.spawnEntity(projectile);
 

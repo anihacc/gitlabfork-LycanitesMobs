@@ -3,9 +3,8 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAttackTargetGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityAetherwave;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
@@ -58,7 +57,7 @@ public class EntitySylph extends TameableCreatureEntity implements IMob {
     public void attackRanged(Entity target, float range) {
     	int projectileCount = 10;
     	for(int i = 0; i < projectileCount; i++) {
-    		this.fireProjectile(EntityAetherwave.class, target, range, (360 / projectileCount) * i, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+    		this.fireProjectile("aetherwave", target, range, (360 / projectileCount) * i, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
 		}
         super.attackRanged(target, range);
     }

@@ -2,9 +2,9 @@ package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
-
-import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemScepterLifeDrain extends ItemScepter {
-	private EntityProjectileLaser projectileTarget;
+	private BaseProjectileEntity projectileTarget;
 	
 	// ==================================================
 	//                   Constructor
@@ -55,10 +55,14 @@ public class ItemScepterLifeDrain extends ItemScepter {
     public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
     	if(!world.isRemote) {
     		if(this.projectileTarget != null && this.projectileTarget.isEntityAlive()) {
-    			projectileTarget.setTime(20);
+    			projectileTarget.projectileLife = 20;
     		}
     		else {
-    			this.projectileTarget = new EntityLifeDrain(world, entity, 20, 10);
+				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("lifedrain");
+				if(projectileInfo == null) {
+					return true;
+				}
+				this.projectileTarget = projectileInfo.createProjectile(world, entity);
     			world.spawnEntity(this.projectileTarget);
                 this.playSound(itemStack, world, entity, 1, this.projectileTarget);
     		}

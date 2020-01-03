@@ -1,13 +1,11 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.projectile.EntityFaeBolt;
-import com.lycanitesmobs.core.entity.projectile.EntityLifeDrain;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -104,10 +102,9 @@ public class EntityNymph extends TameableCreatureEntity {
     //                      Attacks
     // ==================================================
     // ========== Ranged Attack ==========
-    EntityLifeDrain projectile = null;
     @Override
     public void attackRanged(Entity target, float range) {
-		this.fireProjectile(EntityFaeBolt.class, target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, 1F);
+		this.fireProjectile("faebolt", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, 1F);
 		super.attackRanged(target, range);
     }
 

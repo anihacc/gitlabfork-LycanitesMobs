@@ -3,13 +3,13 @@ package com.lycanitesmobs.core.entity.creature;
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityAquaPulse;
 import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -64,7 +64,7 @@ public class EntityJengu extends TameableCreatureEntity implements IMob, IFusabl
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityAquaPulse.class, target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("aquapulse", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

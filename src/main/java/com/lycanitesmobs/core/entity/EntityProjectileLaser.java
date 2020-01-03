@@ -31,7 +31,7 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
 	public float projectileHeight = 0.2f;
 	
 	// Laser:
-	public EntityProjectileLaserEnd laserEnd;
+	public LaserEndProjectileEntity laserEnd;
 	public int laserEndRef = -1;
 	public int laserEndID = 12;
 	
@@ -237,8 +237,8 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
 			Entity possibleLaserEnd = null;
 			if(this.laserEndRef != -1)
 				possibleLaserEnd = this.getEntityWorld().getEntityByID(this.laserEndRef);
-			if(possibleLaserEnd != null && possibleLaserEnd instanceof EntityProjectileLaserEnd)
-				this.laserEnd = (EntityProjectileLaserEnd)possibleLaserEnd;
+			if(possibleLaserEnd != null && possibleLaserEnd instanceof LaserEndProjectileEntity)
+				this.laserEnd = (LaserEndProjectileEntity)possibleLaserEnd;
 			else {
 				this.laserEnd = null;
 				return;
@@ -337,12 +337,12 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
 			if(this.shootingEntity == null) {
 		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, double.class, double.class, double.class, EntityProjectileLaser.class });
 		    	constructor.setAccessible(true);
-		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.posX, this.posY, this.posZ, this });
+		    	laserEnd = (LaserEndProjectileEntity)constructor.newInstance(new Object[] { world, this.posX, this.posY, this.posZ, this });
 		    }
 	        else {
 		    	Constructor constructor = getLaserEndClass().getDeclaredConstructor(new Class[] { World.class, EntityLivingBase.class, EntityProjectileLaser.class });
 		    	constructor.setAccessible(true);
-		    	laserEnd = (EntityProjectileLaserEnd)constructor.newInstance(new Object[] { world, this.shootingEntity, this });
+		    	laserEnd = (LaserEndProjectileEntity)constructor.newInstance(new Object[] { world, this.shootingEntity, this });
 	        }
 	        
 			if(this.getLaunchSound() != null)
@@ -396,12 +396,12 @@ public class EntityProjectileLaser extends BaseProjectileEntity {
     // ==================================================
  	//                   Get laser End
  	// ==================================================
-    public EntityProjectileLaserEnd getLaserEnd() {
+    public LaserEndProjectileEntity getLaserEnd() {
         return this.laserEnd;
     }
 
     public Class getLaserEndClass() {
-        return EntityProjectileLaserEnd.class;
+        return LaserEndProjectileEntity.class;
     }
 	
     

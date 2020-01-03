@@ -2,8 +2,7 @@ package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.api.IFusable;
 import com.lycanitesmobs.core.entity.EntityItemCustom;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
-import com.lycanitesmobs.core.entity.EntityProjectileRapidFire;
+import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
@@ -80,37 +79,37 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
     @Override
     public void attackRanged(Entity target, float range) {
     	// Type:
-    	List<EntityProjectileRapidFire> projectiles = new ArrayList<>();
+    	List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("ember");
     	
-    	EntityProjectileRapidFire projectileEntry = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectiles.add(projectileEntry);
     	
-    	EntityProjectileRapidFire projectileEntry2 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry2 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry2.offsetX += 1.0D;
     	projectiles.add(projectileEntry2);
     	
-    	EntityProjectileRapidFire projectileEntry3 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry3 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry3.offsetX -= 1.0D;
     	projectiles.add(projectileEntry3);
     	
-    	EntityProjectileRapidFire projectileEntry4 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry4 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry4.offsetZ += 1.0D;
     	projectiles.add(projectileEntry4);
     	
-    	EntityProjectileRapidFire projectileEntry5 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry5 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry5.offsetZ -= 1.0D;
     	projectiles.add(projectileEntry5);
     	
-    	EntityProjectileRapidFire projectileEntry6 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry6 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry6.offsetY += 1.0D;
     	projectiles.add(projectileEntry6);
     	
-    	EntityProjectileRapidFire projectileEntry7 = new EntityProjectileRapidFire(projectileInfo, this.getEntityWorld(), this, 15, 3);
+    	RapidFireProjectileEntity projectileEntry7 = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectileEntry7.offsetY -= 1.0D;
     	projectiles.add(projectileEntry7);
     	
-    	for(EntityProjectileRapidFire projectile : projectiles) {
+    	for(RapidFireProjectileEntity projectile : projectiles) {
 	        projectile.setProjectileScale(1f);
 	    	
 	    	// Y Offset:

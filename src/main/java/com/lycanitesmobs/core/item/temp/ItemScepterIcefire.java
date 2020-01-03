@@ -2,8 +2,9 @@ package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
-
-import com.lycanitesmobs.core.entity.projectile.EntityIcefireball;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -41,7 +42,11 @@ public class ItemScepterIcefire extends ItemScepter {
     @Override
     public boolean rapidAttack(ItemStack itemStack, World world, EntityLivingBase entity) {
     	if(!world.isRemote) {
-        	EntityIcefireball projectile = new EntityIcefireball(world, entity);
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("icefireball");
+			if(projectileInfo == null) {
+				return true;
+			}
+			BaseProjectileEntity projectile = projectileInfo.createProjectile(world, entity);
         	world.spawnEntity(projectile);
             this.playSound(itemStack, world, entity, 1, projectile);
         }

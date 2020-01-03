@@ -1,10 +1,12 @@
 package com.lycanitesmobs.core.entity.creature;
 
 import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
-import com.lycanitesmobs.core.entity.projectile.EntityArcaneLaserStorm;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -123,7 +125,7 @@ public class EntityBeholder extends RideableCreatureEntity {
 	// ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityArcaneLaserStorm.class, target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
+        this.fireProjectile("arcanelaserstorm", target, range, 0, new Vec3d(0, 0, 0), 0.6f, 2f, 1F);
         super.attackRanged(target, range);
     }
     
@@ -175,13 +177,16 @@ public class EntityBeholder extends RideableCreatureEntity {
         if(this.getStamina() < this.getStaminaCost())
             return;
 
-        if(rider instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)rider;
-            EntityArcaneLaserStorm projectile = new EntityArcaneLaserStorm(this.getEntityWorld(), player);
-            this.getEntityWorld().spawnEntity(projectile);
-            this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            this.triggerAttackCooldown();
-        }
+		if(rider instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)rider;
+			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("arcanelaserstorm");
+			if(projectileInfo != null) {
+				BaseProjectileEntity projectile = projectileInfo.createProjectile(this.getEntityWorld(), player);
+				this.getEntityWorld().spawnEntity(projectile);
+				this.playSound(projectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				this.triggerAttackCooldown();
+			}
+		}
 
         this.applyStaminaCost();
     }

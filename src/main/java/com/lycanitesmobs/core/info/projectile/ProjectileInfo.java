@@ -15,7 +15,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.ElementManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
-import com.lycanitesmobs.core.item.ItemCharge;
+import com.lycanitesmobs.core.item.ChargeItem;
 import com.lycanitesmobs.client.localisation.LanguageManager;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBase;
@@ -49,6 +49,8 @@ public class ProjectileInfo {
 	public Item chargeItem;
 	/** The name of the charge item for this projectile. Can be automatically generated using the name of this projectile or overridden. **/
 	public String chargeItemName;
+	/** If true, no charge item is generated for this projectile. **/
+	public boolean noChargeItem = false;
 	/** The dispenser behaviour used by this projectile. If null, this item cannot be fired from a dispenser. **/
 	public DispenserBehaviorBase dispenserBehaviour;
 
@@ -75,6 +77,8 @@ public class ProjectileInfo {
 	public double velocity = 1.1D;
 	/** How much gravity affects this projectile. **/
 	public double weight = 1.0D;
+	/** How fast the projectile sprite spins. **/
+	public float rollSpeed = 0;
 
 	// Elements:
 	/** The Elements of this projectile, affects buffs and debuffs amongst other things. **/
@@ -119,6 +123,10 @@ public class ProjectileInfo {
 		}
 		else {
 			this.chargeItemName = this.name + "charge";
+		}
+
+		if(json.has("noChargeItem")) {
+			this.noChargeItem = json.get("noChargeItem").getAsBoolean();
 		}
 
 		if(json.has("entityClass")) {
@@ -215,15 +223,17 @@ public class ProjectileInfo {
 	 */
 	public void load() {
 		// Charge Item:
-		this.chargeItem = ObjectManager.getItem(this.chargeItemName);
-		if(this.chargeItem == null) {
-			this.chargeItem = new ItemCharge(this);
-			ObjectManager.addItem(this.chargeItemName, this.chargeItem);
-		}
+		if(!this.noChargeItem) {
+			this.chargeItem = ObjectManager.getItem(this.chargeItemName);
+			if (this.chargeItem == null) {
+				this.chargeItem = new ChargeItem(this);
+				ObjectManager.addItem(this.chargeItemName, this.chargeItem);
+			}
 
-		// Dispenser:
-		this.dispenserBehaviour = new DispenserBehaviorBase();
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this.chargeItem, this.dispenserBehaviour);
+			// Dispenser:
+			this.dispenserBehaviour = new DispenserBehaviorBase();
+			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this.chargeItem, this.dispenserBehaviour);
+		}
 
 		// Sounds:
 		AssetManager.addSound(name, modInfo, "projectile." + name);
@@ -270,7 +280,7 @@ public class ProjectileInfo {
 	 * @return The display name of this projectile.
 	 */
 	public String getTitle() {
-		return LanguageManager.translate("entity." + this.getLocalisationKey() + ".name");
+		return LanguageManager.translate("entity." + this.getLocalisationKey());
 	}
 
 	/**

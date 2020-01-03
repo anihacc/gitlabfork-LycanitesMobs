@@ -5,7 +5,6 @@ import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.projectile.EntityHellfireOrb;
-import com.lycanitesmobs.core.entity.projectile.EntityHellfireball;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -118,7 +117,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityHellfireball.class, target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
+        this.fireProjectile("hellfireball", target, range, 0, new Vec3d(0, 0, 0), 1.2f, 2f, 1F);
         super.attackRanged(target, range);
     }
     

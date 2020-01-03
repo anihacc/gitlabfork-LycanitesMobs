@@ -1,9 +1,6 @@
 package com.lycanitesmobs.client.renderer;
 
-import com.lycanitesmobs.core.entity.EntityParticle;
-import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.CustomProjectileEntity;
-import com.lycanitesmobs.core.entity.EntityProjectileLaser;
+import com.lycanitesmobs.core.entity.*;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -44,8 +41,15 @@ public class RenderProjectileSprite extends Render {
     	if(this.renderTime++ > Integer.MAX_VALUE - 1)
             this.renderTime = 0;
         this.renderProjectile(entity, x, y, z, par8, par9);
-    	if(entity instanceof EntityProjectileLaser)
-    		this.renderLaser((EntityProjectileLaser)entity, x, y, z, par8, par9);
+    	if(entity instanceof CustomProjectileEntity) {
+			LaserEndProjectileEntity laserEnd = ((CustomProjectileEntity)entity).getLaserEnd();
+			if(laserEnd != null) {
+				this.renderLaser((BaseProjectileEntity)entity, laserEnd, x, y, z, par8, par9, ((CustomProjectileEntity)entity).laserWidth, entity.getDistance(laserEnd));
+			}
+    	}
+    	else if(entity instanceof EntityProjectileLaser) {
+			this.renderLaser((BaseProjectileEntity)entity, ((EntityProjectileLaser)entity).getLaserEnd(), x, y, z, par8, par9, ((EntityProjectileLaser)entity).getLaserWidth(), ((EntityProjectileLaser)entity).getLength());
+		}
     }
     
     
@@ -133,9 +137,7 @@ public class RenderProjectileSprite extends Render {
     // ==================================================
     //                 Render Laser
     // ==================================================
-    public void renderLaser(EntityProjectileLaser entity, double x, double y, double z, float par8, float par9) {
-    	float scale = entity.getLaserWidth();
-    	
+    public void renderLaser(BaseProjectileEntity entity, LaserEndProjectileEntity laserEnd, double x, double y, double z, float par8, float par9, float scale, float length) {
     	// Create Laser Model If Null:
     	if(this.laserBox == null) {
     		laserBox = new ModelRenderer(laserModel, 0, 0);
@@ -147,30 +149,41 @@ public class RenderProjectileSprite extends Render {
         
     	float factor = (float)(1.0 / 16.0);
     	float lastSegment = 0;
-    	float laserSize = entity.getLength();
-    	if(laserSize <= 0)
+    	if(length <= 0)
             return;
     	
     	// Render Laser Beam:
         GlStateManager.pushMatrix();
         GlStateManager.enableAlpha();
-        GlStateManager.color(1, 1, 1, entity.getLaserAlpha());
+        GlStateManager.color(1, 1, 1, 1);
         GlStateManager.translate(x, y, z);
     	this.bindTexture(this.getLaserTexture(entity));
         
         // Rotation:
-        float[] angles = entity.getBeamAngles();
+		float[] angles = new float[] {0, 0, 0, 0};
+		if(laserEnd != null) {
+			float dx = (float)(laserEnd.posX - entity.posX);
+			float dy = (float)(laserEnd.posY - entity.posY);
+			float dz = (float)(laserEnd.posZ - entity.posZ);
+			angles[0] = (float)Math.toDegrees(Math.atan2(dz, dy)) - 90;
+			angles[1] = (float)Math.toDegrees(Math.atan2(dx, dz));
+			angles[2] = (float)Math.toDegrees(Math.atan2(dx, dy)) - 90;
+
+			// Distance based x/z rotation:
+			float dr = (float)Math.sqrt(dx * dx + dz * dz);
+			angles[3] = (float)Math.toDegrees(Math.atan2(dr, dy)) - 90;
+		}
         GlStateManager.rotate(angles[1], 0, 1, 0);
         GlStateManager.rotate(angles[3], 1, 0, 0);
     	
     	// Length:
-        for(float segment = 0; segment <= laserSize - 1; ++segment) {
+        for(float segment = 0; segment <= length - 1; ++segment) {
                 this.laserBox.render(factor);
                 GlStateManager.translate(0, 0, 1);
                 lastSegment = segment;
         }
         lastSegment++;
-        GlStateManager.scale((laserSize - lastSegment), 1, 1);
+        GlStateManager.scale((length - lastSegment), 1, 1);
         this.laserBox.render(factor);
 
         GlStateManager.popMatrix();
@@ -191,7 +204,9 @@ public class RenderProjectileSprite extends Render {
     }
 
     // ========== Get Laser Texture ==========
-    protected ResourceLocation getLaserTexture(EntityProjectileLaser entity) {
-    	return entity.getBeamTexture();
+    protected ResourceLocation getLaserTexture(BaseProjectileEntity entity) {
+    	if(entity instanceof EntityProjectileLaser)
+    		return ((EntityProjectileLaser)entity).getBeamTexture();
+    	return this.getEntityTexture(entity);
     }
 }
