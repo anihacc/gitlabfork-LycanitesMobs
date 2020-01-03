@@ -400,8 +400,8 @@ tile.equipmentforge_greater.description=This forge can be used to create new Equ
 tile.equipmentforge_master.name=Master Equipment Forge (Lvl 3)
 tile.equipmentforge_master.description=This forge can be used to create new Equipment from Level 3 or below creature body parts.
 #
-tile.lycanitesmobs.equipment_infuser=Equipment Infuser
-tile.lycanitesmobs.equipment_infuser.description=Used to infuse Charge items into Equipment Parts with matching Elements in order to level them up. Can also be used to apply dyes to equipment parts.
+tile.equipment_infuser=Equipment Infuser
+tile.equipment_infuser.description=Used to infuse Charge items into Equipment Parts with matching Elements in order to level them up. Can also be used to apply dyes to equipment parts.
 #
 #
 # ========== Special ==========

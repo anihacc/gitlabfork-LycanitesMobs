@@ -54,7 +54,7 @@ public class EquipmentInfuserBlock extends BlockBase implements ITileEntityProvi
 
 	@Override
 	public String getLocalizedName() {
-		return LanguageManager.translate(this.getUnlocalizedName() + ".name");
+		return LanguageManager.translate(this.getUnlocalizedName());
 	}
 
 	@Override

@@ -78,17 +78,17 @@ public class EquipmentInfuserScreen extends BaseContainerScreen {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		this.fontRenderer.drawString(this.equipmentInfuser.getName(), this.guiLeft + 8, this.guiTop + 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getName(), this.guiLeft + 8, this.guiTop + this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(this.equipmentInfuser.getName(), 8, 6, 4210752);
+        this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
 		int backX = (this.width - this.xSize) / 2;
 		int backY = (this.height - this.ySize) / 2;
-		this.drawBars(backX, backY);
+		this.drawBars(0, 0);
     }
 
 	protected void drawBars(int backX, int backY) {
 		int barWidth = 100;
 		int barHeight = 11;
-		int barX = (this.width / 2) - (barWidth / 2);
+		int barX = (barWidth / 2) - 10;
 		int barY = backY + 58;
 		int barCenter = barX + (barWidth / 2);
 		this.drawTexture(AssetManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);

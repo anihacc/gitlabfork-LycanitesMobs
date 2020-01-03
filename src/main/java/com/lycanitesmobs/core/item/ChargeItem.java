@@ -112,9 +112,9 @@ public class ChargeItem extends ItemBase {
     @Override
     public boolean onItemRightClickOnEntity(EntityPlayer player, Entity entity, ItemStack itemStack) {
         if(entity instanceof TameableCreatureEntity && ((TameableCreatureEntity)entity).getPlayerOwner() == player) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**

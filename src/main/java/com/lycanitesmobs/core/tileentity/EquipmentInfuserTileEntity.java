@@ -20,9 +20,9 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 		if(player.world.isRemote) {
 			return new EquipmentInfuserScreen(this, player.inventory);
 		}
-		if(player instanceof EntityPlayerMP) {
+		/*if(player instanceof EntityPlayerMP) {
 			((EntityPlayerMP)player).connection.sendPacket(this.getUpdatePacket());
-		}
+		}*/
 		return new EquipmentInfuserContainer(this, player.inventory);
 	}
 

@@ -55,9 +55,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		this.fontRenderer.drawString(this.creatureInventory.getName(), 8, 6, 4210752);
         this.fontRenderer.drawString(LanguageManager.translate(this.playerInventory.getName()), 8, this.ySize - 96 + 2, 4210752);
-		int backX = (this.width - this.xSize) / 2;
-		int backY = (this.height - this.ySize) / 2;
-		this.drawBars(backX, backY);
+		this.drawBars(0, 0);
     }
 
 	// ========== Draw Creature Health ===========
