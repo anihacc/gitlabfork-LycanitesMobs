@@ -189,7 +189,7 @@ public class AttackRangedGoal extends Goal {
 	@Override
     public void tick() {
     	boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.attackTarget;
-        double distance = this.host.getDistance(this.attackTarget);
+        double distance = this.host.getDistance(this.attackTarget) - (this.attackTarget.getSize(this.attackTarget.getPose()).width / 2);
         boolean hasSight = fixated || this.host.getEntitySenses().canSee(this.attackTarget);
         float flyingHeightOffset = this.flyingHeight;
         

@@ -3319,16 +3319,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 				// Tamed:
 				if (transformedCreature instanceof TameableCreatureEntity) {
-					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
-					Entity owner = null;
+					TameableCreatureEntity fusionTameable = (TameableCreatureEntity)transformedCreature;
+					Entity owner;
 					if(this instanceof TameableCreatureEntity) {
 						owner = ((TameableCreatureEntity)this).getPlayerOwner();
-					}
-					if (owner != null) {
-						transformedCreature.applyLevel(transformedLevel);
-						fusionTameable.setPlayerOwner((PlayerEntity)owner);
-						if(this.hasPetEntry()) {
-							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						if(owner != null) {
+							transformedCreature.applyLevel(transformedLevel);
+							fusionTameable.setPlayerOwner((PlayerEntity)owner);
+							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
 					}
 
@@ -3337,25 +3335,23 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 						Entity partnerOwner = null;
 						if (partnerCreature instanceof TameableCreatureEntity) {
 							partnerOwner = ((TameableCreatureEntity)partnerCreature).getPlayerOwner();
-						}
-						if (partnerOwner != null) {
-							transformedCreature.applyLevel(transformedLevel);
-							fusionTameable.setPlayerOwner((PlayerEntity) partnerOwner);
-							if(partnerCreature.hasPetEntry()) {
-								partnerCreature.getPetEntry().summonSet.applyBehaviour(fusionTameable);
-							}
+							if(partnerOwner != null) {
+								transformedCreature.applyLevel(transformedLevel);
+								fusionTameable.setPlayerOwner((PlayerEntity)partnerOwner);
+								((TameableCreatureEntity)partnerCreature).copyPetBehaviourTo(fusionTameable);
 
-							// Temporary:
-							if (partnerCreature.isTemporary) {
-								transformedCreature.setTemporary(partnerCreature.temporaryDuration);
-							}
+								// Temporary:
+								if (partnerCreature.isTemporary) {
+									transformedCreature.setTemporary(partnerCreature.temporaryDuration);
+								}
 
-							// Minion:
-							transformedCreature.setMinion(partnerCreature.isMinion());
+								// Minion:
+								transformedCreature.setMinion(partnerCreature.isMinion());
 
-							// Master Target:
-							if (partnerCreature.hasMaster()) {
-								transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
+								// Master Target:
+								if (partnerCreature.hasMaster()) {
+									transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
+								}
 							}
 						}
 					}
@@ -3373,8 +3369,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
 					if (this.getOwner() != null && this.getOwner() instanceof PlayerEntity) {
 						fusionTameable.setPlayerOwner((PlayerEntity) this.getOwner());
-						if(this.hasPetEntry()) {
-							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						if(this instanceof TameableCreatureEntity) {
+							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
 					}
 				}
