@@ -299,7 +299,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 			}
 
 			// Charges:
-			if(this.isTamed() && !this.isTemporary && (this.isPetType("pet") || this.isPetType("mount")) && itemStack.getItem() instanceof ChargeItem) {
+			if(this.isTamed() && !this.isTemporary && !this.isPetType("minion") && !this.isPetType("familiar") && itemStack.getItem() instanceof ChargeItem) {
 				if(this.isLevelingChargeItem(itemStack)) {
 					commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Charge");
 				}

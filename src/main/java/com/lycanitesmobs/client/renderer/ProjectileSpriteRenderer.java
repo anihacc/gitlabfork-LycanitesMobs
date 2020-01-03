@@ -41,12 +41,6 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 
 		// Render Laser:
 		LaserEndProjectileEntity laserEnd = null;
-		if(entity instanceof LaserProjectileEntity) {
-			laserEnd = ((LaserProjectileEntity)entity).laserEnd;
-			matrixStack.func_227860_a_();
-			this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((LaserProjectileEntity)entity).laserWidth / 4, loop);
-			matrixStack.func_227865_b_();
-		}
 		if(entity instanceof CustomProjectileEntity) {
 			laserEnd = ((CustomProjectileEntity)entity).getLaserEnd();
 			if(laserEnd != null) {
@@ -54,6 +48,12 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 				this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((CustomProjectileEntity)entity).laserWidth / 4, loop);
 				matrixStack.func_227865_b_();
 			}
+		}
+		else if(entity instanceof LaserProjectileEntity) {
+			laserEnd = ((LaserProjectileEntity)entity).laserEnd;
+			matrixStack.func_227860_a_();
+			this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((LaserProjectileEntity)entity).laserWidth / 4, loop);
+			matrixStack.func_227865_b_();
 		}
 
     	// Render Projectile Sprite:
