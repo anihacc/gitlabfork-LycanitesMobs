@@ -5,7 +5,6 @@ import com.lycanitesmobs.Utilities;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
-import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -43,6 +42,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		if(!(projectile instanceof CustomProjectileEntity)) {
 			return;
 		}
+		projectile.movement = false;
 		((CustomProjectileEntity)projectile).syncThrower();
 		((CustomProjectileEntity)projectile).laserWidth = this.width;
 
@@ -53,14 +53,13 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 				entityToFollow = ((CustomProjectileEntity)projectile).getParent();
 			}
 			double xPos = entityToFollow.getPositionVector().x;
-			double yPos = entityToFollow.getPositionVector().y;
+			double yPos = entityToFollow.getEntityBoundingBox().minY + (entityToFollow.height * 0.5D);
 			double zPos = entityToFollow.getPositionVector().z;
-			if(entityToFollow instanceof BaseCreatureEntity) {
+			/*if(entityToFollow instanceof BaseCreatureEntity) {
 				BaseCreatureEntity creatureToFollow = (BaseCreatureEntity)entityToFollow;
 				xPos = creatureToFollow.getFacingPosition(creatureToFollow, 0, creatureToFollow.rotationYaw + 90F).getX();
-				yPos += entityToFollow.height * 0.75D;
 				zPos = creatureToFollow.getFacingPosition(creatureToFollow, 0, creatureToFollow.rotationYaw).getZ();
-			}
+			}*/
 			projectile.setPosition(xPos, yPos, zPos);
 			projectile.setVelocity(entityToFollow.motionX, entityToFollow.motionY, entityToFollow.motionZ);
 		}
@@ -72,20 +71,8 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 	/**
 	 * Updates the end of the laser.
 	 * @param projectile The projectile firing its laser!
-	 * @return The laser end used for stopping the laser at.
 	 */
-	public LaserEndProjectileEntity updateEnd(BaseProjectileEntity projectile) {
-		// Get or Create Laser End:
-		LaserEndProjectileEntity laserEnd = ((CustomProjectileEntity)projectile).getLaserEnd();
-		if(laserEnd == null && !projectile.getEntityWorld().isRemote) {
-			laserEnd = new LaserEndProjectileEntity(projectile.getEntityWorld());
-			projectile.getEntityWorld().spawnEntity(laserEnd);
-			((CustomProjectileEntity)projectile).setLaserEnd(laserEnd);
-		}
-		if(laserEnd == null) {
-			return null;
-		}
-
+	public void updateEnd(BaseProjectileEntity projectile) {
 		// Laser Aiming:
 		double targetX = projectile.getPositionVector().x;
 		double targetY = projectile.getPositionVector().y;
@@ -101,7 +88,10 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		}
 		else if(projectile.getThrower() != null) {
 			if(projectile.getThrower() instanceof BaseCreatureEntity && ((BaseCreatureEntity)projectile.getThrower()).getAttackTarget() != null) {
-				EntityLivingBase attackTarget = ((BaseCreatureEntity)projectile.getThrower()).getAttackTarget();
+				((CustomProjectileEntity)projectile).setTarget(((BaseCreatureEntity) projectile.getThrower()).getAttackTarget());
+			}
+			Entity attackTarget = ((CustomProjectileEntity)projectile).getTarget();
+			if(attackTarget != null) {
 				targetX = attackTarget.getPositionVector().x;
 				targetY = attackTarget.getPositionVector().y + (attackTarget.height / 2);
 				targetZ = attackTarget.getPositionVector().z;
@@ -115,12 +105,6 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 			}
 		}
 
-		// Client End:
-		if(projectile.getEntityWorld().isRemote) {
-			laserEnd.setPosition(targetX, targetY, targetZ);
-			return laserEnd;
-		}
-
 		// Raytracing:
 		HashSet<Entity> excludedEntities = new HashSet<>();
 		excludedEntities.add(projectile);
@@ -130,20 +114,23 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 
 		// Update Laser End Position:
 		Entity entityHit = null;
-		if(rayTraceResult != null && !lockedLaser) {
-			targetX = rayTraceResult.hitVec.x;
-			targetY = rayTraceResult.hitVec.y;
-			targetZ = rayTraceResult.hitVec.z;
+		if(rayTraceResult != null) {
+			if(!lockedLaser) {
+				targetX = rayTraceResult.hitVec.x;
+				targetY = rayTraceResult.hitVec.y;
+				targetZ = rayTraceResult.hitVec.z;
+			}
 			if(rayTraceResult.entityHit != null) {
 				entityHit = rayTraceResult.entityHit;
 				targetY += entityHit.height / 2;
 			}
 		}
-		laserEnd.setPosition(targetX, targetY, targetZ);
+
+		((CustomProjectileEntity)projectile).setLaserEnd(new Vec3d(targetX, targetY, targetZ));
 
 		// Laser Damage:
-		if(projectile.projectileLife % 20 == 0 && projectile.isEntityAlive() && entityHit != null) {
-			if(laserEnd.getDistance(entityHit) <= (this.width * 10)) {
+		if(projectile.projectileLife % 10 == 0 && projectile.isEntityAlive() && entityHit != null) {
+			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityHit.getPositionVector()) <= (this.width * 10)) {
 				boolean doDamage = true;
 				if (entityHit instanceof EntityLivingBase) {
 					doDamage = projectile.canDamage((EntityLivingBase)entityHit);
@@ -155,7 +142,6 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		}
 
 		projectile.playSound(projectile.getBeamSound(), 1.0F, 1.0F / (projectile.getEntityWorld().rand.nextFloat() * 0.4F + 0.8F));
-		return laserEnd;
 	}
 
 

@@ -252,7 +252,7 @@ public class ProjectileInfo {
 	}
 
 	/**
-	 * Returns the registry id of this projectile. Ex: elementalmobs:chaosorb
+	 * Returns the registry id of this projectile. Ex: lycanitesmobs:chaosorb
 	 * @return Projectile registry entity id.
 	 */
 	public String getEntityId() {

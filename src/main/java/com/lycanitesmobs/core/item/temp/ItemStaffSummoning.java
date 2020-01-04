@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.item.temp;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.core.pets.SummonSet;
 import net.minecraft.entity.EntityLivingBase;
@@ -132,7 +132,7 @@ public class ItemStaffSummoning extends ItemScepter {
 			SummonSet summonSet = playerExt.getSelectedSummonSet();
 			if(summonSet.isUseable()) {
 				if(!player.getEntityWorld().isRemote) {
-					playerExt.staffPortal = new EntityPortal(world, player, summonSet.getCreatureClass(), this);
+					playerExt.staffPortal = new PortalEntity(world, player, summonSet.getCreatureClass(), this);
 					playerExt.staffPortal.setLocationAndAngles(player.posX, player.posY, player.posZ, world.rand.nextFloat() * 360.0F, 0.0F);
 			    	world.spawnEntity(playerExt.staffPortal);
 				}

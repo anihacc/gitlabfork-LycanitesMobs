@@ -1552,7 +1552,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			}
 
 			// With Partner:
-			if (partner != null && partner instanceof BaseCreatureEntity) {
+			if (partner instanceof BaseCreatureEntity) {
 				BaseCreatureEntity partnerCreature = (BaseCreatureEntity) partner;
 				Subspecies fusionSubspecies = transformedCreature.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partnerCreature.getSubspecies());
 				transformedCreature.applySubspecies(fusionSubspecies != null ? fusionSubspecies.index : 0);
@@ -1587,16 +1587,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 				// Tamed:
 				if (transformedCreature instanceof TameableCreatureEntity) {
-					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
-					Entity owner = null;
+					TameableCreatureEntity fusionTameable = (TameableCreatureEntity)transformedCreature;
+					Entity owner;
 					if(this instanceof TameableCreatureEntity) {
 						owner = ((TameableCreatureEntity)this).getPlayerOwner();
-					}
-					if (owner != null) {
-						transformedCreature.applyLevel(transformedLevel);
-						fusionTameable.setPlayerOwner((EntityPlayer)owner);
-						if(this.hasPetEntry()) {
-							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						if(owner != null) {
+							transformedCreature.applyLevel(transformedLevel);
+							fusionTameable.setPlayerOwner((EntityPlayer)owner);
+							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
 					}
 
@@ -1605,25 +1603,23 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 						Entity partnerOwner = null;
 						if (partnerCreature instanceof TameableCreatureEntity) {
 							partnerOwner = ((TameableCreatureEntity)partnerCreature).getPlayerOwner();
-						}
-						if (partnerOwner != null) {
-							transformedCreature.applyLevel(transformedLevel);
-							fusionTameable.setPlayerOwner((EntityPlayer) partnerOwner);
-							if(partnerCreature.hasPetEntry()) {
-								partnerCreature.getPetEntry().summonSet.applyBehaviour(fusionTameable);
-							}
+							if(partnerOwner != null) {
+								transformedCreature.applyLevel(transformedLevel);
+								fusionTameable.setPlayerOwner((EntityPlayer)partnerOwner);
+								((TameableCreatureEntity)partnerCreature).copyPetBehaviourTo(fusionTameable);
 
-							// Temporary:
-							if (partnerCreature.isTemporary) {
-								transformedCreature.setTemporary(partnerCreature.temporaryDuration);
-							}
+								// Temporary:
+								if (partnerCreature.isTemporary) {
+									transformedCreature.setTemporary(partnerCreature.temporaryDuration);
+								}
 
-							// Minion:
-							transformedCreature.setMinion(partnerCreature.isMinion());
+								// Minion:
+								transformedCreature.setMinion(partnerCreature.isMinion());
 
-							// Master Target:
-							if (partnerCreature.hasMaster()) {
-								transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
+								// Master Target:
+								if (partnerCreature.hasMaster()) {
+									transformedCreature.setMasterTarget(partnerCreature.getMasterTarget());
+								}
 							}
 						}
 					}
@@ -1638,11 +1634,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 				// Tamed:
 				if (transformedCreature instanceof TameableCreatureEntity) {
-					TameableCreatureEntity fusionTameable = (TameableCreatureEntity) transformedCreature;
+					TameableCreatureEntity fusionTameable = (TameableCreatureEntity)transformedCreature;
 					if (this.getOwner() != null && this.getOwner() instanceof EntityPlayer) {
 						fusionTameable.setPlayerOwner((EntityPlayer) this.getOwner());
-						if(this.hasPetEntry()) {
-							this.getPetEntry().summonSet.applyBehaviour(fusionTameable);
+						if(this instanceof TameableCreatureEntity) {
+							((TameableCreatureEntity)this).copyPetBehaviourTo(fusionTameable);
 						}
 					}
 				}

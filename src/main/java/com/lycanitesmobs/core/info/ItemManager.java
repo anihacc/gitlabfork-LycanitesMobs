@@ -242,6 +242,8 @@ public class ItemManager extends JSONLoader {
 		OreDictionary.registerOre("listAllchickencooked", Items.COOKED_CHICKEN);
 		OreDictionary.registerOre("listAllmuttonraw", Items.MUTTON);
 		OreDictionary.registerOre("listAllmuttoncooked", Items.COOKED_MUTTON);
+		OreDictionary.registerOre("listAllrabbitraw", Items.RABBIT);
+		OreDictionary.registerOre("listAllrabbitcooked", Items.COOKED_RABBIT);
 		OreDictionary.registerOre("listAllfishraw", Items.FISH);
 		OreDictionary.registerOre("listAllfishcooked", Items.COOKED_FISH);
 		OreDictionary.registerOre("listAllVegetables", Items.WHEAT);
@@ -269,8 +271,8 @@ public class ItemManager extends JSONLoader {
 		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("cooked_joust_meat"));
 		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("raw_silex_meat"));
 		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_silex_meat"));
-		OreDictionary.registerOre("listAllfishraw", ObjectManager.getItem("raw_krake_meat"));
-		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_krake_meat"));
+		OreDictionary.registerOre("listAllrabbitraw", ObjectManager.getItem("raw_krake_meat"));
+		OreDictionary.registerOre("listAllrabbitcooked", ObjectManager.getItem("cooked_krake_meat"));
 		OreDictionary.registerOre("listAllfishcooked", ObjectManager.getItem("cooked_cephignis_meat"));
 		OreDictionary.registerOre("listAllchickenraw", ObjectManager.getItem("raw_concapede_meat"));
 		OreDictionary.registerOre("listAllchickencooked", ObjectManager.getItem("cooked_concapede_meat"));

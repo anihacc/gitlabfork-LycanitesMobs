@@ -1,11 +1,10 @@
 package com.lycanitesmobs.client.gui.overlays;
 
-import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.GuiHandler;
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.gui.BaseScreen;
 import com.lycanitesmobs.client.gui.buttons.CreatureButton;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
-import com.lycanitesmobs.GuiHandler;
-import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import net.minecraft.client.gui.GuiButton;
@@ -88,8 +87,7 @@ public class MinionSelectionOverlay extends BaseScreen {
   	//                    Background
   	// ==================================================
 	protected void drawGuiContainerBackgroundLayer() {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(AssetManager.getTexture("GUIMinion"));
+
 	}
 	
 	

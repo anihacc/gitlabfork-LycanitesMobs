@@ -75,7 +75,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public int summonFocusRecharge = 10;
 	public Map<Integer, SummonSet> summonSets = new HashMap<>();
 	public int summonSetMax = 5;
-	public EntityPortal staffPortal;
+	public PortalEntity staffPortal;
 
     // Initial Setup:
     private boolean initialSetup = false;

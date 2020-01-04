@@ -81,6 +81,9 @@ public class EntityCinder extends TameableCreatureEntity implements IMob, IFusab
     	// Type:
     	List<RapidFireProjectileEntity> projectiles = new ArrayList<>();
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("ember");
+		if(projectileInfo == null) {
+			return;
+		}
     	
     	RapidFireProjectileEntity projectileEntry = new RapidFireProjectileEntity(projectileInfo, this.getEntityWorld(), this, 15, 3);
     	projectiles.add(projectileEntry);

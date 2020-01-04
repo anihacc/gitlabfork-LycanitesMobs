@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity;
 
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -16,7 +17,7 @@ public class LaserEndProjectileEntity extends BaseProjectileEntity {
 	
 	// Properties:
 	public EntityLivingBase shootingEntity;
-	public EntityProjectileLaser laserEntity;
+	public BaseProjectileEntity laserEntity;
 	private double projectileSpeed;
 
     // Datawatcher:

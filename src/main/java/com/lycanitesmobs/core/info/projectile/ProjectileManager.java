@@ -4,8 +4,10 @@ import com.google.gson.JsonObject;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
 import com.lycanitesmobs.core.JSONLoader;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.entity.EntityProjectileModel;
+import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
+import com.lycanitesmobs.core.entity.RapidFireProjectileEntity;
 import com.lycanitesmobs.core.entity.projectile.*;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.entity.Entity;
@@ -109,7 +111,7 @@ public class ProjectileManager extends JSONLoader {
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(projectileInfo.entityClass)
 					.id(projectileInfo.getEntityId(), this.getNextProjectileNetworkId())
-					.name(projectileInfo.getName())
+					.name(projectileInfo.getEntityId())
 					.tracker(40, 3, true)
 					.build();
 			event.getRegistry().register(entityEntry);
@@ -120,7 +122,7 @@ public class ProjectileManager extends JSONLoader {
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(this.oldSpriteProjectiles.get(entityName))
 					.id(registryName, this.getNextProjectileNetworkId())
-					.name(entityName)
+					.name(registryName)
 					.tracker(40, 3, true)
 					.build();
 			event.getRegistry().register(entityEntry);
@@ -131,7 +133,7 @@ public class ProjectileManager extends JSONLoader {
 			EntityEntry entityEntry = EntityEntryBuilder.create()
 					.entity(this.oldModelProjectiles.get(entityName))
 					.id(registryName, this.getNextProjectileNetworkId())
-					.name(entityName)
+					.name(registryName)
 					.tracker(40, 3, true)
 					.build();
 			event.getRegistry().register(entityEntry);
@@ -153,7 +155,9 @@ public class ProjectileManager extends JSONLoader {
 
 	/** Called during early start up, loads all items. **/
 	public void loadOldProjectiles() {
-		this.addOldProjectile("summoningportal", EntityPortal.class);
+		this.addOldProjectile("summoningportal", PortalEntity.class);
+		//this.addOldProjectile("rapidfire", RapidFireProjectileEntity.class); Not needed in 1.12.2
+		this.addOldProjectile("laserend", LaserEndProjectileEntity.class);
 
 		this.addOldProjectile("shadowfirebarrier", EntityShadowfireBarrier.class, false);
 		this.addOldProjectile("hellfirewall", EntityHellfireWall.class, false);
@@ -177,7 +181,6 @@ public class ProjectileManager extends JSONLoader {
 	}
 	
 	public void addOldProjectile(String name, Class<? extends Entity> entityClass, boolean impactSound) {
-		name = name.toLowerCase();
 		ModInfo modInfo = LycanitesMobs.modInfo;
 		AssetManager.addSound(name, modInfo, "projectile." + name);
 		if(impactSound) {

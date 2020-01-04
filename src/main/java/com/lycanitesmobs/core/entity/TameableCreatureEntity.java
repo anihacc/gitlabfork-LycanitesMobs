@@ -253,6 +253,20 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		}
 		return this.getPetEntry() == null || this.isPetType("pet");
 	}
+	
+	/**
+	 * Copies this creature's behaviour to the provided tamed creature.
+	 * @return The creature to copy pet behaviour to.
+	 */
+	public void copyPetBehaviourTo(TameableCreatureEntity target) {
+		target.setPVP(this.isPVP());
+		target.setPassive(this.isPassive());
+		target.setAssist(this.isAssisting());
+		target.setAggressive(this.isAggressive());
+		
+		target.setSitting(this.isSitting());
+		target.setFollowing(this.isFollowing());
+	}
 
 
 	// ==================================================

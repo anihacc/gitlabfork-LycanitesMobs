@@ -40,16 +40,15 @@ public class RenderProjectileSprite extends Render {
     public void doRender(Entity entity, double x, double y, double z, float par8, float par9) {
     	if(this.renderTime++ > Integer.MAX_VALUE - 1)
             this.renderTime = 0;
-        this.renderProjectile(entity, x, y, z, par8, par9);
-    	if(entity instanceof CustomProjectileEntity) {
-			LaserEndProjectileEntity laserEnd = ((CustomProjectileEntity)entity).getLaserEnd();
-			if(laserEnd != null) {
-				this.renderLaser((BaseProjectileEntity)entity, laserEnd, x, y, z, par8, par9, ((CustomProjectileEntity)entity).laserWidth, entity.getDistance(laserEnd));
-			}
-    	}
-    	else if(entity instanceof EntityProjectileLaser) {
-			this.renderLaser((BaseProjectileEntity)entity, ((EntityProjectileLaser)entity).getLaserEnd(), x, y, z, par8, par9, ((EntityProjectileLaser)entity).getLaserWidth(), ((EntityProjectileLaser)entity).getLength());
+		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity) entity).getLaserEnd() != null) {
+			this.renderLaser((CustomProjectileEntity)entity, x, y, z, par8, par9, ((CustomProjectileEntity)entity).laserWidth);
+			return;
 		}
+		if(entity instanceof EntityProjectileLaser) {
+			this.renderOldLaser((BaseProjectileEntity)entity, ((EntityProjectileLaser)entity).getLaserEnd(), x, y, z, par8, par9, ((EntityProjectileLaser)entity).getLaserWidth(), ((EntityProjectileLaser)entity).getLength());
+			return;
+		}
+		this.renderProjectile(entity, x, y, z, par8, par9);
     }
     
     
@@ -57,7 +56,7 @@ public class RenderProjectileSprite extends Render {
     //                 Render Projectile
     // ==================================================
     public void renderProjectile(Entity entity, double x, double y, double z, float par8, float par9) {
-    	double scale = 0.5d;
+    	double scale = 1d;
     	if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
     		return;
 		}
@@ -66,13 +65,17 @@ public class RenderProjectileSprite extends Render {
             scale *= baseProjectileEntity.getProjectileScale();
             y += baseProjectileEntity.getTextureOffsetY();
         }
+		ResourceLocation texture = this.getEntityTexture(entity);
+        if(texture == null) {
+        	return;
+		}
 
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x, (float) y, (float) z);
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(scale, scale, scale);
 
-        this.bindTexture(this.getEntityTexture(entity));
+        this.bindTexture(texture);
         this.renderTexture(Tessellator.getInstance(), entity);
 
         GlStateManager.disableRescaleNormal();
@@ -137,7 +140,7 @@ public class RenderProjectileSprite extends Render {
     // ==================================================
     //                 Render Laser
     // ==================================================
-    public void renderLaser(BaseProjectileEntity entity, LaserEndProjectileEntity laserEnd, double x, double y, double z, float par8, float par9, float scale, float length) {
+    public void renderLaser(CustomProjectileEntity entity, double x, double y, double z, float par8, float par9, float scale) {
     	// Create Laser Model If Null:
     	if(this.laserBox == null) {
     		laserBox = new ModelRenderer(laserModel, 0, 0);
@@ -146,20 +149,75 @@ public class RenderProjectileSprite extends Render {
     		laserBox.rotationPointY = 0;
     		laserBox.rotationPointZ = 0;
     	}
-        
+
     	float factor = (float)(1.0 / 16.0);
     	float lastSegment = 0;
+		double length = entity.getPositionVector().distanceTo(entity.getLaserEnd());
     	if(length <= 0)
             return;
-    	
+
     	// Render Laser Beam:
         GlStateManager.pushMatrix();
         GlStateManager.enableAlpha();
         GlStateManager.color(1, 1, 1, 1);
         GlStateManager.translate(x, y, z);
     	this.bindTexture(this.getLaserTexture(entity));
-        
+
         // Rotation:
+		float[] angles = new float[] {0, 0, 0, 0};
+		float dx = (float)(entity.getLaserEnd().x - entity.posX);
+		float dy = (float)(entity.getLaserEnd().y - entity.posY);
+		float dz = (float)(entity.getLaserEnd().z - entity.posZ);
+		angles[0] = (float)Math.toDegrees(Math.atan2(dz, dy)) - 90;
+		angles[1] = (float)Math.toDegrees(Math.atan2(dx, dz));
+		angles[2] = (float)Math.toDegrees(Math.atan2(dx, dy)) - 90;
+
+		// Distance based x/z rotation:
+		float dr = (float)Math.sqrt(dx * dx + dz * dz);
+		angles[3] = (float)Math.toDegrees(Math.atan2(dr, dy)) - 90;
+        GlStateManager.rotate(angles[1], 0, 1, 0);
+        GlStateManager.rotate(angles[3], 1, 0, 0);
+
+    	// Length:
+        for(float segment = 0; segment <= length - 1; ++segment) {
+                this.laserBox.render(factor);
+                GlStateManager.translate(0, 0, 1);
+                lastSegment = segment;
+        }
+        lastSegment++;
+        GlStateManager.scale((length - lastSegment), 1, 1);
+        this.laserBox.render(factor);
+
+        GlStateManager.popMatrix();
+    }
+
+
+	// ==================================================
+	//                 Render Old Laser
+	// ==================================================
+	public void renderOldLaser(BaseProjectileEntity entity, LaserEndProjectileEntity laserEnd, double x, double y, double z, float par8, float par9, float scale, float length) {
+		// Create Laser Model If Null:
+		if(this.laserBox == null) {
+			laserBox = new ModelRenderer(laserModel, 0, 0);
+			laserBox.addBox(-(scale / 2), -(scale / 2), 0, (int)scale, (int)scale, 16);
+			laserBox.rotationPointX = 0;
+			laserBox.rotationPointY = 0;
+			laserBox.rotationPointZ = 0;
+		}
+
+		float factor = (float)(1.0 / 16.0);
+		float lastSegment = 0;
+		if(length <= 0)
+			return;
+
+		// Render Laser Beam:
+		GlStateManager.pushMatrix();
+		GlStateManager.enableAlpha();
+		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.translate(x, y, z);
+		this.bindTexture(this.getLaserTexture(entity));
+
+		// Rotation:
 		float[] angles = new float[] {0, 0, 0, 0};
 		if(laserEnd != null) {
 			float dx = (float)(laserEnd.posX - entity.posX);
@@ -173,21 +231,21 @@ public class RenderProjectileSprite extends Render {
 			float dr = (float)Math.sqrt(dx * dx + dz * dz);
 			angles[3] = (float)Math.toDegrees(Math.atan2(dr, dy)) - 90;
 		}
-        GlStateManager.rotate(angles[1], 0, 1, 0);
-        GlStateManager.rotate(angles[3], 1, 0, 0);
-    	
-    	// Length:
-        for(float segment = 0; segment <= length - 1; ++segment) {
-                this.laserBox.render(factor);
-                GlStateManager.translate(0, 0, 1);
-                lastSegment = segment;
-        }
-        lastSegment++;
-        GlStateManager.scale((length - lastSegment), 1, 1);
-        this.laserBox.render(factor);
+		GlStateManager.rotate(angles[1], 0, 1, 0);
+		GlStateManager.rotate(angles[3], 1, 0, 0);
 
-        GlStateManager.popMatrix();
-    }
+		// Length:
+		for(float segment = 0; segment <= length - 1; ++segment) {
+			this.laserBox.render(factor);
+			GlStateManager.translate(0, 0, 1);
+			lastSegment = segment;
+		}
+		lastSegment++;
+		GlStateManager.scale((length - lastSegment), 1, 1);
+		this.laserBox.render(factor);
+
+		GlStateManager.popMatrix();
+	}
     
     
     // ==================================================
@@ -205,8 +263,10 @@ public class RenderProjectileSprite extends Render {
 
     // ========== Get Laser Texture ==========
     protected ResourceLocation getLaserTexture(BaseProjectileEntity entity) {
-    	if(entity instanceof EntityProjectileLaser)
-    		return ((EntityProjectileLaser)entity).getBeamTexture();
+    	if(entity instanceof CustomProjectileEntity)
+    		return ((CustomProjectileEntity)entity).getBeamTexture();
+		if(entity instanceof EntityProjectileLaser)
+			return ((EntityProjectileLaser)entity).getBeamTexture();
     	return this.getEntityTexture(entity);
     }
 }

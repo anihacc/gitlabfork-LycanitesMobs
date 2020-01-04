@@ -187,7 +187,7 @@ public class AttackRangedGoal extends EntityAIBase {
 	@Override
     public void updateTask() {
     	boolean fixated = this.host.hasFixateTarget() && this.host.getFixateTarget() == this.attackTarget;
-        double distance = this.host.getDistance(this.attackTarget);
+        double distance = this.host.getDistance(this.attackTarget) - (this.attackTarget.width / 2);
         boolean hasSight = fixated || this.host.getEntitySenses().canSee(this.attackTarget);
         float flyingHeightOffset = this.flyingHeight;
         

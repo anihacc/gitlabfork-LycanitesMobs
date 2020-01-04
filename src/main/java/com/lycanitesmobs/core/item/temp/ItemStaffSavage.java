@@ -1,12 +1,12 @@
 package com.lycanitesmobs.core.item.temp;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class ItemStaffSavage extends ItemStaffSummoning {
-	public EntityPortal portalEntity;
+	public PortalEntity portalEntity;
 	
 	// ==================================================
 	//                   Constructor

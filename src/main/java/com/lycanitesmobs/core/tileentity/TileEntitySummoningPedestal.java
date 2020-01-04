@@ -3,7 +3,7 @@ package com.lycanitesmobs.core.tileentity;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.block.BlockSummoningPedestal;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.entity.EntityPortal;
+import com.lycanitesmobs.core.entity.PortalEntity;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalStats;
 import com.lycanitesmobs.core.network.MessageSummoningPedestalSummonSet;
 import com.lycanitesmobs.core.container.SummoningPedestalContainer;
@@ -37,7 +37,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 	public long updateTick = 0;
 
 	// Summoning Properties:
-	public EntityPortal summoningPortal;
+	public PortalEntity summoningPortal;
 	public UUID ownerUUID;
 	public String ownerName = "";
 	public SummonSet summonSet;
@@ -132,7 +132,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 
 			// Summoning Portal:
 			if (this.summoningPortal == null || this.summoningPortal.isDead) {
-				this.summoningPortal = new EntityPortal(this.getWorld(), this);
+				this.summoningPortal = new PortalEntity(this.getWorld(), this);
 				this.summoningPortal.setProjectileScale(8);
 				this.getWorld().spawnEntity(this.summoningPortal);
 			}
