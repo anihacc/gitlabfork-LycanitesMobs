@@ -40,35 +40,24 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
     	float scale = entity.projectileScale;
 
 		// Render Laser:
-		LaserEndProjectileEntity laserEnd = null;
-		if(entity instanceof CustomProjectileEntity) {
-			laserEnd = ((CustomProjectileEntity)entity).getLaserEnd();
-			if(laserEnd != null) {
-				matrixStack.func_227860_a_();
-				this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((CustomProjectileEntity)entity).laserWidth / 4, loop);
-				matrixStack.func_227865_b_();
-			}
-		}
-		else if(entity instanceof LaserProjectileEntity) {
-			laserEnd = ((LaserProjectileEntity)entity).laserEnd;
+		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).getLaserEnd() != null) {
 			matrixStack.func_227860_a_();
-			this.renderLaser(entity, laserEnd, matrixStack, renderTypeBuffer, ((LaserProjectileEntity)entity).laserWidth / 4, loop);
+			this.renderLaser((CustomProjectileEntity)entity, matrixStack, renderTypeBuffer, ((CustomProjectileEntity)entity).laserWidth / 4, loop);
 			matrixStack.func_227865_b_();
+			return;
 		}
 
     	// Render Projectile Sprite:
-		if(laserEnd == null) {
-			matrixStack.func_227860_a_();
-			matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
-			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
-			matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
-			matrixStack.func_227862_a_(scale, scale, scale); // Projectile Scaling
-			matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
-			ResourceLocation texture = this.getEntityTexture(entity);
-			RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
-			this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);
-			matrixStack.func_227865_b_();
-		}
+		matrixStack.func_227860_a_();
+		matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
+		matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
+		matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
+		matrixStack.func_227862_a_(scale, scale, scale); // Projectile Scaling
+		matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
+		ResourceLocation texture = this.getEntityTexture(entity);
+		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
+		this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);
+		matrixStack.func_227865_b_();
     }
 
     public void renderSprite(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, RenderType rendertype, float scale) {
@@ -113,19 +102,16 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 				.endVertex();
     }
 
-    public void renderLaser(BaseProjectileEntity entity, LaserEndProjectileEntity laserEnd, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, float scale, float loop) {
-    	if(laserEnd == null) {
-    		return;
-		}
-		float laserSize = entity.getDistance(laserEnd);
+    public void renderLaser(CustomProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, float scale, float loop) {
+    	double laserSize = entity.getPositionVec().distanceTo(entity.getLaserEnd());
 		float spacing = 1;
-		float factor = spacing / laserSize;
+		double factor = spacing / laserSize;
 		if(laserSize <= 0) {
 			return;
 		}
 		ResourceLocation texture = this.getEntityTexture(entity);
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
-		Vec3d direction = laserEnd.getPositionVec().subtract(entity.getPositionVec()).normalize();
+		Vec3d direction = entity.getLaserEnd().subtract(entity.getPositionVec()).normalize();
 		for(float segment = 0; segment <= laserSize; segment += factor) {
 			matrixStack.func_227860_a_();
 			matrixStack.func_227861_a_(segment * direction.getX() * spacing, segment * direction.getY() * spacing, segment * direction.getZ() * spacing);

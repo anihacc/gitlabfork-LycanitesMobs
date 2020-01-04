@@ -100,7 +100,6 @@ public class ProjectileManager extends JSONLoader {
 
 		// Old Sprite Projectiles:
 		for(String entityName : this.oldSpriteProjectiles.keySet()) {
-			LycanitesMobs.logDebug("", "Reg proj: " + entityName + " " + this.oldSpriteProjectiles.get(entityName));
 			event.getRegistry().register(this.createEntityType(entityName, this.oldSpriteProjectiles.get(entityName)));
 		}
 

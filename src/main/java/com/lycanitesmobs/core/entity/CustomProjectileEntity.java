@@ -14,6 +14,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,14 +32,17 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	/** The projectile that fired this projectile, if any. **/
 	protected BaseProjectileEntity parent;
 
+	/** TThe target of this projectile if any, used for network sync by some behaviours. **/
+	protected Entity target;
+
 	/** The id of the projectile that fired this projectile if any, used for network sync by some behaviours, -1 for none. **/
 	protected int parentId = -1;
 
-	/** Used by laser behaviours to keep track of the laser end projectile. **/
-	protected LaserEndProjectileEntity laserEnd;
+	/** The id of the target entity of this projectile, used by some behaviours. **/
+	protected int targetId = -1;
 
-	/** The id of this projectile's laser end for network sync, -1 for none. **/
-	protected int laserEndId = -1;
+	/** Used by laser behaviours to keep track of the laser ending position. **/
+	protected Vec3d laserEnd;
 
 	/** The width of this projectile's laser, used by laser behaviours. **/
 	public float laserWidth;
@@ -53,7 +57,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	protected static final DataParameter<String> PROJECTILE_NAME = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.STRING);
 	protected static final DataParameter<Integer> THROWING_ENTITY_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
 	protected static final DataParameter<Integer> PARENT_PROJECTILE_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
-	protected static final DataParameter<Integer> LASER_END_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.VARINT);
 	protected static final DataParameter<Float> LASER_ANGLE = EntityDataManager.createKey(CustomProjectileEntity.class, DataSerializers.FLOAT);
 
 
@@ -99,7 +103,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		this.dataManager.register(PROJECTILE_NAME, "");
 		this.dataManager.register(THROWING_ENTITY_ID, this.throwerId);
 		this.dataManager.register(PARENT_PROJECTILE_ID, this.parentId);
-		this.dataManager.register(LASER_END_ID, this.laserEndId);
+		this.dataManager.register(TARGET_ID, this.targetId);
 		this.dataManager.register(LASER_ANGLE, this.laserAngle);
 	}
 
@@ -262,13 +266,39 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	}
 
 	/**
+	 * Sets the target of this projectile, used by some behaviours.
+	 */
+	public void setTarget(Entity target) {
+		this.target = target;
+		if(!this.getEntityWorld().isRemote) {
+			this.targetId = this.target != null ? this.target.getEntityId() : -1;
+			this.dataManager.set(TARGET_ID, this.targetId);
+		}
+	}
+
+	/**
+	 * Gets the target of this projectile, used by some behaviours.
+	 * @return The projectile target entity if any.
+	 */
+	public Entity getTarget() {
+		if(this.getEntityWorld().isRemote) {
+			this.targetId = this.dataManager.get(TARGET_ID);
+			if(this.targetId == -1) {
+				this.target = null;
+			}
+			else if(this.target == null || this.target.getEntityId() != this.targetId) {
+				this.target = this.getEntityWorld().getEntityByID(this.targetId);
+			}
+		}
+		return this.target;
+	}
+
+	/**
 	 * Sets the laser end used by this projectile or clears it if null. Also updates the laser angle.
 	 */
-	public void setLaserEnd(LaserEndProjectileEntity laserEnd) {
+	public void setLaserEnd(Vec3d laserEnd) {
 		this.laserEnd = laserEnd;
 		if(!this.getEntityWorld().isRemote) {
-			this.laserEndId = this.laserEnd != null ? this.laserEnd.getEntityId() : -1;
-			this.dataManager.set(LASER_END_ID, this.laserEndId);
 			this.dataManager.set(LASER_ANGLE, this.laserAngle);
 		}
 	}
@@ -277,18 +307,8 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 	 * Gets the laser end used by this projectile if any. Also updates the laser angle.
 	 * @return The laser end for laser projectile behaviours.
 	 */
-	public LaserEndProjectileEntity getLaserEnd() {
+	public Vec3d getLaserEnd() {
 		if(this.getEntityWorld().isRemote) {
-			this.laserEndId = this.dataManager.get(LASER_END_ID);
-			if(this.laserEndId == -1) {
-				this.laserEnd = null;
-			}
-			else if(this.laserEnd == null || this.laserEnd.getEntityId() != this.laserEndId) {
-				Entity possibleLaserEnd = this.getEntityWorld().getEntityByID(this.laserEndId);
-				if(possibleLaserEnd instanceof LaserEndProjectileEntity) {
-					this.laserEnd = (LaserEndProjectileEntity)possibleLaserEnd;
-				}
-			}
 			this.laserAngle = this.dataManager.get(LASER_ANGLE);
 		}
 		return this.laserEnd;
