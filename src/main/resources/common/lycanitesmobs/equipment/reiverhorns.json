@@ -39,7 +39,10 @@
 			"featureType": "projectile",
 			"levelMin": 3,
 			"projectileName": "frostbolt",
-			"projectileTrigger": "hold"
+			"projectileTrigger": "secondary",
+			"projectilePattern": "simple",
+			"cooldown": 10,
+			"count": 1
 		}
 	]
 }

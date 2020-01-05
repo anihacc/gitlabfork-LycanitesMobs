@@ -20,6 +20,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
@@ -62,7 +63,7 @@ public class ItemEquipment extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description.getFormattedText(), DESCRIPTION_WIDTH);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
 				tooltip.add(new StringTextComponent(formattedDescription));
 			}
@@ -394,6 +395,58 @@ public class ItemEquipment extends BaseItem {
 			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
 			projectileFeature.onHoldSecondary(user, count);
 		}
+	}
+
+	/**
+	 * Called when the player left clicks with this equipment. This is called via the left click empty or block events (a network packet is called for left click empty).
+	 * @param world The world the player is in.
+	 * @param player The player using the equipment.
+	 * @param hand The active hand.
+	 */
+	public void onItemLeftClick(World world, PlayerEntity player, Hand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
+
+		// Projectiles:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+			projectileFeature.onUsePrimary(world, player, hand);
+		}
+	}
+
+	@Override
+	public ActionResultType onItemUse(ItemUseContext context) {
+		boolean active = false;
+
+		// Harvesting:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(context.getItem(), "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestFeature.onBlockUsed(context)) {
+				active = true;
+			}
+		}
+
+		if(active) {
+			context.getPlayer().setActiveHand(context.getHand());
+			return ActionResultType.SUCCESS;
+		}
+		return super.onItemUse(context);
+	}
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity target, Hand hand) {
+		boolean entityInteraction = false;
+
+		// Harvesting:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestFeature.onEntityInteraction(player, target, itemStack)) {
+				entityInteraction = true;
+			}
+		}
+
+		if(entityInteraction)
+			return true;
+		return super.itemInteractionForEntity(itemStack, player, target, hand);
 	}
 
 

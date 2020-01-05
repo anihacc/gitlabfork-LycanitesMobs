@@ -14,8 +14,7 @@
 			"featureType": "harvest",
 			"harvestType": "shovel",
 			"harvestShape": "block",
-			"harvestRange": [3, 3, 3],
-			"harvestRangeLevelMultiplier": 0
+			"harvestRange": [3, 3, 3]
 		},
 		{
 			"featureType": "damage",

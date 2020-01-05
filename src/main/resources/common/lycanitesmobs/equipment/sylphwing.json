@@ -47,10 +47,11 @@
 			"featureType": "projectile",
 			"levelMin": 3,
 			"projectileName": "aetherwave",
-			"projectileTrigger": "melee",
+			"projectileTrigger": "hit",
 			"projectilePattern": "ring",
-			"projectileCount": 8,
-			"projectileChance": 0.25
+			"count": 8,
+			"hitChance": 0.5,
+			"ringRange": 360
 		}
 	]
 }

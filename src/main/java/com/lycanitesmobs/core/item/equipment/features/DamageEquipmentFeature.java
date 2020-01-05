@@ -71,4 +71,9 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		}
 		return description;
 	}
+
+	@Override
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		return this.getDescription(itemStack, level);
+	}
 }

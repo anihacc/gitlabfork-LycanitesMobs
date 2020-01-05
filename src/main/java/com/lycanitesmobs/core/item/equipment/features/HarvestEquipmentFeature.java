@@ -1,23 +1,31 @@
 package com.lycanitesmobs.core.item.equipment.features;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
+import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Set;
 
 public class HarvestEquipmentFeature extends EquipmentFeature {
@@ -25,6 +33,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	private static final Set<Block> SPADE_HARVEST = Sets.newHashSet(Blocks.CLAY, Blocks.DIRT, Blocks.FARMLAND, Blocks.GRASS_BLOCK, Blocks.GRAVEL, Blocks.MYCELIUM, Blocks.SAND, Blocks.SNOW, Blocks.SOUL_SAND, Blocks.GRASS_PATH, Blocks.GRAY_CONCRETE_POWDER);
 	private static final Set<Block> PICKAXE_HARVEST = Sets.newHashSet(Blocks.ACTIVATOR_RAIL, Blocks.COAL_ORE, Blocks.COBBLESTONE, Blocks.DETECTOR_RAIL, Blocks.DIAMOND_BLOCK, Blocks.DIAMOND_ORE, Blocks.POWERED_RAIL, Blocks.GOLD_BLOCK, Blocks.GOLD_ORE, Blocks.ICE, Blocks.IRON_BLOCK, Blocks.IRON_ORE, Blocks.LAPIS_BLOCK, Blocks.LAPIS_ORE, Blocks.MOSSY_COBBLESTONE, Blocks.NETHERRACK, Blocks.PACKED_ICE, Blocks.RAIL, Blocks.REDSTONE_ORE, Blocks.SANDSTONE, Blocks.RED_SANDSTONE, Blocks.STONE, Blocks.STONE_SLAB, Blocks.STONE_BUTTON, Blocks.STONE_PRESSURE_PLATE);
 	private static final Set<Block> AXE_HARVEST = Sets.newHashSet(Blocks.OAK_PLANKS, Blocks.BOOKSHELF, Blocks.CHEST, Blocks.PUMPKIN, Blocks.MELON, Blocks.LADDER, Blocks.OAK_BUTTON, Blocks.OAK_PRESSURE_PLATE);
+	private static final Map<Block, BlockState> HOE_LOOKUP = Maps.newHashMap(ImmutableMap.of(Blocks.GRASS_BLOCK, Blocks.FARMLAND.getDefaultState(), Blocks.GRASS_PATH, Blocks.FARMLAND.getDefaultState(), Blocks.DIRT, Blocks.FARMLAND.getDefaultState(), Blocks.COARSE_DIRT, Blocks.DIRT.getDefaultState()));
 
 	/** The type of tool to harvest as. Can be: pickaxe, axe, shovel, hoe, sword or shears. **/
 	public String harvestType;
@@ -40,9 +49,6 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 	/** The additional block range of the harvest shape, relative to the harvesting direction, the central block is not affected by this. X = number of blocks both sides laterally (sideways). Y = Number of blocks vertically. Z = Number of blocks forwards. **/
 	public Vec3i harvestRange = new Vec3i(0, 0, 0);
-
-	/** Each extra level of the part that is using this featured increases the range by its base range times by this multiplier per level. **/
-	public double harvestRangeLevelMultiplier = 1;
 
 
 	// ==================================================
@@ -67,9 +73,6 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			this.harvestShape = json.get("harvestShape").getAsString();
 
 		this.harvestRange = JSONHelper.getVec3i(json, "harvestRange");
-
-		if(json.has("harvestRangeLevelMultiplier"))
-			this.harvestRangeLevelMultiplier = json.get("harvestRangeLevelMultiplier").getAsDouble();
 	}
 
 	@Override
@@ -77,20 +80,8 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-			.appendText(" " + this.harvestType);
-
-		description.appendText("\n")
-			.appendSibling(new TranslationTextComponent("equipment.feature.harvest.shape"))
-			.appendText(" " + this.harvestShape);
-
-		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.harvest.range"))
-					.appendText(" " + this.getHarvestRangeString(level));
-		}
-
-		return description;
+		return new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ")
+				.appendSibling(this.getSummary(itemStack, level));
 	}
 
 	@Override
@@ -98,26 +89,19 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		ITextComponent summary = new TranslationTextComponent("equipment.feature." + this.featureType)
-				.appendText(" " + this.harvestType);
-
-		summary.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.harvest.shape"))
-				.appendText(" " + this.harvestShape);
-
-		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
-			summary.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.harvest.range"))
-					.appendText(" " + this.getHarvestRangeString(level));
+		ITextComponent summary = new StringTextComponent(this.harvestType);
+		if(this.harvestRange.distanceSq(0, 0, 0, false) > 0) {
+			summary.appendText(" (" + this.harvestShape);
+			summary.appendText(" " + this.getHarvestRangeString(level));
+			summary.appendText(")");
 		}
-
 		return summary;
 	}
 
 	public String getHarvestRangeString(int level) {
-		String harvestRangeString = "" + Math.round(this.harvestRange.getX() + (this.harvestRange.getX() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += "x" + Math.round(this.harvestRange.getY() + (this.harvestRange.getY() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += "x" + Math.round(this.harvestRange.getZ() + (this.harvestRange.getZ() * (level - 1) * this.harvestRangeLevelMultiplier));
+		String harvestRangeString = "" + this.harvestRange.getX();
+		harvestRangeString += "x" + this.harvestRange.getY();
+		harvestRangeString += "x" + this.harvestRange.getZ();
 		return harvestRangeString;
 	}
 
@@ -385,5 +369,62 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return false;
 		}
 		return this.canHarvestBlock(world.getBlockState(targetPos));
+	}
+
+	/**
+	 * Called when a player right clicks on a block.
+	 * @param context The item use context.
+	 */
+	public boolean onBlockUsed(ItemUseContext context) {
+		if(!"hoe".equals(this.harvestType)) {
+			return false;
+		}
+
+		int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(context);
+		if (hook != 0) return false;
+		World world = context.getWorld();
+		BlockPos blockPos = context.getPos();
+		if (context.getFace() != Direction.DOWN && world.isAirBlock(blockPos.up())) {
+			BlockState blockstate = HOE_LOOKUP.get(world.getBlockState(blockPos).getBlock());
+			if (blockstate != null) {
+				PlayerEntity playerentity = context.getPlayer();
+				world.playSound(playerentity, blockPos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				if (!world.isRemote) {
+					world.setBlockState(blockPos, blockstate, 11);
+				}
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Called when a player right clicks on an entity.
+	 * @param player The player using the equipment.
+	 * @param entity The entity the player is using the equipment on.
+	 * @param itemStack The equipment itemstack.
+	 */
+	public boolean onEntityInteraction(PlayerEntity player, LivingEntity entity, ItemStack itemStack) {
+		if(!"shears".equals(this.harvestType) || player.getEntityWorld().isRemote) {
+			return false;
+		}
+
+		if (entity instanceof net.minecraftforge.common.IShearable) {
+			net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
+			BlockPos pos = new BlockPos(entity.func_226277_ct_(), entity.func_226278_cu_(), entity.func_226281_cx_());
+			if (target.isShearable(itemStack, entity.world, pos)) {
+				java.util.List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
+						net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, itemStack));
+				java.util.Random rand = new java.util.Random();
+				drops.forEach(d -> {
+					net.minecraft.entity.item.ItemEntity ent = entity.entityDropItem(d, 1.0F);
+					ent.setMotion(ent.getMotion().add((double)((rand.nextFloat() - rand.nextFloat()) * 0.1F), (double)(rand.nextFloat() * 0.05F), (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F)));
+				});
+			}
+			return true;
+		}
+
+		return false;
 	}
 }

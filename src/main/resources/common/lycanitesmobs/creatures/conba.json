@@ -78,7 +78,7 @@
 			"item": "lycanitesmobs:poopcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 0.75
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

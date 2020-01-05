@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class SlotEquipmentFeature extends EquipmentFeature {
@@ -22,5 +23,10 @@ public class SlotEquipmentFeature extends EquipmentFeature {
 		}
 		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" " + this.slotType);
 		return description;
+	}
+
+	@Override
+	public ITextComponent getSummary(ItemStack itemStack, int level) {
+		return this.getDescription(itemStack, level);
 	}
 }

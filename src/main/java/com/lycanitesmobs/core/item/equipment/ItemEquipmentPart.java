@@ -144,7 +144,7 @@ public class ItemEquipmentPart extends BaseItem {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 		for(ITextComponent description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description.getFormattedText(), DESCRIPTION_WIDTH + 100);
+			List<String> formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description.getFormattedText(), DESCRIPTION_WIDTH + 100);
 			for (String formattedDescription : formattedDescriptionList) {
 				tooltip.add(new StringTextComponent(formattedDescription));
 			}
@@ -162,6 +162,7 @@ public class ItemEquipmentPart extends BaseItem {
 		int experience = this.getExperience(itemStack);
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
+		// Base Stats:
 		ITextComponent baseFeature = new TranslationTextComponent("equipment.slottype")
 				.appendText(" " + this.slotType)
 				.appendText("\n").appendSibling(new TranslationTextComponent("equipment.level"))
@@ -170,13 +171,15 @@ public class ItemEquipmentPart extends BaseItem {
 			baseFeature.appendText("\n").appendSibling(new TranslationTextComponent("entity.experience"))
 					.appendText(": " + experience + "/" + experienceMax);
 		}
+		descriptions.add(new StringTextComponent("-------------------\n"));
 		descriptions.add(baseFeature);
-
 		if(!this.elements.isEmpty()) {
 			ITextComponent elementFeature = new TranslationTextComponent("equipment.element")
 					.appendText(" ").appendSibling(this.getElementNames());
 			descriptions.add(elementFeature);
 		}
+		descriptions.add(new StringTextComponent("-------------------\n"));
+
 
 		for(EquipmentFeature feature : this.features) {
 			ITextComponent featureDescription = feature.getDescription(itemStack, level);

@@ -64,27 +64,19 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-				.appendText(" ")
-				.appendSibling(new TranslationTextComponent("entity." + this.summonMobId))
-				.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.summon.chance"))
-				.appendText(" " + Math.round(this.summonChance * 100) + "%");
-
-		if(this.summonDuration > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
-					.appendText(" " + ((float)this.summonDuration / 20));
-		}
+			.appendText(" ").appendSibling(new TranslationTextComponent("entity." + this.summonMobId));
 
 		if(this.summonCountMin != this.summonCountMax) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.summon.count"))
-					.appendText(" " + (this.summonCountMin + " - " + this.summonCountMax));
+			description.appendText(" x" + (this.summonCountMin + " - " + this.summonCountMax));
 		}
 		else {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.summon.count"))
-					.appendText(" " + this.summonCountMax);
+			description.appendText(" x" + this.summonCountMax);
+		}
+
+		description.appendText(" " + Math.round(this.summonChance * 100) + "%");
+
+		if(this.summonDuration > 0) {
+			description.appendText(" " + ((float)this.summonDuration / 20) + "s");
 		}
 
 		return description;

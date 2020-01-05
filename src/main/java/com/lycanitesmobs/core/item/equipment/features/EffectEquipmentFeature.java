@@ -46,21 +46,16 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType)
-				.appendText(" ").appendSibling(this.getEffectTypeName())
-				.appendText(" (" + this.effectTarget + ")");
-
+		ITextComponent description = new TranslationTextComponent("equipment.feature." + this.featureType).appendText(" ").appendSibling(
+				this.getEffectTypeName());
 		if(this.effectStrength > 0) {
-			description.appendText("\n")
-					.appendSibling(new TranslationTextComponent("equipment.feature.effect.strength"))
-					.appendText(" " + this.effectStrength);
+			description.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
+		}
+		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
+			description.appendText(" " + ((float)this.effectDuration / 20));
 		}
 
-		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description.appendText("\n")
-				.appendSibling(new TranslationTextComponent("equipment.feature.effect.duration"))
-				.appendText(" " + ((float)this.effectDuration / 20));
-		}
+		description.appendText(" (" + this.effectTarget + ")");
 
 		return description;
 	}
@@ -71,13 +66,15 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		ITextComponent summary = this.getEffectTypeName().appendText(" (" + this.effectTarget + ")");
+		ITextComponent summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
 			summary.appendText(" ").appendSibling(new TranslationTextComponent("entity.level")).appendText(" " + this.effectStrength);
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
 			summary.appendText(" " + ((float)this.effectDuration / 20));
 		}
+
+		summary.appendText(" (" + this.effectTarget + ")");
 
 		return summary;
 	}

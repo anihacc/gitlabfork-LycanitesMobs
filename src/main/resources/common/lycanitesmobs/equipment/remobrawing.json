@@ -15,8 +15,7 @@
 			"levelMax": 1,
 			"harvestType": "axe",
 			"harvestShape": "block",
-			"harvestRange": [1, 1, 1],
-			"harvestRangeLevelMultiplier": 0
+			"harvestRange": [1, 1, 1]
 		},
 		{
 			"featureType": "harvest",
@@ -24,16 +23,14 @@
 			"levelMax": 2,
 			"harvestType": "axe",
 			"harvestShape": "block",
-			"harvestRange": [2, 3, 2],
-			"harvestRangeLevelMultiplier": 0
+			"harvestRange": [2, 3, 2]
 		},
 		{
 			"featureType": "harvest",
 			"levelMin": 3,
 			"harvestType": "axe",
 			"harvestShape": "block",
-			"harvestRange": [3, 10, 3],
-			"harvestRangeLevelMultiplier": 0
+			"harvestRange": [3, 10, 3]
 		},
 		{
 			"featureType": "damage",
