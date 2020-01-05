@@ -89,15 +89,19 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		}
 
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + projectileInfo.getTitle();
-
-		description += "\n" + LanguageManager.translate("equipment.feature.projectile.trigger") + " " + LanguageManager.translate("equipment.feature.projectile.trigger." + this.projectileTrigger);
-		if("hit".equals(this.projectileTrigger)) {
-			description += " " + (this.hitChance * 100) + "%";
-		}
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " "
+				+ projectileInfo.getTitle();
 
 		if(!"simple".equals(this.projectilePattern)) {
-			description += "\n" + LanguageManager.translate("equipment.feature.projectile.pattern") + " " + LanguageManager.translate("equipment.feature.projectile.pattern." + this.projectilePattern);
+			description += " " + LanguageManager.translate("equipment.feature.projectile.pattern." + this.projectilePattern);
+		}
+
+		description += " " + LanguageManager.translate("equipment.feature.projectile.trigger." + this.projectileTrigger);
+		if("hit".equals(this.projectileTrigger)) {
+			description += " " + String.format("%.0f", this.hitChance * 100) + "%";
+		}
+		else {
+			description += " " + String.format("%.1f", (float)this.cooldown / 20) + "s";
 		}
 
 		return description;
@@ -113,6 +117,27 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	}
 
 	/**
+	 * Called when a player left clicks to use their equipment.
+	 * @param world The world the player is in.
+	 * @param shooter The player using the equipment.
+	 * @param hand The hand the player is holding the equipment in.
+	 */
+	public void onUsePrimary(World world, EntityPlayer shooter, EnumHand hand) {
+		if(!"primary".equalsIgnoreCase(this.projectileTrigger)) {
+			return;
+		}
+		ExtendedEntity shooterExt = ExtendedEntity.getForEntity(shooter);
+		if(shooterExt == null) {
+			return;
+		}
+		if(shooterExt.getProjectileCooldown(1, this.projectileName) > 0) {
+			return;
+		}
+		shooterExt.setProjectileCooldown(1, this.projectileName, this.cooldown);
+		this.fireProjectile(shooter);
+	}
+
+	/**
 	 * Called when a player right click begins to use their equipment.
 	 * @param world The world the player is in.
 	 * @param shooter The player using the equipment.
@@ -120,7 +145,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @return True so that the item becomes active.
 	 */
 	public boolean onUseSecondary(World world, EntityPlayer shooter, EnumHand hand) {
-		return true;
+		return "secondary".equalsIgnoreCase(this.projectileTrigger);
 	}
 
 	/**
@@ -136,10 +161,10 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 		if(shooterExt == null) {
 			return;
 		}
-		if(shooterExt.equipmentProjectileCooldown > 0) {
+		if(shooterExt.getProjectileCooldown(2, this.projectileName) > 0) {
 			return;
 		}
-		shooterExt.equipmentProjectileCooldown = this.cooldown;
+		shooterExt.setProjectileCooldown(2, this.projectileName, this.cooldown);
 		this.fireProjectile(shooter);
 	}
 
@@ -150,7 +175,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param attacker The entity using this item to hit.
 	 */
 	public void onHitEntity(ItemStack itemStack, EntityLivingBase target, EntityLivingBase attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || !"hit".equals(this.projectileTrigger)) {
+		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isSneaking() || !"hit".equals(this.projectileTrigger)) {
 			return;
 		}
 
@@ -165,7 +190,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param shooter The entity firing the projectile.
 	 */
 	public void fireProjectile(EntityLivingBase shooter) {
-		if(shooter == null || shooter.getEntityWorld().isRemote) {
+		if(shooter == null || shooter.getEntityWorld().isRemote || this.count <= 0) {
 			return;
 		}
 

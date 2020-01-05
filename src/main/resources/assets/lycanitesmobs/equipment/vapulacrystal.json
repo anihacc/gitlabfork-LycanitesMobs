@@ -62,6 +62,15 @@
 			"effectTarget": "target",
 			"effectDuration": 100,
 			"effectStrength": 1
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 3,
+			"projectileName": "crystalshard",
+			"projectileTrigger": "hit",
+			"projectilePattern": "simple",
+			"count": 1,
+			"hitChance": 0.5
 		}
 	]
 }

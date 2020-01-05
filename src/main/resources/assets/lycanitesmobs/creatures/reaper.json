@@ -30,7 +30,7 @@
 	"width": 0.9,
 	"height": 1.9,
 	"experience": 5,
-	"health": 10,
+	"health": 15,
 	"defense": 0,
 	"armor": 0,
 	"speed": 24,
@@ -87,7 +87,7 @@
 			"item": "lycanitesmobs:spectralboltcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 0.25
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

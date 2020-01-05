@@ -44,14 +44,15 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.getEffectTypeName() + " (" + this.effectTarget + ")";
+		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " +
+				this.getEffectTypeName();
 		if(this.effectStrength > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.strength") + " " + this.effectStrength;
+			description += " " + LanguageManager.translate("entity.level") + " " + this.effectStrength;
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.effectDuration / 20);
+			description += " " + ((float)this.effectDuration / 20);
 		}
-
+		description += " (" + this.effectTarget + ")";
 		return description;
 	}
 
@@ -61,13 +62,14 @@ public class EffectEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 
-		String summary = this.getEffectTypeName() + " (" + this.effectTarget + ")";
+		String summary = this.getEffectTypeName();
 		if(this.effectStrength > 0) {
 			summary += " " + LanguageManager.translate("entity.level") + " " + this.effectStrength;
 		}
 		if(!"self".equals(this.effectTarget) && this.effectDuration > 0) {
 			summary += " " + ((float)this.effectDuration / 20);
 		}
+		summary += " (" + this.effectTarget + ")";
 		return summary;
 	}
 

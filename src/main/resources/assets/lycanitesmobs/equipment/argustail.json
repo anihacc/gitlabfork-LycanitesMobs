@@ -48,6 +48,15 @@
 			"summonCountMin": 1,
 			"summonCountMax": 1,
 			"sizeScale": 0.4
+		},
+		{
+			"featureType": "projectile",
+			"levelMin": 3,
+			"projectileName": "chaosorb",
+			"projectileTrigger": "primary",
+			"projectilePattern": "simple",
+			"cooldown": 10,
+			"count": 1
 		}
 	]
 }

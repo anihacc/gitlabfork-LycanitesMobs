@@ -22,4 +22,9 @@ public class SlotEquipmentFeature extends EquipmentFeature {
 		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.slotType;
 		return description;
 	}
+
+	@Override
+	public String getSummary(ItemStack itemStack, int level) {
+		return this.getDescription(itemStack, level);
+	}
 }

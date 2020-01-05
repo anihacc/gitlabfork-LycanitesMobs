@@ -94,10 +94,10 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:demoniclightningcharge",
-			"minAmount": 1,
-			"maxAmount": 1,
-			"chance": 0.75
+			"item": "lycanitesmobs:demonicblastcharge",
+			"minAmount": 3,
+			"maxAmount": 6,
+			"chance": 1
 		},
 		{
 			"item": "lycanitesmobs:soulstonedemonic",

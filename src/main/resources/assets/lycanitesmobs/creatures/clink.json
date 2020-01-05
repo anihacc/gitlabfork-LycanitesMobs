@@ -75,7 +75,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:throwingscythe",
+			"item": "lycanitesmobs:throwingscythecharge",
 			"minAmount": 2,
 			"maxAmount": 7,
 			"chance": 1

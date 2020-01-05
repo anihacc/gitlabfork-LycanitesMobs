@@ -96,7 +96,7 @@ public class ChargeItem extends ItemBase {
             itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
         }
 
-        if(!world.isRemote) {
+        if(!world.isRemote && player.isSneaking()) {
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
             if(projectile == null) {
                 LycanitesMobs.logWarning("", "Failed to create projectile from Charge Item: " + this.itemName);

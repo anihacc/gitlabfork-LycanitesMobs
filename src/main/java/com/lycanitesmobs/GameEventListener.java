@@ -6,6 +6,8 @@ import com.lycanitesmobs.core.entity.*;
 import com.lycanitesmobs.core.info.ItemConfig;
 import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.equipment.ItemEquipment;
+import com.lycanitesmobs.core.network.MessagePlayerLeftClick;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
@@ -235,6 +237,37 @@ public class GameEventListener {
 			ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 			if(playerExt != null)
 				playerExt.onUpdate();
+		}
+	}
+
+
+	// ==================================================
+	//                 Player Left Click
+	// ==================================================
+	@SubscribeEvent
+	public void onPlayerLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if(player == null)
+			return;
+
+		ItemStack itemStack = player.getHeldItem(event.getHand());
+		Item item = itemStack.getItem();
+		if (item instanceof ItemEquipment) {
+			MessagePlayerLeftClick message = new MessagePlayerLeftClick();
+			LycanitesMobs.packetHandler.sendToServer(message);
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if(player == null || event.getSide().isClient())
+			return;
+
+		ItemStack itemStack = player.getHeldItem(event.getHand());
+		Item item = itemStack.getItem();
+		if (item instanceof ItemEquipment) {
+			((ItemEquipment)item).onItemLeftClick(event.getWorld(), player, event.getHand());
 		}
 	}
 

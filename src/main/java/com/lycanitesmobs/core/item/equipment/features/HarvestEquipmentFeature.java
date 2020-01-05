@@ -4,12 +4,17 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.helpers.JSONHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import com.lycanitesmobs.client.localisation.LanguageManager;
@@ -39,9 +44,6 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	/** The additional block range of the harvest shape, relative to the harvesting direction, the central block is not affected by this. X = number of blocks both sides laterally (sideways). Y = Number of blocks vertically. Z = Number of blocks forwards. **/
 	public Vec3i harvestRange = new Vec3i(0, 0, 0);
 
-	/** Each extra level of the part that is using this featured increases the range by its base range times by this multiplier per level. **/
-	public double harvestRangeLevelMultiplier = 1;
-
 
 	// ==================================================
 	//                        JSON
@@ -65,9 +67,6 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			this.harvestShape = json.get("harvestShape").getAsString();
 
 		this.harvestRange = JSONHelper.getVec3i(json, "harvestRange");
-
-		if(json.has("harvestRangeLevelMultiplier"))
-			this.harvestRangeLevelMultiplier = json.get("harvestRangeLevelMultiplier").getAsDouble();
 	}
 
 	@Override
@@ -75,12 +74,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.harvestType;
-		description += "\n" + LanguageManager.translate("equipment.feature.harvest.shape") + " " + this.harvestShape;
-		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.harvest.range") + " " + this.getHarvestRangeString(level);
-		}
-		return description;
+		return LanguageManager.translate("equipment.feature." + this.featureType) + " " + this.getSummary(itemStack, level);
 	}
 
 	@Override
@@ -88,18 +82,19 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String summary = this.harvestType + " (" + this.harvestShape;
+		String summary = this.harvestType;
 		if(this.harvestRange.distanceSq(new Vec3i(0, 0, 0)) > 0) {
+			summary +=  " (" + this.harvestShape;
 			summary += " " + this.getHarvestRangeString(level);
+			summary += ")";
 		}
-		summary += ")";
 		return summary;
 	}
 
 	public String getHarvestRangeString(int level) {
-		String harvestRangeString = "" + Math.round(this.harvestRange.getX() + (this.harvestRange.getX() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += "x" + Math.round(this.harvestRange.getY() + (this.harvestRange.getY() * (level - 1) * this.harvestRangeLevelMultiplier));
-		harvestRangeString += "x" + Math.round(this.harvestRange.getZ() + (this.harvestRange.getZ() * (level - 1) * this.harvestRangeLevelMultiplier));
+		String harvestRangeString = "" + this.harvestRange.getX();
+		harvestRangeString += "x" + this.harvestRange.getY();
+		harvestRangeString += "x" + this.harvestRange.getZ();
 		return harvestRangeString;
 	}
 
@@ -366,5 +361,84 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 			return false;
 		}
 		return this.canHarvestBlock(world.getBlockState(targetPos));
+	}
+
+	/**
+	 * Called when a player right clicks on a block.
+	 * @param world The world the player is in.
+	 * @param player The player using the equipment.
+	 * @param pos The blockPos used at.
+	 * @param itemStack The equipment itemstack.
+	 * @param facing The use facing direction.
+	 */
+	public boolean onBlockUsed(World world, EntityPlayer player, BlockPos pos, ItemStack itemStack, EnumFacing facing) {
+		if(!"hoe".equals(this.harvestType)) {
+			return false;
+		}
+
+		if (!player.canPlayerEdit(pos.offset(facing), facing, itemStack)) {
+			return false;
+		}
+
+		IBlockState blockState = world.getBlockState(pos);
+		int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(itemStack, player, world, pos);
+		if (hook != 0) return false;
+		IBlockState iblockstate = world.getBlockState(pos);
+		Block block = iblockstate.getBlock();
+		if (facing != EnumFacing.DOWN && world.isAirBlock(pos.up())) {
+			if (block == Blocks.GRASS || block == Blocks.GRASS_PATH) {
+				this.hoeBlock(itemStack, player, world, pos, Blocks.FARMLAND.getDefaultState());
+				return true;
+			}
+			if (block == Blocks.DIRT) {
+				switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT)) {
+					case DIRT:
+						this.hoeBlock(itemStack, player, world, pos, Blocks.FARMLAND.getDefaultState());
+						return true;
+					case COARSE_DIRT:
+						this.hoeBlock(itemStack, player, world, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	protected void hoeBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state) {
+		worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		if (!worldIn.isRemote) {
+			worldIn.setBlockState(pos, state, 11);
+		}
+	}
+
+	/**
+	 * Called when a player right clicks on an entity.
+	 * @param player The player using the equipment.
+	 * @param entity The entity the player is using the equipment on.
+	 * @param itemStack The equipment itemstack.
+	 */
+	public boolean onEntityInteraction(EntityPlayer player, EntityLivingBase entity, ItemStack itemStack) {
+		if(!"shears".equals(this.harvestType) || player.getEntityWorld().isRemote) {
+			return false;
+		}
+
+		if (entity instanceof net.minecraftforge.common.IShearable) {
+			net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
+			BlockPos pos = new BlockPos(entity.posX, entity.posY, entity.posZ);
+			if (target.isShearable(itemStack, entity.world, pos)) {
+				java.util.List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
+						net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.FORTUNE, itemStack));
+				java.util.Random rand = new java.util.Random();
+				for(ItemStack stack : drops) {
+					net.minecraft.entity.item.EntityItem ent = entity.entityDropItem(stack, 1.0F);
+					ent.motionY += rand.nextFloat() * 0.05F;
+					ent.motionX += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+					ent.motionZ += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+				}
+			}
+			return true;
+		}
+
+		return false;
 	}
 }

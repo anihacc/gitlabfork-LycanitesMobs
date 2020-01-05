@@ -61,7 +61,9 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 				zPos = creatureToFollow.getFacingPosition(creatureToFollow, 0, creatureToFollow.rotationYaw).getZ();
 			}*/
 			projectile.setPosition(xPos, yPos, zPos);
-			projectile.setVelocity(entityToFollow.motionX, entityToFollow.motionY, entityToFollow.motionZ);
+			projectile.motionX = entityToFollow.motionX;
+			projectile.motionY = entityToFollow.motionY;
+			projectile.motionZ = entityToFollow.motionZ;
 		}
 
 		// Update Laser End:

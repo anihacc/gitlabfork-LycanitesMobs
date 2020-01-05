@@ -63,7 +63,7 @@ public class ItemEquipment extends ItemBase {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("" + description, DESCRIPTION_WIDTH);
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, DESCRIPTION_WIDTH + 100);
 			for (Object formattedDescription : formattedDescriptionList) {
 				if (formattedDescription instanceof String)
 					tooltip.add("\u00a73" + formattedDescription);
@@ -389,6 +389,59 @@ public class ItemEquipment extends ItemBase {
 		}
 	}
 
+	/**
+	 * Called when the player left clicks with this equipment. This is called via the left click empty or block events (a network packet is called for left click empty).
+	 * @param world The world the player is in.
+	 * @param player The player using the equipment.
+	 * @param hand The active hand.
+	 */
+	public void onItemLeftClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
+
+		// Projectiles:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "projectile")) {
+			ProjectileEquipmentFeature projectileFeature = (ProjectileEquipmentFeature)equipmentFeature;
+			projectileFeature.onUsePrimary(world, player, hand);
+		}
+	}
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack itemStack = player.getHeldItem(hand);
+		boolean active = false;
+
+		// Harvesting:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestFeature.onBlockUsed(world, player, pos, itemStack, facing)) {
+				active = true;
+			}
+		}
+
+		if(active) {
+			player.setActiveHand(hand);
+			return EnumActionResult.SUCCESS;
+		}
+		return super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+	}
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+		boolean entityInteraction = false;
+
+		// Harvesting:
+		for(EquipmentFeature equipmentFeature : this.getFeaturesByType(itemStack, "harvest")) {
+			HarvestEquipmentFeature harvestFeature = (HarvestEquipmentFeature)equipmentFeature;
+			if(harvestFeature.onEntityInteraction(player, target, itemStack)) {
+				entityInteraction = true;
+			}
+		}
+
+		if(entityInteraction)
+			return true;
+		return super.itemInteractionForEntity(itemStack, player, target, hand);
+	}
+
 
 	// ==================================================
 	//                     Harvesting
@@ -468,7 +521,7 @@ public class ItemEquipment extends ItemBase {
 		// Sweeping:
 		List<EntityLivingBase> targets = new ArrayList<>();
 		targets.add(primaryTarget);
-		if(attacker != null && !attacker.getEntityWorld().isRemote) {
+		if(attacker != null && !attacker.getEntityWorld().isRemote && !attacker.isSneaking()) {
 			double sweepAngle = this.getDamageSweep(itemStack) / 2; // Halved for centering.
 			if(sweepAngle > 0) {
 				float sweepDamage = (float) this.getDamageAmount(itemStack);

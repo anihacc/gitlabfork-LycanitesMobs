@@ -62,17 +62,22 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		String description = LanguageManager.translate("equipment.feature." + this.featureType) + " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
-		description += "\n" + LanguageManager.translate("equipment.feature.summon.chance") + " " + Math.round(this.summonChance * 100) + "%";
-		if(this.summonDuration > 0) {
-			description += "\n" + LanguageManager.translate("equipment.feature.effect.duration") + " " + ((float)this.summonDuration / 20);
-		}
+		String description = LanguageManager.translate("equipment.feature." + this.featureType)
+				+ " " + LanguageManager.translate("entity." + this.summonMobId + ".name");
+
 		if(this.summonCountMin != this.summonCountMax) {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMin + " - " + this.summonCountMax;
+			description += " x" + this.summonCountMin + " - " + this.summonCountMax;
 		}
 		else {
-			description += "\n" + LanguageManager.translate("equipment.feature.summon.count") + " " + this.summonCountMax;
+			description += " x" + this.summonCountMax;
 		}
+
+		description += " " + Math.round(this.summonChance * 100) + "%";
+
+		if(this.summonDuration > 0) {
+			description += " " + ((float)this.summonDuration / 20) + "s";
+		}
+
 		return description;
 	}
 

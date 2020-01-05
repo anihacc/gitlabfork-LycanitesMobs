@@ -85,8 +85,8 @@
 		{
 			"item": "lycanitesmobs:frostboltcharge",
 			"minAmount": 1,
-			"maxAmount": 1,
-			"chance": 0.05
+			"maxAmount": 3,
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

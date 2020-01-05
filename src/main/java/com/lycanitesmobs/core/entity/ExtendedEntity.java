@@ -25,8 +25,9 @@ public class ExtendedEntity implements IExtendedEntity {
     // Entity Instance:
 	public EntityLivingBase entity;
 
-	// Equipment:
-	public int equipmentProjectileCooldown = 0;
+	// Projectiles:
+	protected Map<String, Integer> projectileCooldownsPrimary = new HashMap<>();
+	protected Map<String, Integer> projectileCooldownsSecondary = new HashMap<>();
 
     // Safe Position:
     /** The last coordinates the entity was at where it wasn't inside an opaque block. (Helps prevent suffocation). **/
@@ -123,9 +124,19 @@ public class ExtendedEntity implements IExtendedEntity {
         if(this.entity == null)
             return;
 
-        // Equipment:
-		if(this.equipmentProjectileCooldown > 0)
-			this.equipmentProjectileCooldown--;
+        // Projectiles:
+		for(String cooldownName : this.projectileCooldownsPrimary.keySet()) {
+			int cooldownValue = this.projectileCooldownsPrimary.get(cooldownName);
+			if(cooldownValue > 0) {
+				this.projectileCooldownsPrimary.put(cooldownName, cooldownValue - 1);
+			}
+		}
+		for(String cooldownName : this.projectileCooldownsSecondary.keySet()) {
+			int cooldownValue = this.projectileCooldownsSecondary.get(cooldownName);
+			if(cooldownValue > 0) {
+				this.projectileCooldownsSecondary.put(cooldownName, cooldownValue - 1);
+			}
+		}
 
         // Force Remove Entity:
         if (!this.entity.getEntityWorld().isRemote && FORCE_REMOVE_ENTITY_IDS != null && FORCE_REMOVE_ENTITY_IDS.length > 0 && !this.forceRemoveChecked) {
@@ -364,6 +375,43 @@ public class ExtendedEntity implements IExtendedEntity {
 			perchedByEntity.rotationYaw = this.entity.rotationYaw;
 			perchedByEntity.noClip = true;
 		}
+	}
+
+
+	// ==================================================
+	//                     Projectiles
+	// ==================================================
+	/**
+	 * Returns the projectile firing cooldown of the provided type and projectile name.
+	 * @param type The type of cooldown, should be 1 for primary and 2 for secondary.
+	 * @param projectileName The name of the projectile to get the firing cooldown of.
+	 * @return The current firing cooldown.
+	 */
+	public int getProjectileCooldown(int type, String projectileName) {
+		if(type == 1) {
+			if(!this.projectileCooldownsPrimary.containsKey(projectileName)) {
+				return 0;
+			}
+			return this.projectileCooldownsPrimary.get(projectileName);
+		}
+
+		if(!this.projectileCooldownsSecondary.containsKey(projectileName)) {
+			return 0;
+		}
+		return this.projectileCooldownsSecondary.get(projectileName);
+	}
+
+	/**
+	 * Set the projectile firing cooldown of the provided type and projectile name.
+	 * @param type The type of cooldown, should be 1 for primary and 2 for secondary.
+	 * @param projectileName The name of the projectile to set the firing cooldown of.
+	 * @param cooldown The cooldown (in ticks) to set.
+	 */
+	public void setProjectileCooldown(int type, String projectileName, int cooldown) {
+		if(type == 1) {
+			this.projectileCooldownsPrimary.put(projectileName, cooldown);
+		}
+		this.projectileCooldownsSecondary.put(projectileName, cooldown);
 	}
 
 

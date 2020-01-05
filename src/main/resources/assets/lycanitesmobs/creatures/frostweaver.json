@@ -84,7 +84,7 @@
 			"item": "lycanitesmobs:frostwebcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
-			"chance": 0.25
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

@@ -2,7 +2,6 @@
 	"name": "wraamon",
 	"creatureType": "beast",
 	"groups": [
-		"critter",
 		"monster"
 	],
 	"entityClass": "com.lycanitesmobs.core.entity.creature.EntityWraamon",

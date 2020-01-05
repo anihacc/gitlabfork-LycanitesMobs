@@ -61,4 +61,9 @@ public class DamageEquipmentFeature extends EquipmentFeature {
 		}
 		return description;
 	}
+
+	@Override
+	public String getSummary(ItemStack itemStack, int level) {
+		return this.getDescription(itemStack, level);
+	}
 }

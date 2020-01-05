@@ -146,7 +146,7 @@ public class ItemEquipmentPart extends ItemBase {
 		super.addInformation(itemStack, world, tooltip, tooltipFlag);
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		for(String description : this.getAdditionalDescriptions(itemStack, world, tooltipFlag)) {
-			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth("-------------------\n" + description, DESCRIPTION_WIDTH);
+			List formattedDescriptionList = fontRenderer.listFormattedStringToWidth(description, DESCRIPTION_WIDTH);
 			for (Object formattedDescription : formattedDescriptionList) {
 				if (formattedDescription instanceof String)
 					tooltip.add("\u00a73" + formattedDescription);
@@ -165,17 +165,20 @@ public class ItemEquipmentPart extends ItemBase {
 		int experience = this.getExperience(itemStack);
 		int experienceMax = this.getExperienceForNextLevel(itemStack);
 
+		// Base Stats:
 		String baseFeature = LanguageManager.translate("equipment.slottype") + " " + this.slotType;
 		baseFeature += "\n" + LanguageManager.translate("equipment.level") + " " + level + "/" + this.levelMax;
 		if(level < this.levelMax) {
 			baseFeature += "\n" + LanguageManager.translate("entity.experience") + ": " + experience + "/" + experienceMax;
 		}
+		descriptions.add("-------------------\n");
 		descriptions.add(baseFeature);
-
 		if(!this.elements.isEmpty()) {
 			String elementFeature = LanguageManager.translate("equipment.element") + " " + this.getElementNames();
 			descriptions.add(elementFeature);
 		}
+		descriptions.add("-------------------\n");
+
 
 		for(EquipmentFeature feature : this.features) {
 			String featureDescription = feature.getDescription(itemStack, level);

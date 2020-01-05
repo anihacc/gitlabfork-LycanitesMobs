@@ -78,9 +78,9 @@
 		},
 		{
 			"item": "lycanitesmobs:chaosorbcharge",
-			"minAmount": 1,
-			"maxAmount": 1,
-			"chance": 0.25
+			"minAmount": 3,
+			"maxAmount": 5,
+			"chance": 1
 		}
 	],
 	"sizeScale": 1,

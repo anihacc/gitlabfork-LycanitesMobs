@@ -45,7 +45,9 @@ public class FishingSpawnTrigger extends SpawnTrigger {
 	public void applyToEntity(EntityLiving entityLiving) {
 		super.applyToEntity(entityLiving);
 		if(this.hookEntity != null) {
-			entityLiving.setVelocity(this.hookEntity.motionX, this.hookEntity.motionY, this.hookEntity.motionZ);
+			entityLiving.motionX = this.hookEntity.motionX;
+			entityLiving.motionY = this.hookEntity.motionY;
+			entityLiving.motionZ = this.hookEntity.motionZ;
 		}
 	}
 }
