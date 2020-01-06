@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.info.ElementInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviour;
+import com.lycanitesmobs.core.info.projectile.behaviours.ProjectileBehaviourLaser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -200,6 +201,21 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns true if this projectile should be channels where it's lifetime is reset constantly.
+	 * @return True if this projectile can be channeled.
+	 */
+	public boolean shouldChannel() {
+		if(this.projectileInfo != null) {
+			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
+				if(behaviour instanceof ProjectileBehaviourLaser) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 

@@ -4,7 +4,7 @@
 	"width": 0.5,
 	"height": 0.5,
 	"scale": 0.5,
-	"damage": 2,
+	"damage": 1,
 	"pierce": 1,
 	"knockbackChance": 0,
 	"effectDuration": 3,
@@ -24,7 +24,7 @@
 		},
 		{
 			"type": "drainHealth",
-			"rate": 1
+			"rate": 0.25
 		}
 	],
 	"waterproof": true,

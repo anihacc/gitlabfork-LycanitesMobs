@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item.equipment.features;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.ExtendedEntity;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
@@ -46,6 +47,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 	/** Additional damage added to the projectile. **/
 	public int bonusDamage = 0;
+
+	/** Stores a channeled projectile currently in use by this feature, used for lasers. **/
+	private BaseProjectileEntity channeledProjectile;
 
 
 	@Override
@@ -212,6 +216,17 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			return;
 		}
 
+		// Projectile Channeling:
+		if(this.channeledProjectile != null) {
+			if(!this.channeledProjectile.isAlive()) {
+				this.channeledProjectile = null;
+			}
+			else {
+				this.channeledProjectile.projectileLife = 20;
+				return;
+			}
+		}
+
 		World world = shooter.getEntityWorld();
 		BaseProjectileEntity mainProjectile = null;
 		Vec3d firePos = new Vec3d(shooter.getPositionVec().getX(), shooter.getPositionVec().getY() + (shooter.getSize(Pose.STANDING).height * 0.65), shooter.getPositionVec().getZ());
@@ -262,6 +277,14 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			mainProjectile.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 			mainProjectile.setBonusDamage(this.bonusDamage);
 			world.addEntity(mainProjectile);
+		}
+
+		// Channeling:
+		if(this.count == 1 && mainProjectile instanceof CustomProjectileEntity) {
+			CustomProjectileEntity customProjectileEntity = (CustomProjectileEntity)mainProjectile;
+			if(customProjectileEntity.shouldChannel()) {
+				this.channeledProjectile = customProjectileEntity;
+			}
 		}
 
 		if(shooter instanceof PlayerEntity && mainProjectile != null) {
