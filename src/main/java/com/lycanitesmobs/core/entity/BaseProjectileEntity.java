@@ -41,6 +41,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 	public int pierce = 1;
 	public double weight = 1.0D;
 	public double knockbackChance = 1;
+	public int bonusDamage = 0;
 
     // Flags:
 	public boolean waterProof = false;
@@ -487,7 +488,7 @@ public class BaseProjectileEntity extends EntityThrowable {
 	}
 
 	public float getDamage(Entity entity) {
-		float damage = (float)this.damage;
+		float damage = (float)this.damage + this.bonusDamage;
 		if(this.getThrower() != null) {
 			// 20% Extra Damage From Players vs Entities
 			if((this.getThrower() instanceof EntityPlayer  || this.getThrower().getControllingPassenger() instanceof EntityPlayer) && !(entity instanceof EntityPlayer))
@@ -523,7 +524,7 @@ public class BaseProjectileEntity extends EntityThrowable {
     	 return seconds * 20;
      }
 
-    /** When given a base effect strngth value such as a life drain amount, this will return the scaled value with difficulty and other modifiers taken into account
+    /** When given a base effect strength value such as a life drain amount, this will return the scaled value with difficulty and other modifiers taken into account
      * value - The base effect strength.
      **/
     public float getEffectStrength(float value) {
@@ -531,6 +532,13 @@ public class BaseProjectileEntity extends EntityThrowable {
             return ((BaseCreatureEntity)this.getThrower()).getEffectStrength(value);
         return value;
     }
+
+	/**
+	 * Sets additional damage to be dealt by this projectile on top of it's base damage.
+	 */
+	public void setBonusDamage(int bonusDamage) {
+    	this.bonusDamage = bonusDamage;
+	}
 
 
     // ==================================================

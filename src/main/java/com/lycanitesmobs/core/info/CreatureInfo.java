@@ -404,6 +404,11 @@ public class CreatureInfo {
 
 
 	public void lateLoad() {
+		// Skip Dummies:
+		if(this.dummy) {
+			return;
+		}
+
 		// Vanilla Spawning:
 		this.creatureSpawn.registerVanillaSpawns(this);
 		LycanitesMobs.logDebug("Creature", "Creature Late Loaded: " + this.getName() + " - " + this.entityClass + " (" + this.modInfo.name + ")");

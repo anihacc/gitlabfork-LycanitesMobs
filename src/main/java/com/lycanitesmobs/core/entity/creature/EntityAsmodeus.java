@@ -505,7 +505,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     @Override
     public boolean isDamageTypeApplicable(String type, DamageSource source, float damage) {
         if(this.isBlocking())
-            return true;
+            return false;
         return super.isDamageTypeApplicable(type, source, damage);
     }
     

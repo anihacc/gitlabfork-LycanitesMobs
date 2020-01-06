@@ -110,8 +110,12 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		// Raytracing:
 		HashSet<Entity> excludedEntities = new HashSet<>();
 		excludedEntities.add(projectile);
-		if(projectile.getThrower() != null)
+		if(projectile.getThrower() != null) {
 			excludedEntities.add(projectile.getThrower());
+			if(projectile.getThrower().getControllingPassenger() != null) {
+				excludedEntities.add(projectile.getThrower().getControllingPassenger());
+			}
+		}
 		RayTraceResult rayTraceResult = Utilities.raytrace(projectile.getEntityWorld(), projectile.getPositionVector().x, projectile.getPositionVector().y, projectile.getPositionVector().z, targetX, targetY, targetZ, this.width, excludedEntities);
 
 		// Update Laser End Position:

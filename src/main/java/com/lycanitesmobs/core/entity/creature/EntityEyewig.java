@@ -115,8 +115,8 @@ public class EntityEyewig extends RideableCreatureEntity {
 			this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 
 			// Launch:
-			this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-			this.getEntityWorld().spawnEntity(abilityProjectile);
+			this.playSound(this.abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+			this.getEntityWorld().spawnEntity(this.abilityProjectile);
 		}
 
 		this.applyStaminaCost();

@@ -109,7 +109,7 @@ public class EquipmentForgeContainer extends BaseContainer {
 				else if("head".equals(itemEquipmentPart.slotType)) {
 					slotHead.putStackWithoutUpdate(partStack);
 				}
-				else if("blade".equals(itemEquipmentPart.slotType) || "pike".equals(itemEquipmentPart.slotType)) {
+				else if("blade".equals(itemEquipmentPart.slotType) || "pike".equals(itemEquipmentPart.slotType)|| "jewel".equals(itemEquipmentPart.slotType)) {
 					slotTipA.putStackWithoutUpdate(partStack);
 				}
 				else if("axe".equals(itemEquipmentPart.slotType)) {

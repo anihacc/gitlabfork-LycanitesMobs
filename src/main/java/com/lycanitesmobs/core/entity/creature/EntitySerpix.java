@@ -73,7 +73,7 @@ public class EntitySerpix extends TameableCreatureEntity implements IGroupHeavy 
     @Override
     public void attackRanged(Entity target, float range) {
         // Type:
-        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("scorchfireball");
+        ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("blizzard");
         if(projectileInfo == null) {
             return;
         }

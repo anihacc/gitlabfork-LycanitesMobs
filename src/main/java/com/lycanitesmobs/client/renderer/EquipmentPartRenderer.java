@@ -49,7 +49,7 @@ public class EquipmentPartRenderer extends TileEntitySpecialRenderer<TileEntityE
 		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
 			GlStateManager.translate(0F, 0F, 0.5F);
 		}
-		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType)) {
+		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType) || "jewel".equalsIgnoreCase(itemEquipmentPart.slotType)) {
 			GlStateManager.translate(0F, 0F, 1F);
 		}
 

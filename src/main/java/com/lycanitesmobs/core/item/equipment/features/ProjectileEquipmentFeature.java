@@ -42,6 +42,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	/** The range in degrees for the ring pattern. **/
 	public double ringRange = 0;
 
+	/** Additional damage added to the projectile. **/
+	public int bonusDamage = 0;
+
 
 	@Override
 	public void loadFromJSON(JsonObject json) {
@@ -72,6 +75,9 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 
 		if(json.has("ringRange"))
 			this.ringRange = json.get("ringRange").getAsDouble();
+
+		if(json.has("bonusDamage"))
+			this.bonusDamage = json.get("bonusDamage").getAsInt();
 	}
 
 	@Override
@@ -113,7 +119,11 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			return null;
 		}
 		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
-		return projectileInfo.getTitle();
+		String summary = projectileInfo.getTitle();
+		if(this.bonusDamage != 0) {
+			summary += " +" + this.bonusDamage;
+		}
+		return summary;
 	}
 
 	/**
@@ -219,6 +229,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
 				projectile.shoot(shooter, (float)pitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+				projectile.setBonusDamage(this.bonusDamage);
 				world.spawnEntity(projectile);
 				mainProjectile = projectile;
 			}
@@ -230,6 +241,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 				ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile(this.projectileName);
 				BaseProjectileEntity projectile = projectileInfo.createProjectile(world, shooter);
 				projectile.setPosition(firePos.x, firePos.y, firePos.z);
+				projectile.setBonusDamage(this.bonusDamage);
 				world.spawnEntity(projectile);
 				projectile.shoot(shooter, shooter.rotationPitch, (float)yaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
 				mainProjectile = projectile;
@@ -240,6 +252,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 			mainProjectile = projectileInfo.createProjectile(world, shooter);
 			mainProjectile.setPosition(firePos.x, firePos.y, firePos.z);
 			mainProjectile.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw - (float)offsetX, 0, (float)projectileInfo.velocity, 0);
+			mainProjectile.setBonusDamage(this.bonusDamage);
 			world.spawnEntity(mainProjectile);
 		}
 
