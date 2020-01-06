@@ -52,7 +52,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
 			matrixStack.func_227861_a_(0F, 0F, 0.5F);
 		}
-		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType)) {
+		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType) || "jewel".equalsIgnoreCase(itemEquipmentPart.slotType)) {
 			matrixStack.func_227861_a_(0F, 0F, 1F);
 		}
 

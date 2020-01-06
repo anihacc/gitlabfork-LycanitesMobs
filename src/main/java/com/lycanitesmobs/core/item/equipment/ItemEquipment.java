@@ -72,7 +72,7 @@ public class ItemEquipment extends BaseItem {
 
 	@Override
 	public ITextComponent getDescription(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		return new TranslationTextComponent("item.equipment.description");
+		return new StringTextComponent("");
 	}
 
 	public List<ITextComponent> getAdditionalDescriptions(ItemStack itemStack, @Nullable World world, ITooltipFlag tooltipFlag) {
@@ -84,10 +84,7 @@ public class ItemEquipment extends BaseItem {
 			if(equipmentPart == null)
 				continue;
 			int partLevel = equipmentPart.getLevel(equipmentPartStack);
-			descriptions.add(equipmentPart.getDisplayName(itemStack)
-					.appendText(" ")
-					.appendSibling(new TranslationTextComponent("entity.level"))
-					.appendText(" " + partLevel));
+			descriptions.add(equipmentPart.getDisplayName(itemStack));
 		}
 		descriptions.add(new StringTextComponent("-------------------\n"));
 

@@ -87,7 +87,7 @@ public class SummonEquipmentFeature extends EquipmentFeature {
 		if(!this.isActive(itemStack, level)) {
 			return null;
 		}
-		return new TranslationTextComponent("entity." + this.summonMobId + ".name");
+		return new TranslationTextComponent("entity." + this.summonMobId);
 	}
 
 	/**

@@ -85,6 +85,11 @@ public class EntityEyewig extends RideableCreatureEntity {
     // ==================================================
     BaseProjectileEntity abilityProjectile = null;
     public void mountAbility(Entity rider) {
+		ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("poisonray");
+		if(projectileInfo == null) {
+			return;
+		}
+
     	if(this.getEntityWorld().isRemote)
     		return;
     	
@@ -105,18 +110,14 @@ public class EntityEyewig extends RideableCreatureEntity {
     	// Create New Laser:
     	if(this.abilityProjectile == null) {
 			// Type:
-			ProjectileInfo projectileInfo = ProjectileManager.getInstance().getProjectile("poisonray");
-			if(projectileInfo == null) {
-				return;
-			}
 			if(this.getControllingPassenger() == null || !(this.getControllingPassenger() instanceof LivingEntity))
     			return;
 
 			this.abilityProjectile = projectileInfo.createProjectile(this.getEntityWorld(), this);
 	    	
 	    	// Launch:
-	        this.playSound(abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-	        this.getEntityWorld().addEntity(abilityProjectile);
+	        this.playSound(this.abilityProjectile.getLaunchSound(), 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+	        this.getEntityWorld().addEntity(this.abilityProjectile);
     	}
     	
     	this.applyStaminaCost();

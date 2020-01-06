@@ -1517,6 +1517,7 @@
     "item.lycanitesmobs.ironpaxel": "Iron Paxel",
     "item.lycanitesmobs.ironaxehead": "Iron Axe Head",
     "item.lycanitesmobs.ironpikejoint": "Iron Pike Joint",
+    "item.lycanitesmobs.goldscepterhead": "Gold Scepter Head",
     "item.lycanitesmobs.bansheeeye": "Banshee Eye",
     "item.lycanitesmobs.sylphwing": "Sylph Wing",
     "item.lycanitesmobs.grueclaw": "Grue Claw",
@@ -1544,6 +1545,7 @@
     "item.lycanitesmobs.vapulacrystal": "Vapula Crystal",
     "item.lycanitesmobs.reiverhorns": "Reiver Horns",
     "item.lycanitesmobs.eechetikarm": "Eechetik Arm",
+    "item.lycanitesmobs.gammasphere": "Gamma Sphere",
     "_comment": "#############################",
     "item.lycanitesmobs.raw_arisaur_meat": "Raw Arisaur Meat",
     "item.lycanitesmobs.raw_arisaur_meat.description": "A beef-like meat. 'Stunningly good' to eat raw!",
@@ -2002,5 +2004,6 @@
     "entity.lycanitesmobs.devilstar": "Devilstar",
     "entity.lycanitesmobs.aquapulse": "Aqua Pulse",
     "entity.lycanitesmobs.arcanelaserstorm": "Arcane Laser Storm",
-    "entity.lycanitesmobs.aetherwave": "Aetherwave"
+    "entity.lycanitesmobs.aetherwave": "Aetherwave",
+    "entity.lycanitesmobs.summoningseed": "Summoning Seed"
 }

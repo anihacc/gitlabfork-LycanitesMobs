@@ -4,7 +4,7 @@
 	"slotType": "head",
 	"dropMobId": "lycanitesmobs:astaroth",
 	"dropChance": 0.2,
-	"levelMin": 2,
+	"levelMin": 1,
 	"levelMax": 3,
 	"elements": [
 		"nether",
