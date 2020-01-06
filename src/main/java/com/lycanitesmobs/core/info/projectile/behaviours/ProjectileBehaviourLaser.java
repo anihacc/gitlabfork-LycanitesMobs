@@ -135,7 +135,7 @@ public class ProjectileBehaviourLaser extends ProjectileBehaviour {
 		((CustomProjectileEntity)projectile).setLaserEnd(new Vec3d(targetX, targetY, targetZ));
 
 		// Laser Damage:
-		if(projectile.projectileLife % 10 == 0 && projectile.isEntityAlive() && entityHit != null) {
+		if(projectile.updateTick % 10 == 0 && projectile.isEntityAlive() && entityHit != null) {
 			if(((CustomProjectileEntity)projectile).getLaserEnd().distanceTo(entityHit.getPositionVector()) <= (this.width * 10)) {
 				boolean doDamage = true;
 				if (entityHit instanceof EntityLivingBase) {

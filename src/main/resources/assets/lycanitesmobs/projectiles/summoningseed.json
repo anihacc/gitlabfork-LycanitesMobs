@@ -1,6 +1,7 @@
 {
 	"name": "summoningseed",
 	"loadDefault": true,
+	"noChargeItem": true,
 	"width": 0.5,
 	"height": 0.5,
 	"scale": 1.0,

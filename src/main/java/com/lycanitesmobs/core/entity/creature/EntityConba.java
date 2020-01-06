@@ -46,14 +46,14 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
 		super.initEntityAI();
 
-		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(5.0D).setFarDistance(9.0D);
-		this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
+		//this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(4.0D).setFarDistance(8.0D);
+		//this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
 
 		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
 		this.tasks.addTask(this.nextCombatGoalIndex++, this.aiAttackRanged);
 
-        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityPlayer.class));
-        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityVillager.class));
+        //this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityPlayer.class).setTameTargetting(false));
+        //this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityVillager.class));
     }
     
     
