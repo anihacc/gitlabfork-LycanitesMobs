@@ -88,9 +88,6 @@ public class ChargeItem extends BaseItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(!player.abilities.isCreativeMode) {
-            itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-        }
 
         if(!world.isRemote && player.func_225608_bj_()) { // isSneaking()
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
@@ -99,6 +96,9 @@ public class ChargeItem extends BaseItem {
                 return new ActionResult<>(ActionResultType.FAIL, itemStack);
             }
             world.addEntity(projectile);
+            if(!player.abilities.isCreativeMode) {
+                itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+            }
             this.playSound(world, player.getPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (player.getRNG().nextFloat() * 0.4F + 0.8F));
         }
 

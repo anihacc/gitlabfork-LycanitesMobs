@@ -185,14 +185,16 @@ public class TileEntityEquipmentForge extends TileEntityBase implements IInvento
 		if(nbtTagCompound.contains("ForgeLevel")) {
 			this.level = nbtTagCompound.getInt("ForgeLevel");
 		}
-
+		if(nbtTagCompound.contains("Items")) {
+			ItemStackHelper.loadAllItems(nbtTagCompound, this.itemStacks);
+		}
 		super.read(nbtTagCompound);
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT nbtTagCompound) {
 		nbtTagCompound.putInt("ForgeLevel", this.level);
-
+		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
 		return super.write(nbtTagCompound);
 	}
 

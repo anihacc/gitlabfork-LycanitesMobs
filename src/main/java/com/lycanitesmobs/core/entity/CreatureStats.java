@@ -43,13 +43,7 @@ public class CreatureStats {
 			}
 		}
 
-		// Tamed:
-		else {
-			statValue *= CreatureManager.getInstance().tamedHealthMultiplier;
-		}
-
 		statValue *= this.getLevelMultiplier(statName);
-
 		return Math.max(0, statValue);
 	}
 
@@ -72,6 +66,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -94,6 +89,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -116,6 +112,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -138,6 +135,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -160,6 +158,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -182,6 +181,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -204,6 +204,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -222,6 +223,7 @@ public class CreatureStats {
 			statValue *= this.getSubspeciesMultiplier(statName);
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -244,6 +246,7 @@ public class CreatureStats {
 			}
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 
@@ -262,6 +265,7 @@ public class CreatureStats {
 			statValue *= this.getSubspeciesMultiplier(statName);
 		}
 
+		statValue *= this.getLevelMultiplier(statName);
 		return statValue;
 	}
 

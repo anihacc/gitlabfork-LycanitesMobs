@@ -328,7 +328,7 @@ public class PetEntry {
                     LycanitesMobs.logDebug("Pet", "Unable to teleport a pet.");
                 }
 
-                if(entity instanceof LivingEntity) {
+                if(this.entity instanceof LivingEntity) {
                     // Passive Healing:
                     LivingEntity entityLiving = (LivingEntity)this.entity;
                     if(this.entityTick % 60 == 0 && entityLiving.getHealth() < entityLiving.getMaxHealth()) {
@@ -409,7 +409,7 @@ public class PetEntry {
 
         if(this.entity instanceof BaseCreatureEntity) {
             BaseCreatureEntity entityCreature = (BaseCreatureEntity)this.entity;
-            entityCreature.setLevel(this.entityLevel);
+            entityCreature.applyLevel(this.entityLevel);
             entityCreature.setExperience(this.entityExperience);
             entityCreature.setMinion(true);
             entityCreature.setPetEntry(this);
@@ -461,6 +461,8 @@ public class PetEntry {
 
         this.onSpawnEntity(this.entity);
         this.host.getEntityWorld().addEntity(this.entity);
+        if(this.summonSet.playerExt != null)
+            this.summonSet.playerExt.sendPetEntryToPlayer(this);
     }
 
     /** Called when the entity for this entry is spawned just before it is added to the world. **/

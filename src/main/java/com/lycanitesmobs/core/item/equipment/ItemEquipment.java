@@ -443,7 +443,7 @@ public class ItemEquipment extends BaseItem {
 
 		if(entityInteraction)
 			return true;
-		return super.itemInteractionForEntity(itemStack, player, target, hand);
+		return false;
 	}
 
 

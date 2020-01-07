@@ -274,7 +274,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			barX = nextX + this.getFontRenderer().getStringWidth(text);
 			barCenter = barX + (barWidth / 2);
 			this.drawTexture(TextureManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-			float experienceNormal = this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
+			float experienceNormal = (float)this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
 			this.drawTexture(TextureManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 			String experienceText = this.playerExt.selectedPet.getExperience() + "/" + this.playerExt.selectedPet.getMaxExperience();
 			this.getFontRenderer().drawString(experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);

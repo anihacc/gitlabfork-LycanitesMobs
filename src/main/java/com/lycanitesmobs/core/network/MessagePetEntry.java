@@ -22,7 +22,7 @@ public class MessagePetEntry {
 	public String summonType;
 	public int subspecies;
 	public byte behaviour;
-	public int petEntryEntityID;
+	public int petEntryEntityID = -1;
 	public String petEntryEntityName;
 	public int respawnTime;
 	public int respawnTimeMax;
