@@ -9,8 +9,10 @@ import com.lycanitesmobs.core.block.BlockFireBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -62,15 +64,14 @@ public class BlockScorchfire extends BlockFireBase {
     		if(((EntityItem)entity).getItem().getItem() == ObjectManager.getItem("scorchfirecharge"))
     			return;
 
-        /**if(ObjectManager.getEffect("penetration") != null) {
-            PotionEffect effectPenetration = new PotionEffect(ObjectManager.getEffect("penetration"), 5 * 20, 0);
+        if(ObjectManager.getEffect("penetration") != null) {
+            PotionEffect effect = new PotionEffect(ObjectManager.getEffect("penetration"), 3 * 20, 0);
             if(entity instanceof EntityLivingBase) {
                 EntityLivingBase entityLiving = (EntityLivingBase)entity;
-                if(!entityLiving.isPotionApplicable(effectPenetration))
-                    return;
-                entityLiving.addPotionEffect(effectPenetration);
+                if(entityLiving.isPotionApplicable(effect))
+                    entityLiving.addPotionEffect(effect);
             }
-        }**/
+        }
 
 		if(entity.isImmuneToFire())
 			return;

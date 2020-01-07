@@ -280,7 +280,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 				float healthNormal = this.playerExt.selectedPet.getHealth() / this.playerExt.selectedPet.getMaxHealth();
 				this.drawTexture(AssetManager.getTexture("GUIPetBarHealth"), barX, barY, 0, healthNormal, 1, barWidth * healthNormal, barHeight);
 				String healthText = String.format("%.0f", this.playerExt.selectedPet.getHealth()) + "/" + String.format("%.0f", this.playerExt.selectedPet.getMaxHealth());
-				this.getFontRenderer().drawString(healthText, barCenter - (this.getFontRenderer().getStringWidth(healthText) / 2), barY + 2, 0xFFFFFF);
+				this.getFontRenderer().drawString(healthText, barCenter - (this.getFontRenderer().getStringWidth(healthText) / 2), barY + 1, 0xFFFFFF);
 			}
 			else {
 				float respawnNormal = 1.0F - ((float)this.playerExt.selectedPet.respawnTime / this.playerExt.selectedPet.respawnTimeMax);
@@ -291,7 +291,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			// Experience:
 			nextY += 4 + this.getFontRenderer().getWordWrappedHeight(text, colRightWidth);
 			text = "\u00A7l" + LanguageManager.translate("creature.stat.experience") + ": ";
-			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF);
+			this.getFontRenderer().drawString(text, nextX, nextY, 0xFFFFFF, true);
 
 			barY = nextY - 1;
 			barWidth = (256 / 4) + 16;
@@ -299,10 +299,10 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			barX = nextX + this.getFontRenderer().getStringWidth(text);
 			barCenter = barX + (barWidth / 2);
 			this.drawTexture(AssetManager.getTexture("GUIPetBarEmpty"), barX, barY, 0, 1, 1, barWidth, barHeight);
-			float experienceNormal = this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
+			float experienceNormal = (float)this.playerExt.selectedPet.getExperience() / this.playerExt.selectedPet.getMaxExperience();
 			this.drawTexture(AssetManager.getTexture("GUIBarExperience"), barX, barY, 0, experienceNormal, 1, barWidth * experienceNormal, barHeight);
 			String experienceText = this.playerExt.selectedPet.getExperience() + "/" + this.playerExt.selectedPet.getMaxExperience();
-			this.getFontRenderer().drawString(experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 2, 0xFFFFFF);
+			this.getFontRenderer().drawString(experienceText, barCenter - (this.getFontRenderer().getStringWidth(experienceText) / 2), barY + 1, 0xFFFFFF);
 		}
 
 		// Base Display:

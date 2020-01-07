@@ -157,10 +157,14 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
+		if(nbtTagCompound.hasKey("Items")) {
+			ItemStackHelper.loadAllItems(nbtTagCompound, this.itemStacks);
+		}
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+		ItemStackHelper.saveAllItems(nbtTagCompound, this.itemStacks);
 		return super.writeToNBT(nbtTagCompound);
 	}
 }

@@ -439,7 +439,7 @@ public class ItemEquipment extends ItemBase {
 
 		if(entityInteraction)
 			return true;
-		return super.itemInteractionForEntity(itemStack, player, target, hand);
+		return false;
 	}
 
 

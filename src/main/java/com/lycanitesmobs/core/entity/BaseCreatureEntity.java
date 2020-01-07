@@ -1229,7 +1229,13 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // ========== On Spawn ==========
     /** This is called when the mob is first spawned to the world either through natural spawning or from a Spawn Egg. **/
     public void onFirstSpawn() {
-        if(this.hasPetEntry() || this.isMinion())
+    	if(this.hasPetEntry()) {
+    		if(this.getPetEntry().summonSet != null && this.getPetEntry().summonSet.playerExt != null) {
+				this.getPetEntry().summonSet.playerExt.sendPetEntryToPlayer(this.getPetEntry());
+			}
+    		return;
+		}
+        if(this.isMinion())
             return;
 		if(this.needsInitialLevel)
 			this.applyLevel(this.getStartingLevel());

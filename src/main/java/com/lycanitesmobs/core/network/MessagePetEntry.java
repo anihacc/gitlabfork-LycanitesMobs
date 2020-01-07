@@ -25,7 +25,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	public String summonType;
 	public int subspecies;
 	public byte behaviour;
-	public int petEntryEntityID;
+	public int petEntryEntityID = -1;
 	public String petEntryEntityName;
 	public int respawnTime;
 	public int respawnTimeMax;
@@ -46,7 +46,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         this.summonType = summonSet.summonType;
         this.subspecies = petEntry.subspeciesID;
 		this.behaviour = summonSet.getBehaviourByte();
-		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getEntityId() : 0;
+		this.petEntryEntityID = petEntry.entity != null ? petEntry.entity.getEntityId() : -1;
 		this.petEntryEntityName = petEntry.entityName;
 		this.respawnTime = petEntry.respawnTime;
 		this.respawnTimeMax = petEntry.respawnTimeMax;
@@ -97,9 +97,9 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 		SummonSet summonSet = petEntry.summonSet;
 		summonSet.readFromPacket(message.summonType, 0, message.behaviour);
         Entity entity = null;
-        if(message.petEntryEntityID != 0) {
-            entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
-        }
+        if(message.petEntryEntityID != -1) {
+			entity = player.getEntityWorld().getEntityByID(message.petEntryEntityID);
+		}
         petEntry.entity = entity;
         petEntry.entityName = message.petEntryEntityName;
         petEntry.respawnTime = message.respawnTime;
@@ -123,11 +123,11 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         this.petEntryType = packet.readString(256);
         this.spawningActive = packet.readBoolean();
         this.teleportEntity = packet.readBoolean();
-        this.summonType = packet.readString(256);
+        this.summonType = packet.readString(512);
 		this.subspecies = packet.readInt();
         this.behaviour = packet.readByte();
         this.petEntryEntityID = packet.readInt();
-		this.petEntryEntityName = packet.readString(256);
+		this.petEntryEntityName = packet.readString(1024);
         this.respawnTime = packet.readInt();
         this.respawnTimeMax = packet.readInt();
         this.isRespawning = packet.readBoolean();

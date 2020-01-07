@@ -92,9 +92,6 @@ public class ChargeItem extends ItemBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack itemStack = player.getHeldItem(hand);
-        if(!player.capabilities.isCreativeMode) {
-            itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
-        }
 
         if(!world.isRemote && player.isSneaking()) {
             BaseProjectileEntity projectile = this.createProjectile(itemStack, world, player);
@@ -103,6 +100,9 @@ public class ChargeItem extends ItemBase {
                 return new ActionResult<>(EnumActionResult.FAIL, itemStack);
             }
             world.spawnEntity(projectile);
+            if(!player.capabilities.isCreativeMode) {
+                itemStack.setCount(Math.max(0, itemStack.getCount() - 1));
+            }
             this.playSound(world, player.getPosition(), projectile.getLaunchSound(), SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
         }
 
