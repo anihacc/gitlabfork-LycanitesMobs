@@ -1,16 +1,27 @@
 package com.lycanitesmobs.client;
 
+import com.lycanitesmobs.LycanitesMobs;
+import com.lycanitesmobs.ObjectManager;
+import com.lycanitesmobs.client.model.ModelEquipmentPart;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.model.ModelObjOld;
 import com.lycanitesmobs.client.model.ModelItemBase;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import com.lycanitesmobs.core.item.ItemBase;
+import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -23,6 +34,7 @@ public class AssetManager {
 	public static Map<String, ResourceLocation[]> textureGroups = new HashMap<>();
 	public static Map<String, SoundEvent> sounds = new HashMap<>();
 	public static Map<String, ModelBase> models = new HashMap<>();
+	public static Map<ProjectileInfo, ModelBase> projectileModels = new HashMap<>();
 	public static Map<String, IModel> objModels = new HashMap<>();
 	public static Map<String, ModelItemBase> itemModels = new HashMap<>();
 	
@@ -144,6 +156,18 @@ public class AssetManager {
 		models.put(creatureInfo.modelClass.toString(), creatureModel);
 		return creatureModel;
 	}
+
+	/**
+	 * Gets the model used by the provided Projectile.
+	 * @param projectileInfo The projectile info to get the model for.
+	 * @return The Projectile Model.
+	 */
+	public static ModelBase getProjectileModel(ProjectileInfo projectileInfo) {
+		if(projectileModels.containsKey(projectileInfo)) {
+			return projectileModels.get(projectileInfo);
+		}
+		return null;
+	}
 	
 	// ========== Obj Model ==========
 	public static IModel getObjModel(String name) {
@@ -165,5 +189,36 @@ public class AssetManager {
 		if(!itemModels.containsKey(name))
 			return null;
 		return itemModels.get(name);
+	}
+
+
+	// ==================================================
+	//                  Register Models
+	// ==================================================
+	@SideOnly(Side.CLIENT)
+	public static void registerModels() {
+		for(Item item : ObjectManager.items.values()) {
+			if(item instanceof ItemBase) {
+				ItemBase itemBase = (ItemBase) item;
+				if (itemBase.useItemColors()) {
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientProxy.itemColor, item);
+				}
+			}
+			if(item instanceof ItemEquipmentPart) {
+				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
+				AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));
+			}
+		}
+
+		for(ProjectileInfo projectileInfo : ProjectileManager.getInstance().projectiles.values()) {
+			if(projectileInfo.modelClassName != null) {
+				try {
+					projectileModels.put(projectileInfo, (ModelBase)Class.forName(projectileInfo.modelClassName).getConstructor().newInstance());
+				} catch (Exception e) {
+					LycanitesMobs.logWarning("", "Unable to load a Projectile model, check that the model class name is correct in the associated projectile json.");
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

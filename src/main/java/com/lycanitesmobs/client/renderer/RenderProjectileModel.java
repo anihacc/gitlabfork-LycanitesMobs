@@ -43,7 +43,7 @@ public class RenderProjectileModel extends Render {
 				return;
 			}
 			try {
-				this.mainModel = projectileInfo.modelClass.getConstructor().newInstance();
+				this.mainModel = AssetManager.getProjectileModel(projectileInfo);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;

@@ -64,7 +64,7 @@ public class LycanitesMobs {
 	
 	public static final String modid = "lycanitesmobs";
 	public static final String name = "Lycanites Mobs";
-	public static final String versionNumber = "2.0.6.3";
+	public static final String versionNumber = "2.0.6.4";
 	public static final String versionMC = "1.12.2";
 	public static final String version = versionNumber + " - MC " + versionMC;
 	public static final String website = "https://lycanitesmobs.com";
@@ -237,7 +237,7 @@ public class LycanitesMobs {
 	@Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 		// Client:
-		proxy.registerItemModels(modInfo); // Here for Item Color
+		proxy.registerModels(modInfo); // Here for Item Color
 	}
 
 

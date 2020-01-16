@@ -143,8 +143,8 @@ public class ClientProxy extends CommonProxy {
 
 	// ========== Register Models ==========
 	@Override
-	public void registerItemModels(ModInfo groupInfo) {
-		ObjectManager.RegisterModels();
+	public void registerModels(ModInfo groupInfo) {
+		AssetManager.registerModels();
 	}
 
 

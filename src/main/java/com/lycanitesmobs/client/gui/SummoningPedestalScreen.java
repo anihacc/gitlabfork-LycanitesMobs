@@ -8,6 +8,7 @@ import com.lycanitesmobs.core.container.SummoningPedestalContainer;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.pets.SummonSet;
 import com.lycanitesmobs.core.tileentity.TileEntitySummoningPedestal;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -144,18 +145,18 @@ public class SummoningPedestalScreen extends BaseContainerScreen {
     //                    Foreground
     // ==================================================
     protected void drawGuiContainerForegroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(this.getTexture());
+        GL11.glColor4f(255, 255, 255, 1.0F);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(this.getTexture());
 
         // No Pets:
         if (!this.hasPets()) {
-            this.getFontRenderer().drawString(LanguageManager.translate("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
+            this.getFontRenderer().drawStringWithShadow(LanguageManager.translate("gui.beastiary.summoning.empty.title"), this.centerX - 96, this.windowY + 6, 0xFFFFFF);
             this.getFontRenderer().drawSplitString(LanguageManager.translate("gui.beastiary.summoning.empty.info"), this.windowX + 16, this.windowY + 30, this.windowWidth - 32, 0xFFFFFF);
             return;
         }
 
         // Title:
-        this.getFontRenderer().drawString(this.getTitle(), this.centerX - 24, this.windowY + 6, 0xFFFFFF);
+        this.getFontRenderer().drawString(this.getTitle(), this.centerX - 48, this.windowY + 6, 0xFFFFFF);
 
         // Spirit Title:
         this.getFontRenderer().drawString(this.getEnergyTitle(), this.windowX + 16, this.windowY + 20, 0xFFFFFF);
@@ -175,16 +176,13 @@ public class SummoningPedestalScreen extends BaseContainerScreen {
     // ==================================================
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glColor4f(255, 255, 255, 1.0F);
         this.mc.getTextureManager().bindTexture(this.getTexture());
 
         this.drawTexturedModalRect(this.windowX, this.windowY, 0, 0, this.windowWidth, this.windowHeight);
         this.drawTexturedModalRect(this.windowX + 40, this.windowY + this.windowHeight, 40, 224, this.windowWidth - 80, 29);
 
         if(!this.hasPets()) {
-            int recipeWidth = 108;
-            int recipeHeight = 54;
-            this.drawTexturedModalRect(this.centerX - (recipeWidth / 2), this.windowY + this.windowHeight - recipeHeight - 16, 0, 256 - recipeHeight, recipeWidth, recipeHeight);
             return;
         }
 

@@ -6,6 +6,8 @@ import com.lycanitesmobs.core.block.BlockSlabCustom;
 import com.lycanitesmobs.core.config.ConfigBase;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.info.ObjectLists;
+import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
+import com.lycanitesmobs.core.info.projectile.ProjectileManager;
 import com.lycanitesmobs.core.item.ItemBase;
 import com.lycanitesmobs.core.item.ItemBlockBase;
 import com.lycanitesmobs.core.item.ItemSlabCustom;
@@ -288,24 +290,4 @@ public class ObjectManager {
 			event.getRegistry().register(entityEntry);
 		}
 	}
-
-
-    // ==================================================
-    //           Register Block and Item Models
-    // ==================================================
-    @SideOnly(Side.CLIENT)
-    public static void RegisterModels() {
-		for(Item item : items.values()) {
-			if(item instanceof ItemBase) {
-				ItemBase itemBase = (ItemBase) item;
-				if (itemBase.useItemColors()) {
-					Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ClientProxy.itemColor, item);
-				}
-			}
-            if(item instanceof ItemEquipmentPart) {
-				ItemEquipmentPart itemEquipmentPart = (ItemEquipmentPart)item;
-            	AssetManager.addItemModel(itemEquipmentPart.itemName, new ModelEquipmentPart(itemEquipmentPart.itemName, itemEquipmentPart.modInfo));
-			}
-        }
-    }
 }

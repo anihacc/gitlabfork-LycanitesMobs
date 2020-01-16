@@ -1128,6 +1128,9 @@ public abstract class BaseCreatureEntity extends EntityLiving {
             ((BaseCreatureEntity)minion).applySubspecies(this.getSubspeciesIndex());
             ((BaseCreatureEntity)minion).setMasterTarget(this);
             ((BaseCreatureEntity)minion).spawnEventType = this.spawnEventType;
+            if(this.isTemporary) {
+				((BaseCreatureEntity)minion).setTemporary(this.temporaryDuration);
+			}
         }
         this.getEntityWorld().spawnEntity(minion);
         if(this.getAttackTarget() != null) {

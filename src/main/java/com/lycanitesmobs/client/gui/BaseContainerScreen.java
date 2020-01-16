@@ -85,4 +85,31 @@ public abstract class BaseContainerScreen extends GuiContainer {
         vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(u + 0) * scaleX), (double)((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
+
+
+    /**
+     *
+     * @param texture The texture resource location.
+     * @param x The x position to draw at.
+     * @param y The y position to draw at.
+     * @param z The z position to draw at.
+     * @param width The width of each bar segment.
+     * @param height The height of each bar segment.
+     * @param segments How many segments to draw.
+     * @param segmentLimit How many segments to draw up to before squishing them. If negative the bar is draw backwards.
+     */
+    public void drawBar(ResourceLocation texture, int x, int y, float z, float width, float height, int segments, int segmentLimit) {
+        boolean reverse = segmentLimit < 0;
+        if(reverse) {
+            segmentLimit = -segmentLimit;
+        }
+        // TODO segmentLimit
+        for (int i = 0; i < segments; i++) {
+            int currentSegment = i;
+            if(reverse) {
+                currentSegment = segmentLimit - i - 1;
+            }
+            this.drawTexture(texture, x + (width * currentSegment), y, z, 1, 1, width, height);
+        }
+    }
 }

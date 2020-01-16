@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 
 /** This is a wrapper class for the DLDungeons API, uses reflection for now until I find a better way. **/
 public class DLDungeons {
+	public static String API_CLASS_NAME = "jaredbgreat.dldungeons.api.DLDungeonsAPI";
 	
 	// ========== Initialize ==========
 	/** Called if the DLDungeons API is found, this then asks the API if DLDungeons is ready to go, if so, it updates MobInfo so that mobs will register their themes. **/
@@ -21,7 +22,7 @@ public class DLDungeons {
 		Class dlDungeonsAPI = null;
 		Method isLoaded = null;
 		try {
-			dlDungeonsAPI = Class.forName("jaredbgreat.dldungeons.api.DLDungeonsAPI");
+			dlDungeonsAPI = Class.forName(API_CLASS_NAME);
 			isLoaded = dlDungeonsAPI.getMethod("isLoaded");
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "Unable to find DLDungeons API Class/Method via reflection:");
@@ -81,10 +82,9 @@ public class DLDungeons {
 
 		if(!"".equalsIgnoreCase(themes) && creatureInfo.dungeonLevel > 0) {
 			try {
-				Class dlDungeonsAPI = Class.forName("jaredbgreat.dldungeons.api.DLDungeonsAPI");
+				Class dlDungeonsAPI = Class.forName(API_CLASS_NAME);
 				Method addMob = dlDungeonsAPI.getMethod("addMob", String.class, int.class, String[].class);
 				addMob.invoke(null, mobName, creatureInfo.dungeonLevel, themes.split(","));
-				//DLDungeonsAPI.addMob(mobName, creatureInfo.dungeonLevel, themes.split(","));
 				LycanitesMobs.logDebug("MobSetup", "[DLDungeons] Added " + mobName + " with the level: " + creatureInfo.dungeonLevel + " and themes: " + themes);
 			} catch(Exception e) {
 				LycanitesMobs.logWarning("", "Unable to add " + mobName + " to DLDungeons API:");

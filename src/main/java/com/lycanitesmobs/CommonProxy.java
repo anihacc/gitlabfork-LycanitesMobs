@@ -29,7 +29,7 @@ public class CommonProxy {
 	public void initLanguageManager() {}
     public void registerRenders(ModInfo groupInfo) {}
 	public void registerTextures() {}
-	public void registerItemModels(ModInfo groupInfo) {}
+	public void registerModels(ModInfo groupInfo) {}
     public EntityPlayer getClientPlayer() { return null; }
 
 

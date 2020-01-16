@@ -156,6 +156,8 @@ public class AttackMeleeGoal extends EntityAIBase {
         this.attackTarget = this.host.getAttackTarget();
         if(this.attackTarget == null)
         	return false;
+		if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.attackTarget.getClass()))
+			return false;
 		if(!this.host.isEntityAlive() || !this.attackTarget.isEntityAlive()) {
 			return false;
 		}

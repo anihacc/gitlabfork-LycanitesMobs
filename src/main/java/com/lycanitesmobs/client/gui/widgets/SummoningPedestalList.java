@@ -55,19 +55,14 @@ public class SummoningPedestalList extends GuiScrollingList {
 		String mobName = this.minionList.get(index);
 		CreatureInfo creatureInfo = CreatureManager.getInstance().getCreature(mobName);
 
-		int boxLeft = this.left;
+		// Summon Level:
 		int levelBarWidth = 9;
 		int levelBarHeight = 9;
-		int levelBarX = boxLeft + 20;
+		int levelBarX = this.left + 20;
 		int levelBarY = boxTop + boxBottom - levelBarHeight - 4;
-		int levelBarU = 256 - (levelBarWidth * 2);
-		int levelBarV = 256 - levelBarHeight;
 		int level = creatureInfo.summonCost;
-
-		// Summon Level:
-		Minecraft.getMinecraft().getTextureManager().bindTexture(AssetManager.getTexture("GUIBeastiary"));
-		for(int currentLevel = 0; currentLevel < level; currentLevel++) {
-			this.parentGUI.drawTexturedModalRect(levelBarX + (levelBarWidth * currentLevel), levelBarY, levelBarU, levelBarV, levelBarWidth, levelBarHeight);
+		if(level <= 10) {
+			this.parentGUI.drawBar(AssetManager.getTexture("GUIPetLevel"), levelBarX, levelBarY, 0, levelBarWidth, levelBarHeight, level, 10);
 		}
 
 		this.parentGUI.getFontRenderer().drawString(creatureInfo.getTitle(), this.left + 20 , boxTop + 4, 0xFFFFFF);

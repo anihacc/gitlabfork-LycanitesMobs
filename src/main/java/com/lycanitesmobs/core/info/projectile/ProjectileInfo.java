@@ -38,8 +38,9 @@ public class ProjectileInfo {
 
 	/** The entity class used by this projectile. Defaults to EntityProjectileCustom but can be changed to special classes for unique behaviour, etc. **/
 	public Class<? extends Entity> entityClass = CustomProjectileEntity.class;
-	/** The model class used by this projectile, if empty, the Charge Item is used instead. **/
-	public Class<? extends ModelBase> modelClass;
+
+	/** The class of the model this subspecies should use, loaded client side only. **/
+	public String modelClassName;
 
 	/** The group that this projectile belongs to. **/
 	public ModInfo modInfo;
@@ -138,11 +139,7 @@ public class ProjectileInfo {
 		}
 
 		if(json.has("modelClass")) {
-			try {
-				this.modelClass = (Class<? extends ModelBase>) Class.forName(json.get("modelClass").getAsString());
-			} catch (Exception e) {
-				LycanitesMobs.logWarning("", "[Projectile] Unable to find the Java Model Class: " + json.get("modelClass").getAsString() + " for " + this.getName());
-			}
+			this.modelClassName = json.get("modelClass").getAsString();
 		}
 
 		// Size:
@@ -289,7 +286,7 @@ public class ProjectileInfo {
 	 * @param entityLivingBase The entity that created the projectile.
 	 */
 	public BaseProjectileEntity createProjectile(World world, EntityLivingBase entityLivingBase) {
-		if(this.modelClass != null) {
+		if(this.modelClassName != null) {
 			return new CustomProjectileModelEntity(world, entityLivingBase, this);
 		}
 		return new CustomProjectileEntity(world, entityLivingBase, this);

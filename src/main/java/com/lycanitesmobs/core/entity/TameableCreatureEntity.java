@@ -895,6 +895,18 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		}
 		return super.isBreedingItem(itemStack);
 	}
+
+
+	// ============================================
+	//                   Minions
+	// ============================================
+	public void summonMinion(EntityLivingBase minion, double angle, double distance) {
+		if(this.getPlayerOwner() != null && minion instanceof TameableCreatureEntity) {
+			((TameableCreatureEntity)minion).setPlayerOwner(this.getPlayerOwner());
+			this.copyPetBehaviourTo((TameableCreatureEntity)minion);
+		}
+		super.summonMinion(minion, angle, distance);
+	}
     
     
     // ==================================================
