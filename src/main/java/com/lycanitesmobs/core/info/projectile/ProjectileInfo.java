@@ -48,7 +48,7 @@ public class ProjectileInfo {
 	@Nonnull
 	public Class<? extends BaseProjectileEntity> entityClass = CustomProjectileEntity.class;
 
-	/** The constructor used by this creature to create entity instances. **/
+	/** The constructor used by this projectile to create entity instances. **/
 	public Constructor<? extends BaseProjectileEntity> entityConstructor;
 
 	/** The class of the model this subspecies should use, loaded client side only. **/

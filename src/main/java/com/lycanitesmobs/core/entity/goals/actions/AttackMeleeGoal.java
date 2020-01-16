@@ -158,6 +158,8 @@ public class AttackMeleeGoal extends Goal {
         this.attackTarget = this.host.getAttackTarget();
         if(this.attackTarget == null)
         	return false;
+		if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.attackTarget.getClass()))
+			return false;
 		if(!this.host.isAlive() || !this.attackTarget.isAlive())
         	return false;
         if(this.host.getDistanceSq(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY, this.attackTarget.getPositionVec().getZ()) > this.maxChaseDistance)

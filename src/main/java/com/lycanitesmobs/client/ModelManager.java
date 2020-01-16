@@ -5,10 +5,6 @@ import com.lycanitesmobs.client.model.CreatureModel;
 import com.lycanitesmobs.client.model.EquipmentModel;
 import com.lycanitesmobs.client.model.ModelEquipmentPart;
 import com.lycanitesmobs.client.model.ProjectileModel;
-import com.lycanitesmobs.client.model.projectile.AetherwaveModel;
-import com.lycanitesmobs.client.model.projectile.ChaosOrbModel;
-import com.lycanitesmobs.client.model.projectile.CrystalShardModel;
-import com.lycanitesmobs.client.model.projectile.LightBallModel;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.Subspecies;
@@ -65,15 +61,9 @@ public class ModelManager {
 			// Projectile Models:
 			for(ProjectileInfo projectileInfo : ProjectileManager.getInstance().projectiles.values()) {
 				if(projectileInfo.modelClassName != null) {
-					this.projectileModels.put(projectileInfo, (ProjectileModel) Class.forName(projectileInfo.modelClassName).getConstructor().newInstance());
+					this.projectileModels.put(projectileInfo, (ProjectileModel)Class.forName(projectileInfo.modelClassName).getConstructor().newInstance());
 				}
 			}
-
-			// Old Model Projectiles:f
-			this.oldProjectileModels.put("lightball", new LightBallModel());
-			this.oldProjectileModels.put("crystalshard", new CrystalShardModel());
-			this.oldProjectileModels.put("aetherwave", new AetherwaveModel());
-			this.oldProjectileModels.put("chaosorb", new ChaosOrbModel());
 		}
 		catch(ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
 			LycanitesMobs.logError("Unable to load a Projectile model, check that the model class name is correct in the associated projectile json.");

@@ -137,7 +137,7 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
 			// Summoning Portal:
 			if (this.summoningPortal == null || !this.summoningPortal.isAlive()) {
 				this.summoningPortal = new PortalEntity((EntityType<? extends PortalEntity>) ProjectileManager.getInstance().oldProjectileTypes.get(PortalEntity.class), this.getWorld(), this);
-				this.summoningPortal.setProjectileScale(8);
+				this.summoningPortal.setProjectileScale(4);
 				this.getWorld().addEntity(this.summoningPortal);
 			}
 
