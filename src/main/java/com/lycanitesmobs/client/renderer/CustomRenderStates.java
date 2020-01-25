@@ -52,33 +52,33 @@ public class CustomRenderStates extends RenderState {
 			vertexFormatValues.add(DefaultVertexFormats.COLOR_4UB);
 			vertexFormatValues.add(DefaultVertexFormats.TEX_2F);
 			vertexFormatValues.add(DefaultVertexFormats.TEX_2S);
-			vertexFormatValues.add(DefaultVertexFormats.field_227848_e_);
+			vertexFormatValues.add(DefaultVertexFormats.TEX_2SB);
 			vertexFormatValues.add(DefaultVertexFormats.NORMAL_3B);
 			vertexFormatValues.add(DefaultVertexFormats.PADDING_1B);
 			POS_COL_TEX_LIGHT_FADE_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
 		}
 
-		RenderState.TransparencyState transparencyState = field_228515_g_;
+		RenderState.TransparencyState transparencyState = TRANSLUCENT_TRANSPARENCY;
 		if(blending == BLEND.ADD.getValue()) {
 			transparencyState = ADDITIVE_TRANSPARENCY;
 		}
 		else if(blending == BLEND.SUB.getValue()) {
 			transparencyState = SUBTRACTIVE_TRANSPARENCY;
 		}
-		RenderState.DiffuseLightingState lightingState = field_228532_x_; // first
+		RenderState.DiffuseLightingState lightingState = DIFFUSE_LIGHTING_ENABLED;
 		if(glow) {
-			lightingState = field_228533_y_; // second
+			lightingState = DIFFUSE_LIGHTING_DISABLED;
 		}
-		RenderType.State renderTypeState = RenderType.State.func_228694_a_() // getBuilder
-				.func_228724_a_(new RenderState.TextureState(texture, false, false)) // Texture
-				.func_228726_a_(transparencyState) // Transparency
-				.func_228716_a_(lightingState) // Diffuse Lighting (first)
-				.func_228713_a_(field_228517_i_) // Alpha 0.003921569F
-				.func_228714_a_(field_228491_A_) // Cull (off)
-				.func_228719_a_(field_228528_t_) // Lightmap (first)
-				.func_228722_a_(field_228530_v_) // Overlay (first)
-				.func_228728_a_(true);
-		return RenderType.func_228633_a_("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+		RenderType.State renderTypeState = RenderType.State.builder()
+				.texture(new RenderState.TextureState(texture, false, false)) // Texture
+				.transparency(transparencyState)
+				.diffuseLighting(lightingState)
+				.alpha(DEFAULT_ALPHA)
+				.cull(CULL_DISABLED)
+				.lightmap(LIGHTMAP_ENABLED)
+				.overlay(OVERLAY_ENABLED)
+				.build(true);
+		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
 	public static RenderType getObjOutlineRenderType(ResourceLocation texture) {
@@ -88,22 +88,22 @@ public class CustomRenderStates extends RenderState {
 			vertexFormatValues.add(DefaultVertexFormats.COLOR_4UB);
 			vertexFormatValues.add(DefaultVertexFormats.TEX_2F);
 			vertexFormatValues.add(DefaultVertexFormats.TEX_2S);
-			vertexFormatValues.add(DefaultVertexFormats.field_227848_e_);
+			vertexFormatValues.add(DefaultVertexFormats.TEX_2SB);
 			vertexFormatValues.add(DefaultVertexFormats.NORMAL_3B);
 			vertexFormatValues.add(DefaultVertexFormats.PADDING_1B);
 			POS_COL_TEX_LIGHT_FADE_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
 		}
 
-		RenderType.State renderTypeState = RenderType.State.func_228694_a_() // getBuilder
-				.func_228724_a_(new RenderState.TextureState(texture, false, false)) // Texture
-				.func_228714_a_(field_228491_A_) // Cull (off)
-				.func_228715_a_(field_228492_B_) // Depth Test (first)
-				.func_228713_a_(field_228517_i_) // Alpha 0.003921569F
-				.func_228725_a_(field_228525_q_) // Texturing (second)
-				.func_228717_a_(field_228501_K_) // Fog (first)
-				.func_228721_a_(field_228505_O_) // Target (second)
-				.func_228728_a_(false);
-		return RenderType.func_228633_a_("lm_obj_outline_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+		RenderType.State renderTypeState = RenderType.State.builder()
+				.texture(new RenderState.TextureState(texture, false, false))
+				.cull(CULL_DISABLED)
+				.depthTest(DEPTH_ALWAYS)
+				.alpha(DEFAULT_ALPHA)
+				.texturing(OUTLINE_TEXTURING)
+				.fog(NO_FOG)
+				.target(OUTLINE_TARGET)
+				.build(false);
+		return RenderType.get("lm_obj_outline_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
 	public static RenderType getSpriteRenderType(ResourceLocation texture) {
@@ -117,10 +117,10 @@ public class CustomRenderStates extends RenderState {
 			POS_COL_TEX_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
 		}
 
-		RenderType.State renderTypeState = RenderType.State.func_228694_a_() // getBuilder
-				.func_228724_a_(new RenderState.TextureState(texture, false, false)) // Texture
-				.func_228713_a_(field_228517_i_) // Alpha 0.003921569F
-				.func_228728_a_(true);
-		return RenderType.func_228633_a_("lm_sprite", POS_COL_TEX_NORMAL, 7, 256, true, false, renderTypeState);
+		RenderType.State renderTypeState = RenderType.State.builder()
+				.texture(new RenderState.TextureState(texture, false, false))
+				.alpha(DEFAULT_ALPHA)
+				.build(true);
+		return RenderType.get("lm_sprite", POS_COL_TEX_NORMAL, 7, 256, true, false, renderTypeState);
 	}
 }

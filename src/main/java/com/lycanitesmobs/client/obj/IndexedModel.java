@@ -70,24 +70,24 @@ public class IndexedModel {
 			int z = indices.get(i + 2);
 
             // Per Vertex Normal:
-			Vector3f v = vertices.get(y).func_229195_e_(); // clone()
+			Vector3f v = vertices.get(y).copy();
 			v.sub(vertices.get(x));
 			Vector3f l0 = v;
-			v = (Vector3f)vertices.get(z).func_229195_e_();
+			v = vertices.get(z).copy();
 			v.sub(vertices.get(x));
 			Vector3f l1 = v;
-			v = l0.func_229195_e_();
+			v = l0.copy();
 			v.cross(l1); //cross(l0, l1)
 			Vector3f normal = v;
 
-			v = normals.get(x).func_229195_e_();
-			v.func_229189_a_(normal); // add()
+			v = normals.get(x).copy();
+			v.add(normal);
 			normals.set(x, v);
-			v = normals.get(y).func_229195_e_();
-            v.func_229189_a_(normal);
+			v = normals.get(y).copy();
+            v.add(normal);
 			normals.set(y, v);
-			v = normals.get(z).func_229195_e_();
-            v.func_229189_a_(normal);
+			v = normals.get(z).copy();
+            v.add(normal);
 			normals.set(z, v);
 
             /*/ Per Face Normal:
@@ -98,7 +98,7 @@ public class IndexedModel {
 		}
 
 		for(int i = 0; i < normals.size(); i++ ) {
-			normals.get(i).func_229194_d_(); // normalize()
+			normals.get(i).normalize();
 		}
 	}
 
@@ -116,7 +116,7 @@ public class IndexedModel {
 				calU.getX() * calV.getY() - calU.getY() * calV.getX()
 		);
 
-        output.func_229194_d_(); // normalize()
+        output.normalize(); // normalize()
         return output;
     }
 
@@ -130,10 +130,10 @@ public class IndexedModel {
 			int i1 = indices.get(i + 1);
 			int i2 = indices.get(i + 2);
 
-			Vector3f v = (Vector3f)vertices.get(i1).func_229195_e_(); // clone()
+			Vector3f v = (Vector3f)vertices.get(i1).copy(); // clone()
 			v.sub(vertices.get(i0));
 			Vector3f edge1 = v;
-			v = (Vector3f)vertices.get(i2).func_229195_e_(); // clone()
+			v = (Vector3f)vertices.get(i2).copy(); // clone()
 			v.sub(vertices.get(i0));
 			Vector3f edge2 = v;
 
@@ -147,19 +147,19 @@ public class IndexedModel {
 
 			Vector3f tangent = new Vector3f((float)(f * (deltaV2 * edge1.getX() - deltaV1 * edge2.getX())), (float)(f * (deltaV2 * edge1.getY() - deltaV1 * edge2.getY())), (float)(f * (deltaV2 * edge1.getZ() - deltaV1 * edge2.getZ())));
 
-			v = (Vector3f)tangents.get(i0).func_229195_e_(); // clone()
-			v.func_229189_a_(tangent); // add()
+			v = (Vector3f)tangents.get(i0).copy(); // clone()
+			v.add(tangent); // add()
 			tangents.set(i0, v);
-			v = (Vector3f)tangents.get(i1).func_229195_e_(); // clone()
-			v.func_229189_a_(tangent);
+			v = (Vector3f)tangents.get(i1).copy(); // clone()
+			v.add(tangent);
 			tangents.set(i1, v);
-			v = (Vector3f)tangents.get(i2).func_229195_e_(); // clone()
-			v.func_229189_a_(tangent);
+			v = (Vector3f)tangents.get(i2).copy(); // clone()
+			v.add(tangent);
 			tangents.set(i2, v);
 		}
 
 		for(int i = 0; i < tangents.size(); i++ )
-			tangents.get(i).func_229194_d_(); // normalize()
+			tangents.get(i).normalize(); // normalize()
 	}
 
     public ArrayList<OBJLoader.OBJIndex> getObjIndices() {

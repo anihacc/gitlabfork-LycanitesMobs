@@ -411,7 +411,7 @@ public class GameEventListener {
 		if(!event.isDismounting() || !(event.getEntityMounting() instanceof PlayerEntity) || !(event.getEntityBeingMounted() instanceof RideableCreatureEntity)) {
 			return;
 		}
-		event.setCanceled(event.getEntityMounting().func_225608_bj_()); //isSneaking()
+		event.setCanceled(event.getEntityMounting().isShiftKeyDown()); //isSneaking()
 	}
 
 

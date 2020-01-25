@@ -184,7 +184,7 @@ public abstract class ItemObjModel implements IAnimationModel {
 			this.currentAnimationPart = this.animationParts.get(partName);
 
 			// Begin Rendering Part:
-			matrixStack.func_227860_a_();
+			matrixStack.push();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(ROT_OFFSET_X, 1F, 0F, 0F);
@@ -201,8 +201,8 @@ public abstract class ItemObjModel implements IAnimationModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
-			matrixStack.func_227865_b_();
+			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, itemStack, brightness), 0, part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			matrixStack.pop();
 		}
 	}
 
@@ -324,24 +324,24 @@ public abstract class ItemObjModel implements IAnimationModel {
 
 	@Override
 	public void doRotate(float rotX, float rotY, float rotZ) {
-		this.matrixStack.func_227863_a_(new Vector3f(1F, 0F, 0F).func_229187_a_(rotX));
-		this.matrixStack.func_227863_a_(new Vector3f(0F, 1F, 0F).func_229187_a_(rotY));
-		this.matrixStack.func_227863_a_(new Vector3f(0F, 0F, 1F).func_229187_a_(rotZ));
+		this.matrixStack.rotate(new Vector3f(1F, 0F, 0F).rotationDegrees(rotX));
+		this.matrixStack.rotate(new Vector3f(0F, 1F, 0F).rotationDegrees(rotY));
+		this.matrixStack.rotate(new Vector3f(0F, 0F, 1F).rotationDegrees(rotZ));
 	}
 
 	@Override
 	public void doAngle(float rotation, float angleX, float angleY, float angleZ) {
-		this.matrixStack.func_227863_a_(new Vector3f(angleX, angleY, angleZ).func_229187_a_(rotation));
+		this.matrixStack.rotate(new Vector3f(angleX, angleY, angleZ).rotationDegrees(rotation));
 	}
 
 	@Override
 	public void doTranslate(float posX, float posY, float posZ) {
-		this.matrixStack.func_227861_a_(posX, posY, posZ); // TODO Translation?
+		this.matrixStack.translate(posX, posY, posZ); // TODO Translation?
 	}
 
 	@Override
 	public void doScale(float scaleX, float scaleY, float scaleZ) {
-		this.matrixStack.func_227862_a_(scaleX, scaleY, scaleZ); // TODO Scaling?
+		this.matrixStack.scale(scaleX, scaleY, scaleZ); // TODO Scaling?
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class LayerCreatureBase extends LayerRenderer<BaseCreatureEntity, Creatur
      * The default render call function, this is not used in favor of a different custom method.
      */
     @Override
-    public void func_225628_a_(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void render(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseCreatureEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         // This isn't used by the custom renderer.
     }
 

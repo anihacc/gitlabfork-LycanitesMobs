@@ -32,8 +32,8 @@ public class BlockSlabCustom extends SlabBlock {
 	}
 
     @Override
-    public boolean func_220074_n(BlockState blockState) {
-        return false; // Double slabs are defined as BlockSlabDouble.
+    public boolean isTransparent(BlockState blockState) {
+        return true;
     }
 
     @Override

@@ -54,7 +54,7 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
     }
 
 	@Override
-	public void func_225623_a_(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void render(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		// Model States:
 		float time = 0;
 		float distance = 0;
@@ -67,9 +67,9 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 
 		// Render Model and Layers:
 		try {
-			matrixStack.func_227861_a_(0, -0.25F, 0); // translate
-			matrixStack.func_227862_a_(0.25F, 0.25F, 0.25F); // scale
-			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(entity.rotationYaw)); // rotate
+			matrixStack.translate(0, -0.25F, 0); // translate
+			matrixStack.scale(0.25F, 0.25F, 0.25F); // scale
+			matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(entity.rotationYaw)); // rotate
 
 			if(this.getEntityModel() == null) {
 				LycanitesMobs.logWarning("", "Missing Projectile Model: " + entity);
@@ -127,10 +127,10 @@ public class ProjectileModelRenderer extends EntityRenderer<BaseProjectileEntity
 		}
 		RenderType rendertype;
 		if (allyInvisible) {
-			rendertype = RenderType.func_228644_e_(texture);
+			rendertype = RenderType.entityTranslucent(texture);
 		}
 		else if (invisible) {
-			rendertype = RenderType.func_228654_j_(texture);
+			rendertype = RenderType.outline(texture);
 		}
 		else {
 			rendertype = CustomRenderStates.getObjRenderType(texture, this.getEntityModel().getBlending(entity, layer), this.getEntityModel().getGlow(entity, layer));

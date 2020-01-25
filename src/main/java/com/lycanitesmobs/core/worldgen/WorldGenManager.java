@@ -35,26 +35,26 @@ public class WorldGenManager {
 
 		// TODO Enable lake generation when fluids are back.
 		for(BiomeManager.BiomeEntry biomeEntry : BiomeManager.getBiomes(BiomeManager.BiomeType.COOL)) { //was createDecoratedFeature(), is now something like a chained set of createConfiguredFeature()
-			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			//biomeEntry.biome.addStructure(this.dungeonStructure, IFeatureConfig.NO_FEATURE_CONFIG);
 			//biomeEntry.biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.LAKE, new LakesConfig(ObjectManager.getBlock("ooze").getDefaultState()), Placement.WATER_LAKE, new LakeChanceConfig(4)));
 		}
 		for(BiomeManager.BiomeEntry biomeEntry : BiomeManager.getBiomes(BiomeManager.BiomeType.ICY)) {
-			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			//biomeEntry.biome.addStructure(this.dungeonStructure, IFeatureConfig.NO_FEATURE_CONFIG);
 			//biomeEntry.biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.LAKE, new LakesConfig(ObjectManager.getBlock("ooze").getDefaultState()), Placement.WATER_LAKE, new LakeChanceConfig(4)));
 		}
 		for(BiomeManager.BiomeEntry biomeEntry : BiomeManager.getBiomes(BiomeManager.BiomeType.WARM)) {
-			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			//biomeEntry.biome.addStructure(this.dungeonStructure, IFeatureConfig.NO_FEATURE_CONFIG);
 			//biomeEntry.biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.LAKE, new LakesConfig(ObjectManager.getBlock("moglava").getDefaultState()), Placement.WATER_LAKE, new LakeChanceConfig(4)));
 		}
 		for(BiomeManager.BiomeEntry biomeEntry : BiomeManager.getBiomes(BiomeManager.BiomeType.DESERT)) {
-			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
-			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.func_225566_b_(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(spawningStage, this.chunkSpawnFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+			biomeEntry.biome.addFeature(structureStage, this.dungeonFeature.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).func_227228_a_(this.alwaysPlacement.func_227446_a_(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 			//biomeEntry.biome.addStructure(this.dungeonStructure, IFeatureConfig.NO_FEATURE_CONFIG);
 			//biomeEntry.biome.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Biome.createDecoratedFeature(Feature.LAKE, new LakesConfig(ObjectManager.getBlock("moglava").getDefaultState()), Placement.WATER_LAKE, new LakeChanceConfig(4)));
 		}

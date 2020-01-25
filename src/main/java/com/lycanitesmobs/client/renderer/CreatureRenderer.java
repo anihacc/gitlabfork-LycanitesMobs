@@ -38,7 +38,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 	 * @param brightness The brightness of the mob based on block location, etc.
 	 */
 	@Override
-	public void func_225623_a_(BaseCreatureEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void render(BaseCreatureEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		// Get Model and Layers:
 		try {
 			this.layerRenderers.clear();
@@ -58,14 +58,14 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		boolean shouldSit = entity.isPassenger() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
 		this.entityModel.isSitting = shouldSit;
 		this.entityModel.isChild = entity.isChild();
-		float renderYaw = MathHelper.func_219805_h(yaw, entity.prevRenderYawOffset, entity.renderYawOffset);
-		float renderYawHead = MathHelper.func_219805_h(yaw, entity.prevRotationYawHead, entity.rotationYawHead);
+		float renderYaw = MathHelper.clamp(yaw, entity.prevRenderYawOffset, entity.renderYawOffset);
+		float renderYawHead = MathHelper.clamp(yaw, entity.prevRotationYawHead, entity.rotationYawHead);
 
 		// Looking Yaw:
 		float lookYaw = renderYawHead - renderYaw;
 		if(shouldSit && entity.getRidingEntity() instanceof LivingEntity) {
 			LivingEntity livingentity = (LivingEntity)entity.getRidingEntity();
-			renderYaw = MathHelper.func_219805_h(yaw, livingentity.prevRenderYawOffset, livingentity.renderYawOffset);
+			renderYaw = MathHelper.clamp(yaw, livingentity.prevRenderYawOffset, livingentity.renderYawOffset);
 			lookYaw = renderYawHead - renderYaw;
 			float renderYawMountOffset = MathHelper.wrapDegrees(lookYaw);
 			if (renderYawMountOffset < -85.0F) {
@@ -85,22 +85,22 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Looking Pitch:
-		matrixStack.func_227860_a_();
+		matrixStack.push();
 		float lookPitch = MathHelper.lerp(yaw, entity.prevRotationPitch, entity.rotationPitch);
 		if(entity.getPose() == Pose.SLEEPING) {
 			Direction direction = entity.getBedDirection();
 			if (direction != null) {
 				float f4 = entity.getEyeHeight(Pose.STANDING) - 0.1F;
-				matrixStack.func_227861_a_((double)((float)(-direction.getXOffset()) * f4), 0.0D, (double)((float)(-direction.getZOffset()) * f4));
+				matrixStack.translate((double)((float)(-direction.getXOffset()) * f4), 0.0D, (double)((float)(-direction.getZOffset()) * f4));
 			}
 		}
 
 		// Animation Ticks:
 		float loop = this.handleRotationFloat(entity, partialTicks % 1.0F); // partialTicks is increased when turning for some reason
-		this.func_225621_a_(entity, matrixStack, loop, renderYaw, yaw);
-		matrixStack.func_227862_a_(-1.0F, -1.0F, 1.0F);
-		this.func_225620_a_(entity, matrixStack, yaw);
-		matrixStack.func_227861_a_(0.0D, (double)-1.501F, 0.0D);
+		this.applyRotations(entity, matrixStack, loop, renderYaw, yaw);
+		matrixStack.scale(-1.0F, -1.0F, 1.0F);
+		this.preRenderCallback(entity, matrixStack, yaw);
+		matrixStack.translate(0.0D, (double)-1.501F, 0.0D);
 		float distance = 0.0F;
 		float time = 0.0F;
 		if (!shouldSit && entity.isAlive()) {
@@ -122,7 +122,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Entity Visibility:
-		boolean invisible = !this.func_225622_a_(entity, false);
+		boolean invisible = !this.isVisible(entity, false);
 		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
 
 		// Render Model Layers:
@@ -139,7 +139,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 			this.renderModel(entity, matrixStack, renderTypeBuffer, layerCreatureBase, time, distance, loop, lookYaw, lookPitch, scale, brightness, fade, invisible, allyInvisible);
 		}
 		this.getMainModel().clearAnimationFrames();
-		matrixStack.func_227865_b_();
+		matrixStack.pop();
     }
 
 	/**

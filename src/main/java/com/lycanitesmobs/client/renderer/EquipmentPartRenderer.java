@@ -22,7 +22,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 	protected List<LayerItem> renderLayers = new ArrayList<>();
 
 	@Override
-	public void func_228364_a_(ItemStack itemStack, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
+	public void render(ItemStack itemStack, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
 		if(!(itemStack.getItem() instanceof ItemEquipmentPart)) {
 			return;
 		}
@@ -42,18 +42,18 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 			loop = Minecraft.getInstance().player.ticksExisted;
 		}
 
-		matrixStack.func_227861_a_(0.6F, 0.35F, 0.5F); // translate
-		matrixStack.func_227863_a_(new Vector3f(1.0F, 0.0F, 0.0F).func_229187_a_(190)); // rotate
-		matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(-45));
-		matrixStack.func_227863_a_(new Vector3f(0.0F, 0.0F, 1.0F).func_229187_a_(10));
-		matrixStack.func_227861_a_(0F, -1.7F, 0F);
+		matrixStack.translate(0.6F, 0.35F, 0.5F); // translate
+		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(190));
+		matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(-45));
+		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(10));
+		matrixStack.translate(0F, -1.7F, 0F);
 
-		matrixStack.func_227860_a_();
+		matrixStack.push();
 		if("head".equalsIgnoreCase(itemEquipmentPart.slotType)) {
-			matrixStack.func_227861_a_(0F, 0F, 0.5F);
+			matrixStack.translate(0F, 0F, 0.5F);
 		}
 		else if("blade".equalsIgnoreCase(itemEquipmentPart.slotType) || "pike".equalsIgnoreCase(itemEquipmentPart.slotType) || "axe".equalsIgnoreCase(itemEquipmentPart.slotType) || "jewel".equalsIgnoreCase(itemEquipmentPart.slotType)) {
-			matrixStack.func_227861_a_(0F, 0F, 1F);
+			matrixStack.translate(0F, 0F, 1F);
 		}
 
 		itemObjModel.generateAnimationFrames(itemStack, null, loop, null);
@@ -62,7 +62,7 @@ public class EquipmentPartRenderer extends ItemStackTileEntityRenderer implement
 			this.renderModel(itemObjModel, itemStack, hand, matrixStack, renderTypeBuffer, renderLayer, null, loop, brightness);
 		}
 		itemObjModel.clearAnimationFrames();
-		matrixStack.func_227865_b_();
+		matrixStack.pop();
 	}
 
 	/**

@@ -17,8 +17,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -366,13 +364,6 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 		if(this.projectileInfo == null || !this.projectileInfo.glow)
 			return super.getBrightness();
 		return 1.0F;
-	}
-
-	@OnlyIn(Dist.CLIENT) // TODO This is now gone.
-	public int getBrightnessForRender() {
-		if(this.projectileInfo == null || !this.projectileInfo.glow)
-			return super.func_226263_P_();
-		return 15728880;
 	}
 
 

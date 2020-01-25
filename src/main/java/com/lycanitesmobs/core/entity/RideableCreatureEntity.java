@@ -218,7 +218,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
                 if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.JUMP)) {
                     verticalMotion = this.creatureStats.getSpeed() * 20;
                 }
-				else if(player.func_225608_bj_()) { // isSneaking()
+				else if(player.isShiftKeyDown()) { // isSneaking()
                     verticalMotion = -this.creatureStats.getSpeed() * 20;
                 }
                 else {
@@ -401,7 +401,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
         boolean mountingAllowed = CreatureManager.getInstance().config.mountingEnabled;
         if(mountingAllowed && this.isFlying())
             mountingAllowed = CreatureManager.getInstance().config.mountingFlightEnabled;
-    	if(this.canBeMounted(player) && !player.func_225608_bj_() && !this.getEntityWorld().isRemote && mountingAllowed) // isSneaking()
+    	if(this.canBeMounted(player) && !player.isShiftKeyDown() && !this.getEntityWorld().isRemote && mountingAllowed) // isSneaking()
     		commands.put(COMMAND_PIORITIES.MAIN.id, "Mount");
     	
     	return commands;

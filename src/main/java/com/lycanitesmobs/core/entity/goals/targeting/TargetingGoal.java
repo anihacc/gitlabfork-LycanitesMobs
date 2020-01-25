@@ -46,7 +46,7 @@ public abstract class TargetingGoal extends Goal {
 
         this.targetSelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-            if(this.shouldCheckSight() && !entity.func_225510_bt_() && !this.host.canEntityBeSeen(entity)) { // isGlowing()
+            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
                 return false;
             }
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isEntityTargetable(entity, false);
@@ -54,7 +54,7 @@ public abstract class TargetingGoal extends Goal {
 
         this.allySelector = entity -> {
             double targetDistance = TargetingGoal.this.getTargetDistance();
-			if(this.shouldCheckSight() && !entity.func_225510_bt_() && !this.host.canEntityBeSeen(entity)) { // isGlowing()
+			if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
 				return false;
 			}
             return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isAllyTarget(entity);
@@ -300,7 +300,7 @@ public abstract class TargetingGoal extends Goal {
  	// ==================================================
     private boolean isNearby(LivingEntity target) {
         this.targetSearchDelay = 10 + this.host.getRNG().nextInt(5);
-        Path path = this.host.getNavigator().getPathToEntityLiving(target, 0);
+        Path path = this.host.getNavigator().getPathToEntity(target, 0);
 
         if(path == null)
             return false;

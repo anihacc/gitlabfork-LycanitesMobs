@@ -125,10 +125,10 @@ public class AttackMeleeGoal extends Goal {
             // Set Path:
         	if(!this.host.useDirectNavigator()) {
 				if(this.host.isFlying()) {
-					this.pathToTarget = this.host.getNavigator().func_225466_a(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.getPositionVec().getZ(), 0);
+					this.pathToTarget = this.host.getNavigator().getPathToPos(this.attackTarget.getPositionVec().getX(), this.attackTarget.getBoundingBox().minY + this.host.getFlightOffset(), this.attackTarget.getPositionVec().getZ(), 0);
 				}
 				else {
-					this.pathToTarget = this.host.getNavigator().getPathToEntityLiving(this.attackTarget, 0);
+					this.pathToTarget = this.host.getNavigator().getPathToEntity(this.attackTarget, 0);
 				}
 	            this.repathTime = 4 + this.host.getRNG().nextInt(7);
 

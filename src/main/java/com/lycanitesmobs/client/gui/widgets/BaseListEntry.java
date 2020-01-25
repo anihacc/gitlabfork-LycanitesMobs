@@ -109,10 +109,10 @@ public abstract class BaseListEntry extends AbstractOptionList.Entry<BaseListEnt
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
-		buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
-		buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
-		buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
+		buffer.pos(x, y + height, z).tex(0, v).endVertex(); // pos().tex()
+		buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
+		buffer.pos(x + width, y, z).tex(u, 0).endVertex();
+		buffer.pos(x, y, z).tex(0, 0).endVertex();
 		tessellator.draw();
 
 		RenderSystem.enableAlphaTest();

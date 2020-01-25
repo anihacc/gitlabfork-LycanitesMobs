@@ -291,16 +291,16 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     	commands.putAll(super.getInteractCommands(player, itemStack));
 
 		// Perch:
-		if(this.canPerch(player) && !player.func_225608_bj_() && !this.getEntityWorld().isRemote) // isSneaking()
+		if(this.canPerch(player) && !player.isShiftKeyDown() && !this.getEntityWorld().isRemote)
 			commands.put(COMMAND_PIORITIES.MAIN.id, "Perch");
 		
 		// Open GUI:
-		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.func_225608_bj_()) && player == this.getPlayerOwner()) { // isSneaking()
+		else if(!this.getEntityWorld().isRemote && this.isTamed() && (itemStack.isEmpty() || player.isShiftKeyDown()) && player == this.getPlayerOwner()) {
 			commands.put(COMMAND_PIORITIES.MAIN.id, "GUI");
 		}
     	
     	// Server Item Commands:
-    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.func_225608_bj_()) { // isSneaking()
+    	if(!this.getEntityWorld().isRemote && !itemStack.isEmpty() && !player.isShiftKeyDown()) {
     		
     		// Taming:
     		if(!this.isTamed() && isTamingItem(itemStack) && CreatureManager.getInstance().config.tamingEnabled) {

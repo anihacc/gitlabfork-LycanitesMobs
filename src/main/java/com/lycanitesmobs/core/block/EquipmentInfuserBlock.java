@@ -77,7 +77,7 @@ public class EquipmentInfuserBlock extends BlockBase {
 	}
 
 	@Override //onBlockActivated()
-	public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		if(!world.isRemote() && player instanceof ServerPlayerEntity) {
 			TileEntity tileEntity = world.getTileEntity(pos);
 			if(tileEntity instanceof EquipmentInfuserTileEntity) {

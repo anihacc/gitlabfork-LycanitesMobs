@@ -54,8 +54,8 @@ public class BaseOverlay extends BaseGui {
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		int sWidth = Minecraft.getInstance().func_228018_at_().getScaledWidth(); // getMainWindow()
-        int sHeight = Minecraft.getInstance().func_228018_at_().getScaledHeight();
+		int sWidth = Minecraft.getInstance().getMainWindow().getScaledWidth(); // getMainWindow()
+        int sHeight = Minecraft.getInstance().getMainWindow().getScaledHeight();
 
         // ========== Mob/World Events Title ==========
         ExtendedWorld worldExt = ExtendedWorld.getForWorld(player.getEntityWorld());

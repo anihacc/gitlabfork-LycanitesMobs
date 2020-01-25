@@ -72,7 +72,7 @@ public class ObjModel {
 				calU.getX() * calV.getY() - calU.getY() * calV.getX()
 		);
 
-		output.func_229194_d_(); // normalize()
+		output.normalize(); // normalize()
 		return output;
 	}
 
@@ -125,12 +125,12 @@ public class ObjModel {
 			for(int iv = 0; iv < 3; iv++) {
 				Vertex v = objPart.mesh.vertices[indices[i + iv]];
 				vertexBuilder
-						.func_227888_a_(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ()) //pos
-						.func_227885_a_(color.getX(), color.getY(), color.getZ(), color.getW()) //color
-						.func_225583_a_(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f))) //texture
-						.func_225585_a_(0, 10 - fade) // fade
-						.func_227886_a_(brightness) //brightness 240 = full
-						.func_227887_a_(matrix3f, normal.getX(), normal.getY(), normal.getZ()) //normal
+						.pos(matrix4f, v.getPos().getX(), v.getPos().getY(), v.getPos().getZ())
+						.color(color.getX(), color.getY(), color.getZ(), color.getW())
+						.tex(v.getTexCoords().x + (textureOffset.x * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.y * 0.01f)))
+						.overlay(0, 10 - fade)
+						.lightmap(brightness)
+						.normal(matrix3f, normal.getX(), normal.getY(), normal.getZ())
 						.endVertex();
 			}
 		}

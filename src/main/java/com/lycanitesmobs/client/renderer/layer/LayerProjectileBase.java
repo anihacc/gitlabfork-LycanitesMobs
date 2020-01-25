@@ -27,7 +27,7 @@ public class LayerProjectileBase extends LayerRenderer<BaseProjectileEntity, Pro
     }
 
     @Override
-    public void func_225628_a_(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {}
+    public void render(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int ticks, BaseProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {}
 
     public boolean canRenderLayer(BaseProjectileEntity entity, float scale) {
         if(entity == null)

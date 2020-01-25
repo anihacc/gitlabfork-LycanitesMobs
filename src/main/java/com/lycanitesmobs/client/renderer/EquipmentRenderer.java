@@ -19,7 +19,7 @@ import java.util.List;
 public class EquipmentRenderer extends ItemStackTileEntityRenderer implements IItemModelRenderer {
 
 	@Override
-	public void func_228364_a_(ItemStack itemStack, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
+	public void render(ItemStack itemStack, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness, int unknown) {
 		if(!(itemStack.getItem() instanceof ItemEquipment)) {
 			return;
 		}
@@ -27,11 +27,11 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		Hand hand = null;
 
 		// Position:
-		matrixStack.func_227860_a_();
-		matrixStack.func_227861_a_(0.5F, 0.35F, 0.6F); // translate
-		matrixStack.func_227863_a_(new Vector3f(1.0F, 0.0F, 0.0F).func_229187_a_(90)); // rotate
-		matrixStack.func_227863_a_(new Vector3f(0.0F, 0.0F, 1.0F).func_229187_a_(-100)); // rotate
-		matrixStack.func_227861_a_(0F, -1.5F, 0F);
+		matrixStack.push();
+		matrixStack.translate(0.5F, 0.35F, 0.6F); // translate
+		matrixStack.rotate(new Vector3f(1.0F, 0.0F, 0.0F).rotationDegrees(90)); // rotate
+		matrixStack.rotate(new Vector3f(0.0F, 0.0F, 1.0F).rotationDegrees(-100)); // rotate
+		matrixStack.translate(0F, -1.5F, 0F);
 		EquipmentModel equipmentModel = ModelManager.getInstance().getEquipmentModel();
 
 		float loop = 0;
@@ -40,7 +40,7 @@ public class EquipmentRenderer extends ItemStackTileEntityRenderer implements II
 		}
 		equipmentModel.render(itemStack, hand, matrixStack, renderTypeBuffer, this, loop, brightness);
 
-		matrixStack.func_227865_b_();
+		matrixStack.pop();
 	}
 
 	@Override

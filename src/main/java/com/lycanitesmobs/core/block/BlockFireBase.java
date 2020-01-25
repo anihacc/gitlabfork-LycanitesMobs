@@ -99,7 +99,7 @@ public class BlockFireBase extends BlockBase {
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        return worldIn.getBlockState(blockpos).func_224755_d(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
+        return worldIn.getBlockState(blockpos).isFireSource(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
     }
 
     protected boolean areNeighborsFlammable(IBlockReader worldIn, BlockPos pos) {
@@ -129,7 +129,7 @@ public class BlockFireBase extends BlockBase {
 
     // ========== Tick Update ==========
     @Override
-    public void func_225534_a_(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) { //tick()
+    public void tick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) { //tick()
         if (!world.isAreaLoaded(pos, 2)) {
             return;
         }

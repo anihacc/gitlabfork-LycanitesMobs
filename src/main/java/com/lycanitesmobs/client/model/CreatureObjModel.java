@@ -327,7 +327,7 @@ public class CreatureObjModel extends CreatureModel {
 			}
 
 			// Begin Rendering Part:
-			matrixStack.func_227860_a_();
+			matrixStack.push();
 
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(MODEL_OFFSET_ROT_X, 1F, 0F, 0F);
@@ -351,8 +351,8 @@ public class CreatureObjModel extends CreatureModel {
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
-			this.objModel.renderPart(vertexBuilder, matrixStack.func_227866_c_().func_227872_b_(), matrixStack.func_227866_c_().func_227870_a_(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
-			matrixStack.func_227865_b_();
+			this.objModel.renderPart(vertexBuilder, matrixStack.getLast().getNormalMatrix(), matrixStack.getLast().getPositionMatrix(), this.getBrightness(partName, layer, entity, brightness), fade, part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+			matrixStack.pop();
 		}
     }
 

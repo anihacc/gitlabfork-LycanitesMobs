@@ -115,7 +115,7 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 	 */
 	public int getScaledX(float x) {
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.minecraft.func_228018_at_(); // getMainWindow()
+			this.scaledResolution = this.minecraft.getMainWindow();
 		}
 
 		// Aspect Ratio:
@@ -202,10 +202,10 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
-		buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
-		buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
-		buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
+		buffer.pos(x, y + height, z).tex(0, v).endVertex(); // pos().tex()
+		buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
+		buffer.pos(x + width, y, z).tex(u, 0).endVertex();
+		buffer.pos(x, y, z).tex(0, 0).endVertex();
 		tessellator.draw();
 
 		RenderSystem.enableAlphaTest();
@@ -240,14 +240,14 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.func_225582_a_((double)(x + 0), (double)(y + height), z) // pos()
-				.func_225583_a_(((u + 0) * scaleX), (v + height) * scaleY).endVertex(); // tex()
-		buffer.func_225582_a_((double)(x + width), (double)(y + height), z)
-				.func_225583_a_(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
-		buffer.func_225582_a_((double)(x + width), (double)(y + 0), z)
-				.func_225583_a_(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
-		buffer.func_225582_a_((double)(x + 0), (double)(y + 0), z)
-				.func_225583_a_(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
+		buffer.pos((double)(x + 0), (double)(y + height), z) // pos()
+				.tex(((u + 0) * scaleX), (v + height) * scaleY).endVertex(); // tex()
+		buffer.pos((double)(x + width), (double)(y + height), z)
+				.tex(((u + width) * scaleX), ((v + height) * scaleY)).endVertex();
+		buffer.pos((double)(x + width), (double)(y + 0), z)
+				.tex(((u + width) * scaleX), ((v + 0) * scaleY)).endVertex();
+		buffer.pos((double)(x + 0), (double)(y + 0), z)
+				.tex(((u + 0) * scaleX), ((v + 0) * scaleY)).endVertex();
 		tessellator.draw();
 	}
 
@@ -307,14 +307,14 @@ public abstract class BaseScreen extends Screen implements Button.IPressable {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
-				.func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
-        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + height), (double)this.zLevel)
-				.func_225583_a_(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
-        vertexbuffer.func_225582_a_((double)(x + width), (double)(y + 0), (double)this.zLevel)
-				.func_225583_a_(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
-        vertexbuffer.func_225582_a_((double)(x + 0), (double)(y + 0), (double)this.zLevel)
-				.func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.pos((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+				.tex(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
+        vertexbuffer.pos((double)(x + width), (double)(y + height), (double)this.zLevel)
+				.tex(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+        vertexbuffer.pos((double)(x + width), (double)(y + 0), (double)this.zLevel)
+				.tex(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+				.tex(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 }

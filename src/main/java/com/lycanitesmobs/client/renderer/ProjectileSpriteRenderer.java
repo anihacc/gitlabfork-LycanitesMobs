@@ -27,7 +27,7 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
     }
 
     @Override
-	public void func_225623_a_(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
+	public void render(BaseProjectileEntity entity, float partialTicks, float yaw, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int brightness) {
 		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).projectileInfo == null) {
 			return;
 		}
@@ -41,23 +41,23 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 
 		// Render Laser:
 		if(entity instanceof CustomProjectileEntity && ((CustomProjectileEntity)entity).getLaserEnd() != null) {
-			matrixStack.func_227860_a_();
+			matrixStack.push();
 			this.renderLaser((CustomProjectileEntity)entity, matrixStack, renderTypeBuffer, ((CustomProjectileEntity)entity).laserWidth / 4, loop);
-			matrixStack.func_227865_b_();
+			matrixStack.pop();
 			return;
 		}
 
     	// Render Projectile Sprite:
-		matrixStack.func_227860_a_();
-		matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
-		matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
-		matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
-		matrixStack.func_227862_a_(scale, scale, scale); // Projectile Scaling
-		matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
+		matrixStack.push();
+		matrixStack.rotate(this.renderManager.getCameraOrientation());
+		matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(180.0F));
+		matrixStack.rotate(new Vector3f(0, 0, 1).rotationDegrees(loop * entity.rollSpeed)); // Projectile Spinning
+		matrixStack.scale(scale, scale, scale); // Projectile Scaling
+		matrixStack.translate(0, entity.getTextureOffsetY(), 0); // translate
 		ResourceLocation texture = this.getEntityTexture(entity);
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
 		this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, entity.textureScale);
-		matrixStack.func_227865_b_();
+		matrixStack.pop();
     }
 
     public void renderSprite(BaseProjectileEntity entity, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, RenderType rendertype, float scale) {
@@ -74,31 +74,31 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 			textureHeight *= scale;
 		}
 
-		Matrix4f matrix4f = matrixStack.func_227866_c_().func_227870_a_();
+		Matrix4f matrix4f = matrixStack.getLast().getPositionMatrix();
 		IVertexBuilder vertexBuilder = renderTypeBuffer.getBuffer(rendertype);
 		vertexBuilder
-				.func_227888_a_(matrix4f, -textureWidth, -textureHeight + (textureHeight / 2), 0.0F) // pos
-				.func_227885_a_(1, 1, 1, 1) // color
-				.func_225583_a_(minU, maxV) // texture
-				.func_225584_a_(0.0F, 1.0F, 0.0F) // normal
+				.pos(matrix4f, -textureWidth, -textureHeight + (textureHeight / 2), 0.0F) // pos
+				.color(1, 1, 1, 1) // color
+				.tex(minU, maxV) // texture
+				.normal(0.0F, 1.0F, 0.0F) // normal
 				.endVertex();
 		vertexBuilder
-				.func_227888_a_(matrix4f, textureWidth, -textureHeight + (textureHeight / 2), 0.0F)
-				.func_227885_a_(1, 1, 1, 1)
-				.func_225583_a_(maxU, maxV)
-				.func_225584_a_(0.0F, 1.0F, 0.0F)
+				.pos(matrix4f, textureWidth, -textureHeight + (textureHeight / 2), 0.0F)
+				.color(1, 1, 1, 1)
+				.tex(maxU, maxV)
+				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
 		vertexBuilder
-				.func_227888_a_(matrix4f, textureWidth, textureHeight + (textureHeight / 2), 0.0F)
-				.func_227885_a_(1, 1, 1, 1)
-				.func_225583_a_(maxU, minV)
-				.func_225584_a_(0.0F, 1.0F, 0.0F)
+				.pos(matrix4f, textureWidth, textureHeight + (textureHeight / 2), 0.0F)
+				.color(1, 1, 1, 1)
+				.tex(maxU, minV)
+				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
 		vertexBuilder
-				.func_227888_a_(matrix4f, -textureWidth, textureHeight + (textureHeight / 2), 0.0F)
-				.func_227885_a_(1, 1, 1, 1)
-				.func_225583_a_(minU, minV)
-				.func_225584_a_(0.0F, 1.0F, 0.0F)
+				.pos(matrix4f, -textureWidth, textureHeight + (textureHeight / 2), 0.0F)
+				.color(1, 1, 1, 1)
+				.tex(minU, minV)
+				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
     }
 
@@ -113,15 +113,15 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 		RenderType rendertype = CustomRenderStates.getSpriteRenderType(texture);
 		Vec3d direction = entity.getLaserEnd().subtract(entity.getPositionVec()).normalize();
 		for(float segment = 0; segment <= laserSize; segment += factor) {
-			matrixStack.func_227860_a_();
-			matrixStack.func_227861_a_(segment * direction.getX() * spacing, segment * direction.getY() * spacing, segment * direction.getZ() * spacing);
-			matrixStack.func_227861_a_(0, entity.getTextureOffsetY(), 0); // translate
-			matrixStack.func_227863_a_(this.renderManager.func_229098_b_());
-			matrixStack.func_227863_a_(new Vector3f(0.0F, 1.0F, 0.0F).func_229187_a_(180.0F));
-			matrixStack.func_227862_a_(scale, scale, scale); // Laser Scaling
-			matrixStack.func_227863_a_(new Vector3f(0, 0, 1).func_229187_a_(loop * entity.rollSpeed)); // Projectile Spinning
+			matrixStack.push();
+			matrixStack.translate(segment * direction.getX() * spacing, segment * direction.getY() * spacing, segment * direction.getZ() * spacing);
+			matrixStack.translate(0, entity.getTextureOffsetY(), 0); // translate
+			matrixStack.rotate(this.renderManager.getCameraOrientation());
+			matrixStack.rotate(new Vector3f(0.0F, 1.0F, 0.0F).rotationDegrees(180.0F));
+			matrixStack.scale(scale, scale, scale); // Laser Scaling
+			matrixStack.rotate(new Vector3f(0, 0, 1).rotationDegrees(loop * entity.rollSpeed)); // Projectile Spinning
 			this.renderSprite(entity, matrixStack, renderTypeBuffer, rendertype, scale);
-			matrixStack.func_227865_b_();
+			matrixStack.pop();
 		}
     }
 

@@ -101,7 +101,7 @@ public abstract class BeastiaryScreen extends BaseScreen {
 	public void init() {
 		super.init();
 		if(this.scaledResolution == null) {
-			this.scaledResolution = this.mc.func_228018_at_(); // getMainWindow()
+			this.scaledResolution = this.mc.getMainWindow();
 		}
 
 		this.zLevel = -1000F;

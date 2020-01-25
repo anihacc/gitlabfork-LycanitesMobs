@@ -67,12 +67,12 @@ public class BlockVeswax extends BlockBase {
 
     // ========== Tick Update ==========
 	@Override
-	public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
+	public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
         if(world.isRemote)
             return;
         double range = 32D;
         if(!world.getEntitiesWithinAABB(EntityVespidQueen.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty())
             return;
-        super.func_225534_a_(state, world, pos, random);
+        super.tick(state, world, pos, random);
     }
 }

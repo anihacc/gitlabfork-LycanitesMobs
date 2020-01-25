@@ -59,10 +59,10 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 
 		// Scissor Start:
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		double scaleFactor = Minecraft.getInstance().func_228018_at_().getGuiScaleFactor(); // getMainWindow()
+		double scaleFactor = Minecraft.getInstance().getMainWindow().getGuiScaleFactor();
 		int scissorX = (int)((double)this.getLeft() * scaleFactor);
-		int scissorTop = Minecraft.getInstance().func_228018_at_().getHeight() - (int)((double)this.getTop() * scaleFactor);
-		int scissorBottom = Minecraft.getInstance().func_228018_at_().getHeight() - (int)((double)this.getBottom() * scaleFactor);
+		int scissorTop = Minecraft.getInstance().getMainWindow().getHeight() - (int)((double)this.getTop() * scaleFactor);
+		int scissorBottom = Minecraft.getInstance().getMainWindow().getHeight() - (int)((double)this.getBottom() * scaleFactor);
 		int scissorWidth = (int)((double)this.getWidth() * scaleFactor);
 		int scissorHeight = scissorTop - scissorBottom;
 		GL11.glScissor(scissorX, scissorBottom, scissorWidth, scissorHeight); // Scissor starts at bottom right.
@@ -82,18 +82,18 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y1, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex(); // pos().color()
-		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y1, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
-		bufferbuilder.func_225582_a_((double)this.x1, (double)this.y0, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
-		bufferbuilder.func_225582_a_((double)this.x0, (double)this.y0, 0.0D).func_227885_a_(0, 0, 0, 64).endVertex();
+		bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).color(0, 0, 0, 64).endVertex();
+		bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).color(0, 0, 0, 64).endVertex();
 		tessellator.draw();
 
 		// Test Box:
 		/*bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		bufferbuilder.func_225582_a_(0, 10000, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
-		bufferbuilder.func_225582_a_(10000, 10000, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
-		bufferbuilder.func_225582_a_(10000, 0, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
-		bufferbuilder.func_225582_a_(0, 0, 0.0D).func_227885_a_(32, 255, 32, 128).endVertex();
+		bufferbuilder.pos(0, 10000, 0.0D).color(32, 255, 32, 128).endVertex();
+		bufferbuilder.pos(10000, 10000, 0.0D).color(32, 255, 32, 128).endVertex();
+		bufferbuilder.pos(10000, 0, 0.0D).color(32, 255, 32, 128).endVertex();
+		bufferbuilder.pos(0, 0, 0.0D).color(32, 255, 32, 128).endVertex();
 		tessellator.draw();*/
 
 		// Render Entries:
@@ -110,19 +110,19 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 
 		/*if(this.getScrollAmount() > 0) {
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.func_225582_a_((double) this.x0, (double) (this.y0 + 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x1, (double) (this.y0 + 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x1, (double) this.y0, 0.0D).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x0, (double) this.y0, 0.0D).func_227885_a_(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double) this.x0, (double) (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
+			bufferbuilder.pos((double) this.x1, (double) (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
+			bufferbuilder.pos((double) this.x1, (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double) this.x0, (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
 			tessellator.draw();
 		}
 
 		if(this.getScrollAmount() < this.getMaxScroll()) {
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			bufferbuilder.func_225582_a_((double) this.x0, (double) this.y1, 0.0D).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x1, (double) this.y1, 0.0D).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x1, (double) (this.y1 - 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
-			bufferbuilder.func_225582_a_((double) this.x0, (double) (this.y1 - 4), 0.0D).func_227885_a_(0, 0, 0, 0).endVertex();
+			bufferbuilder.pos((double) this.x0, (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double) this.x1, (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double) this.x1, (double) (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
+			bufferbuilder.pos((double) this.x0, (double) (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
 			tessellator.draw();
 		}*/
 
@@ -139,24 +139,24 @@ public abstract class BaseList<S> extends ExtendedList<BaseListEntry> {
 			int scrollbarRight = scrollbarLeft + this.getScrollbarWidth();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)this.y1, 0.0D).func_225583_a_(0.0F, 1.0F).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarRight, (double)this.y1, 0.0D).func_225583_a_(1.0F, 1.0F).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarRight, (double)this.y0, 0.0D).func_225583_a_(1.0F, 0.0F).func_227885_a_(0, 0, 0, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)this.y0, 0.0D).func_225583_a_(0.0F, 0.0F).func_227885_a_(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)this.y1, 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarRight, (double)this.y1, 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarRight, (double)this.y0, 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)this.y0, 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
 			tessellator.draw();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)(scrollY + contentMax), 0.0D).func_225583_a_(0.0F, 1.0F).func_227885_a_(128, 128, 128, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarRight, (double)(scrollY + contentMax), 0.0D).func_225583_a_(1.0F, 1.0F).func_227885_a_(128, 128, 128, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarRight, (double)scrollY, 0.0D).func_225583_a_(1.0F, 0.0F).func_227885_a_(128, 128, 128, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)scrollY, 0.0D).func_225583_a_(0.0F, 0.0F).func_227885_a_(128, 128, 128, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)(scrollY + contentMax), 0.0D).tex(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarRight, (double)(scrollY + contentMax), 0.0D).tex(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarRight, (double)scrollY, 0.0D).tex(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)scrollY, 0.0D).tex(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
 			tessellator.draw();
 
 			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)(scrollY + contentMax - 1), 0.0D).func_225583_a_(0.0F, 1.0F).func_227885_a_(192, 192, 192, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)(scrollbarRight - 1), (double)(scrollY + contentMax - 1), 0.0D).func_225583_a_(1.0F, 1.0F).func_227885_a_(192, 192, 192, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)(scrollbarRight - 1), (double)scrollY, 0.0D).func_225583_a_(1.0F, 0.0F).func_227885_a_(192, 192, 192, 255).endVertex();
-			bufferbuilder.func_225582_a_((double)scrollbarLeft, (double)scrollY, 0.0D).func_225583_a_(0.0F, 0.0F).func_227885_a_(192, 192, 192, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)(scrollY + contentMax - 1), 0.0D).tex(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.pos((double)(scrollbarRight - 1), (double)(scrollY + contentMax - 1), 0.0D).tex(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.pos((double)(scrollbarRight - 1), (double)scrollY, 0.0D).tex(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+			bufferbuilder.pos((double)scrollbarLeft, (double)scrollY, 0.0D).tex(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
 			tessellator.draw();
 		}
 

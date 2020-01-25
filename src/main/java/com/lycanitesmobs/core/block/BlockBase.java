@@ -112,7 +112,7 @@ public class BlockBase extends Block {
 
     // ========== Tick Update ==========
     @Override
-    public void func_225534_a_(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
+    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random) { //tick()
         if (world.isRemote)
             return;
 

@@ -24,7 +24,7 @@ public class NoneRenderer extends EntityRenderer<Entity> {
     //                     Do Render
     // ==================================================
     @Override
-	public void func_225623_a_(Entity entity, float p_225623_2_, float p_225623_3_, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int p_225623_6_) {
+	public void render(Entity entity, float p_225623_2_, float p_225623_3_, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int p_225623_6_) {
     	return;
     }
     

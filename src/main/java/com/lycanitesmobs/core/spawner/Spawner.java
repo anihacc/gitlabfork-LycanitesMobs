@@ -422,7 +422,7 @@ public class Spawner {
 		if(!this.ignoreBiomes) {
 			biomes = new ArrayList<>();
 			for(BlockPos spawnPos : spawnPositions) {
-				Biome biome = world.func_225523_d_().func_226836_a_(spawnPos); //getBiomeManager().getBiome()
+				Biome biome = world.getBiomeManager().getBiome(spawnPos); //getBiomeManager().getBiome()
 				if(!biomes.contains(biome))
 					biomes.add(biome);
 			}
@@ -449,7 +449,7 @@ public class Spawner {
 
 			// Choose Mob To Spawn:
 			MobSpawn mobSpawn = null;
-			Biome spawnBiome = world.func_225523_d_().func_226836_a_(spawnPos); //getBiomeManager().getBiome()
+			Biome spawnBiome = world.getBiomeManager().getBiome(spawnPos); //getBiomeManager().getBiome()
 			if(mobSpawns.containsKey(null)) {
 				mobSpawn = this.chooseMobToSpawn(world, mobSpawns.get(null));
 			}

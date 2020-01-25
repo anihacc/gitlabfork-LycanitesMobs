@@ -97,7 +97,7 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
 		    	        		IGrowable growableBlock = (IGrowable)farmingBlock;
 		    	        		if(growableBlock.canGrow(this.getEntityWorld(), pos, this.getEntityWorld().getBlockState(pos), this.getEntityWorld().isRemote())) {
 	    	                        if(growableBlock.canUseBonemeal(this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos))) {
-	    	                        	growableBlock.func_225535_a_((ServerWorld)this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
+	    	                        	growableBlock.grow((ServerWorld)this.getEntityWorld(), this.getRNG(), pos, this.getEntityWorld().getBlockState(pos));
 	    	                        }
 		    	                }
 		        			}

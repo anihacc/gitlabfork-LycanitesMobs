@@ -94,7 +94,7 @@ public class AvoidGoal extends Goal {
             return false;
 
         if(!this.host.useDirectNavigator()) {
-            this.pathEntity = this.host.getNavigator().func_225466_a(avoidVector.x, avoidVector.y, avoidVector.z, 0);
+            this.pathEntity = this.host.getNavigator().getPathToPos(avoidVector.x, avoidVector.y, avoidVector.z, 0);
             if(this.pathEntity == null)// || !this.pathEntity.isDestinationSame(avoidVector))
                 return false;
         }

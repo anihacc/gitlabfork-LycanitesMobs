@@ -234,7 +234,7 @@ public class WorldSpawnCondition extends SpawnCondition {
 	 */
 	public boolean isAllowedBiome(World world, BlockPos position) {
 		if(position != null) {
-			Biome biome = world.func_225523_d_().func_226836_a_(position); // getBiomeManager().getBiome()
+			Biome biome = world.getBiomeManager().getBiome(position); // getBiomeManager().getBiome()
 
 			// Biome IDs:
 			if (!this.biomeIds.isEmpty()) {

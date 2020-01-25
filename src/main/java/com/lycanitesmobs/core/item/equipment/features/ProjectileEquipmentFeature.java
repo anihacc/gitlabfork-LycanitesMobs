@@ -197,7 +197,7 @@ public class ProjectileEquipmentFeature extends EquipmentFeature {
 	 * @param attacker The entity using this item to hit.
 	 */
 	public void onHitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.func_225608_bj_() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
+		if(target == null || attacker == null || attacker.getEntityWorld().isRemote || attacker.isShiftKeyDown() || !"hit".equals(this.projectileTrigger)) { // isSneaking()
 			return;
 		}
 

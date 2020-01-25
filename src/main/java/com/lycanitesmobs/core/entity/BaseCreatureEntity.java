@@ -3586,13 +3586,13 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
      * getFallResistance() is used to reduce falling damage, if it is at or above 100 no falling damage is taken at all.
      * **/
     @Override
-    public boolean func_225503_b_(float fallDistance, float damageMultiplier) { // fall()
+    public boolean onLivingFall(float fallDistance, float damageMultiplier) {
         if(this.isFlying())
     		return false;
     	fallDistance -= this.getFallResistance();
     	if(this.getFallResistance() >= 100)
     		fallDistance = 0;
-    	return super.func_225503_b_(fallDistance, damageMultiplier);
+    	return super.onLivingFall(fallDistance, damageMultiplier);
     }
     
     /** Called when this mob is falling, y is how far the mob has fell so far and onGround is true when it has hit the ground. **/

@@ -159,10 +159,10 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        buffer.func_225582_a_(x, y + height, z).func_225583_a_(0, v).endVertex(); // pos().tex()
-        buffer.func_225582_a_(x + width, y + height, z).func_225583_a_(u, v).endVertex();
-        buffer.func_225582_a_(x + width, y, z).func_225583_a_(u, 0).endVertex();
-        buffer.func_225582_a_(x, y, z).func_225583_a_(0, 0).endVertex();
+        buffer.pos(x, y + height, z).tex(0, v).endVertex(); // pos().tex()
+        buffer.pos(x + width, y + height, z).tex(u, v).endVertex();
+        buffer.pos(x + width, y, z).tex(u, 0).endVertex();
+        buffer.pos(x, y, z).tex(0, 0).endVertex();
         tessellator.draw();
 
         RenderSystem.enableAlphaTest();
@@ -181,14 +181,14 @@ public abstract class BaseContainerScreen<T extends Container> extends Container
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.func_225582_a_((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
-                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
-        bufferBuilder.func_225582_a_((double)(x + width), (double)(y + height), (double)this.zLevel)
-                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
-        bufferBuilder.func_225582_a_((double)(x + width), (double)(y + 0), (double)this.zLevel)
-                .func_225583_a_(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
-        bufferBuilder.func_225582_a_((double)(x + 0), (double)(y + 0), (double)this.zLevel)
-                .func_225583_a_(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel) // pos()
+                .tex(((float)(u + 0) * scaleX), ((float)(v + height) * scaleY)).endVertex(); // tex()
+        bufferBuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel)
+                .tex(((float)(u + width) * scaleX), ((float)(v + height) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel)
+                .tex(((float)(u + width) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
+        bufferBuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel)
+                .tex(((float)(u + 0) * scaleX), ((float)(v + 0) * scaleY)).endVertex();
         tessellator.draw();
     }
 }

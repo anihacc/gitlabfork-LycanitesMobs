@@ -211,7 +211,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 	 * @param livingEntity The entity that destroyed the block.
 	 */
 	public void onBlockDestroyed(World world, BlockState harvestedBlockState, BlockPos harvestedPos, LivingEntity livingEntity) {
-		if(livingEntity == null || livingEntity.func_225608_bj_()) { // isSneaking()
+		if(livingEntity == null || livingEntity.isShiftKeyDown()) { // isSneaking()
 			return;
 		}
 
@@ -412,7 +412,7 @@ public class HarvestEquipmentFeature extends EquipmentFeature {
 
 		if (entity instanceof net.minecraftforge.common.IShearable) {
 			net.minecraftforge.common.IShearable target = (net.minecraftforge.common.IShearable)entity;
-			BlockPos pos = new BlockPos(entity.func_226277_ct_(), entity.func_226278_cu_(), entity.func_226281_cx_());
+			BlockPos pos = new BlockPos(entity.getPosX(), entity.getPosY(), entity.getPosZ());
 			if (target.isShearable(itemStack, entity.world, pos)) {
 				java.util.List<ItemStack> drops = target.onSheared(itemStack, entity.world, pos,
 						net.minecraft.enchantment.EnchantmentHelper.getEnchantmentLevel(net.minecraft.enchantment.Enchantments.FORTUNE, itemStack));
