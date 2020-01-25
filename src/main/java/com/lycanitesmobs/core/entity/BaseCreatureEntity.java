@@ -546,7 +546,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         
         // Stats:
         this.stepHeight = 0.5F;
-        this.experienceValue = this.creatureInfo.experience;
         this.inventory = new InventoryCreature(this.getName().getFormattedText(), this);
 
         // Drops:
@@ -574,6 +573,19 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     public void addSavedItemDrop(ItemDrop itemDrop) {
     	this.drops.add(itemDrop);
     	this.savedDrops.add(itemDrop);
+	}
+
+	@Override
+	public int getExperiencePoints(PlayerEntity player) {
+		float scaledExp = this.creatureInfo.experience;
+		if(this.subspecies != null) {
+			if ("uncommon".equals(this.subspecies.rarity))
+				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.uncommonExperienceScale));
+			else if ("rare".equals(this.subspecies.rarity))
+				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.rareExperienceScale));
+		}
+		this.experienceValue = Math.round(scaledExp);
+		return this.experienceValue;
 	}
     
     // ========== Name ==========
@@ -1449,12 +1461,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 		this.subspecies = this.creatureInfo.getSubspecies(subspeciesIndex);
 
 		if(this.subspecies != null) {
-			float scaledExp = this.creatureInfo.experience;
-			if ("uncommon".equals(this.subspecies.rarity))
-				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.uncommonExperienceScale));
-			else if ("rare".equals(this.subspecies.rarity))
-				scaledExp = Math.round((float) (this.creatureInfo.experience * Subspecies.rareExperienceScale));
-			this.experienceValue = Math.round(scaledExp);
 			if ("rare".equals(this.subspecies.rarity)) {
 				this.damageLimit = 40;
 				this.damageMax = 25;
@@ -3780,6 +3786,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 			}
 			this.dropItem(itemDrop.getEntityDropItemStack(this, quantity));
     	}
+
+		this.func_226294_cV_(); // Drop XP
     }
     
     // ========== Drop Item ==========

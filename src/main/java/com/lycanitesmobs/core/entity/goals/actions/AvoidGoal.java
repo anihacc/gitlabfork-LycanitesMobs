@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -16,12 +17,14 @@ public class AvoidGoal extends Goal {
     // Properties:
     private double farSpeed = 1.0D;
     private double nearSpeed = 1.2D;
-    private double farDistance = 4096.0D;
+    private double farDistance = 2048.0D;
     private double nearDistance = 49.0D;
     private Class targetClass;
     private float distanceFromEntity = 6.0F;
     private Path pathEntity;
-	
+    private int findRandomTargetAwayFromCooldown = 0;
+    private int findRandomTargetAwayFromCooldownMax = 60;
+
 	// ==================================================
  	//                    Constructor
  	// ==================================================
@@ -72,13 +75,20 @@ public class AvoidGoal extends Goal {
         if(this.targetClass != null && !this.targetClass.isAssignableFrom(this.avoidTarget.getClass()))
             return false;
 
-        /*if(this.host.getDistance(this.avoidTarget) >= this.farDistance) {
+        if(this.host.getDistanceSq(this.avoidTarget) >= this.farDistance) {
         	return false;
-        }*/
-        
+        }
+
+        if(this.findRandomTargetAwayFromCooldown > 0) {
+        	this.findRandomTargetAwayFromCooldown--;
+        	return false;
+		}
+
         Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)this.farDistance, 7, new Vec3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
-        if(avoidVector == null)
-            return false;
+		if(avoidVector == null) {
+			this.findRandomTargetAwayFromCooldown = this.findRandomTargetAwayFromCooldownMax;
+			return false;
+		}
         
         if(this.avoidTarget.getDistanceSq(avoidVector.x, avoidVector.y, avoidVector.z) < this.avoidTarget.getDistanceSq(this.host))
             return false;
@@ -98,13 +108,17 @@ public class AvoidGoal extends Goal {
  	// ==================================================
 	@Override
     public boolean shouldContinueExecuting() {
+    	if(this.avoidTarget == null || this.host.getAvoidTarget() == null)
+    		return false;
+
         if(!this.host.useDirectNavigator() && this.host.getNavigator().noPath())
         	return false;
 		if(this.host.useDirectNavigator() && this.host.directNavigator.atTargetPosition())
 			return false;
 
-        /*if(this.host.getDistance(this.avoidTarget) >= this.farDistance)
-        	return false;*/
+        if(this.host.getDistanceSq(this.avoidTarget) >= this.farDistance)
+        	return false;
+
     	return true;
     }
 	

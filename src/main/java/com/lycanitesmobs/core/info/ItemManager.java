@@ -123,7 +123,7 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addItem("soulstone", new ItemSoulstone(itemProperties, null));
 
 		// Equipment Pieces:
-		Item.Properties equipmentProperties = new Item.Properties().maxStackSize(1).setNoRepair().setTEISR(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);
+		Item.Properties equipmentProperties = new Item.Properties().maxStackSize(1).setNoRepair().setISTER(() -> com.lycanitesmobs.client.renderer.EquipmentRenderer::new);
 		ObjectManager.addItem("equipment", new ItemEquipment(equipmentProperties));
 
 		// Keys:
