@@ -93,6 +93,12 @@
 			"chance": 1
 		},
 		{
+			"item": "minecraft:phantom_membrane",
+			"minAmount": 1,
+			"maxAmount": 1,
+			"chance": 1
+		},
+		{
 			"item": "lycanitesmobs:soulstoneshadow",
 			"minAmount": 1,
 			"maxAmount": 1,

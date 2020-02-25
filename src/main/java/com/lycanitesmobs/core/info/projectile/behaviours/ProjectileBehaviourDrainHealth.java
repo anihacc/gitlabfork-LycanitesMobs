@@ -31,7 +31,7 @@ public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, float damage) {
+	public void onProjectileDamage(BaseProjectileEntity projectile, World world, LivingEntity target, float damage) {
 		if(projectile.getThrower() == null) {
 			return;
 		}

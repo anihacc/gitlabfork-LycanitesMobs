@@ -127,12 +127,12 @@ public class ModelTemplateBiped extends CreatureObjModel {
 
         // Jumping/Flying:
         if(entity != null && !entity.onGround && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
-            if(partName.equals("wingleft")) {
+            if(partName.contains("wingleft")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
             }
-            if(partName.equals("wingright")) {
+            if(partName.contains("wingright")) {
                 rotX = 20;
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
                 rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);

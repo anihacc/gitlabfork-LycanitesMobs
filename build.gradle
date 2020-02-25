@@ -64,7 +64,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.1-30.0.51'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.16'
     1
     // Examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env

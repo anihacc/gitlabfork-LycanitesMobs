@@ -32,7 +32,8 @@ public class TemptGoal extends Goal {
     private boolean stopAttack = false;
     private boolean includeTreats = true;
     private boolean includeDiet = false;
-    
+    private boolean alwaysTempted = false;
+
     private double targetX;
     private double targetY;
     private double targetZ;
@@ -93,6 +94,10 @@ public class TemptGoal extends Goal {
         this.includeDiet = includeDiet;
         return this;
     }
+    public TemptGoal setAlwaysTempted(boolean alwaysTempted) {
+        this.alwaysTempted = alwaysTempted;
+        return this;
+    }
     
     
     // ==================================================
@@ -128,7 +133,7 @@ public class TemptGoal extends Goal {
             }
         }
 
-        if(!this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand())) {
+        if(!this.alwaysTempted && !this.isTemptStack(this.player.getHeldItemMainhand()) && !this.isTemptStack(this.player.getHeldItemOffhand())) {
             this.player = null;
             return false;
         }
