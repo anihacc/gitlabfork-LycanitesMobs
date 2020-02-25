@@ -229,7 +229,7 @@ public class CustomProjectileEntity extends BaseProjectileEntity {
 
 		if(attackSuccess) {
 			for(ProjectileBehaviour behaviour : this.projectileInfo.behaviours) {
-				behaviour.onProjectileDamage(this, this.getEntityWorld(), damage);
+				behaviour.onProjectileDamage(this, this.getEntityWorld(), target, damage);
 			}
 		}
 	}

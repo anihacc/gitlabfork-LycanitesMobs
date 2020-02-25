@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 
 public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
@@ -21,7 +22,7 @@ public class ProjectileBehaviourDrainHealth extends ProjectileBehaviour {
 	}
 
 	@Override
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, float damage) {
+	public void onProjectileDamage(BaseProjectileEntity projectile, World world, EntityLivingBase target, float damage) {
 		if(projectile.getThrower() == null) {
 			return;
 		}

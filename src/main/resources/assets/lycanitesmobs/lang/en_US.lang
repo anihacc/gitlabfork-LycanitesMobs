@@ -15,7 +15,7 @@ spawner.darkness.level2=You can hear sounds from the darkness itself... Quick, r
 spawner.darkness.level3=A shadowy creature has spawned from the darkness!
 spawner.darkness.level1.back=The sounds seem to have stopped... For now at least...
 spawner.chaos.level1=You are disrupting the balance of nature, be careful!
-spawner.chaos.level2=Your destructaive actions on the elements is drawing in Chaotic energy!
+spawner.chaos.level2=Your destructive actions on the elements is drawing in Chaotic energy!
 spawner.chaos.level3=Chaotic energy has manifested into something! Beware!
 spawner.chaos.level1.back=Balance seems to be restored... For now at least...
 #
@@ -859,7 +859,7 @@ entity.lycanitesmobs.fear.combat=Dummy entity.
 # ========================================================================
 entity.lycanitesmobs.feradon.name=Feradon
 entity.lycanitesmobs.feradon.description=Lion-like predators that are excellent hunters.
-entity.lycanitesmobs.feradon.habitat=These beats thrive in plains and savannas.
+entity.lycanitesmobs.feradon.habitat=These beasts thrive in plains and savannas.
 entity.lycanitesmobs.feradon.combat=Feradon attack with a powerful bite that offenses the defenses of the victim.
 # ========================================================================
 entity.lycanitesmobs.frostweaver.name=Frostweaver
@@ -1016,6 +1016,11 @@ entity.lycanitesmobs.pinky.name=Pinky
 entity.lycanitesmobs.pinky.description=Gluttonous beasts that especially love to devour live animals. Can be farmed and bred using live large animals. Baby Pinkies can be tamed and when matured, can be used as battle mounts.
 entity.lycanitesmobs.pinky.habitat=Pinkies roam the Nether looking for anything to eat.
 entity.lycanitesmobs.pinky.combat=These demons are incredibly aggressive but will prioritize bigger juicier prey which ca be used to pure them.
+# ========================================================================
+entity.lycanitesmobs.pinky=Pixen
+entity.lycanitesmobs.pinky.description=Mischievous little imps that lure their prey into a false sense of security before grouping up and eating them!
+entity.lycanitesmobs.pinky.habitat=Pixens can usually be found roaming around forests during the day.
+entity.lycanitesmobs.pinky.combat=These Imps will bombard their targets with balls of magic that apply random debuffs.
 # ========================================================================
 entity.lycanitesmobs.quetzodracl.name=Quetzodracl
 entity.lycanitesmobs.quetzodracl.description=Powerful flying wyvern dragons that still share a strong resemblance to their dragon ancestors the pterosaurs.

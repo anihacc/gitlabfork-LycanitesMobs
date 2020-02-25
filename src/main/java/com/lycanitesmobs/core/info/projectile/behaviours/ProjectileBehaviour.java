@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -34,6 +35,9 @@ public abstract class ProjectileBehaviour {
 		}
 		else if("laser".equals(type)) {
 			projectileBehaviour = new ProjectileBehaviourLaser();
+		}
+		else if("randomEffect".equals(type)) {
+			projectileBehaviour = new ProjectileBehaviourRandomEffect();
 		}
 
 		if(projectileBehaviour == null) {
@@ -73,5 +77,5 @@ public abstract class ProjectileBehaviour {
 	 * @param world The impact world.
 	 * @param damage The damage dealt.
 	 */
-	public void onProjectileDamage(BaseProjectileEntity projectile, World world, float damage) {}
+	public void onProjectileDamage(BaseProjectileEntity projectile, World world, EntityLivingBase target, float damage) {}
 }

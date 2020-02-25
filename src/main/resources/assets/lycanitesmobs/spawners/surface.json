@@ -30,6 +30,10 @@
 		{
 			"mobId": "lycanitesmobs:wisp",
 			"weight": 8
+		},
+		{
+			"mobId": "lycanitesmobs:pixen",
+			"weight": 8
 		}
 	]
 }
