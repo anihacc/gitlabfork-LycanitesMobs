@@ -122,7 +122,7 @@ public class CreatureRenderer extends MobRenderer<BaseCreatureEntity, CreatureMo
 		}
 
 		// Entity Visibility:
-		boolean invisible = !this.isVisible(entity, false);
+		boolean invisible = !this.isVisible(entity);
 		boolean allyInvisible = invisible && !entity.isInvisibleToPlayer(Minecraft.getInstance().player);
 
 		// Render Model Layers:

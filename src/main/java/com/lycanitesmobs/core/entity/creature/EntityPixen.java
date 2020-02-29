@@ -27,7 +27,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
     protected boolean wantsToLand;
     protected boolean  isLanded;
 
-    public int auraRate = 20;
+    public int auraRate = 60;
 
     /** A list of beneficial potion effects that this element can grant. **/
     public List<String> auraEffects = new ArrayList<>();
@@ -49,7 +49,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
         this.spawnsOnLand = true;
         this.spawnsInWater = true;
         this.hasAttackSound = false;
-        this.flySoundSpeed = 20;
+        this.flySoundSpeed = 5;
         this.stepHeight = 1.0F;
         this.setupMob();
 
@@ -175,7 +175,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
 
     @Override
     public boolean isAggressive() {
-        if(!this.isInPack()) {
+        if(!this.isInPack() && this.getRevengeTarget() == null) {
             return false;
         }
         return super.isAggressive();

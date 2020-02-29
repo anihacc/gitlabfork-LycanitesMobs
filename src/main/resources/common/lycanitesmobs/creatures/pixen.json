@@ -65,8 +65,8 @@
 		"fungivore"
 	],
 	"peaceful": false,
-	"summonable": false,
-	"tameable": true,
+	"summonable": true,
+	"tameable": false,
 	"mountable": false,
 	"perchable": true,
 	"summonCost": 2,

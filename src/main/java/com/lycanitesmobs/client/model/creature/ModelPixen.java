@@ -22,9 +22,10 @@ public class ModelPixen extends ModelTemplateBiped {
     	// Load Model:
     	this.initModel("pixen", LycanitesMobs.modInfo, "entity/pixen");
 
-        // Tropy:
+        // Scales:
         this.trophyScale = 1.8F;
         this.trophyOffset = new float[] {0.0F, -0.05F, -0.1F};
+        this.wingScale = 4;
     }
 
     @Override

@@ -10,6 +10,7 @@ public class ModelTemplateBiped extends CreatureObjModel {
     protected float tailScaleY = 1F;
     protected float flightBobScale = 1F;
     protected float mouthScale = 1F;
+    protected float wingScale = 1F;
 
     // ==================================================
     //                 Animate Part
@@ -53,11 +54,11 @@ public class ModelTemplateBiped extends CreatureObjModel {
             rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
         }
         if(entity == null || entity.onGround || entity.isInWater()) {
-            if(partName.equals("wingleft")) {
+            if(partName.contains("wingleft")) {
                 rotZ += Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
                 rotX += Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
             }
-            if(partName.equals("wingright")) {
+            if(partName.contains("wingright")) {
                 rotZ -= Math.toDegrees(MathHelper.cos(loop * 0.09F) * 0.05F + 0.05F);
                 rotX -= Math.toDegrees(MathHelper.sin(loop * 0.067F) * 0.05F);
             }
@@ -129,13 +130,13 @@ public class ModelTemplateBiped extends CreatureObjModel {
         if(entity != null && !entity.onGround && !entity.isInWater() && (creatureEntity == null || !creatureEntity.hasPerchTarget())) {
             if(partName.contains("wingleft")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
+                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
             }
             if(partName.contains("wingright")) {
                 rotX = 20;
-                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F) * 0.6F);
-                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F + (float)Math.PI) * 0.6F);
+                rotX -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale) * 0.6F);
+                rotZ -= Math.toDegrees(MathHelper.sin(loop * 0.4F * this.wingScale + (float)Math.PI) * 0.6F);
             }
             if(entity instanceof BaseCreatureEntity && ((BaseCreatureEntity)entity).isFlying()) {
                 if (partName.equals("body")) {
