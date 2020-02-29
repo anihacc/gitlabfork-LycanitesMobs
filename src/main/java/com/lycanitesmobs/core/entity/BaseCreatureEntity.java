@@ -2854,7 +2854,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		if(shouldFlee && !canPackHunt) {
 			return false;
 		}
-		return shouldHunt;
+		return shouldHunt || shouldPackHunt;
 	}
 
 	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {

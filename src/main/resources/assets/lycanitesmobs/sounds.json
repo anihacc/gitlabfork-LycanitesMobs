@@ -420,6 +420,38 @@
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/pinky/moloch/mount", "stream": false}]
     },
+    "entity.pixen.say": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/say", "stream": false}]
+    },
+    "entity.pixen.hurt": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/hurt", "stream": false}]
+    },
+    "entity.pixen.death": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/death", "stream": false}]
+    },
+    "entity.pixen.beg": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/beg", "stream": false}]
+    },
+    "entity.pixen.tame": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/tame", "stream": false}]
+    },
+    "entity.pixen.eat": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/eat", "stream": false}]
+    },
+    "entity.pixen.step": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/step", "stream": false}]
+    },
+    "entity.pixen.fly": {
+        "category": "hostile",
+        "sounds": [{"name": "lycanitesmobs:entity/pixen/fly", "stream": false}]
+    },
     "entity.trite.say": {
         "category": "hostile",
         "sounds": [{"name": "lycanitesmobs:entity/trite/say", "stream": false}]
@@ -3255,6 +3287,10 @@
     "projectile.throwingscythe": {
         "category": "ambient",
         "sounds": [{"name": "lycanitesmobs:projectile/throwingscythe", "stream": false}]
+    },
+    "projectile.tricksterflare": {
+        "category": "ambient",
+        "sounds": [{"name": "lycanitesmobs:projectile/tricksterflare", "stream": false}]
     },
     "projectile.mudshot": {
         "category": "ambient",

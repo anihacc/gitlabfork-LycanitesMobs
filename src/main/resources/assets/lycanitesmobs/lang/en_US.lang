@@ -1017,10 +1017,10 @@ entity.lycanitesmobs.pinky.description=Gluttonous beasts that especially love to
 entity.lycanitesmobs.pinky.habitat=Pinkies roam the Nether looking for anything to eat.
 entity.lycanitesmobs.pinky.combat=These demons are incredibly aggressive but will prioritize bigger juicier prey which ca be used to pure them.
 # ========================================================================
-entity.lycanitesmobs.pinky=Pixen
-entity.lycanitesmobs.pinky.description=Mischievous little imps that lure their prey into a false sense of security before grouping up and eating them!
-entity.lycanitesmobs.pinky.habitat=Pixens can usually be found roaming around forests during the day.
-entity.lycanitesmobs.pinky.combat=These Imps will bombard their targets with balls of magic that apply random debuffs.
+entity.lycanitesmobs.pixen.name=Pixen
+entity.lycanitesmobs.pixen.description=Mischievous little imps that lure their prey into a false sense of security before grouping up and eating them!
+entity.lycanitesmobs.pixen.habitat=Pixens can usually be found roaming around forests during the day.
+entity.lycanitesmobs.pixen.combat=These Imps will bombard their targets with balls of magic that apply random debuffs.
 # ========================================================================
 entity.lycanitesmobs.quetzodracl.name=Quetzodracl
 entity.lycanitesmobs.quetzodracl.description=Powerful flying wyvern dragons that still share a strong resemblance to their dragon ancestors the pterosaurs.
@@ -2031,6 +2031,7 @@ entity.lycanitesmobs.hellfireball=Hellfireball
 entity.lycanitesmobs.quill=Quill
 entity.lycanitesmobs.scorchfireball=Scorchfireball
 entity.lycanitesmobs.throwingscythe=Throwing Scythe
+entity.lycanitesmobs.tricksterflare=Trickster Flare
 entity.lycanitesmobs.demonicblast=Demonic Blast
 entity.lycanitesmobs.demonicspark=Demonic Spark
 entity.lycanitesmobs.bloodleech=Bloodleech
