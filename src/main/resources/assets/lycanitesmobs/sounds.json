@@ -1114,7 +1114,7 @@
     },
     "entity.gnekk.eat": {
         "category": "hostile",
-        "sounds": [{"name": "lycanitesmobs:entity/eat/jump", "stream": false}]
+        "sounds": [{"name": "lycanitesmobs:entity/gnekk/eat", "stream": false}]
     },
     "entity.gnekk.jump": {
         "category": "hostile",

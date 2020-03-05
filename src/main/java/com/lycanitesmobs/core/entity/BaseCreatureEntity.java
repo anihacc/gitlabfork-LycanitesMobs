@@ -438,7 +438,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	/** Creates and sets all the entity attributes with default values. **/
 	@Override
 	protected void applyEntityAttributes() {
-		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
 		this.loadCreatureFlags();
 
 		this.creatureStats = new CreatureStats(this);
@@ -580,6 +579,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     /** Initiates the entity setting all the values to be watched by the datawatcher. **/
     @Override
     protected void entityInit() {
+		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
         super.entityInit();
         this.dataManager.register(TARGET, (byte) 0);
         this.dataManager.register(ATTACK_PHASE, (byte) 0);
@@ -4343,6 +4343,8 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			return !CreatureManager.getInstance().config.suffocationImmunity && !this.hasPerchTarget();
 		if("drown".equals(type))
 			return !CreatureManager.getInstance().config.drownImmunity;
+		if("fall".equals(type))
+			return this.getFallResistance() < 100;
         return true;
     }
 
