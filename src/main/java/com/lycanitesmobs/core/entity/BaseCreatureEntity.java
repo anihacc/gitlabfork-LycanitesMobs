@@ -421,6 +421,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	@Override
 	protected void registerData() {
+		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
 		super.registerData();
 		this.dataManager.register(TARGET, (byte) 0);
 		this.dataManager.register(ATTACK_PHASE, (byte) 0);
@@ -445,7 +446,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 */
 	@Override
 	protected void registerAttributes() {
-		this.creatureInfo = CreatureManager.getInstance().getCreature(this.getClass());
 		this.loadCreatureFlags();
 		this.creatureSize = new EntitySize((float)this.creatureInfo.width, (float)this.creatureInfo.height, false);
 
@@ -4176,6 +4176,11 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     	if(this.damageLimit > 0) {
 			if (this.damageTakenThisSec >= this.damageLimit)
 				return true;
+		}
+
+		// Falling Damage:
+		if(source == DamageSource.FALL) {
+			return this.getFallResistance() >= 100;
 		}
 
     	// Fire Damage:

@@ -33,6 +33,11 @@ public class EquipmentPartModel implements IBakedModel {
 	}
 
 	@Override
+	public boolean func_230044_c_() {
+		return false;
+	}
+
+	@Override
 	public TextureAtlasSprite getParticleTexture() {
 		return null;
 	}

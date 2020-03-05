@@ -50,7 +50,7 @@ public class CopyOwnerAttackTargetGoal extends TargetingGoal {
 		if(this.target == null) {
 			return false;
 		}
-    	if(lastAttackedTime == owner.getLastAttackedEntityTime())
+    	if(this.lastAttackTime == lastAttackedTime)
     		return false;
     	return true;
     }

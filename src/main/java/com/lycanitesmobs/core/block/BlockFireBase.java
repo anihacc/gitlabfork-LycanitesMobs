@@ -99,7 +99,7 @@ public class BlockFireBase extends BlockBase {
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
         BlockPos blockpos = pos.down();
-        return worldIn.getBlockState(blockpos).isFireSource(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
+        return worldIn.getBlockState(blockpos).isSolidSide(worldIn, blockpos, Direction.UP) || this.areNeighborsFlammable(worldIn, pos);
     }
 
     protected boolean areNeighborsFlammable(IBlockReader worldIn, BlockPos pos) {
