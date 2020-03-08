@@ -67,7 +67,9 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 					explosionRadius = 3;
 				explosionRadius = Math.max(2, Math.round((float)explosionRadius * (float)this.sizeScale));
                 if(this.getEntityWorld().getGameRules().getBoolean("mobGriefing") && this.griefing)
-	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, false);
+	        	    this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, true);
+                else
+					this.getEntityWorld().createExplosion(this, this.posX, this.posY, this.posZ, explosionRadius, false);
 	        	this.setDead();
         	}
         }
