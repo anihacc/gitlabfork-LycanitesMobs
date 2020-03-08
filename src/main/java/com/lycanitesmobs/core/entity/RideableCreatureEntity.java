@@ -97,7 +97,7 @@ public class RideableCreatureEntity extends TameableCreatureEntity {
 			}
 
 			// Dismounting:
-			if (this.getControllingPassenger() instanceof PlayerEntity) {
+			if (!this.getEntityWorld().isRemote && this.getControllingPassenger() instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 				if(playerExt != null && playerExt.isControlActive(ExtendedPlayer.CONTROL_ID.MOUNT_DISMOUNT)) {

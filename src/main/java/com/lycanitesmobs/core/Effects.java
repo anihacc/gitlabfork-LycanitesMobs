@@ -36,7 +36,13 @@ import java.util.UUID;
 
 public class Effects {
     private static final UUID swiftswimmingMoveBoostUUID = UUID.fromString("6d4fe17f-06eb-4ebc-a573-364b79faed5e");
-    private static final AttributeModifier swiftswimmingMoveBoost = (new AttributeModifier(swiftswimmingMoveBoostUUID, "Swiftswimming Speed Boost", 0.6D, AttributeModifier.Operation.ADDITION)).setSaved(false);
+    private static final AttributeModifier swiftswimmingMoveBoost = (new AttributeModifier(swiftswimmingMoveBoostUUID, "Swiftswimming Speed Boost", 1D, AttributeModifier.Operation.ADDITION)).setSaved(false);
+	private static final UUID swiftswimmingMoveBoostUUID2 = UUID.fromString("6d4fe17f-06eb-4ebc-a573-364b79faed5d");
+	private static final AttributeModifier swiftswimmingMoveBoost2 = (new AttributeModifier(swiftswimmingMoveBoostUUID2, "Swiftswimming Speed Boost 2", 2D, AttributeModifier.Operation.ADDITION)).setSaved(false);
+	private static final UUID swiftswimmingMoveBoostUUID3 = UUID.fromString("6d4fe17f-06eb-4ebc-a573-364b79faed5c");
+	private static final AttributeModifier swiftswimmingMoveBoost3 = (new AttributeModifier(swiftswimmingMoveBoostUUID3, "Swiftswimming Speed Boost 3", 3D, AttributeModifier.Operation.ADDITION)).setSaved(false);
+	private static final UUID swiftswimmingMoveBoostUUID4 = UUID.fromString("6d4fe17f-06eb-4ebc-a573-364b79faed5b");
+	private static final AttributeModifier swiftswimmingMoveBoost4 = (new AttributeModifier(swiftswimmingMoveBoostUUID4, "Swiftswimming Speed Boost 4", 4D, AttributeModifier.Operation.ADDITION)).setSaved(false);
 
 	// Global Settings:
 	public boolean disableNausea = false;
@@ -258,18 +264,34 @@ public class Effects {
 		EffectBase swiftswimming = ObjectManager.getEffect("swiftswimming");
 		if(swiftswimming != null && entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)entity;
-			if(entity.isPotionActive(swiftswimming) && entity.isInWater()) {
-				int amplifier = entity.getActivePotionEffect(swiftswimming).getAmplifier();
-				IAttributeInstance movement = entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-				if(movement.getModifier(swiftswimmingMoveBoostUUID) == null) {
-					movement.applyModifier(swiftswimmingMoveBoost);
-				}
+			IAttributeInstance movement = entity.getAttribute(LivingEntity.SWIM_SPEED);
+			int amplifier = -1;
+			if(entity.isPotionActive(swiftswimming)) {
+				amplifier = entity.getActivePotionEffect(swiftswimming).getAmplifier();
 			}
-			else {
-				IAttributeInstance movement = entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-				if(movement.getModifier(swiftswimmingMoveBoostUUID) != null) {
-					movement.removeModifier(swiftswimmingMoveBoost);
-				}
+			if(amplifier == 0 && movement.getModifier(swiftswimmingMoveBoostUUID) == null) {
+				movement.applyModifier(swiftswimmingMoveBoost);
+			}
+			else if(amplifier != 0 && movement.getModifier(swiftswimmingMoveBoostUUID) != null) {
+				movement.removeModifier(swiftswimmingMoveBoost);
+			}
+			if(amplifier == 1 && movement.getModifier(swiftswimmingMoveBoostUUID2) == null) {
+				movement.applyModifier(swiftswimmingMoveBoost2);
+			}
+			else if(amplifier != 1 && movement.getModifier(swiftswimmingMoveBoostUUID2) != null) {
+				movement.removeModifier(swiftswimmingMoveBoost2);
+			}
+			if(amplifier == 2 && movement.getModifier(swiftswimmingMoveBoostUUID3) == null) {
+				movement.applyModifier(swiftswimmingMoveBoost3);
+			}
+			else if(amplifier != 2 && movement.getModifier(swiftswimmingMoveBoostUUID3) != null) {
+				movement.removeModifier(swiftswimmingMoveBoost3);
+			}
+			if(amplifier >= 3 && movement.getModifier(swiftswimmingMoveBoostUUID4) == null) {
+				movement.applyModifier(swiftswimmingMoveBoost4);
+			}
+			else if(amplifier < 3 && movement.getModifier(swiftswimmingMoveBoostUUID4) != null) {
+				movement.removeModifier(swiftswimmingMoveBoost4);
 			}
 		}
 
