@@ -2,6 +2,7 @@ package com.lycanitesmobs.core.item;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.info.EffectEntry;
 import com.lycanitesmobs.core.info.ItemProperties;
 import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.Minecraft;
@@ -59,10 +60,10 @@ public class GenericFoodItem extends ItemFood {
 	@Override
 	protected void onFoodEaten(ItemStack itemStack, World world, EntityPlayer player) {
 		super.onFoodEaten(itemStack, world, player);
-		for(PotionEffect effectInstance : this.properties.food.effects.keySet()) {
-			float chance = this.properties.food.effects.get(effectInstance);
-			if(chance == 1 || world.rand.nextFloat() <= chance) {
-				player.addPotionEffect(new PotionEffect(effectInstance));
+		for (EffectEntry effectEntry : this.properties.food.effects) {
+			PotionEffect potionEffect = effectEntry.createEffectInstance(world);
+			if(potionEffect != null) {
+				player.addPotionEffect(potionEffect);
 			}
 		}
 	}

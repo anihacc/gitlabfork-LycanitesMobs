@@ -228,7 +228,7 @@ public class ProjectileInfo {
 			}
 
 			// Dispenser:
-			this.dispenserBehaviour = new DispenserBehaviorBase();
+			this.dispenserBehaviour = new DispenserBehaviorBase(this);
 			BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this.chargeItem, this.dispenserBehaviour);
 		}
 

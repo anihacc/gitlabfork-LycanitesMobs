@@ -83,23 +83,11 @@ public class ItemInfo {
 				while (jsonIterator.hasNext()) {
 					JsonObject foodEffectJson = jsonIterator.next().getAsJsonObject();
 					String effectId = foodEffectJson.get("effectId").getAsString();
-					String[] effectIds = effectId.split(":");
-					Potion effect;
-					if("minecraft".equals(effectIds[0]))
-						effect = ObjectLists.allEffects.get(effectIds[1]);
-					else
-						effect = ObjectManager.getEffect(effectIds[1]);
-					if(effect == null) {
-						LycanitesMobs.logWarning("", "[Items] Unable to add food effect: " + effectId + " to food item: " + this.name);
-						continue;
-					}
-					PotionEffect effectInstance = new PotionEffect(effect, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt());
-
 					float chance = 1F;
 					if(foodEffectJson.has("chance"))
 						chance = foodEffectJson.get("chance").getAsFloat();
-
-					food.effect(effectInstance, chance);
+					EffectEntry effectEntry = new EffectEntry(effectId, foodEffectJson.get("duration").getAsInt() * 20, foodEffectJson.get("amplifier").getAsInt(), chance);
+					food.effect(effectEntry);
 				}
 			}
 		}

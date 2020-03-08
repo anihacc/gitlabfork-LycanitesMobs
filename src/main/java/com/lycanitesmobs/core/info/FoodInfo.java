@@ -1,9 +1,7 @@
 package com.lycanitesmobs.core.info;
 
-import net.minecraft.potion.PotionEffect;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FoodInfo {
 	public int hunger;
@@ -11,7 +9,7 @@ public class FoodInfo {
 	public boolean alwaysEdible;
 	public boolean fastToEat;
 	public boolean meat;
-	public Map<PotionEffect, Float> effects = new HashMap<>();
+	public List<EffectEntry> effects = new ArrayList<>();
 
 	public void hunger(int hunger) {
 		this.hunger = hunger;
@@ -33,7 +31,7 @@ public class FoodInfo {
 		this.meat = true;
 	}
 
-	public void effect(PotionEffect effectInstance, float chance) {
-		this.effects.put(effectInstance, chance);
+	public void effect(EffectEntry effectEntry) {
+		this.effects.add(effectEntry);
 	}
 }

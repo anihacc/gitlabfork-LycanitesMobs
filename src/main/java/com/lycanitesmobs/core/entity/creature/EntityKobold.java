@@ -21,9 +21,6 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
     public boolean griefing = true;
     public boolean theivery = true;
 
-    // ==================================================
- 	//                    Constructor
- 	// ==================================================
     public EntityKobold(World world) {
         super(world);
 
@@ -54,24 +51,16 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 		this.griefing = this.creatureInfo.getFlag("griefing", this.griefing);
 		this.theivery = this.creatureInfo.getFlag("theivery", this.theivery);
 	}
-	
-	
-	// ==================================================
-  	//                     Spawning
-  	// ==================================================
-    // ========== Despawning ==========
-    @Override
-    protected boolean canDespawn() {
-    	//if(this.inventory.hasBagItems()) return false;
-        return super.canDespawn();
-    }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
+
+	@Override
+	public void onRemovedFromWorld() {
+		if(!this.isTamed() && this.inventory.hasBagItems()) {
+			this.inventory.dropInventory();
+		}
+    	super.onRemovedFromWorld();
+	}
+
     private int torchLootingTime = 20;
-	// ========== Living Update ==========
 	@Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
@@ -122,22 +111,14 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
 			return false;
 		return super.shouldCreatureGroupFlee(target);
 	}
-    
-	
-    // ==================================================
-    //                     Attacks
-    // ==================================================
+
     @Override
 	public boolean canAttackEntity(EntityLivingBase targetEntity) {
     	if((targetEntity.getHealth() / targetEntity.getMaxHealth()) > 0.5F)
 			return false;
 		return super.canAttackEntity(targetEntity);
 	}
-    
-    
-    // ==================================================
-    //                     Equipment
-    // ==================================================
+
     public int getNoBagSize() { return 10; }
     public int getBagSize() { return 10; }
     
@@ -145,10 +126,6 @@ public class EntityKobold extends TameableCreatureEntity implements IMob {
     public boolean canPickupItems() {
     	return this.theivery;
     }
-	
 
-    // ==================================================
-    //                     Pet Control
-    // ==================================================
     public boolean petControlsEnabled() { return true; }
 }
