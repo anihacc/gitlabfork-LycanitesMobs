@@ -22,7 +22,7 @@
 		"spawnGroupMin": 1,
 		"spawnGroupMax": 2,
 		"spawnsInLight": true,
-		"spawnsInDark": false,
+		"spawnsInDark": true,
 		"worldDayMin": -1,
 		"despawnNatural": true,
 		"despawnForced": false
@@ -36,7 +36,7 @@
 	"speed": 30,
 	"damage": 1,
 	"attackSpeed": 1,
-	"rangedSpeed": 1,
+	"rangedSpeed": 0.5,
 	"effectDuration": 5,
 	"effectAmplifier": 0,
 	"pierce": 1,

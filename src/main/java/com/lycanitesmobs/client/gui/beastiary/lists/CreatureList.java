@@ -82,10 +82,10 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 			else if(this.listType == Type.FAMILIAR) {
 				petType = "familiar";
 			}
-			List<PetEntry> creatures = new ArrayList<>();
-			creatures.addAll(this.screen.playerExt.petManager.getEntryList(petType));
-			creatures.sort(Comparator.comparing(PetEntry::getName));
-			for(PetEntry petEntry : creatures) {
+			List<PetEntry> pets = new ArrayList<>();
+			pets.addAll(this.screen.playerExt.petManager.getEntryList(petType));
+			pets.sort(Comparator.comparing(PetEntry::getName));
+			for(PetEntry petEntry : pets) {
 				CreatureInfo creatureInfo = petEntry.getCreatureInfo();
 				if (creatureInfo != null && (this.filterList == null || this.filterList.canListCreature(creatureInfo, this.listType))) {
 					this.addEntry(new Entry(this, creatureIndex++, petEntry));

@@ -2,6 +2,7 @@ package com.lycanitesmobs.client.gui.overlays;
 
 import com.lycanitesmobs.ClientManager;
 import com.lycanitesmobs.ExtendedWorld;
+import com.lycanitesmobs.client.KeyHandler;
 import com.lycanitesmobs.client.TextureManager;
 import com.lycanitesmobs.client.gui.BaseGui;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
@@ -114,13 +115,12 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            	if(this.mountMessageTime < 60)
-            		GL11.glColor4f(1.0F, 1.0F, 1.0F, (float)this.mountMessageTime / (float)60);
-            	String mountMessage = new TranslationTextComponent("gui.mount.controls").getFormattedText();
-            	//mountMessage = mountMessage.replace("%control%", this.mc.gameSettings.(KeyHandler.instance.mountAbility.getKey().getKeyCode()));
-            	int stringWidth = this.mc.fontRenderer.getStringWidth(mountMessage);
-            	this.mc.fontRenderer.drawString(mountMessage, (sWidth / 2) - (stringWidth / 2), sHeight - 64, 0xFFFFFF);
+            	String mountMessage = new TranslationTextComponent("gui.mount.controls.prefix").getFormattedText();
+				mountMessage += " " + KeyHandler.instance.mountAbility.getLocalizedName();
+				mountMessage += new TranslationTextComponent("gui.mount.controls.ability").getFormattedText();
+				mountMessage += " " + KeyHandler.instance.dismount.getLocalizedName();
+				mountMessage += new TranslationTextComponent("gui.mount.controls.dismount").getFormattedText();
+				this.mc.ingameGUI.setOverlayMessage(mountMessage, false);
             }
             
             // Mount Ability Stamina Bar:

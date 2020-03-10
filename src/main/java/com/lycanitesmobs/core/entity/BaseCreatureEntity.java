@@ -147,7 +147,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
     protected int growingAge;
 
 	// Boss Health:
-	public static int BOSS_DAMAGE_LIMIT = 50;
+	public static int BOSS_DAMAGE_LIMIT = 25;
 	/** How much damage this creature has taken over the latest second. **/
 	public float damageTakenThisSec = 0;
 	/** How much health this creature had last tick. **/
@@ -3630,6 +3630,8 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         if(this.getPickupEntity() == entity)
             return false;
 		if(entity instanceof IGroupBoss)
+			return false;
+		if(CreatureManager.getInstance().creatureGroups.containsKey("boss") && CreatureManager.getInstance().creatureGroups.get("boss").hasEntity(entity))
 			return false;
 		boolean heavyTarget =  entity instanceof IGroupHeavy || entity.getSize(Pose.STANDING).height >= 4 || entity.getSize(Pose.STANDING).width >= 4;
 		if(heavyTarget && !(this instanceof IGroupHeavy))

@@ -11,8 +11,8 @@
 	"triggers": [
 		{
 			"type": "world",
-			"chance": 0.25,
-			"tickRate": 3200
+			"chance": 0.5,
+			"tickRate": 1600
 		}
 	],
 	"locations": [
@@ -33,7 +33,7 @@
 		},
 		{
 			"mobId": "lycanitesmobs:pixen",
-			"weight": 8
+			"weight": 16
 		}
 	]
 }

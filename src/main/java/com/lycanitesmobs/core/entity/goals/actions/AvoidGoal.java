@@ -17,7 +17,7 @@ public class AvoidGoal extends Goal {
     // Properties:
     private double farSpeed = 1.0D;
     private double nearSpeed = 1.2D;
-    private double farDistance = 2048.0D;
+    private double farDistance = 4096.0D;
     private double nearDistance = 49.0D;
     private Class targetClass;
     private float distanceFromEntity = 6.0F;
@@ -84,7 +84,7 @@ public class AvoidGoal extends Goal {
         	return false;
 		}
 
-        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)this.farDistance, 7, new Vec3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
+        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vec3d(this.avoidTarget.getPositionVec().getX(), this.avoidTarget.getPositionVec().getY(), this.avoidTarget.getPositionVec().getZ()));
 		if(avoidVector == null) {
 			this.findRandomTargetAwayFromCooldown = this.findRandomTargetAwayFromCooldownMax;
 			return false;

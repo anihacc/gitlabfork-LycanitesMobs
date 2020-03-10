@@ -110,10 +110,10 @@ public class EntityZoataur extends RideableCreatureEntity implements IMob {
         if(this.getEntityWorld().isRemote)
             return;
 
-        this.currentBlockingTime = 10;
-
         if(this.getStamina() < this.getStaminaCost())
             return;
+
+        this.currentBlockingTime = 10;
 
         this.applyStaminaCost();
     }
