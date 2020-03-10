@@ -200,6 +200,34 @@ public class CommandMain implements ICommand {
 			}
 		}
 
+		// Player:
+		if("player".equalsIgnoreCase(args[0])) {
+			reply = "Invalid command arguments, valid arguments are: spirit, focus";
+			if (args.length < 2) {
+				commandSender.sendMessage(new TextComponentString(reply));
+				return;
+			}
+			EntityPlayer player = (EntityPlayer)commandSender;
+			ExtendedPlayer extendedPlayer = ExtendedPlayer.getForPlayer(player);
+
+			// Restore Spirit:
+			if("spirit".equalsIgnoreCase(args[1])) {
+				reply = "Restored Player Spirit.";
+				extendedPlayer.spirit = extendedPlayer.spiritMax;
+				commandSender.sendMessage(new TextComponentString(reply));
+				return;
+			}
+
+			// Restore Focus:
+			if("focus".equalsIgnoreCase(args[1])) {
+				reply = "Restored Player Focus.";
+				extendedPlayer.summonFocus = extendedPlayer.summonFocusMax;
+				CreatureManager.getInstance().reload();
+				commandSender.sendMessage(new TextComponentString(reply));
+				return;
+			}
+		}
+
 		// Spawner:
 		if("creature".equalsIgnoreCase(args[0]) || "creatures".equalsIgnoreCase(args[0])) {
 			reply = LanguageManager.translate("lyc.command.creatures.invalid");

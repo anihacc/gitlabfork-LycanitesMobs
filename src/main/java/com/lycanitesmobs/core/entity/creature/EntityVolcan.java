@@ -17,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class EntityVolcan extends TameableCreatureEntity implements IMob {
@@ -125,6 +126,21 @@ public class EntityVolcan extends TameableCreatureEntity implements IMob {
   	// ==================================================
     @Override
     public boolean isFlying() { return true; }
+
+	// ========== Get Interact Commands ==========
+	@Override
+	public HashMap<Integer, String> getInteractCommands(EntityPlayer player, ItemStack itemStack) {
+		HashMap<Integer, String> commands = new HashMap<>();
+		commands.putAll(super.getInteractCommands(player, itemStack));
+
+		if(itemStack != null) {
+			// Water:
+			if(itemStack.getItem() == Items.BUCKET && this.isTamed())
+				commands.put(COMMAND_PIORITIES.ITEM_USE.id, "Water");
+		}
+
+		return commands;
+	}
 
 	// ========== Perform Command ==========
 	@Override

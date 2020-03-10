@@ -27,7 +27,7 @@ public class EquipmentInfuserTileEntity extends TileEntityBase implements IInven
 	}
 
 	public String getName() {
-		return LanguageManager.translate("tile.lycanitesmobs.equipment_infuser");
+		return LanguageManager.translate("tile.equipment_infuser");
 	}
 
 	@Override

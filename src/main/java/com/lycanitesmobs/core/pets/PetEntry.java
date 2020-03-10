@@ -287,8 +287,8 @@ public class PetEntry {
                 this.entity = null;
                 this.isRespawning = true;
                 this.respawnTime = this.respawnTimeMax;
-                if(this.summonSet.playerExt != null)
-                    this.summonSet.playerExt.sendPetEntryToPlayer(this);
+//                if(this.summonSet.playerExt != null)
+//                    this.summonSet.playerExt.sendPetEntryToPlayer(this);
             }
 
             // No Entity:

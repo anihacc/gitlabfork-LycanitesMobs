@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.targeting;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 
 public class AvoidIfHitGoal extends FindAvoidTargetGoal {
@@ -43,6 +44,15 @@ public class AvoidIfHitGoal extends FindAvoidTargetGoal {
     public AvoidIfHitGoal setCantSeeTimeMax(int setCantSeeTimeMax) {
     	this.cantSeeTimeMax = setCantSeeTimeMax;
     	return this;
+    }
+
+
+    // ==================================================
+    //                      Reset
+    // ==================================================
+    @Override
+    public void resetTask() {
+        this.setTarget(null);
     }
 
 

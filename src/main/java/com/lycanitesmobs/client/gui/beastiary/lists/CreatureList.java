@@ -84,10 +84,10 @@ public class CreatureList extends GuiScrollingList {
 			else if(this.listType == Type.FAMILIAR) {
 				petType = "familiar";
 			}
-			List<PetEntry> creatures = new ArrayList<>();
-			creatures.addAll(this.parentGui.playerExt.petManager.getEntryList(petType));
-			creatures.sort(Comparator.comparing(PetEntry::getDisplayName));
-			for(PetEntry petEntry : creatures) {
+			List<PetEntry> pets = new ArrayList<>();
+			pets.addAll(this.parentGui.playerExt.petManager.getEntryList(petType));
+			pets.sort(Comparator.comparing(PetEntry::getDisplayName));
+			for(PetEntry petEntry : pets) {
 				CreatureInfo creatureInfo = petEntry.getCreatureInfo();
 				if (creatureInfo != null && (this.filterList == null || this.filterList.canListCreature(creatureInfo, this.listType))) {
 					this.petList.put(creatureIndex++, petEntry);

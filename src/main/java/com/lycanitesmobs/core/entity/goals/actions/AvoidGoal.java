@@ -74,7 +74,7 @@ public class AvoidGoal extends EntityAIBase {
         	return false;
         }*/
         
-        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)this.farDistance, 7, new Vec3d(this.avoidTarget.posX, this.avoidTarget.posY, this.avoidTarget.posZ));
+        Vec3d avoidVector = RandomPositionGenerator.findRandomTargetAwayFrom(this.host, (int)Math.sqrt(this.farDistance), 7, new Vec3d(this.avoidTarget.posX, this.avoidTarget.posY, this.avoidTarget.posZ));
         if(avoidVector == null)
             return false;
         
@@ -86,7 +86,7 @@ public class AvoidGoal extends EntityAIBase {
             if(this.pathEntity == null)// || !this.pathEntity.isDestinationSame(avoidVector))
                 return false;
         }
-        
+
         return true;
     }
 	

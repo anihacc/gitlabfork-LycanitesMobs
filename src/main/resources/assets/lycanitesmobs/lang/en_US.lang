@@ -151,8 +151,8 @@ gui.pet.wander=Wander
 gui.pet.sit=Sit
 #
 # Mounts:
-gui.mount.controls=Press %control% to use mount ability
-#%control% will be replaced with the Mount Ability key, don't translate this!
+gui.mount.controls=Press %controlA% to use mount ability and %controlB% to dismount.
+#%controlA% will be replaced with the mount ability key and %controlB% with the dismount key, don't translate this!
 #
 # Equipment Forge:
 gui.equipmentforge.text.name=Equipment Name:

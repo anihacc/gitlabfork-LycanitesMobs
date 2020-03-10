@@ -12,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
@@ -115,13 +116,10 @@ public class BaseOverlay extends BaseGui {
             
             // Mount Controls Message:
             if(this.mountMessageTime > 0) {
-            	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            	if(this.mountMessageTime < 60)
-            		GL11.glColor4f(1.0F, 1.0F, 1.0F, (float)this.mountMessageTime / (float)60);
             	String mountMessage = LanguageManager.translate("gui.mount.controls");
-            	mountMessage = mountMessage.replace("%control%", GameSettings.getKeyDisplayString(KeyHandler.instance.mountAbility.getKeyCode()));
-            	int stringWidth = this.mc.fontRenderer.getStringWidth(mountMessage);
-            	this.mc.fontRenderer.drawString(mountMessage, (sWidth / 2) - (stringWidth / 2), sHeight - 64, 0xFFFFFF);
+				mountMessage = mountMessage.replace("%controlA%", GameSettings.getKeyDisplayString(KeyHandler.instance.mountAbility.getKeyCode()));
+				mountMessage = mountMessage.replace("%controlB%", GameSettings.getKeyDisplayString(KeyHandler.instance.dismount.getKeyCode()));
+				this.mc.ingameGUI.setOverlayMessage(mountMessage, false);
             }
             
             // Mount Ability Stamina Bar:
