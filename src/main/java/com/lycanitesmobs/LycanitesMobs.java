@@ -58,7 +58,7 @@ import java.util.Arrays;
 		version = LycanitesMobs.version,
 		useMetadata = false,
 		acceptedMinecraftVersions = LycanitesMobs.acceptedMinecraftVersions,
-		dependencies="after:" + Thaumcraft.modid
+		dependencies = "after:" + Thaumcraft.modid
 )
 public class LycanitesMobs {
 	
