@@ -17,7 +17,7 @@
 		"dimensionIds": ["minecraft:the_nether", "minecraft:the_end"],
 		"dimensionListType": "blacklist",
 		"ignoreBiome": false,
-		"biomes": ["forest", "river", "-mountain", "-snowy"],
+		"biomes": ["river", "-snowy"],
 		"spawnWeight": 8,
 		"dungeonWeight": 0,
 		"spawnAreaLimit": 5,
