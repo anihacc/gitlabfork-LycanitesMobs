@@ -44,7 +44,8 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> disablePickupOffsets;
 	public final ForgeConfigSpec.ConfigValue<Boolean> suffocationImmunity;
 	public final ForgeConfigSpec.ConfigValue<Boolean> drownImmunity;
-	
+	public final ForgeConfigSpec.ConfigValue<Boolean> packTreatLuring;
+
 	public final ForgeConfigSpec.ConfigValue<Boolean> subspeciesSpawn;
 	public final ForgeConfigSpec.ConfigValue<Boolean> randomSizes;
 	public final ForgeConfigSpec.ConfigValue<Double> randomSizeMin;
@@ -139,6 +140,9 @@ public class ConfigCreatures {
 		drownImmunity = builder.comment("If true, all mobs will be immune to damage from running out of air (drown damage).")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.drownImmunity")
 				.define("drownImmunity", false);
+		packTreatLuring = builder.comment("If true, mobs can be lured with treats even if they are in a pack.")
+				.translation(CoreConfig.CONFIG_PREFIX + "creatures.packTreatLuring")
+				.define("packTreatLuring", false);
 
 		subspeciesSpawn = builder.comment("Set to false to prevent subspecies from spawning, this will not affect mobs that have already spawned as subspecies.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.subspeciesSpawn")

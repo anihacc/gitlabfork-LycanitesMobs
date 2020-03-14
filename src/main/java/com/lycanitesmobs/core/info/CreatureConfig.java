@@ -90,6 +90,9 @@ public class CreatureConfig {
 	/** If true, all mobs will be immune to damage from running out of air. **/
 	public boolean drownImmunity = false;
 
+	/** If true, mobs can be lured with treats even if they are in a pack. **/
+	public boolean packTreatLuring = false;
+
 
 	// Variations:
 	/** If true, mobs will have a chance of becoming a subspecies when spawned. **/
@@ -152,6 +155,7 @@ public class CreatureConfig {
 		this.disablePickupOffsets = ConfigCreatures.INSTANCE.disablePickupOffsets.get();
 		this.suffocationImmunity = ConfigCreatures.INSTANCE.suffocationImmunity.get();
 		this.drownImmunity = ConfigCreatures.INSTANCE.drownImmunity.get();
+		this.packTreatLuring = ConfigCreatures.INSTANCE.packTreatLuring.get();
 
 		// Variations:
 		this.subspeciesSpawn = ConfigCreatures.INSTANCE.subspeciesSpawn.get();

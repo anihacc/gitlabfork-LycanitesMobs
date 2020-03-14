@@ -75,7 +75,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:lightball",
+			"item": "lycanitesmobs:lightballcharge",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

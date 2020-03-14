@@ -3502,7 +3502,16 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
     /** Can this entity by tempted (usually lured by an item) currently? **/
     public boolean canBeTempted() {
-    	return !this.isRareSubspecies() && !this.spawnedAsBoss && (this.creatureInfo.isTameable() || this.creatureInfo.isFarmable());
+		if(this.isRareSubspecies() || this.spawnedAsBoss) {
+			return false;
+		}
+		if(this.creatureInfo.isFarmable()) {
+			return true;
+		}
+		if(this.isInPack() && !CreatureManager.getInstance().config.packTreatLuring) {
+			return false;
+		}
+		return this.creatureInfo.isTameable();
     }
 
 	@Override
