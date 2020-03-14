@@ -37,7 +37,7 @@ public class EquipmentForgeSlot extends BaseSlot {
 		Item item = itemStack.getItem();
 		if(item instanceof ItemEquipmentPart) {
 			ItemEquipmentPart equipmentPart = (ItemEquipmentPart)item;
-			return this.type.equals(equipmentPart.slotType) && equipmentPart.levelMin <= this.containerForge.equipmentForge.getLevel();
+			return this.type.equals(equipmentPart.slotType) && equipmentPart.getLevel(itemStack) <= this.containerForge.equipmentForge.getLevel();
 		}
 		else if(item instanceof ItemEquipment) {
 			if(this.containerForge.equipmentForge.getLevel() < 3) {
