@@ -99,6 +99,9 @@ public class CreatureConfig {
 	/** If true, all mobs will be immune to damage from running out of air. **/
 	public boolean drownImmunity = false;
 
+	/** If true, mobs can be lured with treats even if they are in a pack. **/
+	public boolean packTreatLuring = false;
+
 
 	// Variations:
 	/** If true, mobs will have a chance of becoming a subspecies when spawned. **/
@@ -171,6 +174,7 @@ public class CreatureConfig {
 		this.disablePickupOffsets = config.getBool("Mob Interaction", "Disable Pickup Offset", this.disablePickupOffsets, "If true, when a mob picks up a player, the player will be positioned where the mob is rather than offset to where the mob is holding the player at.");
 		this.suffocationImmunity = config.getBool("Mob Interaction", "Global Suffocation Immunity", this.suffocationImmunity, "If true, all mobs will be immune to suffocation (inWall) damage.");
 		this.drownImmunity = config.getBool("Mob Interaction", "Global Drown Immunity", this.drownImmunity, "If true, all mobs will be immune to damage from running out of air (drown damage).");
+		this.packTreatLuring = config.getBool("Mob Interaction", "Pack Treat Luring", this.packTreatLuring, "If true, mobs can be lured with treats even if they are in a pack.");
 
 		// Variations:
 		config.setCategoryComment("Mob Variations", "Settings for how mobs randomly vary such as subspecies. Subspecies are uncommon and rare variants of regular mobs, uncommon subspecies tend to be a bit tougher and rare subspecies are quite powerful and can be considered as mini bosses..");

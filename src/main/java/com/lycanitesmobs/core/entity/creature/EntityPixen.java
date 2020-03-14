@@ -99,7 +99,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
         }
 
         // Mischief Aura:
-        if(this.auraRate > 0 && !this.isPetType("familiar")) {
+        if(!this.getEntityWorld().isRemote && this.auraRate > 0 && !this.isPetType("familiar")) {
             if (this.updateTick % this.auraRate == 0) {
                 List aoeTargets = this.getNearbyEntities(EntityLivingBase.class, null, 4);
                 for (Object entityObj : aoeTargets) {
@@ -168,7 +168,7 @@ public class EntityPixen extends TameableCreatureEntity implements IMob {
 
     @Override
     public boolean canBeTempted() {
-        return !this.isInPack();
+        return !this.isInPack() && this.getRevengeTarget() == null;
     }
 
     @Override

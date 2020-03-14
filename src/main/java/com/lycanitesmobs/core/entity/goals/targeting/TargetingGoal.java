@@ -257,7 +257,7 @@ public abstract class TargetingGoal extends EntityAIBase {
     }
 
 	/**
-	 * Checks if the target entity is a vlid target for this targeting AI. This should be overridden for AI specific checks..
+	 * Checks if the target entity is a valid target for this targeting AI. This should be overridden for AI specific checks..
 	 * @param target The target entity to check.
 	 * @return True if the entity can be targeted by this AI.
 	 */
