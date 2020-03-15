@@ -205,15 +205,15 @@ public class JSONHelper {
 			}
 
 			if (!selectedBiomes.isEmpty()) {
-				for (Biome biome : selectedBiomes)
-					if(!biomeList.contains(biome)) {
-						if (additive) {
+				for (Biome biome : selectedBiomes) {
+					if (additive) {
+						if (!biomeList.contains(biome)) {
 							biomeList.add(biome);
 						}
-						else {
-							biomeList.remove(biome);
-						}
+					} else {
+						biomeList.remove(biome);
 					}
+				}
 			}
 		}
 

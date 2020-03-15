@@ -21,6 +21,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -570,6 +571,74 @@ public class CreatureInfo {
 			dietNames.appendSibling(new TranslationTextComponent("diet." + diet));
 		}
 		return dietNames;
+	}
+
+
+	/**
+	 * Returns a comma separated list of Biomes native for this Creature.
+	 * @return The Biomes native for this Creature.
+	 */
+	public ITextComponent getBiomeNames() {
+		List<Biome> biomes = new ArrayList<>();
+		if(this.creatureSpawn.biomesFromTags != null)
+			biomes.addAll(this.creatureSpawn.biomesFromTags);
+		if(this.creatureSpawn.biomes != null)
+			biomes.addAll(this.creatureSpawn.biomes);
+		if(biomes.isEmpty()) {
+			return new TranslationTextComponent("gui.beastiary.biomes.none");
+		}
+		ITextComponent biomeNames = new StringTextComponent("");
+		boolean firstBiome = true;
+		for(Biome biome : biomes) {
+			if(!firstBiome) {
+				biomeNames.appendText(", ");
+			}
+			firstBiome = false;
+			biomeNames.appendSibling(biome.getDisplayName());
+		}
+		return biomeNames;
+	}
+
+
+	/**
+	 * Returns a comma separated list of items dropped by this Creature.
+	 * @return The items dropped by this Creature.
+	 */
+	public ITextComponent getDropNames() {
+		if(this.drops.isEmpty()) {
+			return new StringTextComponent("");
+		}
+		ITextComponent dropNames = new StringTextComponent("");
+		boolean firstDrop = true;
+		for(ItemDrop drop : this.drops) {
+			if(!firstDrop) {
+				dropNames.appendText("\n");
+			}
+			firstDrop = false;
+			dropNames.appendSibling(drop.getItemStack().getDisplayName());
+			dropNames.appendText(" (");
+
+			if(drop.maxAmount > drop.minAmount)
+				dropNames.appendText(drop.minAmount + "-" + drop.maxAmount + "X");
+			else
+				dropNames.appendText(drop.minAmount + "X");
+
+			dropNames.appendText(" " + (drop.chance * 100) + "%");
+
+			if(drop.subspeciesID >= 0) {
+				dropNames.appendText(" ");
+				Subspecies subspecies = this.getSubspecies(drop.subspeciesID);
+				if(subspecies == null) {
+					dropNames.appendSibling(new TranslationTextComponent("subspecies.normal"));
+				}
+				else {
+					dropNames.appendSibling(subspecies.getTitle());
+				}
+			}
+
+			dropNames.appendText(")");
+		}
+		return dropNames;
 	}
 
 

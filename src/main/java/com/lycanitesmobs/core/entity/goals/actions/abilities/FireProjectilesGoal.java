@@ -174,7 +174,7 @@ public class FireProjectilesGoal extends Goal {
 
 	@Override
     public void tick() {
-		if(this.abilityTime++ % this.fireRate != 0) {
+		if(this.abilityTime++ % Math.round((float)((1.0D / this.host.getAttribute(BaseCreatureEntity.RANGED_SPEED).getValue()) * this.fireRate)) != 0) {
 			return;
 		}
 

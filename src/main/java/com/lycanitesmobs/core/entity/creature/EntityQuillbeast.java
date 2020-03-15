@@ -42,7 +42,7 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
     @Override
     public void attackRanged(Entity target, float range) {
         for(int i = -2; i < 12; i++) {
-            this.fireProjectile("quill", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, i * 1.0F * (this.getRNG().nextFloat() - 0.5F));
+            this.fireProjectile("quill", target, range, 0, new Vec3d(0, 0, 0), 0.75f, 1f, i * 2.0F * (this.getRNG().nextFloat() - 0.5F));
         }
 
         super.attackRanged(target, range);

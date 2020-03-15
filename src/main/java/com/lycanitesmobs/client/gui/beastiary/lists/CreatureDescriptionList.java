@@ -178,6 +178,38 @@ public class CreatureDescriptionList extends BaseList {
 					.appendText(" " + 2);
 		}
 
+		// Biomes:
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.biomes"))
+				.appendText(": " + "\u00A7r");
+		if(this.creatureKnowledge.rank >= 2) {
+			text.appendText("\n")
+					.appendSibling(creatureInfo.getBiomeNames());
+		}
+		else {
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
+					.appendText(" " + 2);
+		}
+
+		// Drops:
+		text.appendText("\n\n\u00A7l")
+				.appendSibling(new TranslationTextComponent("gui.beastiary.drops"))
+				.appendText(": " + "\u00A7r");
+		if(this.creatureKnowledge.rank >= 2) {
+			text.appendText("\n")
+					.appendSibling(creatureInfo.getDropNames());
+		}
+		else {
+			text.appendText("\n")
+					.appendSibling(new TranslationTextComponent("gui.beastiary.unlockedat"))
+					.appendText(" ")
+					.appendSibling(new TranslationTextComponent("creature.stat.knowledge"))
+					.appendText(" " + 2);
+		}
+
 		return text.getFormattedText();
 	}
 }

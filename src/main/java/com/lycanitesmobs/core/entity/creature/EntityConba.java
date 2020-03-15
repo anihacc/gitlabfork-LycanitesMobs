@@ -4,6 +4,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.*;
@@ -21,9 +22,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 public class EntityConba extends TameableCreatureEntity implements IMob {
-	AttackRangedGoal aiAttackRanged;
 	AttackMeleeGoal aiAttackMelee;
-	AvoidGoal aiAvoid;
 	public boolean vespidInfection = false;
 	public int vespidInfectionTime = 0;
 	
@@ -45,17 +44,13 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 		this.aiAttackMelee = new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false);
 		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, this.aiAttackMelee); // Melee is a priority as it is used when infected.
 
+        this.goalSelector.addGoal(this.nextCombatGoalIndex++, new FireProjectilesGoal(this).setProjectile("poop").setFireRate(20).setVelocity(1.2F));
+
 		super.registerGoals();
 
-		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(4.0D).setFarDistance(6.0D);
-		this.goalSelector.addGoal(this.nextPriorityGoalIndex++, this.aiAvoid);
-
-		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
-		this.goalSelector.addGoal(this.nextCombatGoalIndex++, this.aiAttackRanged);
-
-        //this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class).setTameTargetting(false));
-        //this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
-        //this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PillagerEntity.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PlayerEntity.class).setTameTargetting(false));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(VillagerEntity.class));
+        this.targetSelector.addGoal(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(PillagerEntity.class));
     }
     
     
@@ -112,14 +107,12 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
             if (this.vespidInfection && !this.getEntityWorld().isRemote) {
                 this.aiAttackMelee.setEnabled(true);
-                this.aiAttackRanged.setEnabled(false);
                 if (this.vespidInfectionTime++ >= 60 * 20) {
                     this.spawnVespidSwarm();
                     this.remove();
                 }
             } else {
                 this.aiAttackMelee.setEnabled(false);
-                this.aiAttackRanged.setEnabled(true);
             }
         }
         

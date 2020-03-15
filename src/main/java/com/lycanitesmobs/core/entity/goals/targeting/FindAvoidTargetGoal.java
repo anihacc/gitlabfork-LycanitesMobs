@@ -19,7 +19,7 @@ public class FindAvoidTargetGoal extends TargetingGoal {
   	// ==================================================
     public FindAvoidTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
-		this.setMutexFlags(EnumSet.of(Flag.TARGET));
+		//this.setMutexFlags(EnumSet.of(Flag.TARGET));
     }
     
     
