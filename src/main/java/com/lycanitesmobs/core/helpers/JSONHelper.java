@@ -178,7 +178,6 @@ public class JSONHelper {
 				biomeEntry = biomeEntry.substring(1);
 			}
 
-
 			List<Biome> selectedBiomes = new ArrayList<>();
 			if ("ALL".equalsIgnoreCase(biomeEntry)) {
 				for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
@@ -200,15 +199,15 @@ public class JSONHelper {
 			}
 
 			if (!selectedBiomes.isEmpty()) {
-				for (Biome biome : selectedBiomes)
-					if(!biomeList.contains(biome)) {
-						if (additive) {
+				for (Biome biome : selectedBiomes) {
+					if (additive) {
+						if (!biomeList.contains(biome)) {
 							biomeList.add(biome);
 						}
-						else {
-							biomeList.remove(biome);
-						}
+					} else {
+						biomeList.remove(biome);
 					}
+				}
 			}
 		}
 

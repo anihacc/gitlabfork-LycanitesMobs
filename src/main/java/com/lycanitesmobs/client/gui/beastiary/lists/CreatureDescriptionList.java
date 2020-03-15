@@ -140,8 +140,25 @@ public class CreatureDescriptionList extends GuiScrollingList {
 
 		// Habitat:
 		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.habitat") + ": " + "\u00A7r";
-		if(this.creatureKnowledge.rank >= 2)
+		if(this.creatureKnowledge.rank >= 2) {
 			text += "\n" + creatureInfo.getHabitatDescription();
+		}
+		else
+			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+
+		// Biomes:
+		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.biomes") + ": " + "\u00A7r";
+		if(this.creatureKnowledge.rank >= 2) {
+			text += "\n" + creatureInfo.getBiomeNames();
+		}
+		else
+			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
+
+		// Drops:
+		text += "\n\n\u00A7l" + LanguageManager.translate("gui.beastiary.drops") + ": " + "\u00A7r";
+		if(this.creatureKnowledge.rank >= 2) {
+			text += "\n" + creatureInfo.getDropNames();
+		}
 		else
 			text += "\n" + LanguageManager.translate("gui.beastiary.unlockedat") + " " + LanguageManager.translate("creature.stat.knowledge") + " " + 2;
 

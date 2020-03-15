@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.entity.goals.actions.AttackMeleeGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AttackRangedGoal;
 import com.lycanitesmobs.core.entity.goals.actions.AvoidGoal;
+import com.lycanitesmobs.core.entity.goals.actions.abilities.FireProjectilesGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindAvoidTargetGoal;
 import com.lycanitesmobs.core.info.CreatureManager;
 import net.minecraft.entity.Entity;
@@ -20,9 +21,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityConba extends TameableCreatureEntity implements IMob {
-	AttackRangedGoal aiAttackRanged;
 	AttackMeleeGoal aiAttackMelee;
-	AvoidGoal aiAvoid;
 	public boolean vespidInfection = false;
 	public int vespidInfectionTime = 0;
 	
@@ -46,14 +45,10 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
 		super.initEntityAI();
 
-		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(4.0D).setFarDistance(6.0D);
-		this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
+        this.tasks.addTask(this.nextIdleGoalIndex, new FireProjectilesGoal(this).setProjectile("poop").setFireRate(20).setVelocity(1.2F));
 
-		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
-		this.tasks.addTask(this.nextCombatGoalIndex++, this.aiAttackRanged);
-
-        //this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityPlayer.class).setTameTargetting(false));
-        //this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityVillager.class));
+        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityPlayer.class).setTameTargetting(false));
+        this.targetTasks.addTask(this.nextSpecialTargetIndex++, new FindAvoidTargetGoal(this).setTargetClass(EntityVillager.class));
     }
     
     
@@ -109,14 +104,12 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
             if (this.vespidInfection && !this.getEntityWorld().isRemote) {
                 this.aiAttackMelee.setEnabled(true);
-                this.aiAttackRanged.setEnabled(false);
                 if (this.vespidInfectionTime++ >= 60 * 20) {
                     this.spawnVespidSwarm();
                     this.setDead();
                 }
             } else {
                 this.aiAttackMelee.setEnabled(false);
-                this.aiAttackRanged.setEnabled(true);
             }
         }
         

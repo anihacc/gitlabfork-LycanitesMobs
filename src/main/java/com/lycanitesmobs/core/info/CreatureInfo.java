@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -586,6 +587,74 @@ public class CreatureInfo {
 			dietNames += LanguageManager.translate("diet." + diet);
 		}
 		return dietNames;
+	}
+
+
+	/**
+	 * Returns a comma separated list of Biomes native for this Creature.
+	 * @return The Biomes native for this Creature.
+	 */
+	public String getBiomeNames() {
+		List<Biome> biomes = new ArrayList<>();
+		if(this.creatureSpawn.biomesFromTags != null)
+			biomes.addAll(this.creatureSpawn.biomesFromTags);
+		if(this.creatureSpawn.biomes != null)
+			biomes.addAll(this.creatureSpawn.biomes);
+		if(biomes.isEmpty()) {
+			return LanguageManager.translate("gui.beastiary.biomes.none");
+		}
+		String biomeNames = "";
+		boolean firstBiome = true;
+		for(Biome biome : biomes) {
+			if(!firstBiome) {
+				biomeNames += ", ";
+			}
+			firstBiome = false;
+			biomeNames += biome.getBiomeName();
+		}
+		return biomeNames;
+	}
+
+
+	/**
+	 * Returns a comma separated list of items dropped by this Creature.
+	 * @return The items dropped by this Creature.
+	 */
+	public String getDropNames() {
+		if(this.drops.isEmpty()) {
+			return "";
+		}
+		String dropNames = "";
+		boolean firstDrop = true;
+		for(ItemDrop drop : this.drops) {
+			if(!firstDrop) {
+				dropNames += "\n";
+			}
+			firstDrop = false;
+			dropNames += drop.getItemStack().getDisplayName();
+			dropNames += " (";
+
+			if(drop.maxAmount > drop.minAmount)
+				dropNames += drop.minAmount + "-" + drop.maxAmount + "X";
+			else
+				dropNames += drop.minAmount + "X";
+
+			dropNames += " " + (drop.chance * 100) + "%";
+
+			if(drop.subspeciesID >= 0) {
+				dropNames += " ";
+				Subspecies subspecies = this.getSubspecies(drop.subspeciesID);
+				if(subspecies == null) {
+					dropNames += LanguageManager.translate("subspecies.normal");
+				}
+				else {
+					dropNames += subspecies.getTitle();
+				}
+			}
+
+			dropNames += ")";
+		}
+		return dropNames;
 	}
 
 

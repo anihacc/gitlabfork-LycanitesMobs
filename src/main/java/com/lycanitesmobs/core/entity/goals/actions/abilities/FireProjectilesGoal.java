@@ -171,7 +171,7 @@ public class FireProjectilesGoal extends EntityAIBase {
 
 	@Override
     public void updateTask() {
-		if(this.abilityTime++ % this.fireRate != 0) {
+		if(this.abilityTime++ % Math.round((float)((1.0D / this.host.getEntityAttribute(BaseCreatureEntity.RANGED_SPEED).getAttributeValue()) * this.fireRate)) != 0) {
 			return;
 		}
 

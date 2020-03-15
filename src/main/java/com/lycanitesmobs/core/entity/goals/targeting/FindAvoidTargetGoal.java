@@ -18,7 +18,7 @@ public class FindAvoidTargetGoal extends TargetingGoal {
   	// ==================================================
     public FindAvoidTargetGoal(BaseCreatureEntity setHost) {
         super(setHost);
-		this.setMutexBits(1);
+		//this.setMutexBits(1);
     }
     
     
