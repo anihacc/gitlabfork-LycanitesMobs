@@ -901,7 +901,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		}
 
 		// Count Nearby Entities:
-		List<BaseCreatureEntity> targets = this.getNearbyEntities(BaseCreatureEntity.class, BaseCreatureEntity.class, range);
+		List<BaseCreatureEntity> targets = this.getNearbyEntities(BaseCreatureEntity.class, entity -> BaseCreatureEntity.class.isAssignableFrom(entity.getClass()), range);
 		int typesFound = 0;
 		int speciesFound = 0;
 		for(BaseCreatureEntity targetCreature : targets) {
@@ -928,7 +928,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	// ========== Boss Spawn Check ==========
 	/** Checks for nearby bosses, mobs usually shouldn't randomly spawn near a boss. **/
 	public boolean checkSpawnBoss(World world, BlockPos pos) {
-		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, IGroupBoss.class, CreatureManager.getInstance().spawnConfig.spawnLimitRange);
+		List bosses = this.getNearbyEntities(BaseCreatureEntity.class, entity -> IGroupBoss.class.isAssignableFrom(entity.getClass()), CreatureManager.getInstance().spawnConfig.spawnLimitRange);
 		return bosses.size() == 0;
 	}
 
@@ -4564,7 +4564,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     // Nearby Creature Count:
     /** Returns how many entities of the specified class around within the specified ranged, used mostly for mobs that summon other mobs and other group behaviours. **/
     public int nearbyCreatureCount(Class targetClass, double range) {
-    	return this.getNearbyEntities(Entity.class, targetClass, range).size();
+    	return this.getNearbyEntities(Entity.class, entity -> targetClass == null || targetClass.isAssignableFrom(entity.getClass()), range).size();
     }
 
 	/**
@@ -4573,7 +4573,11 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	 * @return The number of allies within range.
 	 */
 	public int countAllies(double range) {
-		return this.nearbyCreatureCount(this.getClass(), range);
+		return this.getNearbyEntities(Entity.class, entity ->
+				this.getClass().isAssignableFrom(entity.getClass()) &&
+						entity instanceof BaseCreatureEntity &&
+						this.getOwner() == ((BaseCreatureEntity)entity).getOwner(),
+				range).size();
 	}
     
     // ========== Creature Attribute ==========
@@ -4609,18 +4613,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
     
    	// ========== Get Nearby Entities ==========
     /** Get entities that are near this entity. **/
-    public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, final Class filterClass, double range) {
-        return this.getEntityWorld().getEntitiesWithinAABB(clazz, this.getEntityBoundingBox().grow(range, range, range), (Predicate<Entity>) entity -> {
-			if(filterClass == null)
-				return true;
-			return filterClass.isAssignableFrom(entity.getClass());
-		});
+    public <T extends Entity> List<T> getNearbyEntities(Class <? extends T > clazz, Predicate<Entity> predicate, double range) {
+        return this.getEntityWorld().getEntitiesWithinAABB(clazz, this.getEntityBoundingBox().grow(range, range, range), predicate);
     }
 
     // ========== Get Nearest Entity ==========
     /** Get the entity closest to this entity. **/
     public <T extends Entity> T getNearestEntity(Class <? extends T > clazz, Class filterClass, double range, boolean canAttack) {
-        List aoeTargets = this.getNearbyEntities(clazz, filterClass, range);
+        List aoeTargets = this.getNearbyEntities(clazz, entity -> filterClass == null || filterClass.isAssignableFrom(entity.getClass()), range);
         if(aoeTargets.size() == 0)
             return null;
         double nearestDistance = range + 10;

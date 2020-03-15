@@ -46,19 +46,35 @@ public abstract class TargetingGoal extends EntityAIBase {
         this.host = setHost;
 
         this.targetSelector = entity -> {
-            double targetDistance = TargetingGoal.this.getTargetDistance();
+            if(entity == null) {
+                return false;
+            }
+            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
+                return false;
+            }
+            if(!TargetingGoal.this.isEntityTargetable(entity, false)) {
+                return false;
+            }
             if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
                 return false;
             }
-            return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isEntityTargetable(entity, false);
+            return true;
         };
 
         this.allySelector = entity -> {
-            double targetDistance = TargetingGoal.this.getTargetDistance();
-			if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
-				return false;
-			}
-            return !((double) entity.getDistance(TargetingGoal.this.host) > targetDistance) && TargetingGoal.this.isAllyTarget(entity);
+            if(entity == null) {
+                return false;
+            }
+            if(entity.getDistance(TargetingGoal.this.host) > TargetingGoal.this.getTargetDistance()) {
+                return false;
+            }
+            if(!TargetingGoal.this.isAllyTarget(entity)) {
+                return false;
+            }
+            if(this.shouldCheckSight() && !entity.isGlowing() && !this.host.canEntityBeSeen(entity)) {
+                return false;
+            }
+            return true;
         };
 
         this.nearestSorter = new TargetSorterNearest(setHost);
