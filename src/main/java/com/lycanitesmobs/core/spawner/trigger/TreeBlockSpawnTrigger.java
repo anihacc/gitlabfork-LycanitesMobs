@@ -49,7 +49,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			}
 		}
 		String blockName = block.getRegistryName().toString();
-		if(blockName.contains("tree") && blockName.contains("branch")) {
+		if((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("branch")) {
 			return true;
 		}
 		return false;
@@ -72,7 +72,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 			}
 		}
 		String blockName = block.getRegistryName().toString();
-		if(blockName.contains("tree") && blockName.contains("leaves")) {
+		if((blockName.contains("tree") || blockName.contains("traverse")) && blockName.contains("leaves")) {
 			return true;
 		}
 		return false;

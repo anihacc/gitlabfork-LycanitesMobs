@@ -46,8 +46,8 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
 
 		super.initEntityAI();
 
-		//this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(4.0D).setFarDistance(8.0D);
-		//this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
+		this.aiAvoid = new AvoidGoal(this).setNearSpeed(1.5D).setFarSpeed(1.3D).setNearDistance(4.0D).setFarDistance(6.0D);
+		this.tasks.addTask(this.nextPriorityGoalIndex++, this.aiAvoid);
 
 		this.aiAttackRanged = new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1);
 		this.tasks.addTask(this.nextCombatGoalIndex++, this.aiAttackRanged);
@@ -130,18 +130,6 @@ public class EntityConba extends TameableCreatureEntity implements IMob {
         	}
         }
     }
-	
-	// ========== AI Update ==========
-	@Override
-    public void updateAITasks() {
-        // Avoid Attack Target:
-        if(!this.getEntityWorld().isRemote) {
-	        if(this.getAttackTarget() != null && this.getAttackTarget() != this.getAvoidTarget())
-	        	this.setAvoidTarget(this.getAttackTarget());
-        }
-		
-        super.updateAITasks();
-	}
 
 	@Override
 	public boolean shouldCreatureGroupFlee(EntityLivingBase target) {

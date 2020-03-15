@@ -203,14 +203,18 @@ public class EntityRoc extends RideableCreatureEntity implements IMob {
             return false;
         }
 
-        // Daytime Players/Villagers:
-        if(targetEntity instanceof EntityPlayer || targetEntity instanceof EntityVillager) {
-            if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
-                return false;
-            }
-        }
-
         return super.canAttackEntity(targetEntity);
+    }
+
+    @Override
+    public boolean isAggressive() {
+        if(this.isTamed()) {
+            return super.isAggressive();
+        }
+        if (this.getEntityWorld().isDaytime() && this.testLightLevel() >= 2) {
+            return false;
+        }
+        return super.isAggressive();
     }
     
     

@@ -205,6 +205,11 @@ public class EntityGeonach extends TameableCreatureEntity implements IMob, IFusa
     	return true;
     }
 
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
+
 
 	// ==================================================
 	//                      Fusion

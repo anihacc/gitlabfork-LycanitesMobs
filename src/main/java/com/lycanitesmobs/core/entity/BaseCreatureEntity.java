@@ -2785,11 +2785,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 			}
         }
 
-        // Inaccessible From Water:
-        if(!this.isStrongSwimmer() && this.isFlying() && targetEntity.isInWater()) {
-			return false;
-		}
-
 		return true;
 	}
 
@@ -3861,8 +3856,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 					float hardness = blockState.getBlockHardness(this.getEntityWorld(), breakPos);
 					Material material = blockState.getMaterial();
 					if (hardness >= 0 && strength >= hardness && strength >= blockState.getBlock().getExplosionResistance(this) && material != Material.WATER && material != Material.LAVA) {
-						// If a player is set this is from a spawner in which case don't destroy the central block.
-						if(player == null || !(w == 0 && h == 0 && d == 0)) {
+						if(w == 0 && h == 0 && d == 0) {
 							SpawnerEventListener.getInstance().onBlockBreak(this.getEntityWorld(), breakPos, blockState, player, chain);
 							this.getEntityWorld().destroyBlock(breakPos, drop);
 						}
@@ -4576,12 +4570,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		return this.getNearbyEntities(Entity.class, entity ->
 				this.getClass().isAssignableFrom(entity.getClass()) &&
 						entity instanceof BaseCreatureEntity &&
-						this.getOwner() == ((BaseCreatureEntity)entity).getOwner(),
+						this.isTamed() == ((BaseCreatureEntity)entity).isTamed(),
 				range).size();
 	}
     
     // ========== Creature Attribute ==========
-    /** Returns this creature's attriute. **/
+    /** Returns this creature's attribute. **/
    	@Override
     public EnumCreatureAttribute getCreatureAttribute() { return this.attribute; }
 

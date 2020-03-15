@@ -191,4 +191,9 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
     public boolean canBurn() {
     	return false;
     }
+
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
 }

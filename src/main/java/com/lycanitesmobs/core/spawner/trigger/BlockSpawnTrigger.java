@@ -19,7 +19,7 @@ public class BlockSpawnTrigger extends SpawnTrigger {
 	/** Has a random chance of triggering when certain blocks are broken by the player. **/
 
 	/** If true, only players can activate this Trigger, fake players are not counted. **/
-	public boolean playerOnly = true;
+	public boolean playerOnly = false;
 
 	/** If true, the Block Break event will activate this trigger. **/
 	public boolean onBreak = true;

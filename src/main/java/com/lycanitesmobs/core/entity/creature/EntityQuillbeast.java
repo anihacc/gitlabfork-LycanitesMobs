@@ -32,22 +32,6 @@ public class EntityQuillbeast extends TameableCreatureEntity implements IMob {
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackMeleeGoal(this).setLongMemory(true).setEnabled(false));
         this.tasks.addTask(this.nextCombatGoalIndex++, new AttackRangedGoal(this).setSpeed(1.0D).setRange(16.0F).setMinChaseDistance(10.0F).setChaseTime(-1));
     }
-	
-	
-    // ==================================================
-    //                      Updates
-    // ==================================================
-	// ========== AI Update ==========
-	@Override
-    public void updateAITasks() {
-        // Avoid Attack Target:
-        if(!this.getEntityWorld().isRemote) {
-	        if(this.getAttackTarget() != null && this.getAttackTarget() != this.getAvoidTarget())
-	        	this.setAvoidTarget(this.getAttackTarget());
-        }
-		
-        super.updateAITasks();
-	}
     
     
     // ==================================================
