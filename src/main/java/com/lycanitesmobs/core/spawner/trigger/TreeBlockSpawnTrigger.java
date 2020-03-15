@@ -48,7 +48,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 				}
 			}
 		}
-		String blockName = block.getRegistryName().getResourcePath();
+		String blockName = block.getRegistryName().toString();
 		if(blockName.contains("tree") && blockName.contains("branch")) {
 			return true;
 		}
@@ -71,7 +71,7 @@ public class TreeBlockSpawnTrigger extends BlockSpawnTrigger {
 				}
 			}
 		}
-		String blockName = block.getRegistryName().getResourcePath();
+		String blockName = block.getRegistryName().toString();
 		if(blockName.contains("tree") && blockName.contains("leaves")) {
 			return true;
 		}
