@@ -4494,7 +4494,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 	 * @return The number of allies within range.
 	 */
 	public int countAllies(double range) {
-		return this.nearbyCreatureCount(this.getType(), range);
+		return this.getNearbyEntities(Entity.class, entity -> entity.getType() == this.getType(), range).size();
 	}
 
     /** Get the entity closest to this entity. **/
