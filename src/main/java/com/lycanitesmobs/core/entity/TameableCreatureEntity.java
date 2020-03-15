@@ -609,7 +609,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
     public DamageSource getDamageSource(EntityDamageSource nestedDamageSource) {
         if(this.isTamed() && this.getOwner() != null) {
             if(nestedDamageSource == null)
-                nestedDamageSource = new EntityDamageSource("mob", this);
+                nestedDamageSource = (EntityDamageSource)DamageSource.causeMobDamage(this);
             return new MinionEntityDamageSource(nestedDamageSource, this.getOwner());
         }
         return super.getDamageSource(nestedDamageSource);

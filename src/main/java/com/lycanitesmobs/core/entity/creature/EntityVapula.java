@@ -185,6 +185,11 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
 		}
 		return super.isInvulnerableTo(type, source, damage);
     }
+
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
     
     @Override
     public boolean canBurn() {

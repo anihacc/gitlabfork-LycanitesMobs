@@ -2477,11 +2477,6 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
             }
         }
 
-        // Inaccessible From Water:
-        if(!this.isStrongSwimmer() && this.isFlying() && targetEntity.isInWater()) {
-			return false;
-		}
-
 		return true;
 	}
 

@@ -202,4 +202,9 @@ public class EntitySpriggan extends TameableCreatureEntity implements IMob {
     // ==================================================
     public int getNoBagSize() { return 0; }
     public int getBagSize() { return 5; }
+
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
 }
