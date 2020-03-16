@@ -188,7 +188,7 @@ public class JSONHelper {
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
 				BiomeDictionary.Type biomeType = null;
 				try {
-					biomeType = BiomeDictionary.Type.getType(biomeEntry);
+					biomeType = BiomeDictionary.Type.getType(biomeEntry.toUpperCase());
 				} catch (Exception e) {
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
@@ -198,15 +198,13 @@ public class JSONHelper {
 				}
 			}
 
-			if (!selectedBiomes.isEmpty()) {
-				for (Biome biome : selectedBiomes) {
-					if (additive) {
-						if (!biomeList.contains(biome)) {
-							biomeList.add(biome);
-						}
-					} else {
-						biomeList.remove(biome);
+			for (Biome biome : selectedBiomes) {
+				if (additive) {
+					if (!biomeList.contains(biome)) {
+						biomeList.add(biome);
 					}
+				} else {
+					biomeList.remove(biome);
 				}
 			}
 		}

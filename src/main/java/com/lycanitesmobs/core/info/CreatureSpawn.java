@@ -186,10 +186,18 @@ public class CreatureSpawn {
 	 * Registers this mob to vanilla spawners and dungeons. Can only be done during startup.
 	 */
 	public void registerVanillaSpawns(CreatureInfo creatureInfo) {
+		LycanitesMobs.logDebug("MobSetup", "========== Post Init Setup: " + creatureInfo.name + " ==========");
+
 		// Load Biomes:
+		List<Biome> vanillaBiomes = new ArrayList<>();
 		if(this.biomesFromTags == null) {
 			this.biomesFromTags = JSONHelper.getBiomesFromTags(this.biomeTags);
 		}
+		vanillaBiomes.addAll(this.biomesFromTags);
+		if(this.biomes == null) {
+			this.biomes = JSONHelper.getBiomes(this.biomeIds);
+		}
+		vanillaBiomes.addAll(this.biomes);
 
 		// Add Vanilla Spawns:
 		if(!CreatureManager.getInstance().spawnConfig.disableAllSpawning) {
@@ -197,11 +205,12 @@ public class CreatureSpawn {
 				int vanillaWeight = (int)Math.ceil(CreatureManager.getInstance().spawnConfig.spawnWeightScale * this.spawnWeight);
 				for(EnumCreatureType creatureType : this.vanillaSpawnerTypes) {
 					EntityRegistry.addSpawn(creatureInfo.entityClass, vanillaWeight, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, this.biomesFromTags.toArray(new Biome[this.biomesFromTags.size()]));
-					for(Biome biome : this.biomesFromTags) {
+					for(Biome biome : vanillaBiomes) {
 						if(biome == Biomes.HELL) {
 							EntityRegistry.addSpawn(creatureInfo.entityClass, vanillaWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
 							break;
 						}
+						LycanitesMobs.logDebug("MobSetup", "Vanilla Spawn Biome Added: " + biome.getBiomeName());
 					}
 				}
 				LycanitesMobs.logDebug("MobSetup", "Vanilla Spawns Added - Weight: " + vanillaWeight);
