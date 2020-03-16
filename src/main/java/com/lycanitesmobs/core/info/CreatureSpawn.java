@@ -210,7 +210,7 @@ public class CreatureSpawn {
 							EntityRegistry.addSpawn(creatureInfo.entityClass, vanillaWeight * 10, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMin, CreatureManager.getInstance().spawnConfig.ignoreWorldGenSpawning ? 0 : this.spawnGroupMax, creatureType, biome);
 							break;
 						}
-						LycanitesMobs.logDebug("MobSetup", "Vanilla Spawn Biome Added: " + biome.getBiomeName());
+						LycanitesMobs.logDebug("MobSetup", "Vanilla Spawn Biome Added: " + biome);
 					}
 				}
 				LycanitesMobs.logDebug("MobSetup", "Vanilla Spawns Added - Weight: " + vanillaWeight);
