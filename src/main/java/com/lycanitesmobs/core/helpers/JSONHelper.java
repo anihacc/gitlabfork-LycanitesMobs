@@ -194,7 +194,7 @@ public class JSONHelper {
 			else if (!"NONE".equalsIgnoreCase(biomeEntry)) {
 				BiomeDictionary.Type biomeType = null;
 				try {
-					biomeType = BiomeDictionary.Type.getType(biomeEntry);
+					biomeType = BiomeDictionary.Type.getType(biomeEntry.toUpperCase());
 				} catch (Exception e) {
 					LycanitesMobs.logWarning("", "[Spawning] Unknown biome type " + biomeEntry + " this will be ignored and treated as NONE.");
 				}
@@ -204,15 +204,13 @@ public class JSONHelper {
 				}
 			}
 
-			if (!selectedBiomes.isEmpty()) {
-				for (Biome biome : selectedBiomes) {
-					if (additive) {
-						if (!biomeList.contains(biome)) {
-							biomeList.add(biome);
-						}
-					} else {
-						biomeList.remove(biome);
+			for (Biome biome : selectedBiomes) {
+				if (additive) {
+					if (!biomeList.contains(biome)) {
+						biomeList.add(biome);
 					}
+				} else {
+					biomeList.remove(biome);
 				}
 			}
 		}
@@ -229,44 +227,5 @@ public class JSONHelper {
 			}
 		}
 		return biomes;
-	}
-
-	/* Can no longer access a list of all biomes types without reflection. This is the alternative for now. */
-	public static BiomeDictionary.Type[] getAllBiomeTypes() {
-		return new BiomeDictionary.Type[] {
-				BiomeDictionary.Type.HOT,
-				BiomeDictionary.Type.COLD,
-				BiomeDictionary.Type.SPARSE,
-				BiomeDictionary.Type.DENSE,
-				BiomeDictionary.Type.WET,
-				BiomeDictionary.Type.DRY,
-				BiomeDictionary.Type.SAVANNA,
-				BiomeDictionary.Type.CONIFEROUS,
-				BiomeDictionary.Type.JUNGLE,
-				BiomeDictionary.Type.SPOOKY,
-				BiomeDictionary.Type.DEAD,
-				BiomeDictionary.Type.LUSH,
-				BiomeDictionary.Type.MUSHROOM,
-				BiomeDictionary.Type.MAGICAL,
-				BiomeDictionary.Type.RARE,
-				BiomeDictionary.Type.OCEAN,
-				BiomeDictionary.Type.RIVER,
-				BiomeDictionary.Type.WATER,
-				BiomeDictionary.Type.MESA,
-				BiomeDictionary.Type.FOREST,
-				BiomeDictionary.Type.PLAINS,
-				BiomeDictionary.Type.MOUNTAIN,
-				BiomeDictionary.Type.HILLS,
-				BiomeDictionary.Type.SWAMP,
-				BiomeDictionary.Type.SANDY,
-				BiomeDictionary.Type.SNOWY,
-				BiomeDictionary.Type.WASTELAND,
-				BiomeDictionary.Type.BEACH,
-				BiomeDictionary.Type.VOID,
-				BiomeDictionary.Type.MODIFIED,
-				BiomeDictionary.Type.OVERWORLD,
-				BiomeDictionary.Type.NETHER,
-				BiomeDictionary.Type.END
-		};
 	}
 }
