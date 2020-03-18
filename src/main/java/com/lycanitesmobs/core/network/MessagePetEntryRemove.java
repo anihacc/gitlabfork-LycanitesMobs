@@ -10,10 +10,11 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessagePetEntryRemove {
-    public int petEntryID;
+    public UUID petEntryID;
 
 
 	// ==================================================
@@ -67,7 +68,7 @@ public class MessagePetEntryRemove {
 	public static MessagePetEntryRemove decode(PacketBuffer packet) {
 		MessagePetEntryRemove message = new MessagePetEntryRemove();
 		try {
-            message.petEntryID = packet.readInt();
+            message.petEntryID = packet.readUniqueId();
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
@@ -80,7 +81,7 @@ public class MessagePetEntryRemove {
 	 */
 	public static void encode(MessagePetEntryRemove message, PacketBuffer packet) {
 		try {
-			packet.writeInt(message.petEntryID);
+			packet.writeUniqueId(message.petEntryID);
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();

@@ -23,7 +23,7 @@ public class PetEntry {
     /** The Pet Manager that this entry is added to, this can also be null. **/
     public PetManager petManager;
     /** The ID given to this entry by the PetManager. **/
-    public int petEntryID;
+    public UUID petEntryID;
     /** The type of entry this is. This should really always be set if this entry is to be added to a manager. This should only be set when the entry is instantiated and then kept the same. **/
     private String type;
     /** This is set to false if this entry has been removed. Used by PetManagers to auto-remove finished temporary entries. **/
@@ -87,7 +87,7 @@ public class PetEntry {
     public static PetEntry createFromEntity(PlayerEntity player, BaseCreatureEntity entity, String petType) {
         CreatureInfo creatureInfo = entity.creatureInfo;
         String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
-        PetEntry petEntry = new PetEntry(entryName, petType, player, creatureInfo.getName());
+        PetEntry petEntry = new PetEntry(UUID.randomUUID(), entryName, petType, player, creatureInfo.getName());
         if(entity.hasCustomName()) {
 			petEntry.setEntityName(entity.getCustomName().getFormattedText());
 		}
@@ -101,7 +101,8 @@ public class PetEntry {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public PetEntry(String name, String type, LivingEntity host, String summonType) {
+	public PetEntry(UUID petEntryID, String name, String type, LivingEntity host, String summonType) {
+        this.petEntryID = petEntryID;
         this.name = name;
         this.type = type;
         this.host = host;
@@ -250,9 +251,8 @@ public class PetEntry {
     //                       On Add
     // ==================================================
     /** Called when this entry is first added. A Pet Manager is passed if added to one, otherwise null. **/
-    public void onAdd(PetManager petManager, int petEntryID) {
+    public void onAdd(PetManager petManager) {
         this.petManager = petManager;
-        this.petEntryID = petEntryID;
     }
 
 
@@ -556,6 +556,13 @@ public class PetEntry {
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
     public void readFromNBT(CompoundNBT nbtTagCompound) {
+        if(nbtTagCompound.contains("UUID"))
+            this.petEntryID = nbtTagCompound.getUniqueId("UUID");
+        if(nbtTagCompound.contains("EntryName"))
+            this.name = nbtTagCompound.getString("EntryName");
+        if(nbtTagCompound.contains("Type"))
+            this.type = nbtTagCompound.getString("Type");
+
         if(nbtTagCompound.contains("Active"))
             this.active = nbtTagCompound.getBoolean("Active");
         if(nbtTagCompound.contains("RespawnTime"))
@@ -585,14 +592,14 @@ public class PetEntry {
     public void writeToNBT(CompoundNBT nbtTagCompound) {
         if(this.name == null || "".equals(this.name))
             return;
+        nbtTagCompound.putUniqueId("UUID", this.petEntryID);
+        nbtTagCompound.putString("EntryName", this.name);
+        nbtTagCompound.putString("Type", this.getType());
+
         nbtTagCompound.putBoolean("Active", this.active);
         nbtTagCompound.putInt("RespawnTime", this.respawnTime);
         nbtTagCompound.putBoolean("Respawning", this.isRespawning);
         nbtTagCompound.putBoolean("SpawningActive", this.spawningActive);
-
-        nbtTagCompound.putInt("ID", this.petEntryID);
-        nbtTagCompound.putString("EntryName", this.name);
-        nbtTagCompound.putString("Type", this.getType());
         this.summonSet.write(nbtTagCompound);
 
         // Save Entity:

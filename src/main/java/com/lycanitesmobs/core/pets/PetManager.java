@@ -8,17 +8,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PetManager {
 	public LivingEntity host;
-    /** The next ID to use when adding an entry to the main list. **/
-    protected int nextID = 0;
     /** A list of all pet entries, useful for looking up everything summoned by an entity as well as ensuring that no entries are added as multiple types. **/
-    public Map<Integer, PetEntry> allEntries = new HashMap<>();
+    public Map<UUID, PetEntry> allEntries = new HashMap<>();
     /** Pets are mobs that the player has tamed and then bound. They can be summoned and dismissed at will. Eg: Pet Lurker. **/
     public List<PetEntry> pets = new ArrayList<>();
     /** Mounts are mobs that the player has tamed and then bound. One can be summoned for riding at will, they will despawn if unmounted after a short while. Eg: Pet Ventoraptor. **/
@@ -35,7 +30,7 @@ public class PetManager {
     public List<PetEntry> newEntries = new ArrayList<>();
     /** PetEntries that need to be removed. **/
     public List<PetEntry> removedEntries = new ArrayList<>();
-    /** A map containing NBT Tag Compunds mapped to Unique Pet Entry Names. **/
+    /** A map containing NBT Tag Compounds mapped to Unique Pet Entry Names. **/
     public Map<String, CompoundNBT> entryNBTs = new HashMap<>();
 	
     // ==================================================
@@ -60,24 +55,17 @@ public class PetManager {
     // ==================================================
     /** Adds a new PetEntry and executes onAdd() methods. The provided entry should have set whether it's a pet, mount, minion, etc. **/
     public void addEntry(PetEntry petEntry) {
-        this.addEntry(petEntry, -1);
-    }
-    /** Adds a new PetEntry and executes onAdd() methods. The provided entry should have set whether it's a pet, mount, minion, etc. This will also set a specific ID for the entry to use which should only really be done client side. **/
-    public void addEntry(PetEntry petEntry, int entryID) {
         if(this.allEntries.containsValue(petEntry)) {
             LycanitesMobs.logWarning("", "[Pet Manager] Tried to add a Pet Entry that is already added!");
             return;
         }
 
         // Load From NBT:
-        if(this.entryNBTs.containsKey(petEntry.name))
+        if(this.entryNBTs.containsKey(petEntry.name)) {
             petEntry.readFromNBT(this.entryNBTs.get(petEntry.name));
+        }
 
-        if(entryID < 0)
-            entryID = this.nextID++;
-        else if(entryID >= this.nextID)
-            this.nextID = entryID + 1;
-        this.allEntries.put(entryID, petEntry);
+        this.allEntries.put(petEntry.petEntryID, petEntry);
 
         if("pet".equalsIgnoreCase(petEntry.getType()))
             this.pets.add(petEntry);
@@ -90,7 +78,7 @@ public class PetManager {
         else if("familiar".equalsIgnoreCase(petEntry.getType()))
             this.familiars.add(petEntry);
 
-        petEntry.onAdd(this, entryID);
+        petEntry.onAdd(this);
         this.newEntries.add(petEntry);
     }
 
@@ -219,7 +207,7 @@ public class PetManager {
     //                        Get
     // ==================================================
     /** Returns the requested pet entry from its specific id. **/
-    public PetEntry getEntry(int id) {
+    public PetEntry getEntry(UUID id) {
         return this.allEntries.get(id);
     }
 
@@ -273,7 +261,12 @@ public class PetManager {
         // Create New Entries For Pets and Mounts:
         for(CompoundNBT nbtEntry : this.entryNBTs.values()) {
             if(nbtEntry.contains("Type") && ("pet".equalsIgnoreCase(nbtEntry.getString("Type")) || "mount".equalsIgnoreCase(nbtEntry.getString("Type")))) {
-                PetEntry petEntry = new PetEntry(nbtEntry.getString("EntryName"), nbtEntry.getString("Type"), this.host, nbtEntry.getString("SummonType"));
+                UUID petEntryID;
+                if(nbtEntry.contains("UUID"))
+                    petEntryID = nbtEntry.getUniqueId("UUID");
+                else
+                    petEntryID = UUID.randomUUID();
+                PetEntry petEntry = new PetEntry(petEntryID, nbtEntry.getString("EntryName"), nbtEntry.getString("Type"), this.host, nbtEntry.getString("SummonType"));
                 petEntry.readFromNBT(nbtEntry);
                 if(petEntry.active)
                     this.addEntry(petEntry);

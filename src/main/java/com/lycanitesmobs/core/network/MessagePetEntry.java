@@ -11,11 +11,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessagePetEntry {
     public String petEntryName;
-    public int petEntryID;
+    public UUID petEntryID;
     public String petEntryType;
     public boolean spawningActive;
 	public boolean teleportEntity;
@@ -77,8 +78,8 @@ public class MessagePetEntry {
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-            petEntry = new PetEntry(message.petEntryName, message.petEntryType, player, message.summonType);
-            petManager.addEntry(petEntry, message.petEntryID);
+            petEntry = new PetEntry(message.petEntryID, message.petEntryName, message.petEntryType, player, message.summonType);
+            petManager.addEntry(petEntry);
         }
         petEntry.setSpawningActive(message.spawningActive);
         petEntry.teleportEntity = message.teleportEntity;
@@ -102,7 +103,7 @@ public class MessagePetEntry {
 	public static MessagePetEntry decode(PacketBuffer packet) {
 		MessagePetEntry message = new MessagePetEntry();
         message.petEntryName = packet.readString(512);
-        message.petEntryID = packet.readInt();
+        message.petEntryID = packet.readUniqueId();
         message.petEntryType = packet.readString(512);
         message.spawningActive = packet.readBoolean();
         message.teleportEntity = packet.readBoolean();
@@ -122,7 +123,7 @@ public class MessagePetEntry {
 	 */
 	public static void encode(MessagePetEntry message, PacketBuffer packet) {
         packet.writeString(message.petEntryName);
-        packet.writeInt(message.petEntryID);
+        packet.writeUniqueId(message.petEntryID);
         packet.writeString(message.petEntryType);
         packet.writeBoolean(message.spawningActive);
         packet.writeBoolean(message.teleportEntity);
