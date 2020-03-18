@@ -1,5 +1,6 @@
 package com.lycanitesmobs.core.entity.goals.actions;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
@@ -71,7 +72,6 @@ public class FollowOwnerGoal extends FollowGoal {
 		// Start straying when within the stray radius and the target.
 		double distance = this.host.getDistance(target);
 		if(distance <= this.strayDistance && this.strayDistance != 0) {
-			this.host.clearMovement();
 			return false;
 		}
 

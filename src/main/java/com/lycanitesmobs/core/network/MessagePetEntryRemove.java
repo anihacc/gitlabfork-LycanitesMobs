@@ -14,8 +14,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.UUID;
+
 public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessagePetEntryRemove, IMessage> {
-    public int petEntryID;
+    public UUID petEntryID;
 
 
 	// ==================================================
@@ -82,7 +84,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
 		try {
-            this.petEntryID = packet.readInt();
+            this.petEntryID = packet.readUniqueId();
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem decoding the packet: " + packet + ".");
 			e.printStackTrace();
@@ -100,7 +102,7 @@ public class MessagePetEntryRemove implements IMessage, IMessageHandler<MessageP
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
 		try {
-			packet.writeInt(this.petEntryID);
+			packet.writeUniqueId(this.petEntryID);
 		} catch (Exception e) {
 			LycanitesMobs.logWarning("", "There was a problem encoding the packet: " + packet + ".");
 			e.printStackTrace();

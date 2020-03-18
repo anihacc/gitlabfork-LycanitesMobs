@@ -16,9 +16,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.UUID;
+
 public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntry, IMessage> {
     public String petEntryName;
-    public int petEntryID;
+    public UUID petEntryID;
     public String petEntryType;
     public boolean spawningActive;
 	public boolean teleportEntity;
@@ -88,8 +90,8 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-            petEntry = new PetEntry(this.petEntryName, message.petEntryType, player, this.summonType);
-            petManager.addEntry(petEntry, message.petEntryID);
+            petEntry = new PetEntry(message.petEntryID, this.petEntryName, message.petEntryType, player, this.summonType);
+            petManager.addEntry(petEntry);
         }
         petEntry.setSpawningActive(message.spawningActive);
         petEntry.teleportEntity = message.teleportEntity;
@@ -119,7 +121,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
         this.petEntryName = packet.readString(256);
-        this.petEntryID = packet.readInt();
+        this.petEntryID = packet.readUniqueId();
         this.petEntryType = packet.readString(256);
         this.spawningActive = packet.readBoolean();
         this.teleportEntity = packet.readBoolean();
@@ -144,7 +146,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
         packet.writeString(this.petEntryName);
-        packet.writeInt(this.petEntryID);
+        packet.writeUniqueId(this.petEntryID);
         packet.writeString(this.petEntryType);
         packet.writeBoolean(this.spawningActive);
         packet.writeBoolean(this.teleportEntity);

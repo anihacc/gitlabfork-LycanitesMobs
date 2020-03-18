@@ -88,7 +88,7 @@ public class DonationFamiliars {
 				}
 
                 String familiarEntryName = "familiar-" + minecraft_username + "-" + familiar_species.toLowerCase();
-                PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiarEntryName, null, familiar_species.toLowerCase());
+                PetEntryFamiliar familiarEntry = new PetEntryFamiliar(UUID.randomUUID(), familiarEntryName, null, familiar_species.toLowerCase());
                 familiarEntry.setEntitySubspeciesID(familiar_subspecies);
                 if(familiar_size <= 0) {
                     familiarEntry.setEntitySize(familiar_subspecies < 3 ? 0.6D : 0.3D);
