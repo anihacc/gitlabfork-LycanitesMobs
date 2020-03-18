@@ -3,6 +3,7 @@ package com.lycanitesmobs.core.block.effect;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.block.BlockBase;
+import com.lycanitesmobs.core.info.ItemManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -41,6 +42,8 @@ public class BlockPoisonCloud extends BlockBase {
 
 		this.setRegistryName(this.group.modid, this.blockName.toLowerCase());
 		this.setDefaultState(this.getStateContainer().getBaseState().with(AGE, 0));
+
+		ItemManager.getInstance().cutoutBlocks.add(this);
 	}
 
 	@Override

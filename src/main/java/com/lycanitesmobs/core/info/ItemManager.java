@@ -52,6 +52,9 @@ public class ItemManager extends JSONLoader {
 
 	public Map<String, ItemInfo> items = new HashMap<>();
 
+	/** A list of blocks that need to use the cutout renderer. **/
+	public List<Block> cutoutBlocks = new ArrayList<>();
+
 	/** A list of mod groups that have loaded with this manager. **/
 	public List<ModInfo> loadedGroups = new ArrayList<>();
 

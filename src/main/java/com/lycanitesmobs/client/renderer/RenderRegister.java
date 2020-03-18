@@ -6,8 +6,12 @@ import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ItemManager;
 import com.lycanitesmobs.core.info.projectile.ProjectileInfo;
 import com.lycanitesmobs.core.info.projectile.ProjectileManager;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class RenderRegister {
@@ -51,6 +55,12 @@ public class RenderRegister {
         // Special Entities:
         for(Class specialClass : ObjectManager.specialEntities.values()) {
             RenderingRegistry.registerEntityRenderingHandler(ObjectManager.specialEntityTypes.get(specialClass), new RenderFactoryNone<BaseProjectileEntity>(specialClass));
+        }
+    }
+
+    public void registerBlockRenderLayers() {
+        for(Block block : ItemManager.getInstance().cutoutBlocks) {
+            RenderTypeLookup.setRenderLayer(block, RenderType.cutout());
         }
     }
 }
