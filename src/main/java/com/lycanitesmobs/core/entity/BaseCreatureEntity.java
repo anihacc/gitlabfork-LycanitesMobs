@@ -2186,6 +2186,14 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 		return this.world.isMaterialInBB(boundingBox, Material.LAVA);
 	}
 
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+    	x = Math.max(Math.min(x, 10), -10);
+    	y = Math.max(Math.min(y, 10), -10);
+    	z = Math.max(Math.min(z, 10), -10);
+    	super.move(type, x, y, z);
+	}
+
     // ========== Move with Heading ==========
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
     @Override

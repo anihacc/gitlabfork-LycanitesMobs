@@ -223,7 +223,7 @@ public class LycanitesMobs {
 		// Client:
 		proxy.registerEvents();
 		proxy.registerRenders(modInfo);
-		proxy.registerTextures(); // Includes Beastairy Tab
+		proxy.registerTextures(); // Includes Beastiary Tab
 
 		// Mod Support:
 		DLDungeons.init();

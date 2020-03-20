@@ -86,7 +86,7 @@
 			"mobNameTag": "Baron of Hell",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
-			"mobLevel": 30,
+			"mobLevel": 100,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "0",
 			"dungeonLevelMax": "0",
@@ -104,7 +104,7 @@
 			"mobNameTag": "Arachnotron",
 			"mobSizeScale": 1,
 			"naturalDespawn": "false",
-			"mobLevel": 50,
+			"mobLevel": 250,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "1",
 			"dungeonLevelMax": "1",
@@ -112,6 +112,10 @@
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:astarothclaw"
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 10
 				}
 			]
 		},
@@ -122,12 +126,17 @@
 			"mobSizeScale": 1.25,
 			"mobNameTag": "Pain Elemental",
 			"naturalDespawn": "false",
+			"mobLevel": 10,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "2",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:demoniclightningscepter"
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 50
 				}
 			]
 		}

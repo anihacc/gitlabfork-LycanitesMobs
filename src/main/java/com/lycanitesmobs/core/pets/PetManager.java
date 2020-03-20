@@ -67,6 +67,12 @@ public class PetManager {
 
         this.allEntries.put(petEntry.petEntryID, petEntry);
 
+        this.pets.remove(petEntry);
+        this.mounts.remove(petEntry);
+        this.minions.remove(petEntry);
+        this.guardians.remove(petEntry);
+        this.familiars.remove(petEntry);
+
         if("pet".equalsIgnoreCase(petEntry.getType()))
             this.pets.add(petEntry);
         else if("mount".equalsIgnoreCase(petEntry.getType()))
@@ -96,17 +102,11 @@ public class PetManager {
         }
 
         this.allEntries.remove(petEntry.petEntryID);
-
-        if("pet".equalsIgnoreCase(petEntry.getType()))
-            this.pets.remove(petEntry);
-        else if("mount".equalsIgnoreCase(petEntry.getType()))
-            this.mounts.remove(petEntry);
-        else if("minion".equalsIgnoreCase(petEntry.getType()))
-            this.minions.remove(petEntry);
-        else if("guardian".equalsIgnoreCase(petEntry.getType()))
-            this.guardians.remove(petEntry);
-        else if("familiar".equalsIgnoreCase(petEntry.getType()))
-            this.familiars.remove(petEntry);
+        this.pets.remove(petEntry);
+        this.mounts.remove(petEntry);
+        this.minions.remove(petEntry);
+        this.guardians.remove(petEntry);
+        this.familiars.remove(petEntry);
     }
 
     /** Clears an entire list of entries, best used for clean loads. **/

@@ -91,7 +91,7 @@
 			"mobNameTag": "Graboid",
 			"mobSizeScale": 1.5,
 			"naturalDespawn": "false",
-			"mobLevel": 30,
+			"mobLevel": 100,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "0",
 			"dungeonLevelMax": "0",
@@ -109,14 +109,18 @@
 			"mobNameTag": "Crypt Executioner",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
-			"mobLevel": 50,
+			"mobLevel": 250,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "1",
 			"dungeonLevelMax": "1",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:scythescepter"
+					"item": "lycanitesmobs:clinkscythe"
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 10
 				}
 			]
 		},
@@ -127,14 +131,14 @@
 			"mobSizeScale": 1.1,
 			"mobNameTag": "The Tyrant Dragon",
 			"naturalDespawn": "false",
-			"mobLevel": 100,
+			"mobLevel": 500,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "2",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 20
+					"minAmount": 50
 				},
 				{
 					"item": "lycanitesmobs:magmascepter"
