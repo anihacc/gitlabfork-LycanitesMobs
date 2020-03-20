@@ -66,7 +66,7 @@ public class ExtendedWorld extends WorldSavedData {
 		// Server Side:
 		if(world instanceof ServerWorld) {
 			ServerWorld serverWorld = (ServerWorld) world;
-			world.increaseMaxEntityRadius(50);
+			world.increaseMaxEntityRadius(25);
 			ExtendedWorld worldSavedData = serverWorld.getSavedData().get(ExtendedWorld::new, EXT_PROP_NAME);
 			if (worldSavedData != null) {
 				worldExt = worldSavedData;

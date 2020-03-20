@@ -1945,6 +1945,14 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
         return this.isStrongSwimmer();
     }
 
+	@Override
+	public void move(MoverType type, Vec3d pos) {
+		double x = Math.max(Math.min(pos.getX(), 10), -10);
+		double y = Math.max(Math.min(pos.getY(), 10), -10);
+		double z = Math.max(Math.min(pos.getZ(), 10), -10);
+		super.move(type, new Vec3d(x, y, z));
+	}
+
     // ========== Move with Heading ==========
     /** Moves the entity, redirects to the direct navigator if this mob should use that instead. **/
     @Override

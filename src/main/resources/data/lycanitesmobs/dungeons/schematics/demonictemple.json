@@ -112,6 +112,10 @@
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:astarothclaw"
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 10
 				}
 			]
 		},
@@ -122,12 +126,17 @@
 			"mobSizeScale": 1.25,
 			"mobNameTag": "Pain Elemental",
 			"naturalDespawn": "false",
+			"mobLevel": 10,
 			"spawnAsBoss": true,
 			"dungeonLevelMin": "2",
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:demoniclightningscepter"
+				},
+				{
+					"item": "minecraft:diamond",
+					"minAmount": 50
 				}
 			]
 		}
