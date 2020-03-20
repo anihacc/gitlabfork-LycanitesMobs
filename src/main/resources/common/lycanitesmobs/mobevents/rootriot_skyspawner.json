@@ -14,7 +14,7 @@
 	"conditions": [],
 	"triggers": [
 		{
-			"type": "world",
+			"type": "player",
 			"chance": 1,
 			"tickRate": 800
 		}
