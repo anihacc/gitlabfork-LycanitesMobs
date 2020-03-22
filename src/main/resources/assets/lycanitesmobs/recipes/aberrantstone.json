@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "lycanitesmobs:aberrantstone",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone",
+      "data": 5
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

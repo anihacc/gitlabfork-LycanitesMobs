@@ -2188,6 +2188,12 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
+    	if(Double.isNaN(x))
+    		x = 0;
+		if(Double.isNaN(y))
+			y = 0;
+		if(Double.isNaN(z))
+			z = 0;
     	x = Math.max(Math.min(x, 10), -10);
     	y = Math.max(Math.min(y, 10), -10);
     	z = Math.max(Math.min(z, 10), -10);
@@ -4454,7 +4460,7 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	**/
 	@Override
 	public boolean isInWater() {
-		if(this.isLavaCreature)
+		if(this.isLavaCreature && this.width <= 2)
 			return this.isInLava() || super.isInWater();
 		else
 			return super.isInWater();

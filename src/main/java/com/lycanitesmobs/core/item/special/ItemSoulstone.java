@@ -19,9 +19,9 @@ public class ItemSoulstone extends ItemBase {
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulstone(ModInfo group, String type) {
+    public ItemSoulstone(ModInfo group) {
         super();
-        this.itemName = "soulstone" + type;
+        this.itemName = "soulstone";
 		this.modInfo = group;
         this.setup();
     }

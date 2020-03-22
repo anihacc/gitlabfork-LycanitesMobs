@@ -14,7 +14,7 @@
 	],
 	"themes": ["demonic"],
 	"entrances": ["entrancebasic"],
-	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit"],
+	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
 	"stairs": ["stairsbasic"],
 	"bossRooms": ["roombasicboss"],
@@ -65,16 +65,6 @@
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "lycanitesmobs:trite",
-			"weight": 14,
-			"dungeonLevelMin": "1"
-		},
-		{
-			"mobId": "lycanitesmobs:astaroth",
-			"weight": 1,
-			"dungeonLevelMin": "2"
-		},
-		{
 			"mobId": "lycanitesmobs:cacodemon",
 			"weight": 1,
 			"dungeonLevelMin": "2"
@@ -94,15 +84,18 @@
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:hellfirescepter"
+				},
+				{
+					"item": "lycanitesmobs:soulstone_demon"
 				}
 			]
 		},
 		{
-			"mobId": "lycanitesmobs:astaroth",
+			"mobId": "lycanitesmobs:pinky",
 			"weight": 1,
-			"subspecies": 0,
-			"mobNameTag": "Arachnotron",
-			"mobSizeScale": 1,
+			"subspecies": 2,
+			"mobNameTag": "Gluttony",
+			"mobSizeScale": 2,
 			"naturalDespawn": "false",
 			"mobLevel": 250,
 			"spawnAsBoss": true,
@@ -111,11 +104,11 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:astarothclaw"
-				},
-				{
 					"item": "minecraft:diamond",
 					"minAmount": 10
+				},
+				{
+					"item": "lycanitesmobs:soulstone_demon"
 				}
 			]
 		},
@@ -137,6 +130,9 @@
 				{
 					"item": "minecraft:diamond",
 					"minAmount": 50
+				},
+				{
+					"item": "lycanitesmobs:soulstone_demon"
 				}
 			]
 		}

@@ -145,7 +145,19 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:soulstoneshadow",
+			"item": "lycanitesmobs:soulstone_undead",
+			"minAmount": 1,
+			"maxAmount": 3,
+			"chance": 1
+		},
+		{
+			"item": "lycanitesmobs:soulstone_aberration",
+			"minAmount": 1,
+			"maxAmount": 3,
+			"chance": 1
+		},
+		{
+			"item": "lycanitesmobs:soulstone_beast",
 			"minAmount": 1,
 			"maxAmount": 3,
 			"chance": 1

@@ -93,7 +93,7 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:soulstoneshadow",
+			"item": "lycanitesmobs:soulstone_aberration",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,

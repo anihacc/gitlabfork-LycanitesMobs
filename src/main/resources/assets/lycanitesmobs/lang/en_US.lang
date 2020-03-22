@@ -461,23 +461,32 @@ tile.veswax.description=A tough clay-like substance created by Vespids usually t
 tile.propolis.name=Propolis
 tile.propolis.description=A tough clay-like substance created by Vespids usually to form hive floors and ceilings.
 # ========================================================================
+tile.soulcubedemonic.name=Demonic Soulcube
+tile.soulcubedemonic.description=A source of great demonic energy waiting to be unleashed, perfect for luring a great evil...
+#
+tile.soulcubeaberrant.name=Aberrant Soulcube
+tile.soulcubeaberrant.description=A strange device with unknown alien technology and magic flowing within, perhaps some form of beacon?
+#
+tile.soulcubeundead.name=Undead Soulcube
+tile.soulcubeundead.description=Inside lies thousands of twisted trapped souls waiting to escape!
+# ========================================================================
 tile.demonstonebrick_stairs.name=Demonstone Brick Stairs
-tile.demonstonebrick_stairs.description=Some say the greater demons ensalve lesser demons as slaves to build evil temples.
+tile.demonstonebrick_stairs.description=Some say the greater demons enslave lesser demons as slaves to build evil temples.
 #
 tile.demoncrystal.name=Demon Crystal
-tile.demoncrystal.description=The symbol acts as a ward as the trapped demonic energy rages within emiting a wicked light.
+tile.demoncrystal.description=The symbol acts as a ward as the trapped demonic energy rages within emitting a wicked light.
 #
 tile.demonstonechiseled.name=Chiseled Demonstone
 tile.demonstonechiseled.description=It is unknown why greater demons demand such detail for their temples, perhaps they are a status symbol?
 #
 tile.demonstonebrick_wall.name=Demonstone Brick Wall
-tile.demonstonebrick_wall.description=Some say the greater demons ensalve lesser demons as slaves to build evil temples.
+tile.demonstonebrick_wall.description=Some say the greater demons enslave lesser demons as slaves to build evil temples.
 #
 tile.demonstone.name=Demonstone
 tile.demonstone.description=Stone infused with the evil essence of a great demon.
 #
 tile.demonstonebrick_slab.name=Demonstone Brick Slab
-tile.demonstonebrick_slab.description=Some say the greater demons ensalve lesser demons as slaves to build evil temples.
+tile.demonstonebrick_slab.description=Some say the greater demons enslave lesser demons as slaves to build evil temples.
 #
 tile.demonstone_stairs.name=Demonstone Stairs
 tile.demonstone_stairs.description=Stone infused with the evil essence of a great demon.
@@ -486,7 +495,7 @@ tile.demonstone_slab.name=Demonstone Slab
 tile.demonstone_slab.description=Stone infused with the evil essence of a great demon.
 #
 tile.demonstonebrick_fence.name=Demonstone Brick Fence
-tile.demonstonebrick_fence.description=Some say the greater demons ensalve lesser demons as slaves to build evil temples.
+tile.demonstonebrick_fence.description=Some say the greater demons enslave lesser demons as slaves to build evil temples.
 #
 tile.demonstonepillar.name=Demonstone Pillar
 tile.demonstonepillar.description=The demonic temples are built big and while caked in the blood of the suffering, they look majestic.
@@ -501,19 +510,61 @@ tile.demonstone_slab_double.name=Double Demonstone Slab
 tile.demonstone_slab_double.description=Stone infused with the evil essence of a great demon.
 #
 tile.demonstonebrick.name=Demonstone Brick
-tile.demonstonebrick.description=Some say the greater demons ensalve lesser demons as slaves to build evil temples.
+tile.demonstonebrick.description=Some say the greater demons enslave lesser demons as slaves to build evil temples.
 #
 tile.demonstonepolished.name=Polished Demonstone
 tile.demonstonepolished.description=Once polished, the demonic stone looks like fresh blood.
 #
 tile.demonstonetile_stairs.name=Demonstone Tile Stairs
 tile.demonstonetile_stairs.description=How can something of such evil contain so much beauty?
+# ========================================================================
+tile.aberrantstonebrick_stairs.name=Aberrantstone Brick Stairs
+tile.aberrantstonebrick_stairs.description=There is something alien about these decorative blocks.
 #
-tile.soulcubedemonic.name=Demonic Soulcube
-tile.soulcubedemonic.description=A source of great demonic energy waiting to be unleashed, perfect for luring a great evil...
+tile.aberrantcrystal.name=Aberrant Crystal
+tile.aberrantcrystal.description=The light emitted feels like it comes from another world...
 #
-tile.soulcubeundead.name=Undead Soulcube
-tile.soulcubeundead.description=Inside lies thousands of twisted trapped souls waiting to escape!
+tile.aberrantstonechiseled.name=Chiseled Aberrantstone
+tile.aberrantstonechiseled.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonebrick_wall.name=Aberrantstone Brick Wall
+tile.aberrantstonebrick_wall.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstone.name=Aberrantstone
+tile.aberrantstone.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonebrick_slab.name=Aberrantstone Brick Slab
+tile.aberrantstonebrick_slab.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstone_stairs.name=Aberrantstone Stairs
+tile.aberrantstone_stairs.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstone_slab.name=Aberrantstone Slab
+tile.aberrantstone_slab.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonebrick_fence.name=Aberrantstone Brick Fence
+tile.aberrantstonebrick_fence.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonepillar.name=Aberrantstone Pillar
+tile.aberrantstonepillar.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonetile_slab.name=Aberrantstone Tile Slab
+tile.aberrantstonetile_slab.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonetile.name=Aberrantstone Tile
+tile.aberrantstonetile.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstone_slab_double.name=Double Aberrantstone Slab
+tile.aberrantstone_slab_double.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonebrick.name=Aberrantstone Brick
+tile.aberrantstonebrick.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonepolished.name=Polished Aberrantstone
+tile.aberrantstonepolished.description=There is something alien about these decorative blocks.
+#
+tile.aberrantstonetile_stairs.name=Aberrantstone Tile Stairs
+tile.aberrantstonetile_stairs.description=There is something alien about these decorative blocks.
 # ========================================================================
 tile.desertstonebrick_stairs.name=Desertstone Brick Stairs
 tile.desertstonebrick_stairs.description=A refined sandstone used to build great desert monuments.
@@ -1789,20 +1840,47 @@ item.soulkeyemerald.description=A more powerful Soul Key capable for summoning m
 item.soulstone.name=Soulstone
 item.soulstone.description=Use on a tamed creature to bind it to your spirit allowing you to summon and dismiss it anywhere anytime. Bound pets or mounts will also respawn after death.
 #
-item.soulstoneinferno.name=Inferno Soulstone
-item.soulstoneinferno.description=A fiery soul is contained within! Use this item to release what is inside!
+item.soulstone_aberration.name=Aberration Soulstone
+item.soulstone_aberration.description=The eerie soul of an Aberration resides within this Soulstone, unleash it and make it yours!
 #
-item.soulstonefreshwater.name=Freshwater Soulstone
-item.soulstonefreshwater.description=This soulstone looks like a ball of water, inside is the soul of an aquatic beast! Unleash it and let it be yours!
+item.soulstone_angel.name=Angel Soulstone
+item.soulstone_angel.description=The sacred soul of an Angel resides within this Soulstone, unleash it and make it yours!
 #
-item.soulstonedemonic.name=Demonic Soulstone
-item.soulstonedemonic.description=A demonic soul is contained within! Use this item to release what is inside... or use it to craft a Demonic Soulcube to summon something truly evil!
+item.soulstone_aquatic.name=Aquatic Soulstone
+item.soulstone_aquatic.description=The elegant soul of an Aquatic creature resides within this Soulstone, unleash it and make it yours!
 #
-item.soulstoneshadow.name=Shadow Soulstone
-item.soulstoneshadow.description=A dark soul is contained within! Use this item to release what is inside!
+item.soulstone_arthropod.name=Arthropod Soulstone
+item.soulstone_arthropod.description=The strange soul of an Arthropod resides within this Soulstone, unleash it and make it yours!
 #
-item.soulstonemountain.name=Mountain Soulstone
-item.soulstonemountain.description=A spirit of the mountains is contained within! Use this item to release what is inside!
+item.soulstone_avian.name=Avian Soulstone
+item.soulstone_avian.description=The swift soul of an Avian creature resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_beast.name=Beast Soulstone
+item.soulstone_beast.description=The vicious soul of a Beast resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_brute.name=Brute Soulstone
+item.soulstone_brute.description=The mighty soul of a Brute resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_demon.name=Demon Soulstone
+item.soulstone_demon.description=The wicked soul of a Demon resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_dragon.name=Dragon Soulstone
+item.soulstone_dragon.description=The proud soul of a Dragon resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_elemental.name=Elemental Essencestone
+item.soulstone_elemental.description=The magical essence of an Elemental resides within this Essencestone, unleash it and make it yours!
+#
+item.soulstone_imp.name=Imp Soulstone
+item.soulstone_imp.description=The mischievous soul of an Imp resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_plant.name=Plant Soulstone
+item.soulstone_plant.description=The flourishing soul of a Plant creature resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_undead.name=Undead Soulstone
+item.soulstone_undead.description=The tireless soul of an Undead creature resides within this Soulstone, unleash it and make it yours!
+#
+item.soulstone_worm.name=Worm Soulstone
+item.soulstone_worm.description=The relentless soul of a Worm resides within this Soulstone, unleash it and make it yours!
 #
 #
 # ========== Spawns ==========

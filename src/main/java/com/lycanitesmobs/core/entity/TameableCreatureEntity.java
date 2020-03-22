@@ -580,7 +580,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity implements IEn
 		if(this.isPassive())
 			return false;
 		if(this.isTamed()) {
-            if(this.getOwner() == targetEntity)
+            if(this.getOwner() == targetEntity || this.getPlayerOwner() == targetEntity)
                 return false;
             if(!this.getEntityWorld().isRemote) {
                 boolean canPVP = this.getEntityWorld().getMinecraftServer().isPVPEnabled() && this.isPVP();

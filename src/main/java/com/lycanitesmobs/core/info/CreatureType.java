@@ -6,9 +6,13 @@ import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import com.lycanitesmobs.core.item.consumable.ItemTreat;
 import com.lycanitesmobs.client.localisation.LanguageManager;
+import com.lycanitesmobs.core.item.special.ItemSoulstone;
+import com.lycanitesmobs.core.item.special.ItemSoulstoneFilled;
 import net.minecraft.item.Item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreatureType {
@@ -23,14 +27,20 @@ public class CreatureType {
 	/** A map of all creatures of this type by name. **/
 	public Map<String, CreatureInfo> creatures = new HashMap<>();
 
-	/** The name of the spawn egg item this type uses. **/
-	protected String spawnEggName = "beastspawn";
+	/** A list of all creatures of this type that can be tamed. **/
+	public List<CreatureInfo> tameableCreatures = new ArrayList<>();
+
+	/** The treat item this type uses. **/
+	protected Item treat;
+
+	/** The soulstone item this type uses. **/
+	protected ItemSoulstone soulstone;
 
 	/** The spawn egg item this type uses. **/
 	protected Item spawnEgg;
 
-	/** The treat item this type uses. **/
-	protected Item treat;
+	/** The diet type this Creature Type provides as food for predators. "none" by default. **/
+	public String dietProvided = "none";
 
 
 	/**
@@ -46,9 +56,8 @@ public class CreatureType {
 	public void loadFromJSON(JsonObject json) {
 		this.name = json.get("name").getAsString();
 
-		if(json.has("spawnEggName")) {
-			this.spawnEggName = json.get("spawnEggName").getAsString();
-		}
+		if(json.has("dietProvided"))
+			this.dietProvided = json.get("dietProvided").getAsString();
 	}
 
 	/**
@@ -98,6 +107,33 @@ public class CreatureType {
 
 
 	/**
+	 * Generates a soulstone item name from this type. Ex: imp_soulstone
+	 * @return The soulstone item name for this creature type.
+	 */
+	public String getSoulstoneName() {
+		return "soulstone_" + this.getName();
+	}
+
+
+	/**
+	 * Gets this creature type's soulstone item.
+	 * @return The soulstone item for this creature type.
+	 */
+	public ItemSoulstone getSoulstoneItem() {
+		return this.soulstone;
+	}
+
+
+	/**
+	 * Generates a spawn egg item name from this type. Ex: beastspawn
+	 * @return The spawn egg item name for this creature type.
+	 */
+	public String getSpawnEggName() {
+		return this.getName() + "spawn";
+	}
+
+
+	/**
 	 * Adds a creature to this Creature Type.
 	 * @param creatureInfo The creature to add.
 	 * @return
@@ -107,6 +143,9 @@ public class CreatureType {
 			return;
 		}
 		this.creatures.put(creatureInfo.getName(), creatureInfo);
+		if(creatureInfo.isTameable()) {
+			this.tameableCreatures.add(creatureInfo);
+		}
 	}
 
 
@@ -124,12 +163,14 @@ public class CreatureType {
 	 */
 	public void createItems() {
 		// Spawn Egg:
-		this.spawnEgg = ObjectManager.getItem(this.spawnEggName);
+		this.spawnEgg = ObjectManager.getItem(this.getSpawnEggName());
 		if(this.spawnEgg != null) {
+			if(this.spawnEgg instanceof ItemCustomSpawnEgg)
+				((ItemCustomSpawnEgg)this.spawnEgg).creatureType = this;
 			return;
 		}
-		this.spawnEgg = new ItemCustomSpawnEgg(this.spawnEggName, this);
-		ObjectManager.addItem(this.spawnEggName, this.spawnEgg);
+		this.spawnEgg = new ItemCustomSpawnEgg(this.getSpawnEggName(), this);
+		ObjectManager.addItem(this.getSpawnEggName(), this.spawnEgg);
 
 		// Treat:
 		this.treat = ObjectManager.getItem(this.getTreatName());
@@ -138,5 +179,13 @@ public class CreatureType {
 		}
 		this.treat = new ItemTreat(this);
 		ObjectManager.addItem(this.getTreatName(), this.treat);
+
+		// Soulstone:
+		this.soulstone = (ItemSoulstone)ObjectManager.getItem(this.getSoulstoneName());
+		if(this.soulstone != null) {
+			return;
+		}
+		this.soulstone = new ItemSoulstoneFilled(this.modInfo, this);
+		ObjectManager.addItem(this.getSoulstoneName(), this.soulstone);
 	}
 }

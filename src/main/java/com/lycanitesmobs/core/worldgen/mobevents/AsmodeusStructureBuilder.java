@@ -93,9 +93,9 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - radius;
 		int maxZ = originZ + radius;
-		IBlockState floor = ObjectManager.getBlock("demonstonetile").getDefaultState();
-		IBlockState light = ObjectManager.getBlock("demoncrystal").getDefaultState();
-		IBlockState trimming = ObjectManager.getBlock("demonstonechiseled").getDefaultState();
+		IBlockState floor = ObjectManager.getBlock("aberrantstonetile").getDefaultState();
+		IBlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
+		IBlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
 
 		for(int x = minX; x <= maxX; x++) {
 			for(int z = minZ; z <= maxZ; z++) {
@@ -111,7 +111,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 							world.setBlockState(buildPos, floor, 2);
 					}
 					else {
-						if (y > minY + 3 && y >= topY)
+						if (y > minY + 10 && y >= topY)
 							break;
 						world.setBlockToAir(buildPos);
 					}
@@ -134,10 +134,10 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - (radius + thickness);
 		int maxZ = originZ + (radius + thickness);
-		IBlockState base = ObjectManager.getBlock("demonstonebrick").getDefaultState();
-		IBlockState light = ObjectManager.getBlock("demoncrystal").getDefaultState();
-		IBlockState trimming = ObjectManager.getBlock("demonstonechiseled").getDefaultState();
-		IBlockState top = ObjectManager.getBlock("demonstonepolished").getDefaultState();
+		IBlockState base = ObjectManager.getBlock("aberrantstonebrick").getDefaultState();
+		IBlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
+		IBlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
+		IBlockState top = ObjectManager.getBlock("aberrantstonepolished").getDefaultState();
 		IBlockState fireBase = Blocks.OBSIDIAN.getDefaultState();
 		IBlockState fire = ObjectManager.getBlock("hellfire").getDefaultState();
 
@@ -191,10 +191,10 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 		int maxY = originY + height;
 		int minZ = originZ - radius;
 		int maxZ = originZ + radius;
-		IBlockState base = ObjectManager.getBlock("demonstonepillar").getDefaultState();
-		IBlockState light = ObjectManager.getBlock("demoncrystal").getDefaultState();
-		IBlockState trimming = ObjectManager.getBlock("demonstonechiseled").getDefaultState();
-		IBlockState top = ObjectManager.getBlock("demonstonepolished").getDefaultState();
+		IBlockState base = ObjectManager.getBlock("aberrantstonepillar").getDefaultState();
+		IBlockState light = ObjectManager.getBlock("aberrantcrystal").getDefaultState();
+		IBlockState trimming = ObjectManager.getBlock("aberrantstonechiseled").getDefaultState();
+		IBlockState top = ObjectManager.getBlock("aberrantstonepolished").getDefaultState();
 		IBlockState fireBase = Blocks.OBSIDIAN.getDefaultState();
 		IBlockState fire = ObjectManager.getBlock("hellfire").getDefaultState();
 

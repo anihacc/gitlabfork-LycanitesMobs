@@ -16,7 +16,7 @@
 	],
 	"themes": ["desert"],
 	"entrances": ["entrancebasic"],
-	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit"],
+	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
 	"stairs": ["stairsbasic"],
 	"bossRooms": ["roombasicboss"],
@@ -99,6 +99,9 @@
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:scorchfirescepter"
+				},
+				{
+					"item": "lycanitesmobs:soulstone_worm"
 				}
 			]
 		},
@@ -121,6 +124,9 @@
 				{
 					"item": "minecraft:diamond",
 					"minAmount": 10
+				},
+				{
+					"item": "lycanitesmobs:soulstone_imp"
 				}
 			]
 		},
@@ -142,6 +148,9 @@
 				},
 				{
 					"item": "lycanitesmobs:magmascepter"
+				},
+				{
+					"item": "lycanitesmobs:soulstone_dragon"
 				}
 			]
 		}

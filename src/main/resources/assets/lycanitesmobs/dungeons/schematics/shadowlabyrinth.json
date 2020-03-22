@@ -10,13 +10,13 @@
 			"type": "world",
 			"dimensionIds": [0, 1],
 			"dimensionListType": "whitelist",
-			"biomeTags": ["spooky", "mountain", "swamp", "end"],
+			"biomeTags": ["spooky", "mountain", "swamp", "nether", "end"],
 			"biomeTagListType": "whitelist"
 		}
 	],
 	"themes": ["shadow"],
 	"entrances": ["entrancebasic"],
-	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit"],
+	"rooms": ["roombasic", "roombasicloot", "roombasicmob", "roombasicpit", "roomdiamondpit"],
 	"corridors": ["corridorbasic", "corridorbasicdark", "corridorbasicloot", "corridorbasicmob"],
 	"stairs": ["stairsbasic"],
 	"bossRooms": ["roombasicboss"],
@@ -62,7 +62,7 @@
 			"dungeonLevelMin": "1"
 		},
 		{
-			"mobId": "lycanitesmobs:chupacabra",
+			"mobId": "lycanitesmobs:gnekk",
 			"weight": 4,
 			"dungeonLevelMin": "1"
 		},
@@ -96,6 +96,9 @@
 			"mobDrops": [
 				{
 					"item": "lycanitesmobs:bloodleechscepter"
+				},
+				{
+					"item": "lycanitesmobs:soulstone_beast"
 				}
 			]
 		},
@@ -118,6 +121,9 @@
 				{
 					"item": "minecraft:diamond",
 					"minAmount": 10
+				},
+				{
+					"item": "lycanitesmobs:soulstone_aberration"
 				}
 			]
 		},
@@ -139,6 +145,12 @@
 				{
 					"item": "minecraft:diamond",
 					"minAmount": 50
+				},
+				{
+					"item": "lycanitesmobs:soulstone_undead"
+				},
+				{
+					"item": "lycanitesmobs:soulstone_arthropod"
 				}
 			]
 		}

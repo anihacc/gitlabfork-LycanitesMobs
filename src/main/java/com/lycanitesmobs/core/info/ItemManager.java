@@ -18,7 +18,6 @@ import com.lycanitesmobs.core.block.fluid.BlockFluidPureLava;
 import com.lycanitesmobs.core.item.ItemMobToken;
 import com.lycanitesmobs.core.item.consumable.*;
 import com.lycanitesmobs.core.item.equipment.ItemEquipment;
-import com.lycanitesmobs.core.item.soulstone.*;
 import com.lycanitesmobs.core.item.special.*;
 import com.lycanitesmobs.core.item.temp.*;
 import net.minecraft.init.Blocks;
@@ -103,6 +102,7 @@ public class ItemManager extends JSONLoader {
 	public void loadItems() {
 		ModInfo group = LycanitesMobs.modInfo;
 		ObjectManager.addItem("soulgazer", new ItemSoulgazer());
+		ObjectManager.addItem("soulstone", new ItemSoulstone(group));
 		ObjectManager.addItem("equipment", new ItemEquipment());
 		ObjectManager.addItem("mobtoken", new ItemMobToken(group));
 
@@ -117,15 +117,6 @@ public class ItemManager extends JSONLoader {
 		ObjectManager.addBlock("equipmentforge_greater", new BlockEquipmentForge(group, 2));
 		ObjectManager.addBlock("equipmentforge_master", new BlockEquipmentForge(group, 3));
 		ObjectManager.addBlock("equipment_infuser", new EquipmentInfuserBlock(group));
-
-
-		// Soulstones:
-		ObjectManager.addItem("soulstone", new ItemSoulstone(group, ""));
-		ObjectManager.addItem("soulstonedemonic", new ItemSoulstoneDemonic(group));
-		ObjectManager.addItem("soulstonefreshwater", new ItemSoulstoneFreshwater(group));
-		ObjectManager.addItem("soulstoneinferno", new ItemSoulstoneInferno(group));
-		ObjectManager.addItem("soulstonemountain", new ItemSoulstoneMountain(group));
-		ObjectManager.addItem("soulstoneshadow", new ItemSoulstoneShadow(group));
 
 
 		// Buff Items:
@@ -195,12 +186,14 @@ public class ItemManager extends JSONLoader {
 
 
 		// Building Blocks:
-		BlockMaker.addStoneBlocks(group, "lush", Blocks.TALLGRASS);
-		BlockMaker.addStoneBlocks(group, "desert", Blocks.SANDSTONE);
-		BlockMaker.addStoneBlocks(group, "shadow", Blocks.OBSIDIAN);
-		BlockMaker.addStoneBlocks(group, "demon", Items.NETHER_WART);
+		BlockMaker.addStoneBlocks(group, "lush");
+		BlockMaker.addStoneBlocks(group, "desert");
+		BlockMaker.addStoneBlocks(group, "shadow");
+		BlockMaker.addStoneBlocks(group, "demon");
+		BlockMaker.addStoneBlocks(group, "aberrant");
 		ObjectManager.addBlock("soulcubedemonic", new BlockSoulcube(group, "soulcubedemonic"));
 		ObjectManager.addBlock("soulcubeundead", new BlockSoulcube(group, "soulcubeundead"));
+		ObjectManager.addBlock("soulcubeaberrant", new BlockSoulcube(group, "soulcubeaberrant"));
 		ObjectManager.addBlock("propolis", new BlockPropolis());
 		GameRegistry.addSmelting(ObjectManager.getBlock("propolis"), new ItemStack(Blocks.HARDENED_CLAY, 1), 0.5f);
 		ObjectManager.addBlock("veswax", new BlockVeswax());

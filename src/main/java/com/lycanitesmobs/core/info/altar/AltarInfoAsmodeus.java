@@ -25,7 +25,7 @@ public class AltarInfoAsmodeus extends AltarInfo {
     /** Called first when checking for a valid altar, this should be fairly lightweight such as just checking if the first block checked is valid, a more in depth check if then done after. **/
     @Override
     public boolean quickCheck(Entity entity, World world, BlockPos pos) {
-        if(world.getBlockState(pos).getBlock() != ObjectManager.getBlock("soulcubedemonic"))
+        if(world.getBlockState(pos).getBlock() != ObjectManager.getBlock("soulcubeaberrant"))
             return false;
         return true;
     }
@@ -49,13 +49,13 @@ public class AltarInfoAsmodeus extends AltarInfo {
             return false;
 
         // Corners:
-        if(!this.checkPillar(bodyBlock, entity, world, pos.add(-2, 0, 0)))
+        if(!this.checkPillar(bodyBlock, entity, world, pos.add(-2, 0, -2)))
             return false;
-        if(!this.checkPillar(bodyBlock, entity, world, pos.add(2, 0, 0)))
+        if(!this.checkPillar(bodyBlock, entity, world, pos.add(2, 0, -2)))
             return false;
-        if(!this.checkPillar(bodyBlock, entity, world, pos.add(0, 0, -2)))
+        if(!this.checkPillar(bodyBlock, entity, world, pos.add(-2, 0, 2)))
             return false;
-        if(!this.checkPillar(bodyBlock, entity, world,pos.add(0, 0, 2)))
+        if(!this.checkPillar(bodyBlock, entity, world,pos.add(2, 0, 2)))
             return false;
 
         return true;

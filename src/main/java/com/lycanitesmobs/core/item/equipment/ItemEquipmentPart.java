@@ -351,10 +351,10 @@ public class ItemEquipmentPart extends ItemBase {
 			r = nbt.getFloat("equipmentColorR");
 		}
 		if(nbt.hasKey("equipmentColorG")) {
-			r = nbt.getFloat("equipmentColorG");
+			g = nbt.getFloat("equipmentColorG");
 		}
 		if(nbt.hasKey("equipmentColorB")) {
-			r = nbt.getFloat("equipmentColorB");
+			b = nbt.getFloat("equipmentColorB");
 		}
 		return new Vector4f(r, g, b, 1);
 	}

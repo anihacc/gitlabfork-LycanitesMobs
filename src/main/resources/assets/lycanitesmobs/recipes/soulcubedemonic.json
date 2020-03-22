@@ -10,7 +10,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "S": {
-      "item": "minecraft:nether_star"
+      "item": "lycanitesmobs:soulstone_demon"
     },
     "B": {
       "item": "lycanitesmobs:demonstone"

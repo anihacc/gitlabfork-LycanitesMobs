@@ -131,9 +131,9 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:soulstonedemonic",
-			"minAmount": 1,
-			"maxAmount": 3,
+			"item": "lycanitesmobs:soulstone_demon",
+			"minAmount": 2,
+			"maxAmount": 6,
 			"chance": 1
 		},
 		{
