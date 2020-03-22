@@ -427,7 +427,11 @@ public class CommandMain implements ICommand {
 					if(args.length >= 5 && NumberUtils.isNumber(args[4])) {
 						level = Integer.parseInt(args[4]);
 					}
-                    worldExt.startMobEvent(mobEventName, player, pos, level);
+					int subspecies = -1;
+					if(args.length >= 6 && NumberUtils.isNumber(args[5])) {
+						subspecies = Integer.parseInt(args[5]);
+					}
+                    worldExt.startMobEvent(mobEventName, player, pos, level, subspecies);
 					return;
 				}
 				

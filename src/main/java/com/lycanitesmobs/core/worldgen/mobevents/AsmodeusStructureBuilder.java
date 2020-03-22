@@ -21,7 +21,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 	}
 
 	@Override
-	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void build(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
 		int originX = pos.getX();
 		int originY = pos.getY();
 		int originZ = pos.getZ();
@@ -74,7 +74,7 @@ public class AsmodeusStructureBuilder extends StructureBuilder {
 			if(worldExt != null) {
 				MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.name);
 				if(mobEventPlayerServer != null) {
-					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks);
+					mobEventPlayerServer.mobEvent.onSpawn(baseCreatureEntity, world, player, pos, level, ticks, subspecies);
 				}
 			}
 		}

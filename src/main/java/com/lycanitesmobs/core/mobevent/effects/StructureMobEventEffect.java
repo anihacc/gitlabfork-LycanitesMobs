@@ -20,9 +20,9 @@ public class StructureMobEventEffect extends MobEventEffect {
 
 
 	@Override
-	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks) {
+	public void onUpdate(World world, EntityPlayer player, BlockPos pos, int level, int ticks, int subspecies) {
 		if(this.structureBuilder != null) {
-			this.structureBuilder.build(world, player, pos, level, ticks);
+			this.structureBuilder.build(world, player, pos, level, ticks, subspecies);
 		}
 	}
 }

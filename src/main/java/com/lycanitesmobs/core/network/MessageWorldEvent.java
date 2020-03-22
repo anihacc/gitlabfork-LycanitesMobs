@@ -16,16 +16,18 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
+	public int subspecies = 1;
 
 
 	// ==================================================
 	//                    Constructors
 	// ==================================================
 	public MessageWorldEvent() {}
-	public MessageWorldEvent(String mobEventName, BlockPos pos, int level) {
+	public MessageWorldEvent(String mobEventName, BlockPos pos, int level, int subspecies) {
 		this.mobEventName = mobEventName;
 		this.pos = pos;
 		this.level = level;
+		this.subspecies = subspecies;
 	}
 	
 	
@@ -45,7 +47,7 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
 		if("".equals(message.mobEventName))
             worldExt.stopWorldEvent();
 		else {
-            worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level);
+            worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
 		}
 		return null;
 	}
@@ -63,6 +65,7 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
         this.mobEventName = packet.readString(256);
 		this.pos = packet.readBlockPos();
 		this.level = packet.readInt();
+		this.subspecies = packet.readInt();
 	}
 	
 	
@@ -78,6 +81,7 @@ public class MessageWorldEvent implements IMessage, IMessageHandler<MessageWorld
         packet.writeString(this.mobEventName);
 		packet.writeBlockPos(this.pos);
 		packet.writeInt(this.level);
+		packet.writeInt(this.subspecies);
 	}
 	
 }

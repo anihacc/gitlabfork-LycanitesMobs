@@ -18,15 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemSoulkey extends ItemBase {
-    public int rank = 0; // 0 = Standard, 1 = Diamond, 2 = Emerald
+    public int subspecies = -1; // 0 = Standard, 1 = Diamond, 2 = Emerald
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulkey(String itemName, int rank) {
+    public ItemSoulkey(String itemName, int subspecies) {
         super();
         this.itemName = itemName;
-        this.rank = rank;
+        this.subspecies = subspecies;
         this.setup();
     }
 	
@@ -73,7 +73,7 @@ public class ItemSoulkey extends ItemBase {
 
                 // Valid Altar:
                 if(!player.getEntityWorld().isRemote) {
-                    if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
+                    if(!altarInfo.activate(player, world, pos, this.subspecies)) {
                         String message = LanguageManager.translate("message.soulkey.badlocation");
                         player.sendMessage(new TextComponentString(message));
                         return EnumActionResult.FAIL;

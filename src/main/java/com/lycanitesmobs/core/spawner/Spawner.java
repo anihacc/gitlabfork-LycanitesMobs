@@ -783,7 +783,7 @@ public class Spawner {
 			MobEventPlayerServer mobEventPlayerServer = worldExt.getMobEventPlayerServer(this.eventName);
 			if(mobEventPlayerServer != null) {
 				MobEvent mobEvent = mobEventPlayerServer.mobEvent;
-				mobEvent.onSpawn(entityLiving, mobEventPlayerServer.world, mobEventPlayerServer.player, mobEventPlayerServer.origin, mobEventPlayerServer.level, mobEventPlayerServer.ticks);
+				mobEvent.onSpawn(entityLiving, mobEventPlayerServer.world, mobEventPlayerServer.player, mobEventPlayerServer.origin, mobEventPlayerServer.level, mobEventPlayerServer.ticks, -1);
 			}
 		}
 	}

@@ -35,10 +35,10 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 	 * @param entity
 	 * @param world The world that the Altar was activated in.
 	 * @param pos The central position of the Altar.
-	 * @param level The level of the activated the Altar.
+	 * @param subspecies The level of the activated the Altar.
 	 * @return
 	 */
-	public boolean onActivate(Entity entity, World world, BlockPos pos, int level) {
+	public boolean onActivate(Entity entity, World world, BlockPos pos, int subspecies) {
 		EntityPlayer player = null;
 		if(entity instanceof EntityPlayer) {
 			player = (EntityPlayer)entity;
@@ -46,7 +46,7 @@ public class AltarMobEventTrigger extends MobEventTrigger {
 		if(!this.canTrigger(world, player)) {
 			return false;
 		}
-		return this.trigger(world, player, pos, level);
+		return this.trigger(world, player, pos, 1, subspecies);
 	}
 
 

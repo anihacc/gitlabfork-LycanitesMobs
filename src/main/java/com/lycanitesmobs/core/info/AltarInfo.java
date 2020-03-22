@@ -151,10 +151,10 @@ public class AltarInfo {
     //                     Activate
     // ==================================================
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
-    public boolean activate(Entity entity, World world, BlockPos pos, int level) {
+    public boolean activate(Entity entity, World world, BlockPos pos, int subspecies) {
     	if(this.mobEventTrigger == null)
         	return false;
-    	return this.mobEventTrigger.onActivate(entity, world, pos, level);
+    	return this.mobEventTrigger.onActivate(entity, world, pos, subspecies);
     }
 
 
