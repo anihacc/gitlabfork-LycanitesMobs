@@ -74,6 +74,12 @@ public class Spawner {
 	/** The maximum amount of mobs to spawn each wave. **/
 	public int mobCountMax = 1;
 
+	/** If true, this Spawner will divide the amount of mobs to spawn by the amount of players near the trigger player (does not affect non-player triggers). **/
+	public boolean mobCountPlayerScaling = true;
+
+	/** How far to search around a player for finding nearby other player for mob spawn scaling. **/
+	public int mobCountPlayerRange = 64;
+
 	/** If true, this Spawner will ignore all mob dimension checks (not Spawn Condition checks), this bypasses the checks in MobSpawns and SpawnInfos. **/
 	public boolean ignoreDimensions = false;
 
@@ -153,6 +159,12 @@ public class Spawner {
 
 		if(json.has("mobCountMax"))
 			this.mobCountMax = json.get("mobCountMax").getAsInt();
+
+		if(json.has("mobCountPlayerScaling"))
+			this.mobCountPlayerScaling = json.get("mobCountPlayerScaling").getAsBoolean();
+
+		if(json.has("mobCountPlayerRange"))
+			this.mobCountPlayerRange = json.get("mobCountPlayerRange").getAsInt();
 
 		if(json.has("ignoreDimensions"))
 			this.ignoreDimensions = json.get("ignoreDimensions").getAsBoolean();
@@ -383,9 +395,28 @@ public class Spawner {
      * @return True on a successful spawn and false on failure.
      **/
     public boolean doSpawn(World world, PlayerEntity player, SpawnTrigger spawnTrigger, BlockPos triggerPos, int level, int chain) {
-    	int mobCount = this.mobCountMin;
+		// Get Amount of Mobs To Spawn:
+		int mobCount = this.mobCountMin;
     	if(this.mobCountMax > this.mobCountMin) {
     		mobCount = world.rand.nextInt(this.mobCountMax - this.mobCountMin) + 1 + this.mobCountMin;
+		}
+		if(player != null && this.mobCountPlayerScaling) {
+			int nearbyPlayers = 0;
+			List<? extends PlayerEntity> allPlayers = world.getPlayers();
+			for(PlayerEntity targetPlayer : allPlayers) {
+				if(targetPlayer.isCreative() || targetPlayer.isSpectator()) {
+					if(!SpawnerEventListener.testOnCreative)
+						break;
+				}
+				if(targetPlayer.getDistance(player) > this.mobCountPlayerRange) {
+					break;
+				}
+				nearbyPlayers++;
+			}
+			LycanitesMobs.logDebug("JSONSpawner", "Nearby Players: " + nearbyPlayers);
+			if(nearbyPlayers > 0) {
+				mobCount = (int) Math.ceil((double) mobCount / nearbyPlayers);
+			}
 		}
 
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
@@ -532,11 +563,11 @@ public class Spawner {
 			return spawnPositions;
 		}
 		if(this.locations.size() == 1) {
-			LycanitesMobs.logDebug("JSONSpawner", "Only One Spawn Location");
+			LycanitesMobs.logDebug("JSONSpawner", "Only One Spawn Location Type");
 			return this.locations.get(0).getSpawnPositions(world, player, triggerPos);
 		}
 
-		LycanitesMobs.logDebug("JSONSpawner", "Multiple Spawn Locations, Mode: " + this.multipleLocations);
+		LycanitesMobs.logDebug("JSONSpawner", "Multiple Spawn Location Types, Mode: " + this.multipleLocations);
 		if("order".equals(this.multipleLocations)) {
 			for(SpawnLocation location : this.locations) {
 				spawnPositions = location.getSpawnPositions(world, player, triggerPos);

@@ -206,7 +206,7 @@ public class CreatureInfo {
 		// Model Class:
 		this.modelClassName = json.get("modelClass").getAsString();
 
-		// Creature Type:
+		// Get Creature Type:
 		if(json.has("creatureType")) {
 			this.creatureType = CreatureManager.getInstance().getCreatureType(json.get("creatureType").getAsString());
 			if(this.creatureType == null) {
@@ -215,9 +215,6 @@ public class CreatureInfo {
 		}
 		if(this.creatureType == null) {
 			this.creatureType = CreatureManager.getInstance().getCreatureType("beast");
-		}
-		if(this.creatureType != null) {
-			this.creatureType.addCreature(this);
 		}
 
 		// Creature Group:
@@ -371,6 +368,11 @@ public class CreatureInfo {
 				}
 				catch(Exception e) {}
 			}
+		}
+
+		// Add To Creature Type:
+		if(this.creatureType != null) {
+			this.creatureType.addCreature(this);
 		}
 	}
 

@@ -70,6 +70,9 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
                     this.leap(1.0D, 1.0D);
                     this.isLanded = false;
                 }
+                if(this.isTamed() && !this.isSitting()) {
+                    this.isLanded = false;
+                }
             }
             else {
                 if(this.wantsToLand) {
@@ -86,7 +89,7 @@ public class EntityIgnibus extends RideableCreatureEntity implements IGroupHeavy
             if(this.hasPickupEntity() || this.getControllingPassenger() != null || this.hasAttackTarget() || this.isInWater()) {
                 this.wantsToLand = false;
             }
-            else if(this.isTamed() && !this.getLeashed()) {
+            else if(this.isTamed() && this.isSitting() && !this.getLeashed()) {
                 this.wantsToLand = true;
             }
         }

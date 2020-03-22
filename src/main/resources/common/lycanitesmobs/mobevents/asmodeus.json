@@ -8,8 +8,8 @@
 	"conditions": [
 		{
 			"type": "world",
-			"dimensionIds": ["minecraft:the_nether"],
-			"dimensionListType": "whitelist"
+			"dimensionIds": [],
+			"dimensionListType": "blacklist"
 		}
 	],
 	"levelBoostMax": 0,

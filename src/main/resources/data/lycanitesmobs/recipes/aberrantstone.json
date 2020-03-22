@@ -1,0 +1,36 @@
+{
+  "result": {
+    "item": "lycanitesmobs:aberrantstone",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    },
+    {
+      "item": "minecraft:andesite"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

@@ -83,7 +83,7 @@
 			"chance": 0.5
 		},
 		{
-			"item": "lycanitesmobs:soulstoneshadow",
+			"item": "lycanitesmobs:soulstone_undead",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,

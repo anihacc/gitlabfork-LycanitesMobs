@@ -115,7 +115,7 @@
 			"subspecies": 3
 		},
 		{
-			"item": "lycanitesmobs:soulstonemountain",
+			"item": "lycanitesmobs:soulstone_worm",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,

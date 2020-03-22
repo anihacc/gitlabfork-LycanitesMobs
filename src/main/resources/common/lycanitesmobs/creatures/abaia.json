@@ -89,7 +89,7 @@
 			"chance": 1
 		},
 		{
-			"item": "lycanitesmobs:soulstonefreshwater",
+			"item": "lycanitesmobs:soulstone_aquatic",
 			"minAmount": 1,
 			"maxAmount": 1,
 			"chance": 1,
