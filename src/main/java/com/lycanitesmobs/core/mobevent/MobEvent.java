@@ -217,9 +217,10 @@ public class MobEvent {
 	 * @param player The player that triggered the event, this can be null for world based events where all player based checks will fail.
 	 * @param pos Where the event origin will be. This is used by effects for generating structures as well as Mob Event Spawn Triggers and other things.
 	 * @param level The level of the event.
+	 * @param subspecies The subspecies to spawn, if less than 0 a random subspecies is picked as normal.
 	 * @return
 	 */
-	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level) {
+	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level, int subspecies) {
 		LycanitesMobs.logDebug("MobEvents", "~O==================== Mob Event Triggered: " + this.name + " ====================O~");
 		ExtendedWorld worldExt = ExtendedWorld.getForWorld(world);
 		if(worldExt == null) {
@@ -230,7 +231,7 @@ public class MobEvent {
 			worldExt.startWorldEvent(this);
 		}
 		else if(pos != null) {
-			worldExt.startMobEvent(this, player, pos, level);
+			worldExt.startMobEvent(this, player, pos, level, subspecies);
 		}
 		return true;
 	}
@@ -242,10 +243,11 @@ public class MobEvent {
 	 * @param pos Where the event origin will be. This is used by effects for generating structures as well as Mob Event Spawn Triggers and other things.
 	 * @param level The level of the event.
 	 * @param ticks How many ticks the event has been active for.
+	 * @param subspecies The subspecies to spawn, if less than 0 a random subspecies is picked as normal.
 	 */
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies) {
 		for(MobEventEffect mobEventEffect : this.effects) {
-			mobEventEffect.onUpdate(world, player, pos, level, ticks);
+			mobEventEffect.onUpdate(world, player, pos, level, ticks, subspecies);
 		}
 	}
 
@@ -257,8 +259,9 @@ public class MobEvent {
 	 * @param pos Where the event origin will be. This is used by effects for generating structures as well as Mob Event Spawn Triggers and other things.
 	 * @param level The level of the event.
 	 * @param ticks How many ticks the event has been active for.
+	 * @param subspecies The subspecies to spawn, if less than 0 a random subspecies is picked as normal.
 	 */
-	public void onSpawn(LivingEntity entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public void onSpawn(LivingEntity entity, World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies) {
 		for(MobEventEffect mobEventEffect : this.effects) {
 			mobEventEffect.onSpawn(entity, world, player, pos, level, ticks);
 		}
@@ -274,8 +277,8 @@ public class MobEvent {
 				entityCreature.setTemporary(MobEventManager.getInstance().defaultMobDuration);
 			}
 
-			if(level > 1) {
-				entityCreature.applySubspecies(level - 1);
+			if(subspecies >= 0) {
+				entityCreature.applySubspecies(subspecies);
 			}
 		}
     }

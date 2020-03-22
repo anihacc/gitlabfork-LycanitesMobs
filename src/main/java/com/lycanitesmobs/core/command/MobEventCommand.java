@@ -22,14 +22,18 @@ public class MobEventCommand {
 						.then(Commands.argument("mobevent", StringArgumentType.string())
 								.then(Commands.argument("level", IntegerArgumentType.integer())
 										.executes(MobEventCommand::start)
-											.then(Commands.argument("world", IntegerArgumentType.integer())
+											.then(Commands.argument("subspecies", IntegerArgumentType.integer())
 													.executes(MobEventCommand::startWorld))
+														.then(Commands.argument("world", IntegerArgumentType.integer())
+																.executes(MobEventCommand::startWorld))
 				)))
 				.then(Commands.literal("random")
 							.then(Commands.argument("level", IntegerArgumentType.integer())
 									.executes(MobEventCommand::random)
-									.then(Commands.argument("world", IntegerArgumentType.integer())
-											.executes(MobEventCommand::randomWorld))
+										.then(Commands.argument("subspecies", IntegerArgumentType.integer())
+												.executes(MobEventCommand::startWorld))
+													.then(Commands.argument("world", IntegerArgumentType.integer())
+															.executes(MobEventCommand::randomWorld))
 							))
 				.then(Commands.literal("stop")
 						.executes(MobEventCommand::stop)
@@ -41,6 +45,7 @@ public class MobEventCommand {
 		World world = context.getSource().getWorld();
 		String eventName = StringArgumentType.getString(context, "mobevent");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
+		int subspecies = Math.max(-1, IntegerArgumentType.getInteger(context, "subspecies"));
 
 		if(!MobEventManager.getInstance().mobEvents.containsKey(eventName)) {
 			context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevent.start.unknown"), true);
@@ -52,7 +57,7 @@ public class MobEventCommand {
 			return 0;
 		}
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level);
+			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level, subspecies);
 		}
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;
@@ -61,6 +66,7 @@ public class MobEventCommand {
 	public static int startWorld(final CommandContext<CommandSource> context) {
 		String eventName = StringArgumentType.getString(context, "mobevent");
 		int level = Math.max(1, IntegerArgumentType.getInteger(context, "level"));
+		int subspecies = Math.max(-1, IntegerArgumentType.getInteger(context, "subspecies"));
 		int worldId = IntegerArgumentType.getInteger(context, "world");
 
 		if(!MobEventManager.getInstance().mobEvents.containsKey(eventName)) {
@@ -74,7 +80,7 @@ public class MobEventCommand {
 			return 0;
 		}
 		if(context.getSource().getEntity() instanceof PlayerEntity) {
-			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level);
+			extendedWorld.startMobEvent(eventName, (PlayerEntity)context.getSource().getEntity(), context.getSource().getEntity().getPosition(), level, subspecies);
 		}
 		context.getSource().sendFeedback(new TranslationTextComponent("lyc.command.mobevent.start"), true);
 		return 0;

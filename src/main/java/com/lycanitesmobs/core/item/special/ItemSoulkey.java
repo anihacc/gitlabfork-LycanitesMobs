@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemSoulkey extends BaseItem {
-    public int rank = 0; // 0 = Standard, 1 = Diamond, 2 = Emerald
+    public int subspecies = 0; // 0 = Standard, 1 = Diamond, 2 = Emerald
 
 	// ==================================================
 	//                   Constructor
 	// ==================================================
-    public ItemSoulkey(Item.Properties properties, String itemName, int rank) {
+    public ItemSoulkey(Item.Properties properties, String itemName, int subspecies) {
         super(properties);
         this.itemName = itemName;
-        this.rank = rank;
+        this.subspecies = subspecies;
         this.setup();
     }
     
@@ -67,7 +67,7 @@ public class ItemSoulkey extends BaseItem {
 
                 // Valid Altar:
                 if(!player.getEntityWorld().isRemote) {
-                    if(!altarInfo.activate(player, world, pos, this.rank + 1)) {
+                    if(!altarInfo.activate(player, world, pos, this.subspecies)) {
                         ITextComponent message = new TranslationTextComponent("message.soulkey.badlocation");
                         player.sendMessage(message);
                         return ActionResultType.FAIL;

@@ -26,6 +26,9 @@ public abstract class MobEventTrigger {
 	/** Determines how many Trigger specific Conditions must be met. If 0 or less all are required. **/
 	public int conditionsRequired = 0;
 
+	/** Forces the subspecies of mobs to spawn from this event, if less that 0 subspecies are random as normal. **/
+	public int subspecies = -1;
+
 
 	/** Creates a Mob Event Trigger from the provided JSON data. **/
 	public static MobEventTrigger createFromJSON(JsonObject json, MobEvent mobEvent) {
@@ -57,6 +60,9 @@ public abstract class MobEventTrigger {
 	public void loadFromJSON(JsonObject json) {
 		if(json.has("conditionsRequired"))
 			this.conditionsRequired = json.get("conditionsRequired").getAsInt();
+
+		if(json.has("subspecies"))
+			this.subspecies = json.get("subspecies").getAsInt();
 
 		if(json.has("conditions")) {
 			JsonArray jsonArray = json.get("conditions").getAsJsonArray();
@@ -103,8 +109,8 @@ public abstract class MobEventTrigger {
 
 
 	/** Triggers an actual spawn, this does not check conditions, it just triggers. **/
-	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level) {
+	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level, int subspecies) {
 		LycanitesMobs.logDebug("MobEvents", "Trigger Fired: " + this + " for: " + this.mobEvent.name + " channel: " + this.mobEvent.channel);
-		return this.mobEvent.trigger(world, player, pos, level);
+		return this.mobEvent.trigger(world, player, pos, level, subspecies);
 	}
 }

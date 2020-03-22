@@ -15,12 +15,14 @@ public class MessageMobEvent {
 	public String mobEventName;
 	public BlockPos pos;
 	public int level = 1;
+	public int subspecies = 1;
 
 	public MessageMobEvent() {}
-	public MessageMobEvent(String mobEventName, BlockPos pos, int level) {
+	public MessageMobEvent(String mobEventName, BlockPos pos, int level, int subspecies) {
         this.mobEventName = mobEventName;
         this.pos = pos;
         this.level = level;
+        this.subspecies = subspecies;
     }
 	
 	/**
@@ -39,7 +41,7 @@ public class MessageMobEvent {
 			if ("".equals(message.mobEventName))
 				worldExt.stopMobEvent(message.mobEventName);
 			else {
-				worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level);
+				worldExt.startMobEvent(message.mobEventName, null, message.pos, message.level, message.subspecies);
 			}
         });
 	}
@@ -52,6 +54,7 @@ public class MessageMobEvent {
         message.mobEventName = packet.readString(256);
         message.pos = packet.readBlockPos();
         message.level = packet.readInt();
+        message.subspecies = packet.readInt();
 		return message;
 	}
 	
@@ -62,6 +65,7 @@ public class MessageMobEvent {
         packet.writeString(message.mobEventName);
         packet.writeBlockPos(message.pos);
         packet.writeInt(message.level);
+		packet.writeInt(message.subspecies);
 	}
 	
 }

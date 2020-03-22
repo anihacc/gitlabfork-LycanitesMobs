@@ -151,7 +151,7 @@ public class MobEventListener {
 		int searchWeight = 0;
 		for(RandomMobEventTrigger mobEventTrigger : validTriggers) {
 			if(mobEventTrigger.weight + searchWeight > randomWeight) {
-				mobEventTrigger.trigger(world, null, new BlockPos(0, 0, 0), level);
+				mobEventTrigger.trigger(world, null, new BlockPos(0, 0, 0), level, -1);
 				return;
 			}
 			searchWeight += mobEventTrigger.weight;

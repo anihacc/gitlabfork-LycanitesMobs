@@ -48,6 +48,6 @@ public class TickMobEventTrigger extends MobEventTrigger {
 			return;
 		}
 
-		this.trigger(world, null,new BlockPos(0, 0, 0), 0);
+		this.trigger(world, null, new BlockPos(0, 0, 0), 0, this.subspecies);
 	}
 }

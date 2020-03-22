@@ -119,7 +119,7 @@ public class ExtendedWorld extends WorldSavedData {
 		// Start Saved Events:
 		if (!this.world.isRemote && !"".equals(this.getWorldEventName()) && this.serverWorldEventPlayer == null) {
 			long savedLastStartedTime = this.getWorldEventLastStartedTime();
-			this.startMobEvent(this.getWorldEventName(), null, new BlockPos(0, 0, 0), 1); // TODO Swap to read/write from NBT on Server Players.
+			this.startMobEvent(this.getWorldEventName(), null, new BlockPos(0, 0, 0), 1, -1); // TODO Swap to read/write from NBT on Server Players.
 			if (this.serverWorldEventPlayer != null) {
 				this.serverWorldEventPlayer.changeStartedWorldTime(savedLastStartedTime);
 			}
@@ -271,7 +271,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by INSTANCE) on the provided world.
      *  **/
-    public void startMobEvent(MobEvent mobEvent, PlayerEntity player, BlockPos pos, int level) {
+    public void startMobEvent(MobEvent mobEvent, PlayerEntity player, BlockPos pos, int level, int subspecies) {
         if(mobEvent == null) {
             LycanitesMobs.logWarning("", "Tried to start a null mob event.");
             return;
@@ -284,6 +284,7 @@ public class ExtendedWorld extends WorldSavedData {
 			mobEventPlayerServer.player = player;
             mobEventPlayerServer.origin = pos;
             mobEventPlayerServer.level = level;
+			mobEventPlayerServer.subspecies = subspecies;
             mobEventPlayerServer.onStart();
             this.updateAllClientsEvents();
         }
@@ -307,7 +308,7 @@ public class ExtendedWorld extends WorldSavedData {
     /**
      * Starts a provided Mob Event (provided by name) on the provided world.
      **/
-    public MobEvent startMobEvent(String mobEventName, PlayerEntity player, BlockPos pos, int level) {
+    public MobEvent startMobEvent(String mobEventName, PlayerEntity player, BlockPos pos, int level, int subspecies) {
         MobEvent mobEvent;
         if(MobEventManager.getInstance().mobEvents.containsKey(mobEventName)) {
             mobEvent = MobEventManager.getInstance().mobEvents.get(mobEventName);
@@ -321,7 +322,7 @@ public class ExtendedWorld extends WorldSavedData {
             return null;
         }
 
-        mobEvent.trigger(world, player, pos, level);
+        mobEvent.trigger(world, player, pos, level, subspecies);
         return mobEvent;
     }
 
@@ -395,10 +396,11 @@ public class ExtendedWorld extends WorldSavedData {
     public void updateAllClientsEvents() {
     	BlockPos pos = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.origin : new BlockPos(0, 0, 0);
 		int level = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.level : 0;
-        MessageWorldEvent message = new MessageWorldEvent(this.getWorldEventName(), pos, level);
+		int subspecies = this.serverWorldEventPlayer != null ? this.serverWorldEventPlayer.subspecies : -1;
+		MessageWorldEvent message = new MessageWorldEvent(this.getWorldEventName(), pos, level, subspecies);
         LycanitesMobs.packetHandler.sendToWorld(message, this.world);
         for(MobEventPlayerServer mobEventPlayerServer : this.serverMobEventPlayers.values()) {
-            MessageMobEvent messageMobEvent = new MessageMobEvent(mobEventPlayerServer.mobEvent != null ? mobEventPlayerServer.mobEvent.name : "", mobEventPlayerServer.origin, mobEventPlayerServer.level);
+            MessageMobEvent messageMobEvent = new MessageMobEvent(mobEventPlayerServer.mobEvent != null ? mobEventPlayerServer.mobEvent.name : "", mobEventPlayerServer.origin, mobEventPlayerServer.level, mobEventPlayerServer.subspecies);
             LycanitesMobs.packetHandler.sendToWorld(messageMobEvent, this.world);
         }
     }

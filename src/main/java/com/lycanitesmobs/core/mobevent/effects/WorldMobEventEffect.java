@@ -33,7 +33,7 @@ public class WorldMobEventEffect extends MobEventEffect {
 
 
 	@Override
-	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks) {
+	public void onUpdate(World world, PlayerEntity player, BlockPos pos, int level, int ticks, int subspecies) {
 		if(ticks == 0) {
 			// Rain:
 			if ("start".equalsIgnoreCase(this.rain)) {
