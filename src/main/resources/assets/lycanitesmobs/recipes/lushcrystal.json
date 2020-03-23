@@ -4,8 +4,7 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:tallgrass",
-      "data": 1
+      "item": "lycanitesmobs:lushstone"
     },
     {
       "item": "minecraft:glowstone"
