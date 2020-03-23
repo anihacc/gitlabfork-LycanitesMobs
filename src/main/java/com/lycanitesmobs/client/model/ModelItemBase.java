@@ -2,13 +2,13 @@ package com.lycanitesmobs.client.model;
 
 import com.google.gson.*;
 import com.lycanitesmobs.LycanitesMobs;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.model.animation.ModelPartAnimation;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
+import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.ModInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
@@ -198,19 +198,12 @@ public abstract class ModelItemBase implements IAnimationModel {
 			this.doAngle(modelXRotOffset, 1F, 0F, 0F);
 			this.doTranslate(0F, modelYPosOffset, 0F);
 
-			/*/ Animate and Offset By Equipment Piece Slot:
-			if(offsetObjPart != null) {
-				offsetObjPart.applyAnimationFrames(this.animator);
-				this.doTranslate(offsetObjPart.centerX, offsetObjPart.centerY, offsetObjPart.centerZ);
-				this.doRotate(-offsetObjPart.rotationX, -offsetObjPart.rotationY, -offsetObjPart.rotationZ);
-			}*/
-
 			// Apply Animation Frames:
 			this.currentAnimationPart.applyAnimationFrames(this.animator);
 
 			// Render Part:
 			this.onRenderStart(layer, itemStack);
-			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop));
+			this.wavefrontObject.renderGroup(part, this.getPartColor(partName, itemStack, layer, loop), this.getPartTextureOffset(partName, itemStack, layer, loop), null);
 			this.onRenderFinish(layer, itemStack);
 			GlStateManager.popMatrix();
 		}

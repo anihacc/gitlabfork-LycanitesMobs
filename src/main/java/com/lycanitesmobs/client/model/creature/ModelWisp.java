@@ -3,9 +3,9 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
-import com.lycanitesmobs.client.renderer.layer.LayerScrolling;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -45,9 +45,9 @@ public class ModelWisp extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "ball", true, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "ball_glow",  "ball", true, LayerEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerScrolling(renderer, "hair", true, LayerEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "ball", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "ball_glow",  "ball", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "hair", true, LayerCreatureEffect.BLEND.NORMAL.id, true, new Vector2f(0, 4)));
 	}
 
 
@@ -104,7 +104,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(partName.contains("ball") && entity instanceof BaseCreatureEntity && ((BaseCreatureEntity) entity).isAttackOnCooldown()) {
 			return false;
 		}
@@ -129,7 +129,7 @@ public class ModelWisp extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer != null && ("ball".equals(layer.name) || "ball_glow".equals(layer.name))) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;
@@ -145,13 +145,13 @@ public class ModelWisp extends ModelTemplateElemental {
 	//                   On Render
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		GlStateManager.disableLighting();
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		GlStateManager.enableLighting();
 	}

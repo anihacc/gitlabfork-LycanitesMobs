@@ -7,13 +7,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerEquipment extends LayerBase {
+public class LayerCreatureEquipment extends LayerCreatureBase {
     public String equipmentSlot;
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerEquipment(RenderCreature renderer, String equipmentSlot) {
+    public LayerCreatureEquipment(RenderCreature renderer, String equipmentSlot) {
         super(renderer);
         this.equipmentSlot = equipmentSlot;
     }

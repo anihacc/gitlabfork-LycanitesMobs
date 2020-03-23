@@ -12,12 +12,12 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class LayerDjinn extends LayerBase {
+public class LayerCreatureDjinn extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerDjinn(RenderCreature renderer) {
+    public LayerCreatureDjinn(RenderCreature renderer) {
         super(renderer);
     }
 

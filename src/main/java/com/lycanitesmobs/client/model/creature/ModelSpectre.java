@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import com.lycanitesmobs.core.entity.creature.EntitySpectre;
@@ -41,8 +41,8 @@ public class ModelSpectre extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "glow", true, LayerEffect.BLEND.ADD.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "", false, LayerEffect.BLEND.SUB.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "glow", true, LayerCreatureEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "", false, LayerCreatureEffect.BLEND.SUB.id, true));
 	}
 
 
@@ -50,7 +50,7 @@ public class ModelSpectre extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if("effect01".equals(partName)) {
 			return layer != null && "".equals(layer.name);
 		}
@@ -143,12 +143,12 @@ public class ModelSpectre extends ModelTemplateElemental {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 	}
 }

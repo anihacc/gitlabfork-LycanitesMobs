@@ -3,9 +3,9 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
-import com.lycanitesmobs.client.renderer.layer.LayerScrolling;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -45,9 +45,9 @@ public class ModelWraith extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "overlay", true, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerEffect(renderer, "skull", false, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerScrolling(renderer, "", true, LayerEffect.BLEND.ADD.id, true, new Vector2f(-8, 0)));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "skull", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(-8, 0)));
 	}
 
 
@@ -81,12 +81,12 @@ public class ModelWraith extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if("head".equals(partName)) {
 			return layer == null || "overlay".equals(layer.name);
 		}
 		if("fire".equals(partName)) {
-			return layer != null && layer instanceof LayerScrolling;
+			return layer != null && layer instanceof LayerCreatureScrolling;
 		}
 		return layer != null && "skull".equals(layer.name);
 	}
@@ -105,8 +105,8 @@ public class ModelWraith extends ModelTemplateElemental {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
-		if(layer == null || layer instanceof LayerScrolling) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
+		if(layer == null || layer instanceof LayerCreatureScrolling) {
 			float glowSpeed = 80;
 			float glow = loop * glowSpeed % 360;
 			float color = ((float)Math.cos(Math.toRadians(glow)) * 0.1f) + 0.9f;
@@ -125,7 +125,7 @@ public class ModelWraith extends ModelTemplateElemental {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
@@ -136,7 +136,7 @@ public class ModelWraith extends ModelTemplateElemental {
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;

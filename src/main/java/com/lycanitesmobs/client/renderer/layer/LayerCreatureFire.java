@@ -1,19 +1,18 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerSaddle extends LayerBase {
+public class LayerCreatureFire extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerSaddle(RenderCreature renderer) {
+    public LayerCreatureFire(RenderCreature renderer) {
         super(renderer);
     }
 
@@ -23,9 +22,9 @@ public class LayerSaddle extends LayerBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
-        if(!super.canRenderLayer(entity, scale) || !(entity instanceof RideableCreatureEntity))
+        if(!super.canRenderLayer(entity, scale))
             return false;
-        return ((RideableCreatureEntity)entity).hasSaddle();
+        return entity.isAttackOnCooldown();
     }
 
 
@@ -34,6 +33,6 @@ public class LayerSaddle extends LayerBase {
     // ==================================================
     @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
-        return entity.getEquipmentTexture("saddle");
+        return entity.getSubTexture("fire");
     }
 }

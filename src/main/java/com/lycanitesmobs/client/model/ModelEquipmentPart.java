@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.model;
 
+import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
@@ -17,6 +18,11 @@ public class ModelEquipmentPart extends ModelItemBase {
 	// ==================================================
 	public ModelEquipmentPart(String name, ModInfo groupInfo) {
 		this.initModel(name, groupInfo, "equipment/" + name);
+	}
+
+	@Override
+	public void addCustomLayers(IItemModelRenderer renderer) {
+		super.addCustomLayers(renderer);
 	}
 
 

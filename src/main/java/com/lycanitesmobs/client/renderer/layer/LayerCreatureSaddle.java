@@ -1,22 +1,19 @@
 package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
+import com.lycanitesmobs.core.entity.RideableCreatureEntity;
 import com.lycanitesmobs.client.renderer.RenderCreature;
-import com.lycanitesmobs.core.entity.creature.EntityThresher;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.vecmath.Vector4f;
-
 @SideOnly(Side.CLIENT)
-public class LayerThresher extends LayerBase {
+public class LayerCreatureSaddle extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerThresher(RenderCreature renderer) {
+    public LayerCreatureSaddle(RenderCreature renderer) {
         super(renderer);
     }
 
@@ -26,11 +23,9 @@ public class LayerThresher extends LayerBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
-        if(entity instanceof EntityThresher) {
-            EntityThresher entityThresher = (EntityThresher)entity;
-            return entityThresher.canWhirlpool();
-        }
-        return false;
+        if(!super.canRenderLayer(entity, scale) || !(entity instanceof RideableCreatureEntity))
+            return false;
+        return ((RideableCreatureEntity)entity).hasSaddle();
     }
 
 
@@ -38,23 +33,7 @@ public class LayerThresher extends LayerBase {
     //                      Visuals
     // ==================================================
     @Override
-    public boolean canRenderPart(String partName, BaseCreatureEntity entity, boolean trophy) {
-        return "effect".equals(partName);
-    }
-
-    @Override
-    public Vector4f getPartColor(String partName, BaseCreatureEntity entity, boolean trophy) {
-        return new Vector4f(1, 1, 1, 0.5f);
-    }
-
-    @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
-        return entity.getSubTexture("effect");
+        return entity.getEquipmentTexture("saddle");
     }
-
-    @Override
-    public void onRenderStart(Entity entity, boolean trophy) {}
-
-    @Override
-    public void onRenderFinish(Entity entity, boolean trophy) {}
 }

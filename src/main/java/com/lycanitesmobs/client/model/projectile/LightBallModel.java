@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelCreatureObj;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,7 +17,7 @@ import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
 public class LightBallModel extends ModelCreatureObj {
-	LayerEffect ballGlowLayer;
+	LayerCreatureEffect ballGlowLayer;
 
 	// ==================================================
   	//                    Constructors
@@ -39,7 +39,7 @@ public class LightBallModel extends ModelCreatureObj {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		this.ballGlowLayer = new LayerEffect(renderer, "", true, LayerEffect.BLEND.ADD.id, true);
+		this.ballGlowLayer = new LayerCreatureEffect(renderer, "", true, LayerCreatureEffect.BLEND.ADD.id, true);
 		renderer.addLayer(this.ballGlowLayer);
 	}
 
@@ -58,7 +58,7 @@ public class LightBallModel extends ModelCreatureObj {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(partName.equals("ball02") || partName.equals("ball03")) {
 			return layer == this.ballGlowLayer;
 		}
@@ -70,7 +70,7 @@ public class LightBallModel extends ModelCreatureObj {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		float glowSpeed = 40;
 		float glow = loop * glowSpeed % 360;
 		float color = ((float)Math.cos(Math.toRadians(glow)) * 0.1f) + 0.9f;
@@ -82,7 +82,7 @@ public class LightBallModel extends ModelCreatureObj {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		int i = 15728880;
 		int j = i % 65536;
@@ -92,7 +92,7 @@ public class LightBallModel extends ModelCreatureObj {
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		int i = entity.getBrightnessForRender();
 		int j = i % 65536;

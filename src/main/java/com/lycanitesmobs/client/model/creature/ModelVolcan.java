@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerGlow;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureGlow;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -40,7 +40,7 @@ public class ModelVolcan extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerGlow(renderer));
+		renderer.addLayer(new LayerCreatureGlow(renderer));
 	}
 
 
@@ -77,13 +77,13 @@ public class ModelVolcan extends ModelTemplateElemental {
 	//                   On Render
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		GlStateManager.disableLighting();
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		GlStateManager.enableLighting();
 	}

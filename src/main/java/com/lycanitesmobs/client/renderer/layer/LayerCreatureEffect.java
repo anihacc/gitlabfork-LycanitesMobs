@@ -13,7 +13,7 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class LayerEffect extends LayerBase {
+public class LayerCreatureEffect extends LayerCreatureBase {
 
 	public String textureSuffix;
 
@@ -35,13 +35,13 @@ public class LayerEffect extends LayerBase {
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerEffect(RenderCreature renderer, String textureSuffix) {
+    public LayerCreatureEffect(RenderCreature renderer, String textureSuffix) {
         super(renderer);
         this.name = textureSuffix;
         this.textureSuffix = textureSuffix;
     }
 
-	public LayerEffect(RenderCreature renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+	public LayerCreatureEffect(RenderCreature renderer, String textureSuffix, boolean glow, int blending, boolean subspecies) {
 		super(renderer);
 		this.name = textureSuffix;
 		this.textureSuffix = textureSuffix;
@@ -50,7 +50,7 @@ public class LayerEffect extends LayerBase {
 		this.subspecies = subspecies;
 	}
 
-	public LayerEffect(RenderCreature renderer, String name, String textureSuffix, boolean glow, int blending, boolean subspecies) {
+	public LayerCreatureEffect(RenderCreature renderer, String name, String textureSuffix, boolean glow, int blending, boolean subspecies) {
 		super(renderer);
 		this.name = name;
 		this.textureSuffix = textureSuffix;

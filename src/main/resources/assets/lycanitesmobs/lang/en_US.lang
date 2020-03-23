@@ -1620,10 +1620,10 @@ item.equipment.description=
 item.equipmentpart.description=This item can be used to create powerful equipment using an Equipment Forge or can be crafted into a useful resource.
 #
 item.woodenrod.name=Wooden Rod
-item.woodenhilt.name=Wooden Hilt
+item.woodenhilt.name=Wooden Guard
 item.woodenpaxel.name=Wooden Paxel
 item.ironrod.name=Iron Rod
-item.ironhilt.name=Iron Hilt
+item.ironhilt.name=Iron Guard
 item.ironpaxel.name=Iron Paxel
 item.ironpikejoint.name=Iron Pike Joint
 item.ironaxehead.name=Iron Axe Head

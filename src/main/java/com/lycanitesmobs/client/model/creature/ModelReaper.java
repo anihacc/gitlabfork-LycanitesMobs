@@ -3,11 +3,9 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateBiped;
 import com.lycanitesmobs.client.renderer.RenderCreature;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
-import com.lycanitesmobs.client.renderer.layer.LayerScrolling;
-import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.model.ModelObjOld;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -47,7 +45,7 @@ public class ModelReaper extends ModelTemplateBiped {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerScrolling(renderer, "cape", false, LayerEffect.BLEND.SUB.id, true, new Vector2f(0, -1)));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "cape", false, LayerCreatureEffect.BLEND.SUB.id, true, new Vector2f(0, -1)));
 	}
     
     
@@ -100,7 +98,7 @@ public class ModelReaper extends ModelTemplateBiped {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if("cape".equals(partName)) {
 			return layer != null && "cape".equals(layer.name);
 		}
@@ -113,7 +111,7 @@ public class ModelReaper extends ModelTemplateBiped {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		return super.getPartColor(partName, entity, layer, trophy, loop);
 	}
 }

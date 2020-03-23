@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
-import com.lycanitesmobs.client.renderer.layer.LayerFire;
-import com.lycanitesmobs.client.renderer.layer.LayerShield;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureFire;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureShield;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import com.lycanitesmobs.core.entity.creature.EntityAsmodeus;
@@ -62,8 +62,8 @@ public class ModelAsmodeus extends ModelObjOld {
     @Override
     public void addCustomLayers(RenderCreature renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerFire(renderer));
-        renderer.addLayer(new LayerShield(renderer));
+        renderer.addLayer(new LayerCreatureFire(renderer));
+        renderer.addLayer(new LayerCreatureShield(renderer));
     }
 
 

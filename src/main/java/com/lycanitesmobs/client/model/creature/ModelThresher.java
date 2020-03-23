@@ -2,10 +2,10 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateAquatic;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
-import com.lycanitesmobs.client.renderer.layer.LayerThresher;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureThresher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -42,7 +42,7 @@ public class ModelThresher extends ModelTemplateAquatic {
     @Override
     public void addCustomLayers(RenderCreature renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerThresher(renderer));
+        renderer.addLayer(new LayerCreatureThresher(renderer));
     }
 
 
@@ -59,9 +59,9 @@ public class ModelThresher extends ModelTemplateAquatic {
     }
 
     @Override
-    public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
         if("effect".equals(partName)) {
-            return layer instanceof LayerThresher;
+            return layer instanceof LayerCreatureThresher;
         }
         return super.canRenderPart(partName, entity, layer, trophy);
     }

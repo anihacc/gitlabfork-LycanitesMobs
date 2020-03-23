@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
@@ -42,7 +42,7 @@ public class ModelVapula extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "", true, LayerEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "", true, LayerCreatureEffect.BLEND.NORMAL.id, true));
 	}
 
 
@@ -84,12 +84,12 @@ public class ModelVapula extends ModelTemplateElemental {
 	}
 
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(!this.isCrystal(partName)) {
 			return layer == null;
 		}
 
-		if(layer instanceof LayerEffect) {
+		if(layer instanceof LayerCreatureEffect) {
 			if(partName.contains("effect")) {
 				if(entity instanceof BaseCreatureEntity) {
 					int attackPhase = ((BaseCreatureEntity) entity).getAttackPhase();
@@ -143,7 +143,7 @@ public class ModelVapula extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(this.isCrystal(partName)) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;

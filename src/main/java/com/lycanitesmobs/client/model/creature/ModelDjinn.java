@@ -2,10 +2,10 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
-import com.lycanitesmobs.client.renderer.layer.LayerDjinn;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureDjinn;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +40,7 @@ public class ModelDjinn extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerDjinn(renderer));
+		renderer.addLayer(new LayerCreatureDjinn(renderer));
 	}
 
 
@@ -57,9 +57,9 @@ public class ModelDjinn extends ModelTemplateElemental {
 	}
 
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if(partName.contains("ribbon")) {
-			return layer instanceof LayerDjinn;
+			return layer instanceof LayerCreatureDjinn;
 		}
 		return super.canRenderPart(partName, entity, layer, trophy);
 	}

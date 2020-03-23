@@ -7,7 +7,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -118,7 +118,7 @@ public class ModelObjOld extends ModelCustom {
      * @param scale Use to scale this mob. The default scale is 0.0625 (not sure why)! For a trophy/head-only model, set the scale to a negative amount, -1 will return a head similar in size to that of a Zombie head.
      */
     @Override
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean trophyModel = false;
 		if(scale < 0) {
@@ -206,14 +206,14 @@ public class ModelObjOld extends ModelCustom {
             // Render:
             this.uncenterPart(partName);
 			this.onRenderStart(layer, entity, trophyModel);
-            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop));
+            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, trophyModel, loop), this.getPartTextureOffset(partName, entity, layer, trophyModel, loop), null);
 			this.onRenderFinish(layer, entity, trophyModel);
 			GlStateManager.popMatrix();
 		}
 	}
 
 	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.enableBlend();
 		}
@@ -224,7 +224,7 @@ public class ModelObjOld extends ModelCustom {
 	}
 
 	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.disableBlend();
 		}

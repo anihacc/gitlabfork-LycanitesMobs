@@ -1,9 +1,9 @@
 package com.lycanitesmobs.client.model;
 
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
-import com.lycanitesmobs.client.renderer.layer.LayerEquipment;
-import com.lycanitesmobs.client.renderer.layer.LayerSaddle;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEquipment;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureSaddle;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -43,8 +43,8 @@ public class ModelCustom extends ModelBase {
     //             Add Custom Render Layers
     // ==================================================
     public void addCustomLayers(RenderCreature renderer) {
-        renderer.addLayer(new LayerEquipment(renderer, "chest"));
-        renderer.addLayer(new LayerSaddle(renderer));
+        renderer.addLayer(new LayerCreatureEquipment(renderer, "chest"));
+        renderer.addLayer(new LayerCreatureSaddle(renderer));
     }
     
     
@@ -68,7 +68,7 @@ public class ModelCustom extends ModelBase {
         this.render(entity, time, distance, loop, lookY, lookX, scale, null, true);
     }
 
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         float sizeScale = 1F;
 		if(entity instanceof BaseCreatureEntity) {
             sizeScale *= ((BaseCreatureEntity) entity).getRenderScale();
@@ -85,7 +85,7 @@ public class ModelCustom extends ModelBase {
     //                Can Render Part
     // ==================================================
     /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
-    public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
         if(layer == null)
             return this.canBaseRenderPart(partName, entity, trophy);
         if(entity instanceof BaseCreatureEntity)
@@ -103,7 +103,7 @@ public class ModelCustom extends ModelBase {
     //                Get Part Color
     // ==================================================
     /** Returns the coloring to be used for this part and layer. **/
-    public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+    public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
         if(layer == null || !(entity instanceof BaseCreatureEntity))
             return this.getBasePartColor(partName, entity, trophy, loop);
         return layer.getPartColor(partName, (BaseCreatureEntity)entity, trophy);
@@ -119,7 +119,7 @@ public class ModelCustom extends ModelBase {
 	//              Get Part Texture Offset
 	// ==================================================
 	/** Returns the texture offset to be used for this part and layer. **/
-	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector2f getPartTextureOffset(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null || !(entity instanceof BaseCreatureEntity))
 			return this.getBaseTextureOffset(partName, entity, trophy, loop);
 		return layer.getTextureOffset(partName, (BaseCreatureEntity)entity, trophy, loop);

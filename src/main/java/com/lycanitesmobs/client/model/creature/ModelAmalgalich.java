@@ -4,8 +4,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelCreatureObj;
 import com.lycanitesmobs.client.renderer.RenderCreature;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.core.entity.creature.EntityAmalgalich;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -45,11 +45,11 @@ public class ModelAmalgalich extends ModelCreatureObj {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "fire", true, LayerEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "fire", true, LayerCreatureEffect.BLEND.ADD.id, true));
 	}
 
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
     	if(layer != null && entity instanceof EntityAmalgalich) {
     		return ((EntityAmalgalich)entity).getConsumptionAnimation() > 0;
 		}

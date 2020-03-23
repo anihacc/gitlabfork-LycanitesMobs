@@ -1,6 +1,8 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.AssetManager;
+import com.lycanitesmobs.client.renderer.layer.LayerItemDye;
 import com.lycanitesmobs.core.item.equipment.ItemEquipmentPart;
 import com.lycanitesmobs.client.model.ModelItemBase;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
@@ -12,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
+import javax.vecmath.Vector4f;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,10 @@ public class EquipmentPartRenderer extends TileEntitySpecialRenderer<TileEntityE
 		for(LayerItem renderLayer : this.renderLayers) {
 			modelItemBase.render(itemStack, hand, this, null, renderLayer, loop, false);
 		}
+//		Vector4f partColor = itemEquipmentPart.getColor(itemStack);
+//		if(partColor.x < 1 && partColor.y < 1 && partColor.z < 1) {
+//			modelItemBase.render(itemStack, hand, this, null, new LayerItemDye(this, "dye"), loop, false);
+//		}
 		modelItemBase.clearAnimationFrames();
 
 		GlStateManager.popMatrix();

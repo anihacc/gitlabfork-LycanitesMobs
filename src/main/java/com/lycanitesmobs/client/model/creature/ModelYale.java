@@ -5,7 +5,7 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.ModelObjOld;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
-import com.lycanitesmobs.client.renderer.layer.LayerYaleWool;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureYaleWool;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -49,7 +49,7 @@ public class ModelYale extends ModelObjOld {
     @Override
     public void addCustomLayers(RenderCreature renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerYaleWool(renderer));
+        renderer.addLayer(new LayerCreatureYaleWool(renderer));
     }
     
     

@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.animation;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
@@ -82,16 +82,16 @@ public class TextureLayerAnimation {
 	 * @param renderer The creature renderer to use for the layer.
 	 * @return A new Layer Renderer.
 	 */
-	public LayerEffect createCreatureLayer(RenderCreature renderer) {
-		int blendingId = LayerEffect.BLEND.NORMAL.id;
+	public LayerCreatureEffect createCreatureLayer(RenderCreature renderer) {
+		int blendingId = LayerCreatureEffect.BLEND.NORMAL.id;
 		if("add".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.ADD.id;
+			blendingId = LayerCreatureEffect.BLEND.ADD.id;
 		}
 		else if("sub".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.SUB.id;
+			blendingId = LayerCreatureEffect.BLEND.SUB.id;
 		}
 
-		LayerEffect renderLayer = new LayerEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
+		LayerCreatureEffect renderLayer = new LayerCreatureEffect(renderer, this.textureSuffix, this.glow, blendingId, this.subspeciesTexture);
 		renderLayer.name = this.name;
 		renderLayer.scrollSpeed = this.scrollSpeed;
 		return renderLayer;
@@ -104,12 +104,12 @@ public class TextureLayerAnimation {
 	 * @return A new Layer Renderer.
 	 */
 	public LayerItem createItemLayer(IItemModelRenderer renderer) {
-		int blendingId = LayerEffect.BLEND.NORMAL.id;
+		int blendingId = LayerCreatureEffect.BLEND.NORMAL.id;
 		if("additive".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.ADD.id;
+			blendingId = LayerCreatureEffect.BLEND.ADD.id;
 		}
 		else if("subtractive".equals(this.blending)) {
-			blendingId = LayerEffect.BLEND.SUB.id;
+			blendingId = LayerCreatureEffect.BLEND.SUB.id;
 		}
 
 		LayerItem renderLayer = new LayerItem(renderer, this.name);

@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.model.projectile;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.ModelCreatureObj;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
@@ -42,7 +42,7 @@ public class AetherwaveModel extends ModelCreatureObj {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		float glowSpeed = 40;
 		float glow = loop * glowSpeed % 360;
 		float color = ((float)Math.cos(Math.toRadians(glow)) * 0.1f) + 0.9f;
@@ -54,7 +54,7 @@ public class AetherwaveModel extends ModelCreatureObj {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		int i = 15728880;
 		int j = i % 65536;
@@ -63,7 +63,7 @@ public class AetherwaveModel extends ModelCreatureObj {
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		int i = entity.getBrightnessForRender();
 		int j = i % 65536;

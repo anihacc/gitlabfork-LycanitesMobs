@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.obj;
 
+import com.lycanitesmobs.LycanitesMobs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,7 +26,6 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
  */
 public class TessellatorModel extends ObjModel
 {
-
     public static final EventBus MODEL_RENDERING_BUS = new EventBus();
 
     public TessellatorModel(ResourceLocation resourceLocation)
@@ -87,7 +87,7 @@ public class TessellatorModel extends ObjModel
 
 
     @Override
-    public void renderGroupImpl(ObjObject obj, Vector4f color, Vector2f textureOffset) {
+    public void renderGroupImpl(ObjObject obj, Vector4f color, Vector2f textureOffset, VertexFormat vertexFormat) {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tess.getBuffer();
         if(obj.mesh == null) {
@@ -95,17 +95,6 @@ public class TessellatorModel extends ObjModel
         }
 		int[] indices = obj.mesh.indices;
 		Vertex[] vertices = obj.mesh.vertices;
-
-        // Colors From OBJ:
-        //Vector4f color = new Vector4f(1, 1, 1, 1);
-        /*if(obj.material != null) {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, obj.material.diffuseTexture);
-            color = new Vector3f(
-                    obj.material.diffuseColor.x * obj.material.ambientColor.x,
-                    obj.material.diffuseColor.y * obj.material.ambientColor.y,
-                    obj.material.diffuseColor.z * obj.material.ambientColor.z);
-            alpha = obj.material.transparency;
-        }*/
 
 		// Get/Create Normals:
 		if(obj.mesh.normals == null) {
@@ -129,14 +118,12 @@ public class TessellatorModel extends ObjModel
                         .pos(v.getPos().x, v.getPos().y, v.getPos().z)
                         .tex(v.getTexCoords().x + (textureOffset.getX() * 0.01f), 1f - (v.getTexCoords().y + (textureOffset.getY() * 0.01f)))
                         .color(color.x, color.y, color.z, color.w)
-                        //.normal(v.getNormal().x, v.getNormal().y, v.getNormal().z)
-						.normal(normal.x, normal.y, normal.z)
+                        .normal(normal.x, normal.y, normal.z)
                         .endVertex();
             }
         }
 
         // Draw Buffer:
-        //tess.draw();
 		bufferBuilder.finishDrawing();
 		if (bufferBuilder.getVertexCount() > 0) {
 			VertexFormat vertexformat = bufferBuilder.getVertexFormat();

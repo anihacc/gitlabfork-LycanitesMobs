@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -42,7 +42,7 @@ public class ModelNymph extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "overlay"));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "overlay"));
 	}
 
 
@@ -83,7 +83,7 @@ public class ModelNymph extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;
@@ -99,7 +99,7 @@ public class ModelNymph extends ModelTemplateElemental {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
@@ -107,7 +107,7 @@ public class ModelNymph extends ModelTemplateElemental {
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;

@@ -2,10 +2,10 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateAquatic;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
-import com.lycanitesmobs.client.renderer.layer.LayerRoa;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureRoa;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.MathHelper;
@@ -36,7 +36,7 @@ public class ModelRoa extends ModelTemplateAquatic {
     @Override
     public void addCustomLayers(RenderCreature renderer) {
         super.addCustomLayers(renderer);
-        renderer.addLayer(new LayerRoa(renderer));
+        renderer.addLayer(new LayerCreatureRoa(renderer));
     }
 
 
@@ -53,9 +53,9 @@ public class ModelRoa extends ModelTemplateAquatic {
     }
 
     @Override
-    public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
         if("effect".equals(partName)) {
-            return layer instanceof LayerRoa;
+            return layer instanceof LayerCreatureRoa;
         }
         return super.canRenderPart(partName, entity, layer, trophy);
     }

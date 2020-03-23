@@ -3,8 +3,8 @@ package com.lycanitesmobs.client.model.creature;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
@@ -41,7 +41,7 @@ public class ModelArgus extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "flash", true, LayerEffect.BLEND.ADD.id, true));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "flash", true, LayerCreatureEffect.BLEND.ADD.id, true));
 	}
 
 
@@ -49,8 +49,8 @@ public class ModelArgus extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
-		if(layer instanceof LayerEffect && entity instanceof BaseCreatureEntity) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
+		if(layer instanceof LayerCreatureEffect && entity instanceof BaseCreatureEntity) {
 			return ((BaseCreatureEntity)entity).isAttackOnCooldown();
 		}
 		return true;

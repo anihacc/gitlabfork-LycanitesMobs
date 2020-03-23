@@ -1,5 +1,6 @@
 package com.lycanitesmobs.client.obj;
 
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import javax.vecmath.Vector2f;
@@ -43,12 +44,12 @@ public abstract class ObjModel extends Model
     }
 
     public void renderGroup(ObjObject group) {
-        this.renderGroup(group, new Vector4f(1, 1, 1, 1), new Vector2f(0, 0));
+        this.renderGroup(group, new Vector4f(1, 1, 1, 1), new Vector2f(0, 0), null);
     }
 
-    public void renderGroup(ObjObject group, Vector4f color, Vector2f textureOffset) {
+    public void renderGroup(ObjObject group, Vector4f color, Vector2f textureOffset, VertexFormat vertexFormat) {
         //if(fireEvent(new ObjEvent(this, ObjEvent.EventType.PRE_RENDER_GROUP).setData(group, group)))
-            this.renderGroupImpl(group, color, textureOffset);
+            this.renderGroupImpl(group, color, textureOffset, vertexFormat);
         //fireEvent(new ObjEvent(this, ObjEvent.EventType.POST_RENDER_GROUP).setData(group, group));
     }
     
@@ -66,7 +67,7 @@ public abstract class ObjModel extends Model
     
     protected abstract void renderGroupsImpl(String groupsName);
     
-    protected abstract void renderGroupImpl(ObjObject objGroup, Vector4f color, Vector2f textureOffset);
+    protected abstract void renderGroupImpl(ObjObject objGroup, Vector4f color, Vector2f textureOffset, VertexFormat vertexFormat);
 
     protected abstract void renderImpl();
     

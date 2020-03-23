@@ -2,7 +2,7 @@ package com.lycanitesmobs.client.renderer.layer;
 
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.client.renderer.RenderCreature;
-import com.lycanitesmobs.core.entity.creature.EntityRoa;
+import com.lycanitesmobs.core.entity.creature.EntityThresher;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -11,12 +11,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class LayerRoa extends LayerBase {
+public class LayerCreatureThresher extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerRoa(RenderCreature renderer) {
+    public LayerCreatureThresher(RenderCreature renderer) {
         super(renderer);
     }
 
@@ -26,9 +26,9 @@ public class LayerRoa extends LayerBase {
     // ==================================================
     @Override
     public boolean canRenderLayer(BaseCreatureEntity entity, float scale) {
-        if(entity instanceof EntityRoa) {
-            EntityRoa entityRoa = (EntityRoa)entity;
-            return entityRoa.canWhirlpool();
+        if(entity instanceof EntityThresher) {
+            EntityThresher entityThresher = (EntityThresher)entity;
+            return entityThresher.canWhirlpool();
         }
         return false;
     }

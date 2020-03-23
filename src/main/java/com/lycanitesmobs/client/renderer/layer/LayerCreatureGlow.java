@@ -12,12 +12,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.vecmath.Vector4f;
 
 @SideOnly(Side.CLIENT)
-public class LayerGlow extends LayerBase {
+public class LayerCreatureGlow extends LayerCreatureBase {
 
     // ==================================================
     //                   Constructor
     // ==================================================
-    public LayerGlow(RenderCreature renderer) {
+    public LayerCreatureGlow(RenderCreature renderer) {
         super(renderer);
     }
 

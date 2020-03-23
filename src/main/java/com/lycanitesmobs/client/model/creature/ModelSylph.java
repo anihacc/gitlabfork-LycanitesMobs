@@ -2,9 +2,9 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
-import com.lycanitesmobs.client.renderer.layer.LayerScrolling;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureScrolling;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -44,8 +44,8 @@ public class ModelSylph extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "hood", false, LayerEffect.BLEND.NORMAL.id, true));
-		renderer.addLayer(new LayerScrolling(renderer, "wing", true, LayerEffect.BLEND.ADD.id, true, new Vector2f(0, 1)));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "hood", false, LayerCreatureEffect.BLEND.NORMAL.id, true));
+		renderer.addLayer(new LayerCreatureScrolling(renderer, "wing", true, LayerCreatureEffect.BLEND.ADD.id, true, new Vector2f(0, 1)));
 	}
 
 
@@ -105,7 +105,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	//                Can Render Part
 	// ==================================================
 	@Override
-	public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+	public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
 		if (partName.contains("hood")) {
 			return layer != null && "hood".equals(layer.name);
 		}
@@ -121,7 +121,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
 	@Override
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null) {
 			float glowSpeed = 40;
 			float glow = loop * glowSpeed % 360;
@@ -137,7 +137,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	//                      Visuals
 	// ==================================================
 	@Override
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderStart(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;
@@ -145,7 +145,7 @@ public class ModelSylph extends ModelTemplateElemental {
 	}
 
 	@Override
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		super.onRenderFinish(layer, entity, renderAsTrophy);
 		if(layer != null)
 			return;

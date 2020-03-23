@@ -9,7 +9,7 @@ import com.lycanitesmobs.core.info.CreatureManager;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.lycanitesmobs.client.obj.ObjObject;
 import com.lycanitesmobs.client.obj.TessellatorModel;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -219,7 +219,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 	 * @param animate If true, animation frames will be generated and cleared after each render tick, if false, they must be generated and cleared manually.
      */
     @Override
-    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean animate) {
+    public void render(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean animate) {
         // Assess Scale and Check if Trophy:
 		boolean renderAsTrophy = false;
 		if(scale < 0) {
@@ -295,7 +295,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 
             // Render Part:
 			this.onRenderStart(layer, entity, renderAsTrophy);
-            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop));
+            this.wavefrontObject.renderGroup(part, this.getPartColor(partName, entity, layer, renderAsTrophy, loop), this.getPartTextureOffset(partName, entity, layer, renderAsTrophy, loop), null);
 			this.onRenderFinish(layer, entity, renderAsTrophy);
 			GlStateManager.popMatrix();
 		}
@@ -307,7 +307,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
     }
 
 	/** Called just before a layer is rendered. **/
-	public void onRenderStart(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderStart(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.enableBlend();
 		}
@@ -318,7 +318,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 	}
 
 	/** Called just after a layer is rendered. **/
-	public void onRenderFinish(LayerBase layer, Entity entity, boolean renderAsTrophy) {
+	public void onRenderFinish(LayerCreatureBase layer, Entity entity, boolean renderAsTrophy) {
 		if(!CreatureManager.getInstance().config.disableModelAlpha) {
 			GlStateManager.disableBlend();
 		}
@@ -328,7 +328,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
 	}
 
 	/** Generates all animation frames for a render tick. **/
-	public void generateAnimationFrames(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerBase layer, boolean renderAsTrophy) {
+	public void generateAnimationFrames(Entity entity, float time, float distance, float loop, float lookY, float lookX, float scale, LayerCreatureBase layer, boolean renderAsTrophy) {
 		for(ObjObject part : this.wavefrontParts) {
 			String partName = part.getName().toLowerCase();
 			//if(!this.canRenderPart(partName, entity, layer, renderAsTrophy))
@@ -373,7 +373,7 @@ public class ModelCreatureObj extends ModelCustom implements IAnimationModel {
     // ==================================================
     /** Returns true if the part can be rendered, this can do various checks such as Yale wool only rendering in the YaleWoolLayer or hiding body parts in place of armor parts, etc. **/
     @Override
-    public boolean canRenderPart(String partName, Entity entity, LayerBase layer, boolean trophy) {
+    public boolean canRenderPart(String partName, Entity entity, LayerCreatureBase layer, boolean trophy) {
         if(partName == null)
             return false;
         partName = partName.toLowerCase();

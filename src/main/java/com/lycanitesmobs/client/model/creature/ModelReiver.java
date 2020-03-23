@@ -2,8 +2,8 @@ package com.lycanitesmobs.client.model.creature;
 
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.client.model.template.ModelTemplateElemental;
-import com.lycanitesmobs.client.renderer.layer.LayerBase;
-import com.lycanitesmobs.client.renderer.layer.LayerEffect;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureBase;
+import com.lycanitesmobs.client.renderer.layer.LayerCreatureEffect;
 import com.lycanitesmobs.client.renderer.RenderCreature;
 
 import net.minecraft.entity.Entity;
@@ -40,9 +40,9 @@ public class ModelReiver extends ModelTemplateElemental {
 	@Override
 	public void addCustomLayers(RenderCreature renderer) {
 		super.addCustomLayers(renderer);
-		renderer.addLayer(new LayerEffect(renderer, "pulse01", false, LayerEffect.BLEND.NORMAL.id, false));
-		renderer.addLayer(new LayerEffect(renderer, "pulse02", false, LayerEffect.BLEND.NORMAL.id, false));
-		renderer.addLayer(new LayerEffect(renderer, "pulse03", false, LayerEffect.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse01", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse02", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
+		renderer.addLayer(new LayerCreatureEffect(renderer, "pulse03", false, LayerCreatureEffect.BLEND.NORMAL.id, false));
 	}
     
     
@@ -65,7 +65,7 @@ public class ModelReiver extends ModelTemplateElemental {
 	//                Get Part Color
 	// ==================================================
 	/** Returns the coloring to be used for this part and layer. **/
-	public Vector4f getPartColor(String partName, Entity entity, LayerBase layer, boolean trophy, float loop) {
+	public Vector4f getPartColor(String partName, Entity entity, LayerCreatureBase layer, boolean trophy, float loop) {
 		if(layer == null) {
 			return super.getPartColor(partName, entity, layer, trophy, loop);
 		}
