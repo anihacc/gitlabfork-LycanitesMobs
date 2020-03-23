@@ -1,15 +1,13 @@
 package com.lycanitesmobs.client.renderer;
 
+import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.CustomProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserEndProjectileEntity;
 import com.lycanitesmobs.core.entity.LaserProjectileEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -78,25 +76,25 @@ public class ProjectileSpriteRenderer extends EntityRenderer<BaseProjectileEntit
 		IVertexBuilder vertexBuilder = renderTypeBuffer.getBuffer(rendertype);
 		vertexBuilder
 				.pos(matrix4f, -textureWidth, -textureHeight + (textureHeight / 2), 0.0F) // pos
-				.color(1, 1, 1, 1) // color
+				.color(255, 255, 255, 255) // color
 				.tex(minU, maxV) // texture
 				.normal(0.0F, 1.0F, 0.0F) // normal
 				.endVertex();
 		vertexBuilder
 				.pos(matrix4f, textureWidth, -textureHeight + (textureHeight / 2), 0.0F)
-				.color(1, 1, 1, 1)
+				.color(255, 255, 255, 255) // color
 				.tex(maxU, maxV)
 				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
 		vertexBuilder
 				.pos(matrix4f, textureWidth, textureHeight + (textureHeight / 2), 0.0F)
-				.color(1, 1, 1, 1)
+				.color(255, 255, 255, 255) // color
 				.tex(maxU, minV)
 				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
 		vertexBuilder
 				.pos(matrix4f, -textureWidth, textureHeight + (textureHeight / 2), 0.0F)
-				.color(1, 1, 1, 1)
+				.color(255, 255, 255, 255) // color
 				.tex(minU, minV)
 				.normal(0.0F, 1.0F, 0.0F)
 				.endVertex();
