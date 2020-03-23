@@ -81,6 +81,39 @@ public class CustomRenderStates extends RenderState {
 		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
 	}
 
+	public static RenderType getObjColorOnlyRenderType(ResourceLocation texture, int blending, boolean glow) {
+		if(POS_COL_TEX_LIGHT_FADE_NORMAL == null) {
+			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();
+			vertexFormatValues.add(DefaultVertexFormats.POSITION_3F);
+			vertexFormatValues.add(DefaultVertexFormats.COLOR_4UB);
+			vertexFormatValues.add(DefaultVertexFormats.NORMAL_3B);
+			vertexFormatValues.add(DefaultVertexFormats.PADDING_1B);
+			POS_COL_TEX_LIGHT_FADE_NORMAL = new VertexFormat(ImmutableList.copyOf(vertexFormatValues));
+		}
+
+		RenderState.TransparencyState transparencyState = TRANSLUCENT_TRANSPARENCY;
+		if(blending == BLEND.ADD.getValue()) {
+			transparencyState = ADDITIVE_TRANSPARENCY;
+		}
+		else if(blending == BLEND.SUB.getValue()) {
+			transparencyState = SUBTRACTIVE_TRANSPARENCY;
+		}
+		RenderState.DiffuseLightingState lightingState = DIFFUSE_LIGHTING_ENABLED;
+		if(glow) {
+			lightingState = DIFFUSE_LIGHTING_DISABLED;
+		}
+		RenderType.State renderTypeState = RenderType.State.builder()
+				.texture(new RenderState.TextureState(texture, false, false)) // Texture
+				.transparency(transparencyState)
+				.diffuseLighting(lightingState)
+				.alpha(DEFAULT_ALPHA)
+				.cull(CULL_DISABLED)
+				.lightmap(LIGHTMAP_ENABLED)
+				.overlay(OVERLAY_ENABLED)
+				.build(true);
+		return RenderType.get("lm_obj_translucent_no_cull", POS_COL_TEX_LIGHT_FADE_NORMAL, GL11.GL_TRIANGLES, 256, true, false, renderTypeState);
+	}
+
 	public static RenderType getObjOutlineRenderType(ResourceLocation texture) {
 		if(POS_COL_TEX_LIGHT_FADE_NORMAL == null) {
 			List<VertexFormatElement> vertexFormatValues = new ArrayList<>();

@@ -8,6 +8,7 @@ import com.lycanitesmobs.client.obj.ObjPart;
 import com.lycanitesmobs.client.renderer.CustomRenderStates;
 import com.lycanitesmobs.client.renderer.IItemModelRenderer;
 import com.lycanitesmobs.client.renderer.layer.LayerItem;
+import com.lycanitesmobs.client.renderer.layer.LayerItemDye;
 import com.lycanitesmobs.core.info.ModInfo;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -189,13 +190,6 @@ public abstract class ItemObjModel implements IAnimationModel {
 			// Apply Initial Offsets: (To Match Blender OBJ Export)
 			this.doAngle(ROT_OFFSET_X, 1F, 0F, 0F);
 			this.doTranslate(0F, POS_OFFSET_Y, 0F);
-
-			/*/ Animate and Offset By Equipment Piece Slot:
-			if(offsetObjPart != null) {
-				offsetObjPart.applyAnimationFrames(this.animator);
-				this.doTranslate(offsetObjPart.centerX, offsetObjPart.centerY, offsetObjPart.centerZ);
-				this.doRotate(-offsetObjPart.rotationX, -offsetObjPart.rotationY, -offsetObjPart.rotationZ);
-			}*/
 
 			// Apply Animation Frames:
 			this.currentAnimationPart.applyAnimationFrames(this.animator);

@@ -60,7 +60,6 @@ public class ModelEquipmentPart extends ItemObjModel {
 			return layer.getPartColor(partName, itemStack, loop);
 		}
 
-		Vec3d partColor = itemEquipmentPart.getColor(itemStack);
-		return new Vector4f((float)partColor.getX(), (float)partColor.getY(), (float)partColor.getZ(), 1);
+		return new Vector4f(1, 1, 1, 1);
 	}
 }
