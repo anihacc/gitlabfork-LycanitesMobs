@@ -4,8 +4,7 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:sandstone",
-      "data": 0
+      "item": "lycanitesmobs:desertstone"
     },
     {
       "item": "minecraft:glowstone"
