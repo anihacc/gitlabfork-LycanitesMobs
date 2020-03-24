@@ -2715,7 +2715,7 @@ public abstract class BaseCreatureEntity extends CreatureEntity {
 
 		projectile.setPosition(
 				projectile.getPositionVec().getX() + offset.x * this.sizeScale,
-				projectile.getPositionVec().getY() - (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
+				projectile.getPositionVec().getY() + (this.getSize(Pose.STANDING).height / 2) + (offset.y * this.sizeScale),
 				projectile.getPositionVec().getZ() + offset.z * this.sizeScale
 		);
 		projectile.setProjectileScale(scale);

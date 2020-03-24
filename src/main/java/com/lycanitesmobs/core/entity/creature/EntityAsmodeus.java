@@ -429,7 +429,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
     // ========== Ranged Attack ==========
     @Override
     public void attackRanged(Entity target, float range) {
-        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vec3d(0, 8, 0), 1.2f, 6f, 0F);
+        this.fireProjectile(EntityDevilGatling.class, target, range, 0, new Vec3d(0, -8, 0), 1.2f, 6f, 0F);
         super.attackRanged(target, range);
     }
 
