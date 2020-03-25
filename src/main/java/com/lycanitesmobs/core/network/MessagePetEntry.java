@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class MessagePetEntry {
-    public String petEntryName;
     public UUID petEntryID;
     public String petEntryType;
     public boolean spawningActive;
@@ -31,7 +30,6 @@ public class MessagePetEntry {
 
 	public MessagePetEntry() {}
 	public MessagePetEntry(ExtendedPlayer playerExt, PetEntry petEntry) {
-        this.petEntryName = petEntry.name != null ? petEntry.name : "";
         this.petEntryID = petEntry.petEntryID;
         this.petEntryType = petEntry.getType();
         this.spawningActive = petEntry.spawningActive;
@@ -78,7 +76,7 @@ public class MessagePetEntry {
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-            petEntry = new PetEntry(message.petEntryID, message.petEntryName, message.petEntryType, player, message.summonType);
+            petEntry = new PetEntry(message.petEntryID, message.petEntryType, player, message.summonType);
             petManager.addEntry(petEntry);
         }
         petEntry.setSpawningActive(message.spawningActive);
@@ -102,7 +100,6 @@ public class MessagePetEntry {
 	 */
 	public static MessagePetEntry decode(PacketBuffer packet) {
 		MessagePetEntry message = new MessagePetEntry();
-        message.petEntryName = packet.readString(512);
         message.petEntryID = packet.readUniqueId();
         message.petEntryType = packet.readString(512);
         message.spawningActive = packet.readBoolean();
@@ -122,7 +119,6 @@ public class MessagePetEntry {
 	 * Writes the message into bytes.
 	 */
 	public static void encode(MessagePetEntry message, PacketBuffer packet) {
-        packet.writeString(message.petEntryName);
         packet.writeUniqueId(message.petEntryID);
         packet.writeString(message.petEntryType);
         packet.writeBoolean(message.spawningActive);

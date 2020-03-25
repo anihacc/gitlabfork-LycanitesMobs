@@ -26,11 +26,12 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ExtendedPlayer implements IExtendedPlayer {
     public static Map<PlayerEntity, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
 	public static Map<PlayerEntity, ExtendedPlayer> serverExtendedPlayers = new HashMap<>();
-	public static Map<String, CompoundNBT> backupNBTTags = new HashMap<>();
+	public static Map<UUID, CompoundNBT> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
 	public PlayerEntity player;
@@ -131,10 +132,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
     /** Called when the player entity is being cloned, backups all data so that it can be loaded into a new ExtendedPlayer for the clone. **/
     public void backupPlayer() {
-        if(this.player != null) {
+        if(this.player != null && !this.player.getEntityWorld().isRemote()) {
             CompoundNBT nbtTagCompound = new CompoundNBT();
             this.writeNBT(nbtTagCompound);
-            backupNBTTags.put(this.player.getUniqueID().toString(), nbtTagCompound);
+            backupNBTTags.put(this.player.getUniqueID(), nbtTagCompound);
         }
     }
 
@@ -145,9 +146,9 @@ public class ExtendedPlayer implements IExtendedPlayer {
 		this.player.getEntityWorld();
 		if(this.player.getEntityWorld().isRemote)
             return;
-        if(backupNBTTags.containsKey(this.player.getUniqueID().toString())) {
-            this.readNBT(backupNBTTags.get(this.player.getUniqueID().toString()));
-            backupNBTTags.remove(this.player.getUniqueID().toString());
+        if(backupNBTTags.containsKey(this.player.getUniqueID())) {
+            this.readNBT(backupNBTTags.get(this.player.getUniqueID()));
+            backupNBTTags.remove(this.player.getUniqueID());
         }
 	}
 
@@ -239,11 +240,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			// Pet Manager Setup:
 			if (!this.player.getEntityWorld().isRemote) {
 				// Load Familiars:
-				Map<String, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
+				Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
 				if (playerFamiliars != null) {
-					this.petManager.clearEntries("familiar");
 					for (PetEntry petEntry : playerFamiliars.values()) {
-						if (!this.petManager.hasEntry(petEntry)) {
+						if (this.petManager.hasEntry(petEntry)) {
+							PetEntry familiarEntry = this.petManager.getEntry(petEntry.petEntryID);
+							familiarEntry.copy(petEntry);
+						}
+						else {
 							this.petManager.addEntry(petEntry);
 							petEntry.entity = null;
 						}
@@ -352,7 +356,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
 	public void sendPetEntriesToPlayer(String entryType) {
 		if(this.player.getEntityWorld().isRemote) return;
-		for(PetEntry petEntry : this.petManager.allEntries.values()) {
+		for(PetEntry petEntry : this.petManager.entries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
                 LycanitesMobs.packetHandler.sendToPlayer(message, (ServerPlayerEntity) this.player);

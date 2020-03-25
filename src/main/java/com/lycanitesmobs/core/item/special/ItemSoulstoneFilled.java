@@ -38,18 +38,18 @@ public class ItemSoulstoneFilled extends ItemSoulstone {
             return super.onItemRightClick(world, player, hand);
         }
 
-        int creatureIndex = 0;
-        if(this.creatureType.tameableCreatures.size() > 1) {
-            player.getRNG().nextInt(this.creatureType.tameableCreatures.size());
-        }
-        TameableCreatureEntity entity = (TameableCreatureEntity)this.creatureType.tameableCreatures.get(creatureIndex).createEntity(world);
         if(!player.getEntityWorld().isRemote) {
+            int creatureIndex = 0;
+            if(this.creatureType.tameableCreatures.size() > 1) {
+                creatureIndex = player.getRNG().nextInt(this.creatureType.tameableCreatures.size());
+            }
+            TameableCreatureEntity entity = (TameableCreatureEntity)this.creatureType.tameableCreatures.get(creatureIndex).createEntity(world);
             entity.setLocationAndAngles(player.getPosX(), player.getPosY(), player.getPosZ(), player.rotationYaw, player.rotationPitch);
             world.addEntity(entity);
             entity.setPlayerOwner(player);
+            super.itemInteractionForEntity(itemStack, player, entity, hand);
         }
 
-		super.itemInteractionForEntity(itemStack, player, entity, hand);
         return new ActionResult(ActionResultType.SUCCESS, itemStack);
     }
 

@@ -12,12 +12,14 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.*;
 
 public class DonationFamiliars {
     public static DonationFamiliars instance = new DonationFamiliars();
-    public Map<String, Map<String, PetEntry>> playerFamiliars = new HashMap<>();
+    public Map<UUID, Map<UUID, PetEntry>> playerFamiliars = new HashMap<>();
     public long jsonLoadedTime = -1;
     protected List<String> familiarBlacklist = null;
 
@@ -74,11 +76,13 @@ public class DonationFamiliars {
             Iterator<JsonElement> jsonIterator = jsonArray.iterator();
             while (jsonIterator.hasNext()) {
                 JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
-                String minecraft_uuid = familiarJson.get("minecraft_uuid").getAsString();
+                UUID minecraft_uuid = UUID.fromString(familiarJson.get("minecraft_uuid").getAsString());
                 String minecraft_username = familiarJson.get("minecraft_username").getAsString();
                 if(this.getFamiliarBlacklist().contains(minecraft_username)) {
-                	continue;
-				}
+                    continue;
+                }
+                UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
+
                 String familiar_species = familiarJson.get("familiar_species").getAsString();
                 if("phantom".equalsIgnoreCase(familiar_species))
 					familiar_species = "reaper";
@@ -90,8 +94,7 @@ public class DonationFamiliars {
 					familiar_size = familiarJson.get("familiar_size").getAsDouble();
 				}
 
-                String familiarEntryName = "familiar-" + minecraft_username + "-" + familiar_species.toLowerCase();
-                PetEntryFamiliar familiarEntry = new PetEntryFamiliar(UUID.randomUUID(), familiarEntryName, null, familiar_species.toLowerCase());
+                PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
                 familiarEntry.setEntitySubspeciesID(familiar_subspecies);
                 if(familiar_size <= 0) {
                     familiarEntry.setEntitySize(familiar_subspecies < 3 ? 0.6D : 0.3D);
@@ -107,10 +110,10 @@ public class DonationFamiliars {
                 // Add Pet Entries or Update Existing Entries:
                 if (!this.playerFamiliars.containsKey(minecraft_uuid))
                     this.playerFamiliars.put(minecraft_uuid, new HashMap<>());
-                if (!this.playerFamiliars.containsKey(familiarEntryName))
-                    this.playerFamiliars.get(minecraft_uuid).put(familiarEntryName, familiarEntry);
+                if (!this.playerFamiliars.containsKey(familiar_uuid))
+                    this.playerFamiliars.get(minecraft_uuid).put(familiar_uuid, familiarEntry);
                 else {
-                    PetEntry existingEntry = this.playerFamiliars.get(minecraft_uuid).get(familiarEntryName);
+                    PetEntry existingEntry = this.playerFamiliars.get(minecraft_uuid).get(familiar_uuid);
                     existingEntry.copy(familiarEntry);
                 }
             }
@@ -133,15 +136,14 @@ public class DonationFamiliars {
     // ==================================================
     //              Get Familiars For Player
     // ==================================================
-    public Map<String, PetEntry> getFamiliarsForPlayer(PlayerEntity player) {
+    public Map<UUID, PetEntry> getFamiliarsForPlayer(PlayerEntity player) {
         long currentTime = System.currentTimeMillis() / 1000;
         if(this.jsonLoadedTime < 0 || currentTime - this.jsonLoadedTime > 60 * 60)
             this.readFromJSON();
 
-		Map<String, PetEntry> playerFamiliarEntries = new HashMap<>();
-        String playerUUID = player.getUniqueID().toString();
-        if(this.playerFamiliars.containsKey(playerUUID)) {
-			playerFamiliarEntries = this.playerFamiliars.get(playerUUID);
+		Map<UUID, PetEntry> playerFamiliarEntries = new HashMap<>();
+        if(this.playerFamiliars.containsKey(player.getUniqueID())) {
+			playerFamiliarEntries = this.playerFamiliars.get(player.getUniqueID());
 			for(PetEntry familiarEntry : playerFamiliarEntries.values()) {
 				if(familiarEntry.host == null) {
 					familiarEntry.host = player;

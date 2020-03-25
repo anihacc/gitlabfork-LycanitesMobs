@@ -10,7 +10,7 @@ public class PetEntryFamiliar extends PetEntry {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public PetEntryFamiliar(UUID petEntryID, String name, LivingEntity host, String summonType) {
-        super(petEntryID, name, "familiar", host, summonType);
+	public PetEntryFamiliar(UUID petEntryID, LivingEntity host, String summonType) {
+        super(petEntryID, "familiar", host, summonType);
 	}
 }

@@ -3,6 +3,7 @@ package com.lycanitesmobs.client.gui.beastiary;
 import com.lycanitesmobs.LycanitesMobs;
 import com.lycanitesmobs.ObjectManager;
 import com.lycanitesmobs.client.TextureManager;
+import com.lycanitesmobs.client.gui.BaseGui;
 import com.lycanitesmobs.client.gui.BaseScreen;
 import com.lycanitesmobs.client.gui.buttons.ButtonBase;
 import com.lycanitesmobs.core.entity.AgeableCreatureEntity;
@@ -11,7 +12,6 @@ import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -275,7 +275,8 @@ public abstract class BeastiaryScreen extends BaseScreen {
 
 				RenderSystem.pushMatrix();
 				RenderSystem.translatef(0, 0, -1000);
-				InventoryScreen.func_228187_a_(posX, posY, scale, lookX, lookY, this.creaturePreviewEntity); // drawEntityOnScreen()?
+
+				BaseGui.renderLivingEntity(posX, posY, scale, lookX, lookY, this.creaturePreviewEntity); // drawEntityOnScreen()
 				RenderSystem.popMatrix();
 			}
 		}

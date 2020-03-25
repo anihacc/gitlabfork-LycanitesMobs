@@ -14,7 +14,8 @@
 	"lifetime": 100,
 	"elements": [
 		"order",
-		"chaos"
+		"chaos",
+		"quake"
 	],
 	"behaviours": [
 		{

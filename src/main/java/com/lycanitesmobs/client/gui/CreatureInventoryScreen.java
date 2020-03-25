@@ -9,7 +9,6 @@ import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
 import com.lycanitesmobs.core.inventory.InventoryCreature;
 import com.lycanitesmobs.core.network.MessageEntityGUICommand;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
@@ -173,7 +172,7 @@ public class CreatureInventoryScreen extends BaseContainerScreen<CreatureContain
         int creatureWidth = 54;
         int creatureHeight = 54;
         this.drawTexturedModalRect(backX - creatureWidth + 1, backY + 17, statusWidth, 256 - creatureHeight, creatureWidth, creatureHeight);
-		InventoryScreen.func_228187_a_(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature); // drawEntityOnScreen()
+		BaseGui.renderLivingEntity(backX + 26 - creatureWidth + 1, backY + 60, 17, (float) backX - mouseX, (float) backY - mouseY, this.creature); // drawEntityOnScreen()
 	}
 
 	protected void drawSlots(int backX, int backY) {
