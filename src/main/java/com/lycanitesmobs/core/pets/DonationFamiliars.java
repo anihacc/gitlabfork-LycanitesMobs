@@ -75,47 +75,50 @@ public class DonationFamiliars {
             JsonArray jsonArray = jsonElement.getAsJsonArray();
             Iterator<JsonElement> jsonIterator = jsonArray.iterator();
             while (jsonIterator.hasNext()) {
-                JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
-                UUID minecraft_uuid = UUID.fromString(familiarJson.get("minecraft_uuid").getAsString());
-                String minecraft_username = familiarJson.get("minecraft_username").getAsString();
-                if(this.getFamiliarBlacklist().contains(minecraft_username)) {
-                    continue;
+                try {
+                    JsonObject familiarJson = jsonIterator.next().getAsJsonObject();
+                    UUID minecraft_uuid = UUID.fromString(familiarJson.get("minecraft_uuid").getAsString());
+                    String minecraft_username = familiarJson.get("minecraft_username").getAsString();
+                    if(this.getFamiliarBlacklist().contains(minecraft_username)) {
+                        continue;
+                    }
+                    UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
+
+                    String familiar_species = familiarJson.get("familiar_species").getAsString();
+                    if("phantom".equalsIgnoreCase(familiar_species))
+                        familiar_species = "reaper";
+                    int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
+                    String familiar_name = familiarJson.get("familiar_name").getAsString();
+                    String familiar_color = familiarJson.get("familiar_color").getAsString();
+                    double familiar_size = 0;
+                    if(familiarJson.has("familiar_size")) {
+                        familiar_size = familiarJson.get("familiar_size").getAsDouble();
+                    }
+
+                    PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
+                    familiarEntry.setEntitySubspeciesID(familiar_subspecies);
+                    if(familiar_size <= 0) {
+                        familiarEntry.setEntitySize(familiar_subspecies < 3 ? 0.6D : 0.3D);
+                    }
+                    else {
+                        familiarEntry.setEntitySize(familiar_size);
+                    }
+
+                    if (!"".equals(familiar_name))
+                        familiarEntry.setEntityName(familiar_name);
+                    familiarEntry.setColor(familiar_color);
+
+                    // Add Pet Entries or Update Existing Entries:
+                    if (!this.playerFamiliars.containsKey(minecraft_uuid))
+                        this.playerFamiliars.put(minecraft_uuid, new HashMap<>());
+                    if (!this.playerFamiliars.get(minecraft_uuid).containsKey(familiar_uuid))
+                        this.playerFamiliars.get(minecraft_uuid).put(familiar_uuid, familiarEntry);
+                    else {
+                        PetEntry existingEntry = this.playerFamiliars.get(minecraft_uuid).get(familiar_uuid);
+                        existingEntry.copy(familiarEntry);
+                    }
                 }
-                UUID familiar_uuid = UUID.fromString(familiarJson.get("familiar_uuid").getAsString());
-
-                String familiar_species = familiarJson.get("familiar_species").getAsString();
-                if("phantom".equalsIgnoreCase(familiar_species))
-					familiar_species = "reaper";
-                int familiar_subspecies = familiarJson.get("familiar_subspecies").getAsInt();
-                String familiar_name = familiarJson.get("familiar_name").getAsString();
-                String familiar_color = familiarJson.get("familiar_color").getAsString();
-                double familiar_size = 0;
-                if(familiarJson.has("familiar_size")) {
-					familiar_size = familiarJson.get("familiar_size").getAsDouble();
-				}
-
-                PetEntryFamiliar familiarEntry = new PetEntryFamiliar(familiar_uuid, null, familiar_species.toLowerCase());
-                familiarEntry.setEntitySubspeciesID(familiar_subspecies);
-                if(familiar_size <= 0) {
-                    familiarEntry.setEntitySize(familiar_subspecies < 3 ? 0.6D : 0.3D);
-                }
-                else {
-					familiarEntry.setEntitySize(familiar_size);
-				}
-
-                if (!"".equals(familiar_name))
-                    familiarEntry.setEntityName(familiar_name);
-                familiarEntry.setColor(familiar_color);
-
-                // Add Pet Entries or Update Existing Entries:
-                if (!this.playerFamiliars.containsKey(minecraft_uuid))
-                    this.playerFamiliars.put(minecraft_uuid, new HashMap<>());
-                if (!this.playerFamiliars.containsKey(familiar_uuid))
-                    this.playerFamiliars.get(minecraft_uuid).put(familiar_uuid, familiarEntry);
-                else {
-                    PetEntry existingEntry = this.playerFamiliars.get(minecraft_uuid).get(familiar_uuid);
-                    existingEntry.copy(familiarEntry);
-                }
+                catch(Exception e) {}
             }
         }
         catch(Exception e) {
