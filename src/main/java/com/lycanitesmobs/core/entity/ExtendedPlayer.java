@@ -26,10 +26,11 @@ import com.lycanitesmobs.client.localisation.LanguageManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ExtendedPlayer implements IExtendedPlayer {
     public static Map<EntityPlayer, ExtendedPlayer> clientExtendedPlayers = new HashMap<>();
-	public static Map<String, NBTTagCompound> backupNBTTags = new HashMap<>();
+	public static Map<UUID, NBTTagCompound> backupNBTTags = new HashMap<>();
 	
 	// Player Info and Containers:
 	public EntityPlayer player;
@@ -130,10 +131,10 @@ public class ExtendedPlayer implements IExtendedPlayer {
     // ==================================================
     /** Called when the player entity is being cloned, backups all data so that it can be loaded into a new ExtendedPlayer for the clone. **/
     public void backupPlayer() {
-        if(this.player != null) {
+        if(this.player != null && !this.player.getEntityWorld().isRemote) {
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
             this.writeNBT(nbtTagCompound);
-            backupNBTTags.put(this.player.getName(), nbtTagCompound);
+            backupNBTTags.put(this.player.getUniqueID(), nbtTagCompound);
         }
     }
 
@@ -141,11 +142,11 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void setPlayer(EntityPlayer player) {
         this.player = player;
         this.petManager.host = player;
-        if(this.player.getEntityWorld() == null || this.player.getEntityWorld().isRemote)
+        if(this.player.getEntityWorld().isRemote)
             return;
-        if(backupNBTTags.containsKey(this.player.getName())) {
-            this.readNBT(backupNBTTags.get(this.player.getName()));
-            backupNBTTags.remove(this.player.getName());
+        if(backupNBTTags.containsKey(this.player.getUniqueID())) {
+            this.readNBT(backupNBTTags.get(this.player.getUniqueID()));
+            backupNBTTags.remove(this.player.getUniqueID());
         }
 	}
 
@@ -155,7 +156,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 
     /** Returns true if the provided entity is within melee attack range and is considered large. This is used for when the vanilla attack range fails on big entities. **/
     public boolean canMeleeBigEntity(Entity targetEntity) {
-        if(targetEntity == null || !(targetEntity instanceof EntityLivingBase))
+        if(!(targetEntity instanceof EntityLivingBase))
             return false;
         float targetWidth = targetEntity.width;
         float targetHeight = targetEntity.height;
@@ -237,11 +238,14 @@ public class ExtendedPlayer implements IExtendedPlayer {
 			// Pet Manager Setup:
 			if (!this.player.getEntityWorld().isRemote) {
 				// Load Familiars:
-				Map<String, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
+				Map<UUID, PetEntry> playerFamiliars = DonationFamiliars.instance.getFamiliarsForPlayer(this.player);
 				if (playerFamiliars != null) {
-					this.petManager.clearEntries("familiar");
 					for (PetEntry petEntry : playerFamiliars.values()) {
-						if (!this.petManager.hasEntry(petEntry)) {
+						if (this.petManager.hasEntry(petEntry)) {
+							PetEntry familiarEntry = this.petManager.getEntry(petEntry.petEntryID);
+							familiarEntry.copy(petEntry);
+						}
+						else {
 							this.petManager.addEntry(petEntry);
 							petEntry.entity = null;
 						}
@@ -349,7 +353,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public void sendPetEntriesToPlayer(String entryType) {
 		if(this.player.getEntityWorld().isRemote) return;
 		LycanitesMobs.logDebug("Packets", "Sending all pet entries to client.");
-		for(PetEntry petEntry : this.petManager.allEntries.values()) {
+		for(PetEntry petEntry : this.petManager.entries.values()) {
             if(entryType.equals(petEntry.getType()) || "".equals(entryType)) {
                 MessagePetEntry message = new MessagePetEntry(this, petEntry);
                 LycanitesMobs.packetHandler.sendToPlayer(message, (EntityPlayerMP)this.player);

@@ -84,8 +84,7 @@ public class CreatureList extends GuiScrollingList {
 			else if(this.listType == Type.FAMILIAR) {
 				petType = "familiar";
 			}
-			List<PetEntry> pets = new ArrayList<>();
-			pets.addAll(this.parentGui.playerExt.petManager.getEntryList(petType));
+			List<PetEntry> pets = this.parentGui.playerExt.petManager.createEntryListByType(petType);
 			pets.sort(Comparator.comparing(PetEntry::getDisplayName));
 			for(PetEntry petEntry : pets) {
 				CreatureInfo creatureInfo = petEntry.getCreatureInfo();

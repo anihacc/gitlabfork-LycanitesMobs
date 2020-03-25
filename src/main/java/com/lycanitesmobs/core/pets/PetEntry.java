@@ -16,8 +16,6 @@ import net.minecraft.world.World;
 import java.util.UUID;
 
 public class PetEntry {
-    /** The unique name for this entry, used when reading and writing NBT Data. If it is an empty string "" or null then NBT Data will not be stored. **/
-    public String name;
     /** The Pet Manager that this entry is added to, this can also be null. **/
     public PetManager petManager;
     /** The ID given to this entry by the PetManager. **/
@@ -84,8 +82,7 @@ public class PetEntry {
     /** Returns a new PetEntry based off the provided entity for the provided player. **/
     public static PetEntry createFromEntity(EntityPlayer player, BaseCreatureEntity entity, String petType) {
         CreatureInfo creatureInfo = entity.creatureInfo;
-        String entryName = petType + "-" + player.getName() + "-" + creatureInfo.getName() + "-" + UUID.randomUUID().toString();
-        PetEntry petEntry = new PetEntry(UUID.randomUUID(), entryName, petType, player, creatureInfo.getName());
+        PetEntry petEntry = new PetEntry(UUID.randomUUID(), petType, player, creatureInfo.getName());
         if(entity.hasCustomName()) {
 			petEntry.setEntityName(entity.getCustomNameTag());
 		}
@@ -99,14 +96,13 @@ public class PetEntry {
     // ==================================================
     //                     Constructor
     // ==================================================
-	public PetEntry(UUID petEntryID, String name, String type, EntityLivingBase host, String summonType) {
+	public PetEntry(UUID petEntryID, String type, EntityLivingBase host, String summonType) {
         this.petEntryID = petEntryID;
-        this.name = name;
         this.type = type;
         this.host = host;
 
         ExtendedPlayer playerExt = null;
-        if(host != null && host instanceof EntityPlayer)
+        if(host instanceof EntityPlayer)
             playerExt = ExtendedPlayer.getForPlayer((EntityPlayer)host);
         this.summonSet = new SummonSet(playerExt);
         this.summonSet.summonableOnly = false;
@@ -386,7 +382,7 @@ public class PetEntry {
             this.entity = (Entity)this.summonSet.getCreatureClass().getConstructor(new Class[] {World.class}).newInstance(new Object[] {this.host.getEntityWorld()});
         }
         catch (Exception e) {
-            LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureClass() + " Name: " + this.name);
+            LycanitesMobs.logWarning("Pets", "[Pet Entry] Unable to find an entity class for pet entry. " + " Type: " + this.summonSet.summonType + " Class: " + this.summonSet.getCreatureClass() + " ID: " + this.petEntryID);
             //e.printStackTrace();
         }
 
@@ -548,10 +544,8 @@ public class PetEntry {
     // ========== Read ===========
     /** Reads pet entry from NBTTag. Should be called by PetManagers or other classes that store PetEntries and NBT Data for them. **/
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
-        if(nbtTagCompound.hasKey("UUID"))
+        if(nbtTagCompound.hasUniqueId("UUID"))
             this.petEntryID = nbtTagCompound.getUniqueId("UUID");
-        if(nbtTagCompound.hasKey("EntryName"))
-            this.name = nbtTagCompound.getString("EntryName");
         if(nbtTagCompound.hasKey("Type"))
             this.type = nbtTagCompound.getString("Type");
 
@@ -582,10 +576,7 @@ public class PetEntry {
     // ========== Write ==========
     /** Writes pet entry to NBTTag. **/
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
-        if(this.name == null || "".equals(this.name))
-            return;
         nbtTagCompound.setUniqueId("UUID", this.petEntryID);
-        nbtTagCompound.setString("EntryName", this.name);
         nbtTagCompound.setString("Type", this.getType());
 
         nbtTagCompound.setBoolean("Active", this.active);
@@ -597,24 +588,23 @@ public class PetEntry {
 
         // Save Entity:
         if (this.usesSpirit()) {
-            this.saveEntityNBT();
             nbtTagCompound.setString("EntityName", this.entityName);
             nbtTagCompound.setInteger("SubspeciesID", this.subspeciesID);
             nbtTagCompound.setDouble("EntitySize", this.entitySize);
             nbtTagCompound.setString("Color", this.color);
-            nbtTagCompound.setTag("EntityNBT", this.entityNBT);
         }
+        this.saveEntityNBT();
+        nbtTagCompound.setTag("EntityNBT", this.entityNBT);
     }
 
     // ========== Save Entity NBT ==========
     /** If this PetEntry currently has an active entity, this will save that entity's NBT data to this PetEntry's record of it. **/
     public void saveEntityNBT() {
+        if(this.entityNBT == null) {
+            this.entityNBT = new NBTTagCompound();
+        }
     	if(this.entity == null) {
     		return;
-		}
-
-        if(this.entityNBT == null) {
-			this.entityNBT = new NBTTagCompound();
 		}
 
 		// Creature Base:

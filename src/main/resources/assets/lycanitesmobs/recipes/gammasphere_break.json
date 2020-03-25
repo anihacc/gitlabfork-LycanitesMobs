@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:acidsplashcharge",
+    "item": "lycanitesmobs:lightballcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:vespidstinger"
+      "item": "lycanitesmobs:gammasphere"
     }
   ],
   "type": "forge:ore_shapeless"

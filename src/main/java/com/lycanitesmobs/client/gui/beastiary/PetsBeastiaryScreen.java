@@ -50,7 +50,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 			}
 			return title;
 		}
-		if(this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty()) {
+		if(this.playerExt.petManager.entries.isEmpty()) {
 			return LanguageManager.translate("gui.beastiary.pets.empty.title");
 		}
 		return LanguageManager.translate("gui.beastiary.pets");
@@ -146,7 +146,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	protected void updateControls(int mouseX, int mouseY, float partialTicks) {
 		super.updateControls(mouseX, mouseY, partialTicks);
 
-		boolean empty = this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty();
+		boolean empty = this.playerExt.petManager.entries.isEmpty();
 
 		if(!empty) {
 			this.petTypeList.drawScreen(mouseX, mouseY, partialTicks);
@@ -226,7 +226,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 		int width = this.colRightWidth - marginX;
 
 		// Empty:
-		if(this.playerExt.petManager.getEntryList("pet").isEmpty() && this.playerExt.petManager.getEntryList("mount").isEmpty() && this.playerExt.petManager.getEntryList("familiar").isEmpty()) {
+		if(this.playerExt.petManager.entries.isEmpty()) {
 			String text = LanguageManager.translate("gui.beastiary.pets.empty.info");
 			this.drawSplitString(text, nextX, nextY, width, 0xFFFFFF, true);
 			return;

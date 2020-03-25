@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:acidsplashcharge",
+    "item": "lycanitesmobs:lifedraincharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:vespidstinger"
+      "item": "lycanitesmobs:sprigganheart"
     }
   ],
   "type": "forge:ore_shapeless"

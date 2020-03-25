@@ -19,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.UUID;
 
 public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntry, IMessage> {
-    public String petEntryName;
     public UUID petEntryID;
     public String petEntryType;
     public boolean spawningActive;
@@ -39,7 +38,6 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	// ==================================================
 	public MessagePetEntry() {}
 	public MessagePetEntry(ExtendedPlayer playerExt, PetEntry petEntry) {
-        this.petEntryName = petEntry.name != null ? petEntry.name : "";
         this.petEntryID = petEntry.petEntryID;
         this.petEntryType = petEntry.getType();
         this.spawningActive = petEntry.spawningActive;
@@ -90,7 +88,7 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
         PetManager petManager = playerExt.petManager;
         PetEntry petEntry = petManager.getEntry(message.petEntryID);
         if(petEntry == null) {
-            petEntry = new PetEntry(message.petEntryID, this.petEntryName, message.petEntryType, player, this.summonType);
+            petEntry = new PetEntry(message.petEntryID, message.petEntryType, player, this.summonType);
             petManager.addEntry(petEntry);
         }
         petEntry.setSpawningActive(message.spawningActive);
@@ -120,7 +118,6 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
-        this.petEntryName = packet.readString(256);
         this.petEntryID = packet.readUniqueId();
         this.petEntryType = packet.readString(256);
         this.spawningActive = packet.readBoolean();
@@ -145,7 +142,6 @@ public class MessagePetEntry implements IMessage, IMessageHandler<MessagePetEntr
 	@Override
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer packet = new PacketBuffer(buf);
-        packet.writeString(this.petEntryName);
         packet.writeUniqueId(this.petEntryID);
         packet.writeString(this.petEntryType);
         packet.writeBoolean(this.spawningActive);

@@ -1,11 +1,11 @@
 {
   "result": {
-    "item": "lycanitesmobs:acidsplashcharge",
+    "item": "lycanitesmobs:whirlwindcharge",
     "count": 4
   },
   "ingredients": [
 	{
-      "item": "lycanitesmobs:vespidstinger"
+      "item": "lycanitesmobs:uvaraptorskull"
     }
   ],
   "type": "forge:ore_shapeless"

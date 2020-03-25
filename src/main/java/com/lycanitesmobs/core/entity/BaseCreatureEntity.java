@@ -4234,9 +4234,6 @@ public abstract class BaseCreatureEntity extends EntityLiving {
 	}
 	/** Returns the maximum possible size of this mob's inventory. (The creature inventory is not actually resized, instead some slots are locked and made unavailable.) **/
 	public int getInventorySizeMax() {
-		if(this.isPetType("familiar")) {
-			return 0;
-		}
 		return Math.max(this.getNoBagSize(), this.getBagSize());
 	}
     /** Returns true if this mob is equipped with a bag item. **/
