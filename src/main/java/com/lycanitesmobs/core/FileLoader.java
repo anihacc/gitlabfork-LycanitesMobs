@@ -22,7 +22,7 @@ public class FileLoader {
 
 	/**
 	 * Creates and initialises all file loaders for the provided mod domain.
-	 * @param domain The mod domain get load from, ex: "lycanitesmobs"
+	 * @param domain The mod domain to load from, ex: "lycanitesmobs"
 	 */
 	public static void initAll(String domain) {
 		CLIENT = new FileLoader("assets", domain);
@@ -39,7 +39,7 @@ public class FileLoader {
 	/**
 	 * Constrcutor
 	 * @param type The type of directory to load from, ex: "assets", "data", "common"
-	 * @param domain The mod domain get load from, ex: "lycanitesmobs"
+	 * @param domain The mod domain to load from, ex: "lycanitesmobs"
 	 */
 	public FileLoader(String type, String domain) {
 		this.domain = domain;

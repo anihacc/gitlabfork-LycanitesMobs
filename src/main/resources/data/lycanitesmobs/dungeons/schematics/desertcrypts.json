@@ -98,10 +98,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:scorchfirescepter"
+					"item": "lycanitesmobs:scorchfirescepter",
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_worm"
+					"item": "lycanitesmobs:soulstone_worm",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -119,14 +121,17 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:clinkscythe"
+					"item": "lycanitesmobs:clinkscythe",
+					"amountMultiplier": false
 				},
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 10
+					"minAmount": 10,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_imp"
+					"item": "lycanitesmobs:soulstone_imp",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -144,13 +149,16 @@
 			"mobDrops": [
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 50
+					"minAmount": 50,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:magmascepter"
+					"item": "lycanitesmobs:magmascepter",
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_dragon"
+					"item": "lycanitesmobs:soulstone_dragon",
+					"amountMultiplier": false
 				}
 			]
 		}
