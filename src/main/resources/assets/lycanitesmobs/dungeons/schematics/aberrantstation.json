@@ -96,10 +96,12 @@
 			"mobDrops": [
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 3
+					"minAmount": 3,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_beast"
+					"item": "lycanitesmobs:soulstone_beast",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -117,14 +119,17 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:astarothclaw"
+					"item": "lycanitesmobs:astarothclaw",
+					"amountMultiplier": false
 				},
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 10
+					"minAmount": 10,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_aberration"
+					"item": "lycanitesmobs:soulstone_aberration",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -142,14 +147,17 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:astarothclaw"
+					"item": "lycanitesmobs:astarothclaw",
+					"amountMultiplier": false
 				},
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 50
+					"minAmount": 50,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_aberration"
+					"item": "lycanitesmobs:soulstone_aberration",
+					"amountMultiplier": false
 				}
 			]
 		}

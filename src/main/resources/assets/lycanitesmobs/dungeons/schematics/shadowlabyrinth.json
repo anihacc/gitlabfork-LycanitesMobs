@@ -95,10 +95,12 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:bloodleechscepter"
+					"item": "lycanitesmobs:bloodleechscepter",
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_beast"
+					"item": "lycanitesmobs:soulstone_beast",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -116,14 +118,17 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:spectralboltscepter"
+					"item": "lycanitesmobs:spectralboltscepter",
+					"amountMultiplier": false
 				},
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 10
+					"minAmount": 10,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_aberration"
+					"item": "lycanitesmobs:soulstone_aberration",
+					"amountMultiplier": false
 				}
 			]
 		},
@@ -140,17 +145,21 @@
 			"dungeonBoss": true,
 			"mobDrops": [
 				{
-					"item": "lycanitesmobs:grueclaw"
+					"item": "lycanitesmobs:grueclaw",
+					"amountMultiplier": false
 				},
 				{
 					"item": "minecraft:diamond",
-					"minAmount": 50
+					"minAmount": 50,
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_undead"
+					"item": "lycanitesmobs:soulstone_undead",
+					"amountMultiplier": false
 				},
 				{
-					"item": "lycanitesmobs:soulstone_arthropod"
+					"item": "lycanitesmobs:soulstone_arthropod",
+					"amountMultiplier": false
 				}
 			]
 		}

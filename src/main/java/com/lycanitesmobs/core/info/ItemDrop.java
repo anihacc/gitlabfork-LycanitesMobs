@@ -30,7 +30,8 @@ public class ItemDrop {
 	public int minAmount = 1;
 	public int maxAmount = 1;
 	public boolean bonusAmount = true;
-	
+	public boolean amountMultiplier = true;
+
 	public float chance = 0;
 
     /** The ID of the subspecies that this drop is restricted to. An ID below 0 will have this drop ignore the subspecies. **/
@@ -116,6 +117,8 @@ public class ItemDrop {
 			this.maxAmount = json.get("maxAmount").getAsInt();
 		if(json.has("bonusAmount"))
 			this.bonusAmount = json.get("bonusAmount").getAsBoolean();
+		if(json.has("amountMultiplier"))
+			this.amountMultiplier = json.get("amountMultiplier").getAsBoolean();
 		if(json.has("chance"))
 			this.chance = json.get("chance").getAsFloat();
 		if(json.has("subspecies"))
@@ -187,6 +190,9 @@ public class ItemDrop {
 			return 0;
 		
 		// How Many?
+		if(!this.amountMultiplier) {
+			multiplier = 1;
+		}
 		int min = this.minAmount;
 		int max = this.maxAmount + (this.bonusAmount ? bonus : 0);
 		if(max <= min) {
