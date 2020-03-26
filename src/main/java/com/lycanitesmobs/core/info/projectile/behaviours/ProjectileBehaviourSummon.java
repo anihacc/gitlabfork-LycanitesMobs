@@ -2,7 +2,6 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.ClientManager;
-import com.lycanitesmobs.client.gui.beastiary.SummoningBeastiaryScreen;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
@@ -133,7 +132,8 @@ public class ProjectileBehaviourSummon extends ProjectileBehaviour {
 							entityTameable.setAggressive(true);
 							if(summonSet != null) {
 								summonSet.applyBehaviour(entityTameable);
-								entityTameable.applySubspecies(summonSet.subspecies);
+								entityTameable.setSubspecies(summonSet.subspecies);
+								entityTameable.applyVariant(summonSet.variant);
 							}
 						}
 

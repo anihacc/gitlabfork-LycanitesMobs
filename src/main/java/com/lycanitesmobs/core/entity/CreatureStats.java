@@ -1,7 +1,7 @@
 package com.lycanitesmobs.core.entity;
 
 import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import net.minecraft.world.Difficulty;
 
 /** Manages the stats of an EntityCreature. This applies difficulty multipliers, subspecies, levels, etc also. **/
@@ -36,7 +36,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierHealth;
 				statValue += entity.extraMobBehaviour.boostHealth;
@@ -59,7 +59,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierDefense;
 				statValue += entity.extraMobBehaviour.boostDefense;
@@ -82,7 +82,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierArmor;
 				statValue += entity.extraMobBehaviour.boostArmor;
@@ -105,7 +105,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierSpeed;
 				statValue += entity.extraMobBehaviour.boostSpeed;
@@ -128,7 +128,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierDamage;
 				statValue += entity.extraMobBehaviour.boostDamage;
@@ -151,7 +151,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierHaste;
 				statValue += entity.extraMobBehaviour.boostHaste;
@@ -174,7 +174,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierHaste;
 				statValue += entity.extraMobBehaviour.boostHaste;
@@ -197,7 +197,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierEffect;
 				statValue += entity.extraMobBehaviour.boostEffect;
@@ -220,7 +220,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 		}
 
 		statValue *= this.getLevelMultiplier(statName);
@@ -239,7 +239,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 			if(entity.extraMobBehaviour != null) {
 				statValue *= entity.extraMobBehaviour.multiplierPierce;
 				statValue += entity.extraMobBehaviour.boostPierce;
@@ -262,7 +262,7 @@ public class CreatureStats {
 		// Wild:
 		if(!this.entity.isTamed()) {
 			statValue *= this.getDifficultyMultiplier(statName);
-			statValue *= this.getSubspeciesMultiplier(statName);
+			statValue *= this.getVariantMultiplier(statName);
 		}
 
 		statValue *= this.getLevelMultiplier(statName);
@@ -296,13 +296,13 @@ public class CreatureStats {
 
 
 	/**
-	 * Returns a subspecies stat multiplier for the provided stat name and the subspecies that the entity is.
+	 * Returns a variant stat multiplier for the provided stat name and the variant that the entity is.
 	 * @param stat The name of the stat to get the multiplier for.
 	 * @return The stat multiplier.
 	 */
-	protected double getSubspeciesMultiplier(String stat) {
-		if(this.entity.getSubspecies() != null && Subspecies.statMultipliers.containsKey(this.entity.getSubspecies().rarity.toUpperCase() + "-" + stat.toUpperCase())) {
-			return Subspecies.statMultipliers.get(this.entity.getSubspecies().rarity.toUpperCase() + "-" + stat.toUpperCase());
+	protected double getVariantMultiplier(String stat) {
+		if(this.entity.getVariant() != null && Variant.STAT_MULTIPLIERS.containsKey(this.entity.getVariant().rarity.toUpperCase() + "-" + stat.toUpperCase())) {
+			return Variant.STAT_MULTIPLIERS.get(this.entity.getVariant().rarity.toUpperCase() + "-" + stat.toUpperCase());
 		}
 		return 1;
 	}

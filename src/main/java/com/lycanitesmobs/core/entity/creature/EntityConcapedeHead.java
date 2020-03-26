@@ -67,7 +67,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
         		EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(parentSegment.getEntityWorld());
         		segmentEntity.setLocationAndAngles(parentSegment.getPositionVec().getX(), parentSegment.getPositionVec().getY(), parentSegment.getPositionVec().getZ(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(parentSegment);
-				segmentEntity.setSubspecies(this.getSubspeciesIndex());
+				segmentEntity.applyVariant(this.getVariantIndex());
 				segmentEntity.setSizeScale(this.sizeScale);
 				segmentEntity.spawnEventType = this.spawnEventType;
 				segmentEntity.firstSpawn = false;
@@ -119,7 +119,7 @@ public class EntityConcapedeHead extends AgeableCreatureEntity {
 				EntityConcapedeSegment segmentEntity = (EntityConcapedeSegment)CreatureManager.getInstance().getCreature("concapedesegment").createEntity(lastSegment.getEntityWorld());
 	    		segmentEntity.setLocationAndAngles(lastSegment.getPositionVec().getX(), lastSegment.getPositionVec().getY(), lastSegment.getPositionVec().getZ(), 0.0F, 0.0F);
 				segmentEntity.setParentTarget(lastSegment);
-				segmentEntity.applySubspecies(this.getSubspeciesIndex());
+				segmentEntity.applyVariant(this.getVariantIndex());
 				segmentEntity.setSizeScale(this.sizeScale);
 				segmentEntity.spawnEventType = this.spawnEventType;
 				segmentEntity.firstSpawn = false;

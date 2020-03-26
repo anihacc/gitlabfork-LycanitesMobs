@@ -29,8 +29,11 @@ public class ItemDrop {
 
 	public float chance = 0;
 
-    /** The ID of the subspecies that this drop is restricted to. An ID below 0 will have this drop ignore the subspecies. **/
-    public int subspeciesID = -1;
+	/** The ID of the subspecies that this drop is restricted to. An ID below 0 will have this drop ignore the subspecies. **/
+	public int subspeciesIndex = -1;
+
+	/** The ID of the variant that this drop is restricted to. An ID below 0 will have this drop ignore the variant. **/
+	public int variantIndex = -1;
 
 
 	// ==================================================
@@ -111,7 +114,9 @@ public class ItemDrop {
 		if(json.has("chance"))
 			this.chance = json.get("chance").getAsFloat();
 		if(json.has("subspecies"))
-			this.subspeciesID = json.get("subspecies").getAsInt();
+			this.subspeciesIndex = json.get("subspecies").getAsInt();
+		if(json.has("variant"))
+			this.variantIndex = json.get("variant").getAsInt();
 
 		if(json.has("burningItem")) {
 			this.burningItemId = json.get("burningItem").getAsString();
@@ -152,10 +157,15 @@ public class ItemDrop {
 		return this;
 	}
 
-    public ItemDrop setSubspecies(int subspeciesID) {
-        this.subspeciesID = subspeciesID;
+    public ItemDrop setSubspecies(int subspeciesIndex) {
+        this.subspeciesIndex = subspeciesIndex;
         return this;
     }
+
+	public ItemDrop setVariant(int variantIndex) {
+		this.variantIndex = variantIndex;
+		return this;
+	}
 
 
 	/**
@@ -275,9 +285,15 @@ public class ItemDrop {
 			this.itemId = nbtTagCompound.getString("ItemId");
 		this.minAmount = nbtTagCompound.getInt("MinAmount");
 		this.maxAmount = nbtTagCompound.getInt("MaxAmount");
+		if(nbtTagCompound.contains("Subspecies"))
+			this.subspeciesIndex = nbtTagCompound.getInt("Subspecies");
+		if(nbtTagCompound.contains("Variant"))
+			this.variantIndex = nbtTagCompound.getInt("Variant");
 		if(nbtTagCompound.contains("BonusAmount"))
 			this.bonusAmount = nbtTagCompound.getBoolean("BonusAmount");
 		this.chance = nbtTagCompound.getFloat("Chance");
+		if(nbtTagCompound.contains("AmountMultiplier"))
+			this.amountMultiplier = nbtTagCompound.getBoolean("AmountMultiplier");
 	}
 
 
@@ -294,8 +310,11 @@ public class ItemDrop {
 		nbtTagCompound.putString("ItemId", this.itemId);
 		nbtTagCompound.putInt("MinAmount", this.minAmount);
 		nbtTagCompound.putInt("MaxAmount", this.maxAmount);
+		nbtTagCompound.putInt("Subspecies", this.subspeciesIndex);
+		nbtTagCompound.putInt("Variant", this.variantIndex);
 		nbtTagCompound.putBoolean("BonusAmount", this.bonusAmount);
 		nbtTagCompound.putFloat("Chance", this.chance);
+		nbtTagCompound.putBoolean("AmountMultiplier", this.amountMultiplier);
 
 		return true;
 	}

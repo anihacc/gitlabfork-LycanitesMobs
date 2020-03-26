@@ -64,7 +64,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
         super.livingTick();
         
         // Sunlight Explosions:
-        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion() && !this.isRareSubspecies()) {
+        if(!this.getEntityWorld().isRemote && !this.isTamed() && !this.isMinion() && !this.isRareVariant()) {
         	if(!this.isFlying() && (this.onGround || this.isInWater()) && this.isAlive()) {
         		int explosionRadius = 2;
 				if(this.subspecies != null)
@@ -87,7 +87,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
 
 	@Override
 	public boolean canEntityBeSeen(Entity target) {
-		if(this.isRareSubspecies()) {
+		if(this.isRareVariant()) {
 			return true;
 		}
 		return super.canEntityBeSeen(target);
@@ -132,7 +132,7 @@ public class EntityEpion extends RideableCreatureEntity implements IMob {
     /** Returns true if this mob should be damaged by the sun. **/
     @Override
 	public boolean daylightBurns() {
-		return !this.isMinion() && !this.hasMaster() && !this.isTamed() && !this.isRareSubspecies();
+		return !this.isMinion() && !this.hasMaster() && !this.isTamed() && !this.isRareVariant();
 	}
     
     @Override

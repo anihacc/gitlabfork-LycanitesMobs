@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 public class MessageSummonSet {
 	public byte summonSetID;
 	public int subpsecies;
+	public int variant;
 	public String summonType;
 	public byte behaviour;
 	
@@ -21,6 +22,7 @@ public class MessageSummonSet {
 		this.summonSetID = summonSetID;
 		this.summonType = playerExt.getSummonSet(summonSetID).summonType;
 		this.subpsecies = playerExt.getSummonSet(summonSetID).subspecies;
+		this.variant = playerExt.getSummonSet(summonSetID).variant;
 		this.behaviour = playerExt.getSummonSet(summonSetID).getBehaviourByte();
 	}
 	
@@ -36,7 +38,7 @@ public class MessageSummonSet {
 				ExtendedPlayer playerExt = ExtendedPlayer.getForPlayer(player);
 
 				SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-				summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+				summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 			});
             return;
         }
@@ -48,7 +50,7 @@ public class MessageSummonSet {
         	return;
 
 		SummonSet summonSet = playerExt.getSummonSet(message.summonSetID);
-		summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+		summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 	}
 	
 	/**
@@ -59,6 +61,7 @@ public class MessageSummonSet {
         message.summonSetID = packet.readByte();
         message.summonType = packet.readString(256);
 		message.subpsecies = packet.readInt();
+		message.variant = packet.readInt();
         message.behaviour = packet.readByte();
 		return message;
 	}
@@ -70,6 +73,7 @@ public class MessageSummonSet {
         packet.writeByte(message.summonSetID);
         packet.writeString(message.summonType);
 		packet.writeInt(message.subpsecies);
+		packet.writeInt(message.variant);
         packet.writeByte(message.behaviour);
 	}
 	

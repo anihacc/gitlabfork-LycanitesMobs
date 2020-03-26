@@ -84,7 +84,7 @@
 		{
 			"mobId": "lycanitesmobs:chupacabra",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Shadow Hound",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
@@ -107,7 +107,7 @@
 		{
 			"mobId": "lycanitesmobs:shade",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Chaos Serpent",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
@@ -135,7 +135,7 @@
 		{
 			"mobId": "lycanitesmobs:grue",
 			"weight": 1,
-			"subspecies": 3,
+			"variant": 3,
 			"mobSizeScale": 1.5,
 			"mobNameTag": "Night Shade",
 			"naturalDespawn": "false",

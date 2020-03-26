@@ -98,10 +98,7 @@ public class CreaturesBeastiaryScreen extends BeastiaryScreen {
 
 		// Creature Display:
 		if(this.playerExt.selectedCreature != null) {
-			Subspecies subspecies = null;
-			if(this.playerExt.selectedSubspecies != 0) {
-				subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
-			}
+			Subspecies subspecies = this.playerExt.selectedCreature.getSubspecies(this.playerExt.selectedSubspecies);
 
 			// Model:
 			CreatureInfo creatureInfo = this.playerExt.selectedCreature;

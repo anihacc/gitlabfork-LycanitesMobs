@@ -3,18 +3,10 @@ package com.lycanitesmobs.core.info.projectile.behaviours;
 import com.google.gson.JsonObject;
 import com.lycanitesmobs.core.entity.BaseCreatureEntity;
 import com.lycanitesmobs.core.entity.BaseProjectileEntity;
-import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 	/** The explosion radius. **/
@@ -45,7 +37,7 @@ public class ProjectileBehaviourExplosion extends ProjectileBehaviour {
 		int explosionRadius = this.radius;
 		if (projectile.getThrower() != null && projectile.getThrower() instanceof BaseCreatureEntity) {
 			BaseCreatureEntity baseCreatureEntity = (BaseCreatureEntity)projectile.getThrower();
-			if (baseCreatureEntity.isRareSubspecies()) {
+			if (baseCreatureEntity.isRareVariant()) {
 				explosionRadius += 2;
 			}
 		}

@@ -100,11 +100,11 @@ public class FindFuseTargetGoal extends TargetingGoal {
 			return false;
 
 		// Subspecies Check:
-		if(this.host.isRareSubspecies()) {
+		if(this.host.isRareVariant()) {
 			if(!(target instanceof BaseCreatureEntity)) {
 				return false;
 			}
-			if(!((BaseCreatureEntity)target).isRareSubspecies()) {
+			if(!((BaseCreatureEntity)target).isRareVariant()) {
 				return false;
 			}
 		}

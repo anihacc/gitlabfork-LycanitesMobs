@@ -7,6 +7,8 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.CreatureManager;
+import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.network.MessageSummonSetSelection;
 import com.lycanitesmobs.core.pets.PetEntry;
 
@@ -113,16 +115,21 @@ public class CreatureList extends BaseList<BeastiaryScreen> {
 		if(this.listType == Type.KNOWLEDGE) {
 			this.screen.playerExt.selectedCreature = creatureEntry.creatureInfo;
 			this.screen.playerExt.selectedSubspecies = 0;
+			this.screen.playerExt.selectedVariant = 0;
 		}
 		else if(this.listType == Type.SUMMONABLE) {
 			this.screen.playerExt.getSelectedSummonSet().setSummonType(creatureEntry.creatureInfo.getName());
 
-			int subspeciesId = this.screen.playerExt.getSelectedSummonSet().getSubspecies();
-			if(!this.screen.playerExt.getBeastiary().hasKnowledgeRank(creatureEntry.creatureInfo.getName(), 2)) {
-				subspeciesId = 0;
-			}
+			Subspecies subspecies = creatureEntry.creatureInfo.getSubspecies(this.screen.playerExt.getSelectedSummonSet().getSubspecies());
+			this.screen.playerExt.getSelectedSummonSet().setSubspecies(subspecies.index);
 
-			this.screen.playerExt.getSelectedSummonSet().setSubspecies(subspeciesId);
+			Variant variant = subspecies.getVariant(this.screen.playerExt.getSelectedSummonSet().getVariant());
+			int variantId = variant != null? variant.index : 0;
+			if(!this.screen.playerExt.getBeastiary().hasKnowledgeRank(creatureEntry.creatureInfo.getName(), 2)) {
+				variantId = 0;
+			}
+			this.screen.playerExt.getSelectedSummonSet().setVariant(variantId);
+
 			this.screen.playerExt.sendSummonSetToServer((byte)this.screen.playerExt.selectedSummonSet);
 			MessageSummonSetSelection message = new MessageSummonSetSelection(this.screen.playerExt);
 			LycanitesMobs.packetHandler.sendToServer(message);

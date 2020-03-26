@@ -195,7 +195,8 @@ public class ItemStaffSummoning extends BaseItem {
     public void applyMinionBehaviour(TameableCreatureEntity minion, PlayerEntity player) {
     	SummonSet summonSet = ExtendedPlayer.getForPlayer(player).getSelectedSummonSet();
         summonSet.applyBehaviour(minion);
-        minion.applySubspecies(summonSet.subspecies);
+        minion.setSubspecies(summonSet.subspecies);
+        minion.applyVariant(summonSet.variant);
     }
     
     // ========== Minion Effects ==========

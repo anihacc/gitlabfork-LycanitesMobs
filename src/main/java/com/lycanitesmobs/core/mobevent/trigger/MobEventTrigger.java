@@ -109,8 +109,8 @@ public abstract class MobEventTrigger {
 
 
 	/** Triggers an actual spawn, this does not check conditions, it just triggers. **/
-	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level, int subspecies) {
+	public boolean trigger(World world, PlayerEntity player, BlockPos pos, int level, int variant) {
 		LycanitesMobs.logDebug("MobEvents", "Trigger Fired: " + this + " for: " + this.mobEvent.name + " channel: " + this.mobEvent.channel);
-		return this.mobEvent.trigger(world, player, pos, level, subspecies);
+		return this.mobEvent.trigger(world, player, pos, level, variant);
 	}
 }

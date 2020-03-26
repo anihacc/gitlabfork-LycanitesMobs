@@ -112,7 +112,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
     // ==================================================
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
-    public boolean activate(Entity entity, World world, BlockPos pos, int subspecies) {
+    public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
         if(world.isRemote)
             return true;
 
@@ -153,7 +153,7 @@ public class AltarInfoCrimsonEpion extends AltarInfo {
         // Spawn Mini Boss:
         entityCreature.altarSummoned = true;
         entityCreature.forceBossHealthBar = true;
-        entityCreature.applySubspecies(3);
+        entityCreature.applyVariant(3);
         entityCreature.setLocationAndAngles(x, y - 2, z, 0, 0);
         world.addEntity(entityCreature);
         entityCreature.destroyArea(x, y, z, 10000, false, 2);

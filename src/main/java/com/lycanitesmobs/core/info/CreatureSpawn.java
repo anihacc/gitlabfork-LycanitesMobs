@@ -21,7 +21,7 @@ public class CreatureSpawn {
 	public boolean enabled = true;
 
 	/** If true, this mob wont naturally spawn as a subspecies. **/
-	public boolean disableSubspecies = false;
+	public boolean disableVariants = false;
 
 
 	// Spawners:
@@ -105,7 +105,7 @@ public class CreatureSpawn {
 		if(json.has("enabled"))
 			this.enabled = json.get("enabled").getAsBoolean();
 		if(json.has("disableSubspecies"))
-			this.disableSubspecies = json.get("disableSubspecies").getAsBoolean();
+			this.disableVariants = json.get("disableSubspecies").getAsBoolean();
 
 		// Spawners:
 		this.spawners.clear();

@@ -49,8 +49,9 @@ public class WanderGoal extends Goal {
 			return false;
 		else {
 			Vec3d newTarget = RandomPositionGenerator.findRandomTarget(this.host, 10, 7, this.host.getFlyingHeight());
-			if (newTarget == null)
+			if (newTarget == null) {
 				return false;
+			}
 			else {
 				// Random Position:
 				BlockPos wanderPosition = this.host.getWanderPosition(new BlockPos((int) newTarget.x, (int) newTarget.y, (int) newTarget.z));

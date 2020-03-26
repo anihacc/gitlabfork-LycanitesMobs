@@ -114,7 +114,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
     // ==================================================
     /** Called when this Altar should activate. This will typically destroy the Altar and summon a rare mob or activate an event such as a boss event. If false is returned then the activation did not work, this is the place to check for things like dimensions. **/
     @Override
-    public boolean activate(Entity entity, World world, BlockPos pos, int subspecies) {
+    public boolean activate(Entity entity, World world, BlockPos pos, int variant) {
         if (world.isRemote)
             return true;
 
@@ -155,7 +155,7 @@ public class AltarInfoLunarGrue extends AltarInfo {
         // Spawn Mini Boss:
         entityGrue.altarSummoned = true;
         entityGrue.forceBossHealthBar = true;
-        entityGrue.applySubspecies(3);
+        entityGrue.applyVariant(3);
         entityGrue.setLocationAndAngles(x, y - 2, z, 0, 0);
         world.addEntity(entityGrue);
         entityGrue.destroyArea(x, y, z, 10000, false, 2);

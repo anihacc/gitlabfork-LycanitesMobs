@@ -46,7 +46,7 @@ public class ConfigCreatures {
 	public final ForgeConfigSpec.ConfigValue<Boolean> drownImmunity;
 	public final ForgeConfigSpec.ConfigValue<Boolean> packTreatLuring;
 
-	public final ForgeConfigSpec.ConfigValue<Boolean> subspeciesSpawn;
+	public final ForgeConfigSpec.ConfigValue<Boolean> variantsSpawn;
 	public final ForgeConfigSpec.ConfigValue<Boolean> randomSizes;
 	public final ForgeConfigSpec.ConfigValue<Double> randomSizeMin;
 	public final ForgeConfigSpec.ConfigValue<Double> randomSizeMax;
@@ -144,7 +144,7 @@ public class ConfigCreatures {
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.packTreatLuring")
 				.define("packTreatLuring", false);
 
-		subspeciesSpawn = builder.comment("Set to false to prevent subspecies from spawning, this will not affect mobs that have already spawned as subspecies.")
+		variantsSpawn = builder.comment("Set to false to prevent subspecies from spawning, this will not affect mobs that have already spawned as subspecies.")
 				.translation(CoreConfig.CONFIG_PREFIX + "creatures.subspeciesSpawn")
 				.define("subspeciesSpawn", true);
 		randomSizes = builder.comment("Set to false to prevent mobs from having a random size variation when spawning, this will not affect mobs that have already spawned.")

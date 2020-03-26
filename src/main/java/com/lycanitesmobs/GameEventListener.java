@@ -435,6 +435,7 @@ public class GameEventListener {
 				event.getLeft().add("Distance To player: " + mouseOverCreature.getDistance(Minecraft.getInstance().player));
 				event.getLeft().add("Elements: " + mouseOverCreature.creatureInfo.getElementNames(mouseOverCreature.getSubspecies()).getFormattedText());
 				event.getLeft().add("Subspecies: " + mouseOverCreature.getSubspeciesIndex());
+				event.getLeft().add("Variant: " + mouseOverCreature.getVariantIndex());
 				event.getLeft().add("Level: " + mouseOverCreature.getLevel());
 				event.getLeft().add("Experience: " + mouseOverCreature.getExperience() + "/" + mouseOverCreature.creatureStats.getExperienceForNextLevel());
 				event.getLeft().add("Size: " + mouseOverCreature.sizeScale);

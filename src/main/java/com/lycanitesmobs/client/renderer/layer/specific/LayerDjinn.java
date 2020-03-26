@@ -32,8 +32,8 @@ public class LayerDjinn extends LayerCreatureBase {
     @Override
     public ResourceLocation getLayerTexture(BaseCreatureEntity entity) {
 		String textureName = entity.getTextureName();
-		if(entity.getSubspecies() != null) {
-			textureName += "_" + entity.getSubspecies().color;
+		if(entity.getVariant() != null) {
+			textureName += "_" + entity.getVariant().color;
 		}
 		textureName += "_ribbon";
 		if(TextureManager.getTexture(textureName) == null)

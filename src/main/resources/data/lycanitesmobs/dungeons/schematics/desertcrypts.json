@@ -87,9 +87,9 @@
 		{
 			"mobId": "lycanitesmobs:crusk",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobNameTag": "Graboid",
-			"mobSizeScale": 1.5,
+			"mobSizeScale": 3,
 			"naturalDespawn": "false",
 			"mobLevel": 25,
 			"spawnAsBoss": true,
@@ -110,7 +110,7 @@
 		{
 			"mobId": "lycanitesmobs:clink",
 			"weight": 1,
-			"subspecies": 0,
+			"variant": 0,
 			"mobNameTag": "Crypt Executioner",
 			"mobSizeScale": 2,
 			"naturalDespawn": "false",
@@ -138,7 +138,7 @@
 		{
 			"mobId": "lycanitesmobs:ignibus",
 			"weight": 1,
-			"subspecies": 1,
+			"variant": 1,
 			"mobSizeScale": 1.1,
 			"mobNameTag": "The Tyrant Dragon",
 			"naturalDespawn": "false",

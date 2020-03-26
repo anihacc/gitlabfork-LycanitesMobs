@@ -96,7 +96,7 @@ public class CreatureConfig {
 
 	// Variations:
 	/** If true, mobs will have a chance of becoming a subspecies when spawned. **/
-	public boolean subspeciesSpawn = true;
+	public boolean variantsSpawn = true;
 
 	/** If true, mobs will vary in sizes when spawned. **/
 	public boolean randomSizes = true;
@@ -158,7 +158,7 @@ public class CreatureConfig {
 		this.packTreatLuring = ConfigCreatures.INSTANCE.packTreatLuring.get();
 
 		// Variations:
-		this.subspeciesSpawn = ConfigCreatures.INSTANCE.subspeciesSpawn.get();
+		this.variantsSpawn = ConfigCreatures.INSTANCE.variantsSpawn.get();
 		this.randomSizes = ConfigCreatures.INSTANCE.randomSizes.get();
 		this.randomSizeMin = ConfigCreatures.INSTANCE.randomSizeMin.get();
 		this.randomSizeMax = ConfigCreatures.INSTANCE.randomSizeMax.get();
@@ -166,7 +166,7 @@ public class CreatureConfig {
 		// Drops:
 		this.globalDropsString = ""; // Disabled for now.
 
-		Subspecies.loadGlobalSettings();
+		Variant.loadGlobalSettings();
 	}
 
 

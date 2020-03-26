@@ -480,7 +480,7 @@ public class EntityAsmodeus extends BaseCreatureEntity implements IMob, IGroupHe
                 EntityTrite trite = (EntityTrite)CreatureManager.getInstance().getCreature("trite").createEntity(this.getEntityWorld());
                 trite.setLocationAndAngles(this.getPositionVec().getX() + (double)f, this.getPositionVec().getY() + 0.5D, this.getPositionVec().getZ() + (double)f1, this.rand.nextFloat() * 360.0F, 0.0F);
                 trite.setMinion(true);
-                trite.applySubspecies(this.getSubspeciesIndex());
+                trite.applyVariant(this.getVariantIndex());
                 this.getEntityWorld().addEntity(trite);
                 if(this.getAttackTarget() != null)
                 	trite.setRevengeTarget(this.getAttackTarget());

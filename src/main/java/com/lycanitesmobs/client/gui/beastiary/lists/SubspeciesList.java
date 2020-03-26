@@ -5,6 +5,9 @@ import com.lycanitesmobs.client.gui.widgets.BaseList;
 import com.lycanitesmobs.client.gui.widgets.BaseListEntry;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -44,17 +47,22 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 			return;
 		}
 
-		int index = 1;
-		this.addEntry(new Entry(this, index++, 0));
-		for(int subspeciesIndex : this.creature.subspecies.keySet()) {
-			if(!this.screen.playerExt.getBeastiary().hasKnowledgeRank(this.creature.getName(), 2)) {
-				continue;
+		int index = 0;
+		for(Subspecies subspecies : this.creature.subspecies.values()) {
+			this.addEntry(new Entry(this, index++, subspecies.index, 0));
+			for (int variantIndex : subspecies.variants.keySet()) {
+				if(!this.screen.playerExt.getBeastiary().hasKnowledgeRank(this.creature.getName(), 2)) {
+					continue;
+				}
+				Variant variant = subspecies.getVariant(variantIndex);
+				if(variant == null) {
+					continue;
+				}
+				if (this.summoning && "rare".equals(variant.rarity)) {
+					continue;
+				}
+				this.addEntry(new Entry(this, index++, subspecies.index, variant.index));
 			}
-			Subspecies subspecies = this.creature.subspecies.get(subspeciesIndex);
-			if (subspecies != null && "rare".equals(subspecies.rarity)) {
-				continue;
-			}
-			this.addEntry(new Entry(this, index++, subspeciesIndex));
 		}
 	}
 
@@ -66,9 +74,11 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		}
 		if(!this.summoning) {
 			this.screen.playerExt.selectedSubspecies = ((Entry)entry).subspeciesIndex;
+			this.screen.playerExt.selectedVariant = ((Entry)entry).variantIndex;
 		}
 		else {
 			this.screen.playerExt.getSelectedSummonSet().setSubspecies(((Entry)entry).subspeciesIndex);
+			this.screen.playerExt.getSelectedSummonSet().setVariant(((Entry)entry).variantIndex);
 			this.screen.playerExt.sendSummonSetToServer((byte)this.screen.playerExt.selectedSummonSet);
 		}
 	}
@@ -78,10 +88,12 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 		if(!(this.getEntry(index) instanceof Entry))
 			return false;
 		if(!this.summoning) {
-			return this.screen.playerExt.selectedSubspecies == ((Entry)this.getEntry(index)).subspeciesIndex;
+			return this.screen.playerExt.selectedSubspecies == ((Entry)this.getEntry(index)).subspeciesIndex &&
+					this.screen.playerExt.selectedVariant == ((Entry)this.getEntry(index)).variantIndex;
 		}
 		else {
-			return this.screen.playerExt.getSelectedSummonSet().getSubspecies() == ((Entry)this.getEntry(index)).subspeciesIndex;
+			return this.screen.playerExt.getSelectedSummonSet().getSubspecies() == ((Entry)this.getEntry(index)).subspeciesIndex &&
+					this.screen.playerExt.getSelectedSummonSet().getVariant() == ((Entry)this.getEntry(index)).variantIndex;
 		}
 	}
 
@@ -106,24 +118,31 @@ public class SubspeciesList extends BaseList<BeastiaryScreen> {
 	public static class Entry extends BaseListEntry {
 		private SubspeciesList parentList;
 		public int subspeciesIndex;
+		public int variantIndex;
 
-		public Entry(SubspeciesList parentList, int index, int subspeciesIndex) {
+		public Entry(SubspeciesList parentList, int index, int subspeciesIndex, int variantIndex) {
 			this.parentList = parentList;
 			this.index = index;
 			this.subspeciesIndex = subspeciesIndex;
+			this.variantIndex = variantIndex;
 		}
 
 		@Override
 		public void render(int index, int top, int left, int bottom, int right, int mouseX, int mouseY, boolean focus, float partialTicks) {
 			Subspecies subspecies = this.parentList.creature.getSubspecies(this.subspeciesIndex);
-
-			// Name:
-			int nameY = top + 6;
-			if(subspecies == null) {
-				this.parentList.screen.getFontRenderer().drawString("Normal", left + 20, nameY, 0xFFFFFF);
-				return;
+			ITextComponent subspeciesName = new StringTextComponent("");
+			if(subspecies.name != null) {
+				subspeciesName = new StringTextComponent(" ").appendSibling(subspecies.getTitle());
 			}
-			this.parentList.screen.getFontRenderer().drawString(subspecies.getTitle().getFormattedText(), left + 20, nameY, 0xFFFFFF);
+
+			Variant variant = subspecies.getVariant(this.variantIndex);
+			ITextComponent variantName = new StringTextComponent("Normal");
+			if(variant != null) {
+				variantName = variant.getTitle();
+			}
+
+			int nameY = top + 6;
+			this.parentList.screen.getFontRenderer().drawString(variantName.appendSibling(subspeciesName).getFormattedText(), left + 10, nameY, 0xFFFFFF);
 		}
 
 		@Override

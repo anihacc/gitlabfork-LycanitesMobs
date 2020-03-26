@@ -85,7 +85,7 @@ public class EntityAbtu extends TameableCreatureEntity implements IMob {
     	minion.setGrowingAge(minion.growthTime);
     	minion.setLocationAndAngles(x, y, z, this.rand.nextFloat() * 360.0F, 0.0F);
 		minion.setMinion(true);
-		minion.applySubspecies(this.getSubspeciesIndex());
+		minion.applyVariant(this.getVariantIndex());
     	this.getEntityWorld().addEntity(minion);
         if(this.getAttackTarget() != null)
         	minion.setRevengeTarget(this.getAttackTarget());

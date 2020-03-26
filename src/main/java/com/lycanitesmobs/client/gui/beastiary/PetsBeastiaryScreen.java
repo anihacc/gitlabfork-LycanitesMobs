@@ -12,6 +12,7 @@ import com.lycanitesmobs.core.pets.PetEntry;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -25,6 +26,7 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 	public PetsBeastiaryScreen(PlayerEntity player) {
 		super(player);
 		this.playerExt.selectedSubspecies = 0;
+		this.playerExt.selectedVariant = 0;
 	}
 
 	@Override
@@ -409,11 +411,22 @@ public class PetsBeastiaryScreen extends BeastiaryScreen {
 
 	@Override
 	public int getDisplaySubspecies(CreatureInfo creatureInfo) {
-		return this.playerExt.selectedPet.subspeciesID;
+		return this.playerExt.selectedPet.subspeciesIndex;
+	}
+
+
+	@Override
+	public int getDisplayVariant(CreatureInfo creatureInfo) {
+		return this.playerExt.selectedPet.variantIndex;
 	}
 
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
-		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);
+		String soundSuffix = "";
+		if(this.playerExt.selectedPet != null && creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name != null) {
+			soundSuffix += "." + creatureInfo.getSubspecies(this.playerExt.selectedPet.subspeciesIndex).name;
+		}
+		SoundEvent soundEvent = ObjectManager.getSound(creatureInfo.getName() + soundSuffix + "_tame");
+		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), soundEvent, SoundCategory.NEUTRAL, 1, 1);
 	}
 }

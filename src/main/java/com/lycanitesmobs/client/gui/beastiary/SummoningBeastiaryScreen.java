@@ -328,6 +328,12 @@ public class SummoningBeastiaryScreen extends BeastiaryScreen {
 		return this.playerExt.getSelectedSummonSet().subspecies;
 	}
 
+
+	@Override
+	public int getDisplayVariant(CreatureInfo creatureInfo) {
+		return this.playerExt.getSelectedSummonSet().variant;
+	}
+
 	@Override
 	public void playCreatureSelectSound(CreatureInfo creatureInfo) {
 		this.player.getEntityWorld().playSound(this.player, this.player.getPositionVec().getX(), this.player.getPositionVec().getY(), this.player.getPositionVec().getZ(), ObjectManager.getSound(creatureInfo.getName() + "_tame"), SoundCategory.NEUTRAL, 1, 1);

@@ -277,7 +277,8 @@ public class TileEntitySummoningPedestal extends TileEntityBase implements IInve
     public void applyMinionBehaviour(TameableCreatureEntity minion) {
         if(this.summonSet != null) {
             this.summonSet.applyBehaviour(minion);
-            minion.applySubspecies(this.summonSet.subspecies);
+            minion.setSubspecies(this.summonSet.subspecies);
+            minion.applyVariant(this.summonSet.variant);
         }
         this.minions.add(minion);
         minion.setHome(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 20);

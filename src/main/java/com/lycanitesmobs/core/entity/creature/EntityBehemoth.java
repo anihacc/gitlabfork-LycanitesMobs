@@ -85,7 +85,7 @@ public class EntityBehemoth extends TameableCreatureEntity implements IMob {
         if(!this.getEntityWorld().isRemote && this.isMoving() && this.ticksExisted % 5 == 0) {
             int trailHeight = 1;
             int trailWidth = 1;
-            if(this.getSubspeciesIndex() >= 3)
+            if(this.isRareVariant())
                 trailWidth = 3;
             for(int y = 0; y < trailHeight; y++) {
                 Block block = this.getEntityWorld().getBlockState(this.getPosition().add(0, y, 0)).getBlock();

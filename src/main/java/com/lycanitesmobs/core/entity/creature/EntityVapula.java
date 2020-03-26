@@ -63,7 +63,7 @@ public class EntityVapula extends TameableCreatureEntity implements IMob {
         super.livingTick();
 
         if(!this.getEntityWorld().isRemote) {
-			if (this.getSubspeciesIndex() == 3 && !this.isPetType("familiar")){
+			if (this.isRareVariant() && !this.isPetType("familiar")){
 				// Random Charging:
 				if (this.hasAttackTarget() && this.getDistance(this.getAttackTarget()) > 1 && this.getRNG().nextInt(20) == 0) {
 					if (this.getPositionVec().getY() - 1 > this.getAttackTarget().getPositionVec().getY())

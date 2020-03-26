@@ -24,11 +24,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 /** Contains various information about a creature from default spawn information to stats, etc. **/
 public class CreatureInfo {
@@ -282,13 +283,13 @@ public class CreatureInfo {
 		this.eggForeColor = Color.decode(json.get("eggForeColor").getAsString()).getRGB();
 
 		// Subspecies:
-		if(json.has("subspecies")) {
-			Iterator<JsonElement> subspeciesEntries = json.get("subspecies").getAsJsonArray().iterator();
-			while(subspeciesEntries.hasNext()) {
-				JsonObject jsonObject = subspeciesEntries.next().getAsJsonObject();
-				Subspecies subspecies = Subspecies.createFromJSON(this, jsonObject);
-				this.subspecies.put(subspecies.index, subspecies);
-			}
+		for (JsonElement jsonElement : json.get("subspecies").getAsJsonArray()) {
+			JsonObject jsonObject = jsonElement.getAsJsonObject();
+			Subspecies subspecies = Subspecies.createFromJSON(this, jsonObject);
+			this.subspecies.put(subspecies.index, subspecies);
+		}
+		if(this.subspecies.isEmpty()) {
+			throw new RuntimeException("No subspecies were found for " + this.getName() + " there should always be at least 1 default subspecies for the base normal subspecies.");
 		}
 
 		// Elements:
@@ -627,14 +628,23 @@ public class CreatureInfo {
 
 			dropNames.appendText(" " + (drop.chance * 100) + "%");
 
-			if(drop.subspeciesID >= 0) {
+			Subspecies subspecies = this.getSubspecies(0);
+			if(drop.subspeciesIndex > 0) {
+				subspecies = this.getSubspecies(drop.variantIndex);
+				if(subspecies.name != null) {
+					dropNames.appendText(" ");
+					dropNames.appendSibling(subspecies.getTitle());
+				}
+			}
+
+			if(drop.variantIndex >= 0) {
 				dropNames.appendText(" ");
-				Subspecies subspecies = this.getSubspecies(drop.subspeciesID);
-				if(subspecies == null) {
+				Variant variant = subspecies.getVariant(drop.variantIndex);
+				if(variant == null) {
 					dropNames.appendSibling(new TranslationTextComponent("subspecies.normal"));
 				}
 				else {
-					dropNames.appendSibling(subspecies.getTitle());
+					dropNames.appendSibling(variant.getTitle());
 				}
 			}
 
@@ -713,14 +723,13 @@ public class CreatureInfo {
 
 
 	/**
-	 * Returns a subspecies for the provided index or null if invalid.
+	 * Returns a subspecies for the provided index or the first subspecies if invalid.
 	 * @param index The index of the subspecies for this creature.
 	 * @return Creature subspecies.
 	 */
-	@Nullable
 	public Subspecies getSubspecies(int index) {
 		if(!this.subspecies.containsKey(index)) {
-			return null;
+			return this.subspecies.get(0);
 		}
 		return this.subspecies.get(index);
 	}
@@ -729,19 +738,11 @@ public class CreatureInfo {
 	/**
 	 * Gets a random subspecies, normally used by a new mob when spawned.
 	 * @param entity The entity that has this subspecies.
-	 * @param rare If true, there will be much higher odds of a subspecies being picked.
-	 * @return A Subspecies or null if using the base species.
+	 * @return The Subspecies to use.
 	 */
-	public Subspecies getRandomSubspecies(LivingEntity entity, boolean rare) {
+	public Subspecies getRandomSubspecies(LivingEntity entity) {
 		LycanitesMobs.logDebug("Subspecies", "~0===== Subspecies =====0~");
-		LycanitesMobs.logDebug("Subspecies", "Selecting random subspecies for: " + entity);
-		if(rare) {
-			LycanitesMobs.logDebug("Subspecies", "The conditions have been set to rare increasing the chances of a subspecies being picked.");
-		}
-		if(this.subspecies.isEmpty()) {
-			LycanitesMobs.logDebug("Subspecies", "No species available, will be base species.");
-			return null;
-		}
+		LycanitesMobs.logDebug("Subspecies", "Selecting subspecies for: " + entity);
 		LycanitesMobs.logDebug("Subspecies", "Subspecies Available: " + this.subspecies.size());
 
 		// Get Viable Subspecies:
@@ -756,8 +757,8 @@ public class CreatureInfo {
 			}
 		}
 		if(possibleSubspecies.isEmpty()) {
-			LycanitesMobs.logDebug("Subspecies", "No subspecies allowed, will be base species.");
-			return null;
+			LycanitesMobs.logWarning("", "[Subspecies] No subspecies allowed for " + this.getName() + ", there should always be a default subspecies, returning the first subspecies found for now.");
+			return this.subspecies.get(0);
 		}
 
 		// Filter Priorities:
@@ -768,68 +769,16 @@ public class CreatureInfo {
 				}
 			}
 		}
-
 		LycanitesMobs.logDebug("Subspecies", "Subspecies Allowed: " + possibleSubspecies.size() + " Highest Priority: " + highestPriority);
 
-		// Get Weights:
-		int baseSpeciesWeightScaled = Subspecies.BASE_WEIGHT;
-		if(rare) {
-			baseSpeciesWeightScaled = Math.round((float)baseSpeciesWeightScaled / 4);
-		}
-		if(highestPriority > 0) {
-			baseSpeciesWeightScaled = 0;
-		}
-		int totalWeight = baseSpeciesWeightScaled;
-		for(Subspecies subspeciesEntry : possibleSubspecies) {
-			totalWeight += subspeciesEntry.weight;
-		}
-		LycanitesMobs.logDebug("Subspecies", "Total Weight: " + totalWeight);
-
-		// Roll and Check Default:
-		int roll = entity.getRNG().nextInt(totalWeight) + 1;
-		LycanitesMobs.logDebug("Subspecies", "Rolled: " + roll);
-		if(roll <= baseSpeciesWeightScaled) {
-			LycanitesMobs.logDebug("Subspecies", "Base species selected: " + baseSpeciesWeightScaled);
-			return null;
+		// Only One Viable:
+		if(possibleSubspecies.size() == 1) {
+			return possibleSubspecies.get(0);
 		}
 
 		// Get Random Subspecies:
-		int checkWeight = baseSpeciesWeightScaled;
-		for(Subspecies subspeciesEntry : possibleSubspecies) {
-			checkWeight += subspeciesEntry.weight;
-			if(roll <= checkWeight) {
-				LycanitesMobs.logDebug("Subspecies", "Subspecies selected: " + subspeciesEntry.toString());
-				return subspeciesEntry;
-			}
-		}
-
-		LycanitesMobs.logWarning("Subspecies", "The roll was higher than the Total Weight, this shouldn't happen.");
-		return null;
-	}
-
-	public Subspecies getRandomSubspecies(LivingEntity entity) {
-		return this.getRandomSubspecies(entity, false);
-	}
-
-	/**
-	 * Used for when two mobs breed to randomly determine the subspecies of the child.
-	 * @param entity The entity that has this subspecies, currently only used to get RNG.
-	 * @param hostSubspeciesIndex The index of the subspecies of the host entity.
-	 * @param partnerSubspecies The subspecies of the partner. Null if the partner is default.
-	 * @return
-	 */
-	public Subspecies getChildSubspecies(LivingEntity entity, int hostSubspeciesIndex, Subspecies partnerSubspecies) {
-		Subspecies hostSubspecies = this.getSubspecies(hostSubspeciesIndex);
-		int partnerSubspeciesIndex = (partnerSubspecies != null ? partnerSubspecies.index : 0);
-		if(hostSubspeciesIndex == partnerSubspeciesIndex)
-			return hostSubspecies;
-
-		int hostWeight = (hostSubspecies != null ? hostSubspecies.weight : Subspecies.BASE_WEIGHT);
-		int partnerWeight = (partnerSubspecies != null ? partnerSubspecies.weight : Subspecies.BASE_WEIGHT);
-		int roll = entity.getRNG().nextInt(hostWeight + partnerWeight);
-		if(roll > hostWeight)
-			return partnerSubspecies;
-		return hostSubspecies;
+		int randomIndex =  entity.getRNG().nextInt(possibleSubspecies.size());
+		return possibleSubspecies.get(randomIndex);
 	}
 
 	/**

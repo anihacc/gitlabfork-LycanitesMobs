@@ -124,7 +124,7 @@ public class EntityGrue extends TameableCreatureEntity implements IMob {
     		return false;
     	
     	// Leech:
-    	if(this.getSubspeciesIndex() > 2 && target instanceof LivingEntity) {
+    	if(this.isRareVariant() && target instanceof LivingEntity) {
     		LivingEntity targetLiving = (LivingEntity)target;
     		List<Effect> goodEffects = new ArrayList<>();
     		for(EffectInstance effectInstance : targetLiving.getActivePotionEffects()) {

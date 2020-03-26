@@ -68,13 +68,13 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     
     // ========== Get Random Subspecies ==========
     @Override
-    public void getRandomSubspecies() {
+    public void getRandomVariant() {
     	if(this.subspecies == null && !this.hasParent()) {
     		this.subspecies = this.creatureInfo.getRandomSubspecies(this);
     	}
     	
     	if(this.hasParent() && this.getParentTarget() instanceof BaseCreatureEntity) {
-    		this.applySubspecies(((BaseCreatureEntity)this.getParentTarget()).getSubspeciesIndex());
+    		this.applyVariant(((BaseCreatureEntity)this.getParentTarget()).getSubspeciesIndex());
     	}
     }
     
@@ -191,7 +191,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
 			concapedeHead.firstSpawn = false;
 			concapedeHead.setGrowingAge(-this.growthTime / 4);
 			concapedeHead.setSizeScale(this.sizeScale);
-			concapedeHead.applySubspecies(this.getSubspeciesIndex());
+			concapedeHead.applyVariant(this.getVariantIndex());
 			this.getEntityWorld().addEntity(concapedeHead);
 			if(this.backSegment != null)
 				this.backSegment.setParentTarget(concapedeHead);
@@ -265,7 +265,7 @@ public class EntityConcapedeSegment extends AgeableCreatureEntity {
     // ========== Render Subspecies Name Tag ==========
     /** Gets whether this mob should always display its nametag if it's a subspecies. **/
 	@Override
-    public boolean renderSubspeciesNameTag() {
+    public boolean renderVariantNameTag() {
     	return !this.hasParent();
     }
     

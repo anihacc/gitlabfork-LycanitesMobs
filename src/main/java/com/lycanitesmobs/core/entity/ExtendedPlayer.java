@@ -43,6 +43,7 @@ public class ExtendedPlayer implements IExtendedPlayer {
 	public CreatureType selectedCreatureType;
 	public CreatureInfo selectedCreature;
 	public int selectedSubspecies = 0;
+	public int selectedVariant = 0;
 	public int selectedPetType = 0;
 	public PetEntry selectedPet;
 

@@ -766,7 +766,7 @@ public class TameableCreatureEntity extends AgeableCreatureEntity {
 	 * @return True if the entity is tamed, false on failure.
 	 */
     public boolean tame(PlayerEntity player) {
-    	if(!this.getEntityWorld().isRemote && !this.isRareSubspecies() && !this.isBoss()) {
+    	if(!this.getEntityWorld().isRemote && !this.isRareVariant() && !this.isBoss()) {
 			if (this.rand.nextInt(3) == 0) {
 				this.setPlayerOwner(player);
 				this.onTamedByPlayer();

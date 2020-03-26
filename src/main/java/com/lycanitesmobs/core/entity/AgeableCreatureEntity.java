@@ -5,6 +5,7 @@ import com.lycanitesmobs.core.entity.goals.actions.MateGoal;
 import com.lycanitesmobs.core.entity.goals.targeting.FindParentGoal;
 import com.lycanitesmobs.core.info.CreatureInfo;
 import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.Variant;
 import com.lycanitesmobs.core.item.ItemCustomSpawnEgg;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Pose;
@@ -112,11 +113,18 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
     }
     
     // ========== Get Random Subspecies ==========
+	@Override
+	public void getRandomSubspecies() {
+		if(this.isChild())
+			return;
+		super.getRandomSubspecies();
+	}
+
     @Override
-    public void getRandomSubspecies() {
+    public void getRandomVariant() {
     	if(this.isChild())
     		return;
-    	super.getRandomSubspecies();
+    	super.getRandomVariant();
     }
 	
 	
@@ -322,18 +330,8 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
 			return false;
 		if(partner.getClass() != this.getClass())
 			return false;
-		if(this.getSubspecies() == null) {
-			if(partner.getSubspecies() != null && partner.getSubspecies().skin != null) {
-				return false;
-			}
-		}
-		else if(this.getSubspecies().skin != null) {
-			if(partner.getSubspecies() == null) {
-				return false;
-			}
-			if(!this.getSubspecies().skin.equals(partner.getSubspecies().skin)) {
-				return false;
-			}
+		if(this.getSubspecies() != partner.getSubspecies()) {
+			return false;
 		}
 		return this.isInLove() && partner.isInLove();
 	}
@@ -368,8 +366,9 @@ public abstract class AgeableCreatureEntity extends BaseCreatureEntity {
             this.finishBreeding();
             partner.finishBreeding();
             baby.setGrowingAge(baby.growthTime);
-            Subspecies babySubspecies = this.creatureInfo.getChildSubspecies(this, this.getSubspeciesIndex(), partner.getSubspecies());
-            baby.applySubspecies(babySubspecies != null ? babySubspecies.index : 0);
+			baby.setSubspecies(this.getSubspeciesIndex());
+			Variant babyVariant = this.getSubspecies().getChildVariant(this, this.getVariant(), partner.getVariant());
+            baby.applyVariant(babyVariant != null ? babyVariant.index : 0);
             baby.setLocationAndAngles(this.getPositionVec().getX(), this.getPositionVec().getY(), this.getPositionVec().getZ(), this.rotationYaw, this.rotationPitch);
 
             for(int i = 0; i < 7; ++i) {

@@ -2,10 +2,7 @@ package com.lycanitesmobs.core.pets;
 
 import com.lycanitesmobs.core.entity.ExtendedPlayer;
 import com.lycanitesmobs.core.entity.TameableCreatureEntity;
-import com.lycanitesmobs.core.info.CreatureInfo;
-import com.lycanitesmobs.core.info.CreatureKnowledge;
-import com.lycanitesmobs.core.info.CreatureManager;
-import com.lycanitesmobs.core.info.Subspecies;
+import com.lycanitesmobs.core.info.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -15,6 +12,7 @@ public class SummonSet {
 	// Summoning Details:
 	public String summonType = "";
 	public int subspecies = 0;
+	public int variant = 0;
     public boolean summonableOnly = true;
 	public boolean sitting = false;
 	public boolean following = true;
@@ -73,6 +71,14 @@ public class SummonSet {
 
 	public int getSubspecies() {
 		return this.subspecies;
+	}
+
+	public void setVariant(int variant) {
+		this.variant = variant;
+	}
+
+	public int getVariant() {
+		return this.variant;
 	}
 	
 	public boolean getSitting() {
@@ -147,11 +153,9 @@ public class SummonSet {
 				return false;
 			}
 			Subspecies subspecies = creatureInfo.getSubspecies(this.subspecies);
-			if(subspecies == null) {
+			Variant variant = subspecies.getVariant(this.variant);
+			if(variant == null) {
 				return true;
-			}
-			if(subspecies.skin != null) {
-				return this.playerExt.getBeastiary().hasKnowledgeRank(creatureInfo.getName(), 3);
 			}
 			return this.playerExt.getBeastiary().hasKnowledgeRank(creatureInfo.getName(), 2);
 		}
@@ -171,9 +175,10 @@ public class SummonSet {
 	// ==================================================
     //                        Sync
     // ==================================================
-	public void readFromPacket(String summonType, int subspecies, byte behaviour) {
+	public void readFromPacket(String summonType, int subspecies, int variant, byte behaviour) {
 		this.setSummonType(summonType);
 		this.setSubspecies(subspecies);
+		this.setVariant(variant);
 		this.setBehaviourByte(behaviour);
 	}
 
@@ -209,6 +214,9 @@ public class SummonSet {
 
 		if(nbtTagCompound.contains("Subspecies"))
 			this.setSubspecies(nbtTagCompound.getInt("Subspecies"));
+
+		if(nbtTagCompound.contains("Variant"))
+			this.setVariant(nbtTagCompound.getInt("Variant"));
     	
     	if(nbtTagCompound.contains("Sitting"))
     		this.sitting = nbtTagCompound.getBoolean("Sitting");
@@ -235,6 +243,8 @@ public class SummonSet {
 		nbtTagCompound.putString("SummonType", this.summonType);
 
 		nbtTagCompound.putInt("Subspecies", this.getSubspecies());
+
+		nbtTagCompound.putInt("Variant", this.getVariant());
     	
     	nbtTagCompound.putBoolean("Sitting", this.sitting);
     	

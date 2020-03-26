@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 public class MessageSummoningPedestalSummonSet {
 	public String summonType;
 	public int subpsecies;
+	public int variant;
 	public byte behaviour;
     public int x;
     public int y;
@@ -23,6 +24,7 @@ public class MessageSummoningPedestalSummonSet {
 	public MessageSummoningPedestalSummonSet(SummonSet summonSet, int x, int y, int z) {
 		this.summonType = summonSet.summonType;
 		this.subpsecies = summonSet.subspecies;
+		this.variant = summonSet.variant;
 		this.behaviour = summonSet.getBehaviourByte();
         this.x = x;
         this.y = y;
@@ -47,7 +49,7 @@ public class MessageSummoningPedestalSummonSet {
 				return;
 			if(summoningPedestal.summonSet == null)
 				summoningPedestal.summonSet = new SummonSet(null);
-			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.behaviour);
+			summoningPedestal.summonSet.readFromPacket(message.summonType, message.subpsecies, message.variant, message.behaviour);
 		});
 	}
 	
@@ -61,6 +63,7 @@ public class MessageSummoningPedestalSummonSet {
         message.z = packet.readInt();
         message.summonType = packet.readString(256);
         message.subpsecies = packet.readInt();
+        message.variant = packet.readInt();
         message.behaviour = packet.readByte();
 		return message;
 	}
@@ -74,6 +77,7 @@ public class MessageSummoningPedestalSummonSet {
         packet.writeInt(message.z);
         packet.writeString(message.summonType);
         packet.writeInt(message.subpsecies);
+        packet.writeInt(message.variant);
         packet.writeByte(message.behaviour);
 	}
 	
